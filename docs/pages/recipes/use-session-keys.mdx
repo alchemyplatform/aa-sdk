@@ -1,0 +1,788 @@
+---
+title: Use Smart Wallet Session Keys
+description: Smart Wallet Session Keys with Frontend Signing & Backend Processing
+slug: wallets/recipes/smart-wallet-session-keys
+---
+
+# Recipe: Smart Wallet Session Keys with Frontend Signing & Backend Processing
+
+In this recipe, you'll learn how to implement Alchemy Smart Wallet session keys for automated transactions, with frontend signing and backend transaction processing.
+
+![flow](https://alchemyapi-res.cloudinary.com/image/upload/v1757948678/Screenshot_2025-09-15_at_8.04.25_AM_pgchyv.png)
+
+## Prerequisites
+
+- Node.js 18+ installed
+- Alchemy account with API key
+- Basic knowledge of React/Next.js
+
+## Step 1: Create a Next.js app
+
+> Skip to Step 2 if you already have a React app set up.
+
+```bash
+npx create-next-app@latest my-app --yes
+cd my-app
+npm run dev
+```
+
+## Step 2: Install dependencies
+
+```bash
+npm install @account-kit/react @tanstack/react-query @account-kit/infra
+```
+
+## Step 3: Configure Smart Wallet Authentication
+
+> Skip to Step 4 if you already have authentication set up with Alchemy Smart Wallets.
+
+In order to properly authenticate your app, you need the following files set up properly:
+
+- `config.ts` (in root level of project)
+
+```bash
+// @noErrors
+import { createConfig, cookieStorage } from "@account-kit/react";
+import { QueryClient } from "@tanstack/react-query";
+import { sepolia, alchemy } from "@account-kit/infra";
+
+export const config = createConfig(
+  {
+    transport: alchemy({
+      apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY!,
+    }),
+    chain: sepolia,
+    ssr: true,
+    storage: cookieStorage,
+    enablePopupOauth: true,
+    policyId: process.env.NEXT_PUBLIC_ALCHEMY_POLICY_ID,
+  },
+  {
+    auth: {
+      sections: [[{ type: "email" }]],
+      addPasskeyOnSignup: true,
+    },
+  }
+);
+
+export const queryClient = new QueryClient();
+```
+
+- `providers.tsx` (in `/src/app/`) folder
+
+```javascript
+"use client";
+import { config, queryClient } from "@/config";
+import { AlchemyClientState } from "@account-kit/core";
+import { AlchemyAccountProvider } from "@account-kit/react";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { PropsWithChildren } from "react";
+
+export const Providers = (
+  props: PropsWithChildren<{ initialState?: AlchemyClientState }>
+) => {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <AlchemyAccountProvider
+        config={config}
+        queryClient={queryClient}
+        initialState={props.initialState}
+      >
+        {props.children}
+      </AlchemyAccountProvider>
+    </QueryClientProvider>
+  );
+};
+```
+
+`layout.tsx`:
+
+```javascript
+import { Providers } from './providers';
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en">
+      <body>
+        <Providers>{children}</Providers>
+      </body>
+    </html>
+  );
+}
+```
+
+## Step 4: Create custom hooks for session-key operations
+
+### Step 4.1: Get the Alchemy signer address
+
+- Hook: `useSignerAddress.ts`
+- Purpose: Get the Alchemy signer address
+  Method: Uses getSignerAddress() from the `@account-kit/react` package (no API endpoint needed)
+- Create `src/hooks/useSignerAddress.ts`:
+
+```javascript
+import { useState } from "react";
+import { useSigner } from "@account-kit/react";
+
+export function useSignerAddress() {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = (useState < string) | (null > null);
+  const signer = useSigner();
+
+  const getAddress = async () => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const address = await signer.getAddress();
+      return address;
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error ? err.message : "Failed to get address";
+      setError(errorMessage);
+      throw err;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return { getAddress, isLoading, error };
+}
+```
+
+### Step 4.2: Request smart account for the user
+
+- Hook: `useSmartAccount.ts`
+- Purpose: Request a smart account for the user
+- Alchemy Method: `wallet_requestAccount` ([view in docs](https://www.alchemy.com/docs/wallets/api-reference/smart-wallets/wallet-api-endpoints/wallet-api-endpoints/wallet-request-account))
+- Create `src/hooks/useSmartAccount.ts`:
+
+```javascript
+import { useState } from 'react';
+
+export function useSmartAccount() {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [result, setResult] = useState<any>(null);
+
+  const requestAccount = async (signerAddress: string) => {
+    setIsLoading(true);
+    setError(null);
+    setResult(null);
+
+    try {
+      const response = await fetch('/api/wallet-request-account', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ signerAddress }),
+      });
+
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error);
+
+      setResult(data);
+      return data;
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to request account';
+      setError(errorMessage);
+      throw err;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return { requestAccount, isLoading, error, result };
+}
+```
+
+### Step 4.3: Create a session key for the user's smart wallet
+
+- Hook: `useSession.ts`
+- Purpose: Create a session key for smart wallet
+- Alchemy Method: `wallet_createSession` ([view in docs](https://www.alchemy.com/docs/wallets/api-reference/smart-wallets/wallet-api-endpoints/wallet-api-endpoints/wallet-create-session))
+- Create `src/hooks/useSession.ts`:
+
+```javascript
+import { useState } from 'react';
+
+export function useSession() {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [result, setResult] = useState<any>(null);
+
+  const createSession = async (params: {
+    account: string;
+    chainId: string;
+    sessionKeyAddress: string;
+  }) => {
+    setIsLoading(true);
+    setError(null);
+    setResult(null);
+
+    try {
+      const response = await fetch('/api/wallet-create-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(params),
+      });
+
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error);
+
+      setResult(data);
+      return data;
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to create session';
+      setError(errorMessage);
+      throw err;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return { createSession, isLoading, error, result };
+}
+```
+
+### Step 4.4: Sign session
+
+- Hook: `useSessionAuthorization.ts`
+- Purpose: Sign the session authorization using Smart Wallets API
+- Alchemy Method: Uses `signer.signTypedData()` from Smart Wallets API
+- Create `/hooks/useSessionAuthorization.ts`:
+
+```javascript
+import { useSigner } from '@account-kit/react';
+import { useState } from 'react';
+
+interface SessionAuthorizationResult {
+  sessionId: string;
+  signature: string;
+  authorization: string; // The hex-concatenation of 0x00 + sessionId + signature
+}
+
+export function useSessionAuthorization() {
+  const signer = useSigner();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [result, setResult] = useState<SessionAuthorizationResult | null>(null);
+
+  const signSessionAuthorization = async (sessionId: string, signatureRequest: any) => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      if (!signer) {
+        throw new Error('No signer available');
+      }
+
+      // Sign the signature request using the signer
+      const signature = await signer.signTypedData(signatureRequest.data);
+
+      // Create the hex-concatenation of 0x00 + sessionId + signature
+      const authorization = `0x00${sessionId.slice(2)}${signature.slice(2)}`;
+
+      const authorizationResult = {
+        sessionId,
+        signature,
+        authorization,
+      };
+
+      setResult(authorizationResult);
+      return authorizationResult;
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to sign session authorization';
+      setError(errorMessage);
+      throw err;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return {
+    signSessionAuthorization,
+    isLoading,
+    error,
+    result,
+  };
+}
+```
+
+## Step 5: Create Backend API Routes
+
+### Step 5.1: Set up API Endpoint for `wallet_requestAccount`
+
+- API Endpoint: `/api/wallet-request-account`
+- Purpose: Requests a smart account for the signer
+- Alchemy Method: `wallet_requestAccount`
+- Parameters: `{ signerAddress }`
+- Create `src/app/api/wallet-request-account/route.ts`:
+
+```javascript
+import { NextRequest, NextResponse } from 'next/server';
+
+export async function POST(request: NextRequest) {
+  try {
+    const { signerAddress } = await request.json();
+
+    if (!process.env.NEXT_PUBLIC_ALCHEMY_API_KEY) {
+      return NextResponse.json({ error: 'Alchemy API key not configured' }, { status: 500 });
+    }
+
+    const requestAccountRequest = {
+      id: 1,
+      jsonrpc: '2.0',
+      method: 'wallet_requestAccount',
+      params: [{ signerAddress }]
+    };
+
+    const response = await fetch(`https://api.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(requestAccountRequest)
+    });
+
+    const result = await response.json();
+    if (!response.ok || result.error) {
+      throw new Error(result.error?.message || 'Failed to request account');
+    }
+
+    return NextResponse.json(result.result);
+  } catch (error) {
+    return NextResponse.json(
+      { error: error instanceof Error ? error.message : 'Failed to request account' },
+      { status: 500 }
+    );
+  }
+}
+```
+
+### Step 5.2: Set up API endpoint for `wallet_prepareCalls`
+
+- API Endpoint: `/api/wallet-prepare-calls`
+- Purpose: Prepares transaction calls for execution
+- Alchemy Method: `wallet_prepareCalls` ([view in docs](https://www.alchemy.com/docs/wallets/api-reference/smart-wallets/wallet-api-endpoints/wallet-api-endpoints/wallet-prepare-calls))
+- Parameters: `{ sessionId, signature, accountAddress, chainId, calls }`
+- Create `src/app/api/wallet-prepare-calls/route.ts`:
+
+```javascript
+import { NextRequest, NextResponse } from 'next/server';
+
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json();
+
+    if (!process.env.NEXT_PUBLIC_ALCHEMY_API_KEY) {
+      return NextResponse.json({ error: 'Alchemy API key not configured' }, { status: 500 });
+    }
+
+    const createSessionRequest = {
+      id: 1,
+      jsonrpc: '2.0',
+      method: 'wallet_createSession',
+      params: [body]
+    };
+
+    const response = await fetch(`https://api.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(createSessionRequest)
+    });
+
+    const result = await response.json();
+    if (!response.ok || result.error) {
+      throw new Error(result.error?.message || 'Failed to create session');
+    }
+
+    return NextResponse.json(result.result);
+  } catch (error) {
+    return NextResponse.json(
+      { error: error instanceof Error ? error.message : 'Failed to create session' },
+      { status: 500 }
+    );
+  }
+}
+```
+
+### Step 5.3: Set up API Endpoint for `wallet_sendPreparedCalls` ([view method in docs](https://www.alchemy.com/docs/wallets/api-reference/smart-wallets/wallet-api-endpoints/wallet-api-endpoints/wallet-send-prepared-calls))
+
+- API Endpoint: `/api/wallet-send-prepared-calls`
+- Purpose: Sends the prepared transaction calls
+- Alchemy Method: `wallet_sendPreparedCalls`
+- Parameters: `{ sessionId, signature, userOpSignature, userOpRequest, chainId }`
+- Create `src/app/api/wallet-send-prepared-calls/route.ts`:
+
+```javascript
+import { NextRequest, NextResponse } from 'next/server';
+
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const { sessionId, signature, userOpSignature, userOpRequest, chainId } = body;
+
+    if (!sessionId || !signature || !userOpSignature || !userOpRequest || !chainId) {
+      return NextResponse.json({ error: 'Missing required parameters' }, { status: 400 });
+    }
+
+    if (!process.env.NEXT_PUBLIC_ALCHEMY_API_KEY) {
+      return NextResponse.json({ error: 'Alchemy API key not configured' }, { status: 500 });
+    }
+
+    // Concatenate the context: 0x00 + sessionId + signature
+    const context = `0x00${sessionId.slice(2)}${signature.slice(2)}`;
+
+    const sendCallsRequest = {
+      id: 1,
+      jsonrpc: '2.0',
+      method: 'wallet_sendPreparedCalls',
+      params: [
+        {
+          type: 'user-operation-v070',
+          data: userOpRequest,
+          capabilities: {
+            permissions: {
+              context: context
+            }
+          },
+          signature: {
+            signature: userOpSignature
+          }
+        }
+      ]
+    };
+
+    const response = await fetch(`https://api.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(sendCallsRequest)
+    });
+
+    const result = await response.json();
+    if (!response.ok || result.error) {
+      throw new Error(result.error?.message || 'Failed to send prepared calls');
+    }
+
+    return NextResponse.json({
+      success: true,
+      callIds: result.result
+    });
+  } catch (error) {
+    return NextResponse.json(
+      { error: error instanceof Error ? error.message : 'Failed to send prepared calls' },
+      { status: 500 }
+    );
+  }
+}
+```
+
+## Step 6: Implement the Complete Session Key Workflow
+
+- Replace your `src/app/page.tsx` with:
+
+```javascript
+"use client";
+
+import {
+  useAuthModal,
+  useLogout,
+  useSignerStatus,
+  useUser,
+} from "@account-kit/react";
+import { useSignerAddress } from "../hooks/useSignerAddress";
+import { useSmartAccount } from "../hooks/useSmartAccount";
+import { useSession } from "../hooks/useSession";
+import { useSessionAuthorization } from "../hooks/useSessionAuthorization";
+
+export default function Home() {
+  const user = useUser();
+  const { openAuthModal } = useAuthModal();
+  const signerStatus = useSignerStatus();
+  const { logout } = useLogout();
+
+  const {
+    getAddress: getSignerAddress,
+    isLoading: isGettingAddress,
+    error: addressError,
+  } = useSignerAddress();
+  const {
+    requestAccount,
+    isLoading: isRequestingAccount,
+    error: accountError,
+    result: smartAccountResult,
+  } = useSmartAccount();
+  const {
+    createSession,
+    isLoading: isCreatingSession,
+    error: sessionError,
+    result: sessionResult,
+  } = useSession();
+  const {
+    signSessionAuthorization,
+    isLoading: isSigningAuthorization,
+    error: authorizationError,
+    result: authorizationResult,
+  } = useSessionAuthorization();
+
+  return (
+    <div className="flex min-h-screen flex-col items-center p-24 gap-4 justify-center text-center">
+      {signerStatus.isInitializing ? (
+        <>Loading...</>
+      ) : user ? (
+        <div className="w-full max-w-6xl">
+          <div className="text-center mb-8">
+            <p className="text-xl font-bold">Success!</p>
+            You're logged in as {user.email ?? "anon"}.
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Step 1: Get Signer Address */}
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h3 className="font-semibold mb-3 text-lg">
+                Step 1: Get Alchemy Signer Address
+              </h3>
+              <button
+                className="akui-btn akui-btn-primary w-full"
+                onClick={async () => {
+                  try {
+                    const address = await getSignerAddress();
+                    console.log("Signer address:", address);
+                  } catch (error) {
+                    console.error("Error getting address:", error);
+                  }
+                }}
+                disabled={isGettingAddress}
+              >
+                {isGettingAddress ? "Getting Address..." : "Get Address"}
+              </button>
+              {addressError && (
+                <p className="text-red-500 text-sm mt-2">
+                  Error: {addressError}
+                </p>
+              )}
+            </div>
+
+            {/* Step 2: Request Smart Account */}
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h3 className="font-semibold mb-3 text-lg">
+                Step 2: Request Smart Account
+              </h3>
+              <button
+                className="akui-btn akui-btn-primary w-full"
+                onClick={async () => {
+                  try {
+                    const signerAddress = await getSignerAddress();
+                    await requestAccount(signerAddress);
+                  } catch (error) {
+                    console.error("Error requesting account:", error);
+                  }
+                }}
+                disabled={isRequestingAccount || isGettingAddress}
+              >
+                {isRequestingAccount
+                  ? "Requesting Account..."
+                  : "Request Smart Account"}
+              </button>
+
+              {accountError && (
+                <p className="text-red-500 text-sm mt-2">
+                  Error: {accountError}
+                </p>
+              )}
+
+              {smartAccountResult && (
+                <div className="bg-green-100 p-3 rounded mt-3">
+                  <p className="text-green-800 font-semibold text-base">
+                    Smart Account Retrieved!
+                  </p>
+                  <div className="flex items-center gap-2 mt-2">
+                    <p className="text-sm">
+                      <strong>Address:</strong>{" "}
+                      {smartAccountResult.accountAddress.slice(0, 10)}...
+                      {smartAccountResult.accountAddress.slice(-8)}
+                    </p>
+                    <button
+                      onClick={() =>
+                        navigator.clipboard.writeText(
+                          smartAccountResult.accountAddress,
+                        )
+                      }
+                      className="text-xs bg-green-200 hover:bg-green-300 px-2 py-1 rounded"
+                    >
+                      Copy
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Step 3: Create Session */}
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h3 className="font-semibold mb-3 text-lg">
+                Step 3: Create Session
+              </h3>
+              <button
+                className="akui-btn akui-btn-primary w-full"
+                onClick={async () => {
+                  try {
+                    if (!smartAccountResult?.accountAddress) {
+                      console.error("No smart account available");
+                      return;
+                    }
+
+                    await createSession({
+                      account: smartAccountResult.accountAddress,
+                      chainId: "0xaa36a7", // Ethereum Sepolia
+                      sessionKeyAddress: smartAccountResult.accountAddress,
+                    });
+                  } catch (error) {
+                    console.error("Error creating session:", error);
+                  }
+                }}
+                disabled={isCreatingSession || !smartAccountResult}
+              >
+                {isCreatingSession ? "Creating Session..." : "Create Session"}
+              </button>
+
+              {sessionError && (
+                <p className="text-red-500 text-sm mt-2">
+                  Error: {sessionError}
+                </p>
+              )}
+
+              {sessionResult && (
+                <div className="bg-blue-100 p-3 rounded mt-3">
+                  <p className="text-blue-800 font-semibold text-base">
+                    Session Created!
+                  </p>
+                  <div className="flex items-center gap-2 mt-2">
+                    <p className="text-sm">
+                      <strong>Session ID:</strong>{" "}
+                      {sessionResult.sessionId.slice(0, 10)}...
+                      {sessionResult.sessionId.slice(-8)}
+                    </p>
+                    <button
+                      onClick={() =>
+                        navigator.clipboard.writeText(sessionResult.sessionId)
+                      }
+                      className="text-xs bg-blue-200 hover:bg-blue-300 px-2 py-1 rounded"
+                    >
+                      Copy
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Step 4: Sign Session Authorization */}
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h3 className="font-semibold mb-3 text-lg">
+                Step 4: Sign Session Authorization
+              </h3>
+              <button
+                className="akui-btn akui-btn-primary w-full"
+                onClick={async () => {
+                  try {
+                    if (
+                      !sessionResult?.sessionId ||
+                      !sessionResult?.signatureRequest
+                    ) {
+                      console.error("No session available");
+                      return;
+                    }
+
+                    await signSessionAuthorization(
+                      sessionResult.sessionId,
+                      sessionResult.signatureRequest,
+                    );
+                  } catch (error) {
+                    console.error("Error signing authorization:", error);
+                  }
+                }}
+                disabled={isSigningAuthorization || !sessionResult}
+              >
+                {isSigningAuthorization
+                  ? "Signing Authorization..."
+                  : "Sign Session Authorization"}
+              </button>
+
+              {authorizationError && (
+                <p className="text-red-500 text-sm mt-2">
+                  Error: {authorizationError}
+                </p>
+              )}
+
+              {authorizationResult && (
+                <div className="bg-purple-100 p-3 rounded mt-3">
+                  <p className="text-purple-800 font-semibold text-base">
+                    Session Authorized!
+                  </p>
+                  <div className="flex items-center gap-2 mt-2">
+                    <p className="text-sm">
+                      <strong>Session ID:</strong>{" "}
+                      {authorizationResult.sessionId.slice(0, 10)}...
+                      {authorizationResult.sessionId.slice(-8)}
+                    </p>
+                    <button
+                      onClick={() =>
+                        navigator.clipboard.writeText(
+                          authorizationResult.sessionId,
+                        )
+                      }
+                      className="text-xs bg-purple-200 hover:bg-purple-300 px-2 py-1 rounded"
+                    >
+                      Copy
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="text-center mt-8">
+            <button
+              className="akui-btn akui-btn-primary"
+              onClick={() => logout()}
+            >
+              Log out
+            </button>
+          </div>
+        </div>
+      ) : (
+        <button className="akui-btn akui-btn-primary" onClick={openAuthModal}>
+          Step 1: Login
+        </button>
+      )}
+    </div>
+  );
+}
+```
+
+## Step 7: Set Up Environment Variables
+
+Create `.env.local` in your project root:
+
+```bash
+NEXT_PUBLIC_ALCHEMY_API_KEY=your_alchemy_api_key_here
+NEXT_PUBLIC_ALCHEMY_POLICY_ID=your_policy_id_here
+```
+
+## Step 8: Run Your Application
+
+```bash
+npm run dev
+```
+
+## API Endpoints Summary
+
+| Step | Endpoint                          | Alchemy Method             | Purpose                    |
+| ---- | --------------------------------- | -------------------------- | -------------------------- |
+| 1    | `/api/wallet-create-session`      | `wallet_createSession`     | Get signer address         |
+| 2    | `/api/wallet-request-account`     | `wallet_requestAccount`    | Create smart account       |
+| 3    | `/api/wallet-create-session`      | `wallet_createSession`     | Create session key         |
+| 4    | `/api/wallet-sign-authorization`  | `wallet_signAuthorization` | Sign session authorization |
+| 5    | `/api/wallet-prepare-calls`       | `wallet_prepareCalls`      | Prepare transaction calls  |
+| 6    | `/api/wallet-send-prepared-calls` | `wallet_sendPreparedCalls` | Send prepared transactions |
