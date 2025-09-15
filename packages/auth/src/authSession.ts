@@ -161,9 +161,9 @@ export class AuthSession {
     (this.turnkey.stamper as TurnkeyStamper).clear?.();
   }
 
-  public async getAuthSessionState(): Promise<AuthSessionState> {
+  public getAuthSessionState(): Promise<AuthSessionState> {
     this.throwIfDisconnected();
-    // TODO: retrieve and deserialize AuthSessionState from wagmi connector
+    // TODO: serialize AuthSessionState to be consumed by wagmi connector
     return notImplemented();
   }
 
