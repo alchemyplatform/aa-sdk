@@ -80,10 +80,10 @@ const signInput = {
 };
 
 // Sign the quote, getting back prepared and signed calls
-const signedCalls = await walletClient.signPreparedCalls(signInput as any);
+const signedCalls = await client.signPreparedCalls(signInput as any);
 
 // Send the prepared calls
-const sendResult = await walletClient.sendPreparedCalls(signedCalls);
+const sendResult = await client.sendPreparedCalls(signedCalls);
 
 // Wait for the call to resolve
 const callStatusResults = await client.waitForCallsStatus({
