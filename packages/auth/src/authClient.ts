@@ -1,4 +1,4 @@
-import { Signer } from "./signer.js";
+import { AuthSession } from "./authSession.js";
 import type {
   CreateTekStamperFn,
   CreateWebAuthnStamperFn,
@@ -246,7 +246,7 @@ export class AuthClient {
    *
    * @param {SubmitOtpCodeParams} params - Parameters for submitting the OTP code
    * @param {string} params.otpCode - The OTP code received via email
-   * @returns {Promise<Signer>} Promise that resolves to an authenticated Signer instance
+   * @returns {Promise<AuthSession>} Promise that resolves to an authenticated Signer instance
    * @throws {Error} If no OTP has been sent or if the code is invalid
    *
    * @example
@@ -260,7 +260,7 @@ export class AuthClient {
    */
   public async submitOtpCode({
     otpCode,
-  }: SubmitOtpCodeParams): Promise<Signer> {
+  }: SubmitOtpCodeParams): Promise<AuthSession> {
     if (!this.pendingOtp) {
       throw new Error("Cannot submit OTP code when none has been sent");
     }
@@ -286,7 +286,7 @@ export class AuthClient {
    * @param {string} [params.claims] - OAuth claims parameters
    * @param {Record<string, string>} [params.otherParameters] - Additional OAuth parameters
    * @param {"popup" | "redirect"} [params.mode] - OAuth flow mode, defaults to "redirect"
-   * @returns {Promise<Signer>} Promise that resolves to an authenticated Signer instance
+   * @returns {Promise<AuthSession>} Promise that resolves to an authenticated Signer instance
    * @throws {Error} If OAuth flow fails or is cancelled
    *
    * @example
@@ -298,7 +298,9 @@ export class AuthClient {
    * });
    * ```
    */
-  public async loginWithOauth(params: LoginWithOauthParams): Promise<Signer> {
+  public async loginWithOauth(
+    params: LoginWithOauthParams,
+  ): Promise<AuthSession> {
     const { targetPublicKey } = await this.getTekStamper();
     const oauthConfig = await this.dev_request("prepare-oauth", {
       nonce: getOauthNonce(targetPublicKey),
@@ -339,7 +341,7 @@ export class AuthClient {
    * The method automatically detects OAuth callback parameters (alchemy-bundle, alchemy-org-id,
    * alchemy-id-token) in the URL query string, processes them, and completes the authentication flow.
    *
-   * @returns {Promise<Signer>} Promise that resolves to an authenticated Signer instance
+   * @returns {Promise<AuthSession>} Promise that resolves to an authenticated Signer instance
    * @throws {Error} If no OAuth callback parameters are found in the URL
    * @throws {Error} If OAuth authentication failed (alchemy-error parameter present)
    * @throws {Error} If credential bundle injection fails
@@ -358,7 +360,7 @@ export class AuthClient {
    * ```
    */
   // TO DO: move this to the web signer client.
-  public async handleOauthRedirect(): Promise<Signer | null> {
+  public async handleOauthRedirect(): Promise<AuthSession | null> {
     // // First, check if we're currently on a page with OAuth callback parameters
     const callbackParams = extractOAuthCallbackParams();
     if (callbackParams) {
@@ -380,7 +382,7 @@ export class AuthClient {
    * Initiates passkey (WebAuthn) authentication flow.
    * This method uses WebAuthn standards to authenticate users with biometric or hardware security keys.
    *
-   * @returns {Promise<Signer>} Promise that resolves to an authenticated Signer instance
+   * @returns {Promise<AuthSession>} Promise that resolves to an authenticated Signer instance
    * @throws {Error} Currently throws "Not implemented" as this method is under development
    *
    * @example
@@ -388,7 +390,7 @@ export class AuthClient {
    * const signer = await authClient.loginWithPasskey();
    * ```
    */
-  public async loginWithPasskey(): Promise<Signer> {
+  public async loginWithPasskey(): Promise<AuthSession> {
     // TODO: figure out what the current passkey code is doing.
     const stamper = await this.createWebAuthnStamper({
       credentialId: undefined,
@@ -406,13 +408,13 @@ export class AuthClient {
     bundle: string;
     orgId: string;
     idToken?: string;
-  }): Promise<Signer> {
+  }): Promise<AuthSession> {
     const { stamper } = await this.getTekStamper();
     const success = await stamper.injectCredentialBundle(bundle);
     if (!success) {
       throw new Error("Failed to inject credential bundle");
     }
-    const signer = await Signer.create({
+    const signer = await AuthSession.create({
       apiKey: this.apiKey,
       stamper,
       orgId,

@@ -1,3 +1,3 @@
 export { createWebAuthClient } from "./createWebAuthClient.js";
-export type * from "@alchemy/signer";
+export type * from "@alchemy/auth";
 export type * from "./createWebAuthClient.js";

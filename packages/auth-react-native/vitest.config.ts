@@ -6,7 +6,7 @@ export default mergeConfig(
   sharedConfig,
   defineProject({
     test: {
-      name: "alchemy/signer-react-native",
+      name: "alchemy/auth-react-native",
     },
   }),
 );

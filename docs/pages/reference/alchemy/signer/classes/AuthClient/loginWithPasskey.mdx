@@ -11,7 +11,7 @@ This method uses WebAuthn standards to authenticate users with biometric or hard
 ## Import
 
 ```ts
-import { AuthClient } from "@alchemy/signer";
+import { AuthClient } from "@alchemy/auth";
 ```
 
 ## Usage
@@ -22,5 +22,5 @@ const signer = await authClient.loginWithPasskey();
 
 ## Returns
 
-`Promise<Signer>`
+`Promise<AuthSession>`
 Promise that resolves to an authenticated Signer instance

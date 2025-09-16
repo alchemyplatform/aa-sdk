@@ -15,8 +15,8 @@ const packageMap: Record<string, string> = {
   "alchemy/smart-accounts": "Alchemy Smart Accounts",
   "alchemy/wagmi-core": "Alchemy Wagmi Core",
   "alchemy/connectors-web": "Alchemy Wagmi Connector Web",
-  "alchemy/signer-web": "Alchemy Web Signer",
-  "alchemy/signer": "Alchemy Signer",
+  "alchemy/auth-web": "Alchemy Web Auth",
+  "alchemy/auth": "Alchemy Auth",
 };
 
 export default packageMap;

@@ -1,4 +1,4 @@
-import { AuthClient, OauthCancelledError } from "@alchemy/signer";
+import { AuthClient, OauthCancelledError } from "@alchemy/auth";
 import { IframeStamper } from "@turnkey/iframe-stamper";
 
 const CHECK_CLOSE_INTERVAL = 500;
@@ -33,7 +33,7 @@ export type WebAuthClientParams = {
  *
  * @example
  * ```ts
- * import { createWebAuthClient } from "@alchemy/signer-web";
+ * import { createWebAuthClient } from "@alchemy/auth-web";
  *
  * const authClient = createWebAuthClient({
  *   apiKey: "your-alchemy-api-key",
