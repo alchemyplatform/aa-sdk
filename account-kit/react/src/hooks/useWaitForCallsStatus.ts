@@ -26,7 +26,7 @@ export type UseWaitForCallsStatusResult = UseQueryResult<QueryResult>;
  * It will poll until the calls reach the desired status or until a timeout occurs.
  *
  * @example
- * ```tsx
+ * ```tsx twoslash
  * import { useWaitForCallsStatus } from "@account-kit/react";
  *
  * function MyComponent() {

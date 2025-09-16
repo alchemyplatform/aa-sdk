@@ -1,0 +1,52 @@
+<Info>Required SDK version: ^v4.61.0</Info>
+
+To use Smart Wallets in EIP-7702 mode, you must specify the mode when constructing the smart account client with `useSmartAccountClient`.
+This will allow the authorized EOA to act as a smart wallet with the same address as the EOA. The `useSendCalls` hook will sign the required
+delegation payload the first time that a user interacts with a new chain. This payload is then relayed on chain with the user's first transaction.
+
+**Prerequisites:**
+
+- [Smart Wallets installed and configured in your project](/docs/wallets/pages/react/setup.mdx)
+
+See the [`useSendCalls` SDK reference](/wallets/reference/account-kit/react/hooks/useSendCalls) for parameter descriptions.
+
+<CodeBlocks>
+
+```tsx twoslash title="sendCalls.tsx" focus={4-8,17-25}
+import { useSendCalls, useSmartAccountClient } from "@account-kit/react";
+
+export default function SendCalls() {
+  const { client } = useSmartAccountClient({
+    accountParams: {
+      mode: "7702",
+    },
+  });
+  const { sendCallsAsync } = useSendCalls({ client });
+
+  const handleSend = async () => {
+    if (!client) {
+      throw new Error("Smart account client not connected");
+    }
+
+    try {
+      const { ids } = await sendCallsAsync({
+        calls: [
+          {
+            to: "0x0000000000000000000000000000000000000000",
+            value: "0x00",
+            data: "0x",
+          },
+        ],
+      });
+
+      console.log("Transaction sent with ID:", ids[0]);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  return <button onClick={handleSend}>Click to Send</button>;
+}
+```
+
+</CodeBlocks>

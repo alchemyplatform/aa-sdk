@@ -31,7 +31,7 @@ export type UseCallsStatusResult = UseQueryResult<QueryResult>;
  * The status indicates whether the batch of calls has been processed, confirmed, or failed on-chain.
  *
  * @example
- * ```tsx
+ * ```tsx twoslash
  * import { useCallsStatus } from "@account-kit/react";
  *
  * function MyComponent() {

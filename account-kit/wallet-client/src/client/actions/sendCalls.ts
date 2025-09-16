@@ -29,7 +29,7 @@ export type SendCallsResult = SendPreparedCallsResult;
  * @param {PrepareCallsParams<TAccount>} params - Parameters for sending calls
  * @param {Array<{to: Address, data?: Hex, value?: Hex}>} params.calls - Array of contract calls to execute
  * @param {Address} [params.from] - The address to execute the calls from (required if the client wasn't initialized with an account)
- * @param {object} [params.capabilities] - Optional capabilities to include with the request.
+ * @param {object} [params.capabilities] - Optional capabilities to include with the request. See [API documentation](/wallets/api-reference/smart-wallets/wallet-api-endpoints/wallet-api-endpoints/wallet-prepare-calls#request.body.prepareCallsRequest.capabilities) for details.
  * @returns {Promise<SendPreparedCallsResult>} A Promise that resolves to the result containing the prepared call IDs.
  *
  *  @example

@@ -8,7 +8,7 @@ import type { AlchemyAccountContextProps } from "../AlchemyAccountContext.js";
  * This hook is meant to be consumed by other hooks exported by this package.
  *
  * @example
- * ```tsx
+ * ```tsx twoslash
  * import { useAlchemyAccountContext } from "@account-kit/react";
  *
  * const { config, queryClient } = useAlchemyAccountContext();
