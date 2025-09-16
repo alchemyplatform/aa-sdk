@@ -66,7 +66,6 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
     },
 
     async connect({ chainId } = {}) {
-      console.log("connect", parameters.apiKey);
       // Connection is handled through the auth flow (sendEmailOtp -> submitOtpCode)
       // This method is called by wagmi after authentication completes
       if (!signerInstance) {
