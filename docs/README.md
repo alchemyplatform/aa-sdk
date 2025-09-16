@@ -12,7 +12,7 @@ aa-sdk/
 │   ├── docs.yml         # The main configuration file that defines the documentation structure and sidebar navigation
 │   ├── pages/           # Contains the documentation markdown files
 │   ├── images/          # Contains images used in the documentation
-│   ├── components/      # Contains the all custom React components used in markdown
+│   ├── components/      # Contains all the custom React components used in markdown
 |   ├── specs/           # Contains OpenRPC and OpenAPI spec definitions which are dereferenced during build
 |   └── api-generators/  # Contains generators.yaml files used by Fern to reference API specs
 └── docs-site/           # Git Submodule containing Fern and all non-wallet docs content

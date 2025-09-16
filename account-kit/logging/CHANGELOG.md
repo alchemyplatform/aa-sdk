@@ -3,6 +3,56 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.63.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.63.1...v4.63.2) (2025-09-16)
+
+**Note:** Version bump only for package @account-kit/logging
+
+## [4.63.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.63.0...v4.63.1) (2025-09-15)
+
+**Note:** Version bump only for package @account-kit/logging
+
+# [4.63.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.62.2...v4.63.0) (2025-09-15)
+
+**Note:** Version bump only for package @account-kit/logging
+
+## [4.62.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.62.1...v4.62.2) (2025-09-12)
+
+**Note:** Version bump only for package @account-kit/logging
+
+## [4.62.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.62.0...v4.62.1) (2025-09-11)
+
+**Note:** Version bump only for package @account-kit/logging
+
+# [4.62.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.61.0...v4.62.0) (2025-09-06)
+
+**Note:** Version bump only for package @account-kit/logging
+
+# [4.61.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.60.1...v4.61.0) (2025-09-05)
+
+**Note:** Version bump only for package @account-kit/logging
+
+## [4.60.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.60.0...v4.60.1) (2025-09-03)
+
+**Note:** Version bump only for package @account-kit/logging
+
+# [4.60.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.59.1...v4.60.0) (2025-09-03)
+
+### Features
+
+- remove segment & add heap to demo app ([#1983](https://github.com/alchemyplatform/aa-sdk/issues/1983)) ([658bd54](https://github.com/alchemyplatform/aa-sdk/commit/658bd54c9cd4b0c59bd804cdc85ddef1caa3164f))
+
+## [4.59.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.59.0...v4.59.1) (2025-08-27)
+
+**Note:** Version bump only for package @account-kit/logging
+
+# [4.59.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.58.0...v4.59.0) (2025-08-26)
+
+**Note:** Version bump only for package @account-kit/logging
+
+# [4.58.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.57.1...v4.58.0) (2025-08-25)
+
+**Note:** Version bump only for package @account-kit/logging
+
 ## [4.57.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.57.0...v4.57.1) (2025-08-20)
 
 **Note:** Version bump only for package @account-kit/logging

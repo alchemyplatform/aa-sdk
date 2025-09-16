@@ -1,0 +1,26 @@
+---
+title: Send parallel transactions
+slug: wallets/transactions/send-parallel-transactions
+---
+
+This quide explains how to send multiple parallel transactions. Note that you don't need to send parallel transactions for batching calls. This is for sending new transactions when, for example, there's already a transaction in the mempool for a certain account.
+
+## Prerequisites
+
+- An [Alchemy API Key](https://dashboard.alchemy.com/apps)
+- A [Gas Manager](https://dashboard.alchemy.com/gas-manager/policy/create) policy
+- A signer to own the account and sign messages
+
+<Info>The `nonceKey` override must fit into a `uint152`!</Info>
+
+<Tabs>
+  <Tab title="React">
+    <Markdown src="react.mdx" />
+  </Tab>
+  <Tab title="JavaScript">
+    <Markdown src="client.mdx" />
+  </Tab>
+  <Tab title="API">
+    <Markdown src="api.mdx" />
+  </Tab>
+</Tabs>

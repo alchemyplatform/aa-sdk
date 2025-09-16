@@ -6,7 +6,7 @@ slug: wallets/resources/types
 
 ## `BatchUserOperationCallData`
 
-An array of `UserOperationCallData`, representing a sequence of `UserOperations` to be executed in batch by calling the `executeBatch` function on the `SmartContractAccount` contract. Check out our guide on [How to submit batch transactions](/wallets/transactions/send/send-user-operations#batch-user-operation) to learn more about batching multiple transactions into a single `UserOperation`.
+An array of `UserOperationCallData`, representing a sequence of `UserOperations` to be executed in batch by calling the `executeBatch` function on the `SmartContractAccount` contract. Check out our guide on [How to submit batch transactions](/wallets/transactions/send-batch-transactions) to learn more about batching multiple transactions into a single `UserOperation`.
 
 <Accordion title="BatchUserOperationCallData">
 
@@ -42,7 +42,7 @@ An object type that may contain optional `min` and `max` fields, each of which a
 
 ## `BundlerAction`
 
-Bundler Actions are `viem` [`Actions`](https://viem.sh/docs/actions/public/introduction) that map one-to-one with "public" [`Bundler`](./terms#bundler) RPC methods (`eth_sendUserOperation`, `eth_getUserOperationByHash`, etc.) under the [EIP-4337](https://eips.ethereum.org/EIPS/eip-4337) and [EIP-6900](https://eips.ethereum.org/EIPS/eip-6900) standards. They are used with a [`BundlerClient`](#bundlerclient). `BundlerActions` do not require any special permissions, nor do they provide "signing" capabilities to the user. Examples of `BundlerActions` include retrieving the details of a specific user operation, estimating user operation gas, etc.
+Bundler Actions are `viem` [`Actions`](https://viem.sh/docs/actions/public/introduction) that map one-to-one with "public" [`Bundler`](/wallets/resources/terms#bundler) RPC methods (`eth_sendUserOperation`, `eth_getUserOperationByHash`, etc.) under the [EIP-4337](https://eips.ethereum.org/EIPS/eip-4337) and [EIP-6900](https://eips.ethereum.org/EIPS/eip-6900) standards. They are used with a [`BundlerClient`](#bundlerclient). `BundlerActions` do not require any special permissions, nor do they provide "signing" capabilities to the user. Examples of `BundlerActions` include retrieving the details of a specific user operation, estimating user operation gas, etc.
 
 <Accordion title="BundlerAction">
 
@@ -138,7 +138,7 @@ An extension of the [`SmartAccountSigner`](#smartaccountsigner) interface, this 
 
 ## `SmartAccountClient`
 
-`SmartAccountClient` is a custom `viem` `Client`, like the [`BundlerClient`](#bundlerclient), which is an intermediary or connector that enables your client application to interact with the `SmartContractAccount`. `SmartAccountClient` is analogous to the [`WalletClient`](https://viem.sh/docs/clients/wallet). The difference is that while `WalletClient` has [`WalletActions`](https://viem.sh/docs/actions/wallet/introduction) that lets your client application interact with an [Externally-owned account (EOA)](https://ethereum.org/developers/docs/accounts) with a [wallet](./terms#wallet), `SmartAccountClient` provides [`SmartAccountClientActions`](#smartaccountclientaction) for client applications to interact with `SmartContractAccounts`.
+`SmartAccountClient` is a custom `viem` `Client`, like the [`BundlerClient`](#bundlerclient), which is an intermediary or connector that enables your client application to interact with the `SmartContractAccount`. `SmartAccountClient` is analogous to the [`WalletClient`](https://viem.sh/docs/clients/wallet). The difference is that while `WalletClient` has [`WalletActions`](https://viem.sh/docs/actions/wallet/introduction) that lets your client application interact with an [Externally-owned account (EOA)](https://ethereum.org/developers/docs/accounts) with a [wallet](/wallets/resources/terms#wallet), `SmartAccountClient` provides [`SmartAccountClientActions`](#smartaccountclientaction) for client applications to interact with `SmartContractAccounts`.
 
 <Accordion title="SmartAccountClient">
 
@@ -150,7 +150,7 @@ An extension of the [`SmartAccountSigner`](#smartaccountsigner) interface, this 
 
 ## `SmartAccountClientAction`
 
-`SmartAccountClientActions` are `viem` [`Actions`](https://viem.sh/docs/actions/wallet/introduction) that map one-to-one with smart contract account-related or "signable" actions, such as constructing user operation requests to be sent to the [`Bundler`](./terms#bundler), signing messages or user operation requests, sending user operations to the `Bundler`, upgrading accounts to different implementation address, etc. They are used with a `SmartAccountClient`. `SmartAccountClientActions` require special permissions and provide signing capabilities for `SmartContractAccounts`.
+`SmartAccountClientActions` are `viem` [`Actions`](https://viem.sh/docs/actions/wallet/introduction) that map one-to-one with smart contract account-related or "signable" actions, such as constructing user operation requests to be sent to the [`Bundler`](/wallets/resources/terms/#bundler), signing messages or user operation requests, sending user operations to the `Bundler`, upgrading accounts to different implementation address, etc. They are used with a `SmartAccountClient`. `SmartAccountClientActions` require special permissions and provide signing capabilities for `SmartContractAccounts`.
 
 <Accordion title="SmartAccountClientAction">
 
@@ -162,7 +162,7 @@ An extension of the [`SmartAccountSigner`](#smartaccountsigner) interface, this 
 
 ## `SmartAccountSigner`
 
-An interface representing a signer capable of signing messages and typed data. It provides methods to retrieve the signer's address (`getAddress`), sign a message (`signMessage`), and sign typed data (`signTypedData`). `SmartAccountSigner` refers to the [`Signer`](./terms#signer) instance responsible for the signing activities using its private key for smart account activities. Often, the `Signer` is referred to as the `Owner` of the account as it has the authority to use the smart account on-chain with its signatures.
+An interface representing a signer capable of signing messages and typed data. It provides methods to retrieve the signer's address (`getAddress`), sign a message (`signMessage`), and sign typed data (`signTypedData`). `SmartAccountSigner` refers to the [`Signer`](/wallets/resources/terms#signer) instance responsible for the signing activities using its private key for smart account activities. Often, the `Signer` is referred to as the `Owner` of the account as it has the authority to use the smart account on-chain with its signatures.
 
 <Accordion title="SmartAccountSigner">
 
@@ -174,7 +174,7 @@ An interface representing a signer capable of signing messages and typed data. I
 
 ## `SmartContractAccount`
 
-As smart contract accounts are essentially the contract codes that operate on the blockchain, `SmartContractAccount` defines the interface with different functionalities for managing and interacting with the contract account. It includes different functionalities for creating, managing, and using your smart account. In addition to supporting all functionalities achieved with a basic [EOA](./terms#wallet) alone, `SmartContractAccount` can have custom capabilities such as automating processes or executing actions based on predefined conditions. Smart contract wallets allow users to customize how they manage their digital assets, offering a more tailored approach to handling funds securely. `SmartContractAccount` type extends `viem`'s [`Account`](https://viem.sh/docs/accounts/custom), and instantiation of an account is done using the [`toSmartContractAccount`](/wallets/reference/aa-sdk/core/functions/toSmartContractAccount) action.
+As smart contract accounts are essentially the contract codes that operate on the blockchain, `SmartContractAccount` defines the interface with different functionalities for managing and interacting with the contract account. It includes different functionalities for creating, managing, and using your smart account. In addition to supporting all functionalities achieved with a basic [EOA](/wallets/resources/terms#wallet) alone, `SmartContractAccount` can have custom capabilities such as automating processes or executing actions based on predefined conditions. Smart contract wallets allow users to customize how they manage their digital assets, offering a more tailored approach to handling funds securely. `SmartContractAccount` type extends `viem`'s [`Account`](https://v1.viem.sh/docs/accounts/custom.html), and instantiation of an account is done using the [`toSmartContractAccount`](/wallets/reference/aa-sdk/core/functions/toSmartContractAccount) action.
 
 <Accordion title="SmartContractAccount">
 
@@ -215,7 +215,7 @@ This type defines the parameters to the `SmartContractAccount` instantiation act
 
 ## `UserOperationCallData`
 
-`UserOperationCallData` is a type that represents the user's "intent" or the desired outcome representing a specific objective a user aims to accomplish. It includes `target` (the destination address), `data` (the [`Transaction calldata`](./terms#transaction-calldata)), and `value` (the amount value of ETH, or the native token to send). It acts as the input to the `sendUserOperation` method on [`SmartAccountClient`](#smartaccountclient).
+`UserOperationCallData` is a type that represents the user's "intent" or the desired outcome representing a specific objective a user aims to accomplish. It includes `target` (the destination address), `data` (the [`Transaction calldata`](/wallets/resources/terms#transaction-calldata)), and `value` (the amount value of ETH, or the native token to send). It acts as the input to the `sendUserOperation` method on [`SmartAccountClient`](#smartaccountclient).
 
 <Accordion title="UserOperationCallData">
 

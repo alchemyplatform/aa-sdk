@@ -6,7 +6,7 @@ slug: wallets/resources/terms
 
 ## Smart Wallets
 
-Smart Wallets is a framework designed to embed smart accounts in web3 applications. It includes a set of tools such as [Signer integrations](/wallets/concepts/smart-account-signer), [Gas Manager](https://docs.alchemy.com/docs/gas-manager-services) and [Bundler](https://docs.alchemy.com/docs/bundler-services) utilities that unlock features such as [gas sponsorship](/wallets/transactions/sponsor-gas/sponsor-gas-evm), [batched transactions](/wallets/transactions/send/send-user-operations#batch-user-operation) and email/social login. With its user-friendly suite of SDKs, known as [aa-sdk](https://github.com/alchemyplatform/aa-sdk), Smart Wallets makes it easy to deploy smart accounts, manage `UserOperation`s, and handle gas sponsorship, streamlining the entire process with minimal coding effort.
+The Smart Wallets framework is designed to embed smart accounts in web3 applications. It includes a set of tools such as [Signer integrations](/wallets/signer/what-is-a-signer), [Gas Manager](https://docs.alchemy.com/docs/gas-manager-services) and [Bundler](https://docs.alchemy.com/docs/bundler-services) utilities that unlock features such as [gas sponsorship](/wallets/transactions/sponsor-gas), [batched transactions](/wallets/transactions/send-batch-transactions) and email/social login. With its user-friendly suite of SDKs, known as [aa-sdk](https://github.com/alchemyplatform/aa-sdk), Smart Wallets makes it easy to deploy smart accounts, manage `UserOperation`s, and handle gas sponsorship, streamlining the entire process with minimal coding effort.
 
 ## Bundler
 
@@ -22,7 +22,7 @@ A standardized smart contract that acts as the primary gateway for processing `U
 
 ## ERC-4337
 
-A standard authored by the [Ethereum Foundation](https://ethereum.foundation/) for [account abstraction](https://docs.alchemy.com/docs/introduction-to-account-abstraction), establishing a uniform interface for all smart accounts. This standard also outlines the roles and functionalities of [Bundlers](https://docs.alchemy.com/docs/bundler-services), [Paymasters](https://www.alchemy.com/overviews/what-is-a-paymaster), and [`EntryPoint`](#entrypoint). Reference: https://eips.ethereum.org/EIPS/eip-4337
+A standard authored by the [Ethereum Foundation](https://ethereum.foundation/) for account abstraction, establishing a uniform interface for all smart accounts. This standard also outlines the roles and functionalities of [Bundlers](https://docs.alchemy.com/docs/bundler-services), [Paymasters](https://www.alchemy.com/overviews/what-is-a-paymaster), and [`EntryPoint`](#entrypoint). Reference: https://eips.ethereum.org/EIPS/eip-4337
 
 ## ERC-6492
 
@@ -38,7 +38,7 @@ A [standard for modular accounts](https://eips.ethereum.org/EIPS/eip-6900) autho
 
 ## Light Account
 
-[Light Account](/wallets/smart-contracts/other-accounts/light-account/) is a collection of lightweight, production-ready [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337) smart accounts developed by Alchemy. It builds on top of Ethereum Foundation's canonical [SimpleAccount](https://github.com/eth-infinitism/account-abstraction/blob/develop/contracts/samples/SimpleAccount.sol) to add key improvements such as ownership transfers, multiple owners, ERC-1271 signature support, and gas optimizations. It has been audited [multiple](https://github.com/alchemyplatform/light-account/blob/develop/audits/2024-01-09_quantstamp_aa8196b.pdf) [times](https://github.com/alchemyplatform/light-account/blob/develop/audits/2024-04-26_quantstamp_93f46a2.pdf) by Quantstamp.
+[Light Account](/wallets/smart-contracts/other-accounts/light-account/) is a collection of lightweight, production-ready [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337) smart accounts developed by Alchemy. It builds on top of Ethereum Foundation's canonical [SimpleAccount](https://github.com/eth-infinitism/account-abstraction/blob/cc3893bcaf2272c163ce89d5eb9eadb8e6b52db7/contracts/accounts/SimpleAccount.sol#L22) to add key improvements such as ownership transfers, multiple owners, ERC-1271 signature support, and gas optimizations. It has been audited [multiple](https://github.com/alchemyplatform/light-account/blob/develop/audits/2024-01-09_quantstamp_aa8196b.pdf) [times](https://github.com/alchemyplatform/light-account/blob/develop/audits/2024-04-26_quantstamp_93f46a2.pdf) by Quantstamp.
 
 ## Magic Link Authentication
 
@@ -73,7 +73,7 @@ A service or application that manages the private key and signs either arbitrary
 
 ## Smart Contract Account
 
-A [Smart Contract Account (SCA)](/wallets/concepts/smart-contract-account), or smart account in short, is an individual on-chain account located at a public address where an ERC-4337 compatible smart account [`contract`](https://ethereum.org/developers/docs/smart-contracts) is deployed to. This address is controlled by one or more owners of the smart contract account. The [aa-sdk](https://github.com/alchemyplatform/aa-sdk) supports different smart account implementations such as [Modular Account V2](/wallets/smart-contracts/modular-account-v2/overview), [Modular Account V1](/wallets/smart-contracts/other-accounts/modular-account/), [Light Account](/wallets/smart-contracts/other-accounts/light-account/), or [Simple Account](https://github.com/eth-infinitism/account-abstraction/blob/develop/contracts/samples/SimpleAccount.sol). You can also [add your own account implementation in aa-sdk](#TODO/smart-contracts/custom/contributing).
+A [Smart Contract Account (SCA)](/wallets/concepts/smart-contract-account), or smart account in short, is an individual on-chain account located at a public address where an ERC-4337 compatible smart account [`contract`](https://ethereum.org/developers/docs/smart-contracts) is deployed to. This address is controlled by one or more owners of the smart contract account. The [aa-sdk](https://github.com/alchemyplatform/aa-sdk) supports different smart account implementations such as [Modular Account V2](/wallets/smart-contracts/modular-account-v2/overview), [Modular Account V1](/wallets/smart-contracts/other-accounts/modular-account/), [Light Account](/wallets/smart-contracts/other-accounts/light-account/), or [Simple Account](https://github.com/eth-infinitism/account-abstraction/blob/cc3893bcaf2272c163ce89d5eb9eadb8e6b52db7/contracts/accounts/SimpleAccount.sol#L22). You can also [add your own account implementation in aa-sdk](#TODO/smart-contracts/custom/contributing).
 
 ## Transaction
 
@@ -89,7 +89,7 @@ User Operations are pseudo-transaction objects introduced by the ERC-4337 standa
 
 ## Wallet
 
-[Wallets](https://ethereum.org/wallets) are applications that give you control over your account. Like your physical wallet, it contains everything you need to prove your identity and handle your assets. Your wallet allows you to sign in to applications, read your balance, send transactions, and verify your identity. Your wallet is a tool for interacting with your account, which can be either an [Externally-Owned Account (EOA)](https://ethereum.org/developers/docs/accounts) or [`SmartContractAccount`](#smart-contract-account). Conventionally, wallets used to interact with `SmartContractAccounts` are called `Smart Contract Wallets`, while wallets used to interact with Externally-owned accounts (EOA) are called `EOA Wallets`.
+[Wallets](https://ethereum.org/wallets) are applications that give you control over your account. Like your physical wallet, it contains everything you need to prove your identity and handle your assets. Your wallet allows you to sign in to applications, read your balance, send transactions, and verify your identity. Your wallet is a tool for interacting with your account, which can be either an [Externally-Owned Account (EOA)](https://ethereum.org/developers/docs/accounts) or [`SmartContractAccount`](/wallets/concepts/smart-contract-account). Conventionally, wallets used to interact with `SmartContractAccounts` are called `Smart Contract Wallets`, while wallets used to interact with Externally-owned accounts (EOA) are called `EOA Wallets`.
 
 ## Wallet-as-a-Service (WaaS)
 

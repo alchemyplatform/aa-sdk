@@ -8,7 +8,7 @@ import {
 import type { SmartWalletClient } from "@account-kit/wallet-client";
 import { toHex, type Transport } from "viem";
 import { ClientOnlyPropertyError, SignerNotConnectedError } from "../errors.js";
-import { getSmartWalletClient } from "../experimental/actions/getSmartWalletClient.js";
+import { getSmartWalletClient } from "./getSmartWalletClient.js";
 import { CoreLogger } from "../metrics.js";
 import type {
   AlchemyAccountsConfig,

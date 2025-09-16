@@ -1,6 +1,4 @@
-import { createClientLogger } from "./client.js";
 import { noopLogger } from "./noop.js";
-import { createServerLogger } from "./server.js";
 import type { EventLogger, EventsSchema, LoggerContext } from "./types";
 
 export type * from "./types.js";
@@ -9,17 +7,10 @@ export function createLogger<Schema extends EventsSchema = []>(
   context: LoggerContext,
 ): EventLogger<Schema>;
 
-export function createLogger(context: LoggerContext): EventLogger {
-  const innerLogger = (() => {
-    try {
-      return typeof window === "undefined"
-        ? createServerLogger(context)
-        : createClientLogger(context);
-    } catch (e) {
-      console.error("[Safe to ignore] failed to initialize metrics", e);
-      return noopLogger;
-    }
-  })();
+export function createLogger(_context: LoggerContext): EventLogger {
+  // We are currently not logging events from the SDK (as Sept 2, 2025), so
+  // a no-op logger is always used. This will be further explored in v5.
+  const innerLogger = noopLogger;
 
   const logger: EventLogger = {
     ...innerLogger,

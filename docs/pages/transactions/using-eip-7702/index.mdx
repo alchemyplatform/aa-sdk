@@ -1,0 +1,103 @@
+---
+title: Using EIP-7702
+description: Upgrade to Smart Wallets with EIP-7702
+slug: wallets/transactions/using-eip-7702
+---
+
+Upgrade your user's accounts to Smart Wallets using [EIP-7702](https://eips.ethereum.org/EIPS/eip-7702).
+This gives users access to all of the capabilities of Smart Wallets including gas sponsorship, batching, and more.
+
+## How it works
+
+EIP-7702 enables EOAs (Externally Owned Accounts) to delegate control to smart wallets that can execute code directly from their addresses. Users simply sign an authorization
+payload to delegate, then their account can function as a smart wallet with access to all of the user's assets. Wallet APIs will prompt the user to sign this authorization
+when the delegation is missing on the chain they're interacting with.
+
+## Prerequisites
+
+- API key from your [dashboard](https://dashboard.alchemy.com/apps)
+
+## Implementation
+
+<Tabs>
+  <Tab title="React">
+    <Markdown src="react.mdx" />
+  </Tab>
+  <Tab title="JavaScript">
+    <Markdown src="client.mdx" />
+  </Tab>
+  <Tab title="API">
+    <Markdown src="api.mdx" />
+  </Tab>
+</Tabs>
+
+## Advanced
+
+<Accordion title="When to use EIP-7702">
+
+EIP-7702 is particularly useful when you have existing wallets that are being used as EOAs, but want access to smart wallet capabilities while allowing users
+to keep their existing address and avoid transferring their assets. With EIP-7702, you can upgrade your users' EOAs directly to a Smart Wallet at their current address.
+
+See a full list of recommendations [here](https://www.alchemy.com/blog/eip-7702-ethereum-pectra-hardfork#for-developers-that-havent-yet-deployed-their-application).
+
+</Accordion>
+
+<Accordion title="Usage with prepare calls">
+
+The EIP-7702 capability works with the prepare calls function in a similar way to its usage in send calls.
+However, you are required to handle the authorization signature request in your code's logic.
+
+When a delegation is required the response to prepare calls will return an array of signature requests:
+
+1. An authorization signature request
+2. A user operation signature request
+
+Both of these requests need to be signed and included in the `sendPreparedCalls` request. `sendPreparedCalls` takes
+an array of signed calls for this purpose. These signatures are combined into a single transaction that is relayed onchain.
+
+Signing an authorization signature request requires logic specific to the wallet being used. Examples:
+
+- [Viem](https://viem.sh/docs/eip7702/signAuthorization)
+- [Cast](https://getfoundry.sh/cast/reference/wallet/sign-auth/)
+
+<Warning>
+  Most external wallet implementations, including browser wallets, will block
+  requests to sign authorizations. This is done for security reasons. To use
+  EIP-7702 ensure that your user's wallets support signing authorizations.
+</Warning>
+
+<Tabs>
+  <Tab title="React">
+    See the [`usePrepareCalls` react
+    hook](/wallets/reference/account-kit/react/hooks/usePrepareCalls)
+  </Tab>
+  <Tab title="JavaScript">
+    See the [`prepareCalls` SDK
+    reference](/wallets/reference/account-kit/wallet-client/functions/prepareCalls)
+  </Tab>
+  <Tab title="API">
+    See the [`wallet_prepareCalls` API
+    reference](/wallets/api/smart-wallets/wallet-api-endpoints/wallet-api-endpoints/wallet-prepare-calls)
+  </Tab>
+</Tabs>
+
+</Accordion>
+
+<Accordion title="EIP-7702 delegations">
+The `eip7702Auth` capability supports the interface defined in [ERC-7902](https://eips.ethereum.org/EIPS/eip-7902).
+However, it currently only supports a single delegation address: `0x69007702764179f14F51cdce752f4f775d74E139`. All other addresses will be rejected.
+It's recommended to use `eip7702Auth: true` to avoid the extra complexity.
+
+Once your account is delegated, it will remain delegated until the delegation is replaced or removed. We currently only support relaying delegations
+for Modular Account v2. If you wish to replace or remove this delegation, you'll need to relay the delegation yourself or use a third party service.
+Viem has a guide for this [here](https://viem.sh/docs/eip7702/contract-writes).
+
+To reset an account back to a pure EOA with no delegation, delegate the account to `0x0000000000000000000000000000000000000000` as defined in [EIP-7702](https://eips.ethereum.org/EIPS/eip-7702#behavior).
+
+</Accordion>
+
+## Next steps
+
+Build more:
+
+- [Sponsor gas](/wallets/transactions/sponsor-gas)

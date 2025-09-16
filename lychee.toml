@@ -1,0 +1,13 @@
+
+# Base URL or website root directory to check relative URLs.
+base_url = "https://www.alchemy.com"
+
+exclude = [
+    ".*\\.mdx$",             # Links to MDX files - these should only be for snippets, not HTML pages
+    ".*\\.png$",             # All PNG files 
+    ".*\\.pdf$",             # All PDF files 
+    ".*g\\.alchemy\\.com.*", # Any path containing g.alchemy.com - RPC endpoints require API keys
+]
+
+# Comma-separated list of accepted status codes for valid links.
+accept = [200, 403]

@@ -101,9 +101,6 @@ const config = {
         "ui-loading-dark": "ui-loading-dark 0.8s 0ms ease-out infinite both",
         "ui-loading-light": "ui-loading-light 0.8s 0ms ease-out infinite both",
       },
-      backgroundImage: {
-        "bg-main": "url('/images/bg-main.webp')",
-      },
       boxShadow: {
         smallCard:
           "0px 50px 50px 0px rgba(0, 0, 0, 0.09), 0px 12px 27px 0px rgba(0, 0, 0, 0.10)",

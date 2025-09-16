@@ -53,8 +53,8 @@ export const config = createConfig(
   {
     transport: alchemy({ apiKey: "API_KEY" }),
     chain: chain,
-    ssr: true, // more about ssr: https://www.alchemy.com/docs/wallets/react/ssr
-    storage: cookieStorage, // more about persisting state with cookies: https://www.alchemy.com/docs/wallets/react/ssr#persisting-the-account-state
+    ssr: true, // more about ssr: https://www.alchemy.com/docs/wallets/troubleshooting/ssr
+    storage: cookieStorage, // more about persisting state with cookies: https://www.alchemy.com/docs/wallets/troubleshooting/ssr#persisting-the-account-state
     enablePopupOauth: true, // must be set to "true" if you plan on using popup rather than redirect in the social login flow
     policyId: "policy_id",
   },
@@ -66,7 +66,7 @@ export const config = createConfig(
 
 #### Working with React?
 
-Follow this [Quickstart](https://www.alchemy.com/docs/wallets/react/quickstart/new-project) guide to set up a new project.
+Follow this [Quickstart](https://www.alchemy.com/docs/wallets/react/quickstart) guide to set up a new project.
 
 The most important step is getting your API Key (`NEXT_PUBLIC_ALCHEMY_API_KEY`) and ensuring your project is configured correctly on your dashboard. Make sure you have Hyperliquid enabled as a network on your app.
 
@@ -169,7 +169,7 @@ const txHash = await walletClient.sendRawTransaction({
 
 ## 4. Sponsoring User Operations
 
-Alchemy gas sponsorship lets your users send transactions on HyperEVM without holding the native token for gas. To start, make sure you have a gas policy ID configured in your app dashboard and pass it to your client initialization. Learn more in [Sponsor Gas](https://www.alchemy.com/docs/wallets/infra/sponsor-gas).
+Alchemy gas sponsorship lets your users send transactions on HyperEVM without holding the native token for gas. To start, make sure you have a gas policy ID configured in your app dashboard and pass it to your client initialization. Learn more in [Sponsor Gas](https://www.alchemy.com/docs/wallets/transactions/sponsor-gas/sponsor-gas).
 
 As an example, we will be sponsoring a HyperEVM user operation opening a limit order, using the HyperCore Writer contract. Start by creating some helpers to encode the call.
 
@@ -311,7 +311,7 @@ await modularAccountV2Client.sendUserOperation({
 - [Alchemy Signer](https://www.alchemy.com/docs/wallets/signer/what-is-a-signer)
 - [Using Signer as EOA](https://www.alchemy.com/docs/wallets/signer/as-an-eoa)
 - [Connect your EOAs](https://www.alchemy.com/docs/wallets/react/login-methods/eoa-login)
-- [Alchemy Gas Sponsorship](https://www.alchemy.com/docs/wallets/infra/sponsor-gas)
+- [Alchemy Gas Sponsorship](https://www.alchemy.com/docs/wallets/transactions/sponsor-gas/sponsor-gas)
 - [Viem Custom Chain Support](https://viem.sh/docs/chains/introduction#custom-chains)
 - [Full Example](https://github.com/aashkrishnan/hyperevmguide/blob/ash/hyperevm/app/page.tsx)
 - [Bridge Funds to Hype](https://debridge.finance/)
