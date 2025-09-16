@@ -2,7 +2,7 @@ In JavaScript, you can use [Viem](https://viem.sh/docs/contract/encodeFunctionDa
 
 <CodeBlocks>
 
-```ts twoslash title="sendCalls.ts" focus={9-13}
+```ts title="sendCalls.ts" focus={9-13}
 import { encodeFunctionData } from "viem";
 import { client } from "./client.ts";
 import { exampleAbi } from "./abi.ts";
@@ -21,7 +21,7 @@ await client.sendCalls({
 });
 ```
 
-```ts twoslash title="abi.ts"
+```ts title="abi.ts"
 export const exampleAbi = [
   {
     inputs: [{ name: "recipient", type: "address" }],
@@ -33,7 +33,7 @@ export const exampleAbi = [
 ] as const;
 ```
 
-```ts twoslash title="client.ts"
+```ts title="client.ts"
 import { LocalAccountSigner } from "@aa-sdk/core";
 import { alchemy, sepolia } from "@account-kit/infra";
 import {

@@ -14,7 +14,7 @@ You'll need the following env variables:
 
 <CodeBlocks>
 
-```ts twoslash title="retryTransaction.ts"
+```ts title="retryTransaction.ts"
 import { client, config } from "./client.ts";
 
 // Send initial transaction
@@ -71,7 +71,7 @@ if (status.status === 100) {
 }
 ```
 
-```ts twoslash title="client.ts"
+```ts title="client.ts"
 import "dotenv/config";
 import { type Address, type Hex, toHex } from "viem";
 import { LocalAccountSigner } from "@aa-sdk/core";

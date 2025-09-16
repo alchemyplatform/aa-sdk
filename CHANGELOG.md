@@ -3,6 +3,31 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.63.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.63.1...v4.63.2) (2025-09-16)
+
+### Bug Fixes
+
+- add tip for setting up a signer to login method pages ([#1901](https://github.com/alchemyplatform/aa-sdk/issues/1901)) ([e2d6f03](https://github.com/alchemyplatform/aa-sdk/commit/e2d6f0317940f27328c8838fd6125a992327bed1))
+- broken links ([#2052](https://github.com/alchemyplatform/aa-sdk/issues/2052)) ([9f38d2f](https://github.com/alchemyplatform/aa-sdk/commit/9f38d2f815d43f674e03f2558c936e0c5f8ccea6))
+- broken links for api endpoints ([#2051](https://github.com/alchemyplatform/aa-sdk/issues/2051)) ([03fbb2a](https://github.com/alchemyplatform/aa-sdk/commit/03fbb2ada37bc65c618af07c7d1aba48e884db64))
+- casing for JavaScript ([#2049](https://github.com/alchemyplatform/aa-sdk/issues/2049)) ([2807f9d](https://github.com/alchemyplatform/aa-sdk/commit/2807f9d144071d90cd84db2225e937baeb74ed7a))
+- don't try to clear walletconnect data for react native ([#2061](https://github.com/alchemyplatform/aa-sdk/issues/2061)) ([75a0f66](https://github.com/alchemyplatform/aa-sdk/commit/75a0f66be65e03d5626a02678ed6f8e4036b0379))
+- quickstart ([#2050](https://github.com/alchemyplatform/aa-sdk/issues/2050)) ([24e3fa7](https://github.com/alchemyplatform/aa-sdk/commit/24e3fa74af5517943af41b0c1896001165be4ccf))
+- relative links ([#2053](https://github.com/alchemyplatform/aa-sdk/issues/2053)) ([d6a9807](https://github.com/alchemyplatform/aa-sdk/commit/d6a9807535c0481e81ba0432858b354556508795))
+- rent description ([#2054](https://github.com/alchemyplatform/aa-sdk/issues/2054)) ([83469db](https://github.com/alchemyplatform/aa-sdk/commit/83469db6c1a88c5b7f582bacdefb5aa84ed0baf1))
+- update react quickstart top level copy ([8fd9a49](https://github.com/alchemyplatform/aa-sdk/commit/8fd9a498581ac6d6d67f200efa0ea6751bd596e1))
+
+### Features
+
+- add postcalls comment, remove focus ([34b54d1](https://github.com/alchemyplatform/aa-sdk/commit/34b54d1e33a704bf4fa74d11850265e641b7ff5e))
+- **docs:** rebased infra docs ([#2048](https://github.com/alchemyplatform/aa-sdk/issues/2048)) ([0472600](https://github.com/alchemyplatform/aa-sdk/commit/0472600788acb886990da0150caa0975069b6689)), closes [#1953](https://github.com/alchemyplatform/aa-sdk/issues/1953) [#1999](https://github.com/alchemyplatform/aa-sdk/issues/1999) [#2026](https://github.com/alchemyplatform/aa-sdk/issues/2026)
+- **infra:** fix formatting ([ba76f75](https://github.com/alchemyplatform/aa-sdk/commit/ba76f759bbadd43567477aae2cd0556811795867))
+- **infra:** fix psth ([df7dfc5](https://github.com/alchemyplatform/aa-sdk/commit/df7dfc5f842395604a9d8cf0dbf9bfa49f54fec4))
+- **infra:** reomve duplicate docs path ([9a68bd7](https://github.com/alchemyplatform/aa-sdk/commit/9a68bd771f41ebce759a02721f74cd31b1b345c6))
+- parallel-transaction docs ([#2032](https://github.com/alchemyplatform/aa-sdk/issues/2032)) ([98061e4](https://github.com/alchemyplatform/aa-sdk/commit/98061e4f3ca745e6833e98ac0f39e1d8ada4381b)), closes [#2040](https://github.com/alchemyplatform/aa-sdk/issues/2040)
+- postcalls in api swap guide ([73c1a5f](https://github.com/alchemyplatform/aa-sdk/commit/73c1a5f9640aa52578cb86d60e6468f2e5f78a32))
+- refactor gas manager docs ([#2047](https://github.com/alchemyplatform/aa-sdk/issues/2047)) ([d5a4fb2](https://github.com/alchemyplatform/aa-sdk/commit/d5a4fb2efdbc2b0e7a48d06b87200df9f7c15209))
+
 ## [4.63.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.63.0...v4.63.1) (2025-09-15)
 
 ### Bug Fixes

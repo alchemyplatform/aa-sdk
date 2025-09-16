@@ -1,5 +1,5 @@
 <CodeBlocks>
-```ts twoslash title="config.ts"
+```ts title="config.ts"
 import { alchemy, sepolia } from "@account-kit/infra";
 
 const YOUR_API_KEY = "<YOUR_API_KEY>";
@@ -13,7 +13,7 @@ export const transport = alchemy({
 });
 ```
 
-```ts twoslash title="client.ts"
+```ts title="client.ts"
 import { createModularAccountV2Client } from "@account-kit/smart-contracts";
 import { chain, transport, policyId } from "./config";
 import { LocalAccountSigner } from "@aa-sdk/core";
