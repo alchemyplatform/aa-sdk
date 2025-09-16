@@ -21,7 +21,7 @@ import { AuthClient } from "@alchemy/auth";
 await authClient.sendEmailOtp({ email: "user@example.com" });
 
 // Then submit the code received via email
-const signer = await authClient.submitOtpCode({ otpCode: "123456" });
+const authSession = await authClient.submitOtpCode({ otpCode: "123456" });
 ```
 
 ## Parameters
@@ -41,4 +41,4 @@ const signer = await authClient.submitOtpCode({ otpCode: "123456" });
 ## Returns
 
 `Promise<AuthSession>`
-Promise that resolves to an authenticated Signer instance
+Promise that resolves to an auth session instance

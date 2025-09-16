@@ -160,7 +160,7 @@ export class AuthSession {
 
   private throwIfDisconnected(): void {
     if (this.isDisconnected) {
-      throw new Error("Signer is disconnected");
+      throw new Error("Auth session has been disconnected");
     }
   }
 

@@ -17,7 +17,7 @@ import { AuthClient } from "@alchemy/auth";
 ## Usage
 
 ```ts
-const signer = await authClient.loginWithOauth({
+const authSession = await authClient.loginWithOauth({
   type: "oauth",
   authProviderId: "google",
   mode: "popup",
@@ -65,4 +65,4 @@ const signer = await authClient.loginWithOauth({
 ## Returns
 
 `Promise<AuthSession>`
-Promise that resolves to an authenticated Signer instance
+Promise that resolves to an auth session instance

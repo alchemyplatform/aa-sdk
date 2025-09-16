@@ -17,10 +17,10 @@ import { AuthClient } from "@alchemy/auth";
 ## Usage
 
 ```ts
-const signer = await authClient.loginWithPasskey();
+const authSession = await authClient.loginWithPasskey();
 ```
 
 ## Returns
 
 `Promise<AuthSession>`
-Promise that resolves to an authenticated Signer instance
+Promise that resolves to an auth session instance
