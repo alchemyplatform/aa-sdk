@@ -1,4 +1,3 @@
-import { Key } from "@/components/icons/key";
 import { Button } from "./Button";
 import { LoadingIcon } from "@/components/icons/loading";
 import { Transactions } from "./Transactions";
@@ -6,6 +5,7 @@ import { useMemo } from "react";
 import { useRecurringTransactions } from "@/hooks/useRecurringTransactions";
 import { alchemy, arbitrumSepolia, baseSepolia } from "@account-kit/infra";
 import { Card } from "./Card";
+import Image from "next/image";
 
 export const TransactionsCard = ({
   accountMode,
@@ -57,9 +57,14 @@ export const TransactionsCard = ({
   return (
     <Card
       imageSlot={
-        <div className="w-full h-full bg-[#EAEBFE] flex justify-center items-center">
-          <Key className="h-8 w-8 sm:h-[74px] sm:w-[74px] xl:h-[86px] xl:w-[86px]" />
-        </div>
+        <Image
+          width={326}
+          height={222}
+          src="/images/pen.svg"
+          alt="An NFT"
+          priority
+          className="object-cover h-full w-full"
+        />
       }
       heading="Recurring transactions"
       content={content}

@@ -52,6 +52,7 @@ export type AuthParams =
       bundle: string;
       orgId: string;
       idToken: string;
+      accessToken?: string;
       isNewUser?: boolean;
     }
   | {
@@ -155,6 +156,7 @@ export class AlchemyWebSigner extends BaseAlchemySigner<AlchemySignerWebClient> 
       oauthBundle: "alchemy-bundle",
       oauthOrgId: "alchemy-org-id",
       idToken: "alchemy-id-token",
+      accessToken: "alchemy-access-token",
       isSignup: "aa-is-signup",
       otpId: "alchemy-otp-id",
       email: "alchemy-email",
@@ -168,6 +170,7 @@ export class AlchemyWebSigner extends BaseAlchemySigner<AlchemySignerWebClient> 
       oauthBundle,
       oauthOrgId,
       idToken,
+      accessToken,
       isSignup,
       otpId,
       email,
@@ -202,6 +205,7 @@ export class AlchemyWebSigner extends BaseAlchemySigner<AlchemySignerWebClient> 
       return {
         status,
         idToken,
+        accessToken,
         email,
         providerName: authProvider,
         otpId,
@@ -227,6 +231,7 @@ export class AlchemyWebSigner extends BaseAlchemySigner<AlchemySignerWebClient> 
         bundle: oauthBundle,
         orgId: oauthOrgId,
         idToken,
+        accessToken,
         isNewUser,
       });
     }

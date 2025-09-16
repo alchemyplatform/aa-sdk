@@ -42,6 +42,10 @@ export type * from "./createConfig.js";
 export { createConfig, DEFAULT_IFRAME_CONTAINER_ID } from "./createConfig.js";
 export type * from "./environments/web/createSigner.js";
 export { createSigner as internalCreateWebSigner } from "./environments/web/createSigner.js";
+export type * from "./actions/getSmartWalletClient.js";
+export { getSmartWalletClient } from "./actions/getSmartWalletClient.js";
+export type * from "./actions/watchSmartWalletClient.js";
+export { watchSmartWalletClient } from "./actions/watchSmartWalletClient.js";
 export { ClientOnlyPropertyError } from "./errors.js";
 export { hydrate } from "./hydrate.js";
 export {

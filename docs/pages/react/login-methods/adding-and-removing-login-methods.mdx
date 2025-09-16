@@ -40,15 +40,7 @@ export default function MyPage() {
 
 ## Setting email auth
 
-To set an account's email, use the `useSetEmail` hook.
-
-<Warning>
-  **If you set a user's email, it is critical that you verify that they own the email first**, to prevent malicious users from squatting on emails that have not yet been added to accounts.
-
-Because of the security implications, the ability to set emails on existing accounts is disabled by default. If you would like it enabled for your team, please [reach
-out](mailto:support@alchemy.com).
-
-</Warning>
+To set an account's email, use the `useSendVerificationCode` and `useSetEmail` hooks. Emails must be verified before they are set.
 
 <Warning>
   An account may have at most one email address associated with it. If an
@@ -57,13 +49,34 @@ out](mailto:support@alchemy.com).
 </Warning>
 
 ```tsx twoslash
-import { useSetEmail } from "@account-kit/react";
+import { useSetEmail, useSendVerificationCode } from "@account-kit/react";
 
 export default function MyPage() {
+  const { sendVerificationCode } = useSendVerificationCode();
   const { setEmail } = useSetEmail();
 
   return (
-    <button onClick={() => setEmail("user@example.com")}>Change email</button>
+    <>
+      <button
+        onClick={() => {
+          sendVerificationCode({
+            type: "email",
+            contact: "user@example.com",
+          });
+        }}
+      >
+        Send verification code
+      </button>
+      <button
+        onClick={() =>
+          setEmail({
+            verificationCode: "code user received in email",
+          })
+        }
+      >
+        Update email
+      </button>
+    </>
   );
 }
 ```
@@ -78,9 +91,7 @@ import { useRemoveEmail } from "@account-kit/react";
 export default function MyPage() {
   const { removeEmail } = useRemoveEmail();
 
-  return (
-    <button onClick={() => removeEmail())}>Remove email</button>
-  );
+  return <button onClick={() => removeEmail()}>Remove email</button>;
 }
 ```
 
@@ -113,7 +124,7 @@ export default function MyPage() {
 
 When this button is clicked, the user will be prompted to log in to a social account. Once they do, that account will be added as an auth method to the current user.
 
-The options that can be passed to `addOauthProvider` match those which can be passed to `authenticate` when logging in with an OAuth provider. For information on these options and the required setup for enabling OAuth providers, see the [Social Login](/wallets/react/login-methods/social-login) documentation.
+The options that can be passed to `addOauthProvider` match those which can be passed to `authenticate` when logging in with an OAuth provider. For information on these options and the required setup for enabling OAuth providers, see the [Social Login](/wallets/authentication/login-methods/social-login) documentation.
 
 ## Removing OAuth providers
 
@@ -152,9 +163,7 @@ import { useAddPasskey } from "@account-kit/react";
 export default function MyPage() {
   const { addPasskey } = useAddPasskey();
 
-  return (
-    <button onClick={() => addPasskey())}>Add passkey</button>
-  );
+  return <button onClick={() => addPasskey()}>Add passkey</button>;
 }
 ```
 

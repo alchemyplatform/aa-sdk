@@ -24,6 +24,7 @@ import { clientHeaderTrack } from "../../index.js";
  * @param {Client<TTransport, TChain, any>} client_ The client instance used to interact with the blockchain
  * @param {WaitForUserOperationTxParameters} args The parameters for the transaction to wait for
  * @param {Hex} args.hash The transaction hash to wait for
+ * @param {string} args.tag The tag to use for the UO status. "pending" or "latest". Defaults to "latest".
  * @param {WaitForUserOperationTxParameters["retries"]} [args.retries] Optional retry parameters
  * @param {number} [args.retries.maxRetries] The maximum number of retry attempts
  * @param {number} [args.retries.intervalMs] The interval in milliseconds between retries
@@ -65,7 +66,7 @@ export const waitForUserOperationTransaction: <
     );
 
     const receipt = await client
-      .getUserOperationReceipt(hash as `0x${string}`)
+      .getUserOperationReceipt(hash as `0x${string}`, args.tag)
       .catch((e) => {
         Logger.error(
           `[SmartAccountProvider] waitForUserOperationTransaction error fetching receipt for ${hash}: ${e}`,

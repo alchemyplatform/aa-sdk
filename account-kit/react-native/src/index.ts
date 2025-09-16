@@ -5,6 +5,8 @@ import "node-libs-react-native/globals.js";
 
 export {
   useAccount,
+  useAddOauthProvider,
+  useAddPasskey,
   useAuthenticate,
   useAuthError,
   useBundlerClient,
@@ -12,8 +14,14 @@ export {
   useConnection,
   useDropAndReplaceUserOperation,
   useExportAccount,
+  useListAuthMethods,
   useLogout,
+  useRemoveEmail,
+  useRemoveOauthProvider,
+  useRemovePasskey,
   useSendUserOperation,
+  useSendVerificationCode,
+  useSetEmail,
   useSigner,
   useSignerStatus,
   useSignMessage,

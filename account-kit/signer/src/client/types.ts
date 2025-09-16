@@ -7,6 +7,15 @@ import type {
 import type { Hex } from "viem";
 import type { AuthParams } from "../signer";
 
+// [!region VerificationOtp]
+export type VerificationOtp = {
+  /** The OTP ID returned from initOtp */
+  id: string;
+  /** The OTP code received by the user */
+  code: string;
+};
+// [!endregion VerificationOtp]
+
 export type CredentialCreationOptionOverrides = {
   publicKey?: Partial<CredentialCreationOptions["publicKey"]>;
 } & Pick<CredentialCreationOptions, "signal">;
@@ -14,12 +23,14 @@ export type CredentialCreationOptionOverrides = {
 // [!region User]
 export type User = {
   email?: string;
+  phone?: string;
   orgId: string;
   userId: string;
   address: Address;
   solanaAddress?: string;
   credentialId?: string;
   idToken?: string;
+  accessToken?: string;
   claims?: Record<string, unknown>;
 };
 // [!endregion User]
@@ -28,6 +39,8 @@ export type ExportWalletParams = {
   iframeContainerId: string;
   iframeElementId?: string;
 };
+
+export type ExportWalletOutput = boolean;
 
 export type CreateAccountParams =
   | {
@@ -112,6 +125,7 @@ export type SignupResponse = {
   orgId: string;
   userId?: string;
   address?: Address;
+  solanaAddress?: string;
   otpId?: string;
 };
 
@@ -194,6 +208,26 @@ export type SignerEndpoints = [
     };
   },
   {
+    Route: "/v1/init-otp";
+    Body: {
+      contact: string;
+      otpType: "OTP_TYPE_SMS" | "OTP_TYPE_EMAIL";
+    };
+    Response: {
+      otpId: string;
+    };
+  },
+  {
+    Route: "/v1/verify-otp";
+    Body: {
+      otpId: string;
+      otpCode: string;
+    };
+    Response: {
+      verificationToken: string;
+    };
+  },
+  {
     Route: "/v1/sign-payload";
     Body: {
       stampedRequest: TSignedRequest;
@@ -204,6 +238,13 @@ export type SignerEndpoints = [
   },
   {
     Route: "/v1/update-email-auth";
+    Body: {
+      stampedRequest: TSignedRequest;
+    };
+    Response: void;
+  },
+  {
+    Route: "/v1/update-phone-auth";
     Body: {
       stampedRequest: TSignedRequest;
     };
@@ -424,6 +465,7 @@ export type GetWebAuthnAttestationResult = {
 export type AuthLinkingPrompt = {
   status: "ACCOUNT_LINKING_CONFIRMATION_REQUIRED";
   idToken: string;
+  accessToken?: string;
   email: string;
   providerName: string;
   otpId: string;
@@ -433,6 +475,7 @@ export type AuthLinkingPrompt = {
 export type IdTokenOnly = {
   status: "FETCHED_ID_TOKEN_ONLY";
   idToken: string;
+  accessToken?: string;
   providerName: string;
 };
 
@@ -506,6 +549,7 @@ export type AddOauthProviderParams = {
 
 export type AuthMethods = {
   email?: string;
+  phone?: string;
   oauthProviders: OauthProviderInfo[];
   passkeys: PasskeyInfo[];
 };

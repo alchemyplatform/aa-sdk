@@ -15,7 +15,7 @@ function hasAddBreadcrumb<A extends {}>(
  *
  * @param {X} client Clients are somethings like viem, that we are adding breadcrumbs to, and could be owning the transport. Usually a alchemy client.
  * @param {string} crumb The crumb to add to the breadcrumb
- * @returns {Function} A function that updates the headers
+ * @returns {Function} The updated client
  */
 export function clientHeaderTrack<X extends {}>(client: X, crumb: string): X {
   if (hasAddBreadcrumb(client)) {

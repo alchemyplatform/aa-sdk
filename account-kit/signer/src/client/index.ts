@@ -5,7 +5,9 @@ import { WebauthnStamper } from "@turnkey/webauthn-stamper";
 import { z } from "zod";
 import type { AuthParams } from "../signer.js";
 import { generateRandomBuffer } from "../utils/generateRandomBuffer.js";
-import { BaseSignerClient } from "./base.js";
+import { assertNever } from "../utils/typeAssertions.js";
+import { BaseSignerClient, type ExportWalletStamper } from "./base.js";
+import { NotAuthenticatedError } from "../errors.js";
 import type {
   AlchemySignerClientEvents,
   AuthenticatingEventMetadata,
@@ -22,6 +24,7 @@ import type {
   GetWebAuthnAttestationResult,
   IdTokenOnly,
   SmsAuthParams,
+  ExportWalletOutput,
 } from "./types.js";
 import { MfaRequiredError } from "../errors.js";
 import { parseMfaError } from "../utils/parseMfaError.js";
@@ -54,7 +57,10 @@ export type AlchemySignerClientParams = z.input<
  * A lower level client used by the AlchemySigner used to communicate with
  * Alchemy's signer service.
  */
-export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams> {
+export class AlchemySignerWebClient extends BaseSignerClient<
+  ExportWalletParams,
+  ExportWalletOutput
+> {
   private iframeStamper: IframeStamper;
   private webauthnStamper: WebauthnStamper;
   oauthCallbackUrl: string;
@@ -333,6 +339,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
     orgId,
     connectedEventName,
     idToken,
+    accessToken,
     authenticatingType,
   }: {
     bundle: string;
@@ -340,6 +347,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
     connectedEventName: keyof AlchemySignerClientEvents;
     authenticatingType: AuthenticatingEventMetadata["type"];
     idToken?: string;
+    accessToken?: string;
   }): Promise<User> => {
     this.eventEmitter.emit("authenticating", { type: authenticatingType });
     await this.initSessionStamper();
@@ -350,7 +358,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
       throw new Error("Failed to inject credential bundle");
     }
 
-    const user = await this.whoami(orgId, idToken);
+    const user = await this.whoami(orgId, idToken, accessToken);
 
     this.eventEmitter.emit(connectedEventName, user, bundle);
 
@@ -387,7 +395,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
   public override exportWallet = async ({
     iframeContainerId,
     iframeElementId = "turnkey-export-iframe",
-  }: ExportWalletParams) => {
+  }: ExportWalletParams): Promise<ExportWalletOutput> => {
     const exportWalletIframeStamper = new IframeStamper({
       iframeContainer: document.getElementById(iframeContainerId),
       iframeElementId: iframeElementId,
@@ -407,6 +415,29 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
       exportAs: "PRIVATE_KEY",
     });
   };
+
+  /**
+   * Exports wallet credentials based on the specified type, either as a SEED_PHRASE or PRIVATE_KEY.
+   *
+   * @param {object} params The parameters for exporting the wallet
+   * @param {ExportWalletStamper} params.exportStamper The stamper used for exporting the wallet
+   * @param {"SEED_PHRASE" | "PRIVATE_KEY"} params.exportAs Specifies the format for exporting the wallet, either as a SEED_PHRASE or PRIVATE_KEY
+   * @returns {Promise<boolean>} A promise that resolves to true if the export is successful
+   */
+  protected exportWalletInner(params: {
+    exportStamper: ExportWalletStamper;
+    exportAs: "SEED_PHRASE" | "PRIVATE_KEY";
+  }): Promise<ExportWalletOutput> {
+    const { exportAs } = params;
+    switch (exportAs) {
+      case "PRIVATE_KEY":
+        return this.exportAsPrivateKey(params.exportStamper);
+      case "SEED_PHRASE":
+        return this.exportAsSeedPhrase(params.exportStamper);
+      default:
+        assertNever(exportAs, `Unknown export mode: ${exportAs}`);
+    }
+  }
 
   /**
    * Asynchronous function that clears the user and resets the iframe stamper.
@@ -542,6 +573,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
           alchemyBundle: bundle,
           alchemyOrgId: orgId,
           alchemyIdToken: idToken,
+          alchemyAccessToken: accessToken,
           alchemyIsSignup: isSignup,
           alchemyError,
           alchemyOtpId: otpId,
@@ -566,6 +598,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
               orgId,
               connectedEventName: "connectedOauth",
               idToken,
+              accessToken,
               authenticatingType: "oauth",
             }).then((user) => {
               if (isSignup) {
@@ -578,6 +611,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
             resolve({
               status,
               idToken,
+              accessToken,
               email,
               providerName,
               otpId,
@@ -588,6 +622,7 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
             resolve({
               status,
               idToken,
+              accessToken,
               providerName,
             } satisfies IdTokenOnly);
             break;
@@ -742,6 +777,96 @@ export class AlchemySignerWebClient extends BaseSignerClient<ExportWalletParams>
       ];
     }
   }
+
+  private exportAsSeedPhrase = async (stamper: ExportWalletStamper) => {
+    if (!this.user) {
+      throw new NotAuthenticatedError();
+    }
+
+    const { wallets } = await this.turnkeyClient.getWallets({
+      organizationId: this.user.orgId,
+    });
+
+    const walletAccountResponses = await Promise.all(
+      wallets.map(({ walletId }) =>
+        this.turnkeyClient.getWalletAccounts({
+          organizationId: this.user!.orgId,
+          walletId,
+        }),
+      ),
+    );
+    const walletAccounts = walletAccountResponses.flatMap((x) => x.accounts);
+
+    const walletAccount = walletAccounts.find(
+      (x) => x.address.toLowerCase() === this.user!.address.toLowerCase(),
+    );
+
+    if (!walletAccount) {
+      throw new Error(
+        `Could not find wallet associated with ${this.user.address}`,
+      );
+    }
+
+    const { activity } = await this.turnkeyClient.exportWallet({
+      organizationId: this.user.orgId,
+      type: "ACTIVITY_TYPE_EXPORT_WALLET",
+      timestampMs: Date.now().toString(),
+      parameters: {
+        walletId: walletAccount!.walletId,
+        targetPublicKey: stamper.publicKey()!,
+      },
+    });
+
+    const { exportBundle } = await this.pollActivityCompletion(
+      activity,
+      this.user.orgId,
+      "exportWalletResult",
+    );
+
+    const result = await stamper.injectWalletExportBundle(
+      exportBundle,
+      this.user.orgId,
+    );
+
+    if (!result) {
+      throw new Error("Failed to inject wallet export bundle");
+    }
+
+    return result;
+  };
+
+  private exportAsPrivateKey = async (stamper: ExportWalletStamper) => {
+    if (!this.user) {
+      throw new NotAuthenticatedError();
+    }
+
+    const { activity } = await this.turnkeyClient.exportWalletAccount({
+      organizationId: this.user.orgId,
+      type: "ACTIVITY_TYPE_EXPORT_WALLET_ACCOUNT",
+      timestampMs: Date.now().toString(),
+      parameters: {
+        address: this.user.address,
+        targetPublicKey: stamper.publicKey()!,
+      },
+    });
+
+    const { exportBundle } = await this.pollActivityCompletion(
+      activity,
+      this.user.orgId,
+      "exportWalletAccountResult",
+    );
+
+    const result = await stamper.injectKeyExportBundle(
+      exportBundle,
+      this.user.orgId,
+    );
+
+    if (!result) {
+      throw new Error("Failed to inject wallet export bundle");
+    }
+
+    return result;
+  };
 }
 
 /**
