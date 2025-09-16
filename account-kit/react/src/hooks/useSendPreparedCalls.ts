@@ -65,7 +65,9 @@ export type UseSendPreparedCallsResult = {
  * - `error`: Error from the last failed prepared call execution, if any
  *
  * @example
- * ```tsx
+ * ```ts twoslash
+ * import { useSendPreparedCalls } from "@account-kit/react";
+ *
  * const { sendPreparedCalls, sendPreparedCallsAsync, isSendingPreparedCalls, error } = useSendPreparedCalls();
  *
  * // Send prepared calls

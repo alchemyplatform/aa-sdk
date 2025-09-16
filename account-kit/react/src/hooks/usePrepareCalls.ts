@@ -65,7 +65,9 @@ export type UsePrepareCallsResult = {
  * - `error`: Error from the last failed call preparation, if any
  *
  * @example
- * ```tsx
+ * ```ts twoslash
+ * import { usePrepareCalls } from "@account-kit/react";
+ *
  * const { prepareCalls, prepareCallsAsync, isPreparingCalls, error } = usePrepareCalls();
  *
  * // Prepare calls

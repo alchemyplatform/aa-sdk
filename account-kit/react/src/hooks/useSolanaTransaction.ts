@@ -103,17 +103,21 @@ export type SolanaTransactionHookParams = {
  * Supports sponsorship for both external wallets and internal signers.
  *
  * @example
- * ```ts
-  const {mutate} = useSolanaTransaction({
-    policyId: "<policyId>",
-});
- 
-mutate({
-  transfer: {
-    amount: <amount:number>,
-    toAddress: "<toAddress>",
-  },
+ * ```ts twoslash
+ * import { useSolanaTransaction } from "@account-kit/react";
+ *
+ * const { mutate } = useSolanaTransaction({
+ *   policyId: "<policyId>",
+ * });
+ *
+ * mutate({
+ *   transfer: {
+ *     amount: 0,
+ *     toAddress: "<toAddress>",
+ *   },
+ * });
  * ```
+ *
  * @param {SolanaTransactionHookParams} opts Options for the hook to get setup, The transaction is required.
  * @returns {SolanaTransaction} The transaction hook.
  */
