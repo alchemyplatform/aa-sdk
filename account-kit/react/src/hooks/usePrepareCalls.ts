@@ -65,7 +65,7 @@ export type UsePrepareCallsResult = {
  * - `error`: Error from the last failed call preparation, if any
  *
  * @example
- * ```tsx
+ * ```tsx twoslash
  * const { prepareCalls, prepareCallsAsync, isPreparingCalls, error } = usePrepareCalls();
  *
  * // Prepare calls
