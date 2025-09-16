@@ -72,7 +72,9 @@ export type UseSendPreparedCallsResult = {
  *
  * // Send prepared calls
  * await sendPreparedCallsAsync({
- *   preparedCalls: [/* prepared call objects *\/]
+ *   preparedCalls: [
+ *     // prepared call objects
+ *   ]
  * });
  * ```
  *
