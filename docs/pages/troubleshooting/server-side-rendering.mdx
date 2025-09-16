@@ -63,7 +63,7 @@ If you are using NextJS App Directory, you can read the cookie state and pass it
 
 <CodeBlocks>
 
-```tsx twoslash app/layout.tsx
+```tsx app/layout.tsx
 // @noErrors
 import React from "react";
 import { cookieToInitialState } from "@account-kit/core";
@@ -103,7 +103,7 @@ export default function RootLayout({
 }
 ```
 
-```tsx twoslash app/providers.tsx
+```tsx app/providers.tsx
 // @noErrors
 "use client";
 
@@ -141,7 +141,7 @@ export const Providers = (
 };
 ```
 
-```tsx twoslash config.ts
+```tsx config.ts
 import { createConfig, cookieStorage } from "@account-kit/react";
 import { sepolia, alchemy } from "@account-kit/infra";
 import { QueryClient } from "@tanstack/react-query";
@@ -164,7 +164,7 @@ export const config = () =>
   </Tab>
   <Tab title="Other Javascript">
 
-```ts twoslash
+```ts
 import { createConfig } from "@account-kit/core";
 import { sepolia, alchemy } from "@account-kit/infra";
 
@@ -183,7 +183,7 @@ Now that you've set up your config for SSR, you will have to manually hydrate th
 
 <CodeBlocks>
 
-```ts twoslash hydrate.ts
+```ts hydrate.ts
 import { hydrate } from "@account-kit/core";
 import { config } from "./config";
 
@@ -197,7 +197,7 @@ if (typeof window !== "undefined") {
 }
 ```
 
-```ts twoslash config.ts
+```ts config.ts
 import { createConfig } from "@account-kit/core";
 import { alchemy, sepolia } from "@account-kit/infra";
 
@@ -230,7 +230,7 @@ Now you can get the initial state from cookies and pass it to the `hydrate` meth
 
 <CodeBlocks>
 
-```ts twoslash hydrate.ts {7}
+```ts hydrate.ts {7}
 import { cookieToInitialState, hydrate } from "@account-kit/core";
 import { config } from "./config";
 
@@ -245,7 +245,7 @@ if (typeof window !== "undefined") {
 }
 ```
 
-```ts twoslash config.ts {7-8}
+```ts config.ts {7-8}
 import { createConfig, cookieStorage } from "@account-kit/core";
 import { sepolia, alchemy } from "@account-kit/infra";
 

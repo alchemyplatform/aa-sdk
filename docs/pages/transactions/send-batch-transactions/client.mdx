@@ -8,7 +8,7 @@ You can batch transactions using either the smart wallet client `sendCalls` or `
 
 <CodeBlocks>
 
-```ts twoslash title="sendCalls.ts"
+```ts title="sendCalls.ts"
 import { type Address, erc20Abi, encodeFunctionData, parseUnits } from "viem";
 import { client } from "./client";
 import { swapAbi } from "./swapAbi";
@@ -42,7 +42,7 @@ const { preparedCallIds } = await client.sendCalls({
 });
 ```
 
-```ts twoslash title="client.ts"
+```ts title="client.ts"
 import "dotenv/config";
 import type { Hex } from "viem";
 import { LocalAccountSigner } from "@aa-sdk/core";
@@ -69,7 +69,7 @@ export const client = createSmartWalletClient({
 });
 ```
 
-```ts twoslash title="swapAbi.ts"
+```ts title="swapAbi.ts"
 export const swapAbi = [
   {
     type: "constructor",

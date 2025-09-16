@@ -6,7 +6,7 @@ You can send transactions using the smart wallet client `sendCalls` action.
 
 <CodeBlocks>
 
-```ts twoslash title="sendCalls.ts"
+```ts title="sendCalls.ts"
 import { parseEther, toHex } from "viem";
 import { client } from "./client.ts";
 
@@ -27,7 +27,7 @@ const result = await client.waitForCallsStatus({ id: preparedCallIds[0] });
 console.log(result);
 ```
 
-```ts twoslash title="client.ts"
+```ts title="client.ts"
 import { LocalAccountSigner } from "@aa-sdk/core";
 import { alchemy, sepolia } from "@account-kit/infra";
 import {

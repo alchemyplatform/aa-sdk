@@ -4,7 +4,7 @@ You can use smart wallet client actions to prepare, sign, and send transactions.
 
 <CodeBlocks>
 
-```ts twoslash title="sendCalls.ts" focus={4-20}
+```ts title="sendCalls.ts" focus={4-20}
 import { parseEther, toHex } from "viem";
 import { client } from "./client.ts";
 
@@ -27,7 +27,7 @@ const sentCalls = await client.sendPreparedCalls(signedCalls);
 console.log({ sentCalls });
 ```
 
-```ts twoslash title="client.ts"
+```ts title="client.ts"
 import { LocalAccountSigner } from "@aa-sdk/core";
 import { alchemy, sepolia } from "@account-kit/infra";
 import {
