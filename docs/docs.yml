@@ -90,8 +90,6 @@ navigation:
                 path: wallets/pages/concepts/smart-contract-account.mdx
               - page: Smart Account Client
                 path: wallets/pages/concepts/smart-account-client.mdx
-              - page: Bundler Client
-                path: wallets/pages/concepts/bundler-client.mdx
               - page: Middleware
                 path: wallets/pages/concepts/middleware.mdx
               - page: What is a signer?
