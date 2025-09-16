@@ -85,7 +85,7 @@ export type UseSendCallsResult<
  * - `error`: Error from the last failed call execution, if any
  *
  * @example
- * ```tsx
+ * ```tsx twoslash
  * const { sendCalls, sendCallsAsync, isSendingCalls, error } = useSendCalls();
  *
  * // Send a single call
