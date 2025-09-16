@@ -6,7 +6,7 @@ In React, you can use [Viem](https://viem.sh/docs/contract/encodeFunctionData) t
 
 <CodeBlocks>
 
-```tsx twoslash title="sendCalls.tsx" focus={20-24}
+```tsx title="sendCalls.tsx" focus={20-24}
 import { useSendCalls, useSmartAccountClient } from "@account-kit/react";
 import { encodeFunctionData } from "viem";
 import { exampleAbi } from "./abi.ts";
@@ -44,7 +44,7 @@ export default function SendCalls() {
 }
 ```
 
-```ts twoslash title="abi.ts"
+```ts title="abi.ts"
 export const exampleAbi = [
   {
     inputs: [{ name: "recipient", type: "address" }],

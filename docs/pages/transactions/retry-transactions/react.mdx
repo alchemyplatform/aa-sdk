@@ -6,7 +6,7 @@ You'll need both `ALCHEMY_API_KEY` and `ALCHEMY_POLICY_ID` environment variables
 
 <CodeBlocks>
 
-```tsx twoslash title="retryTransaction.tsx"
+```tsx title="retryTransaction.tsx"
 import { config } from "@/app/config";
 import {
   useSendCalls,
@@ -109,7 +109,7 @@ export default function RetryTransaction() {
 }
 ```
 
-```ts twoslash title="config.ts"
+```ts title="config.ts"
 export const config = {
   alchemyApiKey: process.env.ALCHEMY_API_KEY!,
   policyId: process.env.ALCHEMY_POLICY_ID!,
