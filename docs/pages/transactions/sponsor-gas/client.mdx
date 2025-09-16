@@ -1,0 +1,67 @@
+<Info>Required SDK version: ^v4.61.0</Info>
+
+See the [`sendCalls` SDK
+reference](/wallets/reference/account-kit/wallet-client/functions/sendCalls)
+for full descriptions of the parameters used in the following example.
+
+Use the `paymasterService` capability on the smart wallet client `sendCalls` or `prepareCalls` actions.
+
+<CodeBlocks>
+
+```ts twoslash title="sendCalls.ts"
+import { client, config } from "./client.ts";
+
+try {
+  const { preparedCallIds } = await client.sendCalls({
+    capabilities: {
+      paymasterService: {
+        policyId: config.policyId,
+      },
+    },
+    calls: [
+      {
+        to: "0x0000000000000000000000000000000000000000",
+        value: "0x00",
+        data: "0x",
+      },
+    ],
+  });
+
+  console.log(preparedCallIds);
+} catch (error) {
+  console.error(error);
+}
+```
+
+```ts twoslash title="client.ts"
+import "dotenv/config";
+import type { Hex } from "viem";
+import { LocalAccountSigner } from "@aa-sdk/core";
+import { alchemy, sepolia } from "@account-kit/infra";
+import { createSmartWalletClient } from "@account-kit/wallet-client";
+
+export const config = {
+  policyId: process.env.ALCHEMY_POLICY_ID!,
+};
+
+const clientParams = {
+  transport: alchemy({
+    apiKey: process.env.ALCHEMY_API_KEY!,
+  }),
+  chain: sepolia,
+  signer: LocalAccountSigner.privateKeyToAccountSigner(
+    process.env.PRIVATE_KEY! as Hex,
+  ),
+};
+
+const clientWithoutAccount = createSmartWalletClient(clientParams);
+
+const account = await clientWithoutAccount.requestAccount();
+
+export const client = createSmartWalletClient({
+  ...clientParams,
+  account: account.address,
+});
+```
+
+</CodeBlocks>

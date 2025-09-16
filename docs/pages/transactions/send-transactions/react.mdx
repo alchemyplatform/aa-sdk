@@ -1,0 +1,76 @@
+<Info>Required SDK version: ^v4.62.2</Info>
+
+**Prerequisites**
+
+- [Smart Wallets installed and configured in your project](/wallets/pages/react/setup.mdx)
+- An [authenticated user](/wallets/authentication/overview)
+
+You can use the `useSendCalls` hook to send calls, followed by the `useWaitForCallsStatus` hook to wait for confirmation.
+
+<CodeBlocks>
+
+```tsx twoslash title="sendCalls.tsx" focus={11-22,29-37,42-44}
+import {
+  useSendCalls,
+  useSmartAccountClient,
+  useWaitForCallsStatus,
+} from "@account-kit/react";
+import { parseEther, toHex } from "viem";
+
+export default function SendCalls() {
+  const { client } = useSmartAccountClient({});
+
+  const { sendCalls, isSendingCalls, sendCallsResult } = useSendCalls({
+    client,
+  });
+
+  const {
+    data: statusResult,
+    isLoading: isWaitingForConfirmation,
+    error,
+  } = useWaitForCallsStatus({
+    client,
+    id: sendCallsResult?.ids[0],
+  });
+
+  const handleSend = async () => {
+    if (!client) {
+      throw new Error("Smart account client not connected");
+    }
+
+    sendCalls({
+      calls: [
+        {
+          to: "0x0000000000000000000000000000000000000000",
+          value: toHex(parseEther("0")),
+          data: "0x",
+        },
+      ],
+    });
+  };
+
+  return (
+    <div>
+      <button onClick={handleSend}>
+        {isSendingCalls ? "Sending..." : "Send"}
+      </button>
+      {sendCallsResult && (
+        <p>
+          {isWaitingForConfirmation
+            ? "Waiting for confirmation..."
+            : error
+              ? `Error: ${error}`
+              : !statusResult
+                ? "Timed out waiting for confirmation"
+                : `Result: ${statusResult.status}`}
+        </p>
+      )}
+    </div>
+  );
+}
+```
+
+</CodeBlocks>
+
+See the [`useSendCalls` SDK reference](/wallets/reference/account-kit/react/hooks/useSendCalls) for
+full descriptions of the parameters used in the above example.
