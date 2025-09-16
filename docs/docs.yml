@@ -1085,6 +1085,10 @@ navigation:
                 contents:
                   - page: createConfig
                     path: wallets/pages/reference/alchemy/wagmi-core/functions/createConfig.mdx
+                  - page: handleOauthRedirect
+                    path: wallets/pages/reference/alchemy/wagmi-core/functions/handleOauthRedirect.mdx
+                  - page: loginWithOauth
+                    path: wallets/pages/reference/alchemy/wagmi-core/functions/loginWithOauth.mdx
                   - page: sendEmailOtp
                     path: wallets/pages/reference/alchemy/wagmi-core/functions/sendEmailOtp.mdx
                   - page: submitOtpCode

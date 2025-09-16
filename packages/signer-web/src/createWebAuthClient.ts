@@ -1,4 +1,9 @@
-import { AuthClient, OauthCancelledError } from "@alchemy/signer";
+import {
+  AuthClient,
+  OauthCancelledError,
+  type CreateTekStamperFn,
+  type CreateWebAuthnStamperFn,
+} from "@alchemy/signer";
 import { IframeStamper } from "@turnkey/iframe-stamper";
 
 const CHECK_CLOSE_INTERVAL = 500;
@@ -13,6 +18,10 @@ export type WebAuthClientParams = {
   iframeElementId?: string;
   /** Optional ID for the container element that holds the iframe. Defaults to "turnkey-iframe-container" */
   iframeContainerId?: string;
+  /** Optional custom TEK stamper factory for power users / RN */
+  createTekStamper?: CreateTekStamperFn;
+  /** Optional custom WebAuthn stamper factory for power users / RN */
+  createWebAuthnStamper?: CreateWebAuthnStamperFn;
 };
 
 /**
@@ -63,6 +72,8 @@ export function createWebAuthClient({
   apiKey,
   iframeElementId = "turnkey-iframe",
   iframeContainerId = "turnkey-iframe-container",
+  createTekStamper,
+  createWebAuthnStamper,
 }: WebAuthClientParams): AuthClient {
   const getOrCreateIframeContainer = () => {
     let iframeContainer = document.getElementById(iframeContainerId);
@@ -78,16 +89,20 @@ export function createWebAuthClient({
   return new AuthClient({
     apiKey,
 
-    createTekStamper: async () => {
-      const iframeContainer = getOrCreateIframeContainer();
-      return new IframeStamper({
-        iframeUrl: "https://auth.turnkey.com",
-        iframeElementId,
-        iframeContainer,
-      });
-    },
+    createTekStamper:
+      createTekStamper ||
+      (async () => {
+        const iframeContainer = getOrCreateIframeContainer();
+        return new IframeStamper({
+          iframeUrl: "https://auth.turnkey.com",
+          iframeElementId,
+          iframeContainer,
+        });
+      }),
 
-    createWebAuthnStamper: () => Promise.reject(new Error("Not implemented")),
+    createWebAuthnStamper:
+      createWebAuthnStamper ||
+      (() => Promise.reject(new Error("Not implemented"))),
     handleOauthFlow: async (authUrl: string, mode: "popup" | "redirect") => {
       switch (mode) {
         case "popup":
@@ -117,7 +132,7 @@ export function createWebAuthClient({
               if (alchemyError) {
                 cleanup();
                 popup?.close();
-                reject(new alchemyError());
+                reject(alchemyError);
               }
               if (!status) {
                 // This message isn't meant for us.

@@ -11,6 +11,18 @@ export {
 } from "./actions/submitOtpCode.js";
 
 export {
+  loginWithOauth,
+  type LoginWithOauthParameters,
+  type LoginWithOauthReturnType,
+} from "./actions/loginWithOauth.js";
+
+export {
+  handleOauthRedirect,
+  type HandleOauthRedirectParameters,
+  type HandleOauthRedirectReturnType,
+} from "./actions/handleOauthRedirect.js";
+
+export {
   createConfig,
   type AlchemyConfig,
   type AlchemyCreateConfigParameters,

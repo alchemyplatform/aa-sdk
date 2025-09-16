@@ -19,25 +19,25 @@ import { alchemyAuth } from "@alchemy/connectors-web";
 
 ## Parameters
 
-### parameters
+### options
 
 `AlchemyAuthOptions`
 
 - Configuration for the connector
 
-### parameters.apiKey
+### options.apiKey
 
 `string`
 
 - API key for authentication with Alchemy services
 
-### parameters.iframeElementId
+### options.iframeElementId
 
 `string`
 
 - Optional ID for the iframe element used by Turnkey stamper
 
-### parameters.iframeContainerId
+### options.iframeContainerId
 
 `string`
 
@@ -45,5 +45,5 @@ import { alchemyAuth } from "@alchemy/connectors-web";
 
 ## Returns
 
-`ReturnType<typeof createConnector>`
-A Wagmi connector compatible with `createConfig`.
+`CreateConnectorFn`
+A Wagmi connector factory compatible with `createConfig`.

@@ -1,5 +1,5 @@
-import type { Config } from "wagmi";
 import { resolveAlchemyAuthConnector } from "@alchemy/connectors-web";
+import type { Config } from "@wagmi/core";
 
 export type SendEmailOtpParameters = {
   email: string;

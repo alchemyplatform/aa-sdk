@@ -1,9 +1,9 @@
 import { baseAccount, injected, walletConnect } from '@wagmi/connectors'
-import { createConfig, http } from '@wagmi/core'
+import { Config, createConfig, http } from '@wagmi/core'
 import { mainnet, sepolia } from '@wagmi/core/chains'
 import { alchemyAuth } from '@alchemy/connectors-web'
 
-export const config = createConfig({
+export const config: Config = createConfig({
   chains: [mainnet, sepolia],
   connectors: [
     injected(),
