@@ -2,15 +2,25 @@ import {
   createConnector,
   // type Connector,
 } from "@wagmi/core";
+import { createWebAuthClient } from "@alchemy/signer-web";
+import type { AuthClient } from "@alchemy/signer";
+import type { Signer } from "@alchemy/signer";
+import type { Address } from "viem";
 
+// TODO: Support other connection config options.
 export interface AlchemyAuthOptions {
-  // web-specific: popup OAuth, iframe, cookie/session opts, etc.
+  /** API key for authentication with Alchemy services */
+  apiKey?: string;
+  /** Optional ID for the iframe element used by Turnkey stamper. Defaults to "turnkey-iframe" */
+  iframeElementId?: string;
+  /** Optional ID for the container element that holds the iframe. Defaults to "turnkey-iframe-container" */
+  iframeContainerId?: string;
 }
 
 alchemyAuth.type = "alchemy-auth" as const;
 
 /**
- * Creates the Alchemy Auth connector for Wagmi (scaffolded).
+ * Creates the Alchemy Auth connector for Wagmi.
  *
  * This function returns a connector factory via Wagmi's `createConnector`.
  *
@@ -18,24 +28,24 @@ alchemyAuth.type = "alchemy-auth" as const;
  *
  * @see https://wagmi.sh/dev/creating-connectors
  *
- * @param {AlchemyAuthOptions} parameters - Optional configuration for the connector.
+ * @param {AlchemyAuthOptions} parameters - Configuration for the connector
+ * @param {string} [parameters.apiKey] - API key for authentication with Alchemy services
+ * @param {string} [parameters.iframeElementId] - Optional ID for the iframe element used by Turnkey stamper
+ * @param {string} [parameters.iframeContainerId] - Optional ID for the container element that holds the iframe
  * @returns {ReturnType<typeof createConnector>} A Wagmi connector compatible with `createConfig`.
  */
 export function alchemyAuth(parameters: AlchemyAuthOptions = {}) {
-  // TODO: remove this
-  void parameters;
-
   type Provider = any; // TODO: Define proper provider type
   type Properties = {
-    getAuthClient(): Promise<any>; // TODO: Define proper auth client type
-    getSigner(): Promise<any>; // TODO: Define proper signer type
+    getAuthClient(): AuthClient;
+    getSigner(): Promise<Signer>;
+    setSigner(signer: Signer): void;
   };
 
   // Shared instances
-  let signerInstance: any; // AlchemyWebSigner | undefined
-  void signerInstance;
-  let authClientInstance: any | undefined;
-  void authClientInstance;
+  let signerInstance: Signer | undefined;
+  let authClientInstance: AuthClient | undefined;
+  let currentChainId: number | undefined;
 
   // Event listeners
   // let accountsChanged: Connector['onAccountsChanged'] | undefined
@@ -49,48 +59,96 @@ export function alchemyAuth(parameters: AlchemyAuthOptions = {}) {
     type: alchemyAuth.type,
 
     async setup() {
-      // TODO: remove this void
-      void config;
-
       // Optional function for running when the connector is first created.
-      throw new Error("Not implemented: setup");
+      // For now, we don't need any specific setup logic
     },
 
     async connect({ chainId } = {}) {
-      void chainId;
-      throw new Error("Not implemented: connect");
+      // Connection is handled through the auth flow (sendEmailOtp -> submitOtpCode)
+      // This method is called by wagmi after authentication completes
+      if (!signerInstance) {
+        // TODO(v5): Update error message to reflect different auth methods available.
+        throw new Error(
+          "No signer available. Please authenticate first using sendEmailOtp and submitOtpCode.",
+        );
+      }
+
+      const accounts = await this.getAccounts();
+      if (accounts.length === 0) {
+        throw new Error("No accounts available from signer");
+      }
+
+      const resolvedChainId = chainId ?? config.chains[0]?.id;
+      if (!resolvedChainId) {
+        throw new Error(
+          "No chain ID available. Please provide a chainId parameter or configure chains in your wagmi config.",
+        );
+      }
+
+      // Remember the connected chain ID
+      currentChainId = resolvedChainId;
+
+      return {
+        accounts,
+        chainId: resolvedChainId,
+      };
     },
 
     async disconnect() {
-      // Clean up instances, may need to reinitialize a new authClientInstance
+      // Clean up instances
+      await signerInstance?.disconnect();
       signerInstance = undefined;
       authClientInstance = undefined;
-
-      // TODO: Implement actual disconnect logic
-      throw new Error("Not implemented: disconnect");
+      currentChainId = undefined;
     },
 
-    async getAccounts() {
-      // TODO: Get the account from the signer
-      return [];
+    async getAccounts(): Promise<readonly Address[]> {
+      if (!signerInstance) {
+        return [];
+      }
+
+      const address = signerInstance.getAddress();
+      return [address as Address];
     },
 
     async getChainId() {
-      // TODO: the connector will need to presist the chain id and instantiate the client/provider with it
-      throw new Error("Not implemented: getChainId");
+      // Return the currently connected chain, or fall back to first configured chain
+      const resolvedChainId = currentChainId ?? config.chains[0]?.id;
+      if (!resolvedChainId) {
+        throw new Error(
+          "No chain configured. Please configure chains in your wagmi config.",
+        );
+      }
+      return resolvedChainId;
     },
 
     async getProvider() {
-      throw new Error("Not implemented: getProvider");
+      // Return a basic provider-like object
+      // This may need to be enhanced based on actual usage patterns
+      return {
+        request: async () => {
+          throw new Error("Provider request not implemented");
+        },
+      };
     },
 
     async isAuthorized() {
-      throw new Error("Not implemented: isAuthorized");
+      // Check if we have a valid signer instance
+      return signerInstance !== undefined;
     },
 
     async switchChain({ chainId }) {
-      void chainId;
-      throw new Error("Not implemented: switchChain");
+      // Update the current chain ID
+      currentChainId = chainId;
+
+      // For now, just return a basic chain object
+      // In the future, this should update the provider/signer configuration
+      return {
+        id: chainId,
+        name: `Chain ${chainId}`,
+        nativeCurrency: { name: "ETH", symbol: "ETH", decimals: 18 },
+        rpcUrls: { default: { http: [""] }, public: { http: [""] } },
+      };
     },
 
     async onAccountsChanged(accounts) {
@@ -112,17 +170,35 @@ export function alchemyAuth(parameters: AlchemyAuthOptions = {}) {
     },
 
     // Custom methods for Alchemy Auth
-    async getAuthClient() {
-      // Stub for now – will be implemented in a future iteration
-      throw new Error("Not implemented: getAuthClient");
+    getAuthClient() {
+      // TODO: Expand this to support other auth methods (jwt, rpcUrl) when
+      // AlchemyConnectionConfig pattern is adopted in future PR
+      if (!!parameters.apiKey) {
+        const error = new Error(
+          "Authentication required. Please configure the alchemyAuth connector with an apiKey.",
+        );
+        config.emitter.emit("error", { error });
+        throw error;
+      }
+
+      if (!authClientInstance) {
+        authClientInstance = createWebAuthClient({
+          apiKey: parameters.apiKey!,
+          iframeElementId: parameters.iframeElementId,
+          iframeContainerId: parameters.iframeContainerId,
+        });
+      }
+      return authClientInstance;
     },
 
     async getSigner() {
-      // Stub for now – will be implemented in a future iteration
-      throw new Error("Not implemented: getSigner");
+      if (!signerInstance) {
+        throw new Error("Signer not available. Please authenticate first.");
+      }
+      return signerInstance;
     },
 
-    setSigner(signer: any) {
+    setSigner(signer: Signer) {
       signerInstance = signer;
     },
   }));

@@ -2,6 +2,7 @@ import { TurnkeyClient } from "@turnkey/http";
 import {
   hashMessage,
   hashTypedData,
+  type Address,
   type HashTypedDataParameters,
   type Hex,
   type SignableMessage,
@@ -65,6 +66,14 @@ export class Signer {
     // For now, just return the whoami response.
     const user = whoamiResponse;
     return new Signer(apiKey, turnkey, user);
+  }
+
+  public getAddress(): Address {
+    return this.user.address;
+  }
+
+  public getUser(): User {
+    return this.user;
   }
 
   public signRawPayload = async ({
