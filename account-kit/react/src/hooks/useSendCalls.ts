@@ -85,7 +85,9 @@ export type UseSendCallsResult<
  * - `error`: Error from the last failed call execution, if any
  *
  * @example
- * ```tsx twoslash
+ * ```ts twoslash
+ * import { useSendCalls } from "@account-kit/react";
+ *
  * const { sendCalls, sendCallsAsync, isSendingCalls, error } = useSendCalls();
  *
  * // Send a single call
