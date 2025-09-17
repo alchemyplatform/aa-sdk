@@ -24,16 +24,6 @@ await authClient.sendEmailOtp({ email: "user@example.com" });
 const authSession = await authClient.submitOtpCode({ otpCode: "123456" });
 ```
 
-## Usage
-
-```ts
-// First send OTP
-await authClient.sendEmailOtp({ email: "user@example.com" });
-
-// Then submit the code received via email
-const signer = await authClient.submitOtpCode({ otpCode: "123456" });
-```
-
 ## Parameters
 
 ### params

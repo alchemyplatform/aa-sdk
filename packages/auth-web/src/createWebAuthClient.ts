@@ -9,8 +9,11 @@ import { IframeStamper } from "@turnkey/iframe-stamper";
 const CHECK_CLOSE_INTERVAL = 500;
 
 export type WebAuthClientParams = {
+  /** API key for authentication with Alchemy services */
   apiKey: string;
+  /** Optional ID for the iframe element used by Turnkey stamper. Defaults to "turnkey-iframe" */
   iframeElementId?: string;
+  /** Optional ID for the container element that holds the iframe. Defaults to "turnkey-iframe-container" */
   iframeContainerId?: string;
   /** Optional custom TEK stamper factory for React Native */
   createTekStamper?: CreateTekStamperFn;
