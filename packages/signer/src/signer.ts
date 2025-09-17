@@ -16,6 +16,7 @@ import type {
   User,
 } from "./types";
 import { dev_request } from "./devRequest.js";
+import { create1193Provider } from "./provider.js";
 
 export type CreateSignerParams = {
   // TODO: replace apiKey with transport once it's ready.
@@ -162,6 +163,13 @@ export class Signer {
     if (this.isDisconnected) {
       throw new Error("Signer is disconnected");
     }
+  }
+
+  public getProvider(): unknown {
+    if (this.isDisconnected) {
+      throw new Error("Signer is disconnected");
+    }
+    return create1193Provider(this);
   }
 
   // TODO: remove this and use transport instead once it's ready.

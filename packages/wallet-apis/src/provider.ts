@@ -11,10 +11,10 @@ import {
 import {
   AccountNotFoundError,
   BaseError,
+  ChainNotFoundError,
   InvalidRequestError,
 } from "@alchemy/common";
 import type { ExtractRpcMethod, BaseWalletClient } from "./types.js";
-import { ChainNotFoundError } from "../../../aa-sdk/core/src/errors/client.js";
 import type { PrepareCallsParams } from "./actions/prepareCalls.js";
 import type { SmartWalletActions } from "./decorators/smartWalletActions.js";
 import type { WalletServerViemRpcSchema } from "@alchemy/wallet-api-types/rpc";
