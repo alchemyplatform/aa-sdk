@@ -1,0 +1,85 @@
+---
+title: Authentication Quickstart
+description: Set up authentication in the Dashboard so users can sign in
+slug: wallets/authentication/setup
+---
+
+## Overview
+
+Set up authentication in the Dashboard so users can sign in and start using their wallet.
+
+## Prerequisites
+
+- App created in the Dashboard
+
+## 1. Enable login methods
+
+In the Dashboard, open the authentication settings and enable the login methods you want to support. See the login methods section for more details.
+
+### Custom clients
+
+If you bring your own OAuth 2.0 client ID and secret instead of using the default managed clients,
+make sure that you allow the signer callback URL in the OAuth provider's settings (usually labeled "Authorized redirect URIs"). Use this callback URL: `https://signer.alchemy.com/callback`.
+
+<Info>
+  Do not add your app's redirect URI here. You will allow your app's redirect
+  URI in a later step.
+</Info>
+
+<img
+  src="/images/google-alchemy-callback-whitelist.png"
+  alt="Allow the signer callback URL in your OAuth provider settings"
+  style={{ width: "100%" }}
+/>
+
+## 2. Choose an authentication mode
+
+Choose between two modes: `popup` or `redirect`.
+
+- `popup` (React only): Opens a popup to the selected provider and, after sign-in, injects user credentials into the current session.
+
+- `redirect` (React and React Native): Performs a full-page redirect to the provider. After sign-in it injects user credentials into the current session and redirects to a deep link (for React Native) or a webpage that you choose.
+
+### Allow redirect URIs
+
+If you use `redirect`, you must allow your redirect URI in the Dashboard.
+
+<img
+  src="/images/dashboard-redirect-whitelist.png"
+  alt="Allow your app's redirect URI in the Dashboard"
+  style={{ width: "100%" }}
+/>
+
+<Tabs>
+  <Tab title="React">
+    <Info>Required SDK version: ^v4.59.1</Info>
+    In React, you can allow redirects to any valid URL in your web application.
+
+    ```ts twoslash
+    authenticateAsync({
+      redirectUrl: "https://demo.alchemy.com/",
+      mode: "redirect",
+      authProviderId: "google",
+      type: "oauth",
+    });
+    ```
+
+  </Tab>
+  <Tab title="React Native">
+    <Info>Required SDK version: ^v4.59.1</Info>
+    In React Native, you can redirect to a valid URL or to a deep link in your application. 
+    You can also redirect to a webpage that then redirects to a deep link in your application.
+
+    <Info>If you redirect to a webpage that then redirects to an in-app deep link, allow the deep link, not the webpage.</Info>
+
+    ```ts twoslash
+    await authenticateAsync({
+      redirectUrl: "account-kit-expo-quickstart://oauth-callback",
+      mode: "redirect",
+      authProviderId: "google",
+      type: "oauth",
+    });
+    ```
+
+  </Tab>
+</Tabs>
