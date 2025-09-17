@@ -176,7 +176,15 @@ An interface representing a signer capable of signing messages and typed data. I
 
 ## `SmartContractAccount`
 
-As smart contract accounts are essentially the contract codes that operate on the blockchain, `SmartContractAccount` defines the interface with different functionalities for managing and interacting with the contract account. It includes different functionalities for creating, managing, and using your smart account. In addition to supporting all functionalities achieved with a basic [EOA](/wallets/resources/terms#wallet) alone, `SmartContractAccount` can have custom capabilities such as automating processes or executing actions based on predefined conditions. Smart contract wallets allow users to customize how they manage their digital assets, offering a more tailored approach to handling funds securely. `SmartContractAccount` type extends `viem`'s [`Account`](https://v1.viem.sh/docs/accounts/custom.html), and instantiation of an account is done using the [`toSmartContractAccount`](/wallets/reference/aa-sdk/core/functions/toSmartContractAccount) action.
+`SmartContractAccount` is the client-side interface for creating, managing, and interacting with smart contract accounts in a type-safe manner. It extends `viem`'s [`Account`](https://v1.viem.sh/docs/accounts/custom.html) interface with smart account functionality.
+Within Smart Wallets, implementations for Light Account and Modular Account are exported from `@account-kit/smart-contracts`. These implementations handle the logic for generating the deployment data, encoding
+single and batch UO execution, and signing of messages, typed data, and UOs.
+
+Smart Contract Accounts are rarely used on their own, and are typically passed in to [Smart Account Client](#TODO/concepts/smart-account-client) implementations.
+When using either the [React](/wallets/react/quickstart) or [Core](/wallets/core/overview) libraries, the connection of an account and a client are handled for you.
+
+It's also possible to use a custom account when using the [Infra](//wallets/reference/account-kit/infra) library.
+Within `@aa-sdk/core`, a method [`toSmartContractAccount`](/wallets/reference/aa-sdk/core/functions/toSmartContractAccount) is provided so you can create an instance of your Smart Contract Account.
 
 <Accordion title="SmartContractAccount">
 
