@@ -16,14 +16,17 @@ import { useSolanaSignMessage } from "@account-kit/react";
 
 ## Usage
 
-```ts
+```ts twoslash
+import { useSolanaSignMessage } from "@account-kit/react";
+
 const {
   isPending: isSigningMessage,
   mutate: signHello,
   data: signature,
   reset,
 } = useSolanaSignMessage({});
-mutate({ message: "Hello" });
+
+signHello({ message: "Hello" });
 ```
 
 ## Parameters

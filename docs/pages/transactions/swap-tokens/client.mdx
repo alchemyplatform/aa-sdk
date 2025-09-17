@@ -13,7 +13,7 @@ You'll need the following env variables:
 
 <CodeBlocks>
 
-```ts twoslash title="requestQuote.ts"
+```ts title="requestQuote.ts"
 import { client, config } from "./client.ts";
 
 interface SwapQuoteResponse {
@@ -114,7 +114,7 @@ console.log(
 );
 ```
 
-```ts twoslash title="client.ts"
+```ts title="client.ts"
 import "dotenv/config";
 import { type Address, type Hex, toHex } from "viem";
 import { LocalAccountSigner } from "@aa-sdk/core";
@@ -151,7 +151,7 @@ export const client = createSmartWalletClient({
 
 This example swaps 0.01 USDC for DAI on Arbitrum, and includes additional error handling.
 
-```ts twoslash
+```ts
 /**
  * Note: This uses direct fetch calls as the swap feature is not yet
  * available in @account-kit/wallet-client. Once available, you'll be

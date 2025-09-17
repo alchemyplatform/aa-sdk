@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.63.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.63.1...v4.63.2) (2025-09-16)
+
+### Bug Fixes
+
+- don't try to clear walletconnect data for react native ([#2061](https://github.com/alchemyplatform/aa-sdk/issues/2061)) ([75a0f66](https://github.com/alchemyplatform/aa-sdk/commit/75a0f66be65e03d5626a02678ed6f8e4036b0379))
+
 ## [4.63.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.63.0...v4.63.1) (2025-09-15)
 
 **Note:** Version bump only for package @account-kit/core

@@ -1,6 +1,6 @@
 <CodeBlocks>
 
-```ts twoslash title="example.ts"
+```ts title="example.ts"
 import { VersionedTransaction } from "@solana/web3.js";
 import { connection, keypair } from "./config.ts";
 import { sponsoredSerializedTransaction } from "./request.ts";
@@ -14,7 +14,7 @@ tx.sign([keypair]);
 const signature = await connection.sendRawTransaction(tx.serialize());
 ```
 
-```ts twoslash title="config.ts"
+```ts title="config.ts"
 import { Connection, Keypair } from "@solana/web3.js";
 
 export const ALCHEMY_API_KEY = "<API_KEY>";
@@ -30,7 +30,7 @@ export const connection = new Connection(
 );
 ```
 
-```ts twoslash title="request.ts"
+```ts title="request.ts"
 // Result from the request step
 // Sponsored serialized transaction returned by alchemy_requestFeePayer
 export const sponsoredSerializedTransaction = "<base64-serialized-tx>";

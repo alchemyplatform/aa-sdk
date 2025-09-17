@@ -23,7 +23,6 @@ export type UseUserResult = (User & { type: "eoa" | "sca" }) | null;
  * type UseUserResult  = (User & { type: "eoa" | "sca" }) | null;
  *
  * const user = useUser();
- *
  * ```
  */
 
