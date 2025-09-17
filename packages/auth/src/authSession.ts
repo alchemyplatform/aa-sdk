@@ -18,7 +18,7 @@ import type {
 import { dev_request } from "./devRequest.js";
 import { create1193Provider } from "./provider.js";
 
-export type CreateSignerParams = {
+export type CreateAuthSessionParams = {
   // TODO: replace apiKey with transport once it's ready.
   // transport: AlchemyTransport;
   apiKey: string;
@@ -36,7 +36,7 @@ export type SignMessageParams = {
   message: SignableMessage;
 };
 
-export class Signer {
+export class AuthSession {
   private isDisconnected = false;
 
   private constructor(
@@ -51,7 +51,7 @@ export class Signer {
     stamper,
     orgId,
     idToken: _,
-  }: CreateSignerParams): Promise<Signer> {
+  }: CreateAuthSessionParams): Promise<AuthSession> {
     const turnkey = new TurnkeyClient(
       { baseUrl: "https://api.turnkey.com" },
       stamper,
@@ -66,7 +66,7 @@ export class Signer {
     // TODO: combine whoami response with idToken to get the full user object.
     // For now, just return the whoami response.
     const user = whoamiResponse;
-    return new Signer(apiKey, turnkey, user);
+    return new AuthSession(apiKey, turnkey, user);
   }
 
   public getAddress(): Address {
@@ -161,7 +161,7 @@ export class Signer {
 
   private throwIfDisconnected(): void {
     if (this.isDisconnected) {
-      throw new Error("Signer is disconnected");
+      throw new Error("Auth session has been disconnected");
     }
   }
 

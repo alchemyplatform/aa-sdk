@@ -1,4 +1,4 @@
-import { AuthClient, OauthCancelledError } from "@alchemy/signer";
+import { AuthClient, OauthCancelledError } from "@alchemy/auth";
 import { IframeStamper } from "@turnkey/iframe-stamper";
 
 const CHECK_CLOSE_INTERVAL = 500;
@@ -33,7 +33,7 @@ export type WebAuthClientParams = {
  *
  * @example
  * ```ts
- * import { createWebAuthClient } from "@alchemy/signer-web";
+ * import { createWebAuthClient } from "@alchemy/auth-web";
  *
  * const authClient = createWebAuthClient({
  *   apiKey: "your-alchemy-api-key",
@@ -44,10 +44,10 @@ export type WebAuthClientParams = {
  * await authClient.sendEmailOtp({ email: "user@example.com" });
  *
  * // Submit OTP code
- * const signer = await authClient.submitOtpCode({ otpCode: "123456" });
+ * const authSession = await authClient.submitOtpCode({ otpCode: "123456" });
  *
  * // OAuth login
- * const signer = await authClient.loginWithOauth({
+ * const authSession = await authClient.loginWithOauth({
  *   type: "oauth",
  *   authProviderId: "google",
  *   mode: "popup"
