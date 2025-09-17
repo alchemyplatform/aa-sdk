@@ -1,5 +1,6 @@
 import { AuthSession } from "./authSession.js";
 import type {
+  AuthSessionState,
   CreateTekStamperFn,
   CreateWebAuthnStamperFn,
   HandleOauthFlowFn,
@@ -64,21 +65,36 @@ type TekStamperAndPublicKey = {
   targetPublicKey: string;
 };
 
-export type AuthClientParams = {
-  transport: AlchemyTransport;
-  createTekStamper: CreateTekStamperFn;
-  createWebAuthnStamper: CreateWebAuthnStamperFn;
-  handleOauthFlow: HandleOauthFlowFn;
+type PendingOtp = {
+  otpId: string;
+  orgId: string;
 };
 
-export type LoginWithOauthParams = {
-  type: "oauth";
-  authProviderId: string;
-  scope?: string;
-  claims?: string;
-  otherParameters?: Record<string, string>;
-  mode?: "popup" | "redirect";
-};
+/**
+ * Reads and removes the specified query params from the URL.
+ *
+ * @param {T} keys object whose values are the query parameter keys to read and
+ * remove
+ * @returns {{ [K in keyof T]: string | undefined }} object with the same keys
+ * as the input whose values are the values of the query params.
+ */
+function getAndRemoveQueryParams<T extends Record<string, string>>(
+  keys: T,
+): { [K in keyof T]: string | undefined } {
+  const url = new URL(window.location.href);
+  const result: Record<string, string | undefined> = {};
+  let foundQueryParam = false;
+  for (const [key, param] of Object.entries(keys)) {
+    const value = url.searchParams.get(param) ?? undefined;
+    foundQueryParam ||= value != null;
+    result[key] = value;
+    url.searchParams.delete(param);
+  }
+  if (foundQueryParam) {
+    window.history.replaceState(window.history.state, "", url.toString());
+  }
+  return result as { [K in keyof T]: string | undefined };
+}
 
 /**
  * Attempts to extract OAuth callback parameters from the current URL.
@@ -174,25 +190,55 @@ function extractOAuthCallbackParams() {
  * ```
  */
 export class AuthClient {
-  private readonly transport: AlchemyTransport;
+  // TODO: temporary for testing before the transport is ready.
+  private readonly apiKey: string;
   private readonly createTekStamper: CreateTekStamperFn;
   private readonly createWebAuthnStamper: CreateWebAuthnStamperFn;
   private readonly handleOauthFlow: HandleOauthFlowFn;
 
+  /**
+   * Creates a new AuthClient instance
+   *
+   * @param {AuthClientParams} params - Configuration parameters for the auth client
+   * @param {string} params.apiKey - API key for authentication with Alchemy services
+   * @param {CreateTekStamperFn} params.createTekStamper - Function to create a TEK stamper
+   * @param {CreateWebAuthnStamperFn} params.createWebAuthnStamper - Function to create a WebAuthn stamper
+   * @param {HandleOauthFlowFn} params.handleOauthFlow - Function to handle OAuth authentication flow
+   */
   constructor(params: AuthClientParams) {
-    this.transport = params.transport;
+    this.apiKey = params.apiKey;
     this.createTekStamper = params.createTekStamper;
     this.createWebAuthnStamper = params.createWebAuthnStamper;
     this.handleOauthFlow = params.handleOauthFlow;
   }
 
   private tekStamperPromise: Promise<TekStamperAndPublicKey> | null = null;
-  // TODO: do we care about persisting this across reloads?
-  private otpId: string | null = null;
 
-  public async sendEmailOtp(email: string): Promise<void> {
+  // TODO: do we care about persisting this across reloads?
+  private pendingOtp: PendingOtp | null = null;
+
+  /**
+   * Sends an OTP (One-Time Password) to the specified email address for authentication.
+   * The OTP will be sent to the user's email and can be submitted using submitOtpCode().
+   *
+   * @param {SendEmailOtpParams} params - Parameters for sending the email OTP
+   * @param {string} params.email - Email address to send the OTP to
+   * @returns {Promise<void>} Promise that resolves when the OTP has been sent
+   *
+   * @example
+   * ```ts
+   * await authClient.sendEmailOtp({ email: "user@example.com" });
+   * // User will receive an OTP code via email
+   * ```
+   */
+  public async sendEmailOtp({ email }: SendEmailOtpParams): Promise<void> {
     const { targetPublicKey } = await this.getTekStamper();
-    this.otpId = await notImplemented(email, targetPublicKey);
+    const { otpId, orgId } = await this.dev_request("auth", {
+      email,
+      emailMode: "otp",
+      targetPublicKey,
+    });
+    this.pendingOtp = { otpId, orgId };
   }
 
   /**
@@ -254,7 +300,7 @@ export class AuthClient {
    * ```
    */
   public async loginWithOauth(
-    params: LoginWithOauthParams
+    params: LoginWithOauthParams,
   ): Promise<AuthSession> {
     const { targetPublicKey } = await this.getTekStamper();
     const oauthConfig = await this.dev_request("prepare-oauth", {
@@ -270,6 +316,11 @@ export class AuthClient {
     const response = await this.handleOauthFlow(authUrl, params.mode);
     console.log({ response });
     if (response.status === "SUCCESS") {
+      console.log("completeAuthWithBundle", {
+        bundle: response.bundle,
+        orgId: response.orgId,
+        idToken: response.idToken,
+      });
       return this.completeAuthWithBundle({
         bundle: response.bundle!,
         orgId: response.orgId!,
@@ -346,6 +397,28 @@ export class AuthClient {
       credentialId: undefined,
     });
     return notImplemented(stamper);
+  }
+
+  /**
+   * Loads a signer from a previously saved authentication session state.
+   *
+   * @param {AuthSessionState} state - The saved authentication session state
+   * @returns {Promise<Signer | undefined>} A promise that resolves to a Signer instance if the session is valid, undefined otherwise
+   */
+  public async loadAuthSessionState(
+    state: AuthSessionState,
+  ): Promise<AuthSession | undefined> {
+    const { type, expirationDateMs, user } = state;
+    if (expirationDateMs > Date.now()) {
+      if (type === "passkey") {
+        return this.loginWithPasskey();
+      } else {
+        const { bundle } = state;
+        const { orgId, idToken } = user;
+        return this.completeAuthWithBundle({ bundle, orgId, idToken });
+      }
+    }
+    return undefined;
   }
 
   // TODO: ... and many more.
