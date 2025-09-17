@@ -22,12 +22,12 @@ export async function handleOauthRedirect(
   const connector: AlchemyAuthConnector = resolveAlchemyAuthConnector(config);
   const authClient = connector.getAuthClient();
 
-  const signer = await authClient.handleOauthRedirect();
+  const authSession = await authClient.handleOauthRedirect();
 
-  if (!signer) {
-    throw new Error("OAuth authentication failed - no signer returned");
+  if (!authSession) {
+    throw new Error("OAuth authentication failed - no auth session returned");
   }
 
-  connector.setSigner(signer);
+  connector.setAuthSession(authSession);
   await connect(config, { connector });
 }

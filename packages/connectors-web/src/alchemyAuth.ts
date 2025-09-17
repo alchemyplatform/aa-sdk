@@ -1,27 +1,25 @@
 import { createConnector } from "@wagmi/core";
 import type { CreateConnectorFn } from "wagmi";
-import { createWebAuthClient } from "@alchemy/auth-web";
-import type {
-  AuthClient,
-  AuthSession,
-  CreateTekStamperFn,
-  CreateWebAuthnStamperFn,
-} from "@alchemy/auth";
+import {
+  createWebAuthClient,
+  type WebAuthClientParams,
+} from "@alchemy/auth-web";
+import type { AuthClient, AuthSession } from "@alchemy/auth";
 import { type Address, type EIP1193Provider } from "viem";
 
-export interface AlchemyAuthOptions {
-  /** Optional custom TEK stamper factory for power users / React Native */
-  createTekStamper?: CreateTekStamperFn;
-  /** Optional custom WebAuthn stamper factory for passkey authentication */
-  createWebAuthnStamper?: CreateWebAuthnStamperFn;
+export interface AlchemyAuthOptions
+  extends Pick<
+    WebAuthClientParams,
+    | "createTekStamper"
+    | "createWebAuthnStamper"
+    | "iframeElementId"
+    | "iframeContainerId"
+  > {
   /** Session configuration bubbled straight to the signer */
   sessionConfig?: { expiryInSeconds?: number; sessionKey?: string };
   /** API key for authentication with Alchemy services */
+  // TODO: remove this once we use alchemy transport. Optional for now to avoid unnecessary errors.
   apiKey?: string;
-  /** Optional ID for the iframe element used by Turnkey stamper. Defaults to "turnkey-iframe" */
-  iframeElementId?: string;
-  /** Optional ID for the container element that holds the iframe. Defaults to "turnkey-iframe-container" */
-  iframeContainerId?: string;
 }
 
 alchemyAuth.type = "alchemy-auth" as const;
@@ -39,10 +37,14 @@ alchemyAuth.type = "alchemy-auth" as const;
  * @param {string} [options.apiKey] - API key for authentication with Alchemy services
  * @param {string} [options.iframeElementId] - Optional ID for the iframe element used by Turnkey stamper
  * @param {string} [options.iframeContainerId] - Optional ID for the container element that holds the iframe
+ * @param {CreateTekStamperFn} [options.createTekStamper] - Optional custom TEK stamper factory for  React Native
+ * @param {CreateWebAuthnStamperFn} [options.createWebAuthnStamper] - Optional custom WebAuthn stamper factory for passkey authentication
+ * @param {object} [options.sessionConfig] - Session configuration bubbled straight to the signer
+ * @param {number} [options.sessionConfig.expiryInSeconds] - Session expiry time in seconds
+ * @param {string} [options.sessionConfig.sessionKey] - Custom session key
  * @returns {CreateConnectorFn} A Wagmi connector factory compatible with `createConfig`.
  */
 export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
-  const parameters = options;
   type Provider = EIP1193Provider;
   type Properties = {
     getAuthClient(): AuthClient;
@@ -55,175 +57,177 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
   let authClientInstance: AuthClient | undefined;
   let currentChainId: number | undefined;
 
-  return createConnector<Provider, Properties>((config) => ({
-    id: "alchemyAuth",
-    name: "Alchemy Auth",
-    type: alchemyAuth.type,
+  return createConnector<Provider, Properties>((config) => {
+    const emitAndThrowError = (message: string) => {
+      const error = new Error(message);
+      config.emitter.emit("error", { error });
+      throw error;
+    };
 
-    async setup() {
-      // Optional function for running when the connector is first created.
-      // For now, we don't need any specific setup logic
-    },
+    return {
+      id: "alchemyAuth",
+      name: "Alchemy Auth",
+      type: alchemyAuth.type,
 
-    async connect({ chainId } = {}) {
-      // Connection is handled through the auth flow (sendEmailOtp -> submitOtpCode)
-      // This method is called by wagmi after authentication completes
-      if (!authSessionInstance) {
-        // TODO(v5): Update error message to reflect different auth methods available.
-        const error = new Error(
-          "No signer available. Please authenticate first using sendEmailOtp and submitOtpCode, or loginWithOauth.",
-        );
-        config.emitter.emit("error", { error });
-        throw error;
-      }
+      async setup() {
+        // Optional function for running when the connector is first created.
+        // For now, we don't need any specific setup logic
+      },
 
-      const accounts = await this.getAccounts();
-      if (accounts.length === 0) {
-        throw new Error("No accounts available from authSession");
-      }
-
-      const resolvedChainId = chainId ?? config.chains[0]?.id;
-      if (!resolvedChainId) {
-        const error = new Error(
-          "No chain ID available. Please provide a chainId parameter or configure chains in your wagmi config.",
-        );
-        config.emitter.emit("error", { error });
-        throw error;
-      }
-
-      currentChainId = resolvedChainId;
-
-      return {
-        accounts,
-        chainId: resolvedChainId,
-      };
-    },
-
-    async disconnect() {
-      try {
-        // Clean up instances
-        if (authSessionInstance) {
-          await authSessionInstance.disconnect();
+      async connect({ chainId } = {}) {
+        // Connection is handled through the auth flow (sendEmailOtp -> submitOtpCode)
+        // This method is called by wagmi after authentication completes
+        if (!authSessionInstance) {
+          // TODO(v5): Update error message to reflect different auth methods available.
+          emitAndThrowError(
+            "No signer available. Please authenticate first using sendEmailOtp and submitOtpCode, or loginWithOauth.",
+          );
         }
-        authSessionInstance = undefined;
-        authClientInstance = undefined;
-        currentChainId = undefined;
-      } catch (error) {
-        // Log disconnect errors but don't throw to avoid breaking flow
-        config.emitter.emit("error", { error: error as Error });
-      }
-    },
 
-    async getAccounts(): Promise<readonly Address[]> {
-      if (!authSessionInstance) {
-        return [];
-      }
+        const accounts = await this.getAccounts();
+        if (accounts.length === 0) {
+          throw new Error("No accounts available from authSession");
+        }
 
-      const address = authSessionInstance.getAddress();
-      return [address];
-    },
+        const resolvedChainId = chainId ?? config.chains[0]?.id;
+        if (!resolvedChainId) {
+          emitAndThrowError(
+            "No chain ID available. Please provide a chainId parameter or configure chains in your wagmi config.",
+          );
+        }
 
-    async getChainId() {
-      // Return the currently connected chain, or fall back to first configured chain
-      const resolvedChainId = currentChainId ?? config.chains[0]?.id;
-      if (!resolvedChainId) {
-        throw new Error(
-          "No chain configured. Please configure chains in your wagmi config.",
-        );
-      }
-      return resolvedChainId;
-    },
+        currentChainId = resolvedChainId;
 
-    async getProvider(): Promise<Provider> {
-      // TODO: Implement proper provider when Signer EIP-1193 support is available
-      // For now, throw an error as the provider is not yet implemented
-      throw new Error("Provider not implemented.");
-    },
+        return {
+          accounts,
+          chainId: resolvedChainId,
+        };
+      },
 
-    async isAuthorized() {
-      // Check if we have a valid authSession instance
-      return authSessionInstance !== undefined;
-    },
+      async disconnect() {
+        try {
+          // Clean up instances
+          if (authSessionInstance) {
+            await authSessionInstance.disconnect();
+          }
+          authSessionInstance = undefined;
+          authClientInstance = undefined;
+          currentChainId = undefined;
+        } catch (error) {
+          // Log disconnect errors but don't throw to avoid breaking flow
+          config.emitter.emit("error", { error: error as Error });
+        }
+      },
 
-    async switchChain({ chainId }) {
-      currentChainId = chainId;
-      const targetChain = config.chains.find((chain) => chain.id === chainId);
-      if (!targetChain) {
-        throw new Error(`Chain with id ${chainId} not found in config`);
-      }
+      async getAccounts(): Promise<readonly Address[]> {
+        if (!authSessionInstance) {
+          return [];
+        }
 
-      return targetChain;
-    },
+        const address = authSessionInstance.getAddress();
+        return [address];
+      },
 
-    async onAccountsChanged(accounts) {
-      // Handle account changes - for now just emit the accounts
-      // In a full implementation, we might need to update internal state
-      if (accounts.length === 0) {
+      async getChainId() {
+        // Return the currently connected chain, or fall back to first configured chain
+        const resolvedChainId = currentChainId ?? config.chains[0]?.id;
+        if (!resolvedChainId) {
+          throw new Error(
+            "No chain configured. Please configure chains in your wagmi config.",
+          );
+        }
+        return resolvedChainId;
+      },
+
+      async getProvider(): Promise<Provider> {
+        // TODO: Implement proper provider when Signer EIP-1193 support is available
+        // For now, throw an error as the provider is not yet implemented
+        throw new Error("Provider not implemented.");
+      },
+
+      async isAuthorized() {
+        // Check if we have a valid authSession instance
+        return authSessionInstance !== undefined;
+      },
+
+      async switchChain({ chainId }) {
+        currentChainId = chainId;
+        const targetChain = config.chains.find((chain) => chain.id === chainId);
+        if (!targetChain) {
+          throw new Error(`Chain with id ${chainId} not found in config`);
+        }
+
+        return targetChain;
+      },
+
+      async onAccountsChanged(accounts) {
+        // Handle account changes - for now just emit the accounts
+        // In a full implementation, we might need to update internal state
+        if (accounts.length === 0) {
+          await this.disconnect();
+        }
+      },
+
+      onChainChanged(chainId) {
+        // Update the current chain ID when chain changes
+        currentChainId = parseInt(chainId, 16);
+      },
+
+      async onConnect(connectInfo) {
+        // Handle successful connection
+        // This is typically called after authentication completes
+        void connectInfo;
+      },
+
+      async onDisconnect(error) {
+        // Handle disconnection
         await this.disconnect();
-      }
-    },
+        if (error) {
+          config.emitter.emit("error", { error });
+        }
+      },
 
-    onChainChanged(chainId) {
-      // Update the current chain ID when chain changes
-      currentChainId = parseInt(chainId, 16);
-    },
+      // Custom methods for Alchemy Auth
+      getAuthClient() {
+        // TODO: Expand this to support other auth methods (jwt, rpcUrl) when
+        // AlchemyConnectionConfig pattern is adopted in future PR
+        if (!options.apiKey) {
+          emitAndThrowError(
+            "Authentication required. Please configure the alchemyAuth connector with an apiKey.",
+          );
+        }
 
-    async onConnect(connectInfo) {
-      // Handle successful connection
-      // This is typically called after authentication completes
-      void connectInfo;
-    },
+        if (!authClientInstance) {
+          authClientInstance = createWebAuthClient({
+            apiKey: options.apiKey!,
+            iframeElementId: options.iframeElementId,
+            iframeContainerId: options.iframeContainerId,
+            createTekStamper: options.createTekStamper,
+            createWebAuthnStamper: options.createWebAuthnStamper,
+          });
+        }
+        return authClientInstance;
+      },
 
-    async onDisconnect(error) {
-      // Handle disconnection
-      await this.disconnect();
-      if (error) {
-        config.emitter.emit("error", { error });
-      }
-    },
+      async getAuthSession() {
+        if (!authSessionInstance) {
+          throw new Error(
+            "authSession not available. Please authenticate first.",
+          );
+        }
+        return authSessionInstance;
+      },
 
-    // Custom methods for Alchemy Auth
-    getAuthClient() {
-      // TODO: Expand this to support other auth methods (jwt, rpcUrl) when
-      // AlchemyConnectionConfig pattern is adopted in future PR
-      if (!parameters.apiKey) {
-        const error = new Error(
-          "Authentication required. Please configure the alchemyAuth connector with an apiKey.",
-        );
-        config.emitter.emit("error", { error });
-        throw error;
-      }
+      setAuthSession(authSession: AuthSession) {
+        authSessionInstance = authSession;
+      },
 
-      if (!authClientInstance) {
-        authClientInstance = createWebAuthClient({
-          apiKey: parameters.apiKey!,
-          iframeElementId: parameters.iframeElementId,
-          iframeContainerId: parameters.iframeContainerId,
-          createTekStamper: parameters.createTekStamper,
-          createWebAuthnStamper: parameters.createWebAuthnStamper,
-        });
-      }
-      return authClientInstance;
-    },
-
-    async getAuthSession() {
-      if (!authSessionInstance) {
-        throw new Error(
-          "authSession not available. Please authenticate first.",
-        );
-      }
-      return authSessionInstance;
-    },
-
-    setAuthSession(authSession: AuthSession) {
-      authSessionInstance = authSession;
-    },
-
-    setSigner(signer: any) {
-      // Store the signer instance for future use
-      // For now, we'll just store it as part of the auth session or connector state
-      // This method is called after successful authentication to provide the signer
-      console.log("Signer set:", signer);
-    },
-  }));
+      setSigner(signer: any) {
+        // Store the signer instance for future use
+        // For now, we'll just store it as part of the auth session or connector state
+        // This method is called after successful authentication to provide the signer
+        console.log("Signer set:", signer);
+      },
+    };
+  });
 }

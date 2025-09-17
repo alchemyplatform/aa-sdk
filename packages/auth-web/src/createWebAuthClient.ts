@@ -18,9 +18,9 @@ export type WebAuthClientParams = {
   iframeElementId?: string;
   /** Optional ID for the container element that holds the iframe. Defaults to "turnkey-iframe-container" */
   iframeContainerId?: string;
-  /** Optional custom TEK stamper factory for power users / RN */
+  /** Optional custom TEK stamper factory for React Native */
   createTekStamper?: CreateTekStamperFn;
-  /** Optional custom WebAuthn stamper factory for power users / RN */
+  /** Optional custom WebAuthn stamper factory */
   createWebAuthnStamper?: CreateWebAuthnStamperFn;
 };
 

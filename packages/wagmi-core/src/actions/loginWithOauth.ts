@@ -32,12 +32,12 @@ export async function loginWithOauth(
   const connector: AlchemyAuthConnector = resolveAlchemyAuthConnector(config);
   const authClient = connector.getAuthClient();
 
-  const signer = await authClient.loginWithOauth({
+  const authSession = await authClient.loginWithOauth({
     type: "oauth",
     authProviderId: parameters.provider,
-    mode: parameters.mode || "popup",
+    mode: parameters.mode ?? "popup",
   });
 
-  connector.setSigner(signer);
+  connector.setAuthSession(authSession);
   await connect(config, { connector });
 }
