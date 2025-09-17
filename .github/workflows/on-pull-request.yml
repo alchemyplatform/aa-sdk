@@ -58,12 +58,6 @@ jobs:
           fern-token: ${{ secrets.FERN_TOKEN }}
           ref: ${{ github.head_ref }}
 
-      - name: Log preview results
-        if: always()
-        run: |
-          echo "Preview URL: ${{ steps.preview.outputs.preview-url }}"
-          echo "Status: ${{ steps.preview.outputs.status }}"
-
   lint_docs:
     name: Lint Documentation
     runs-on: ubuntu-latest
@@ -125,9 +119,7 @@ jobs:
           lychee --version
 
       - name: Check for broken links
-        run: |
-          echo "Preview URL: ${{ needs.preview.outputs.preview-url }}"
-          yarn docs:broken-links --base-url "${{ needs.preview.outputs.preview-url }}"
+        run: yarn docs:broken-links --base-url "${{ needs.preview.outputs.preview-url }}"
   
   lint:
     name: Lint
