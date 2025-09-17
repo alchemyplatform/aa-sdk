@@ -36,6 +36,27 @@ jobs:
         env:
           TITLE: ${{ github.event.pull_request.title }}
         run: echo "$TITLE" | yarn commitlint
+  
+  preview:
+    name: Generate Documentation Preview
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+      pull-requests: write
+    outputs:
+      preview-url: ${{ steps.preview.outputs.preview-url }}
+    steps:
+      - name: Checkout aa-sdk
+        uses: actions/checkout@v4
+
+      - name: Generate Documentation Preview
+        id: preview
+        uses: ./.github/actions/preview-fern-docs
+        with:
+          github-token: ${{ github.token }}
+          fern-token: ${{ secrets.FERN_TOKEN }}
+          ref: ${{ github.head_ref }}
 
   lint_docs:
     name: Lint Documentation
@@ -72,10 +93,8 @@ jobs:
   check_broken_links:
     name: Check Broken Links
     runs-on: ubuntu-latest
-    needs: changes
-    if: ${{ needs.changes.outputs.docs == 'true' }}
-    # TODO: Remove this after fixing all broken links
-    continue-on-error: true
+    needs: [changes, preview]
+    if: ${{ needs.changes.outputs.docs == 'true' && needs.preview.outputs.preview-url != '' }}
     steps:
       - name: "Checkout files"
         uses: actions/checkout@v3
@@ -101,7 +120,7 @@ jobs:
           lychee --version
 
       - name: Check for broken links
-        run: yarn docs:broken-links
+        run: yarn docs:broken-links --base-url "${{ needs.preview.outputs.preview-url }}"
   
   lint:
     name: Lint
