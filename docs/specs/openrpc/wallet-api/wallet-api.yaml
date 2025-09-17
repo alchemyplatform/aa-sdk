@@ -3325,10 +3325,11 @@ methods:
   - name: wallet_getCallsStatus
     description: This method is used to get the status of calls IDs returned from wallet_sendPreparedCalls.
     params:
-      - name: getCallsStatusRequest
+      - name: callId
         required: true
         schema:
           description: "The call ID returned from wallet_sendPreparedCalls"
+          title: "callId"
           type: "string"
           pattern: "^0x(.*)$"
 
@@ -3487,31 +3488,21 @@ methods:
   - name: wallet_getCapabilities
     description: This method is used to request capabilities from a wallet
     params:
-      - name: getCapabilitiesRequest
+      - name: Wallet Address
         required: true
         schema:
-          anyOf:
-            - description: "Wallet address only"
-              type: "array"
-              items:
-                - type: "string"
-                  pattern: "^0x(.*)$"
-              additionalItems: false
-              minItems: 1
-              maxItems: 1
-            - description: "Wallet address and chain ids"
-              type: "array"
-              items:
-                - type: "string"
-                  pattern: "^0x(.*)$"
-                - type: "array"
-                  items:
-                    type: "string"
-                    pattern: "^0x(.*)$"
-              additionalItems: false
-              minItems: 2
-              maxItems: 2
-          minItems: 1
+          title: "Wallet Address"
+          type: "string"
+          pattern: "^0x(.*)$"
+
+      - name: Chain IDs
+        required: false
+        schema:
+          title: "Chain IDs"
+          type: "array"
+          items:
+            type: "string"
+            pattern: "^0x(.*)$"
 
     result:
       name: getCapabilitiesResponse
