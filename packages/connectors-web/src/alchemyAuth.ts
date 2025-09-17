@@ -15,8 +15,6 @@ export interface AlchemyAuthOptions
     | "iframeElementId"
     | "iframeContainerId"
   > {
-  /** Session configuration bubbled straight to the signer */
-  sessionConfig?: { expiryInSeconds?: number; sessionKey?: string };
   /** API key for authentication with Alchemy services */
   // TODO: remove this once we use alchemy transport. Optional for now to avoid unnecessary errors.
   apiKey?: string;
@@ -39,7 +37,6 @@ alchemyAuth.type = "alchemy-auth" as const;
  * @param {string} [options.iframeContainerId] - Optional ID for the container element that holds the iframe
  * @param {CreateTekStamperFn} [options.createTekStamper] - Optional custom TEK stamper factory for React Native
  * @param {CreateWebAuthnStamperFn} [options.createWebAuthnStamper] - Optional custom WebAuthn stamper factory for passkey authentication
- * @param {object} [options.sessionConfig] - Session configuration bubbled straight to the signer
  * @returns {CreateConnectorFn} A Wagmi connector factory compatible with `createConfig`.
  */
 export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
