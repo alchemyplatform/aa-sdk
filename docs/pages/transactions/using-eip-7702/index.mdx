@@ -54,6 +54,8 @@ When a delegation is required the response to prepare calls will return an array
 
 Both of these requests need to be signed and included in the `sendPreparedCalls` request. `sendPreparedCalls` takes
 an array of signed calls for this purpose. These signatures are combined into a single transaction that is relayed onchain.
+Once the delegation is signed, as long as the user doesn't delegate to another account, subsequent requests will only
+contain the user operation signature request.
 
 Signing an authorization signature request requires logic specific to the wallet being used. Examples:
 
