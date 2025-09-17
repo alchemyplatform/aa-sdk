@@ -44,7 +44,8 @@ jobs:
       contents: read
       deployments: write
       pull-requests: write
-
+    outputs:
+      preview-url: ${{ steps.preview.outputs.preview-url }}
     steps:
       - name: Checkout aa-sdk
         uses: actions/checkout@v4
