@@ -14,7 +14,7 @@ You'll need the following env variables:
 
 <CodeBlocks>
 
-```ts twoslash title="sendParallelCalls.ts"
+```ts title="sendParallelCalls.ts"
 import { client, config } from "./client.ts";
 
 const [
@@ -67,7 +67,7 @@ const callStatusResults = await Promise.all([
 console.log("Calls status results:", callStatusResults);
 ```
 
-```ts twoslash title="client.ts"
+```ts title="client.ts"
 import "dotenv/config";
 import { type Address, type Hex, toHex } from "viem";
 import { LocalAccountSigner } from "@aa-sdk/core";

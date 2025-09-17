@@ -16,7 +16,7 @@ import { useAlchemyAccountContext } from "./useAlchemyAccountContext.js";
  * The hook automatically subscribes to changes in signer status and chain configuration.
  *
  * @example
- * ```tsx
+ * ```tsx twoslash
  * import { useSmartWalletClient } from "@account-kit/react";
  *
  * function MyComponent() {

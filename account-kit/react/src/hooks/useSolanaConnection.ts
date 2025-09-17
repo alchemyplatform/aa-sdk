@@ -28,9 +28,10 @@ export type SolanaConnectionHookParams = {
  * This hook is used for establishing a connection to Solana and returns the connection object and the signer object.
  *
  * @example
- * ```ts
-  const {connection} = useSolanaConnection();
- 
+ * ```ts twoslash
+ * import { useSolanaConnection } from "@account-kit/react";
+ *
+ * const { connection } = useSolanaConnection();
  * ```
  * @param {SolanaConnectionHookParams} opts Options for the hook to get setup
  * @returns {SolanaConnection} The transaction hook.

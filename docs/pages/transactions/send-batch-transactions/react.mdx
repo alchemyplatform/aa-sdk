@@ -4,7 +4,7 @@ Use the `useSendCalls` hook to send a batched transaction. You can also use the 
 
 <CodeBlocks>
 
-```tsx twoslash title="sendCalls.tsx" focus={6-9,19-41}
+```tsx title="sendCalls.tsx" focus={6-9,19-41}
 import { useSendCalls, useSmartAccountClient } from "@account-kit/react";
 import { type Address, encodeFunctionData, erc20Abi, parseUnits } from "viem";
 import { swapAbi } from "./swapAbi";
@@ -57,7 +57,7 @@ export default function SendCalls() {
 }
 ```
 
-```ts twoslash title="swapAbi.ts"
+```ts title="swapAbi.ts"
 export const swapAbi = [
   {
     type: "constructor",

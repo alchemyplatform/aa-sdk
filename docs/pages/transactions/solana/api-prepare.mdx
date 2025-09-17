@@ -1,6 +1,6 @@
 <CodeBlocks>
 
-```ts twoslash title="example.ts"
+```ts title="example.ts"
 import * as solanaWeb3 from "@solana/web3.js";
 import { connection, keypair } from "./config.ts";
 
@@ -29,7 +29,7 @@ export const serializedTx = Buffer.from(transaction.serialize()).toString(
 );
 ```
 
-```ts twoslash title="config.ts"
+```ts title="config.ts"
 import { Connection, Keypair } from "@solana/web3.js";
 
 export const ALCHEMY_API_KEY = "<API_KEY>";

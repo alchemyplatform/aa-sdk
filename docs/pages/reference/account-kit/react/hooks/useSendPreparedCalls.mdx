@@ -18,12 +18,21 @@ import { useSendPreparedCalls } from "@account-kit/react";
 
 ## Usage
 
-```tsx
-const { sendPreparedCalls, sendPreparedCallsAsync, isSendingPreparedCalls, error } = useSendPreparedCalls();
+```ts twoslash
+import { useSendPreparedCalls } from "@account-kit/react";
+
+const {
+  sendPreparedCalls,
+  sendPreparedCallsAsync,
+  isSendingPreparedCalls,
+  error,
+} = useSendPreparedCalls();
 
 // Send prepared calls
 await sendPreparedCallsAsync({
-preparedCalls: [/* prepared call objects *\/]
+  preparedCalls: [
+    // prepared call objects
+  ],
 });
 ```
 
