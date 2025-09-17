@@ -15,7 +15,7 @@ alchemy-id-token) in the URL query string, processes them, and completes the aut
 ## Import
 
 ```ts
-import { AuthClient } from "@alchemy/signer";
+import { AuthClient } from "@alchemy/auth";
 ```
 
 ## Usage
@@ -25,8 +25,8 @@ import { AuthClient } from "@alchemy/signer";
 // https://yourapp.com/?alchemy-bundle=eyJ0eXAi...&alchemy-org-id=24c1ac...&alchemy-id-token=eyJ0eXAi...
 
 try {
-  const signer = await authClient.handleOauthRedirect();
-  console.log("OAuth authentication successful", signer.user);
+  const authSession = await authClient.handleOauthRedirect();
+  console.log("OAuth authentication successful", authSession.user);
 } catch (error) {
   console.error("OAuth callback failed:", error.message);
 }
@@ -34,5 +34,5 @@ try {
 
 ## Returns
 
-`Promise<Signer>`
-Promise that resolves to an authenticated Signer instance
+`Promise<AuthSession>`
+Promise that resolves to an auth session instance

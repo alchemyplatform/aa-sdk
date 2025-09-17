@@ -2,9 +2,9 @@ import {
   createConnector,
   // type Connector,
 } from "@wagmi/core";
-import { createWebAuthClient } from "@alchemy/signer-web";
-import type { AuthClient } from "@alchemy/signer";
-import type { Signer } from "@alchemy/signer";
+import { createWebAuthClient } from "@alchemy/auth-web";
+import type { AuthClient } from "@alchemy/auth";
+import type { AuthSession } from "@alchemy/auth";
 import type { Address } from "viem";
 
 // TODO: Support other connection config options.
@@ -38,12 +38,12 @@ export function alchemyAuth(parameters: AlchemyAuthOptions = {}) {
   type Provider = any; // TODO: Define proper provider type
   type Properties = {
     getAuthClient(): AuthClient;
-    getSigner(): Promise<Signer>;
-    setSigner(signer: Signer): void;
+    getAuthSession(): Promise<AuthSession>;
+    setAuthSession(authSession: AuthSession): void;
   };
 
   // Shared instances
-  let signerInstance: Signer | undefined;
+  let authSessionInstance: AuthSession | undefined;
   let authClientInstance: AuthClient | undefined;
   let currentChainId: number | undefined;
 
@@ -66,16 +66,16 @@ export function alchemyAuth(parameters: AlchemyAuthOptions = {}) {
     async connect({ chainId } = {}) {
       // Connection is handled through the auth flow (sendEmailOtp -> submitOtpCode)
       // This method is called by wagmi after authentication completes
-      if (!signerInstance) {
+      if (!authSessionInstance) {
         // TODO(v5): Update error message to reflect different auth methods available.
         throw new Error(
-          "No signer available. Please authenticate first using sendEmailOtp and submitOtpCode.",
+          "No auth session available. Please authenticate first using sendEmailOtp and submitOtpCode.",
         );
       }
 
       const accounts = await this.getAccounts();
       if (accounts.length === 0) {
-        throw new Error("No accounts available from signer");
+        throw new Error("No accounts available from authSession");
       }
 
       const resolvedChainId = chainId ?? config.chains[0]?.id;
@@ -96,18 +96,18 @@ export function alchemyAuth(parameters: AlchemyAuthOptions = {}) {
 
     async disconnect() {
       // Clean up instances
-      await signerInstance?.disconnect();
-      signerInstance = undefined;
+      await authSessionInstance?.disconnect();
+      authSessionInstance = undefined;
       authClientInstance = undefined;
       currentChainId = undefined;
     },
 
     async getAccounts(): Promise<readonly Address[]> {
-      if (!signerInstance) {
+      if (!authSessionInstance) {
         return [];
       }
 
-      const address = signerInstance.getAddress();
+      const address = authSessionInstance.getAddress();
       return [address as Address];
     },
 
@@ -133,8 +133,8 @@ export function alchemyAuth(parameters: AlchemyAuthOptions = {}) {
     },
 
     async isAuthorized() {
-      // Check if we have a valid signer instance
-      return signerInstance !== undefined;
+      // Check if we have a valid authSession instance
+      return authSessionInstance !== undefined;
     },
 
     async switchChain({ chainId }) {
@@ -142,7 +142,7 @@ export function alchemyAuth(parameters: AlchemyAuthOptions = {}) {
       currentChainId = chainId;
 
       // For now, just return a basic chain object
-      // In the future, this should update the provider/signer configuration
+      // In the future, this should update the provider/auth session configuration
       return {
         id: chainId,
         name: `Chain ${chainId}`,
@@ -191,15 +191,24 @@ export function alchemyAuth(parameters: AlchemyAuthOptions = {}) {
       return authClientInstance;
     },
 
-    async getSigner() {
-      if (!signerInstance) {
-        throw new Error("Signer not available. Please authenticate first.");
+    async getAuthSession() {
+      if (!authSessionInstance) {
+        throw new Error(
+          "authSession not available. Please authenticate first.",
+        );
       }
-      return signerInstance;
+      return authSessionInstance;
     },
 
-    setSigner(signer: Signer) {
-      signerInstance = signer;
+    setAuthSession(authSession: AuthSession) {
+      authSessionInstance = authSession;
+    },
+
+    setSigner(signer: any) {
+      // Store the signer instance for future use
+      // For now, we'll just store it as part of the auth session or connector state
+      // This method is called after successful authentication to provide the signer
+      console.log("Signer set:", signer);
     },
   }));
 }

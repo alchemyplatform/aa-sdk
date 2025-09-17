@@ -1,13 +1,13 @@
 import type { Config, Connector } from "wagmi";
-import type { AuthClient, Signer } from "@alchemy/signer";
+import type { AuthClient, AuthSession } from "@alchemy/auth";
 
 /**
  * Extended connector interface that includes Alchemy Auth-specific methods
  */
 export interface AlchemyAuthConnector extends Connector {
   getAuthClient(): AuthClient;
-  getSigner(): Promise<Signer>;
-  setSigner(signer: Signer): void;
+  getAuthSession(): Promise<AuthSession>;
+  setAuthSession(authSession: AuthSession): void;
 }
 
 /**

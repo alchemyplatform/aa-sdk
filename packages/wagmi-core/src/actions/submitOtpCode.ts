@@ -22,10 +22,10 @@ export async function submitOtpCode(
 ): Promise<SubmitOtpCodeReturnType> {
   const connector = resolveAlchemyAuthConnector(config);
   const authClient = connector.getAuthClient();
-  const signer = await authClient.submitOtpCode({
+  const authSession = await authClient.submitOtpCode({
     otpCode: parameters.otpCode,
   });
 
-  connector.setSigner(signer);
+  connector.setAuthSession(authSession);
   await connect(config, { connector });
 }

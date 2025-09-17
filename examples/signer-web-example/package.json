@@ -1,5 +1,5 @@
 {
-  "name": "signer-web-example",
+  "name": "auth-web-example",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@alchemy/signer-web": "*",
+    "@alchemy/auth-web": "*",
     "next": "15.4.6",
     "react": "19.1.0",
     "react-dom": "19.1.0"
