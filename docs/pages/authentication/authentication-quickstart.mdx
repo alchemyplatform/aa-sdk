@@ -44,6 +44,8 @@ Choose between two modes: `popup` or `redirect`. These modes control your applic
   <Tab title="Redirect">
     ```ts twoslash
     authenticateAsync({
+      // For react native this can be a direct deeplink in your app e.g. account-kit-expo-quickstart://home
+      // or a webpage that deeplinks to a page in your app
       redirectUrl: "https://demo.alchemy.com/",
       mode: "redirect",
       authProviderId: "google",
