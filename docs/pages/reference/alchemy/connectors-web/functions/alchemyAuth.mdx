@@ -43,6 +43,24 @@ import { alchemyAuth } from "@alchemy/connectors-web";
 
 - Optional ID for the container element that holds the iframe
 
+### options.createTekStamper
+
+`CreateTekStamperFn`
+
+- Optional custom TEK stamper factory for React Native
+
+### options.createWebAuthnStamper
+
+`CreateWebAuthnStamperFn`
+
+- Optional custom WebAuthn stamper factory for passkey authentication
+
+### options.sessionConfig
+
+`object`
+
+- Session configuration bubbled straight to the signer
+
 ## Returns
 
 `CreateConnectorFn`
