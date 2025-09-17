@@ -6,7 +6,7 @@ export default mergeConfig(
   sharedConfig,
   defineProject({
     test: {
-      name: "alchemy/signer-web",
+      name: "alchemy/auth-web",
     },
   }),
 );

@@ -1,6 +1,6 @@
 "use client";
-import { Signer } from "@alchemy/signer";
-import { createWebAuthClient } from "@alchemy/signer-web";
+import { AuthSession } from "@alchemy/auth";
+import { createWebAuthClient } from "@alchemy/auth-web";
 import { ReactElement, useCallback, useEffect, useState } from "react";
 
 const apiKey = process.env.NEXT_PUBLIC_ALCHEMY_API_KEY!;
@@ -15,12 +15,12 @@ export default function Home(): ReactElement {
   const [email, setEmail] = useState("");
   const [hasSentEmail, setHasSentEmail] = useState(false);
   const [otpCode, setOtpCode] = useState("");
-  const [signer, setSigner] = useState<Signer | null>(null);
+  const [authSession, setAuthSession] = useState<AuthSession | null>(null);
   const [signature, setSignature] = useState<string | null>(null);
 
   useEffect(() => {
-    authClient.handleOauthRedirect().then((signer) => {
-      setSigner(signer);
+    authClient.handleOauthRedirect().then((authSession) => {
+      setAuthSession(authSession);
     });
   }, []);
 
@@ -40,27 +40,27 @@ export default function Home(): ReactElement {
   }, [email]);
 
   const handleSubmitOtpCode = useCallback(async () => {
-    const signer = await authClient.submitOtpCode({ otpCode });
-    setSigner(signer);
+    const authSession = await authClient.submitOtpCode({ otpCode });
+    setAuthSession(authSession);
   }, [otpCode]);
 
   const handleDisconnect = useCallback(async () => {
-    signer?.disconnect();
+    authSession?.disconnect();
     setEmail("");
     setHasSentEmail(false);
     setOtpCode("");
-    setSigner(null);
+    setAuthSession(null);
     setSignature(null);
-  }, [signer]);
+  }, [authSession]);
 
   const handleSign = useCallback(async () => {
-    if (!signer) {
+    if (!authSession) {
       // Should never happen.
-      throw new Error("Cannot sign without a signer");
+      throw new Error("Cannot sign without an auth session");
     }
-    const signature = await signer.signMessage({ message: "out" });
+    const signature = await authSession.signMessage({ message: "out" });
     setSignature(signature);
-  }, [signer]);
+  }, [authSession]);
 
   function renderEnterEmail() {
     return (
@@ -121,8 +121,8 @@ export default function Home(): ReactElement {
       <div className="flex flex-col items-center justify-center h-screen bg-base-200">
         <div className="flex flex-col gap-4 p-8 rounded-lg shadow-lg bg-base-100 items-center">
           <div className="alert alert-success w-full max-w-md flex flex-col items-center text-center">
-            <p>Logged in as {signer!.user.email}</p>
-            <p>Your address: {signer!.user.address}</p>
+            <p>Logged in as {authSession!.user.email}</p>
+            <p>Your address: {authSession!.user.address}</p>
           </div>
           {signature && (
             <div className="alert alert-success w-full max-w-md flex flex-col">
@@ -147,7 +147,7 @@ export default function Home(): ReactElement {
     );
   }
 
-  if (signer) {
+  if (authSession) {
     return renderLoggedIn();
   } else if (hasSentEmail) {
     return renderEnterOtpCode();
