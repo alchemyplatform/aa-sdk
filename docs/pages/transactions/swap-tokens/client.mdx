@@ -1,0 +1,365 @@
+<Info>Required SDK version: ^v4.61.0</Info>
+
+<Info>
+  Full SDK support is coming soon! For now, this guide uses `fetch` to fetch the
+  swap quote.
+</Info>
+
+You'll need the following env variables:
+
+- `ALCHEMY_API_KEY`: An [Alchemy API Key](https://dashboard.alchemy.com/apps)
+- `ALCHEMY_POLICY_ID`: A [Gas Manager](https://dashboard.alchemy.com/gas-manager/policy/create) policy ID
+- `PRIVATE_KEY`: A private key for a signer
+
+<CodeBlocks>
+
+```ts title="requestQuote.ts"
+import { client, config } from "./client.ts";
+
+interface SwapQuoteResponse {
+  id: number;
+  jsonrpc: "2.0";
+  result?: {
+    quote: {
+      minimumToAmount: Hex;
+      expiry: Hex;
+    };
+    type: string;
+    data: any;
+    signatureRequest: any;
+  };
+  error?: {
+    code: number;
+    message: string;
+  };
+}
+
+const quoteRequest = {
+  method: "wallet_requestQuote_v0" as const,
+  params: [
+    {
+      from: client.account!.address,
+      chainId: "CHAIN_ID",
+      fromToken: "FROM_TOKEN",
+      toToken: "TO_TOKEN",
+      fromAmount: "FROM_AMOUNT", // You can pass a `minimumToAmount` instead to ensure you get a minimum output from the swap
+      // postCalls: [ // You can uncomment this block to batch calls after the swap!
+      //   {
+      //     to: "0x...",
+      //     data: "0x...",
+      //     value: "0x...",
+      //   },
+      // ],
+      capabilities: {
+        paymasterService: {
+          policyId: config.paymasterPolicyId,
+        },
+      },
+      // slippage: "0x32", // Optional: 50 (0.5% slippage tolerance, 0x32) is the default
+    },
+  ],
+};
+
+let response: Response = await fetch(
+  `https://api.g.alchemy.com/v2/${alchemyApiKey}`,
+  {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      id: 1,
+      jsonrpc: "2.0",
+      ...quoteRequest,
+    }),
+  },
+);
+
+const quoteResponse = (await response.json()) as SwapQuoteResponse;
+
+console.log("Quote: ", quoteResponse.result!.quote);
+
+// Build the input for signing the calls
+const signInput = {
+  type: quoteResponse.result!.type,
+  data: quoteResponse.result!.data,
+  signatureRequest: quoteResponse.result!.signatureRequest,
+};
+
+// Sign the quote, getting back prepared and signed calls
+const signedCalls = await client.signPreparedCalls(signInput as any);
+
+// Send the prepared calls
+const sendResult = await client.sendPreparedCalls(signedCalls);
+
+// Wait for the call to resolve
+const callStatusResults = await client.waitForCallsStatus({
+  id: sendResult.preparedCallIds[0]!,
+});
+
+// Filter through potential failure cases
+if (
+  callStatusResult.status !== "success" ||
+  !callStatusResult.receipts ||
+  !callStatusResult.receipts[0]
+) {
+  throw new Error(
+    `Transaction failed with status ${callStatusResult.status}, full receipt:\n ${JSON.stringify(callStatusResult, null, 2)}`,
+  );
+}
+
+console.log("Swap confirmed!");
+console.log(
+  `Transaction hash: ${callStatusResult.receipts[0].transactionHash}`,
+);
+```
+
+```ts title="client.ts"
+import "dotenv/config";
+import { type Address, type Hex, toHex } from "viem";
+import { LocalAccountSigner } from "@aa-sdk/core";
+import { alchemy, sepolia } from "@account-kit/infra";
+import { createSmartWalletClient } from "@account-kit/wallet-client";
+
+export const config = {
+  policyId: process.env.ALCHEMY_POLICY_ID!,
+};
+
+const clientParams = {
+  transport: alchemy({
+    apiKey: process.env.ALCHEMY_API_KEY!,
+  }),
+  chain: sepolia,
+  signer: LocalAccountSigner.privateKeyToAccountSigner(
+    process.env.PRIVATE_KEY! as Hex,
+  ),
+};
+
+const clientWithoutAccount = createSmartWalletClient(clientParams);
+
+const account = await clientWithoutAccount.requestAccount();
+
+export const client = createSmartWalletClient({
+  ...clientParams,
+  account: account.address,
+});
+```
+
+</CodeBlocks>
+
+<Accordion title="Full Example">
+
+This example swaps 0.01 USDC for DAI on Arbitrum, and includes additional error handling.
+
+```ts
+/**
+ * Note: This uses direct fetch calls as the swap feature is not yet
+ * available in @account-kit/wallet-client. Once available, you'll be
+ * able to use the wallet client instead!
+ *
+ * Complete example: Swap 0.01 DAI for USDC on Arbitrum
+ * Prerequisites:
+ * - PRIVATE_KEY: Your EOA private key (as usual, any signer will do the trick here!)
+ * - ALCHEMY_API_KEY: Your Alchemy API key
+ * - PAYMASTER_POLICY_ID: Your paymaster policy ID for gas sponsorship
+ */
+
+import { createSmartWalletClient } from "@account-kit/wallet-client";
+import { alchemy, arbitrum } from "@account-kit/infra";
+import { LocalAccountSigner } from "@aa-sdk/core";
+import { fromHex, type Hex } from "viem";
+import { privateKeyToAccount } from "viem/accounts";
+
+// Common token addresses on Arbitrum
+const TOKENS = {
+  DAI: "0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1",
+  USDC: "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+  ETH: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEee",
+  // Add more as needed
+} as const;
+
+// Type definitions for the swap quote response, which is temporary until
+// the swap feature is available in @account-kit/wallet-client
+interface SwapQuoteResponse {
+  id: number;
+  jsonrpc: "2.0";
+
+  result?: {
+    quote: {
+      minimumToAmount: Hex;
+      expiry: Hex;
+    };
+    type: string;
+    data: any;
+    signatureRequest: any;
+  };
+  error?: {
+    code: number;
+    message: string;
+  };
+}
+
+// Check environment variables
+if (!process.env.PRIVATE_KEY) {
+  throw new Error("PRIVATE_KEY environment variable is not set");
+}
+
+const alchemyApiKey = process.env.ALCHEMY_API_KEY;
+if (!alchemyApiKey) {
+  throw new Error("ALCHEMY_API_KEY environment variable is not set");
+}
+
+const paymasterPolicyId = process.env.PAYMASTER_POLICY_ID;
+if (!paymasterPolicyId) {
+  throw new Error("PAYMASTER_POLICY_ID environment variable is not set");
+}
+
+// Step 1: Create a signer
+const signer = LocalAccountSigner.privateKeyToAccountSigner(
+  process.env.PRIVATE_KEY as `0x${string}`,
+);
+
+// Step 2: Create a wallet client
+const walletClientWithoutAccount = createSmartWalletClient({
+  transport: alchemy({
+    apiKey: alchemyApiKey,
+  }),
+  chain: arbitrum,
+  signer,
+});
+
+// Step 3: Get account
+const account = await walletClientWithoutAccount.requestAccount();
+console.log("Smart wallet address:", account.address);
+
+const walletClient = createSmartWalletClient({
+  account: account.address,
+  transport: alchemy({
+    apiKey: alchemyApiKey,
+  }),
+  chain: arbitrum,
+  signer,
+});
+
+// Step 4: Create swap quote request
+// Note: Amount values are in wei (smallest unit)
+// 0x2386F26FC10000 = 0.01 DAI (10^16 wei)
+//
+// Option A: Swap exact amount of source token (fromAmount)
+// Option B: Get minimum destination amount (uncomment minimumToAmount)
+const quoteRequest = {
+  method: "wallet_requestQuote_v0" as const,
+  params: [
+    {
+      from: walletClient.account!.address,
+      chainId: "0xa4b1", // Arbitrum chain ID (42161 in hex)
+      fromToken: TOKENS.DAI,
+      toToken: TOKENS.USDC,
+      fromAmount: "0x2386F26FC10000", // Swap exactly 0.01 DAI
+      minimumToAmount: "0x2710", // OR: Get at least 0.01 USDC (uncomment to use this flow)
+      capabilities: {
+        paymasterService: {
+          policyId: paymasterPolicyId,
+        },
+      },
+      slippage: "0x0a", // 10 (0.1% slippage), the default is 50 (0.5% slippage) or 0x32
+    },
+  ],
+};
+
+// Step 5: Request the quote using fetch
+try {
+  console.log("Requesting swap quote...");
+
+  const fullRequest = {
+    id: 1,
+    jsonrpc: "2.0",
+    ...quoteRequest,
+  };
+
+  const response = await fetch(
+    `https://api.g.alchemy.com/v2/${alchemyApiKey}`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(fullRequest),
+    },
+  );
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    console.error("Quote request failed:", errorText);
+    throw new Error(`Quote request failed (${response.status}): ${errorText}`);
+  }
+
+  const quoteResponse = (await response.json()) as SwapQuoteResponse;
+
+  // Check for RPC errors
+  if (quoteResponse.error) {
+    throw new Error(`RPC Error: ${quoteResponse.error.message}`);
+  }
+
+  if (!quoteResponse.result) {
+    throw new Error("No result in quote response");
+  }
+  console.log(
+    "Quote received successfully, minimum amount to receive:",
+    fromHex(quoteResponse.result.quote.minimumToAmount, "bigint"),
+  );
+
+  // Step 6: Sign the quote data
+  const signInput = {
+    type: quoteResponse.result.type,
+    data: quoteResponse.result.data,
+    signatureRequest: quoteResponse.result.signatureRequest,
+  };
+
+  console.log("Signing swap transaction...");
+  // Type casting needed until SDK types are updated!
+  const signedCalls = await walletClient.signPreparedCalls(signInput as any);
+
+  // Step 7: Send the transaction
+  console.log("Sending swap transaction...");
+  const sendResult = await walletClient.sendPreparedCalls(signedCalls);
+
+  // Validate prepared call ID
+  if (sendResult.preparedCallIds.length !== 1) {
+    throw new Error(
+      `Expected exactly 1 prepared call ID, but got ${sendResult.preparedCallIds.length}`,
+    );
+  }
+
+  // Log the transaction result
+  console.log("Swap transaction submitted:", sendResult);
+
+  // Step 8: Poll for transaction status
+  const callStatusResult = await walletClient.waitForCallsStatus({
+    id: sendResult.preparedCallIds[0]!,
+  });
+
+  if (
+    callStatusResult.status !== "success" ||
+    !callStatusResult.receipts ||
+    !callStatusResult.receipts[0]
+  ) {
+    throw new Error(
+      `Transaction failed with status ${callStatusResult.status}, full receipt:\n ${JSON.stringify(callStatusResult, null, 2)}`,
+    );
+  }
+
+  console.log("Swap confirmed!");
+  console.log(
+    `Transaction hash: ${callStatusResult.receipts[0].transactionHash}`,
+  );
+  console.log(
+    `View on Arbiscan: https://arbiscan.io/tx/${callStatusResult.receipts[0]?.transactionHash}`,
+  );
+} catch (error) {
+  console.error("Error during swap:", error);
+  process.exit(1);
+}
+```
+
+</Accordion>

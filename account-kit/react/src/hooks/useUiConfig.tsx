@@ -73,7 +73,7 @@ export function useUiConfig<T = UiConfigStore>(
  * @throws Will throw an error if the `UiConfigContext` is not present in the component tree
  *
  * @example
- * ```tsx twoslash
+ * ```ts twoslash
  * import { useUiConfig } from "@account-kit/react";
  *
  * const { illustrationStyle, auth } = useUiConfig(({ illustrationStyle, auth }) => ({ illustrationStyle, auth }));

@@ -1,0 +1,73 @@
+<Info>Required SDK version: ^v4.61.0</Info>
+
+Use the `useSendCalls` hook and the `paymasterService` capability parameter to send calls with
+an ERC20 token paymaster.
+
+**Prerequisites**
+
+- [Smart Wallets installed and configured in your project](/wallets/pages/react/setup.mdx).
+
+See the [`useSendCalls` SDK reference](/wallets/reference/account-kit/react/hooks/useSendCalls) for parameter descriptions.
+
+<CodeBlocks>
+
+```tsx title="sendCalls.tsx" focus={5-7,14-27}
+import { useSendCalls, useSmartAccountClient } from "@account-kit/react";
+import { config } from "./config";
+
+export default function SendCalls() {
+  const { client } = useSmartAccountClient({});
+  const { sendCallsAsync } = useSendCalls({ client });
+
+  const handleSend = async () => {
+    if (!client) {
+      throw new Error("Smart account client not connected");
+    }
+
+    try {
+      const { ids } = await sendCallsAsync({
+        capabilities: {
+          paymasterService: {
+            policyId: config.policyId,
+            erc20: {
+              tokenAddress: config.gasToken,
+              postOpSettings: {
+                autoApprove: {
+                  below: config.approveBelow,
+                  amount: config.approveAmount,
+                },
+              },
+            },
+          },
+        },
+        calls: [
+          {
+            to: "0x0000000000000000000000000000000000000000",
+            value: "0x00",
+            data: "0x",
+          },
+        ],
+      });
+
+      console.log("Transaction sent with ID:", ids[0]);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  return <button onClick={handleSend}>Click to Send</button>;
+}
+```
+
+```ts title="config.ts"
+import { type Address, toHex } from "viem";
+
+export const config = {
+  policyId: process.env.ALCHEMY_POLICY_ID!,
+  gasToken: "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238" as Address, // USDC on Sepolia
+  approveBelow: toHex(1000000n), // 1 USDC
+  approveAmount: toHex(10000000n), // 10 USDC
+};
+```
+
+</CodeBlocks>

@@ -140,7 +140,7 @@ This will delegate to the 7702 compatible smart contract account, Modular Accoun
 
 <CodeBlocks>
 
-```ts example.ts twoslash
+```ts example.ts
 import { createModularAccountV2Client } from "@account-kit/smart-contracts";
 import { sepolia, alchemy } from "@account-kit/infra";
 import { signer } from "./signer.js";
@@ -167,7 +167,7 @@ const txnHash =
   await smartAccountClient.waitForUserOperationTransaction(uoHash);
 ```
 
-```ts twoslash signer.ts filename="signer.ts"
+```ts signer.ts filename="signer.ts"
 import { LocalAccountSigner } from "@aa-sdk/core";
 
 const privateKey = "0x...";
