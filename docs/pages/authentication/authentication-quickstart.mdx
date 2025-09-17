@@ -14,7 +14,7 @@ Set up authentication in the Dashboard so users can sign in and start using thei
 
 ## 1. Enable login methods
 
-In the Dashboard, open the authentication settings and enable the login methods you want to support. See the login methods section for more details.
+In the Dashboard, open the authentication settings and enable the login methods you want to support. See the [login methods](/wallets/authentication/login-methods/social-login) section for more details.
 
 ### Custom clients
 
@@ -34,27 +34,14 @@ make sure that you allow the signer callback URL in the OAuth provider's setting
 
 ## 2. Choose an authentication mode
 
-Choose between two modes: `popup` or `redirect`.
+Choose between two modes: `popup` or `redirect`. These modes control your application's navigation flow and how the OAuth provider's authentication is accessed.
 
-- `popup` (React only): Opens a popup to the selected provider and, after sign-in, injects user credentials into the current session.
+- `popup`: Stays on current page, opens a popup to the selected provider and, after sign-in, injects user credentials into the current session.
 
-- `redirect` (React and React Native): Performs a full-page redirect to the provider. After sign-in it injects user credentials into the current session and redirects to a deep link (for React Native) or a webpage that you choose.
-
-### Allow redirect URIs
-
-If you use `redirect`, you must allow your redirect URI in the Dashboard.
-
-<img
-  src="/images/dashboard-redirect-whitelist.png"
-  alt="Allow your app's redirect URI in the Dashboard"
-  style={{ width: "100%" }}
-/>
+- `redirect`: Performs a full-page redirect to the provider. After sign-in it injects user credentials into the current session and redirects to a deep link (for React Native) or a webpage that you choose.
 
 <Tabs>
-  <Tab title="React">
-    <Info>Required SDK version: ^v4.59.1</Info>
-    In React, you can allow redirects to any valid URL in your web application.
-
+  <Tab title="Redirect">
     ```ts twoslash
     authenticateAsync({
       redirectUrl: "https://demo.alchemy.com/",
@@ -65,21 +52,29 @@ If you use `redirect`, you must allow your redirect URI in the Dashboard.
     ```
 
   </Tab>
-  <Tab title="React Native">
-    <Info>Required SDK version: ^v4.59.1</Info>
-    In React Native, you can redirect to a valid URL or to a deep link in your application. 
-    You can also redirect to a webpage that then redirects to a deep link in your application.
-
-    <Info>If you redirect to a webpage that then redirects to an in-app deep link, allow the deep link, not the webpage.</Info>
-
+  <Tab title="Popup">
+    <Info>Not supported on React Native</Info>
     ```ts twoslash
     await authenticateAsync({
-      redirectUrl: "account-kit-expo-quickstart://oauth-callback",
-      mode: "redirect",
+      mode: "popup",
       authProviderId: "google",
       type: "oauth",
     });
     ```
-
   </Tab>
 </Tabs>
+
+### Allow redirect URIs
+
+If you use `redirect`, you must allow your redirect URI in the Dashboard.
+
+<Info>
+  If you redirect to a webpage that then redirects to a React Native in-app deep
+  link, allow the deep link, not the webpage.
+</Info>
+
+<img
+  src="/images/dashboard-redirect-whitelist.png"
+  alt="Allow your app's redirect URI in the Dashboard"
+  style={{ width: "100%" }}
+/>
