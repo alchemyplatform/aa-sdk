@@ -90,7 +90,7 @@ export function createWebAuthClient({
     apiKey,
 
     createTekStamper:
-      createTekStamper ||
+      createTekStamper ??
       (async () => {
         const iframeContainer = getOrCreateIframeContainer();
         return new IframeStamper({
@@ -101,7 +101,7 @@ export function createWebAuthClient({
       }),
 
     createWebAuthnStamper:
-      createWebAuthnStamper ||
+      createWebAuthnStamper ??
       (() => Promise.reject(new Error("Not implemented"))),
     handleOauthFlow: async (authUrl: string, mode: "popup" | "redirect") => {
       switch (mode) {

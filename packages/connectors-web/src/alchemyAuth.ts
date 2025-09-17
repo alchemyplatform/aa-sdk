@@ -37,11 +37,9 @@ alchemyAuth.type = "alchemy-auth" as const;
  * @param {string} [options.apiKey] - API key for authentication with Alchemy services
  * @param {string} [options.iframeElementId] - Optional ID for the iframe element used by Turnkey stamper
  * @param {string} [options.iframeContainerId] - Optional ID for the container element that holds the iframe
- * @param {CreateTekStamperFn} [options.createTekStamper] - Optional custom TEK stamper factory for  React Native
+ * @param {CreateTekStamperFn} [options.createTekStamper] - Optional custom TEK stamper factory for React Native
  * @param {CreateWebAuthnStamperFn} [options.createWebAuthnStamper] - Optional custom WebAuthn stamper factory for passkey authentication
  * @param {object} [options.sessionConfig] - Session configuration bubbled straight to the signer
- * @param {number} [options.sessionConfig.expiryInSeconds] - Session expiry time in seconds
- * @param {string} [options.sessionConfig.sessionKey] - Custom session key
  * @returns {CreateConnectorFn} A Wagmi connector factory compatible with `createConfig`.
  */
 export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
