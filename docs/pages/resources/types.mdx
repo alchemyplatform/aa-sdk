@@ -54,7 +54,9 @@ Bundler Actions are `viem` [`Actions`](https://viem.sh/docs/actions/public/intro
 
 ## `BundlerClient`
 
-`BundlerClient` is a custom `viem` [`Client`](https://viem.sh/docs/clients/custom) we have built our own, where we extended viem's [`PublicClient`](https://viem.sh/docs/clients/public) with [`BundlerActions`](#bundleraction), which are `Actions` that provide custom functionalities of [EIP-4337](https://eips.ethereum.org/EIPS/eip-4337) and [EIP-6900](https://eips.ethereum.org/EIPS/eip-6900) standards. `BundlerClient` is an intermediary or connector that enables client applications to interact with the [`Bundler`](https://eips.ethereum.org/EIPS/eip-4337#definitions) that you are using. `BundlerClient`, because it extends `PublicClient`, supports [`Public Actions`](https://viem.sh/docs/actions/public/introduction) for client applications to connect, query, and interact with the blockchain (i.e., sending transactions, smart contract executions, data retrieval, etc.).
+`BundlerClient` is a custom `viem` [`Client`](https://viem.sh/docs/clients/custom) that extends viem's [`PublicClient`](https://viem.sh/docs/clients/public) with bundler-specific actions for [EIP-4337](https://eips.ethereum.org/EIPS/eip-4337) operations and [EIP-6900](https://eips.ethereum.org/EIPS/eip-6900) standards. The actions are defined in [`@aa-sdk/core`](/wallets/reference/aa-sdk/core). It's account agnostic and only exposes methods for interacting directly with Bundler RPC and ETH RPC methods.
+`BundlerClient` also supports [`Public Actions`](https://viem.sh/docs/actions/public/introduction) for client applications to connect, query, and interact with the blockchain (i.e., sending transactions, smart contract executions, data retrieval, etc.). Additionally, it is EIP-1193 compliant, so can easily be swapped out in place of other web3 providers (eg. `window.ethereum`).
+In the vast majority of cases, you will not use this client directly. Use the [`SmartAccountClient`](/wallets/concepts/smart-account-client) instead, which wraps the Bundler Client and provides the same actions plus account-specific functionality.
 
 <Accordion title="BundlerClient">
 
@@ -174,7 +176,15 @@ An interface representing a signer capable of signing messages and typed data. I
 
 ## `SmartContractAccount`
 
-As smart contract accounts are essentially the contract codes that operate on the blockchain, `SmartContractAccount` defines the interface with different functionalities for managing and interacting with the contract account. It includes different functionalities for creating, managing, and using your smart account. In addition to supporting all functionalities achieved with a basic [EOA](/wallets/resources/terms#wallet) alone, `SmartContractAccount` can have custom capabilities such as automating processes or executing actions based on predefined conditions. Smart contract wallets allow users to customize how they manage their digital assets, offering a more tailored approach to handling funds securely. `SmartContractAccount` type extends `viem`'s [`Account`](https://v1.viem.sh/docs/accounts/custom.html), and instantiation of an account is done using the [`toSmartContractAccount`](/wallets/reference/aa-sdk/core/functions/toSmartContractAccount) action.
+`SmartContractAccount` is the client-side interface for creating, managing, and interacting with smart contract accounts in a type-safe manner. It extends `viem`'s [`Account`](https://v1.viem.sh/docs/accounts/custom.html) interface with smart account functionality.
+Within Smart Wallets, implementations for Light Account and Modular Account are exported from `@account-kit/smart-contracts`. These implementations handle the logic for generating the deployment data, encoding
+single and batch UO execution, and signing of messages, typed data, and UOs.
+
+Smart Contract Accounts are rarely used on their own, and are typically passed in to [Smart Account Client](#TODO/concepts/smart-account-client) implementations.
+When using either the [React](/wallets/react/quickstart) or [Core](/wallets/core/overview) libraries, the connection of an account and a client are handled for you.
+
+It's also possible to use a custom account when using the [Infra](//wallets/reference/account-kit/infra) library.
+Within `@aa-sdk/core`, a method [`toSmartContractAccount`](/wallets/reference/aa-sdk/core/functions/toSmartContractAccount) is provided so you can create an instance of your Smart Contract Account.
 
 <Accordion title="SmartContractAccount">
 
