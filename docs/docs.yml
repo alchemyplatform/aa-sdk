@@ -89,6 +89,8 @@ navigation:
         contents:
           - page: Overview
             path: wallets/pages/authentication/overview.mdx
+          - page: Authentication Quickstart
+            path: wallets/pages/authentication/quickstart.mdx
           - section: Login methods
             contents:
               - page: Email OTP
