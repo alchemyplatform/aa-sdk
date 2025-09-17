@@ -178,6 +178,8 @@ navigation:
         contents:
           - page: Overview
             path: wallets/pages/transactions/overview.mdx
+          - page: Set up client
+            path: wallets/pages/concepts/smart-account-client.mdx
           - page: Send transactions
             path: wallets/pages/transactions/send-transactions/index.mdx
           - page: Using EIP-7702
@@ -1140,8 +1142,6 @@ navigation:
           - page: Types
             slug: resources/types
             path: wallets/pages/resources/types.mdx
-          - page: Smart Account Client
-            path: wallets/pages/concepts/smart-account-client.mdx
           - page: Middleware
             path: wallets/pages/concepts/middleware.mdx
           - section: Smart Account Types

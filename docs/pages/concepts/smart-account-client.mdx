@@ -1,35 +1,155 @@
 ---
-title: Smart Account Client
-description: What is the Smart Account Client?
+title: Set up client
+description: Set up client
 slug: wallets/concepts/smart-account-client
 ---
 
-The [`SmartAccountClient`](https://github.com/alchemyplatform/aa-sdk/blob/main/aa-sdk/core/src/account/smartContractAccount.ts#L102-L128) is an extension of `viem`'s [Client](https://viem.sh/docs/clients/custom#build-your-own-client) which allows you to interact
-with [Smart Contract Accounts](/wallets/concepts/smart-contract-account). You can use the Smart Account Client to send User Operations, sign messages with your account, sponsor gas,
-and other account-related actions.
+A smart acccount client is the main interface used to interact with smart wallets and take actions like sending transactions, batching transactions, swapping, sponsoring gas, and more.
 
-The client is also EIP-1193 compliant, meaning it can easily be swapped out in place of other web3 providers (eg. `window.ethereum`).
+## How It Works
 
-## Account hoisting
+The [`SmartAccountClient`](https://github.com/alchemyplatform/aa-sdk/blob/main/aa-sdk/core/src/account/smartContractAccount.ts#L102-L128) is a EIP-1193 compatible extension of `viem`'s [Client](https://viem.sh/docs/clients/custom#build-your-own-client) which allows you to interact with smart wallets.
+
+## Prerequisites
+
+- [API key](https://dashboard.alchemy.com/apps)
+- [Smart wallets installed and configured in your project](/wallets/pages/react/setup)
+- (Optional) [A gas policyID](https://dashboard.alchemy.com/gas-manager/policy/create)
+
+## Implementation
+
+<Tabs>
+  <Tab title="React">
+    <Info>
+      [Set up your environment](/wallets/react/quickstart/existing-project) and app integration before using the client. React hooks only support Alchemy Signer.
+    </Info>
+    The [`useSmartAccountClient`](/wallets/reference/account-kit/react/hooks/useSmartAccountClient) hook will use the API key and policy ID settings passed to [`createConfig`](/wallets/react/quickstart/ui-customization).
+    ```tsx twoslash
+    import React from "react";
+    import { useSmartAccountClient } from "@account-kit/react";
+
+    const { client } = useSmartAccountClient({});
+    ```
+
+  </Tab>
+  <Tab title="React Native">
+    <Info>
+      [Set up your environment](/wallets/react-native/getting-started/app-integration) and app integration before using the client. React hooks only support Alchemy Signer.
+    </Info>
+    The [`useSmartAccountClient`](/wallets/reference/account-kit/react/hooks/useSmartAccountClient) hook will use the API key and policy ID settings passed to [`createConfig`](/wallets/react/quickstart/ui-customization).
+    ```tsx twoslash
+    import React from "react";
+    import { useSmartAccountClient } from "@account-kit/react";
+
+    const { client } = useSmartAccountClient({});
+    ```
+
+  </Tab>
+  <Tab title="Javascript">
+    Use the [`createSmartWalletClient`](/wallets/reference/account-kit/wallet-client/functions/createSmartWalletClient) function to create a smart wallet client. Replace the API key and policy ID with your own. Additionally, replace the signer with the signer generated during [authentication](/wallets/authentication/login-methods/email-otp#step-4-check-authentication-status).
+
+    ```ts title="client.ts"
+
+import { LocalAccountSigner } from "@aa-sdk/core";
+import { alchemy, sepolia } from "@account-kit/infra";
+import {
+  createSmartWalletClient,
+  type SmartWalletClientParams,
+} from "@account-kit/wallet-client";
+
+const clientParams: SmartWalletClientParams = {
+transport: alchemy({ apiKey: "your-alchemy-api-key"}),
+chain: sepolia,
+signer: LocalAccountSigner.privateKeyToAccountSigner(
+"0x-your-wallet-private-key",
+),
+policyId: "your-policy-id",
+};
+
+const clientWithoutAccount = createSmartWalletClient(clientParams);
+
+const account = await clientWithoutAccount.requestAccount();
+
+export const client = createSmartWalletClient({
+  ...clientParams,
+  account: account.address,
+});
+```
+  </Tab>
+  <Tab title="API">
+    If using raw [APIs](/wallets/smart-wallet-quickstart/api), you don't need a client.
+
+    If using wallet APIs via the wallet client [SDK](/wallets/smart-wallet-quickstart/sdk), you'll need to create a client. Given a signer (e.g. a `LocalAccountSigner` imported from `@aa-sdk/core` or an [Alchemy Signer](/docs/wallets/signer/what-is-a-signer#alchemy-signer)), all you need to do is follow a few simple steps to start sending user ops with Wallet APIs!
+
+```ts
+import { createSmartWalletClient } from "@account-kit/wallet-client";
+import { alchemy, arbitrumSepolia } from "@account-kit/infra";
+import { LocalAccountSigner } from "@aa-sdk/core";
+
+const signer = LocalAccountSigner.privateKeyToAccountSigner(PRIVATE_KEY); // we use a private key signer as an example here
+
+const transport = alchemy({
+  apiKey: ALCHEMY_API_KEY, // use your Alchemy app api key here!
+});
+
+const client = createSmartWalletClient({
+  transport,
+  chain: arbitrumSepolia, // use any chain imported from @account-kit/infra here!
+  signer,
+});
+```
+
+  </Tab>
+</Tabs>
+
+## Advanced
+
+<Accordion title="Configuration options">
+You can customize your client by specifying additional parameters to change account type, add gas sponsorship, etc. These parameters are optional.
+
+**Account type**
+
+By default, the Smart Account Client will use [ModularAccountV2](/wallets/smart-contracts/modular-account-v2/overview). This is the cheapest and most advanced Smart Account, but you can specify other smart contract account types as needed. Learn more about the different smart accounts [here](/wallets/smart-contracts/choosing-a-smart-account).
+
+- **`type`** (string) - Defines the smart account type. Options:
+  - `"ModularAccountV2"` (recommended and default)
+  - `"LightAccount"`
+  - `"MultiOwnerLightAccount"`
+  - `"MultiOwnerModularAccount"`
 
 <Tip>
-  If you're using the [React](/wallets/react/quickstart) or
-  [Core](/wallets/core/overview) packages, the Smart Account Clients already
-  handle hoisting and creation of account instances. The [Smart
-  Contracts](/wallets/smart-contracts/choosing-a-smart-account) package exports
-  client definitions for hoisted instances of the Smart Contract Accounts.
+  Note: Changing the account type will deploy a different account. If you've
+  already deployed an account for a user and want to change the underlying
+  account type, you'll need to upgrade it. Learn how to upgrade
+  [here](/wallets/smart-contracts/other-accounts/modular-account/upgrading-to-modular-account).
 </Tip>
 
-When creating a Smart Account Client, you have two options:
+**Using 7702**
 
-1. You can pass an account instance directly into the client constructor. Doing so will use that account for all of the actions you perform with the client, and you won't have to
-   pass in the account each time you call a method. This is known as **"account hoisting"**.
-2. You can create a client without passing in an account. As a result, you'll have to pass in an account instance to each method you call on the client. This is really useful if you
-   want to manage multiple instances of an account in your app, and want to use one client for all of them.
+To use EIP-7702, pass `"7702"`" to the `mode` in `accountParams`. This will delegate the connected EOA to a smart account. Read more [here](/wallets/transactions/using-eip-7702).
 
-Let's see an example:
+**Advanced options**
+| Usage | Parameter | Type |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Smart contract account implementation | `type` | One of `"ModularAccountV2"`, `"LightAccount"`, `"MultiOwnerLightAccount"`, `"MultiOwnerModularAccount"` |
+| Sponsor gas for users. Get your policy ID [here](https://dashboard.alchemy.com/gas-manager) | `policyId` | `string` |
+| Simulate user operations before sending (i.e. use [`alchemyUserOperationSimulator`](/wallets/reference/account-kit/infra/functions/alchemyUserOperationSimulator)) | `useSimulation` | `boolean` |
+| Custom middleware to run before requesting sponsorship | `customMiddleware` | `ClientMiddlewareFn` |
+| Override fee estimation middleware (if you are using our RPCs, it's important to use the default [`alchemyFeeEstimator`](/wallets/reference/account-kit/infra/functions/alchemyFeeEstimator)) | `feeEstimator` | `ClientMiddlewareFn` |
+| Override gas estimation middleware (the default middleware calls the underlying bundler RPC to `eth_estimateUserOperationGas`) | `gasEstimator` | `ClientMiddlewareFn` |
+| Override middleware that signs user operation(s) | `signUserOperation` | `ClientMiddlewareFn` |
+| Advanced account params | `accountParams` | `AccountConfig` with the following fields: <ul><li>`mode`: `"default"` \| `"7702"`</li><li>`entryPoint`: `EntryPointDef`</li><li>`signerEntity`: `SignerEntity`</li><li>`salt`: `bigint`</li><li>`factoryAddress`: `Address`</li><li>`initCode`: `Hex`</li><li>`accountAddress`: `Address`</li></ul> |
 
-```ts twoslash
+</Accordion>
+<Accordion title="Smart account client actions">
+Because the Smart Account Clients are extensions of viem's clients, they support extensions via the `.extend` method. The base client already includes a [number of actions](https://github.com/alchemyplatform/aa-sdk/tree/v4.x.x/aa-sdk/core/src/actions/smartAccount) by default. You can find additional details about these actions in the [`@aa-sdk/core` documentation](/wallets/reference/aa-sdk/core).
+</Accordion>
+<Accordion title="Account agnostic client">
+  Typically, the smart account client uses the default account or the account passed into the client constructor for all of the actions you perform with the client - also known as **account hositing**.
+
+If you want to manage multiple instances of an account but want to use one client for all of them, you can pass an account to the client on every action.
+
+```ts
 import {
   createAlchemySmartAccountClient,
   sepolia,
@@ -72,7 +192,10 @@ const signature2 = await nonHoistedClient.signMessage({
 });
 ```
 
-## Smart Account Client actions
+</Accordion>
 
-Because the Smart Account Clients are extensions of viem's clients, they support extensions via the `.extend` method. The base client already includes a [number of actions](https://github.com/alchemyplatform/aa-sdk/tree/v4.x.x/aa-sdk/core/src/actions/smartAccount) by default.
-You can find additional details about these actions in the [`@aa-sdk/core` documentation](/wallets/reference/aa-sdk/core).
+## Next Steps
+
+- [Send transactions](/wallets/transactions/send/evm-user-ops)
+- [Sponsor gas](/wallets/transactions/sponsor-gas/sponsor-gas-evm)
+- [Batch transactions](wallets/transactions/send/batch-user-ops)
