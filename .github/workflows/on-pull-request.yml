@@ -38,6 +38,7 @@ jobs:
         run: echo "$TITLE" | yarn commitlint
   
   preview:
+    name: Generate Documentation Preview
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -91,8 +92,8 @@ jobs:
   check_broken_links:
     name: Check Broken Links
     runs-on: ubuntu-latest
-    needs: [changes, preview]
-    if: ${{ needs.changes.outputs.docs == 'true' && needs.preview.outputs.preview-url != '' }}
+    needs: preview
+    if: ${{ needs.preview.outputs.preview-url != '' }}
     steps:
       - name: "Checkout files"
         uses: actions/checkout@v3
