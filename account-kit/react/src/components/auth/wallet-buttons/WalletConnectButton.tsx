@@ -45,7 +45,7 @@ export const WalletConnectButton = ({
 
   return (
     <Button
-      className={`justify-start ${className ?? ""}`}
+      className={`justify-center ${className ?? ""}`}
       variant="social"
       icon={<WalletConnectIcon className="w-6 h-6" />}
       onClick={handleClick}
