@@ -410,34 +410,6 @@ export class AuthClient {
   }
 
   /**
-   * Helper method to create AuthSession for passkey authentication.
-   * This should be called after successful passkey authentication.
-   *
-   * @param {any} stamper - The WebAuthn stamper instance
-   * @param {string} orgId - The organization ID
-   * @param {any} user - The user object
-   * @param {string} credentialId - The credential ID for the passkey
-   * @returns {Promise<AuthSession>} A promise that resolves to an auth session instance
-   */
-  // @ts-ignore - Will be used when passkey implementation is complete
-  private async createPasskeyAuthSession(
-    stamper: any,
-    orgId: string,
-    user: any,
-    credentialId: string,
-  ): Promise<AuthSession> {
-    return AuthSession.create({
-      apiKey: this.apiKey,
-      stamper,
-      orgId,
-      idToken: user.idToken,
-      authType: "passkey",
-      credentialId,
-      // No bundle needed for passkey authentication
-    });
-  }
-
-  /**
    * Creates an instance of AuthSession from a previously saved authentication session state that has not expired.
    *
    * @param {AuthSessionState} state - The saved authentication session state
