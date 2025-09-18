@@ -33,7 +33,6 @@ export type AlchemyAuth1193Methods = [
   // or should the wagmi connector actually call US (the provider) to get the chain, then we just need to track it in here?
   // ExtractRpcMethod<WalletRpcSchema, "eth_chainId">,
   // TODO(jh): do we need to do anything for these?
-  // ExtractRpcMethod<WalletRpcSchema, "wallet_estimateGas">,
   // ExtractRpcMethod<WalletRpcSchema, "wallet_addEthereumChain">,
   // ExtractRpcMethod<WalletRpcSchema, "wallet_switchEthereumChain">,
   // ExtractRpcMethod<WalletRpcSchema, "wallet_connect">,
@@ -49,7 +48,11 @@ export type AlchemyAuthEip1193Provider = Prettify<
 // TODO(jh): we can probably easily write tests for this by mocking the signer service fetch requests?
 export const create1193Provider = (
   authSession: AuthSession,
-  publicClient?: Client, // TODO(jh): solidify type here. Client, transport, or provider?
+  // TODO(jh): solidify type here. should client be created within the connector & passed here,
+  // or does it make more sense to just pass the public transport here and create the public
+  // client within this provider? might make the most sense for the connector do handle it
+  // so that it can cache the client?
+  publicClient?: Client,
 ): AlchemyAuthEip1193Provider => {
   // TODO(v5): implement any other supported events: https://eips.ethereum.org/EIPS/eip-1193#events
   const eventEmitter = new EventEmitter();
@@ -251,6 +254,12 @@ export const create1193Provider = (
           if (!publicClient) {
             throw new Error(`Unsupported method: ${method}`);
           }
+          // TODO(jh): Reconsider if we actually need to fall through to the public provider here.
+          // If this 1193 provider is mainly used w/ wagmi, requests that use a public client
+          // will probably not even be routed through here, but directly to the public client.
+          // But it might still be useful for users who might want to use this provider w/o
+          // wagmi and have a single viem client for interacting with wallet methods and
+          // public methods.
           return publicClient.request({
             method: method as any,
             params: params as any,
