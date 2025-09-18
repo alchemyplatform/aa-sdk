@@ -17,6 +17,7 @@ export { assertNever } from "./utils/assertNever.js";
 export { raise } from "./utils/raise.js";
 export { bigIntMultiply } from "./utils/bigint.js";
 export { lowerAddress } from "./utils/lowerAddress.js";
+export { createEip1193HandlerFactory } from "./utils/createEip1193HandlerFactory.js";
 
 // config
 export type { AlchemyConnectionConfig } from "./transport/connectionSchema.js";

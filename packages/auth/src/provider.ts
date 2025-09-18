@@ -11,6 +11,7 @@ import {
   BaseError,
   InvalidRequestError,
   MethodUnsupportedError,
+  createEip1193HandlerFactory,
 } from "@alchemy/common";
 import type { ExtractRpcMethod } from "./types";
 import type { AuthSession } from "./authSession.js";
@@ -29,6 +30,8 @@ export type AlchemyAuthEip1193Provider = Prettify<
     request: EIP1193RequestFn<AlchemyAuth1193Methods>;
   }
 >;
+
+const handler = createEip1193HandlerFactory<AlchemyAuth1193Methods>();
 
 // TODO(jh): we can probably easily write tests for this by mocking the signer service fetch requests?
 export const create1193Provider = (
@@ -135,19 +138,3 @@ export const create1193Provider = (
     request,
   };
 };
-
-// Viem's typing within a custom EIP1193 request function is surprisingly bad. This helps a lot
-// by automatically casting the input params & ensuring that the result matches what is required.
-const handler =
-  <TMethod extends AlchemyAuth1193Methods[number]["Method"]>(
-    handle: (
-      params: ExtractRpcMethod<AlchemyAuth1193Methods, TMethod>["Parameters"],
-    ) => Promise<
-      ExtractRpcMethod<AlchemyAuth1193Methods, TMethod>["ReturnType"]
-    >,
-  ) =>
-  (params: unknown) => {
-    return handle(
-      params as ExtractRpcMethod<AlchemyAuth1193Methods, TMethod>["Parameters"],
-    );
-  };

@@ -13,6 +13,7 @@ import {
   BaseError,
   ChainNotFoundError,
   InvalidRequestError,
+  createEip1193HandlerFactory,
 } from "@alchemy/common";
 import type { ExtractRpcMethod, BaseWalletClient } from "./types.js";
 import type { PrepareCallsParams } from "./actions/prepareCalls.js";
@@ -38,6 +39,8 @@ export type SmartWalletClientEip1193Provider = Prettify<
     request: EIP1193RequestFn<SmartWalletClient1193Methods>;
   }
 >;
+
+const handler = createEip1193HandlerFactory<SmartWalletClient1193Methods>();
 
 export const createEip1193ProviderFromClient = <
   TAccount extends Address | undefined = Address | undefined,
@@ -243,25 +246,3 @@ export const createEip1193ProviderFromClient = <
     request,
   };
 };
-
-// Viem's typing within a custom EIP1193 request function is surprisingly bad. This helps a lot
-// by automatically casting the input params & ensuring that the result matches what is required.
-const handler =
-  <TMethod extends SmartWalletClient1193Methods[number]["Method"]>(
-    handle: (
-      params: ExtractRpcMethod<
-        SmartWalletClient1193Methods,
-        TMethod
-      >["Parameters"],
-    ) => Promise<
-      ExtractRpcMethod<SmartWalletClient1193Methods, TMethod>["ReturnType"]
-    >,
-  ) =>
-  (params: unknown) => {
-    return handle(
-      params as ExtractRpcMethod<
-        SmartWalletClient1193Methods,
-        TMethod
-      >["Parameters"],
-    );
-  };
