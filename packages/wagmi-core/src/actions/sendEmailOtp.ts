@@ -22,6 +22,6 @@ export async function sendEmailOtp(
   const connector = resolveAlchemyAuthConnector(config);
 
   const authClient = connector.getAuthClient();
-  // TODO(jh): this fails if the account doesn't exist yet. do we want to handle creating accounts here?
+  // TODO(v5): this fails if the account doesn't exist yet. do we want to handle creating accounts here?
   await authClient.sendEmailOtp({ email: parameters.email });
 }

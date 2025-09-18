@@ -1247,6 +1247,8 @@ navigation:
                     path: wallets/pages/reference/alchemy/common/functions/assertNever.mdx
                   - page: bigIntMultiply
                     path: wallets/pages/reference/alchemy/common/functions/bigIntMultiply.mdx
+                  - page: createEip1193HandlerFactory
+                    path: wallets/pages/reference/alchemy/common/functions/createEip1193HandlerFactory.mdx
                   - page: getAlchemyRpcUrl
                     path: wallets/pages/reference/alchemy/common/functions/getAlchemyRpcUrl.mdx
                   - page: getSupportedChainIds
@@ -1277,6 +1279,8 @@ navigation:
                     path: wallets/pages/reference/alchemy/common/classes/FetchError/constructor.mdx
                   - page: InvalidRequestError
                     path: wallets/pages/reference/alchemy/common/classes/InvalidRequestError/constructor.mdx
+                  - page: MethodUnsupportedError
+                    path: wallets/pages/reference/alchemy/common/classes/MethodUnsupportedError/constructor.mdx
                   - page: ServerError
                     path: wallets/pages/reference/alchemy/common/classes/ServerError/constructor.mdx
       - section: Alchemy Smart Accounts

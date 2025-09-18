@@ -167,9 +167,7 @@ export class AuthSession {
   }
 
   public getProvider(): AlchemyAuthEip1193Provider {
-    if (this.isDisconnected) {
-      throw new Error("Signer is disconnected");
-    }
+    this.throwIfDisconnected();
     return create1193Provider(this);
   }
 
