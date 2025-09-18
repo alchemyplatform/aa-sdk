@@ -1085,6 +1085,10 @@ navigation:
                 contents:
                   - page: createConfig
                     path: wallets/pages/reference/alchemy/wagmi-core/functions/createConfig.mdx
+                  - page: handleOauthRedirect
+                    path: wallets/pages/reference/alchemy/wagmi-core/functions/handleOauthRedirect.mdx
+                  - page: loginWithOauth
+                    path: wallets/pages/reference/alchemy/wagmi-core/functions/loginWithOauth.mdx
                   - page: sendEmailOtp
                     path: wallets/pages/reference/alchemy/wagmi-core/functions/sendEmailOtp.mdx
                   - page: submitOtpCode
@@ -1273,8 +1277,6 @@ navigation:
                     path: wallets/pages/reference/alchemy/common/classes/FetchError/constructor.mdx
                   - page: InvalidRequestError
                     path: wallets/pages/reference/alchemy/common/classes/InvalidRequestError/constructor.mdx
-                  - page: MethodUnsupportedError
-                    path: wallets/pages/reference/alchemy/common/classes/MethodUnsupportedError/constructor.mdx
                   - page: ServerError
                     path: wallets/pages/reference/alchemy/common/classes/ServerError/constructor.mdx
       - section: Alchemy Smart Accounts
