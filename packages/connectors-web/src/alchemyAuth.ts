@@ -1,11 +1,8 @@
-import {
-  createConnector,
-  // type Connector,
-} from "@wagmi/core";
+import { createConnector } from "@wagmi/core";
 import { createWebAuthClient } from "@alchemy/auth-web";
 import type { AuthClient } from "@alchemy/auth";
 import type { AuthSession } from "@alchemy/auth";
-import type { Address } from "viem";
+import { createPublicClient, type Address } from "viem";
 
 // TODO: Support other connection config options.
 export interface AlchemyAuthOptions {
@@ -122,14 +119,29 @@ export function alchemyAuth(parameters: AlchemyAuthOptions = {}) {
       return resolvedChainId;
     },
 
-    async getProvider() {
-      // Return a basic provider-like object
-      // This may need to be enhanced based on actual usage patterns
-      return {
-        request: async () => {
-          throw new Error("Provider request not implemented");
-        },
-      };
+    async getProvider({ chainId: _chainId } = { chainId: undefined }) {
+      if (!authSessionInstance) {
+        throw new Error(
+          "No auth session available. Please authenticate first.",
+        );
+      }
+      const chainId = _chainId ?? (await this.getChainId());
+      const transport = config.transports?.[chainId];
+      if (!transport) {
+        throw new Error(
+          `No transport configured for chain ID ${chainId}. Please configure transports in your wagmi config.`,
+        );
+      }
+
+      // TODO(jh): does this need to handle switching chains,
+      // or is everything fine since wagmi actions internally
+      // call `connector.getProvider` every time a wallet
+      // action is performed?
+      const publicClient = createPublicClient({
+        transport,
+        chain: config.chains.find((x) => x.id === chainId),
+      });
+      return authSessionInstance.getProvider(publicClient);
     },
 
     async isAuthorized() {
@@ -173,7 +185,7 @@ export function alchemyAuth(parameters: AlchemyAuthOptions = {}) {
     getAuthClient() {
       // TODO: Expand this to support other auth methods (jwt, rpcUrl) when
       // AlchemyConnectionConfig pattern is adopted in future PR
-      if (!!parameters.apiKey) {
+      if (!parameters.apiKey) {
         const error = new Error(
           "Authentication required. Please configure the alchemyAuth connector with an apiKey.",
         );

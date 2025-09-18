@@ -1,4 +1,3 @@
-import type { Signer } from "./signer";
 import EventEmitter from "events";
 import {
   type TypedDataDefinition,
@@ -7,30 +6,51 @@ import {
   type Prettify,
   type EIP1193RequestFn,
   type EIP1193Events,
+  type Client,
+  serializeTransaction,
+  keccak256,
+  type TransactionSerializable,
+  parseSignature,
+  assertCurrentChain,
+  formatTransactionRequest,
 } from "viem";
 import { BaseError, InvalidRequestError } from "@alchemy/common";
 import type { ExtractRpcMethod } from "./types";
+import type { AuthSession } from "./authSession.js";
+import { getTransactionCount, prepareTransactionRequest } from "viem/actions";
 
-// TODO(jh): better name
 export type AlchemyAuth1193Methods = [
   ExtractRpcMethod<WalletRpcSchema, "eth_accounts">,
   ExtractRpcMethod<WalletRpcSchema, "eth_requestAccounts">,
   ExtractRpcMethod<WalletRpcSchema, "personal_sign">,
   ExtractRpcMethod<WalletRpcSchema, "eth_signTypedData_v4">,
-  // TODO(jh): impl handling for these:
   ExtractRpcMethod<WalletRpcSchema, "eth_sign">,
   ExtractRpcMethod<WalletRpcSchema, "eth_signTransaction">,
-  // TODO(jh): implement the chain & transaction methods elsewhere if this provider is staying in the signer pkg?
+  ExtractRpcMethod<WalletRpcSchema, "eth_sendTransaction">,
+  ExtractRpcMethod<WalletRpcSchema, "wallet_sendCalls">,
+  // TODO(jh): if we keep wallet_sendCalls, we probably should also impl wallet_getCallsStatus.
+  // TODO(jh): should we track chain id here? or just do it on the wagmi connector & underlying provider?
+  // or should the wagmi connector actually call US (the provider) to get the chain, then we just need to track it in here?
+  // ExtractRpcMethod<WalletRpcSchema, "eth_chainId">,
+  // TODO(jh): do we need to do anything for these?
+  // ExtractRpcMethod<WalletRpcSchema, "wallet_estimateGas">,
+  // ExtractRpcMethod<WalletRpcSchema, "wallet_addEthereumChain">,
+  // ExtractRpcMethod<WalletRpcSchema, "wallet_switchEthereumChain">,
+  // ExtractRpcMethod<WalletRpcSchema, "wallet_connect">,
+  // ExtractRpcMethod<WalletRpcSchema, "wallet_disconnect">,
 ];
 
-// TODO(jh): better name
 export type AlchemyAuthEip1193Provider = Prettify<
   EIP1193Events & {
     request: EIP1193RequestFn<AlchemyAuth1193Methods>;
   }
 >;
 
-export const create1193Provider = (signer: Signer): unknown => {
+// TODO(jh): we can probably easily write tests for this by mocking the signer service fetch requests?
+export const create1193Provider = (
+  authSession: AuthSession,
+  publicClient?: Client, // TODO(jh): solidify type here. Client, transport, or provider?
+): AlchemyAuthEip1193Provider => {
   // TODO(v5): implement any other supported events: https://eips.ethereum.org/EIPS/eip-1193#events
   const eventEmitter = new EventEmitter();
 
@@ -40,19 +60,21 @@ export const create1193Provider = (signer: Signer): unknown => {
         case "eth_requestAccounts":
         case "eth_accounts": {
           return handler<"eth_accounts">(async () => {
-            const address = signer.getAddress();
+            const address = authSession.getAddress();
             return [address];
           })(params);
         }
 
         case "personal_sign": {
           return handler<"personal_sign">(async ([data, address]) => {
-            if (address?.toLowerCase() !== signer.getAddress().toLowerCase()) {
+            if (
+              address?.toLowerCase() !== authSession.getAddress().toLowerCase()
+            ) {
               throw new InvalidRequestError(
                 "Cannot sign for an address other than the current account.",
               );
             }
-            return await signer.signMessage({
+            return await authSession.signMessage({
               message: {
                 raw: data,
               },
@@ -62,46 +84,180 @@ export const create1193Provider = (signer: Signer): unknown => {
 
         case "eth_signTypedData_v4": {
           return handler<"eth_signTypedData_v4">(async ([address, tdJson]) => {
-            if (address?.toLowerCase() !== signer.getAddress().toLowerCase()) {
+            if (
+              address?.toLowerCase() !== authSession.getAddress().toLowerCase()
+            ) {
               throw new InvalidRequestError(
                 "Cannot sign for an address other than the current account.",
               );
             }
-            return await signer.signTypedData({
+            return await authSession.signTypedData({
               ...(JSON.parse(tdJson) as TypedDataDefinition),
             });
           })(params);
         }
 
-        // TODO(jh): the wagmi connector using this provider def
-        // will need to be able to send transactions. do we have
-        // access to a node rpc here to do that? or should it
-        // be handled elsewhere and this provider is soley
-        // responsible for signing?
+        case "eth_sign": {
+          return handler<"eth_sign">(async ([address, data]) => {
+            if (
+              address?.toLowerCase() !== authSession.getAddress().toLowerCase()
+            ) {
+              throw new InvalidRequestError(
+                "Cannot sign for an address other than the current account.",
+              );
+            }
+            return await authSession.signMessage({
+              message: {
+                raw: data,
+              },
+            });
+          })(params);
+        }
 
-        // TODO(jh): will the transport given to the authClient only be
-        // a signer service transport? if so, it might actually make sense
-        // for the auth client 1193 provider to live in the wagmi-core pkg,
-        // since that will also have access to the node rpc transport from
-        // the wagmi config. that probably makes sense if the wagmi
-        // connectors are going to be where we control routing b/w
-        // different transports for different methods?
+        case "eth_signTransaction": {
+          return handler<"eth_signTransaction">(async ([transaction]) => {
+            if (transaction.type !== "0x2") {
+              // TODO(jh): support other txn types.
+              throw new InvalidRequestError(
+                `Unsupported transaction type: ${transaction.type}. Only EIP-1559 transactions (type 0x2) are supported.`,
+              );
+            }
+            // TODO(jh): track chain within the provider so we can emit events when it changes?
+            if (!publicClient?.chain) {
+              throw new InvalidRequestError(
+                "Cannot sign transaction without a public client with a chain configured.",
+              );
+            }
 
-        // TODO(jh): maybe actually it's okay to only support a couple of methods here,
-        // then have another provider in the wagmi-core pkg that handles everything else?
+            // TODO(jh): extract helper for this?
+            const serializableTransaction: TransactionSerializable = {
+              ...transaction,
+              type: "eip1559",
+              chainId: publicClient.chain.id,
+              nonce:
+                transaction.nonce != null
+                  ? Number(transaction.nonce)
+                  : undefined,
+              value:
+                transaction.value != null
+                  ? BigInt(transaction.value)
+                  : undefined,
+              gas:
+                transaction.gas != null ? BigInt(transaction.gas) : undefined,
+              maxFeePerGas:
+                transaction.maxFeePerGas != null
+                  ? BigInt(transaction.maxFeePerGas)
+                  : undefined,
+              maxPriorityFeePerGas:
+                transaction.maxPriorityFeePerGas != null
+                  ? BigInt(transaction.maxPriorityFeePerGas)
+                  : undefined,
+              accessList: transaction.accessList,
+            };
 
-        // TODO(jh): maybe another option is that you can pass the node rpc transport to
-        // this function, then this can stay here and handle everything?
+            const serializedTxn = serializeTransaction(serializableTransaction);
+            const digest = keccak256(serializedTxn);
+
+            const sigHex = await authSession.signRawPayload({
+              payload: digest,
+              mode: "ETHEREUM",
+            });
+
+            const { r, s, v } = parseSignature(sigHex);
+            const yParity = v === 27n ? 0 : v === 28n ? 1 : Number(v);
+
+            return serializeTransaction(serializableTransaction, {
+              r,
+              s,
+              yParity,
+            });
+          })(params);
+        }
+
+        case "eth_sendTransaction": {
+          return handler<"eth_sendTransaction">(async ([transaction]) => {
+            if (!publicClient?.chain) {
+              throw new InvalidRequestError(
+                "Cannot send transaction without a public client for chain.",
+              );
+            }
+            const signed = await request({
+              method: "eth_signTransaction",
+              params: [transaction],
+            });
+            return await publicClient.request({
+              method: "eth_sendRawTransaction",
+              params: [signed],
+            });
+          })(params);
+        }
+
+        case "wallet_sendCalls": {
+          return handler<"wallet_sendCalls">(async (params) => {
+            if (!publicClient?.chain) {
+              throw new InvalidRequestError(
+                "Cannot send calls without a public client for chain.",
+              );
+            }
+            if (!params) {
+              throw new InvalidRequestError(
+                "Missing parameters for wallet_sendCalls",
+              );
+            }
+            const [{ from: _from, calls, chainId: _chainId }] = params;
+            const chainId = _chainId ? Number(_chainId) : publicClient.chain.id;
+            assertCurrentChain({
+              chain: publicClient.chain,
+              currentChainId: chainId,
+            });
+            const from = _from ?? authSession.getAddress();
+            if (from.toLowerCase() !== authSession.getAddress().toLowerCase()) {
+              throw new InvalidRequestError(
+                "Cannot send calls for an address other than the current account.",
+              );
+            }
+            const nonce = await getTransactionCount(publicClient, {
+              address: from,
+            });
+            const txHashes = await Promise.all(
+              calls.map(async (call, idx) => {
+                const prepared = await prepareTransactionRequest(publicClient, {
+                  from,
+                  to: call.to,
+                  data: call.data,
+                  value: call.value ? BigInt(call.value) : undefined,
+                  chain: publicClient.chain,
+                });
+                console.log({ prepared });
+                // TODO(jh): ERROR: The number NaN cannot be converted to a BigInt because it is not an integer
+                return request({
+                  method: "eth_sendTransaction",
+                  params: [
+                    formatTransactionRequest({
+                      ...prepared,
+                      nonce: prepared.nonce ?? nonce + idx,
+                    }),
+                  ],
+                });
+              }),
+            );
+            console.log({ txHashes });
+            return {
+              // TODO(jh): how to actually format this?
+              // we'll need to parse it in getCallsStatus here too.
+              id: txHashes.join(Array(32).fill("0").join("")),
+            };
+          })(params);
+        }
 
         default:
-          // TODO(jh): do underlying methods automatically fall through to a node rpc,
-          // or is method routing handled within the wagmi connector?
-          // If here, where do we get the node rpc transport from?
-          // return signer.request({
-          //   method: method as any,
-          //   params: params as any,
-          // });
-          throw new Error(`Method unsupported by signer: ${method}`);
+          if (!publicClient) {
+            throw new Error(`Unsupported method: ${method}`);
+          }
+          return publicClient.request({
+            method: method as any,
+            params: params as any,
+          });
       }
     } catch (err) {
       // TODO(jh): handle errors that we are expecting from the signer.

@@ -1,4 +1,4 @@
-import { connect, disconnect, reconnect, watchAccount } from '@wagmi/core'
+import { connect, disconnect, getAccount, reconnect, signMessage, sendTransaction, prepareTransactionRequest, watchAccount, sendCalls } from '@wagmi/core'
 import { sendEmailOtp, submitOtpCode } from '@alchemy/wagmi-core'
 import { Buffer } from 'buffer'
 
@@ -22,7 +22,7 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
     </div>
 
     <div id="connect">
-      <h2>Connect</h2>
+      <h2>Other connectors</h2>
       ${config.connectors
         .filter((connector) => connector.id !== 'alchemyAuth')
         .map(
@@ -33,7 +33,7 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
     </div>
 
     <div id="email-auth">
-      <h2>Email Authentication</h2>
+      <h2>Alchemy Auth</h2>
       
       <div>
         <input type="email" id="email-input" placeholder="Enter your email" />
@@ -44,6 +44,14 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
         <button id="submit-otp" type="button">Submit OTP</button>
       </div>
       <div id="auth-status"></div>
+      <div>
+        <input type="text" id="message-input" placeholder="Enter message" />
+        <button id="sign-message" type="button">Sign message</button>
+      </div>
+      <div>
+        <button id="send-transaction" type="button">Send transaction</button>
+        <button id="send-calls" type="button">Send calls</button>
+      </div>
     </div>
   </div>
 `
@@ -106,6 +114,14 @@ function setupApp(element: HTMLDivElement) {
   const otpInput = element.querySelector<HTMLInputElement>('#otp-input')
   const authStatus = element.querySelector<HTMLDivElement>('#auth-status')
 
+  // Signing functionality
+  const messageInput = element.querySelector<HTMLInputElement>('#message-input')
+  const signMessageButton = element.querySelector<HTMLButtonElement>('#sign-message')
+
+  // Transaction functionality
+  const sendTransactionButton = element.querySelector<HTMLButtonElement>('#send-transaction')
+  const sendCallsButton = element.querySelector<HTMLButtonElement>('#send-calls')
+
   sendOtpButton?.addEventListener('click', async () => {
     const email = emailInput?.value
     if (!email) {
@@ -137,6 +153,66 @@ function setupApp(element: HTMLDivElement) {
       if (authStatus) authStatus.innerText = 'Authentication successful!'
     } catch (error) {
       if (authStatus) authStatus.innerText = `Error: ${(error as Error).message}`
+    }
+  })
+
+  signMessageButton?.addEventListener('click', async () => {
+    const account = getAccount(config)
+    if (account.status !== 'connected') {
+      alert('Not connected')
+      return
+    }
+    const message = messageInput?.value
+    if (!message) {
+      return
+    }
+
+    try {
+      const signature = await signMessage(config as any, { message })
+      console.log({ signature })
+      alert(`Signature: ${signature}`)
+    } catch(err) {
+      console.error(err)
+      alert("Failed to sign message")
+    }
+  })
+
+  sendTransactionButton?.addEventListener('click', async () => {
+    const account = getAccount(config)
+    if (account.status !== 'connected') {
+      alert('Not connected')
+      return
+    }
+
+    try {
+      // Send a 0 ETH transaction to self.
+      const prepared = await prepareTransactionRequest(config, { to: account.addresses![0], value: 0n })
+      console.log({ prepared })
+
+      const sent = await sendTransaction(config as any, prepared)
+      console.log({ sent })
+      alert("Success")
+    } catch(err) {
+      console.error(err)
+      alert("Failed to send transaction")
+    }
+  })
+
+  sendCallsButton?.addEventListener('click', async () => {
+    const account = getAccount(config)
+    if (account.status !== 'connected') {
+      alert('Not connected')
+      return
+    }
+
+    try {
+      // Send two 0 ETH transactions to self.
+      const sent = await sendCalls(config as any, {calls: [{ to: account.addresses![0], value: 0n }, { to: account.addresses![0], value: 0n }]})
+      console.log({ sent })
+      alert("Success")
+    } catch(err) {
+      console.error(err)
+      alert("Failed to send transaction")
     }
   })
 
