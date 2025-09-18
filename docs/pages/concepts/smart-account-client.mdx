@@ -4,11 +4,11 @@ description: Set up client
 slug: wallets/concepts/smart-account-client
 ---
 
-A smart acccount client is the main interface used to interact with smart wallets and take actions like sending transactions, batching transactions, swapping, sponsoring gas, and more.
+A smart wallet client is the main interface used to interact with smart wallets and take actions like sending transactions, batching transactions, swapping, sponsoring gas, and more.
 
 ## How It Works
 
-The [`SmartAccountClient`](https://github.com/alchemyplatform/aa-sdk/blob/main/aa-sdk/core/src/account/smartContractAccount.ts#L102-L128) is a EIP-1193 compatible extension of `viem`'s [Client](https://viem.sh/docs/clients/custom#build-your-own-client) which allows you to interact with smart wallets.
+The [`SmartWalletClient`](https://github.com/alchemyplatform/aa-sdk/blob/b8dad097dc537985334efe0c1cc2af4e79dc0050/account-kit/wallet-client/src/client/index.ts#L34) is a EIP-1193 compatible extension of `viem`'s [Client](https://viem.sh/docs/clients/custom#build-your-own-client) which allows you to interact with smart wallets.
 
 ## Prerequisites
 
@@ -77,39 +77,18 @@ export const client = createSmartWalletClient({
 ```
   </Tab>
   <Tab title="API">
-    If using raw [APIs](/wallets/smart-wallet-quickstart/api), you don't need a client.
-
-    If using wallet APIs via the wallet client [SDK](/wallets/smart-wallet-quickstart/sdk), you'll need to create a client. Given a signer (e.g. a `LocalAccountSigner` imported from `@aa-sdk/core` or an [Alchemy Signer](/docs/wallets/signer/what-is-a-signer#alchemy-signer)), all you need to do is follow a few simple steps to start sending user ops with Wallet APIs!
-
-```ts
-import { createSmartWalletClient } from "@account-kit/wallet-client";
-import { alchemy, arbitrumSepolia } from "@account-kit/infra";
-import { LocalAccountSigner } from "@aa-sdk/core";
-
-const signer = LocalAccountSigner.privateKeyToAccountSigner(PRIVATE_KEY); // we use a private key signer as an example here
-
-const transport = alchemy({
-  apiKey: ALCHEMY_API_KEY, // use your Alchemy app api key here!
-});
-
-const client = createSmartWalletClient({
-  transport,
-  chain: arbitrumSepolia, // use any chain imported from @account-kit/infra here!
-  signer,
-});
-```
-
+    When using wallet [APIs](/wallets/smart-wallet-quickstart/api), you don't need to define a client. You can start sending request with APIs directly. 
   </Tab>
 </Tabs>
 
 ## Advanced
 
 <Accordion title="Configuration options">
-You can customize your client by specifying additional parameters to change account type, add gas sponsorship, etc. These parameters are optional.
+Adjust client settings by specifying additional parameters to change account type, add gas sponsorship, etc. These parameters are optional.
 
 **Account type**
 
-By default, the Smart Account Client will use [ModularAccountV2](/wallets/smart-contracts/modular-account-v2/overview). This is the cheapest and most advanced Smart Account, but you can specify other smart contract account types as needed. Learn more about the different smart accounts [here](/wallets/smart-contracts/choosing-a-smart-account).
+By default, the Smart Wallet Client will use [ModularAccountV2](/wallets/smart-contracts/modular-account-v2/overview). This is the cheapest and most advanced Smart Account, but you can specify other smart contract account types as needed. Learn more about the different smart accounts [here](/wallets/smart-contracts/choosing-a-smart-account).
 
 - **`type`** (string) - Defines the smart account type. Options:
   - `"ModularAccountV2"` (recommended and default)
@@ -142,7 +121,7 @@ To use EIP-7702, pass `"7702"`" to the `mode` in `accountParams`. This will dele
 
 </Accordion>
 <Accordion title="Smart account client actions">
-Because the Smart Account Clients are extensions of viem's clients, they support extensions via the `.extend` method. The base client already includes a [number of actions](https://github.com/alchemyplatform/aa-sdk/tree/v4.x.x/aa-sdk/core/src/actions/smartAccount) by default. You can find additional details about these actions in the [`@aa-sdk/core` documentation](/wallets/reference/aa-sdk/core).
+Because the Smart Wallet Clients are extensions of viem's clients, they support extensions via the `.extend` method. The base client already includes a [number of actions](https://github.com/alchemyplatform/aa-sdk/tree/v4.x.x/aa-sdk/core/src/actions/smartAccount) by default. You can find additional details about these actions in the [`@aa-sdk/core` documentation](/wallets/reference/aa-sdk/core).
 </Accordion>
 <Accordion title="Account agnostic client">
   Typically, the smart account client uses the default account or the account passed into the client constructor for all of the actions you perform with the client - also known as **account hositing**.
