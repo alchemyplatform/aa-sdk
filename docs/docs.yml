@@ -210,8 +210,11 @@ navigation:
             path: wallets/pages/transactions/retry-transactions/index.mdx
           - page: Sponsor gas on Solana
             path: wallets/pages/transactions/solana/sponsor-gas-solana.mdx
-          - page: Use permissions (Session keys)
+          - section: Permissions (Session keys)
             path: wallets/pages/transactions/session-keys/index.mdx
+            contents:
+              - page: Permission Types
+                path: wallets/pages/transactions/session-keys/supported-permissions.mdx
       - section: Low-Level Infra
         contents:
           - page: Overview

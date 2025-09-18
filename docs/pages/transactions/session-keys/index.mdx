@@ -17,6 +17,15 @@ Key benefits include:
 - **Enhanced security**: Limit exposure of the main account key
 - **Granular permissions**: Control exactly what, when, and how much a session key can do
 
+<Card
+  title="Supported permissions"
+  icon="shield"
+  iconPosition="left"
+  href="/wallets/transactions/session-keys/supported-permissions"
+>
+  See the full list of supported permissions here.
+</Card>
+
 ## Prerequisites
 
 - API key from your [dashboard](https://dashboard.alchemy.com/apps)
@@ -36,100 +45,6 @@ Key benefits include:
     <Markdown src="api.mdx" />
   </Tab>
 </Tabs>
-
-## Permission Types
-
-Session keys work best when they are tightly scoped. You can apply multiple permission types to create granular control over what a session key can do:
-
-### Native Token Transfer
-
-Allows transfer of native tokens (like Ether) from the account with a specified limit.
-
-```ts
-{
-  type: "native-token-transfer";
-  data: {
-    allowance: "0xde0b6b3a7640000"; // 1 ETH in hex
-  }
-}
-```
-
-### ERC20 Token Transfer
-
-Allows transfer or approval of ERC20 tokens from the account. Both transfers and approvals count towards the limit.
-
-```ts
-{
-  type: "erc20-token-transfer";
-  data: {
-    address: "0xA0b86a33E6441b8c4C8C0e1cB8C4C8C0e1cB8C4C8"; // token contract address
-    allowance: "0x56bc75e2d630e0000"; // 100 USDC in hex
-  }
-}
-```
-
-### Gas Limit
-
-Allows the session key to spend gas for user operations up to a specified limit.
-
-```ts
-{
-  type: "gas-limit";
-  data: {
-    limit: "0x493e0"; // 300,000 gas in hex
-  }
-}
-```
-
-### Contract Access
-
-Grants access to **all** functions in a specific contract.
-
-```ts
-{
-  type: "contract-access";
-  data: {
-    address: "0x1234567890123456789012345678901234567890"; // target contract address
-  }
-}
-```
-
-### Functions On Contract
-
-Grants access to specific function selectors on **one** contract.
-
-```ts
-{
-  type: "functions-on-contract";
-  data: {
-    address: "0x1234567890123456789012345678901234567890";
-    functions: ["0xddf252ad", "0x095ea7b3"]; // transfer and approve function selectors
-  }
-}
-```
-
-### Account Functions
-
-Grants access to specific functions on the smart account itself.
-
-```ts
-{
-  type: "account-functions";
-  data: {
-    functions: ["0xabcdef01", "0x12345678"]; // allowed function selectors
-  }
-}
-```
-
-### Root
-
-Grants full access to everything. **Use with extreme caution in production.**
-
-```ts
-{
-  type: "root"; // no additional data required
-}
-```
 
 ## Next steps
 
