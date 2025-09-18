@@ -438,10 +438,10 @@ export class AuthClient {
   }
 
   /**
-   * Loads a signer from a previously saved authentication session state.
+   * Creates an instance of AuthSession from a previously saved authentication session state that has not expired.
    *
    * @param {AuthSessionState} state - The saved authentication session state
-   * @returns {Promise<Signer | undefined>} A promise that resolves to a Signer instance if the session is valid, undefined otherwise
+   * @returns {Promise<AuthSession | undefined>} A promise that resolves to an AuthSession instance if the session is valid, undefined otherwise
    */
   public async loadAuthSessionState(
     state: AuthSessionState,
@@ -455,11 +455,11 @@ export class AuthClient {
             "Credential ID is required for passkey authentication",
           );
         }
-        return this.loginWithPasskey(credentialId);
+        return await this.loginWithPasskey(credentialId);
       } else {
         const { bundle } = state;
         const { orgId, idToken } = user;
-        return this.completeAuthWithBundle({
+        return await this.completeAuthWithBundle({
           bundle,
           orgId,
           idToken,

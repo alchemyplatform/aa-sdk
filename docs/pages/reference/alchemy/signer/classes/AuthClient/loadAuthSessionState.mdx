@@ -5,7 +5,7 @@ description: Overview of the loadAuthSessionState method
 slug: wallets/reference/alchemy/signer/classes/AuthClient/loadAuthSessionState
 ---
 
-Loads a signer from a previously saved authentication session state.
+Creates an instance of AuthSession from a previously saved authentication session state that has not expired.
 
 ## Import
 
@@ -23,5 +23,5 @@ import { AuthClient } from "@alchemy/auth";
 
 ## Returns
 
-`Promise<Signer | undefined>`
-A promise that resolves to a Signer instance if the session is valid, undefined otherwise
+`Promise<AuthSession | undefined>`
+A promise that resolves to an AuthSession instance if the session is valid, undefined otherwise
