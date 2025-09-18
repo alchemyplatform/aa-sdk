@@ -1,12 +1,14 @@
 {
   "name": "server-wallets",
-  "version": "1.0.0",
-  "main": "index.js",
-  "license": "MIT",
+  "version": "0.1.0",
+  "private": true,
+  "engines": {
+    "node": "22.x"
+  },
   "dependencies": {
     "@account-kit/infra": "^4.62.2",
-    "@account-kit/signer": "4.62.2",
-    "@account-kit/wallet-client": "4.62.2",
+    "@account-kit/signer": "^4.62.2",
+    "@account-kit/wallet-client": "^4.62.2",
     "dotenv": "^17.2.2"
   },
   "devDependencies": {

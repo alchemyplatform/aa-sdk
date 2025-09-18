@@ -6,7 +6,7 @@ import { NotAuthenticatedError, UnsupportedFeatureError } from "../errors.js";
 import { TurnkeyClient } from "@turnkey/http";
 import type { AuthParams } from "../signer";
 
-export interface ApiKeySignerClientParams {
+export interface ServerSignerClientParams {
   connection: ConnectionConfig;
 }
 
@@ -29,16 +29,16 @@ const createDummyStamper = () => {
  * It extends the BaseSignerClient and uses the ApiKeyStamper for signing.
  * Primarily intended to be used server-side.
  */
-export class ApiKeySignerClient extends BaseSignerClient<undefined> {
+export class ServerSignerClient extends BaseSignerClient<undefined> {
   /**
    * Creates an instance of ApiKeySignerClient.
    *
-   * @param {ApiKeySignerClientParams} params The parameters for the client, including the API key and connection config
+   * @param {ServerSignerClientParams} params The parameters for the client, including the API key and connection config
    * @param {ConnectionConfig} params.connection The connection configuration for the client
    * @param {string} params.apiKey.publicKey The public key of the API key
    * @param {string} params.apiKey.privateKey The private key of the API key
    */
-  constructor({ connection }: ApiKeySignerClientParams) {
+  constructor({ connection }: ServerSignerClientParams) {
     // we will re-recreate the turnkey client (including the stamper) when we authenticate with an api key
     const stamper = createDummyStamper();
 
@@ -64,15 +64,16 @@ export class ApiKeySignerClient extends BaseSignerClient<undefined> {
   public override createAccount = async (
     params: CreateAccountParams,
   ): Promise<SignupResponse> => {
-    if (params.type !== "apiKey") {
+    if (params.type !== "accessKey") {
       throw new Error(
-        "ApiKeySignerClient only supports account creation via api key",
+        "ServerSignerClient only supports account creation via access key",
       );
     }
 
     return this.request("/v1/signup", {
-      apiKey: {
+      accessKey: {
         publicKey: params.publicKey,
+        id: params.id,
       },
     });
   };
@@ -80,20 +81,28 @@ export class ApiKeySignerClient extends BaseSignerClient<undefined> {
   /**
    * Authenticates the user with an API key.
    *
-   * @param {Extract<AuthParams, { type: "apiKey" }>} params The parameters for the authentication
+   * @param {Extract<AuthParams, { type: "accessKey" }>} params The parameters for the authentication
    * @returns {Promise<User>} A promise that resolves to the user
    */
-  public authenticateWithApiKey = async (
-    params: Extract<AuthParams, { type: "apiKey" }>,
+  public authenticateWithAccessKey = async (
+    params: Extract<AuthParams, { type: "accessKey" }>,
   ): Promise<User> => {
-    const { orgId } = params.createNew
-      ? await this.createAccount({
-          type: "apiKey",
-          publicKey: params.apiKey.publicKey,
-        })
-      : params;
+    const user = await this.lookupUserByAccessKey({
+      publicKey: params.keyPair.publicKey,
+      id: params.id,
+    });
 
-    return this.completeAuthWithApiKey(params.apiKey, orgId);
+    const orgId =
+      user?.orgId ??
+      (
+        await this.createAccount({
+          type: "accessKey",
+          publicKey: params.keyPair.publicKey,
+          id: params.id,
+        })
+      )?.orgId;
+
+    return this.completeAuthWithApiKey(params.keyPair, orgId);
   };
 
   private completeAuthWithApiKey = async (

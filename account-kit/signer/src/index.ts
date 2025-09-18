@@ -1,14 +1,12 @@
 export { BaseAlchemySigner } from "./base.js";
-export { AlchemyApiKeySigner, createApiKeySigner } from "./apiKeySigner.js";
+export { AlchemyServerSigner, createServerSigner } from "./serverSigner.js";
 export { BaseSignerClient } from "./client/base.js";
 export {
   AlchemySignerWebClient,
   OauthCancelledError,
   OauthFailedError,
 } from "./client/index.js";
-export {
-ApiKeySignerClient,
-} from "./client/apiKey.js";
+export { ServerSignerClient } from "./client/server.js";
 export type * from "./client/types.js";
 export {
   NotAuthenticatedError,
@@ -29,4 +27,4 @@ export {
   createSolanaSponsoredTransaction,
   createSolanaTransaction,
 } from "./utils/solana.js";
-export { generateP256KeyPair as generateApiKeyPair } from "@turnkey/crypto";
+export { generateP256KeyPair as generateKeyPair } from "@turnkey/crypto";

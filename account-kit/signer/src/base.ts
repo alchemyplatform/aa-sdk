@@ -331,8 +331,8 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
             return this.authenticateWithOtp(params);
           case "custom-jwt":
             return this.authenticateWithJwt(params);
-          case "apiKey":
-            throw new UnsupportedFeatureError("API key auth");
+          case "accessKey":
+            throw new UnsupportedFeatureError("Access key auth");
           default:
             assertNever(type, `Unknown auth type: ${type}`);
         }
@@ -415,7 +415,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
           data: { authType: "otp" },
         });
         break;
-      case "apiKey":
+      case "accessKey":
         break;
       default:
         assertNever(type, `Unknown auth type: ${type}`);

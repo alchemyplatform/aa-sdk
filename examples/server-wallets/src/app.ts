@@ -1,6 +1,6 @@
 import 'dotenv/config'
 
-import { createApiKeySigner, generateApiKeyPair } from "@account-kit/signer";
+import { createServerSigner, generateKeyPair } from "@account-kit/signer";
 import { createSmartWalletClient } from "@account-kit/wallet-client";
 import { raise } from './util';
 import { alchemy, baseSepolia } from '@account-kit/infra';
@@ -17,18 +17,16 @@ const transport = alchemy({
 })
 
 async function app() {
-  const apiKey = generateApiKeyPair();
-  console.log("🔐 Created API keypair with public key:", apiKey.publicKey);
+  const keyPair = generateKeyPair()
 
-  const { signer } = await createApiKeySigner({
+  const signer = await createServerSigner({
+    auth: {
+      keyPair
+    },
     connection: {
       jwt: envConfig.ALCHEMY_API_KEY,
       rpcUrl: envConfig.ALCHEMY_API_URL,
     },
-    auth: {
-      apiKey: apiKey,
-      createNew: true,
-    }
   })
   console.log("🕵️‍♂️ Authenticated with signer:", await signer.getAddress());
 
@@ -40,6 +38,7 @@ async function app() {
   });
   
   const account = await client.requestAccount();
+  console.log("🧩 Account:", account.address);
 
   const { preparedCallIds: [preparedCallId] } = await client.sendCalls({
     calls: [{ to: "0x0000000000000000000000000000000000000000", value: "0x0" }],

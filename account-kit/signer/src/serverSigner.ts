@@ -4,9 +4,9 @@ import {
   unpackSignRawMessageBytes,
 } from "@aa-sdk/core";
 import {
-  ApiKeySignerClient,
-  type ApiKeySignerClientParams,
-} from "./client/apiKey.js";
+  ServerSignerClient,
+  type ServerSignerClientParams,
+} from "./client/server.js";
 import {
   hashMessage,
   hashTypedData,
@@ -18,7 +18,7 @@ import {
   type TypedDataDefinition,
 } from "viem";
 import { hashAuthorization } from "viem/utils";
-import type { ApiKeyAuthParams, AuthParams } from "./signer.js";
+import type { AccessKeyAuthParams, AuthParams } from "./signer.js";
 import type { User } from "./client/types.js";
 
 /**
@@ -26,16 +26,16 @@ import type { User } from "./client/types.js";
  * It extends the SmartAccountSigner interface and uses the ApiKeySignerClient to sign messages and typed data.
  * Primarily intended to be used server-side.
  */
-export class AlchemyApiKeySigner implements SmartAccountSigner {
-  inner: ApiKeySignerClient;
-  signerType = "alchemy-api-key-signer";
+export class AlchemyServerSigner implements SmartAccountSigner {
+  inner: ServerSignerClient;
+  signerType = "alchemy-server-signer";
 
   /**
    * Creates an instance of AlchemyApiKeySigner.
    *
-   * @param {ApiKeySignerClient} client The underlying signer client
+   * @param {ServerSignerClient} client The underlying signer client
    */
-  constructor(client: ApiKeySignerClient) {
+  constructor(client: ServerSignerClient) {
     this.inner = client;
   }
 
@@ -104,18 +104,15 @@ export class AlchemyApiKeySigner implements SmartAccountSigner {
    * @param {Extract<AuthParams, { type: "apiKey" }>} params The parameters for the authentication
    * @returns {Promise<User>} A promise that resolves to the user
    */
-  async authenticate(params: Extract<AuthParams, { type: "apiKey" }>): Promise<User> {
-    return this.inner.authenticateWithApiKey(params);
+  async authenticate(
+    params: Extract<AuthParams, { type: "apiKey" }>,
+  ): Promise<User> {
+    return this.inner.authenticateWithAccessKey(params);
   }
 }
 
-type CreateApiKeySignerParams = ApiKeySignerClientParams & {
-  auth?: ApiKeyAuthParams
-};
-
-type CreateApiKeySignerResponse = {
-  signer: AlchemyApiKeySigner;
-  orgId?: string;
+type CreateServerSignerParams = ServerSignerClientParams & {
+  auth: AccessKeyAuthParams;
 };
 
 /**
@@ -151,15 +148,16 @@ type CreateApiKeySignerResponse = {
  * @returns {Promise<CreateApiKeySignerResponse>} A promise that resolves to a SmartAccountSigner
  * @throws {Error} If the API key is invalid for the given orgId
  */
-export const createApiKeySigner = async (
-  params: CreateApiKeySignerParams,
-): Promise<CreateApiKeySignerResponse> => {
-  const client = new ApiKeySignerClient(params);
-  const signer = new AlchemyApiKeySigner(client);
+export const createServerSigner = async (
+  params: CreateServerSignerParams,
+): Promise<AlchemyServerSigner> => {
+  const client = new ServerSignerClient(params);
+  const signer = new AlchemyServerSigner(client);
 
-  let { orgId } = params.auth 
-    ? await signer.inner.authenticateWithApiKey({ ...params.auth, type: "apiKey" }) 
-    : {}
-  
-  return { signer, orgId }
+  await signer.inner.authenticateWithAccessKey({
+    ...params.auth,
+    type: "accessKey",
+  });
+
+  return signer;
 };
