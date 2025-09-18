@@ -1,19 +1,36 @@
 import type { Address } from "viem";
 
+/**
+ * User object containing all user information and authentication details
+ */
 export type User = {
+  /** User's email address (optional) */
   email?: string;
+  /** Organization ID */
   orgId: string;
+  /** Unique user identifier */
   userId: string;
+  /** User's Ethereum/blockchain address */
   address: Address;
+  /** User's Solana address (optional) */
   solanaAddress?: string;
+  /** Credential ID for passkey authentication (optional) */
   credentialId?: string;
+  /** ID token from authentication flow (optional) */
   idToken?: string;
+  /** Additional claims from authentication provider (optional) */
   claims?: Record<string, unknown>;
 };
 
+/**
+ * Available authentication methods for a user
+ */
 export type AuthMethods = {
+  /** User's email address if email authentication is configured */
   email?: string;
+  /** List of configured OAuth providers */
   oauthProviders: OauthProviderInfo[];
+  /** List of registered passkeys/WebAuthn credentials */
   passkeys: PasskeyInfo[];
 };
 
@@ -157,13 +174,43 @@ export type AuthProviderCustomization = {
   otherParameters?: Record<string, string>;
 };
 
-// Signer state types
+/**
+ * Serializable authentication session state for persistence and restoration
+ *
+ * This union type represents the complete state needed to restore an authentication
+ * session. It includes different variants for different authentication methods:
+ * - Bundle-based auth (email, oauth, otp): requires credential bundle
+ * - Passkey auth: requires credential ID instead of bundle
+ */
 export type AuthSessionState =
   | {
+      /** Authentication type that uses credential bundles */
       type: "email" | "oauth" | "otp";
+      /** Encrypted credential bundle for session restoration */
       bundle: string;
+      /** Timestamp when this session state expires */
       expirationDateMs: number;
+      /** Complete user information */
       user: User;
-      chainId: number;
     }
-  | { type: "passkey"; user: User; expirationDateMs: number; chainId: number };
+  | {
+      /** Passkey authentication type */
+      type: "passkey";
+      /** Complete user information */
+      user: User;
+      /** Timestamp when this session state expires */
+      expirationDateMs: number;
+      /** Credential ID for passkey authentication restoration */
+      credentialId?: string;
+    };
+
+/**
+ * Available authentication methods supported by the AuthSession
+ */
+export type AuthType = "email" | "oauth" | "otp" | "passkey";
+
+/**
+ * Authentication types that require credential bundle for session creation
+ * (excludes passkey which uses credential ID instead)
+ */
+export type CompleteWithBundleAuthType = "email" | "oauth" | "otp";

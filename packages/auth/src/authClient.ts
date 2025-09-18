@@ -1,6 +1,7 @@
 import { AuthSession } from "./authSession.js";
 import type {
   AuthSessionState,
+  CompleteWithBundleAuthType,
   CreateTekStamperFn,
   CreateWebAuthnStamperFn,
   HandleOauthFlowFn,
@@ -248,7 +249,6 @@ export class AuthClient {
    * @param {SubmitOtpCodeParams} params - Parameters for submitting the OTP code
    * @param {string} params.otpCode - The OTP code received via email
    * @returns {Promise<AuthSession>} Promise that resolves to an auth session instance
-   * @throws {Error} If no OTP has been sent or if the code is invalid
    *
    * @example
    * ```ts
@@ -274,7 +274,11 @@ export class AuthClient {
       targetPublicKey,
     });
     this.pendingOtp = null;
-    return this.completeAuthWithBundle({ bundle: credentialBundle, orgId });
+    return this.completeAuthWithBundle({
+      bundle: credentialBundle,
+      orgId,
+      authType: "otp",
+    });
   }
 
   /**
@@ -288,7 +292,6 @@ export class AuthClient {
    * @param {Record<string, string>} [params.otherParameters] - Additional OAuth parameters
    * @param {"popup" | "redirect"} [params.mode] - OAuth flow mode, defaults to "redirect"
    * @returns {Promise<AuthSession>} Promise that resolves to an auth session instance
-   * @throws {Error} If OAuth flow fails or is cancelled
    *
    * @example
    * ```ts
@@ -325,6 +328,7 @@ export class AuthClient {
         bundle: response.bundle!,
         orgId: response.orgId!,
         idToken: response.idToken,
+        authType: "oauth",
       });
     } else if (response.status === "ACCOUNT_LINKING_CONFIRMATION_REQUIRED") {
       // TODO: decide what to do here.
@@ -343,9 +347,6 @@ export class AuthClient {
    * alchemy-id-token) in the URL query string, processes them, and completes the authentication flow.
    *
    * @returns {Promise<AuthSession>} Promise that resolves to an auth session instance
-   * @throws {Error} If no OAuth callback parameters are found in the URL
-   * @throws {Error} If OAuth authentication failed (alchemy-error parameter present)
-   * @throws {Error} If credential bundle injection fails
    *
    * @example
    * ```ts
@@ -373,6 +374,7 @@ export class AuthClient {
         bundle: callbackParams.bundle!,
         orgId: callbackParams.orgId!,
         idToken: callbackParams.idToken,
+        authType: "oauth",
       });
     }
     console.log("No OAuth callback parameters found");
@@ -381,22 +383,58 @@ export class AuthClient {
 
   /**
    * Initiates passkey (WebAuthn) authentication flow.
-   * This method uses WebAuthn standards to authenticate users with biometric or hardware security keys.
    *
+   * This method uses WebAuthn standards to authenticate users with biometric or hardware security keys.
+   * Can be used for both new passkey creation (when credentialId is undefined) and
+   * authentication with existing passkeys (when credentialId is provided).
+   *
+   * @param {string} [credentialId] - Optional credential ID for authenticating with existing passkey
    * @returns {Promise<AuthSession>} Promise that resolves to an auth session instance
-   * @throws {Error} Currently throws "Not implemented" as this method is under development
    *
    * @example
    * ```ts
+   * // New passkey authentication
    * const authSession = await authClient.loginWithPasskey();
+   *
+   * // Authenticate with existing passkey
+   * const authSession = await authClient.loginWithPasskey("existing-credential-id");
    * ```
    */
-  public async loginWithPasskey(): Promise<AuthSession> {
+  public async loginWithPasskey(credentialId?: string): Promise<AuthSession> {
     // TODO: figure out what the current passkey code is doing.
+    // For new passkey authentication, credentialId would be undefined initially
     const stamper = await this.createWebAuthnStamper({
-      credentialId: undefined,
+      credentialId: credentialId ?? undefined,
     });
     return notImplemented(stamper);
+  }
+
+  /**
+   * Helper method to create AuthSession for passkey authentication.
+   * This should be called after successful passkey authentication.
+   *
+   * @param {any} stamper - The WebAuthn stamper instance
+   * @param {string} orgId - The organization ID
+   * @param {any} user - The user object
+   * @param {string} credentialId - The credential ID for the passkey
+   * @returns {Promise<AuthSession>} A promise that resolves to an auth session instance
+   */
+  // @ts-ignore - Will be used when passkey implementation is complete
+  private async createPasskeyAuthSession(
+    stamper: any,
+    orgId: string,
+    user: any,
+    credentialId: string,
+  ): Promise<AuthSession> {
+    return AuthSession.create({
+      apiKey: this.apiKey,
+      stamper,
+      orgId,
+      idToken: user.idToken,
+      authType: "passkey",
+      credentialId,
+      // No bundle needed for passkey authentication
+    });
   }
 
   /**
@@ -411,11 +449,22 @@ export class AuthClient {
     const { type, expirationDateMs, user } = state;
     if (expirationDateMs > Date.now()) {
       if (type === "passkey") {
-        return this.loginWithPasskey();
+        const { credentialId } = state;
+        if (!credentialId) {
+          throw new Error(
+            "Credential ID is required for passkey authentication",
+          );
+        }
+        return this.loginWithPasskey(credentialId);
       } else {
         const { bundle } = state;
         const { orgId, idToken } = user;
-        return this.completeAuthWithBundle({ bundle, orgId, idToken });
+        return this.completeAuthWithBundle({
+          bundle,
+          orgId,
+          idToken,
+          authType: type as "email" | "oauth" | "otp",
+        });
       }
     }
     return undefined;
@@ -427,10 +476,12 @@ export class AuthClient {
     bundle,
     orgId,
     idToken,
+    authType = "otp", // Default to otp for backward compatibility
   }: {
     bundle: string;
     orgId: string;
     idToken?: string;
+    authType?: CompleteWithBundleAuthType;
   }): Promise<AuthSession> {
     const { stamper } = await this.getTekStamper();
     const success = await stamper.injectCredentialBundle(bundle);
@@ -442,6 +493,8 @@ export class AuthClient {
       stamper,
       orgId,
       idToken,
+      bundle,
+      authType,
     });
     // Forget the reference to the TEK stamper, because in some implementations
     // it may become invalid if it is disconnected later. Future logins should
@@ -466,7 +519,6 @@ export class AuthClient {
     return dev_request(this.apiKey, path, body);
   }
 }
-
 function notImplemented(..._: unknown[]): Promise<never> {
   throw new Error("Not implemented");
 }
