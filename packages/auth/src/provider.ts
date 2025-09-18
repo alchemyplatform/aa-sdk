@@ -228,8 +228,6 @@ export const create1193Provider = (
                   value: call.value ? BigInt(call.value) : undefined,
                   chain: publicClient.chain,
                 });
-                console.log({ prepared });
-                // TODO(jh): ERROR: The number NaN cannot be converted to a BigInt because it is not an integer
                 return request({
                   method: "eth_sendTransaction",
                   params: [
@@ -241,7 +239,6 @@ export const create1193Provider = (
                 });
               }),
             );
-            console.log({ txHashes });
             return {
               // TODO(jh): how to actually format this?
               // we'll need to parse it in getCallsStatus here too.
