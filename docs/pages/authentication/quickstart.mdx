@@ -16,6 +16,12 @@ Set up authentication in the Dashboard so users can sign in and start using thei
 
 In the Dashboard, open the authentication settings and enable the login methods you want to support. See the [login methods](/wallets/authentication/login-methods/social-login) section for more details.
 
+<img
+  src="/images/wallets/dashboard-enable-social-auth.png"
+  alt="Enable the social auth you want to support"
+  style={{ width: "100%" }}
+/>
+
 ### Custom clients
 
 If you bring your own OAuth 2.0 client ID and secret instead of using the default managed clients,
@@ -43,7 +49,7 @@ Choose between two modes: `popup` or `redirect`. These modes control your applic
 <Tabs>
   <Tab title="Redirect">
     ```ts twoslash
-    authenticateAsync({
+    await authenticateAsync({
       // For react native this can be a direct deeplink in your app e.g. account-kit-expo-quickstart://home
       // or a webpage that deeplinks to a page in your app
       redirectUrl: "https://demo.alchemy.com/",
@@ -80,3 +86,8 @@ If you use `redirect`, you must allow your redirect URI in the Dashboard.
   alt="Allow your app's redirect URI in the Dashboard"
   style={{ width: "100%" }}
 />
+
+## 3. Next Steps
+
+You should be able to log users in now, common next steps are building out the UI for this authentication flow
+and starting to sign and send transactions for users.
