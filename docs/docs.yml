@@ -89,7 +89,7 @@ navigation:
         contents:
           - page: Overview
             path: wallets/pages/authentication/overview.mdx
-          - page: Authentication Quickstart
+          - page: Quickstart
             path: wallets/pages/authentication/quickstart.mdx
           - section: Login methods
             contents:
