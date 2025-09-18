@@ -120,10 +120,10 @@ jobs:
           lychee --version
 
       - name: Wait for preview deployment to stabilize
-        run: sleep 30
+        run: sleep 60
 
       - name: Check for broken links
-        run: yarn docs:broken-links --base-url "${{ needs.preview.outputs.preview-url }}" --max-retries 5 --timeout 60
+        run: yarn docs:broken-links --base-url "${{ needs.preview.outputs.preview-url }}"
   
   lint:
     name: Lint
