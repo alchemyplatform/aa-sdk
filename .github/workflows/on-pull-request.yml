@@ -123,7 +123,7 @@ jobs:
         run: sleep 30
 
       - name: Check for broken links
-        run: yarn docs:broken-links --base-url "${{ needs.preview.outputs.preview-url }}" --max-retries 3 --retry-wait-time 5 --timeout 30
+        run: yarn docs:broken-links --base-url "${{ needs.preview.outputs.preview-url }}" --max-retries 5 --timeout 60
   
   lint:
     name: Lint
