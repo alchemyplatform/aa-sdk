@@ -1,5 +1,5 @@
 ---
-title: Authentication Quickstart
+title: Quickstart
 description: Set up authentication in the Dashboard so users can sign in
 slug: wallets/authentication/quickstart
 ---
@@ -24,13 +24,15 @@ In the Dashboard, open the authentication settings and enable the login methods 
 
 ### Custom clients
 
-If you bring your own OAuth 2.0 client ID and secret instead of using the default managed clients,
+Optional: If you bring your own OAuth 2.0 client ID and secret instead of using the default managed clients,
 make sure that you allow the signer callback URL in the OAuth provider's settings (usually labeled "Authorized redirect URIs"). Use this callback URL: `https://signer.alchemy.com/callback`.
 
 <Info>
   Do not add your app's redirect URI here. You will allow your app's redirect
   URI in a later step.
 </Info>
+
+For example, this is how you'd add the alchemy callback url for Google OAuth
 
 <img
   src="/images/wallets/google-alchemy-callback-whitelist.png"
