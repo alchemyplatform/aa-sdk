@@ -1,3 +1,5 @@
+import { AlchemyRestClient } from "@alchemy/common";
+import type { SignerHttpSchema } from "@alchemy/aa-infra";
 import { AuthSession } from "./authSession.js";
 import type {
   CreateTekStamperFn,
@@ -5,19 +7,19 @@ import type {
   HandleOauthFlowFn,
   TurnkeyTekStamper,
 } from "./types.js";
-import { dev_request } from "./devRequest.js";
 import { getOauthNonce, getOauthProviderUrl } from "./utils.js";
 
 /**
  * Configuration parameters for creating an AuthClient instance
  */
 export type AuthClientParams = {
-  // TODO: put this back when the transport is ready.
-  // transport: AlchemyTransport;
-  // TODO: this is temporary for testing before the transport is ready.
-  /** API key for authentication with Alchemy services */
-  apiKey: string;
-  /** Function to create a TEK (Turnkey Ephemeral Key) stamper */
+  /** API key for authentication with Alchemy services. */
+  apiKey?: string;
+  /** JWT token for authentication with Alchemy services. */
+  jwt?: string;
+  /** Custom URL (optional - defaults to Alchemy's chain-agnostic URL, but can be used to override it) */
+  url?: string;
+  /** Function to create a TEK (Traffic Encryption Key) stamper */
   createTekStamper: CreateTekStamperFn;
   /** Function to create a WebAuthn stamper for passkey authentication */
   createWebAuthnStamper: CreateWebAuthnStamperFn;
@@ -189,8 +191,7 @@ function extractOAuthCallbackParams() {
  * ```
  */
 export class AuthClient {
-  // TODO: temporary for testing before the transport is ready.
-  private readonly apiKey: string;
+  private readonly signerHttpClient: AlchemyRestClient<SignerHttpSchema>;
   private readonly createTekStamper: CreateTekStamperFn;
   private readonly createWebAuthnStamper: CreateWebAuthnStamperFn;
   private readonly handleOauthFlow: HandleOauthFlowFn;
@@ -205,7 +206,11 @@ export class AuthClient {
    * @param {HandleOauthFlowFn} params.handleOauthFlow - Function to handle OAuth authentication flow
    */
   constructor(params: AuthClientParams) {
-    this.apiKey = params.apiKey;
+    this.signerHttpClient = new AlchemyRestClient({
+      apiKey: params.apiKey,
+      jwt: params.jwt,
+      url: params.url,
+    });
     this.createTekStamper = params.createTekStamper;
     this.createWebAuthnStamper = params.createWebAuthnStamper;
     this.handleOauthFlow = params.handleOauthFlow;
@@ -232,12 +237,16 @@ export class AuthClient {
    */
   public async sendEmailOtp({ email }: SendEmailOtpParams): Promise<void> {
     const { targetPublicKey } = await this.getTekStamper();
-    const { otpId, orgId } = await this.dev_request("auth", {
-      email,
-      emailMode: "otp",
-      targetPublicKey,
+    const { otpId, orgId } = await this.signerHttpClient.request({
+      route: "signer/v1/auth",
+      method: "POST",
+      body: {
+        email,
+        emailMode: "otp",
+        targetPublicKey,
+      },
     });
-    this.pendingOtp = { otpId, orgId };
+    this.pendingOtp = { otpId: otpId!, orgId };
   }
 
   /**
@@ -266,14 +275,13 @@ export class AuthClient {
     }
     const { otpId, orgId } = this.pendingOtp;
     const { targetPublicKey } = await this.getTekStamper();
-    const { credentialBundle } = await this.dev_request("otp", {
-      otpId,
-      otpCode,
-      orgId,
-      targetPublicKey,
+    const { credentialBundle } = await this.signerHttpClient.request({
+      route: "signer/v1/otp",
+      method: "POST",
+      body: { otpId, otpCode, orgId, targetPublicKey },
     });
     this.pendingOtp = null;
-    return this.completeAuthWithBundle({ bundle: credentialBundle, orgId });
+    return this.completeAuthWithBundle({ bundle: credentialBundle!, orgId });
   }
 
   /**
@@ -302,8 +310,10 @@ export class AuthClient {
     params: LoginWithOauthParams,
   ): Promise<AuthSession> {
     const { targetPublicKey } = await this.getTekStamper();
-    const oauthConfig = await this.dev_request("prepare-oauth", {
-      nonce: getOauthNonce(targetPublicKey),
+    const oauthConfig = await this.signerHttpClient.request({
+      route: "signer/v1/prepare-oauth",
+      method: "POST",
+      body: { nonce: getOauthNonce(targetPublicKey) },
     });
     const authUrl = getOauthProviderUrl({
       oauthParams:
@@ -374,7 +384,6 @@ export class AuthClient {
         idToken: callbackParams.idToken,
       });
     }
-    console.log("No OAuth callback parameters found");
     return null;
   }
 
@@ -415,7 +424,7 @@ export class AuthClient {
       throw new Error("Failed to inject credential bundle");
     }
     const authSession = await AuthSession.create({
-      apiKey: this.apiKey,
+      signerHttpClient: this.signerHttpClient,
       stamper,
       orgId,
       idToken,
@@ -436,11 +445,6 @@ export class AuthClient {
       })();
     }
     return this.tekStamperPromise;
-  }
-
-  // TODO: remove this and use transport instead once it's ready.
-  private dev_request(path: string, body: unknown): Promise<any> {
-    return dev_request(this.apiKey, path, body);
   }
 }
 

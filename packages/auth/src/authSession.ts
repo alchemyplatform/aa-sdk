@@ -15,12 +15,11 @@ import type {
   TurnkeyStamper,
   User,
 } from "./types";
-import { dev_request } from "./devRequest.js";
+import type { AlchemyRestClient } from "@alchemy/common";
+import type { SignerHttpSchema } from "@alchemy/aa-infra";
 
 export type CreateAuthSessionParams = {
-  // TODO: replace apiKey with transport once it's ready.
-  // transport: AlchemyTransport;
-  apiKey: string;
+  signerHttpClient: AlchemyRestClient<SignerHttpSchema>;
   stamper: TurnkeyStamper;
   orgId: string;
   idToken: string | undefined;
@@ -39,14 +38,13 @@ export class AuthSession {
   private isDisconnected = false;
 
   private constructor(
-    // TODO: replace apiKey with transport once it's ready.
-    private readonly apiKey: string,
+    private readonly signerHttpClient: AlchemyRestClient<SignerHttpSchema>,
     private readonly turnkey: TurnkeyClient,
     private readonly user: User,
   ) {}
 
   public static async create({
-    apiKey,
+    signerHttpClient,
     stamper,
     orgId,
     idToken: _,
@@ -58,14 +56,17 @@ export class AuthSession {
     const stampedRequest = await turnkey.stampGetWhoami({
       organizationId: orgId,
     });
-    // TODO: use the transport to make this call once it's finalized.
-    const whoamiResponse = await dev_request(apiKey, "whoami", {
-      stampedRequest,
+    const whoamiResponse = await signerHttpClient.request({
+      route: "signer/v1/whoami",
+      method: "POST",
+      body: {
+        stampedRequest,
+      },
     });
     // TODO: combine whoami response with idToken to get the full user object.
     // For now, just return the whoami response.
     const user = whoamiResponse;
-    return new AuthSession(apiKey, turnkey, user);
+    return new AuthSession(signerHttpClient, turnkey, user);
   }
 
   public getAddress(): Address {
@@ -99,8 +100,10 @@ export class AuthSession {
       },
     });
 
-    const { signature } = await this.dev_request("sign-payload", {
-      stampedRequest,
+    const { signature } = await this.signerHttpClient.request({
+      route: "signer/v1/sign-payload",
+      method: "POST",
+      body: { stampedRequest },
     });
     return signature;
   };
@@ -162,11 +165,6 @@ export class AuthSession {
     if (this.isDisconnected) {
       throw new Error("Auth session has been disconnected");
     }
-  }
-
-  // TODO: remove this and use transport instead once it's ready.
-  private dev_request(path: string, body: unknown): Promise<any> {
-    return dev_request(this.apiKey, path, body);
   }
 }
 
