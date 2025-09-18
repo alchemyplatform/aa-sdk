@@ -82,22 +82,6 @@ navigation:
               - page: Multi-chain setup
                 slug: recipes/multi-chain-setup
                 path: wallets/pages/recipes/multi-chain-setup.mdx
-          - section: Concepts
-            contents:
-              - page: Intro to Smart Wallets
-                path: wallets/pages/concepts/intro-to-account-kit.mdx
-              - page: Smart Contract Account
-                path: wallets/pages/concepts/smart-contract-account.mdx
-              - page: Smart Account Client
-                path: wallets/pages/concepts/smart-account-client.mdx
-              - page: Bundler Client
-                path: wallets/pages/concepts/bundler-client.mdx
-              - page: Middleware
-                path: wallets/pages/concepts/middleware.mdx
-              - page: What is a signer?
-                path: wallets/pages/authentication/what-is-a-signer.mdx
-              - page: Intro to Account Kit
-                path: wallets/pages/overview/sdk-concepts/intro-to-account-kit.mdx
           - page: Supported Chains
             path: wallets/pages/overview/supported-chains.mdx
 
@@ -157,14 +141,14 @@ navigation:
                 path: wallets/pages/react/mfa/email-magic-link.mdx
               - page: Social login
                 path: wallets/pages/react/mfa/social-login.mdx
+          - page: Solana wallets
+            path: wallets/pages/react/solana-wallets/get-started.mdx
           - section: Account management
             contents:
               - page: Pregenerate wallets
                 path: wallets/pages/react/pregenerate-wallets.mdx
               - page: User sessions
                 path: wallets/pages/signer/user-sessions.mdx
-              - page: Using Solana Signer
-                path: wallets/pages/react/solana-wallets/get-started.mdx
               - section: Policies
                 contents:
                   - page: Overview
@@ -187,6 +171,8 @@ navigation:
                 path: wallets/pages/signer/export-private-key.mdx
           - page: Third party signers
             path: wallets/pages/third-party/signers.mdx
+          - page: What is a signer?
+            path: wallets/pages/authentication/what-is-a-signer.mdx
 
       - section: Transactions
         contents:
@@ -1140,6 +1126,8 @@ navigation:
           - page: Features
             slug: wallets/resources/features
             path: wallets/pages/features.mdx
+          - page: Understanding Smart Wallets
+            path: wallets/pages/concepts/intro-to-account-kit.mdx
           - link: GitHub
             href: https://github.com/alchemyplatform/aa-sdk
           - link: Changelog
@@ -1157,6 +1145,10 @@ navigation:
           - page: Types
             slug: resources/types
             path: wallets/pages/resources/types.mdx
+          - page: Smart Account Client
+            path: wallets/pages/concepts/smart-account-client.mdx
+          - page: Middleware
+            path: wallets/pages/concepts/middleware.mdx
           - section: Smart Account Types
             contents:
               - page: Choosing a Smart Account

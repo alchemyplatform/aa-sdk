@@ -54,6 +54,8 @@ When a delegation is required the response to prepare calls will return an array
 
 Both of these requests need to be signed and included in the `sendPreparedCalls` request. `sendPreparedCalls` takes
 an array of signed calls for this purpose. These signatures are combined into a single transaction that is relayed onchain.
+Once the delegation is signed, as long as the user doesn't delegate to another account, subsequent requests will only
+contain the user operation signature request.
 
 Signing an authorization signature request requires logic specific to the wallet being used. Examples:
 
@@ -94,6 +96,10 @@ Viem has a guide for this [here](https://viem.sh/docs/eip7702/contract-writes).
 
 To reset an account back to a pure EOA with no delegation, delegate the account to `0x0000000000000000000000000000000000000000` as defined in [EIP-7702](https://eips.ethereum.org/EIPS/eip-7702#behavior).
 
+</Accordion>
+
+<Accordion title="Third party signers">
+  <Markdown src="third-party.mdx" />
 </Accordion>
 
 ## Next steps
