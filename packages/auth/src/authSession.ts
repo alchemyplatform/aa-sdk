@@ -37,7 +37,7 @@ export type CreateAuthSessionParams = {
   /** Credential bundle for serialization (not needed for passkey) */
   bundle?: string;
   /** Authentication method used */
-  authType?: AuthType;
+  authType: AuthType;
   /** Credential ID for passkey authentication */
   credentialId?: string;
 };

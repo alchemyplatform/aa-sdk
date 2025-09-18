@@ -1,7 +1,7 @@
 import { AuthSession } from "./authSession.js";
 import type {
   AuthSessionState,
-  CompleteWithBundleAuthType,
+  AuthType,
   CreateTekStamperFn,
   CreateWebAuthnStamperFn,
   HandleOauthFlowFn,
@@ -435,7 +435,7 @@ export class AuthClient {
           bundle,
           orgId,
           idToken,
-          authType: type as "email" | "oauth" | "otp",
+          authType: type,
         });
       }
     }
@@ -448,12 +448,12 @@ export class AuthClient {
     bundle,
     orgId,
     idToken,
-    authType = "otp", // Default to otp for backward compatibility
+    authType,
   }: {
     bundle: string;
     orgId: string;
     idToken?: string;
-    authType?: CompleteWithBundleAuthType;
+    authType: Omit<AuthType, "passkey">;
   }): Promise<AuthSession> {
     const { stamper } = await this.getTekStamper();
     const success = await stamper.injectCredentialBundle(bundle);
@@ -466,7 +466,7 @@ export class AuthClient {
       orgId,
       idToken,
       bundle,
-      authType,
+      authType: authType as AuthType,
     });
     // Forget the reference to the TEK stamper, because in some implementations
     // it may become invalid if it is disconnected later. Future logins should

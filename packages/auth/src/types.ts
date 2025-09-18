@@ -208,9 +208,3 @@ export type AuthSessionState =
  * Available authentication methods supported by the AuthSession
  */
 export type AuthType = "email" | "oauth" | "otp" | "passkey";
-
-/**
- * Authentication types that require credential bundle for session creation
- * (excludes passkey which uses credential ID instead)
- */
-export type CompleteWithBundleAuthType = Omit<"passkey", AuthType>;

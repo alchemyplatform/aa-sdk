@@ -106,7 +106,7 @@ export function createWebAuthClient({
           const popup = window.open(
             authUrl,
             "_blank",
-            "popup,width=500,height=600"
+            "popup,width=500,height=600",
           );
           // const eventEmitter = this.eventEmitter;
           return new Promise((resolve, reject) => {
@@ -184,8 +184,8 @@ export function createWebAuthClient({
           return new Promise((_, reject) =>
             setTimeout(
               () => reject(new Error("Redirecting to OAuth provider...")),
-              1000
-            )
+              1000,
+            ),
           );
         default:
           throw new Error(`Unsupported OAuth mode: ${mode}`);
