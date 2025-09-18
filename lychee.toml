@@ -7,7 +7,6 @@ exclude = [
     ".*\\.png$",             # All PNG files 
     ".*\\.pdf$",             # All PDF files 
     ".*g\\.alchemy\\.com.*", # Any path containing g.alchemy.com - RPC endpoints require API keys
-    "^#.*",                  # Skip all hash/anchor links
 ]
 
 # Comma-separated list of accepted status codes for valid links.

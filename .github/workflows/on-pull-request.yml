@@ -119,8 +119,11 @@ jobs:
           sudo mv lychee /usr/local/bin/
           lychee --version
 
+      - name: Wait for preview deployment to stabilize
+        run: sleep 30
+
       - name: Check for broken links
-        run: yarn docs:broken-links --base-url "${{ needs.preview.outputs.preview-url }}"
+        run: yarn docs:broken-links --base-url "${{ needs.preview.outputs.preview-url }}" --max-retries 3 --retry-wait-time 5 --timeout 30
   
   lint:
     name: Lint
