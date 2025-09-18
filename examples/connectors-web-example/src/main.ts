@@ -1,4 +1,4 @@
-import { connect, disconnect, getAccount, reconnect, signMessage, sendTransaction, prepareTransactionRequest, watchAccount, sendCalls } from '@wagmi/core'
+import { connect, disconnect, getAccount, reconnect, signMessage, watchAccount } from '@wagmi/core'
 import { sendEmailOtp, submitOtpCode } from '@alchemy/wagmi-core'
 import { Buffer } from 'buffer'
 
@@ -35,23 +35,24 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
     <div id="email-auth">
       <h2>Alchemy Auth</h2>
       
-      <div>
-        <input type="email" id="email-input" placeholder="Enter your email" />
-        <button id="send-otp" type="button">Send OTP</button>
-      </div>
-      <div>
-        <input type="text" id="otp-input" placeholder="Enter OTP code" maxlength="6" />
-        <button id="submit-otp" type="button">Submit OTP</button>
-      </div>
+      <form id="email-form">
+        <input type="email" id="email-input" placeholder="Enter your email" required autocomplete="off" data-1p-ignore />
+        <button id="send-otp" type="submit">Send OTP</button>
+      </form>
+      <form id="otp-form">
+        <input type="text" id="otp-input" placeholder="Enter OTP code" maxlength="6" required autocomplete="off" data-1p-ignore />
+        <button id="submit-otp" type="submit">Submit OTP</button>
+      </form>
       <div id="auth-status"></div>
-      <div>
-        <input type="text" id="message-input" placeholder="Enter message" />
-        <button id="sign-message" type="button">Sign message</button>
-      </div>
-      <div>
-        <button id="send-transaction" type="button">Send transaction</button>
-        <button id="send-calls" type="button">Send calls</button>
-      </div>
+    </div>
+
+    <div id="wallet-actions">
+      <h2>Wallet Actions</h2>
+      
+      <form id="message-form">
+        <input type="text" id="message-input" placeholder="Enter message" required />
+        <button id="sign-message" type="submit">Sign message</button>
+      </form>
     </div>
   </div>
 `
@@ -108,21 +109,18 @@ function setupApp(element: HTMLDivElement) {
   })
 
   // Email OTP functionality
-  const sendOtpButton = element.querySelector<HTMLButtonElement>('#send-otp')
-  const submitOtpButton = element.querySelector<HTMLButtonElement>('#submit-otp')
+  const emailForm = element.querySelector<HTMLFormElement>('#email-form')
+  const otpForm = element.querySelector<HTMLFormElement>('#otp-form')
   const emailInput = element.querySelector<HTMLInputElement>('#email-input')
   const otpInput = element.querySelector<HTMLInputElement>('#otp-input')
   const authStatus = element.querySelector<HTMLDivElement>('#auth-status')
 
   // Signing functionality
+  const messageForm = element.querySelector<HTMLFormElement>('#message-form')
   const messageInput = element.querySelector<HTMLInputElement>('#message-input')
-  const signMessageButton = element.querySelector<HTMLButtonElement>('#sign-message')
 
-  // Transaction functionality
-  const sendTransactionButton = element.querySelector<HTMLButtonElement>('#send-transaction')
-  const sendCallsButton = element.querySelector<HTMLButtonElement>('#send-calls')
-
-  sendOtpButton?.addEventListener('click', async () => {
+  emailForm?.addEventListener('submit', async (e) => {
+    e.preventDefault()
     const email = emailInput?.value
     if (!email) {
       if (authStatus) authStatus.innerText = 'Please enter an email address'
@@ -140,7 +138,8 @@ function setupApp(element: HTMLDivElement) {
     }
   })
 
-  submitOtpButton?.addEventListener('click', async () => {
+  otpForm?.addEventListener('submit', async (e) => {
+    e.preventDefault()
     const otpCode = otpInput?.value
     if (!otpCode) {
       if (authStatus) authStatus.innerText = 'Please enter the OTP code'
@@ -156,7 +155,8 @@ function setupApp(element: HTMLDivElement) {
     }
   })
 
-  signMessageButton?.addEventListener('click', async () => {
+  messageForm?.addEventListener('submit', async (e) => {
+    e.preventDefault()
     const account = getAccount(config)
     if (account.status !== 'connected') {
       alert('Not connected')
@@ -174,45 +174,6 @@ function setupApp(element: HTMLDivElement) {
     } catch(err) {
       console.error(err)
       alert("Failed to sign message")
-    }
-  })
-
-  sendTransactionButton?.addEventListener('click', async () => {
-    const account = getAccount(config)
-    if (account.status !== 'connected') {
-      alert('Not connected')
-      return
-    }
-
-    try {
-      // Send a 0 ETH transaction to self.
-      const prepared = await prepareTransactionRequest(config, { to: account.addresses![0], value: 0n })
-      console.log({ prepared })
-
-      const sent = await sendTransaction(config as any, prepared)
-      console.log({ sent })
-      alert("Success")
-    } catch(err) {
-      console.error(err)
-      alert("Failed to send transaction")
-    }
-  })
-
-  sendCallsButton?.addEventListener('click', async () => {
-    const account = getAccount(config)
-    if (account.status !== 'connected') {
-      alert('Not connected')
-      return
-    }
-
-    try {
-      // Send two 0 ETH transactions to self.
-      const sent = await sendCalls(config as any, {calls: [{ to: account.addresses![0], value: 0n }, { to: account.addresses![0], value: 0n }]})
-      console.log({ sent })
-      alert("Success")
-    } catch(err) {
-      console.error(err)
-      alert("Failed to send transaction")
     }
   })
 

@@ -2,7 +2,7 @@ import { createConnector } from "@wagmi/core";
 import { createWebAuthClient } from "@alchemy/auth-web";
 import type { AuthClient } from "@alchemy/auth";
 import type { AuthSession } from "@alchemy/auth";
-import { createPublicClient, type Address } from "viem";
+import { type Address } from "viem";
 
 // TODO: Support other connection config options.
 export interface AlchemyAuthOptions {
@@ -125,23 +125,7 @@ export function alchemyAuth(parameters: AlchemyAuthOptions = {}) {
           "No auth session available. Please authenticate first.",
         );
       }
-      const chainId = _chainId ?? (await this.getChainId());
-      const transport = config.transports?.[chainId];
-      if (!transport) {
-        throw new Error(
-          `No transport configured for chain ID ${chainId}. Please configure transports in your wagmi config.`,
-        );
-      }
-
-      // TODO(jh): does this need to handle switching chains,
-      // or is everything fine since wagmi actions internally
-      // call `connector.getProvider` every time a wallet
-      // action is performed?
-      const publicClient = createPublicClient({
-        transport,
-        chain: config.chains.find((x) => x.id === chainId),
-      });
-      return authSessionInstance.getProvider(publicClient);
+      return authSessionInstance.getProvider();
     },
 
     async isAuthorized() {

@@ -3,7 +3,6 @@ import {
   hashMessage,
   hashTypedData,
   type Address,
-  type Client,
   type HashTypedDataParameters,
   type Hex,
   type SignableMessage,
@@ -167,11 +166,11 @@ export class AuthSession {
     }
   }
 
-  public getProvider(publicClient?: Client): AlchemyAuthEip1193Provider {
+  public getProvider(): AlchemyAuthEip1193Provider {
     if (this.isDisconnected) {
       throw new Error("Signer is disconnected");
     }
-    return create1193Provider(this, publicClient);
+    return create1193Provider(this);
   }
 
   // TODO: remove this and use transport instead once it's ready.
