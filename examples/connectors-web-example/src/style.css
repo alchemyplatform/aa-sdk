@@ -20,8 +20,134 @@
   }
 }
 
-input {  
-  width: 30ch;
+#oauth-auth, #email-auth, #wallet-actions, #session-controls {
+  margin: 20px 0;
+  padding: 20px;
+  border: 1px solid #333;
+  border-radius: 8px;
+}
+
+.oauth-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 15px;
+  align-items: flex-start;
+}
+
+.oauth-btn {
+  padding: 12px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 200px;
+}
+
+#oauth-google {
+  background: #4285f4;
+  color: white;
+}
+
+#oauth-google:hover {
+  background: #357ae8;
+}
+
+#oauth-facebook {
+  background: #1877f2;
+  color: white;
+}
+
+#oauth-facebook:hover {
+  background: #166fe5;
+}
+
+#oauth-apple {
+  background: #000;
+  color: white;
+}
+
+#oauth-apple:hover {
+  background: #333;
+}
+
+.disconnect-btn {
+  background: #666;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.disconnect-btn:hover {
+  background: #555;
+}
+
+#disconnect-status {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.oauth-mode {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.oauth-mode label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+}
+
+#oauth-status {
+  margin-top: 10px;
+  padding: 8px;
+  border-radius: 4px;
+  font-size: 14px;
+  min-height: 20px;
 }
 
 
+input[type="text"], input[type="email"] {
+  padding: 8px 12px;
+  margin: 5px;
+  border: 1px solid #333;
+  border-radius: 4px;
+  background: transparent;
+  color: inherit;
+  width: 32ch;
+}
+
+#email-auth button,
+#wallet-actions button {
+  padding: 8px 16px;
+  margin: 5px;
+  background: #10b981;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  min-width: 16ch;
+}
+
+#email-auth button:hover,
+#wallet-actions button:hover {
+  background: #059669;
+}
+
+@media (prefers-color-scheme: light) {
+  #oauth-auth, #email-auth, #wallet-actions, #session-controls {
+    border-color: #ddd;
+  }
+
+  input[type="text"], input[type="email"] {
+    border-color: #ddd;
+  }
+}

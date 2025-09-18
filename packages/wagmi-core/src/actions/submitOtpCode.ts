@@ -1,5 +1,4 @@
-import type { Config } from "wagmi";
-import { connect } from "@wagmi/core";
+import { connect, type Config } from "@wagmi/core";
 import { resolveAlchemyAuthConnector } from "@alchemy/connectors-web";
 
 export type SubmitOtpCodeParameters = {
