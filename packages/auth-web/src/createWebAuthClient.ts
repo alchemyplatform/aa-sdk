@@ -83,7 +83,7 @@ export function createWebAuthClient({
     return iframeContainer;
   };
 
-  return new AuthClient({
+  return AuthClient.create({
     apiKey,
 
     createTekStamper:

@@ -44,6 +44,7 @@
   },
   "dependencies": {
     "@alchemy/common": "*",
+    "@alchemy/aa-infra": "*",
     "viem": "2.29.2"
   },
   "publishConfig": {

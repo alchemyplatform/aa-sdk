@@ -28,5 +28,3 @@ export type AlchemyJsonRpcSchema = [
     ReturnType: RequestGasAndPaymasterAndDataResponse;
   },
 ];
-
-export type AlchemyHttpSchema = [];

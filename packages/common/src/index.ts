@@ -1,3 +1,8 @@
+// http
+export type * from "./rest/restClient.js";
+export type * from "./rest/types.js";
+export { AlchemyRestClient } from "./rest/restClient.js";
+
 // transport
 export type * from "./transport/alchemy.js";
 export { alchemyTransport, isAlchemyTransport } from "./transport/alchemy.js";
