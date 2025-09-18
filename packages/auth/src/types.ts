@@ -213,4 +213,4 @@ export type AuthType = "email" | "oauth" | "otp" | "passkey";
  * Authentication types that require credential bundle for session creation
  * (excludes passkey which uses credential ID instead)
  */
-export type CompleteWithBundleAuthType = "email" | "oauth" | "otp";
+export type CompleteWithBundleAuthType = Omit<"passkey", AuthType>;
