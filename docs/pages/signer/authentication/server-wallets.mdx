@@ -4,7 +4,12 @@ description: Control wallets programmatically using access keys
 slug: wallets/authentication/login-methods/server-wallets
 ---
 
-<Warning>**This feature is in early access.**</Warning>
+<Tip>
+  Server wallets are in early access and we'd love to hear how you're using
+  them! Contact us at contact@alchemy.com or through your Slack channel if
+  you're interested in using this feature- we'd love to help you get up and
+  running.
+</Tip>
 
 Server wallets can be programmatically controlled using access keys. This enables backend applications to sign transactions and messages on behalf of users without requiring interactive authentication.
 
@@ -16,7 +21,14 @@ Get your **API key** by creating a new app in your [Alchemy Dashboard](https://d
 
 ## Step 1: Generate an Access Key
 
-Generate a secure access key for authentication. This key will never be sent to our servers - we'll derive a public key from it when interacting with Alchemy. Store this key securely, you'll need it to access the wallet in the future.
+Generate a secure access key for authentication. This key will never be sent to our servers - we'll derive a public key from it when interacting with Alchemy.
+
+<Warning>
+**Critical: Save your access key securely!**
+
+This access key is required to control your server wallet and cannot be recovered if lost. Make sure to store it in a secure location.
+
+</Warning>
 
 <CodeBlocks>
 
