@@ -5,6 +5,7 @@ import {
   type Address,
   type HashTypedDataParameters,
   type Hex,
+  type LocalAccount,
   type SignableMessage,
 } from "viem";
 import type {
@@ -16,6 +17,7 @@ import type {
   User,
 } from "./types";
 import { dev_request } from "./devRequest.js";
+import { toLocalAccount } from "./toLocalAccount.js";
 
 export type CreateAuthSessionParams = {
   // TODO: replace apiKey with transport once it's ready.
@@ -162,6 +164,11 @@ export class AuthSession {
     if (this.isDisconnected) {
       throw new Error("Auth session has been disconnected");
     }
+  }
+
+  public async toLocalAccount(): LocalAccount {
+    this.throwIfDisconnected();
+    return toLocalAccount(this);
   }
 
   // TODO: remove this and use transport instead once it's ready.
