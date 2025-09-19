@@ -1,0 +1,95 @@
+---
+title: Quickstart
+description: Set up authentication in the Dashboard so users can sign in
+slug: wallets/authentication/quickstart
+---
+
+## Overview
+
+Set up authentication in the Dashboard so users can sign in and start using their wallet.
+
+## Prerequisites
+
+- App created in the Dashboard
+
+## 1. Enable login methods
+
+In the Dashboard, open the authentication settings and enable the login methods you want to support. See the [login methods](/wallets/authentication/login-methods/social-login) section for more details.
+
+<img
+  src="/images/wallets/dashboard-enable-social-auth.png"
+  alt="Enable the social auth you want to support"
+  style={{ width: "100%" }}
+/>
+
+### Custom clients
+
+Optional: If you bring your own OAuth 2.0 client ID and secret instead of using the default managed clients,
+make sure that you allow the signer callback URL in the OAuth provider's settings (usually labeled "Authorized redirect URIs"). Use this callback URL: `https://signer.alchemy.com/callback`.
+
+<Info>
+  Do not add your app's redirect URI here. You will allow your app's redirect
+  URI in a later step.
+</Info>
+
+For example, this is how you'd add the alchemy callback url for Google OAuth
+
+<img
+  src="/images/wallets/google-alchemy-callback-whitelist.png"
+  alt="Allow the signer callback URL in your OAuth provider settings"
+  style={{ width: "100%" }}
+/>
+
+## 2. Choose an authentication mode
+
+Choose between two modes: `popup` or `redirect`. These modes control your application's navigation flow and how the OAuth provider's authentication is accessed.
+
+- `popup`: Stays on current page, opens a popup to the selected provider and, after sign-in, injects user credentials into the current session.
+
+- `redirect`: Performs a full-page redirect to the provider. After sign-in it injects user credentials into the current session and redirects to a deep link (for React Native) or a webpage that you choose.
+
+<Tabs>
+  <Tab title="Redirect">
+    ```ts twoslash
+    await authenticateAsync({
+      // For react native this can be a direct deeplink in your app e.g. account-kit-expo-quickstart://home
+      // or a webpage that deeplinks to a page in your app
+      redirectUrl: "https://demo.alchemy.com/",
+      mode: "redirect",
+      authProviderId: "google",
+      type: "oauth",
+    });
+    ```
+
+  </Tab>
+  <Tab title="Popup">
+    <Info>Not supported on React Native</Info>
+    ```ts twoslash
+    await authenticateAsync({
+      mode: "popup",
+      authProviderId: "google",
+      type: "oauth",
+    });
+    ```
+  </Tab>
+</Tabs>
+
+### Allow redirect URIs
+
+If you use `redirect`, you must allow your redirect URI in the Dashboard.
+
+<Info>
+  If you redirect to a webpage that then redirects to a React Native in-app deep
+  link, allow the deep link, not the webpage.
+</Info>
+
+<img
+  src="/images/wallets/dashboard-redirect-whitelist.png"
+  alt="Allow your app's redirect URI in the Dashboard"
+  style={{ width: "100%" }}
+/>
+
+## 3. Next Steps
+
+You should be fully set up to enable users to log in now, common next steps are building out the UI for this authentication flow
+and starting to sign and send transactions for users.
