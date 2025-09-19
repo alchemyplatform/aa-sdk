@@ -24,8 +24,8 @@ import { p256 } from "@noble/curves/p256";
 import { bytesToHex } from "@noble/curves/utils";
 
 /**
- * AlchemyApiKeySigner is a signer that can sign messages and typed data using an API key.
- * It extends the SmartAccountSigner interface and uses the ApiKeySignerClient to sign messages and typed data.
+ * AlchemyServerSigner is a signer that can sign messages and typed data using an access key.
+ * It extends the SmartAccountSigner interface and uses the ServerSignerClient to sign requests.
  * Primarily intended to be used server-side.
  */
 export class AlchemyServerSigner implements SmartAccountSigner {
@@ -33,7 +33,7 @@ export class AlchemyServerSigner implements SmartAccountSigner {
   signerType = "alchemy-server-signer";
 
   /**
-   * Creates an instance of AlchemyApiKeySigner.
+   * Creates an instance of AlchemyServerSigner.
    *
    * @param {ServerSignerClient} client The underlying signer client
    */
@@ -108,7 +108,7 @@ export class AlchemyServerSigner implements SmartAccountSigner {
    * import { AlchemyServerSigner } from "@account-kit/signer";
    *
    * const signer = await createServerSigner({
-   *   auth: { keyPair },
+   *   auth: { accessKey },
    *   connection: {
    *     apiKey: "alchemy-api-key",
    *   },
@@ -129,37 +129,24 @@ type CreateServerSignerParams = ServerSignerClientParams & {
 };
 
 /**
- * Creates a SmartAccountSigner using an AlchemyApiKeySignerClient.
+ * Creates a new server signer.
  *
  * @example
  * ```ts
- *  const signer = await createApiKeySigner({
- *   apiKey: {
- *     privateKey: "private-api-key",
- *     publicKey: "public-api-key",
- *   },
+ *  const signer = await createServerSigner({
+ *   auth: { accessKey },
  *   connection: {
  *     apiKey: "alchemy-api-key",
- *   },
- *   userOrgId: 'user-org-id',
+ *   }
  * });
  *
- * const account = await createModularAccountV2({
- *   transport,
- *   signer,
- *   chain,
- * });
- *
- * const client = createAlchemySmartAccountClient({
- *   account,
- *   transport,
- *   chain,
- * });
+ * console.log("Signer address:", await signer.getAddress());
  * ```
  *
- * @param {CreateApiKeySignerParams} params Parameters including the connection config, api key, and user org ID
- * @returns {Promise<CreateApiKeySignerResponse>} A promise that resolves to a SmartAccountSigner
- * @throws {Error} If the API key is invalid for the given orgId
+ * @param {CreateServerSignerParams} params Parameters
+ * @param {AccessKeyAuthParams} params.auth Authentication config for the server signer
+ * @param {ConnectionConfig} params.connection Connection config for the server signer
+ * @returns {Promise<AlchemyServerSigner>} A promise that resolves to a server signer
  */
 export const createServerSigner = async (
   params: CreateServerSignerParams,

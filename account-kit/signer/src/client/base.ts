@@ -187,9 +187,7 @@ export abstract class BaseSignerClient<
     }
 
     if (params.type === "accessKey") {
-      // Accounts created with access keys should always be created server-side, otherwise
-      // it opens up a potential risk of users being able to create an account associated
-      // with an email address that is not their own.
+      // Developers should use the server signer to create accounts with access keys
       throw new UnsupportedFeatureError("Access key auth");
     }
 

@@ -27,21 +27,21 @@ const createDummyStamper = () => {
 };
 
 /**
- * ApiKeySignerClient is a client for signing messages using an API key.
+ * ServerSignerClient is a client for signing messages using an access key.
  * It extends the BaseSignerClient and uses the ApiKeyStamper for signing.
  * Primarily intended to be used server-side.
  */
 export class ServerSignerClient extends BaseSignerClient<undefined> {
   /**
-   * Creates an instance of ApiKeySignerClient.
+   * Creates an instance of ServerSignerClient.
    *
-   * @param {ServerSignerClientParams} params The parameters for the client, including the API key and connection config
+   * @param {ServerSignerClientParams} params The parameters for the client, including the access key and connection configuration
    * @param {ConnectionConfig} params.connection The connection configuration for the client
-   * @param {string} params.apiKey.publicKey The public key of the API key
-   * @param {string} params.apiKey.privateKey The private key of the API key
+   * @param {string} params.accessKey The access key to be used for authentication
+   * @param {string | undefined} params.accountId An optional ID to identify the account. Only required when using a single access key for multiple signers.
    */
   constructor({ connection }: ServerSignerClientParams) {
-    // we will re-recreate the turnkey client (including the stamper) when we authenticate with an api key
+    // we will re-recreate the turnkey client (including the stamper) when we authenticate
     const stamper = createDummyStamper();
 
     super({ connection, stamper });
@@ -58,8 +58,8 @@ export class ServerSignerClient extends BaseSignerClient<undefined> {
    * Creates a new user with the given parameters.
    *
    * @param {CreateAccountParams} params The parameters for creating the account
-   * @param {string} params.type The type of account to create (only "apiKey" is supported)
-   * @param {string} params.publicKey The public key to use to authenticate on behalf of the user
+   * @param {string} params.type The type of account to create (only "accessKey" is supported)
+   * @param {string} params.accessKey The public key to use to authenticate on behalf of the user
    * @param {string} params.email The email address associated with the user (optional)
    * @returns {Promise<SignupResponse>} A promise that resolves to the signup response
    */
@@ -81,7 +81,7 @@ export class ServerSignerClient extends BaseSignerClient<undefined> {
   };
 
   /**
-   * Authenticates the user with an API key.
+   * Authenticates the user with an access key.
    *
    * @param {Extract<AuthParams, { type: "accessKey" }>} params The parameters for the authentication
    * @returns {Promise<User>} A promise that resolves to the user
@@ -129,6 +129,10 @@ export class ServerSignerClient extends BaseSignerClient<undefined> {
     return user;
   };
 
+  /**
+   * Unimplemented functions for server signer.
+   * Required to extend the BaseSignerClient class.
+   */
   public initSmsAuth = unimplementedFunction("Sms auth");
   public submitJwt = unimplementedFunction("Jwt");
   protected initSessionStamper = unimplementedFunction("Sessions");
@@ -139,7 +143,6 @@ export class ServerSignerClient extends BaseSignerClient<undefined> {
   override oauthWithRedirect = unimplementedFunction("OAuth redirect");
   override oauthWithPopup = unimplementedFunction("OAuth popup");
   override exportWallet = unimplementedFunction("Wallet export");
-  override lookupUserWithPasskey = unimplementedFunction("WebAuthn");
   override targetPublicKey = unimplementedFunction("Target public key");
   override getWebAuthnAttestation = unimplementedFunction(
     "WebAuthn attestation",
