@@ -109,6 +109,8 @@ navigation:
                 path: wallets/pages/react/add-passkey.mdx
               - page: "[NEW] On-chain passkeys"
                 path: wallets/pages/react/login-methods/onchain-passkeys.mdx
+              - page: SMS login
+                path: wallets/pages/authentication/login-methods/sms-login.mdx
               - page: Adding and removing login methods
                 path: wallets/pages/react/login-methods/adding-and-removing-login-methods.mdx
           - section: UI components

@@ -1,0 +1,162 @@
+---
+title: SMS Authentication
+description: How to authenticate users with phone number and SMS OTP code
+slug: wallets/authentication/login-methods/sms-login
+---
+
+<Info>
+  SMS auth is currently in closed alpha. If you'd like early access please reach
+  out to contact@alchemy.com
+</Info>
+
+Authenticate users with their phone number by sending verification codes via SMS.
+
+## How It Works
+
+SMS authentication is a two-step process:
+
+1. The user enters their phone number and requests a verification code. This will trigger a text message with a 6-digit code to their phone number.
+2. The user enters the 6-digit code they receive via SMS to complete authentication
+
+The SDK will handle phone number validation, code generation, and delivery automatically.
+
+Pricing varies by country and requires specific area codes to be enabled for your account. An overview of the current SMS costs can be found below.
+
+## Prerequisites
+
+- Early access to SMS auth configured on your account: [Request early access!]()
+- API key from your [dashboard](https://dashboard.alchemy.com/apps)
+- [Smart Wallets installed and configured in your project](/docs/wallets/pages/react/setup.mdx)
+- [A "pay gas with any token" policy](https://dashboard.alchemy.com/gas-manager/policy/create)
+- SDK version ≥v4.53.0
+
+## Implementation
+
+<Tabs>
+  <Tab title="React">
+    <Info>
+      SMS auth is not yet supported with pre-built UI components. Please follow
+      [this guide](/wallets/react/react-hooks) to
+      set up custom UI and configure authentication with hooks.
+    </Info>
+    ### Step 1: Send the SMS verification code
+    Ensure you pass the phone number including the country code in the format `+<country code><phone number>`.
+    ```tsx twoslash
+    import { useAuthenticate } from "@account-kit/react"
+
+    const { authenticate } = useAuthenticate()
+
+    const handleSendCode = (email: string) => {
+      authenticate(
+        { type: "sms", phone: "+123456789" },
+        {
+          onSuccess: () => {
+            // onSuccess only fires once the entire flow is done (email OTP + optional MFA).
+            // It still runs even if the final step completes in another tab/window.
+          },
+          onError: (error) => {
+            // Handle error
+          },
+        },
+      );
+    };
+    ```
+
+    ### Step 2: Show OTP input on status change
+    Use the `useSignerStatus` hook and `AlchemySignerStatus` enum to react to status changes:
+
+    ```tsx twoslash
+    import React from "react";
+    import { useSignerStatus } from "@account-kit/react";
+    import { AlchemySignerStatus } from "@account-kit/signer";
+
+    const TrackStatus = () => {
+      const { status } = useSignerStatus();
+
+      return (
+        <>
+          {status === AlchemySignerStatus.AWAITING_SMS_AUTH && (
+            <div>Prompt the user to enter the OTP code received via SMS</div>
+          )}
+        </>
+      );
+    };
+    ```
+
+    ### Step 3: Verify the OTP code
+    ```tsx twoslash
+    import { useAuthenticate } from "@account-kit/react";
+
+    const { authenticate } = useAuthenticate();
+
+    // When the user submits the OTP code
+    const handleVerifyCode = (otpCode: string) => {
+      authenticate(
+        {
+          type: "otp",
+          otpCode,
+        },
+        {
+          onSuccess: () => {
+            // onSuccess only fires once the entire flow is done (SMS OTP).
+          },
+          onError: (error) => {
+            // Handle invalid code error
+          },
+        },
+      );
+    };
+    ```
+
+    ### Step 4: Check authentication status
+
+    Use the `useSignerStatus` hook to determine if the user is authenticated:
+
+    ```tsx twoslash
+    import { useSignerStatus } from "@account-kit/react";
+
+    // Inside your component
+    const { isConnected } = useSignerStatus();
+
+    // You can use isConnected to conditionally render UI
+    ```
+    <Tab title="React Native">
+    <Info>
+      SMS auth is not yet supported with pre-built UI components. Please follow
+      [this guide](/wallets/react-native/overview) to
+      set up custom UI and configure authentication with hooks.
+    </Info>
+    ```tsx
+    import { useAuthenticate } from "@account-kit/react-native"
+
+    ...
+    const { authenticate } = useAuthenticate()
+
+    // send sms verification code
+    authenticate({ type: "sms", phone: "+123456789" })
+    ...
+    // verify sms verification code
+    authenticate({ type: "otp", otpCode: "123456" })
+    ```
+    </Tab>
+
+  </Tab>
+  <Tab title="Javascript">
+    <Info>Ensure you've set up your project by following [this](/wallets/core/quickstart) guide first.</Info>
+    ```ts
+    import { AlchemyWebSigner } from "@account-kit/signer"
+    const signer = new AlchemyWebSigner(...)
+
+    // send sms verification code
+    await signer.authenticate({ type: "sms", phone: "+123456789" })
+    ...
+    // verify sms verification code
+    await signer.authenticate({ type: "otp", otpCode: "123456" })
+    ```
+
+  </Tab>
+</Tabs>
+
+## Next Steps
+
+- Send [transactions](/wallets/pages/transactions/send-transactions/index)
