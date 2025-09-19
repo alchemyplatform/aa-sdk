@@ -44,14 +44,14 @@ export const create1193Provider = (
       switch (method) {
         case "eth_requestAccounts":
         case "eth_accounts": {
-          return handler<"eth_accounts">(async () => {
+          return await handler<"eth_accounts">(async () => {
             const address = authSession.getAddress();
             return [address];
           })(params);
         }
 
         case "personal_sign": {
-          return handler<"personal_sign">(async ([data, address]) => {
+          return await handler<"personal_sign">(async ([data, address]) => {
             if (
               address?.toLowerCase() !== authSession.getAddress().toLowerCase()
             ) {
@@ -68,22 +68,25 @@ export const create1193Provider = (
         }
 
         case "eth_signTypedData_v4": {
-          return handler<"eth_signTypedData_v4">(async ([address, tdJson]) => {
-            if (
-              address?.toLowerCase() !== authSession.getAddress().toLowerCase()
-            ) {
-              throw new InvalidRequestError(
-                "Cannot sign for an address other than the current account.",
-              );
-            }
-            return await authSession.signTypedData({
-              ...(JSON.parse(tdJson) as TypedDataDefinition),
-            });
-          })(params);
+          return await handler<"eth_signTypedData_v4">(
+            async ([address, tdJson]) => {
+              if (
+                address?.toLowerCase() !==
+                authSession.getAddress().toLowerCase()
+              ) {
+                throw new InvalidRequestError(
+                  "Cannot sign for an address other than the current account.",
+                );
+              }
+              return await authSession.signTypedData({
+                ...(JSON.parse(tdJson) as TypedDataDefinition),
+              });
+            },
+          )(params);
         }
 
         case "eth_sign": {
-          return handler<"eth_sign">(async ([address, data]) => {
+          return await handler<"eth_sign">(async ([address, data]) => {
             if (
               address?.toLowerCase() !== authSession.getAddress().toLowerCase()
             ) {
@@ -100,7 +103,7 @@ export const create1193Provider = (
         }
 
         case "wallet_disconnect": {
-          return handler<"wallet_disconnect">(async () => {
+          return await handler<"wallet_disconnect">(async () => {
             await authSession.disconnect();
             eventEmitter.emit("disconnect");
           })(params);

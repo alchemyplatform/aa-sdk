@@ -3,6 +3,7 @@ import {
   it,
   expect,
   beforeEach,
+  afterEach,
   vi,
   type MockedFunction,
 } from "vitest";
@@ -11,9 +12,8 @@ import { create1193Provider } from "./provider.js";
 import { AuthSession } from "./authSession.js";
 import type { AlchemyAuthEip1193Provider } from "./provider.js";
 
-// Mock the global fetch function
+// Mock fetch function (will be stubbed in beforeEach)
 const mockFetch = vi.fn() as MockedFunction<typeof fetch>;
-vi.stubGlobal("fetch", mockFetch);
 
 // Mock AuthSession
 const mockAuthSession = {
@@ -30,10 +30,18 @@ describe("create1193Provider", () => {
   beforeEach(() => {
     vi.clearAllMocks();
 
+    // Mock fetch globally for this test suite
+    vi.stubGlobal("fetch", mockFetch);
+
     // Set up default mock implementations
     (mockAuthSession.getAddress as any).mockReturnValue(testAddress);
 
     provider = create1193Provider(mockAuthSession);
+  });
+
+  afterEach(() => {
+    // Clean up global fetch mock
+    vi.unstubAllGlobals();
   });
 
   describe("eth_accounts", () => {
@@ -92,7 +100,9 @@ describe("create1193Provider", () => {
           method: "personal_sign",
           params: [messageData, differentAddress],
         }),
-      ).rejects.toThrow(ProviderRpcError);
+      ).rejects.toThrow(
+        "Cannot sign for an address other than the current account.",
+      );
     });
 
     it("should handle signing errors from auth session", async () => {
@@ -104,7 +114,7 @@ describe("create1193Provider", () => {
           method: "personal_sign",
           params: [messageData, testAddress],
         }),
-      ).rejects.toThrow(ProviderRpcError);
+      ).rejects.toThrow("Signing failed");
     });
   });
 
@@ -162,7 +172,9 @@ describe("create1193Provider", () => {
           method: "eth_signTypedData_v4",
           params: [differentAddress, typedDataJson],
         }),
-      ).rejects.toThrow(ProviderRpcError);
+      ).rejects.toThrow(
+        "Cannot sign for an address other than the current account.",
+      );
     });
 
     it("should handle signing errors from auth session", async () => {
@@ -174,7 +186,7 @@ describe("create1193Provider", () => {
           method: "eth_signTypedData_v4",
           params: [testAddress, typedDataJson],
         }),
-      ).rejects.toThrow(ProviderRpcError);
+      ).rejects.toThrow("Signing failed");
     });
   });
 
@@ -212,7 +224,9 @@ describe("create1193Provider", () => {
           method: "eth_sign",
           params: [differentAddress, messageData],
         }),
-      ).rejects.toThrow(ProviderRpcError);
+      ).rejects.toThrow(
+        "Cannot sign for an address other than the current account.",
+      );
     });
 
     it("should handle signing errors from auth session", async () => {
@@ -224,7 +238,7 @@ describe("create1193Provider", () => {
           method: "eth_sign",
           params: [testAddress, messageData],
         }),
-      ).rejects.toThrow(ProviderRpcError);
+      ).rejects.toThrow("Signing failed");
     });
   });
 
@@ -249,7 +263,7 @@ describe("create1193Provider", () => {
         provider.request({
           method: "wallet_disconnect",
         }),
-      ).rejects.toThrow(ProviderRpcError);
+      ).rejects.toThrow("Disconnect failed");
     });
   });
 
@@ -260,7 +274,60 @@ describe("create1193Provider", () => {
           method: "eth_sendTransaction" as any,
           params: [] as any,
         }),
-      ).rejects.toThrow(ProviderRpcError);
+      ).rejects.toThrow("Unsupported method");
+    });
+  });
+
+  describe("error types and RPC codes", () => {
+    it("should throw ProviderRpcError with code -32600 for invalid address", async () => {
+      const differentAddress = "0x9876543210987654321098765432109876543210";
+
+      try {
+        await provider.request({
+          method: "personal_sign",
+          params: ["0x123", differentAddress],
+        });
+        expect.fail("Expected error to be thrown");
+      } catch (error) {
+        expect(error).toBeInstanceOf(ProviderRpcError);
+        expect((error as ProviderRpcError).code).toBe(-32600);
+        expect((error as Error).message).toContain(
+          "Cannot sign for an address other than the current account.",
+        );
+      }
+    });
+
+    it("should throw ProviderRpcError with code -32601 for unsupported method", async () => {
+      try {
+        await provider.request({
+          method: "eth_sendTransaction" as any,
+          params: [] as any,
+        });
+        expect.fail("Expected error to be thrown");
+      } catch (error) {
+        expect(error).toBeInstanceOf(ProviderRpcError);
+        expect((error as ProviderRpcError).code).toBe(-32601);
+        expect((error as Error).message).toContain(
+          "Unsupported method: eth_sendTransaction",
+        );
+      }
+    });
+
+    it("should throw ProviderRpcError with code -32603 for unexpected errors", async () => {
+      const unexpectedError = new Error("Something went wrong");
+      (mockAuthSession.signMessage as any).mockRejectedValue(unexpectedError);
+
+      try {
+        await provider.request({
+          method: "personal_sign",
+          params: ["0x123", testAddress],
+        });
+        expect.fail("Expected error to be thrown");
+      } catch (error) {
+        expect(error).toBeInstanceOf(ProviderRpcError);
+        expect((error as ProviderRpcError).code).toBe(-32603);
+        expect((error as Error).message).toContain("Something went wrong");
+      }
     });
   });
 });
