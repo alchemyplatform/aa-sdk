@@ -166,7 +166,7 @@ export class AuthSession {
     }
   }
 
-  public async toLocalAccount(): LocalAccount {
+  public toLocalAccount(): LocalAccount {
     this.throwIfDisconnected();
     return toLocalAccount(this);
   }

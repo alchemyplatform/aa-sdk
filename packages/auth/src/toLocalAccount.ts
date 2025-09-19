@@ -1,8 +1,8 @@
 import {
   type LocalAccount,
   type Hex,
-  type TypedDataDefinition,
   parseSignature,
+  type TypedDataDefinition,
 } from "viem";
 import type { AuthSession } from "./authSession.js";
 import type { SignAuthorizationReturnType } from "viem/actions";
@@ -14,6 +14,8 @@ export const toLocalAccount = (authSession: AuthSession): LocalAccount => {
     address,
     source: "alchemy-auth",
     type: "local",
+    // Ideally this would be the full public key instead of the
+    // address, but seems this isn't actually used by viem anywhere.
     publicKey: address,
     sign: async (params): Promise<Hex> => {
       return await authSession.signRawPayload({
@@ -25,9 +27,10 @@ export const toLocalAccount = (authSession: AuthSession): LocalAccount => {
       return await authSession.signMessage({ message: params.message });
     },
     signTypedData: async (params): Promise<Hex> => {
-      // TODO(jh): can we fix the type here w/o casting?
+      // TODO(jh): test that this casting is safe.
       return await authSession.signTypedData(params as TypedDataDefinition);
     },
+    // TODO(jh): test that this actually works.
     signAuthorization: async (params): Promise<SignAuthorizationReturnType> => {
       const { chainId, nonce } = params;
       const address = params.contractAddress ?? params.address;
