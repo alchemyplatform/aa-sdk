@@ -1,0 +1,105 @@
+---
+title: Sign typed data
+description: Sign EIP-712 typed data using with your Smart Wallet
+slug: wallets/transactions/signing/sign-typed-data
+---
+
+This guide will teach you how to sign EIP-712 typed data with your Smart Wallet. Typed data signing provides a more structured and secure way to sign complex data compared to plain text messages.
+
+## Prerequisites
+
+- API key from your [dashboard](https://dashboard.alchemy.com/apps)
+- A Smart Wallet with an associated signer
+
+## What is typed data signing?
+
+EIP-712 typed data signing allows users to:
+
+- **Sign structured data** with clear type definitions
+- **Improve user experience** with readable signature requests
+- **Enhance security** through type safety and domain separation
+
+Typed data follows the [EIP-712](https://eips.ethereum.org/EIPS/eip-712) standard, which provides a way to encode structured data for signing.
+
+## Implementation
+
+<Tabs>
+  <Tab title="React" language="react">
+    <Markdown src="react.mdx" />
+  </Tab>
+  <Tab title="JavaScript" language="javascript">
+    <Markdown src="client.mdx" />
+  </Tab>
+</Tabs>
+
+## Typed data structure
+
+EIP-712 typed data consists of four main components:
+
+### Domain
+
+The domain provides context and prevents signature reuse across different dApps:
+
+```ts
+const domain = {
+  name: "Example DApp",
+  version: "1",
+  chainId: 1,
+  verifyingContract: "0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC",
+};
+```
+
+### Types
+
+Define the structure of your data:
+
+```ts
+const types = {
+  Person: [
+    { name: "name", type: "string" },
+    { name: "wallet", type: "address" },
+  ],
+  Mail: [
+    { name: "from", type: "Person" },
+    { name: "to", type: "Person" },
+    { name: "contents", type: "string" },
+  ],
+};
+```
+
+### Primary type
+
+Specify which type is the main type being signed:
+
+```ts
+const primaryType = "Mail";
+```
+
+### Message
+
+The actual data to sign:
+
+```ts
+const message = {
+  from: {
+    name: "Alice",
+    wallet: "0xAaAaAaAaAaAaAaAaAaAAAAAAAAaaaAaAaAaaAaAa",
+  },
+  to: {
+    name: "Bob",
+    wallet: "0xBbBbBbBbBbBbBbBbBbBBBBBBBBbbBbBbBbbBbBb",
+  },
+  contents: "Hello, Bob!",
+};
+```
+
+## Next steps
+
+Build more:
+
+- [Sign messages](/wallets/transactions/signing/sign-messages)
+- [Send transactions](/wallets/transactions/send-transactions)
+
+Troubleshooting:
+
+- [Common errors](/wallets/resources/faqs#common-errors)
