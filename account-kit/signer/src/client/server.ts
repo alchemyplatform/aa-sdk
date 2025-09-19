@@ -58,9 +58,6 @@ export class ServerSignerClient extends BaseSignerClient<undefined> {
    * Creates a new user with the given parameters.
    *
    * @param {CreateAccountParams} params The parameters for creating the account
-   * @param {string} params.type The type of account to create (only "accessKey" is supported)
-   * @param {string} params.accessKey The public key to use to authenticate on behalf of the user
-   * @param {string} params.email The email address associated with the user (optional)
    * @returns {Promise<SignupResponse>} A promise that resolves to the signup response
    */
   public override createAccount = async (
