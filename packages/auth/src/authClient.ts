@@ -1,6 +1,5 @@
 import { AuthSession } from "./authSession.js";
 import type {
-  AuthSessionState,
   AuthType,
   CreateTekStamperFn,
   CreateWebAuthnStamperFn,
@@ -404,7 +403,7 @@ export class AuthClient {
     // TODO: figure out what the current passkey code is doing.
     // For new passkey authentication, credentialId would be undefined initially
     const stamper = await this.createWebAuthnStamper({
-      credentialId: credentialId ?? undefined,
+      credentialId,
     });
     return notImplemented(stamper);
   }
@@ -412,34 +411,54 @@ export class AuthClient {
   /**
    * Creates an instance of AuthSession from a previously saved authentication session state that has not expired.
    *
-   * @param {AuthSessionState} state - The saved authentication session state
-   * @returns {Promise<AuthSession | undefined>} A promise that resolves to an AuthSession instance if the session is valid, undefined otherwise
+   * This method takes a JSON string representation of a serialized AuthSessionState (typically obtained
+   * from AuthSession.getAuthSessionState()) and attempts to restore the authentication session.
+   * The method will validate the session expiration and handle different authentication types appropriately.
+   *
+   * @param {string} state - The serialized authentication session state as a JSON string
+   * @returns {Promise<AuthSession | undefined>} A promise that resolves to an AuthSession instance if the session is valid and not expired, undefined if expired
+   *
+   * @throws {Error} Throws an error if the session state is invalid or if credential injection fails
+   * @throws {Error} For passkey authentication, throws if credentialId is missing from the session state
+   *
+   * @example
+   * ```ts
+   * // Restore a session from stored JSON string
+   * const sessionJson = localStorage.getItem('authSession');
+   * if (sessionJson) {
+   *   const authSession = await authClient.loadAuthSessionState(sessionJson);
+   *   if (authSession) {
+   *     console.log('Session restored successfully');
+   *   } else {
+   *     console.log('Session expired');
+   *   }
+   * }
+   * ```
    */
   public async loadAuthSessionState(
-    state: AuthSessionState,
+    state: string,
   ): Promise<AuthSession | undefined> {
-    const { type, expirationDateMs, user } = state;
-    if (expirationDateMs > Date.now()) {
-      if (type === "passkey") {
-        const { credentialId } = state;
-        if (!credentialId) {
-          throw new Error(
-            "Credential ID is required for passkey authentication",
-          );
-        }
-        return await this.loginWithPasskey(credentialId);
-      } else {
-        const { bundle } = state;
-        const { orgId, idToken } = user;
-        return await this.completeAuthWithBundle({
-          bundle,
-          orgId,
-          idToken,
-          authType: type,
-        });
-      }
+    const parsedState = JSON.parse(state);
+
+    const { type, expirationDateMs, user } = parsedState;
+    if (expirationDateMs < Date.now()) {
+      return undefined;
     }
-    return undefined;
+    if (type === "passkey") {
+      const { credentialId } = parsedState;
+      if (!credentialId) {
+        throw new Error("Credential ID is required for passkey authentication");
+      }
+      return await this.loginWithPasskey(credentialId);
+    }
+    const { bundle } = parsedState;
+    const { orgId, idToken } = user;
+    return await this.completeAuthWithBundle({
+      bundle,
+      orgId,
+      idToken,
+      authType: type,
+    });
   }
 
   // TODO: ... and many more.
@@ -453,7 +472,7 @@ export class AuthClient {
     bundle: string;
     orgId: string;
     idToken?: string;
-    authType: Omit<AuthType, "passkey">;
+    authType: Exclude<AuthType, "passkey">;
   }): Promise<AuthSession> {
     const { stamper } = await this.getTekStamper();
     const success = await stamper.injectCredentialBundle(bundle);
@@ -466,7 +485,7 @@ export class AuthClient {
       orgId,
       idToken,
       bundle,
-      authType: authType as AuthType,
+      authType,
     });
     // Forget the reference to the TEK stamper, because in some implementations
     // it may become invalid if it is disconnected later. Future logins should

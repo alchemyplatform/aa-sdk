@@ -101,8 +101,9 @@ describe("AuthClient", () => {
         user: mockUser,
       };
 
-      const authSession =
-        await authClient.loadAuthSessionState(validOAuthState);
+      const authSession = await authClient.loadAuthSessionState(
+        JSON.stringify(validOAuthState),
+      );
 
       expect(authSession).toBeInstanceOf(AuthSession);
       expect(authSession?.getUser()).toEqual(
@@ -128,7 +129,9 @@ describe("AuthClient", () => {
         user: mockUser,
       };
 
-      const authSession = await authClient.loadAuthSessionState(validOtpState);
+      const authSession = await authClient.loadAuthSessionState(
+        JSON.stringify(validOtpState),
+      );
 
       expect(authSession).toBeInstanceOf(AuthSession);
       expect(authSession?.getUser()).toEqual(
@@ -154,8 +157,9 @@ describe("AuthClient", () => {
         user: mockUser,
       };
 
-      const authSession =
-        await authClient.loadAuthSessionState(validEmailState);
+      const authSession = await authClient.loadAuthSessionState(
+        JSON.stringify(validEmailState),
+      );
 
       expect(authSession).toBeInstanceOf(AuthSession);
       expect(authSession?.getUser()).toEqual(
@@ -193,8 +197,9 @@ describe("AuthClient", () => {
         credentialId: "test-passkey-credential",
       };
 
-      const authSession =
-        await authClient.loadAuthSessionState(validPasskeyState);
+      const authSession = await authClient.loadAuthSessionState(
+        JSON.stringify(validPasskeyState),
+      );
 
       expect(authSession).toBeInstanceOf(AuthSession);
       expect(mockLoginWithPasskey).toHaveBeenCalledWith(
@@ -213,7 +218,7 @@ describe("AuthClient", () => {
       };
 
       await expect(
-        authClient.loadAuthSessionState(invalidPasskeyState),
+        authClient.loadAuthSessionState(JSON.stringify(invalidPasskeyState)),
       ).rejects.toThrow("Credential ID is required for passkey authentication");
     });
 
@@ -225,7 +230,9 @@ describe("AuthClient", () => {
         user: mockUser,
       };
 
-      const authSession = await authClient.loadAuthSessionState(expiredState);
+      const authSession = await authClient.loadAuthSessionState(
+        JSON.stringify(expiredState),
+      );
 
       expect(authSession).toBeUndefined();
       // Should not create stamper or inject bundle for expired sessions
@@ -244,9 +251,9 @@ describe("AuthClient", () => {
         user: mockUser,
       };
 
-      await expect(authClient.loadAuthSessionState(validState)).rejects.toThrow(
-        "Failed to inject credential bundle",
-      );
+      await expect(
+        authClient.loadAuthSessionState(JSON.stringify(validState)),
+      ).rejects.toThrow("Failed to inject credential bundle");
     });
   });
 });
