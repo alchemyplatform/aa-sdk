@@ -3,10 +3,12 @@ import {
   hashMessage,
   hashTypedData,
   type Address,
+  type Authorization,
   type HashTypedDataParameters,
   type Hex,
   type LocalAccount,
   type SignableMessage,
+  parseSignature,
 } from "viem";
 import type {
   AddOauthProviderParams,
@@ -18,6 +20,7 @@ import type {
 } from "./types";
 import { dev_request } from "./devRequest.js";
 import { toLocalAccount } from "./toLocalAccount.js";
+import { hashAuthorization } from "viem/utils";
 
 export type CreateAuthSessionParams = {
   // TODO: replace apiKey with transport once it's ready.
@@ -119,6 +122,25 @@ export class AuthSession {
       payload: hashTypedData(typedData),
       mode: "ETHEREUM",
     });
+  }
+
+  public async signAuthorization(
+    params: Authorization<number, false>,
+  ): Promise<Authorization<number, true>> {
+    const { chainId, nonce, address } = params;
+    const hashedAuth = hashAuthorization({ address, chainId, nonce });
+    const signatureHex = await this.signRawPayload({
+      mode: "ETHEREUM",
+      payload: hashedAuth,
+    });
+    // TODO(jh): replace w/ `unpackSignRawMessageBytes` if this doesn't work
+    const signature = parseSignature(signatureHex);
+    return {
+      address,
+      chainId,
+      nonce,
+      ...signature,
+    };
   }
 
   public async listAuthMethods(): Promise<AuthMethods> {

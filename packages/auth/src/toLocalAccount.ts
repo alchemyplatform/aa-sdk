@@ -1,12 +1,6 @@
-import {
-  type LocalAccount,
-  type Hex,
-  parseSignature,
-  type TypedDataDefinition,
-} from "viem";
+import { type LocalAccount, type Hex, type TypedDataDefinition } from "viem";
 import type { AuthSession } from "./authSession.js";
 import type { SignAuthorizationReturnType } from "viem/actions";
-import { hashAuthorization } from "viem/utils";
 
 export const toLocalAccount = (authSession: AuthSession): LocalAccount => {
   const address = authSession.getAddress();
@@ -30,22 +24,11 @@ export const toLocalAccount = (authSession: AuthSession): LocalAccount => {
       // TODO(jh): test that this casting is safe.
       return await authSession.signTypedData(params as TypedDataDefinition);
     },
-    // TODO(jh): test that this actually works.
     signAuthorization: async (params): Promise<SignAuthorizationReturnType> => {
-      const { chainId, nonce } = params;
-      const address = params.contractAddress ?? params.address;
-      const hashedAuth = hashAuthorization({ address, chainId, nonce });
-      const signatureHex = await authSession.signRawPayload({
-        mode: "ETHEREUM",
-        payload: hashedAuth,
+      return await authSession.signAuthorization({
+        ...params,
+        address: params.contractAddress ?? params.address,
       });
-      const signature = parseSignature(signatureHex);
-      return {
-        address,
-        chainId,
-        nonce,
-        ...signature,
-      };
     },
     signTransaction: () => {
       throw new Error("Signing transactions is unsupported by Alchemy Auth");
