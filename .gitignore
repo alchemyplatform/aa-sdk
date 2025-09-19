@@ -132,3 +132,5 @@ vendor
 .claude/settings.local.json
 
 .lycheecache
+
+typedoc/

@@ -1,0 +1,7 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPoints": ["aa-sdk/core", "aa-sdk/ethers"],
+  "entryPointStrategy": "packages",
+  "plugin": ["typedoc-plugin-markdown"],
+  "out": "./typedoc"
+}

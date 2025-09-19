@@ -54,7 +54,9 @@
     "prepare": "husky install && yarn turbo prepare",
     "docs:dev": "./docs/scripts/docs-dev.sh",
     "docs:broken-links": "lychee docs --root-dir /docs",
-    "version": "yarn build:libs"
+    "version": "yarn build:libs",
+    "typedoc": "typedoc"
+
   },
   "devDependencies": {
     "@commitlint/cli": "^17.6.3",
@@ -85,6 +87,8 @@
     "tsx": "^4.19.2",
     "turbo": "^2.2.3",
     "typescript": "^5.8.3",
+    "typedoc": "^0.28.13",
+    "typedoc-plugin-markdown": "^4.8.1",
     "viem": "^2.29.2",
     "vitest": "^2.1.9",
     "wagmi": "2.12.7",
