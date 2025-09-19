@@ -13,9 +13,19 @@
     "account-kit/rn-signer/src/index.tsx"
   ],
   "entryPointStrategy": "expand",
-  // "plugin": ["typedoc-plugin-markdown"],
-  "out": "./typedoc",
+  "plugin": [
+    "typedoc-plugin-markdown",
+    "typedoc-plugin-frontmatter",
+    "./custom-frontmatter.mjs"
+  ],
+  "fileExtension": ".mdx",
+  "out": "./docs/pages/reference/typedoc",
   "tsconfig": "./tsconfig.typedoc.json",
+  "frontmatterGlobals": {
+    "layout": "reference"
+  },
+  "frontmatterCommentTags": ["description"],
+  "frontmatterNamingConvention": "camelCase",
   "exclude": [
     "**/*.test.ts",
     "**/*.test.tsx",
