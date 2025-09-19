@@ -34,7 +34,7 @@ console.log("Access key:", accessKey);
 
 ## Step 2: Create the Server Signer
 
-Use your access key you just generated to create a server signer:
+Before we can send transactions we need a way to sign them. Let's create a server signer using the access key you just created to handle this:
 
 <CodeBlocks>
 
@@ -56,9 +56,9 @@ console.log("Signer address:", await signer.getAddress());
 </CodeBlocks>
 
 <Tip>
-  Want to use the same access key to control multiple signers? Check out the
-  example below to learn how to use `auth.accountId` to create multiple signers
-  that you can control with the same access key.
+  Want to use the same access key to control multiple server signers? Check out
+  the example below to learn how to use `auth.accountId` to create multiple
+  signers that you can control with the same access key.
 </Tip>
 
 <Accordion title="Multiple signers per access key">
