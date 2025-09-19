@@ -1,10 +1,16 @@
 export { BaseAlchemySigner } from "./base.js";
+export {
+  AlchemyServerSigner,
+  createServerSigner,
+  generateAccessKey,
+} from "./serverSigner.js";
 export { BaseSignerClient } from "./client/base.js";
 export {
   AlchemySignerWebClient,
   OauthCancelledError,
   OauthFailedError,
 } from "./client/index.js";
+export { ServerSignerClient } from "./client/server.js";
 export type * from "./client/types.js";
 export {
   NotAuthenticatedError,
