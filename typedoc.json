@@ -1,6 +1,17 @@
 {
   "$schema": "https://typedoc.org/schema.json",
-  "entryPoints": ["aa-sdk/core", "aa-sdk/ethers"],
+  "entryPoints": [
+    "aa-sdk/core",
+    "aa-sdk/ethers",
+    "account-kit/core",
+    "account-kit/infra",
+    "account-kit/react",
+    "account-kit/react-native",
+    "account-kit/rn-signer",
+    "account-kit/signer",
+    "account-kit/smart-contracts",
+    "account-kit/wallet-client"
+  ],
   "entryPointStrategy": "packages",
   "plugin": ["typedoc-plugin-markdown"],
   "out": "./typedoc"
