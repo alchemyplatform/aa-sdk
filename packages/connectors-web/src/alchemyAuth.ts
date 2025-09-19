@@ -1,5 +1,5 @@
 import { createConnector } from "@wagmi/core";
-import type { CreateConnectorFn } from "wagmi";
+import type { CreateConnectorFn, useDisconnect } from "wagmi";
 import {
   createWebAuthClient,
   type WebAuthClientParams,
@@ -56,6 +56,8 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
   let authSessionInstance: AuthSession | undefined;
   let authClientInstance: AuthClient | undefined;
   let currentChainId: number | undefined;
+  // Cache signer clients by chainId to avoid recreating them unnecessarily.
+  let signerClients: Record<number, Client> = {};
 
   return createConnector<Provider, Properties>((config) => {
     const emitAndThrowError = (message: string) => {
@@ -63,6 +65,17 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
       config.emitter.emit("error", { error });
       throw error;
     };
+
+    config.emitter.on("change", (data) => {
+      const newChain = data.chainId;
+      if (newChain !== currentChainId) {
+        // TODO(jh): remove logging after testing.
+        console.log(
+          `[alchemyAuth connector] Chain changed from ${currentChainId} to ${newChain}, updating currentChainId.`,
+        );
+        currentChainId = newChain;
+      }
+    });
 
     return {
       id: "alchemyAuth",
@@ -113,6 +126,7 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
           authSessionInstance = undefined;
           authClientInstance = undefined;
           currentChainId = undefined;
+          signerClients = {};
         } catch (error) {
           // Log disconnect errors but don't throw to avoid breaking flow
           config.emitter.emit("error", { error: error as Error });
@@ -159,6 +173,10 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
           throw new Error("chainId is required to getClient");
         }
 
+        if (signerClients[chainId]) {
+          return signerClients[chainId];
+        }
+
         const chain = config.chains.find((chain) => chain.id === chainId);
         if (!chain) {
           throw new Error(`Chain with id ${chainId} not found in config`);
@@ -173,14 +191,13 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
 
         const account = authSessionInstance!.toLocalAccount();
 
-        // TODO(jh): we should cache this client (either by chain, or invalidate it when the chain changes).
-        // also be sure to destroy it when we disconnect.
-        // See how wagmi does it here: https://github.com/wevm/wagmi/blob/main/packages/core/src/actions/getConnectorClient.ts
         const client = createWalletClient({
           account,
           transport,
           chain,
         });
+
+        signerClients[chainId] = client;
 
         return client;
       },
