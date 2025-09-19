@@ -1,0 +1,49 @@
+<Info>Required SDK version: ^v4.59.1</Info>
+
+See the [`signMessage` SDK
+reference](/wallets/reference/account-kit/wallet-client/functions/signMessage)
+for full descriptions of the parameters used in the following example.
+
+<CodeBlocks>
+
+```ts title="signRawMessage.ts"
+import { client } from "./client";
+
+// Sign a raw hex message
+const rawSignature = await client.signMessage({
+  message: {
+    raw: "0x48656c6c6f2c20776f726c6421", // "Hello, world!" in hex
+  },
+});
+
+console.log("Signature over raw data:", rawSignature);
+```
+
+```ts title="client.ts"
+import "dotenv/config";
+import type { Hex } from "viem";
+import { LocalAccountSigner } from "@aa-sdk/core";
+import { alchemy, sepolia } from "@account-kit/infra";
+import { createSmartWalletClient } from "@account-kit/wallet-client";
+
+const clientParams = {
+  transport: alchemy({
+    apiKey: process.env.ALCHEMY_API_KEY!,
+  }),
+  chain: sepolia,
+  signer: LocalAccountSigner.privateKeyToAccountSigner(
+    process.env.PRIVATE_KEY! as Hex,
+  ),
+};
+
+const clientWithoutAccount = createSmartWalletClient(clientParams);
+
+const account = await clientWithoutAccount.requestAccount();
+
+export const client = createSmartWalletClient({
+  ...clientParams,
+  account: account.address,
+});
+```
+
+</CodeBlocks>

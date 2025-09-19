@@ -1,0 +1,47 @@
+<Info>Required SDK version: ^v4.59.1</Info>
+
+See the [`signMessage` SDK
+reference](/wallets/reference/account-kit/wallet-client/functions/signMessage)
+for full descriptions of the parameters used in the following example.
+
+<CodeBlocks>
+
+```ts title="signTextMessage.ts"
+import { client } from "./client";
+
+// Sign a simple text message
+const textSignature = await client.signMessage({
+  message: "Hello, world!",
+});
+
+console.log("Signature over text:", textSignature);
+```
+
+```ts title="client.ts"
+import "dotenv/config";
+import type { Hex } from "viem";
+import { LocalAccountSigner } from "@aa-sdk/core";
+import { alchemy, sepolia } from "@account-kit/infra";
+import { createSmartWalletClient } from "@account-kit/wallet-client";
+
+const clientParams = {
+  transport: alchemy({
+    apiKey: process.env.ALCHEMY_API_KEY!,
+  }),
+  chain: sepolia,
+  signer: LocalAccountSigner.privateKeyToAccountSigner(
+    process.env.PRIVATE_KEY! as Hex,
+  ),
+};
+
+const clientWithoutAccount = createSmartWalletClient(clientParams);
+
+const account = await clientWithoutAccount.requestAccount();
+
+export const client = createSmartWalletClient({
+  ...clientParams,
+  account: account.address,
+});
+```
+
+</CodeBlocks>
