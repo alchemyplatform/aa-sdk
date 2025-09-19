@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@alchemy/common": "*",
     "@alchemy/connectors-web": "*",
     "@alchemy/wagmi-core": "*",
     "@wagmi/connectors": "latest",

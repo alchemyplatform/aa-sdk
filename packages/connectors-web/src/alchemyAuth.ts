@@ -1,5 +1,5 @@
 import { createConnector } from "@wagmi/core";
-import type { CreateConnectorFn, useDisconnect } from "wagmi";
+import type { CreateConnectorFn } from "wagmi";
 import {
   createWebAuthClient,
   type WebAuthClientParams,
@@ -60,7 +60,7 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
   let clients: Record<number, Client> = {};
 
   return createConnector<Provider, Properties>((config) => {
-    const emitAndThrowError = (message: string) => {
+    const emitAndThrowError = (message: string): never => {
       const error = new Error(message);
       config.emitter.emit("error", { error });
       throw error;
@@ -153,10 +153,13 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
         return resolvedChainId;
       },
 
-      async getProvider(): Promise<Provider> {
-        // TODO: Implement proper provider when Signer EIP-1193 support is available
-        // For now, throw an error as the provider is not yet implemented
-        throw new Error("Provider not implemented.");
+      async getProvider() {
+        if (!authSessionInstance) {
+          throw new Error(
+            "No auth session available. Please authenticate first.",
+          );
+        }
+        return authSessionInstance.getProvider();
       },
 
       // This is optional, but called by `getConnectorClient`. See here: https://github.com/wevm/wagmi/blob/main/packages/core/src/actions/getConnectorClient.ts

@@ -21,6 +21,10 @@ import type {
 import { dev_request } from "./devRequest.js";
 import { toLocalAccount } from "./toLocalAccount.js";
 import { hashAuthorization } from "viem/utils";
+import {
+  type AlchemyAuthEip1193Provider,
+  create1193Provider,
+} from "./provider.js";
 
 export type CreateAuthSessionParams = {
   // TODO: replace apiKey with transport once it's ready.
@@ -191,6 +195,11 @@ export class AuthSession {
   public toLocalAccount(): LocalAccount {
     this.throwIfDisconnected();
     return toLocalAccount(this);
+  }
+
+  public getProvider(): AlchemyAuthEip1193Provider {
+    this.throwIfDisconnected();
+    return create1193Provider(this);
   }
 
   // TODO: remove this and use transport instead once it's ready.

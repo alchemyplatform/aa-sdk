@@ -20,8 +20,7 @@
   }
 }
 
-/* OAuth Buttons Styling */
-#oauth-auth {
+#oauth-auth, #email-auth, #wallet-actions, #session-controls {
   margin: 20px 0;
   padding: 20px;
   border: 1px solid #333;
@@ -74,14 +73,6 @@
   background: #333;
 }
 
-/* Session Controls */
-#session-controls {
-  margin-top: 2rem;
-  padding: 1rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-
 .disconnect-btn {
   background: #666;
   color: white;
@@ -115,7 +106,6 @@
   cursor: pointer;
 }
 
-/* Status Messages */
 #oauth-status {
   margin-top: 10px;
   padding: 8px;
@@ -124,24 +114,19 @@
   min-height: 20px;
 }
 
-/* Email Auth Styling */
-#email-auth {
-  margin: 20px 0;
-  padding: 20px;
-  border: 1px solid #333;
-  border-radius: 8px;
-}
 
-#email-auth input {
+input[type="text"], input[type="email"] {
   padding: 8px 12px;
   margin: 5px;
   border: 1px solid #333;
   border-radius: 4px;
   background: transparent;
   color: inherit;
+  width: 32ch;
 }
 
-#email-auth button {
+#email-auth button,
+#wallet-actions button {
   padding: 8px 16px;
   margin: 5px;
   background: #10b981;
@@ -149,18 +134,20 @@
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  min-width: 16ch;
 }
 
-#email-auth button:hover {
+#email-auth button:hover,
+#wallet-actions button:hover {
   background: #059669;
 }
 
 @media (prefers-color-scheme: light) {
-  #oauth-auth, #email-auth {
+  #oauth-auth, #email-auth, #wallet-actions, #session-controls {
     border-color: #ddd;
   }
 
-  #email-auth input {
+  input[type="text"], input[type="email"] {
     border-color: #ddd;
   }
 }
