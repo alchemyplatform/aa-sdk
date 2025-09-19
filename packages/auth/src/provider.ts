@@ -12,8 +12,8 @@ import {
   InvalidRequestError,
   MethodUnsupportedError,
   createEip1193HandlerFactory,
+  type ExtractRpcMethod,
 } from "@alchemy/common";
-import type { ExtractRpcMethod } from "./types";
 import type { AuthSession } from "./authSession.js";
 
 export type AlchemyAuth1193Methods = [

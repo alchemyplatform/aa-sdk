@@ -14,8 +14,9 @@ import {
   ChainNotFoundError,
   InvalidRequestError,
   createEip1193HandlerFactory,
+  type ExtractRpcMethod,
 } from "@alchemy/common";
-import type { ExtractRpcMethod, BaseWalletClient } from "./types.js";
+import type { BaseWalletClient } from "./types.js";
 import type { PrepareCallsParams } from "./actions/prepareCalls.js";
 import type { SmartWalletActions } from "./decorators/smartWalletActions.js";
 import type { WalletServerViemRpcSchema } from "@alchemy/wallet-api-types/rpc";

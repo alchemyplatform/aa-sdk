@@ -156,12 +156,3 @@ export type AuthProviderCustomization = {
   claims?: string;
   otherParameters?: Record<string, string>;
 };
-
-export type ExtractRpcMethod<
-  T extends readonly {
-    Method: string;
-    Parameters?: unknown;
-    ReturnType: unknown;
-  }[],
-  M extends T[number]["Method"],
-> = Extract<T[number], { Method: M }>;
