@@ -86,14 +86,15 @@ export class ServerSignerClient extends BaseSignerClient<undefined> {
    * @param {Extract<AuthParams, { type: "accessKey" }>} params The parameters for the authentication
    * @returns {Promise<User>} A promise that resolves to the user
    */
-  public authenticateWithAccessKey = async (
-    params: Extract<AuthParams, { type: "accessKey" }>,
-  ): Promise<User> => {
-    const publicKey = bytesToHex(p256.getPublicKey(params.accessKey));
+  public authenticateWithAccessKey = async ({
+    accessKey,
+    accountId,
+  }: Extract<AuthParams, { type: "accessKey" }>): Promise<User> => {
+    const publicKey = bytesToHex(p256.getPublicKey(accessKey));
 
     const user = await this.lookupUserByAccessKey({
       publicKey,
-      accountId: params.accountId,
+      accountId,
     });
 
     const orgId =
@@ -102,12 +103,12 @@ export class ServerSignerClient extends BaseSignerClient<undefined> {
         await this.createAccount({
           type: "accessKey",
           publicKey,
-          accountId: params.accountId,
+          accountId,
         })
       )?.orgId;
 
     return this.completeAuthWithApiKey(
-      { publicKey, privateKey: params.accessKey },
+      { publicKey, privateKey: accessKey },
       orgId,
     );
   };
