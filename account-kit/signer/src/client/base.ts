@@ -10,7 +10,11 @@ import {
   type Address,
   type Hex,
 } from "viem";
-import { NotAuthenticatedError, OAuthProvidersError } from "../errors.js";
+import {
+  NotAuthenticatedError,
+  OAuthProvidersError,
+  UnsupportedFeatureError,
+} from "../errors.js";
 import { getDefaultProviderCustomization } from "../oauth.js";
 import type { OauthMode } from "../signer.js";
 import { base64UrlEncode } from "../utils/base64UrlEncode.js";
@@ -75,6 +79,11 @@ const MFA_PAYLOAD = {
   VERIFY: "verify_mfa",
   LIST: "list_mfas",
 } as const;
+
+type LookupUserByAccessKeyParams = {
+  publicKey: string;
+  accountId?: string;
+};
 
 const withHexPrefix = (hex: string) => `0x${hex}` as const;
 
@@ -175,6 +184,11 @@ export abstract class BaseSignerClient<
         targetPublicKey: publicKey,
       });
       return response;
+    }
+
+    if (params.type === "accessKey") {
+      // Developers should use the server signer to create accounts with access keys
+      throw new UnsupportedFeatureError("Access key auth");
     }
 
     this.eventEmitter.emit("authenticating", { type: "passkey" });
@@ -792,6 +806,20 @@ export abstract class BaseSignerClient<
    */
   public lookupUserByPhone = async (phone: string) => {
     return this.request("/v1/lookup", { phone });
+  };
+
+  /**
+   * Looks up information based on an access key.
+   *
+   * @param {LookupUserByAccessKeyParams} params - The access key parameters
+   * @returns {Promise<any>} The result of the lookup request
+   */
+  public lookupUserByAccessKey = async (
+    params: LookupUserByAccessKeyParams,
+  ) => {
+    return this.request("/v1/lookup", {
+      accessKey: { publicKey: params.publicKey, accountId: params.accountId },
+    });
   };
 
   /**
