@@ -33,7 +33,6 @@ export type AlchemyAuthEip1193Provider = Prettify<
 
 const handler = createEip1193HandlerFactory<AlchemyAuth1193Methods>();
 
-// TODO(jh): we can probably easily write tests for this by mocking the signer service fetch requests?
 export const create1193Provider = (
   authSession: AuthSession,
 ): AlchemyAuthEip1193Provider => {
