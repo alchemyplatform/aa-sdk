@@ -1,5 +1,6 @@
 import { AuthSession } from "./authSession.js";
 import type {
+  AuthType,
   CreateTekStamperFn,
   CreateWebAuthnStamperFn,
   HandleOauthFlowFn,
@@ -247,7 +248,6 @@ export class AuthClient {
    * @param {SubmitOtpCodeParams} params - Parameters for submitting the OTP code
    * @param {string} params.otpCode - The OTP code received via email
    * @returns {Promise<AuthSession>} Promise that resolves to an auth session instance
-   * @throws {Error} If no OTP has been sent or if the code is invalid
    *
    * @example
    * ```ts
@@ -273,7 +273,11 @@ export class AuthClient {
       targetPublicKey,
     });
     this.pendingOtp = null;
-    return this.completeAuthWithBundle({ bundle: credentialBundle, orgId });
+    return this.completeAuthWithBundle({
+      bundle: credentialBundle,
+      orgId,
+      authType: "otp",
+    });
   }
 
   /**
@@ -287,7 +291,6 @@ export class AuthClient {
    * @param {Record<string, string>} [params.otherParameters] - Additional OAuth parameters
    * @param {"popup" | "redirect"} [params.mode] - OAuth flow mode, defaults to "redirect"
    * @returns {Promise<AuthSession>} Promise that resolves to an auth session instance
-   * @throws {Error} If OAuth flow fails or is cancelled
    *
    * @example
    * ```ts
@@ -324,6 +327,7 @@ export class AuthClient {
         bundle: response.bundle!,
         orgId: response.orgId!,
         idToken: response.idToken,
+        authType: "oauth",
       });
     } else if (response.status === "ACCOUNT_LINKING_CONFIRMATION_REQUIRED") {
       // TODO: decide what to do here.
@@ -342,9 +346,6 @@ export class AuthClient {
    * alchemy-id-token) in the URL query string, processes them, and completes the authentication flow.
    *
    * @returns {Promise<AuthSession>} Promise that resolves to an auth session instance
-   * @throws {Error} If no OAuth callback parameters are found in the URL
-   * @throws {Error} If OAuth authentication failed (alchemy-error parameter present)
-   * @throws {Error} If credential bundle injection fails
    *
    * @example
    * ```ts
@@ -372,6 +373,7 @@ export class AuthClient {
         bundle: callbackParams.bundle!,
         orgId: callbackParams.orgId!,
         idToken: callbackParams.idToken,
+        authType: "oauth",
       });
     }
     console.log("No OAuth callback parameters found");
@@ -380,22 +382,83 @@ export class AuthClient {
 
   /**
    * Initiates passkey (WebAuthn) authentication flow.
-   * This method uses WebAuthn standards to authenticate users with biometric or hardware security keys.
    *
+   * This method uses WebAuthn standards to authenticate users with biometric or hardware security keys.
+   * Can be used for both new passkey creation (when credentialId is undefined) and
+   * authentication with existing passkeys (when credentialId is provided).
+   *
+   * @param {string} [credentialId] - Optional credential ID for authenticating with existing passkey
    * @returns {Promise<AuthSession>} Promise that resolves to an auth session instance
-   * @throws {Error} Currently throws "Not implemented" as this method is under development
    *
    * @example
    * ```ts
+   * // New passkey authentication
    * const authSession = await authClient.loginWithPasskey();
+   *
+   * // Authenticate with existing passkey
+   * const authSession = await authClient.loginWithPasskey("existing-credential-id");
    * ```
    */
-  public async loginWithPasskey(): Promise<AuthSession> {
+  public async loginWithPasskey(credentialId?: string): Promise<AuthSession> {
     // TODO: figure out what the current passkey code is doing.
+    // For new passkey authentication, credentialId would be undefined initially
     const stamper = await this.createWebAuthnStamper({
-      credentialId: undefined,
+      credentialId,
     });
     return notImplemented(stamper);
+  }
+
+  /**
+   * Creates an instance of AuthSession from a previously saved authentication session state that has not expired.
+   *
+   * This method takes a JSON string representation of a serialized AuthSessionState (typically obtained
+   * from AuthSession.getAuthSessionState()) and attempts to restore the authentication session.
+   * The method will validate the session expiration and handle different authentication types appropriately.
+   *
+   * @param {string} state - The serialized authentication session state as a JSON string
+   * @returns {Promise<AuthSession | undefined>} A promise that resolves to an AuthSession instance if the session is valid and not expired, undefined if expired
+   *
+   * @throws {Error} Throws an error if the session state is invalid or if credential injection fails
+   * @throws {Error} For passkey authentication, throws if credentialId is missing from the session state
+   *
+   * @example
+   * ```ts
+   * // Restore a session from stored JSON string
+   * const sessionJson = localStorage.getItem('authSession');
+   * if (sessionJson) {
+   *   const authSession = await authClient.loadAuthSessionState(sessionJson);
+   *   if (authSession) {
+   *     console.log('Session restored successfully');
+   *   } else {
+   *     console.log('Session expired');
+   *   }
+   * }
+   * ```
+   */
+  public async loadAuthSessionState(
+    state: string,
+  ): Promise<AuthSession | undefined> {
+    const parsedState = JSON.parse(state);
+
+    const { type, expirationDateMs, user } = parsedState;
+    if (expirationDateMs < Date.now()) {
+      return undefined;
+    }
+    if (type === "passkey") {
+      const { credentialId } = parsedState;
+      if (!credentialId) {
+        throw new Error("Credential ID is required for passkey authentication");
+      }
+      return await this.loginWithPasskey(credentialId);
+    }
+    const { bundle } = parsedState;
+    const { orgId, idToken } = user;
+    return await this.completeAuthWithBundle({
+      bundle,
+      orgId,
+      idToken,
+      authType: type,
+    });
   }
 
   // TODO: ... and many more.
@@ -404,10 +467,12 @@ export class AuthClient {
     bundle,
     orgId,
     idToken,
+    authType,
   }: {
     bundle: string;
     orgId: string;
     idToken?: string;
+    authType: Exclude<AuthType, "passkey">;
   }): Promise<AuthSession> {
     const { stamper } = await this.getTekStamper();
     const success = await stamper.injectCredentialBundle(bundle);
@@ -419,6 +484,8 @@ export class AuthClient {
       stamper,
       orgId,
       idToken,
+      bundle,
+      authType,
     });
     // Forget the reference to the TEK stamper, because in some implementations
     // it may become invalid if it is disconnected later. Future logins should
@@ -443,7 +510,6 @@ export class AuthClient {
     return dev_request(this.apiKey, path, body);
   }
 }
-
 function notImplemented(..._: unknown[]): Promise<never> {
   throw new Error("Not implemented");
 }

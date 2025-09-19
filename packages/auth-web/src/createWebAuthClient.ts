@@ -8,9 +8,6 @@ import { IframeStamper } from "@turnkey/iframe-stamper";
 
 const CHECK_CLOSE_INTERVAL = 500;
 
-/**
- * Configuration parameters for creating a web-based AuthClient
- */
 export type WebAuthClientParams = {
   /** API key for authentication with Alchemy services */
   apiKey: string;
