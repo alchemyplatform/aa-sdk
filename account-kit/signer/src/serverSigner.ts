@@ -18,9 +18,10 @@ import {
   type TypedDataDefinition,
 } from "viem";
 import { hashAuthorization } from "viem/utils";
-import type { AccessKeyAuthParams, AuthParams } from "./signer.js";
-import type { User } from "./client/types.js";
+import type { AccessKeyAuthParams } from "./signer.js";
 import { SolanaSigner } from "./solanaSigner.js";
+import { p256 } from "@noble/curves/p256";
+import { bytesToHex } from "@noble/curves/utils";
 
 /**
  * AlchemyApiKeySigner is a signer that can sign messages and typed data using an API key.
@@ -100,18 +101,6 @@ export class AlchemyServerSigner implements SmartAccountSigner {
   }
 
   /**
-   * Authenticates the signer. Only API key auth is supported.
-   *
-   * @param {Extract<AuthParams, { type: "apiKey" }>} params The parameters for the authentication
-   * @returns {Promise<User>} A promise that resolves to the user
-   */
-  async authenticate(
-    params: Extract<AuthParams, { type: "apiKey" }>,
-  ): Promise<User> {
-    return this.inner.authenticateWithAccessKey(params);
-  }
-
-  /**
    * Creates a new instance of `SolanaSigner` using the inner client.
    *
    * @example
@@ -185,3 +174,11 @@ export const createServerSigner = async (
 
   return signer;
 };
+
+/**
+ * Generates a new access key for use in the server signer
+ *
+ * @returns {Hex} A randomly generated access key
+ */
+export const generateAccessKey = () =>
+  bytesToHex(p256.utils.randomPrivateKey());

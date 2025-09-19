@@ -5,6 +5,8 @@ import { BaseSignerClient } from "./base.js";
 import { NotAuthenticatedError, UnsupportedFeatureError } from "../errors.js";
 import { TurnkeyClient } from "@turnkey/http";
 import type { AuthParams } from "../signer";
+import { p256 } from "@noble/curves/p256";
+import { bytesToHex } from "@noble/curves/utils";
 
 export interface ServerSignerClientParams {
   connection: ConnectionConfig;
@@ -73,7 +75,7 @@ export class ServerSignerClient extends BaseSignerClient<undefined> {
     return this.request("/v1/signup", {
       accessKey: {
         publicKey: params.publicKey,
-        id: params.id,
+        accountId: params.accountId,
       },
     });
   };
@@ -87,9 +89,11 @@ export class ServerSignerClient extends BaseSignerClient<undefined> {
   public authenticateWithAccessKey = async (
     params: Extract<AuthParams, { type: "accessKey" }>,
   ): Promise<User> => {
+    const publicKey = bytesToHex(p256.getPublicKey(params.accessKey));
+
     const user = await this.lookupUserByAccessKey({
-      publicKey: params.keyPair.publicKey,
-      id: params.id,
+      publicKey,
+      accountId: params.accountId,
     });
 
     const orgId =
@@ -97,12 +101,15 @@ export class ServerSignerClient extends BaseSignerClient<undefined> {
       (
         await this.createAccount({
           type: "accessKey",
-          publicKey: params.keyPair.publicKey,
-          id: params.id,
+          publicKey,
+          accountId: params.accountId,
         })
       )?.orgId;
 
-    return this.completeAuthWithApiKey(params.keyPair, orgId);
+    return this.completeAuthWithApiKey(
+      { publicKey, privateKey: params.accessKey },
+      orgId,
+    );
   };
 
   private completeAuthWithApiKey = async (

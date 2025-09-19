@@ -68,7 +68,7 @@ export type CreateAccountParams =
   | {
       type: "accessKey";
       publicKey: string;
-      id?: string;
+      accountId?: string;
     };
 
 export type EmailType = "magicLink" | "otp";
@@ -91,7 +91,7 @@ export type SmsAuthParams = {
 export type AccessKeyAuthParamsPublicKeyOnly = {
   accessKey: {
     publicKey: string;
-    id?: string;
+    accountId?: string;
   };
 };
 
@@ -217,7 +217,7 @@ export type SignerEndpoints = [
       phone?: string;
       accessKey?: {
         publicKey: string;
-        id?: string;
+        accountId?: string;
       };
     };
     Response: {

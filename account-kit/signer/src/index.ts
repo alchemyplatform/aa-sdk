@@ -1,5 +1,9 @@
 export { BaseAlchemySigner } from "./base.js";
-export { AlchemyServerSigner, createServerSigner } from "./serverSigner.js";
+export {
+  AlchemyServerSigner,
+  createServerSigner,
+  generateAccessKey,
+} from "./serverSigner.js";
 export { BaseSignerClient } from "./client/base.js";
 export {
   AlchemySignerWebClient,
@@ -27,4 +31,3 @@ export {
   createSolanaSponsoredTransaction,
   createSolanaTransaction,
 } from "./utils/solana.js";
-export { generateP256KeyPair as generateKeyPair } from "@turnkey/crypto";

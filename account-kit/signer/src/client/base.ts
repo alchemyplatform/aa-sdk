@@ -82,7 +82,7 @@ const MFA_PAYLOAD = {
 
 type LookupUserByAccessKeyParams = {
   publicKey: string;
-  id?: string;
+  accountId?: string;
 };
 
 const withHexPrefix = (hex: string) => `0x${hex}` as const;
@@ -820,7 +820,7 @@ export abstract class BaseSignerClient<
     params: LookupUserByAccessKeyParams,
   ) => {
     return this.request("/v1/lookup", {
-      accessKey: { publicKey: params.publicKey, id: params.id },
+      accessKey: { publicKey: params.publicKey, accountId: params.accountId },
     });
   };
 

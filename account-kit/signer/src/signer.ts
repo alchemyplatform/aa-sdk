@@ -12,11 +12,8 @@ import type {
 import { SessionManagerParamsSchema } from "./session/manager.js";
 
 export type AccessKeyAuthParams = {
-  keyPair: {
-    publicKey: string;
-    privateKey: string;
-  };
-  id?: string;
+  accessKey: string;
+  accountId?: string;
 };
 
 export type AuthParams =
