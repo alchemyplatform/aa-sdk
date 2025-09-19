@@ -56,7 +56,6 @@
     "docs:broken-links": "lychee docs --root-dir /docs",
     "version": "yarn build:libs",
     "typedoc": "typedoc"
-
   },
   "devDependencies": {
     "@commitlint/cli": "^17.6.3",

@@ -1,18 +1,36 @@
 {
   "$schema": "https://typedoc.org/schema.json",
   "entryPoints": [
-    "aa-sdk/core",
-    "aa-sdk/ethers",
-    "account-kit/core",
-    "account-kit/infra",
-    "account-kit/react",
-    "account-kit/react-native",
-    "account-kit/rn-signer",
-    "account-kit/signer",
-    "account-kit/smart-contracts",
-    "account-kit/wallet-client"
+    "aa-sdk/core/src/index.ts",
+    "aa-sdk/ethers/src/index.ts",
+    "account-kit/infra/src/exports/index.ts",
+    "account-kit/signer/src/index.ts",
+    "account-kit/wallet-client/src/exports/index.ts",
+    "account-kit/core/src/index.ts",
+    "account-kit/react/src/index.ts",
+    "account-kit/react-native/src/index.ts",
+    "account-kit/smart-contracts/src/index.ts",
+    "account-kit/rn-signer/src/index.tsx"
   ],
-  "entryPointStrategy": "packages",
-  "plugin": ["typedoc-plugin-markdown"],
-  "out": "./typedoc"
+  "entryPointStrategy": "expand",
+  // "plugin": ["typedoc-plugin-markdown"],
+  "out": "./typedoc",
+  "tsconfig": "./tsconfig.typedoc.json",
+  "exclude": [
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/*.test-d.ts",
+    "**/*.e2e.test.ts",
+    "**/__tests__/**/*",
+    "**/e2e-tests/**/*",
+    "**/vitest.config.ts",
+    "**/vitest.config.e2e.ts",
+    "**/*.stories.ts",
+    "**/*.stories.tsx",
+    ".vitest/**/*"
+  ],
+  "skipErrorChecking": true,
+  "compilerOptions": {
+    "skipLibCheck": true
+  }
 }
