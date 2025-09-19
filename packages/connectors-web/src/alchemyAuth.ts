@@ -5,7 +5,12 @@ import {
   type WebAuthClientParams,
 } from "@alchemy/auth-web";
 import type { AuthClient, AuthSession } from "@alchemy/auth";
-import { type Address, type EIP1193Provider } from "viem";
+import {
+  createWalletClient,
+  type Address,
+  type Client,
+  type EIP1193Provider,
+} from "viem";
 
 export interface AlchemyAuthOptions
   extends Pick<
@@ -138,6 +143,46 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
         // TODO: Implement proper provider when Signer EIP-1193 support is available
         // For now, throw an error as the provider is not yet implemented
         throw new Error("Provider not implemented.");
+      },
+
+      // This is optional, but called by `getConnectorClient`. See here: https://github.com/wevm/wagmi/blob/main/packages/core/src/actions/getConnectorClient.ts
+      // This enables signing 7702 authorizations, since otherwise wagmi will build a client using the 1193 provider, which is unable to sign authorizations.
+      async getClient(params = { chainId: undefined }): Promise<Client> {
+        if (!authSessionInstance) {
+          emitAndThrowError(
+            "Authentication required. Please configure the alchemyAuth connector with an apiKey.",
+          );
+        }
+
+        const chainId = params.chainId ?? (await this.getChainId());
+        if (!chainId) {
+          throw new Error("chainId is required to getClient");
+        }
+
+        const chain = config.chains.find((chain) => chain.id === chainId);
+        if (!chain) {
+          throw new Error(`Chain with id ${chainId} not found in config`);
+        }
+
+        const transport = config.transports?.[chainId];
+        if (!transport) {
+          throw new Error(
+            `No transport found for chain with id ${chainId}. Please configure a transport in your wagmi config.`,
+          );
+        }
+
+        const account = authSessionInstance!.toLocalAccount();
+
+        // TODO(jh): we should cache this client (either by chain, or invalidate it when the chain changes).
+        // also be sure to destroy it when we disconnect.
+        // See how wagmi does it here: https://github.com/wevm/wagmi/blob/main/packages/core/src/actions/getConnectorClient.ts
+        const client = createWalletClient({
+          account,
+          transport,
+          chain,
+        });
+
+        return client;
       },
 
       async isAuthorized() {
