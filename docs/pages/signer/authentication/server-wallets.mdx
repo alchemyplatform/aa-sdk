@@ -1,0 +1,190 @@
+---
+title: Server wallets
+description: Control wallets programmatically using access keys
+slug: wallets/authentication/login-methods/server-wallets
+---
+
+<Warning>**This feature is in early access.**</Warning>
+
+Server wallets allow you to programmatically control wallets server-side using access keys. This enables backend applications to sign transactions and messages on behalf of users without requiring interactive authentication.
+
+## Prerequisites
+
+Get your **API key** by creating a new app in your [Alchemy Dashboard](https://dashboard.alchemy.com/apps). Make sure your desired network is enabled for your app under the Networks tab.
+
+## Step 1: Generate an Access Key
+
+Generate a secure access key for authentication. This key will never be sent to our servers - we'll derive a public key from it when interacting with Alchemy. Store this key securely, you'll need it to access the wallet in the future.
+
+<CodeBlocks>
+
+```ts generate-key.ts
+import { generateAccessKey } from "@account-kit/signer";
+
+// Generate a random access key
+const accessKey = generateAccessKey();
+console.log("Access key:", accessKey);
+
+// Store this securely - you'll need it to control the server signer
+```
+
+</CodeBlocks>
+
+## Step 2: Create the Server Signer
+
+Use your access key you just generated to create a server signer:
+
+<CodeBlocks>
+
+```ts server-signer.ts
+import { createServerSigner } from "@account-kit/signer";
+
+const signer = await createServerSigner({
+  auth: {
+    accessKey: "your-access-key-here",
+  },
+  connection: {
+    apiKey: "your-alchemy-api-key",
+  },
+});
+
+console.log("Signer address:", await signer.getAddress());
+```
+
+</CodeBlocks>
+
+<Tip>
+  Want to use the same access key to control multiple signers? Check out the
+  example below to learn how to use `auth.accountId` to create multiple signers
+  that you can control with the same access key.
+</Tip>
+
+<Accordion title="Multiple signers per access key">
+
+```ts
+const businessSigner = await createServerSigner({
+  auth: {
+    accessKey: "your-access-key-here",
+    accountId: "business",
+  },
+  connection: {
+    apiKey: "your-alchemy-api-key",
+  },
+});
+
+const personalSigner = await createServerSigner({
+  auth: {
+    accessKey: "your-access-key-here", // same access key
+    accountId: "personal", // different account ID
+  },
+  connection: {
+    apiKey: "your-alchemy-api-key",
+  },
+});
+
+// These will have different addresses despite using the same access key
+console.log("Business address:", await businessSigner.getAddress());
+console.log("Personal address:", await personalSigner.getAddress());
+```
+
+</Accordion>
+
+## Step 3: Using with Smart Wallets
+
+You can easily use the server signer with our smart wallet client:
+
+<CodeBlocks>
+
+```ts smart-wallet.ts
+import { createServerSigner } from "@account-kit/signer";
+import { createSmartWalletClient } from "@account-kit/wallet-client";
+import { alchemy, baseSepolia } from "@account-kit/infra";
+
+// Create the server signer
+const signer = await createServerSigner({
+  auth: {
+    accessKey: "your-access-key",
+  },
+  connection: {
+    apiKey: "your-alchemy-api-key",
+  },
+});
+
+// Create smart wallet client
+const client = createSmartWalletClient({
+  transport: alchemy({
+    apiKey: "your-alchemy-api-key",
+  }),
+  chain: baseSepolia,
+  signer,
+  policyId: "your-gas-manager-policy-id", // Make sure enabled on Base Sepolia
+});
+
+// Get the smart account
+const account = await client.requestAccount();
+console.log("Smart account address:", account.address);
+
+// Send a transaction
+const { preparedCallIds } = await client.sendCalls({
+  calls: [
+    {
+      to: "0x1234567890123456789012345678901234567890",
+      value: "0x0",
+      data: "0x",
+    },
+  ],
+  from: account.address,
+});
+console.log("Transaction sent:", preparedCallIds[0]);
+```
+
+</CodeBlocks>
+
+## Solana Support
+
+Your server signer can also be used with Solana by converting it to a Solana signer. To start sending sponsored Solana transactions, make sure to set up a Solana gas manager policy in our [dashboard](https://dashboard.alchemy.com/gas-manager).
+
+<CodeBlocks>
+
+```ts solana.ts
+import { createServerSigner } from "@account-kit/signer";
+import { Connection } from "@solana/web3.js";
+
+// Set up Solana connection
+const connection = new Connection(
+  `https://solana-devnet.g.alchemy.com/v2/your-alchemy-api-key`,
+);
+
+const signer = await createServerSigner({
+  auth: { accessKey: "your-access-key" },
+  connection: { apiKey: "your-alchemy-api-key" },
+});
+
+// Convert the signer to a Solana-compatible signer
+const solanaSigner = signer.toSolanaSigner();
+
+// Build transaction instructions
+const instructions = [
+  SystemProgram.transfer({
+    fromPubkey: new PublicKey(solanaSigner.address),
+    toPubkey: new PublicKey(solanaSigner.address),
+    lamports: 0,
+  }),
+];
+
+// Add sponsorship
+const tx = await solanaSigner.addSponsorship(
+  instructions,
+  connection,
+  "your-solana-sponsorship-policy-id", // Make sure enabled on Solana devnet
+);
+
+// Sign the transaction
+await solanaSigner.addSignature(tx);
+
+// Send the transaction
+const hash = await connection.sendTransaction(tx);
+console.log("Transaction sent:", hash);
+```
+
+</CodeBlocks>
