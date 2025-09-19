@@ -482,7 +482,7 @@ export class AuthClient {
       orgId,
       idToken,
       bundle,
-      authType: authType as AuthType,
+      authType,
     });
     // Forget the reference to the TEK stamper, because in some implementations
     // it may become invalid if it is disconnected later. Future logins should
