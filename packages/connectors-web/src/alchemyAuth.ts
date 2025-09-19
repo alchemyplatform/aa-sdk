@@ -56,8 +56,8 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
   let authSessionInstance: AuthSession | undefined;
   let authClientInstance: AuthClient | undefined;
   let currentChainId: number | undefined;
-  // Cache signer clients by chainId to avoid recreating them unnecessarily.
-  let signerClients: Record<number, Client> = {};
+  // Cache clients by chainId to avoid recreating them unnecessarily.
+  let clients: Record<number, Client> = {};
 
   return createConnector<Provider, Properties>((config) => {
     const emitAndThrowError = (message: string) => {
@@ -126,7 +126,7 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
           authSessionInstance = undefined;
           authClientInstance = undefined;
           currentChainId = undefined;
-          signerClients = {};
+          clients = {};
         } catch (error) {
           // Log disconnect errors but don't throw to avoid breaking flow
           config.emitter.emit("error", { error: error as Error });
@@ -173,8 +173,8 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
           throw new Error("chainId is required to getClient");
         }
 
-        if (signerClients[chainId]) {
-          return signerClients[chainId];
+        if (clients[chainId]) {
+          return clients[chainId];
         }
 
         const chain = config.chains.find((chain) => chain.id === chainId);
@@ -197,7 +197,7 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
           chain,
         });
 
-        signerClients[chainId] = client;
+        clients[chainId] = client;
 
         return client;
       },
