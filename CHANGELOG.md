@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.64.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.63.2...v4.64.0) (2025-09-19)
+
+### Bug Fixes
+
+- address race condition between preview env and link check ([#2082](https://github.com/alchemyplatform/aa-sdk/issues/2082)) ([72df7e6](https://github.com/alchemyplatform/aa-sdk/commit/72df7e628fbb7ce28ab66ddbab148171cbf00f84))
+- check links on preview ([#2067](https://github.com/alchemyplatform/aa-sdk/issues/2067)) ([dbb8960](https://github.com/alchemyplatform/aa-sdk/commit/dbb8960f60b1e589b997904cc7902c2e3af6e589))
+- fix broken link in guide ([#2083](https://github.com/alchemyplatform/aa-sdk/issues/2083)) ([415bfdf](https://github.com/alchemyplatform/aa-sdk/commit/415bfdf7cbc633ce1b136ee16b512b30c3af2553))
+- remove twoslash within codeblocks due to fern issue ([#2059](https://github.com/alchemyplatform/aa-sdk/issues/2059)) ([fd3b7a6](https://github.com/alchemyplatform/aa-sdk/commit/fd3b7a634e2ac229c614e2771b843ebe56650cef))
+
+### Features
+
+- add link to tx docs from quickstart ([#2073](https://github.com/alchemyplatform/aa-sdk/issues/2073)) ([8367b79](https://github.com/alchemyplatform/aa-sdk/commit/8367b799f896b3dbc7f316b5964b6f72f661e50d))
+- server signing ([#2043](https://github.com/alchemyplatform/aa-sdk/issues/2043)) ([8797f63](https://github.com/alchemyplatform/aa-sdk/commit/8797f6342a8934dbe57c5e029599d02d56ce8145))
+
 ## [4.63.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.63.1...v4.63.2) (2025-09-16)
 
 ### Bug Fixes
