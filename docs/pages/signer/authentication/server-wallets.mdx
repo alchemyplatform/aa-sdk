@@ -18,7 +18,7 @@ Generate a secure access key for authentication. This key will never be sent to 
 
 <CodeBlocks>
 
-```ts generate-key.ts
+```ts twoslash generate-key.ts
 import { generateAccessKey } from "@account-kit/signer";
 
 // Generate a random access key
@@ -36,7 +36,7 @@ Use your access key you just generated to create a server signer:
 
 <CodeBlocks>
 
-```ts server-signer.ts
+```ts twoslash server-signer.ts
 import { createServerSigner } from "@account-kit/signer";
 
 const signer = await createServerSigner({
@@ -61,7 +61,9 @@ console.log("Signer address:", await signer.getAddress());
 
 <Accordion title="Multiple signers per access key">
 
-```ts
+```ts twoslash
+import { createServerSigner } from "@account-kit/signer";
+// ---cut---
 const businessSigner = await createServerSigner({
   auth: {
     accessKey: "your-access-key-here",
@@ -95,7 +97,7 @@ You can easily use the server signer with our smart wallet client:
 
 <CodeBlocks>
 
-```ts smart-wallet.ts
+```ts twoslash smart-wallet.ts
 import { createServerSigner } from "@account-kit/signer";
 import { createSmartWalletClient } from "@account-kit/wallet-client";
 import { alchemy, baseSepolia } from "@account-kit/infra";
@@ -117,7 +119,7 @@ const client = createSmartWalletClient({
   }),
   chain: baseSepolia,
   signer,
-  policyId: "your-gas-manager-policy-id", // Make sure enabled on Base Sepolia
+  policyId: "your-sponsor-gas-policy-id", // Make sure enabled on Base Sepolia
 });
 
 // Get the smart account
@@ -142,13 +144,13 @@ console.log("Transaction sent:", preparedCallIds[0]);
 
 ## Solana Support
 
-Your server signer can also be used with Solana by converting it to a Solana signer. To start sending sponsored Solana transactions, make sure to set up a Solana gas manager policy in our [dashboard](https://dashboard.alchemy.com/gas-manager).
+Your server signer can also be used with Solana by converting it to a Solana signer. To start sending sponsored Solana transactions, make sure to set up a Solana sponsor gas policy in our [dashboard](https://dashboard.alchemy.com/gas-manager).
 
 <CodeBlocks>
 
-```ts solana.ts
+```ts twoslash solana.ts
 import { createServerSigner } from "@account-kit/signer";
-import { Connection } from "@solana/web3.js";
+import { Connection, SystemProgram, PublicKey } from "@solana/web3.js";
 
 // Set up Solana connection
 const connection = new Connection(
