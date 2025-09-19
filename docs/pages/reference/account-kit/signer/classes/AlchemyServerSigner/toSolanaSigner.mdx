@@ -19,7 +19,7 @@ import { AlchemyServerSigner } from "@account-kit/signer";
 import { AlchemyServerSigner } from "@account-kit/signer";
 
 const signer = await createServerSigner({
-  auth: { keyPair },
+  auth: { accessKey },
   connection: {
     apiKey: "alchemy-api-key",
   },

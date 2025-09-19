@@ -5,7 +5,7 @@ description: Overview of the ServerSignerClient method
 slug: wallets/reference/account-kit/signer/classes/ServerSignerClient/constructor
 ---
 
-Creates an instance of ApiKeySignerClient.
+Creates an instance of ServerSignerClient.
 
 <Note>
   `ServerSignerClient` extends `BaseSignerClient`, see the docs for
@@ -23,19 +23,19 @@ import { ServerSignerClient } from "@account-kit/signer";
 ### params
 
 `ServerSignerClientParams`
-The parameters for the client, including the API key and connection config
+The parameters for the client, including the access key and connection configuration
 
 ### params.connection
 
 `ConnectionConfig`
 The connection configuration for the client
 
-### params.apiKey.publicKey
+### params.accessKey
 
 `string`
-The public key of the API key
+The access key to be used for authentication
 
-### params.apiKey.privateKey
+### params.accountId
 
-`string`
-The private key of the API key
+`string | undefined`
+An optional ID to identify the account. Only required when using a single access key for multiple signers.

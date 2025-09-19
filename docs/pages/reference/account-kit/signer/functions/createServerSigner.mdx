@@ -5,7 +5,7 @@ description: Overview of the createServerSigner method
 slug: wallets/reference/account-kit/signer/functions/createServerSigner
 ---
 
-Creates a SmartAccountSigner using an AlchemyApiKeySignerClient.
+Creates a new server signer.
 
 ## Import
 
@@ -16,38 +16,34 @@ import { createServerSigner } from "@account-kit/signer";
 ## Usage
 
 ```ts
-const signer = await createApiKeySigner({
-  apiKey: {
-    privateKey: "private-api-key",
-    publicKey: "public-api-key",
-  },
+const signer = await createServerSigner({
+  auth: { accessKey },
   connection: {
     apiKey: "alchemy-api-key",
   },
-  userOrgId: "user-org-id",
 });
 
-const account = await createModularAccountV2({
-  transport,
-  signer,
-  chain,
-});
-
-const client = createAlchemySmartAccountClient({
-  account,
-  transport,
-  chain,
-});
+console.log("Signer address:", await signer.getAddress());
 ```
 
 ## Parameters
 
 ### params
 
-`CreateApiKeySignerParams`
-Parameters including the connection config, api key, and user org ID
+`CreateServerSignerParams`
+Parameters
+
+### params.auth
+
+`AccessKeyAuthParams`
+Authentication config for the server signer
+
+### params.connection
+
+`ConnectionConfig`
+Connection config for the server signer
 
 ## Returns
 
-`Promise<CreateApiKeySignerResponse>`
-A promise that resolves to a SmartAccountSigner
+`Promise<AlchemyServerSigner>`
+A promise that resolves to a server signer
