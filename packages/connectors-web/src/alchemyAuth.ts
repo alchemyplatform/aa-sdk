@@ -53,7 +53,7 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
   let currentChainId: number | undefined;
 
   return createConnector<Provider, Properties>((config) => {
-    const emitAndThrowError = (message: string) => {
+    const emitAndThrowError = (message: string): never => {
       const error = new Error(message);
       config.emitter.emit("error", { error });
       throw error;
@@ -134,10 +134,13 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
         return resolvedChainId;
       },
 
-      async getProvider(): Promise<Provider> {
-        // TODO: Implement proper provider when Signer EIP-1193 support is available
-        // For now, throw an error as the provider is not yet implemented
-        throw new Error("Provider not implemented.");
+      async getProvider() {
+        if (!authSessionInstance) {
+          throw new Error(
+            "No auth session available. Please authenticate first.",
+          );
+        }
+        return authSessionInstance.getProvider();
       },
 
       async isAuthorized() {

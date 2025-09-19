@@ -1,10 +1,9 @@
 import { sendEmailOtp, submitOtpCode, loginWithOauth, handleOauthRedirect } from '@alchemy/wagmi-core'
 import { resolveAlchemyAuthConnector } from '@alchemy/connectors-web'
 import { Buffer } from 'buffer'
-
-import './style.css'
-import { connect, disconnect, reconnect, watchAccount } from '@wagmi/core'
+import { connect, disconnect, reconnect, watchAccount, getAccount, signMessage, verifyMessage } from '@wagmi/core'
 import { config } from './wagmi'
+import './style.css'
 
 globalThis.Buffer = Buffer
 
@@ -72,6 +71,30 @@ async function handleOauthLogin(provider: string) {
     updateStatus('oauth-status', `${provider} authentication successful!`)
   } catch (error) {
     updateStatus('oauth-status', `Error: ${(error as Error).message}`)
+  }
+}
+
+async function handleSignMessage() {
+  const account = getAccount(config)
+  if (account.status !== 'connected') {
+    alert('Not connected')
+    return
+  }
+
+  const message = getInputValue('message-input')
+  if (!message) {
+    alert('Please enter a message')
+    return
+  }
+
+  try {
+    const signature = await signMessage(config, { message })
+    const isValid = await verifyMessage(config, { message, signature, address: account.address })
+    console.log({ signature, isValid })
+    alert(`Signature: ${signature}\n\n Verified: ${isValid}`)
+  } catch (error) {
+    console.error(error)
+    alert('Failed to sign message')
   }
 }
 
@@ -148,7 +171,7 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
     </div>
 
     <div id="connect">
-      <h2>Connect</h2>
+      <h2>3rd Party Connectors</h2>
       ${config.connectors
         .filter((connector) => connector.id !== 'alchemyAuth')
         .map(
@@ -161,14 +184,14 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
     <div id="email-auth">
       <h2>Email Authentication</h2>
 
-      <div>
-        <input type="email" id="email-input" placeholder="Enter your email" />
-        <button id="send-otp" type="button">Send OTP</button>
-      </div>
-      <div>
-        <input type="text" id="otp-input" placeholder="Enter OTP code" maxlength="6" />
-        <button id="submit-otp" type="button">Submit OTP</button>
-      </div>
+      <form id="email-form">
+        <input type="email" id="email-input" placeholder="Enter your email" required autocomplete="off" data-1p-ignore />
+        <button id="send-otp" type="submit">Send OTP</button>
+      </form>
+      <form id="otp-form">
+        <input type="text" id="otp-input" placeholder="Enter OTP code" maxlength="6" required autocomplete="off" data-1p-ignore />
+        <button id="submit-otp" type="submit">Submit OTP</button>
+      </form>
       <div id="auth-status"></div>
     </div>
 
@@ -197,6 +220,15 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
       </div>
 
       <div id="oauth-status"></div>
+    </div>
+
+    <div id="wallet-actions">
+      <h2>Wallet Actions</h2>
+      
+      <form id="message-form">
+        <input type="text" id="message-input" placeholder="Enter message" required />
+        <button id="sign-message" type="submit">Sign message</button>
+      </form>
     </div>
 
     <div id="session-controls">
@@ -269,11 +301,18 @@ function setupAccountWatcher(element: HTMLDivElement) {
 }
 
 function setupEmailAuth() {
-  const sendOtpButton = document.getElementById('send-otp')
-  const submitOtpButton = document.getElementById('submit-otp')
+  const emailForm = document.querySelector<HTMLFormElement>('#email-form')
+  const otpForm = document.querySelector<HTMLFormElement>('#otp-form')
 
-  sendOtpButton?.addEventListener('click', handleSendOtp)
-  submitOtpButton?.addEventListener('click', handleSubmitOtp)
+  emailForm?.addEventListener('submit', async (e) => {
+    e.preventDefault()
+    await handleSendOtp()
+  })
+
+  otpForm?.addEventListener('submit', async (e) => {
+    e.preventDefault()
+    await handleSubmitOtp()
+  })
 }
 
 function setupOauthAuth() {
@@ -287,6 +326,15 @@ function setupOauthAuth() {
   })
 }
 
+function setupWalletActions() {
+  const messageForm = document.querySelector<HTMLFormElement>('#message-form')
+
+  messageForm?.addEventListener('submit', async (e) => {
+    e.preventDefault()
+    await handleSignMessage()
+  })
+}
+
 function setupSessionControls() {
   const forceDisconnectButton = document.getElementById('force-disconnect')
   forceDisconnectButton?.addEventListener('click', handleForceDisconnect)
@@ -297,6 +345,7 @@ function setupApp(element: HTMLDivElement) {
   setupAccountWatcher(element)
   setupEmailAuth()
   setupOauthAuth()
+  setupWalletActions()
   setupSessionControls()
 
   // Handle OAuth redirect on page load

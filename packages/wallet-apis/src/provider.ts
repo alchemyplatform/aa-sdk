@@ -11,10 +11,12 @@ import {
 import {
   AccountNotFoundError,
   BaseError,
+  ChainNotFoundError,
   InvalidRequestError,
+  createEip1193HandlerFactory,
+  type ExtractRpcMethod,
 } from "@alchemy/common";
-import type { ExtractRpcMethod, BaseWalletClient } from "./types.js";
-import { ChainNotFoundError } from "../../../aa-sdk/core/src/errors/client.js";
+import type { BaseWalletClient } from "./types.js";
 import type { PrepareCallsParams } from "./actions/prepareCalls.js";
 import type { SmartWalletActions } from "./decorators/smartWalletActions.js";
 import type { WalletServerViemRpcSchema } from "@alchemy/wallet-api-types/rpc";
@@ -39,6 +41,8 @@ export type SmartWalletClientEip1193Provider = Prettify<
   }
 >;
 
+const handler = createEip1193HandlerFactory<SmartWalletClient1193Methods>();
+
 export const createEip1193ProviderFromClient = <
   TAccount extends Address | undefined = Address | undefined,
 >(
@@ -61,7 +65,7 @@ export const createEip1193ProviderFromClient = <
     try {
       switch (method) {
         case "eth_chainId": {
-          return handler<"eth_chainId">(async () => {
+          return await handler<"eth_chainId">(async () => {
             if (client.chain.id == null) {
               throw new ChainNotFoundError();
             }
@@ -70,7 +74,7 @@ export const createEip1193ProviderFromClient = <
         }
 
         case "eth_accounts": {
-          return handler<"eth_accounts">(async () => {
+          return await handler<"eth_accounts">(async () => {
             if (!client.account) {
               throw new AccountNotFoundError();
             }
@@ -79,7 +83,7 @@ export const createEip1193ProviderFromClient = <
         }
 
         case "personal_sign": {
-          return handler<"personal_sign">(async ([data, address]) => {
+          return await handler<"personal_sign">(async ([data, address]) => {
             if (!client.account) {
               throw new AccountNotFoundError();
             }
@@ -100,28 +104,30 @@ export const createEip1193ProviderFromClient = <
         }
 
         case "eth_signTypedData_v4": {
-          return handler<"eth_signTypedData_v4">(async ([address, tdJson]) => {
-            if (!client.account) {
-              throw new AccountNotFoundError();
-            }
-            if (
-              address?.toLowerCase() !== client.account.address.toLowerCase()
-            ) {
-              throw new InvalidRequestError(
-                "Cannot sign for an address other than the current account.",
-              );
-            }
-            return await client.signTypedData({
-              account: client.account.address,
-              ...(JSON.parse(tdJson) as TypedDataDefinition),
-            });
-          })(params);
+          return await handler<"eth_signTypedData_v4">(
+            async ([address, tdJson]) => {
+              if (!client.account) {
+                throw new AccountNotFoundError();
+              }
+              if (
+                address?.toLowerCase() !== client.account.address.toLowerCase()
+              ) {
+                throw new InvalidRequestError(
+                  "Cannot sign for an address other than the current account.",
+                );
+              }
+              return await client.signTypedData({
+                account: client.account.address,
+                ...(JSON.parse(tdJson) as TypedDataDefinition),
+              });
+            },
+          )(params);
         }
 
         // eslint-disable-next-line no-fallthrough
         case "wallet_sendTransaction":
         case "eth_sendTransaction": {
-          return handler<"eth_sendTransaction">(async ([tx]) => {
+          return await handler<"eth_sendTransaction">(async ([tx]) => {
             if (!client.account) {
               throw new AccountNotFoundError();
             }
@@ -154,7 +160,7 @@ export const createEip1193ProviderFromClient = <
         }
 
         case "wallet_sendCalls": {
-          return handler<"wallet_sendCalls">(async (_params) => {
+          return await handler<"wallet_sendCalls">(async (_params) => {
             if (!_params) {
               throw new InvalidRequestError("Params are required.");
             }
@@ -195,7 +201,7 @@ export const createEip1193ProviderFromClient = <
         }
 
         case "wallet_getCapabilities": {
-          return handler<"wallet_getCapabilities">(async () => {
+          return await handler<"wallet_getCapabilities">(async () => {
             return await getCapabilities(client);
           })(params);
         }
@@ -243,25 +249,3 @@ export const createEip1193ProviderFromClient = <
     request,
   };
 };
-
-// Viem's typing within a custom EIP1193 request function is surprisingly bad. This helps a lot
-// by automatically casting the input params & ensuring that the result matches what is required.
-const handler =
-  <TMethod extends SmartWalletClient1193Methods[number]["Method"]>(
-    handle: (
-      params: ExtractRpcMethod<
-        SmartWalletClient1193Methods,
-        TMethod
-      >["Parameters"],
-    ) => Promise<
-      ExtractRpcMethod<SmartWalletClient1193Methods, TMethod>["ReturnType"]
-    >,
-  ) =>
-  (params: unknown) => {
-    return handle(
-      params as ExtractRpcMethod<
-        SmartWalletClient1193Methods,
-        TMethod
-      >["Parameters"],
-    );
-  };

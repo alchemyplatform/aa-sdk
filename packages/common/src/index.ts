@@ -17,6 +17,7 @@ export { assertNever } from "./utils/assertNever.js";
 export { raise } from "./utils/raise.js";
 export { bigIntMultiply } from "./utils/bigint.js";
 export { lowerAddress } from "./utils/lowerAddress.js";
+export { createEip1193HandlerFactory } from "./utils/createEip1193HandlerFactory.js";
 
 // config
 export type { AlchemyConnectionConfig } from "./transport/connectionSchema.js";
@@ -34,6 +35,7 @@ export { ConnectionConfigError } from "./errors/ConnectionConfigError.js";
 export { FetchError } from "./errors/FetchError.js";
 export { ServerError } from "./errors/ServerError.js";
 export { InvalidRequestError } from "./errors/InvalidRequestError.js";
+export { MethodUnsupportedError } from "./errors/MethodUnsupportedError.js";
 
 // actions
 export type * from "./actions/addBreadCrumb.js";

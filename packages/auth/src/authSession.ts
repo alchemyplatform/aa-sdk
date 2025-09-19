@@ -16,6 +16,8 @@ import type {
   User,
 } from "./types";
 import { dev_request } from "./devRequest.js";
+import { create1193Provider } from "./provider.js";
+import type { AlchemyAuthEip1193Provider } from "./provider.js";
 
 export type CreateAuthSessionParams = {
   // TODO: replace apiKey with transport once it's ready.
@@ -162,6 +164,11 @@ export class AuthSession {
     if (this.isDisconnected) {
       throw new Error("Auth session has been disconnected");
     }
+  }
+
+  public getProvider(): AlchemyAuthEip1193Provider {
+    this.throwIfDisconnected();
+    return create1193Provider(this);
   }
 
   // TODO: remove this and use transport instead once it's ready.

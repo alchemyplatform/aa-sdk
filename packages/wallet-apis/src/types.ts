@@ -43,12 +43,3 @@ export type WithoutRawPayload<T> = T extends { rawPayload: Hex }
   : T;
 
 export type Expect<T extends true> = T;
-
-export type ExtractRpcMethod<
-  T extends readonly {
-    Method: string;
-    Parameters?: unknown;
-    ReturnType: unknown;
-  }[],
-  M extends T[number]["Method"],
-> = Extract<T[number], { Method: M }>;
