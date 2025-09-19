@@ -102,7 +102,7 @@ describe("AuthClient", () => {
       };
 
       const authSession = await authClient.loadAuthSessionState(
-        JSON.stringify(validOAuthState),
+        JSON.stringify(validOAuthState)
       );
 
       expect(authSession).toBeInstanceOf(AuthSession);
@@ -111,13 +111,13 @@ describe("AuthClient", () => {
           orgId: mockUser.orgId,
           userId: mockUser.userId,
           address: mockUser.address,
-        }),
+        })
       );
 
       // Verify the TEK stamper was created and bundle was injected
       expect(mockCreateTekStamper).toHaveBeenCalled();
       expect(mockTekStamper.injectCredentialBundle).toHaveBeenCalledWith(
-        "test-oauth-bundle",
+        "test-oauth-bundle"
       );
     });
 
@@ -130,7 +130,7 @@ describe("AuthClient", () => {
       };
 
       const authSession = await authClient.loadAuthSessionState(
-        JSON.stringify(validOtpState),
+        JSON.stringify(validOtpState)
       );
 
       expect(authSession).toBeInstanceOf(AuthSession);
@@ -139,13 +139,13 @@ describe("AuthClient", () => {
           orgId: mockUser.orgId,
           userId: mockUser.userId,
           address: mockUser.address,
-        }),
+        })
       );
 
       // Verify the TEK stamper was created and bundle was injected
       expect(mockCreateTekStamper).toHaveBeenCalled();
       expect(mockTekStamper.injectCredentialBundle).toHaveBeenCalledWith(
-        "test-otp-bundle",
+        "test-otp-bundle"
       );
     });
 
@@ -158,7 +158,7 @@ describe("AuthClient", () => {
       };
 
       const authSession = await authClient.loadAuthSessionState(
-        JSON.stringify(validEmailState),
+        JSON.stringify(validEmailState)
       );
 
       expect(authSession).toBeInstanceOf(AuthSession);
@@ -167,13 +167,13 @@ describe("AuthClient", () => {
           orgId: mockUser.orgId,
           userId: mockUser.userId,
           address: mockUser.address,
-        }),
+        })
       );
 
       // Verify the TEK stamper was created and bundle was injected
       expect(mockCreateTekStamper).toHaveBeenCalled();
       expect(mockTekStamper.injectCredentialBundle).toHaveBeenCalledWith(
-        "test-email-bundle",
+        "test-email-bundle"
       );
     });
 
@@ -198,12 +198,12 @@ describe("AuthClient", () => {
       };
 
       const authSession = await authClient.loadAuthSessionState(
-        JSON.stringify(validPasskeyState),
+        JSON.stringify(validPasskeyState)
       );
 
       expect(authSession).toBeInstanceOf(AuthSession);
       expect(mockLoginWithPasskey).toHaveBeenCalledWith(
-        "test-passkey-credential",
+        "test-passkey-credential"
       );
 
       mockLoginWithPasskey.mockRestore();
@@ -218,7 +218,7 @@ describe("AuthClient", () => {
       };
 
       await expect(
-        authClient.loadAuthSessionState(JSON.stringify(invalidPasskeyState)),
+        authClient.loadAuthSessionState(JSON.stringify(invalidPasskeyState))
       ).rejects.toThrow("Credential ID is required for passkey authentication");
     });
 
@@ -231,7 +231,7 @@ describe("AuthClient", () => {
       };
 
       const authSession = await authClient.loadAuthSessionState(
-        JSON.stringify(expiredState),
+        JSON.stringify(expiredState)
       );
 
       expect(authSession).toBeUndefined();
@@ -252,7 +252,7 @@ describe("AuthClient", () => {
       };
 
       await expect(
-        authClient.loadAuthSessionState(JSON.stringify(validState)),
+        authClient.loadAuthSessionState(JSON.stringify(validState))
       ).rejects.toThrow("Failed to inject credential bundle");
     });
   });
