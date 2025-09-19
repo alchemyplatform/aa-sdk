@@ -6,8 +6,10 @@ slug: wallets/authentication/login-methods/server-wallets
 
 <Warning>**This feature is in early access.**</Warning>
 
-Server wallets allow you to programmatically control wallets server-side using access keys. This enables backend applications to sign transactions and messages on behalf of users without requiring interactive authentication.
+Server wallets can be programmatically controlled using access keys. This enables backend applications to sign transactions and messages on behalf of users without requiring interactive authentication.
 
+<Tabs>
+  <Tab title="JavaScript">
 ## Prerequisites
 
 Get your **API key** by creating a new app in your [Alchemy Dashboard](https://dashboard.alchemy.com/apps). Make sure your desired network is enabled for your app under the Networks tab.
@@ -18,7 +20,7 @@ Generate a secure access key for authentication. This key will never be sent to 
 
 <CodeBlocks>
 
-```ts twoslash generate-key.ts
+```ts twoslash evm.ts
 import { generateAccessKey } from "@account-kit/signer";
 
 // Generate a random access key
@@ -36,7 +38,7 @@ Use your access key you just generated to create a server signer:
 
 <CodeBlocks>
 
-```ts twoslash server-signer.ts
+```ts twoslash evm.ts
 import { createServerSigner } from "@account-kit/signer";
 
 const signer = await createServerSigner({
@@ -91,28 +93,17 @@ console.log("Personal address:", await personalSigner.getAddress());
 
 </Accordion>
 
-## Step 3: Using with Smart Wallets
+## Step 3: Send a Transaction
 
-You can easily use the server signer with our smart wallet client:
+We can now send transactions using the Smart Account Client:
 
 <CodeBlocks>
 
-```ts twoslash smart-wallet.ts
-import { createServerSigner } from "@account-kit/signer";
+```ts twoslash evm.ts
 import { createSmartWalletClient } from "@account-kit/wallet-client";
 import { alchemy, baseSepolia } from "@account-kit/infra";
 
-// Create the server signer
-const signer = await createServerSigner({
-  auth: {
-    accessKey: "your-access-key",
-  },
-  connection: {
-    apiKey: "your-alchemy-api-key",
-  },
-});
-
-// Create smart wallet client
+// Create Smart Account Client using the signer from Step 2
 const client = createSmartWalletClient({
   transport: alchemy({
     apiKey: "your-alchemy-api-key",
@@ -122,7 +113,7 @@ const client = createSmartWalletClient({
   policyId: "your-sponsor-gas-policy-id", // Make sure enabled on Base Sepolia
 });
 
-// Get the smart account
+// Retrieve account
 const account = await client.requestAccount();
 console.log("Smart account address:", account.address);
 
@@ -144,7 +135,7 @@ console.log("Transaction sent:", preparedCallIds[0]);
 
 ## Solana Support
 
-Your server signer can also be used with Solana by converting it to a Solana signer. To start sending sponsored Solana transactions, make sure to set up a Solana sponsor gas policy in our [dashboard](https://dashboard.alchemy.com/gas-manager).
+Server wallet can also easily be used on Solana. To start sending sponsored transactions on Solana, set up a Solana sponsor gas policy in our [dashboard](https://dashboard.alchemy.com/gas-manager) and follow the guide below.
 
 <CodeBlocks>
 
@@ -190,3 +181,6 @@ console.log("Transaction sent:", hash);
 ```
 
 </CodeBlocks>
+
+  </Tab>
+</Tabs>
