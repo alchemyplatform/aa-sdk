@@ -66,17 +66,6 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
       throw error;
     };
 
-    config.emitter.on("change", (data) => {
-      const newChain = data.chainId;
-      if (newChain !== currentChainId) {
-        // TODO(jh): remove logging after testing.
-        console.log(
-          `[alchemyAuth connector] Chain changed from ${currentChainId} to ${newChain}, updating currentChainId.`,
-        );
-        currentChainId = newChain;
-      }
-    });
-
     return {
       id: "alchemyAuth",
       name: "Alchemy Auth",
@@ -111,6 +100,11 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
 
         currentChainId = resolvedChainId;
 
+        config.emitter.emit("connect", {
+          chainId: resolvedChainId,
+          accounts,
+        });
+
         return {
           accounts,
           chainId: resolvedChainId,
@@ -131,6 +125,7 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
           // Log disconnect errors but don't throw to avoid breaking flow
           config.emitter.emit("error", { error: error as Error });
         }
+        config.emitter.emit("disconnect");
       },
 
       async getAccounts(): Promise<readonly Address[]> {
@@ -139,6 +134,7 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
         }
 
         const address = authSessionInstance.getAddress();
+
         return [address];
       },
 
@@ -216,6 +212,11 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
         if (!targetChain) {
           throw new Error(`Chain with id ${chainId} not found in config`);
         }
+
+        config.emitter.emit("change", {
+          chainId,
+          accounts: await this.getAccounts(),
+        });
 
         return targetChain;
       },

@@ -1,7 +1,6 @@
 import { sendEmailOtp, submitOtpCode, loginWithOauth, handleOauthRedirect } from '@alchemy/wagmi-core'
-import { resolveAlchemyAuthConnector } from '@alchemy/connectors-web'
 import { Buffer } from 'buffer'
-import { connect, disconnect, reconnect, watchAccount, getAccount, signMessage, verifyMessage } from '@wagmi/core'
+import { connect, disconnect, reconnect, watchAccount, getAccount, signMessage, verifyMessage, switchChain } from '@wagmi/core'
 import { config } from './wagmi'
 import './style.css'
 
@@ -98,6 +97,15 @@ async function handleSignMessage() {
   }
 }
 
+async function handleSwitchChain(chainId: number) {
+  try {
+    switchChain(config, { chainId })
+  } catch (error) {
+    console.error(error)
+    alert('Failed to switch chain')
+  }
+}
+
 // OAuth redirect handling on page load
 function handleOauthRedirectOnLoad() {
   const urlParams = new URLSearchParams(window.location.search)
@@ -113,46 +121,29 @@ function handleOauthRedirectOnLoad() {
   }
 }
 
-// Force disconnect handler
-async function handleForceDisconnect() {
+// Disconnect handler
+async function handleDisconnect() {
   try {
-    updateStatus('disconnect-status', 'Disconnecting and clearing session...')
+    updateStatus('disconnect-status', 'Disconnecting...')
 
-    // Try to get and disconnect the Alchemy connector directly using the helper
-    try {
-      const alchemyConnector = resolveAlchemyAuthConnector(config)
-      console.log('Found Alchemy connector:', alchemyConnector)
+    await disconnect(config)
 
-      // Call disconnect on the connector directly
-      if (alchemyConnector && typeof alchemyConnector.disconnect === 'function') {
-        await alchemyConnector.disconnect()
-        console.log('Successfully called connector.disconnect()')
-      } else {
-        console.warn('Connector does not have disconnect method')
-        // Fall back to Wagmi's disconnect
-        await disconnect(config)
-      }
-    } catch (connectorError) {
-      console.warn('Could not resolve Alchemy connector, trying general disconnect:', connectorError)
-      // Fall back to Wagmi's disconnect
-      await disconnect(config)
-    }
-
-    // Clear any additional browser storage that might be used
-    // This ensures a completely clean state
-    localStorage.clear()
-    sessionStorage.clear()
-
-    updateStatus('disconnect-status', 'Successfully disconnected and cleared session!')
-
-    // Optionally reload the page to ensure clean state
-    setTimeout(() => {
-      window.location.reload()
-    }, 1000)
-
+    updateStatus('disconnect-status', 'Successfully disconnected!')
   } catch (error) {
     console.error('Disconnect error details:', error)
     updateStatus('disconnect-status', `Disconnect error: ${(error as Error).message}`)
+  }
+}
+
+// Clear storage handler
+function handleClearStorage() {
+  try {
+    localStorage.clear()
+    sessionStorage.clear()
+    updateStatus('disconnect-status', 'Storage cleared successfully!')
+  } catch (error) {
+    console.error('Clear storage error:', error)
+    updateStatus('disconnect-status', `Clear storage error: ${(error as Error).message}`)
   }
 }
 
@@ -233,8 +224,11 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
 
     <div id="session-controls">
       <h2>Session Controls</h2>
-      <button id="force-disconnect" type="button" class="disconnect-btn">
-        Force Disconnect & Clear Session
+      <button id="disconnect-btn" type="button" class="disconnect-btn">
+        Disconnect
+      </button>
+      <button id="clear-storage-btn" type="button" class="clear-storage-btn">
+        Clear Storage
       </button>
       <div id="disconnect-status"></div>
     </div>
@@ -287,7 +281,17 @@ function setupAccountWatcher(element: HTMLDivElement) {
         </div>
         ${
           account.status === 'connected'
-            ? `<button id="disconnect" type="button">Disconnect</button>`
+            ? `<div id="chain-buttons">
+                ${config.chains
+                  .map(
+                    (chain) =>
+                      `<button class="chain-btn" data-chain-id="${chain.id}" type="button">
+                        Switch to ${chain.name}
+                      </button>`,
+                  )
+                  .join('')}
+              </div>
+              <button id="disconnect" type="button">Disconnect</button>`
             : ''
         }
       `
@@ -296,6 +300,14 @@ function setupAccountWatcher(element: HTMLDivElement) {
       if (disconnectButton) {
         disconnectButton.addEventListener('click', () => disconnect(config))
       }
+
+      const chainButtons = element.querySelectorAll<HTMLButtonElement>('.chain-btn')
+      chainButtons.forEach(button => {
+        button.addEventListener('click', async () => {
+          const chainId = parseInt(button.getAttribute('data-chain-id') || '0', 10)
+          await handleSwitchChain(chainId)
+        })
+      })
     },
   })
 }
@@ -328,16 +340,26 @@ function setupOauthAuth() {
 
 function setupWalletActions() {
   const messageForm = document.querySelector<HTMLFormElement>('#message-form')
-
   messageForm?.addEventListener('submit', async (e) => {
     e.preventDefault()
     await handleSignMessage()
   })
+
+  const chainButtons = document.querySelectorAll<HTMLButtonElement>('.chain-btn')
+  chainButtons.forEach(button => {
+    button.addEventListener('click', async () => {
+      const chainId = parseInt(button.getAttribute('data-chain-id') || '0', 10)
+      await handleSwitchChain(chainId)
+    })
+  })
 }
 
 function setupSessionControls() {
-  const forceDisconnectButton = document.getElementById('force-disconnect')
-  forceDisconnectButton?.addEventListener('click', handleForceDisconnect)
+  const disconnectButton = document.getElementById('disconnect-btn')
+  disconnectButton?.addEventListener('click', handleDisconnect)
+
+  const clearStorageButton = document.getElementById('clear-storage-btn')
+  clearStorageButton?.addEventListener('click', handleClearStorage)
 }
 
 function setupApp(element: HTMLDivElement) {
