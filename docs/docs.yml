@@ -1188,6 +1188,8 @@ navigation:
             contents:
               - section: Functions
                 contents:
+                  - page: createSmartWalletClient
+                    path: wallets/pages/reference/alchemy/wallet-apis/functions/createSmartWalletClient.mdx
                   - page: formatSign
                     path: wallets/pages/reference/alchemy/wallet-apis/functions/formatSign.mdx
                   - page: grantPermissions

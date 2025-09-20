@@ -167,7 +167,7 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
           );
         }
 
-        const chainId = params.chainId ?? (await this.getChainId());
+        const chainId = params.chainId ?? currentChainId;
         if (!chainId) {
           throw new Error("chainId is required to getClient");
         }

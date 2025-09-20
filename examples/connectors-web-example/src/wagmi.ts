@@ -1,7 +1,12 @@
 import { baseAccount, injected, walletConnect } from '@wagmi/connectors'
-import { Config, createConfig, http } from '@wagmi/core'
+import { Config, createConfig } from '@wagmi/core'
 import { arbitrumSepolia, mainnet, sepolia } from '@wagmi/core/chains'
 import { alchemyAuth } from '@alchemy/connectors-web'
+import { alchemyTransport } from '@alchemy/common'
+
+const transport = alchemyTransport({
+  apiKey: import.meta.env.VITE_ALCHEMY_API_KEY,
+})
 
 export const config: Config = createConfig({
   chains: [arbitrumSepolia, mainnet, sepolia],
@@ -14,8 +19,8 @@ export const config: Config = createConfig({
     }),
   ],
   transports: {
-    [arbitrumSepolia.id]: http(),
-    [mainnet.id]: http(),
-    [sepolia.id]: http(),
+    [arbitrumSepolia.id]: transport,
+    [mainnet.id]: transport,
+    [sepolia.id]: transport,
   },
 })

@@ -137,7 +137,6 @@ export class AuthSession {
       mode: "ETHEREUM",
       payload: hashedAuth,
     });
-    // TODO(jh): replace w/ `unpackSignRawMessageBytes` if this doesn't work
     const signature = parseSignature(signatureHex);
     return {
       address,

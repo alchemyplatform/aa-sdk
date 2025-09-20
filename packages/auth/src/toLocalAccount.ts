@@ -21,7 +21,7 @@ export const toLocalAccount = (authSession: AuthSession): LocalAccount => {
       return await authSession.signMessage({ message: params.message });
     },
     signTypedData: async (params): Promise<Hex> => {
-      // TODO(jh): test that this casting is safe.
+      // This type casting seems safe. Typed Data types in Viem are tricky.
       return await authSession.signTypedData(params as TypedDataDefinition);
     },
     signAuthorization: async (params): Promise<SignAuthorizationReturnType> => {

@@ -1,8 +1,8 @@
 import { sendEmailOtp, submitOtpCode, loginWithOauth, handleOauthRedirect } from '@alchemy/wagmi-core'
 import { Buffer } from 'buffer'
-import { connect, disconnect, reconnect, watchAccount, getAccount, signMessage, verifyMessage, switchChain } from '@wagmi/core'
+import { connect, disconnect, reconnect, watchAccount, getAccount, signMessage, verifyMessage, switchChain, signTypedData, verifyTypedData } from '@wagmi/core'
 import { config } from './wagmi'
-import { testSmartWalletWithConnectorClient } from './test-sign-authorization'
+import { testSmartWalletWithConnectorClient } from './test-smart-wallet'
 import './style.css'
 
 globalThis.Buffer = Buffer
@@ -95,6 +95,60 @@ async function handleSignMessage() {
   } catch (error) {
     console.error(error)
     alert('Failed to sign message')
+  }
+}
+
+async function handleSignTypedData() {
+  const account = getAccount(config)
+  if (account.status !== 'connected') {
+    alert('Not connected')
+    return
+  }
+
+  const typedData = {
+    domain: {
+      name: 'Ether Mail',
+      version: '1',
+      chainId: account.chainId,
+      verifyingContract: '0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC' as const,
+    },
+    types: {
+      Person: [
+        { name: 'name', type: 'string' },
+        { name: 'wallet', type: 'address' },
+      ],
+      Mail: [
+        { name: 'from', type: 'Person' },
+        { name: 'to', type: 'Person' },
+        { name: 'contents', type: 'string' },
+      ],
+    },
+    primaryType: 'Mail' as const,
+    message: {
+      from: {
+        name: 'Cow',
+        wallet: '0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826',
+      },
+      to: {
+        name: 'Bob',
+        wallet: '0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB',
+      },
+      contents: 'Hello, Bob!',
+    },
+  }
+
+  try {
+    const signature = await signTypedData(config, typedData)
+    const isValid = await verifyTypedData(config, {
+      ...typedData,
+      signature,
+      address: account.address,
+    })
+    console.log({ typedData, signature, isValid })
+    alert(`Typed Data Signature: ${signature}\n\n Verified: ${isValid}`)
+  } catch (error) {
+    console.error(error)
+    alert('Failed to sign typed data')
   }
 }
 
@@ -239,8 +293,12 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
         <button id="sign-message" type="submit">Sign message</button>
       </form>
 
-      <button id="test-smart-wallet" type="button">Send call via Smart Wallet Client</button>
-      <div id="smart-wallet-status"></div>
+      <button id="sign-typed-data" type="button">Sign Typed Data</button>
+
+      <div>
+        <button id="test-smart-wallet" type="button">Send call via Smart Wallet Client</button>
+        <div id="smart-wallet-status"></div>
+      </div>
     </div>
 
     <div id="session-controls">
@@ -365,6 +423,9 @@ function setupWalletActions() {
     e.preventDefault()
     await handleSignMessage()
   })
+
+  const signTypedDataButton = document.getElementById('sign-typed-data')
+  signTypedDataButton?.addEventListener('click', handleSignTypedData)
 
   const testSmartWalletButton = document.getElementById('test-smart-wallet')
   testSmartWalletButton?.addEventListener('click', handleTestSmartWallet)
