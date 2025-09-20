@@ -1,8 +1,8 @@
 import { sendEmailOtp, submitOtpCode, loginWithOauth, handleOauthRedirect } from '@alchemy/wagmi-core'
-import { resolveAlchemyAuthConnector } from '@alchemy/connectors-web'
 import { Buffer } from 'buffer'
-import { connect, disconnect, reconnect, watchAccount, getAccount, signMessage, verifyMessage } from '@wagmi/core'
+import { connect, disconnect, reconnect, watchAccount, getAccount, signMessage, verifyMessage, switchChain, signTypedData, verifyTypedData } from '@wagmi/core'
 import { config } from './wagmi'
+import { testSmartWalletWithConnectorClient } from './test-smart-wallet'
 import './style.css'
 
 globalThis.Buffer = Buffer
@@ -98,6 +98,86 @@ async function handleSignMessage() {
   }
 }
 
+async function handleSignTypedData() {
+  const account = getAccount(config)
+  if (account.status !== 'connected') {
+    alert('Not connected')
+    return
+  }
+
+  const typedData = {
+    domain: {
+      name: 'Ether Mail',
+      version: '1',
+      chainId: account.chainId,
+      verifyingContract: '0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC' as const,
+    },
+    types: {
+      Person: [
+        { name: 'name', type: 'string' },
+        { name: 'wallet', type: 'address' },
+      ],
+      Mail: [
+        { name: 'from', type: 'Person' },
+        { name: 'to', type: 'Person' },
+        { name: 'contents', type: 'string' },
+      ],
+    },
+    primaryType: 'Mail' as const,
+    message: {
+      from: {
+        name: 'Cow',
+        wallet: '0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826',
+      },
+      to: {
+        name: 'Bob',
+        wallet: '0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB',
+      },
+      contents: 'Hello, Bob!',
+    },
+  }
+
+  try {
+    const signature = await signTypedData(config, typedData)
+    const isValid = await verifyTypedData(config, {
+      ...typedData,
+      signature,
+      address: account.address,
+    })
+    console.log({ typedData, signature, isValid })
+    alert(`Typed Data Signature: ${signature}\n\n Verified: ${isValid}`)
+  } catch (error) {
+    console.error(error)
+    alert('Failed to sign typed data')
+  }
+}
+
+async function handleTestSmartWallet() {
+  const account = getAccount(config)
+  if (account.status !== 'connected') {
+    alert('Not connected')
+    return
+  }
+
+  try {
+    updateStatus('smart-wallet-status', 'Sending call (see console for more info)...')
+    const result = await testSmartWalletWithConnectorClient()
+    updateStatus('smart-wallet-status', `Result: ${result}`)
+  } catch (error) {
+    console.error('Call failed:', error)
+    updateStatus('smart-wallet-status', `Error: ${(error as Error).message}`)
+  }
+}
+
+async function handleSwitchChain(chainId: number) {
+  try {
+    switchChain(config, { chainId })
+  } catch (error) {
+    console.error(error)
+    alert('Failed to switch chain')
+  }
+}
+
 // OAuth redirect handling on page load
 function handleOauthRedirectOnLoad() {
   const urlParams = new URLSearchParams(window.location.search)
@@ -113,46 +193,29 @@ function handleOauthRedirectOnLoad() {
   }
 }
 
-// Force disconnect handler
-async function handleForceDisconnect() {
+// Disconnect handler
+async function handleDisconnect() {
   try {
-    updateStatus('disconnect-status', 'Disconnecting and clearing session...')
+    updateStatus('disconnect-status', 'Disconnecting...')
 
-    // Try to get and disconnect the Alchemy connector directly using the helper
-    try {
-      const alchemyConnector = resolveAlchemyAuthConnector(config)
-      console.log('Found Alchemy connector:', alchemyConnector)
+    await disconnect(config)
 
-      // Call disconnect on the connector directly
-      if (alchemyConnector && typeof alchemyConnector.disconnect === 'function') {
-        await alchemyConnector.disconnect()
-        console.log('Successfully called connector.disconnect()')
-      } else {
-        console.warn('Connector does not have disconnect method')
-        // Fall back to Wagmi's disconnect
-        await disconnect(config)
-      }
-    } catch (connectorError) {
-      console.warn('Could not resolve Alchemy connector, trying general disconnect:', connectorError)
-      // Fall back to Wagmi's disconnect
-      await disconnect(config)
-    }
-
-    // Clear any additional browser storage that might be used
-    // This ensures a completely clean state
-    localStorage.clear()
-    sessionStorage.clear()
-
-    updateStatus('disconnect-status', 'Successfully disconnected and cleared session!')
-
-    // Optionally reload the page to ensure clean state
-    setTimeout(() => {
-      window.location.reload()
-    }, 1000)
-
+    updateStatus('disconnect-status', 'Successfully disconnected!')
   } catch (error) {
     console.error('Disconnect error details:', error)
     updateStatus('disconnect-status', `Disconnect error: ${(error as Error).message}`)
+  }
+}
+
+// Clear storage handler
+function handleClearStorage() {
+  try {
+    localStorage.clear()
+    sessionStorage.clear()
+    updateStatus('disconnect-status', 'Storage cleared successfully!')
+  } catch (error) {
+    console.error('Clear storage error:', error)
+    updateStatus('disconnect-status', `Clear storage error: ${(error as Error).message}`)
   }
 }
 
@@ -224,17 +287,27 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
 
     <div id="wallet-actions">
       <h2>Wallet Actions</h2>
-      
+
       <form id="message-form">
         <input type="text" id="message-input" placeholder="Enter message" required />
         <button id="sign-message" type="submit">Sign message</button>
       </form>
+
+      <button id="sign-typed-data" type="button">Sign Typed Data</button>
+
+      <div>
+        <button id="test-smart-wallet" type="button">Send call via Smart Wallet Client</button>
+        <div id="smart-wallet-status"></div>
+      </div>
     </div>
 
     <div id="session-controls">
       <h2>Session Controls</h2>
-      <button id="force-disconnect" type="button" class="disconnect-btn">
-        Force Disconnect & Clear Session
+      <button id="disconnect-btn" type="button" class="disconnect-btn">
+        Disconnect
+      </button>
+      <button id="clear-storage-btn" type="button" class="clear-storage-btn">
+        Clear Storage
       </button>
       <div id="disconnect-status"></div>
     </div>
@@ -287,7 +360,17 @@ function setupAccountWatcher(element: HTMLDivElement) {
         </div>
         ${
           account.status === 'connected'
-            ? `<button id="disconnect" type="button">Disconnect</button>`
+            ? `<div id="chain-buttons">
+                ${config.chains
+                  .map(
+                    (chain) =>
+                      `<button class="chain-btn" data-chain-id="${chain.id}" type="button">
+                        Switch to ${chain.name}
+                      </button>`,
+                  )
+                  .join('')}
+              </div>
+              <button id="disconnect" type="button">Disconnect</button>`
             : ''
         }
       `
@@ -296,6 +379,14 @@ function setupAccountWatcher(element: HTMLDivElement) {
       if (disconnectButton) {
         disconnectButton.addEventListener('click', () => disconnect(config))
       }
+
+      const chainButtons = element.querySelectorAll<HTMLButtonElement>('.chain-btn')
+      chainButtons.forEach(button => {
+        button.addEventListener('click', async () => {
+          const chainId = parseInt(button.getAttribute('data-chain-id') || '0', 10)
+          await handleSwitchChain(chainId)
+        })
+      })
     },
   })
 }
@@ -328,16 +419,32 @@ function setupOauthAuth() {
 
 function setupWalletActions() {
   const messageForm = document.querySelector<HTMLFormElement>('#message-form')
-
   messageForm?.addEventListener('submit', async (e) => {
     e.preventDefault()
     await handleSignMessage()
   })
+
+  const signTypedDataButton = document.getElementById('sign-typed-data')
+  signTypedDataButton?.addEventListener('click', handleSignTypedData)
+
+  const testSmartWalletButton = document.getElementById('test-smart-wallet')
+  testSmartWalletButton?.addEventListener('click', handleTestSmartWallet)
+
+  const chainButtons = document.querySelectorAll<HTMLButtonElement>('.chain-btn')
+  chainButtons.forEach(button => {
+    button.addEventListener('click', async () => {
+      const chainId = parseInt(button.getAttribute('data-chain-id') || '0', 10)
+      await handleSwitchChain(chainId)
+    })
+  })
 }
 
 function setupSessionControls() {
-  const forceDisconnectButton = document.getElementById('force-disconnect')
-  forceDisconnectButton?.addEventListener('click', handleForceDisconnect)
+  const disconnectButton = document.getElementById('disconnect-btn')
+  disconnectButton?.addEventListener('click', handleDisconnect)
+
+  const clearStorageButton = document.getElementById('clear-storage-btn')
+  clearStorageButton?.addEventListener('click', handleClearStorage)
 }
 
 function setupApp(element: HTMLDivElement) {

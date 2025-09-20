@@ -3,9 +3,12 @@ import {
   hashMessage,
   hashTypedData,
   type Address,
+  type Authorization,
   type HashTypedDataParameters,
   type Hex,
+  type LocalAccount,
   type SignableMessage,
+  parseSignature,
 } from "viem";
 import type {
   AddOauthProviderParams,
@@ -16,8 +19,12 @@ import type {
   User,
 } from "./types";
 import { dev_request } from "./devRequest.js";
-import { create1193Provider } from "./provider.js";
-import type { AlchemyAuthEip1193Provider } from "./provider.js";
+import { toLocalAccount } from "./toLocalAccount.js";
+import { hashAuthorization } from "viem/utils";
+import {
+  type AlchemyAuthEip1193Provider,
+  create1193Provider,
+} from "./provider.js";
 
 export type CreateAuthSessionParams = {
   // TODO: replace apiKey with transport once it's ready.
@@ -121,6 +128,24 @@ export class AuthSession {
     });
   }
 
+  public async signAuthorization(
+    params: Authorization<number, false>,
+  ): Promise<Authorization<number, true>> {
+    const { chainId, nonce, address } = params;
+    const hashedAuth = hashAuthorization({ address, chainId, nonce });
+    const signatureHex = await this.signRawPayload({
+      mode: "ETHEREUM",
+      payload: hashedAuth,
+    });
+    const signature = parseSignature(signatureHex);
+    return {
+      address,
+      chainId,
+      nonce,
+      ...signature,
+    };
+  }
+
   public async listAuthMethods(): Promise<AuthMethods> {
     this.throwIfDisconnected();
     return notImplemented();
@@ -164,6 +189,11 @@ export class AuthSession {
     if (this.isDisconnected) {
       throw new Error("Auth session has been disconnected");
     }
+  }
+
+  public toLocalAccount(): LocalAccount {
+    this.throwIfDisconnected();
+    return toLocalAccount(this);
   }
 
   public getProvider(): AlchemyAuthEip1193Provider {

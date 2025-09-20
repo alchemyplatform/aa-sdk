@@ -73,7 +73,7 @@
   background: #333;
 }
 
-.disconnect-btn {
+.disconnect-btn, .clear-storage-btn {
   background: #666;
   color: white;
   border: none;
@@ -83,7 +83,7 @@
   font-size: 0.9rem;
 }
 
-.disconnect-btn:hover {
+.disconnect-btn:hover, .clear-storage-btn:hover {
   background: #555;
 }
 

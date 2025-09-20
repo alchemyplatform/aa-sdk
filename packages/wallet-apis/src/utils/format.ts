@@ -7,7 +7,7 @@ import {
   type TypedDataDefinition,
   getTypesForEIP712Domain,
 } from "viem";
-import { TypedDataDefinition as WalletServerTypedDataDefinition } from "@alchemy/wallet-api-types";
+import type { TypedDataDefinition as WalletServerTypedDataDefinition } from "@alchemy/wallet-api-types";
 
 export const castToHex = (val: string | number | bigint | Hex): Hex => {
   if (isHex(val)) {

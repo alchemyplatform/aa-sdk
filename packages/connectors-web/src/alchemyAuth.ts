@@ -5,7 +5,12 @@ import {
   type WebAuthClientParams,
 } from "@alchemy/auth-web";
 import type { AuthClient, AuthSession } from "@alchemy/auth";
-import { type Address, type EIP1193Provider } from "viem";
+import {
+  createWalletClient,
+  type Address,
+  type Client,
+  type EIP1193Provider,
+} from "viem";
 
 export interface AlchemyAuthOptions
   extends Pick<
@@ -51,6 +56,8 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
   let authSessionInstance: AuthSession | undefined;
   let authClientInstance: AuthClient | undefined;
   let currentChainId: number | undefined;
+  // Cache clients by chainId to avoid recreating them unnecessarily.
+  let clients: Record<number, Client> = {};
 
   return createConnector<Provider, Properties>((config) => {
     const emitAndThrowError = (message: string): never => {
@@ -93,6 +100,11 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
 
         currentChainId = resolvedChainId;
 
+        config.emitter.emit("connect", {
+          chainId: resolvedChainId,
+          accounts,
+        });
+
         return {
           accounts,
           chainId: resolvedChainId,
@@ -108,10 +120,12 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
           authSessionInstance = undefined;
           authClientInstance = undefined;
           currentChainId = undefined;
+          clients = {};
         } catch (error) {
           // Log disconnect errors but don't throw to avoid breaking flow
           config.emitter.emit("error", { error: error as Error });
         }
+        config.emitter.emit("disconnect");
       },
 
       async getAccounts(): Promise<readonly Address[]> {
@@ -120,6 +134,7 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
         }
 
         const address = authSessionInstance.getAddress();
+
         return [address];
       },
 
@@ -143,6 +158,49 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
         return authSessionInstance.getProvider();
       },
 
+      // This is optional, but called by `getConnectorClient`. See here: https://github.com/wevm/wagmi/blob/main/packages/core/src/actions/getConnectorClient.ts
+      // This enables signing 7702 authorizations, since otherwise wagmi will build a client using the 1193 provider, which is unable to sign authorizations.
+      async getClient(params = { chainId: undefined }): Promise<Client> {
+        if (!authSessionInstance) {
+          emitAndThrowError(
+            "Authentication required. Please configure the alchemyAuth connector with an apiKey.",
+          );
+        }
+
+        const chainId = params.chainId ?? currentChainId;
+        if (!chainId) {
+          throw new Error("chainId is required to getClient");
+        }
+
+        if (clients[chainId]) {
+          return clients[chainId];
+        }
+
+        const chain = config.chains.find((chain) => chain.id === chainId);
+        if (!chain) {
+          throw new Error(`Chain with id ${chainId} not found in config`);
+        }
+
+        const transport = config.transports?.[chainId];
+        if (!transport) {
+          throw new Error(
+            `No transport found for chain with id ${chainId}. Please configure a transport in your wagmi config.`,
+          );
+        }
+
+        const account = authSessionInstance!.toLocalAccount();
+
+        const client = createWalletClient({
+          account,
+          transport,
+          chain,
+        });
+
+        clients[chainId] = client;
+
+        return client;
+      },
+
       async isAuthorized() {
         // Check if we have a valid authSession instance
         return authSessionInstance !== undefined;
@@ -154,6 +212,11 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
         if (!targetChain) {
           throw new Error(`Chain with id ${chainId} not found in config`);
         }
+
+        config.emitter.emit("change", {
+          chainId,
+          accounts: await this.getAccounts(),
+        });
 
         return targetChain;
       },
