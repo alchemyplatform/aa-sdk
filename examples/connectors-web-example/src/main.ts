@@ -2,6 +2,7 @@ import { sendEmailOtp, submitOtpCode, loginWithOauth, handleOauthRedirect } from
 import { Buffer } from 'buffer'
 import { connect, disconnect, reconnect, watchAccount, getAccount, signMessage, verifyMessage, switchChain } from '@wagmi/core'
 import { config } from './wagmi'
+import { testSmartWalletWithConnectorClient } from './test-sign-authorization'
 import './style.css'
 
 globalThis.Buffer = Buffer
@@ -94,6 +95,23 @@ async function handleSignMessage() {
   } catch (error) {
     console.error(error)
     alert('Failed to sign message')
+  }
+}
+
+async function handleTestSmartWallet() {
+  const account = getAccount(config)
+  if (account.status !== 'connected') {
+    alert('Not connected')
+    return
+  }
+
+  try {
+    updateStatus('smart-wallet-status', 'Sending call (see console for more info)...')
+    const result = await testSmartWalletWithConnectorClient()
+    updateStatus('smart-wallet-status', `Result: ${result}`)
+  } catch (error) {
+    console.error('Call failed:', error)
+    updateStatus('smart-wallet-status', `Error: ${(error as Error).message}`)
   }
 }
 
@@ -215,11 +233,14 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
 
     <div id="wallet-actions">
       <h2>Wallet Actions</h2>
-      
+
       <form id="message-form">
         <input type="text" id="message-input" placeholder="Enter message" required />
         <button id="sign-message" type="submit">Sign message</button>
       </form>
+
+      <button id="test-smart-wallet" type="button">Send call via Smart Wallet Client</button>
+      <div id="smart-wallet-status"></div>
     </div>
 
     <div id="session-controls">
@@ -344,6 +365,9 @@ function setupWalletActions() {
     e.preventDefault()
     await handleSignMessage()
   })
+
+  const testSmartWalletButton = document.getElementById('test-smart-wallet')
+  testSmartWalletButton?.addEventListener('click', handleTestSmartWallet)
 
   const chainButtons = document.querySelectorAll<HTMLButtonElement>('.chain-btn')
   chainButtons.forEach(button => {
