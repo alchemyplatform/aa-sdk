@@ -9,6 +9,33 @@ import type {
 } from "./types.js";
 import { dev_request } from "./devRequest.js";
 import { getOauthNonce, getOauthProviderUrl } from "./utils.js";
+import { z } from "zod";
+
+const UserSchema = z.object({
+  email: z.string().optional(),
+  orgId: z.string(),
+  userId: z.string(),
+  address: z.string(),
+  solanaAddress: z.string().optional(),
+  credentialId: z.string().optional(),
+  idToken: z.string().optional(),
+  claims: z.record(z.unknown()).optional(),
+});
+
+const AuthSessionStateSchema = z.discriminatedUnion("type", [
+  z.object({
+    type: z.literal("passkey"),
+    user: UserSchema,
+    expirationDateMs: z.number(),
+    credentialId: z.string().optional(),
+  }),
+  z.object({
+    type: z.enum(["email", "oauth", "otp"]),
+    bundle: z.string(),
+    user: UserSchema,
+    expirationDateMs: z.number(),
+  }),
+]);
 
 /**
  * Configuration parameters for creating an AuthClient instance
@@ -436,10 +463,10 @@ export class AuthClient {
    * }
    * ```
    */
-  public async loadAuthSessionState(
+  public async restoreAuthSession(
     state: string,
   ): Promise<AuthSession | undefined> {
-    const parsedState: AuthSessionState = JSON.parse(state);
+    const parsedState: AuthSessionState = this.deserializeState(state);
 
     const { type, expirationDateMs, user } = parsedState;
     if (expirationDateMs < Date.now()) {
@@ -504,6 +531,19 @@ export class AuthClient {
       })();
     }
     return this.tekStamperPromise;
+  }
+
+  private deserializeState(serializedState: string): AuthSessionState {
+    let parsedState = undefined;
+    try {
+      parsedState = JSON.parse(serializedState);
+    } catch (error) {
+      throw new Error("Failed to parse serialized state into JSON format");
+    }
+    const result = AuthSessionStateSchema.safeParse(parsedState);
+    if (!result.success)
+      throw new Error("Parsed state is not of type AuthSessionState");
+    return parsedState;
   }
 
   // TODO: remove this and use transport instead once it's ready.
