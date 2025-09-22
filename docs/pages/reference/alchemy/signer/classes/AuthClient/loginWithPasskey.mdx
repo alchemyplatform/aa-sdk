@@ -6,7 +6,10 @@ slug: wallets/reference/alchemy/signer/classes/AuthClient/loginWithPasskey
 ---
 
 Initiates passkey (WebAuthn) authentication flow.
+
 This method uses WebAuthn standards to authenticate users with biometric or hardware security keys.
+Can be used for both new passkey creation (when credentialId is undefined) and
+authentication with existing passkeys (when credentialId is provided).
 
 ## Import
 
@@ -16,9 +19,21 @@ import { AuthClient } from "@alchemy/auth";
 
 ## Usage
 
-```ts
+```ts twoslash
+// New passkey authentication
 const authSession = await authClient.loginWithPasskey();
+
+// Authenticate with existing passkey
+const authSession = await authClient.loginWithPasskey("existing-credential-id");
 ```
+
+## Parameters
+
+### credentialId
+
+`string`
+
+- Optional credential ID for authenticating with existing passkey
 
 ## Returns
 
