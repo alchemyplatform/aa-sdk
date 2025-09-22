@@ -87,7 +87,7 @@ export type SignMessageParams = {
  * });
  *
  * const signature = await authSession.signMessage({ message: "Hello World" });
- * const sessionState = authSession.getAuthSessionState();
+ * const sessionState = authSession.getSerializedState();
  * ```
  */
 export class AuthSession {
@@ -411,7 +411,7 @@ export class AuthSession {
    *
    * @example
    * ```ts twoslash
-   * const sessionState = authSession.getAuthSessionState();
+   * const sessionState = authSession.getSerializedState();
    * localStorage.setItem('authSession', sessionState);
    *
    * // Later restore:
@@ -421,7 +421,7 @@ export class AuthSession {
    * }
    * ```
    */
-  public getAuthSessionState(): string {
+  public getSerializedState(): string {
     this.throwIfDisconnected();
 
     // Calculate expiration time (24 hours from now as default)
