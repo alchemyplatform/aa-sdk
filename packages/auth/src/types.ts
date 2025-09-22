@@ -81,7 +81,7 @@ export type CreateTekStamperFn = () => Promise<TurnkeyTekStamper>;
  * key accessed with WebAuthn (e.g. passkeys).
  */
 export type CreateWebAuthnStamperFn = (
-  params: CreateWebAuthnStamperParams
+  params: CreateWebAuthnStamperParams,
 ) => Promise<TurnkeyStamper>;
 
 export type CreateWebAuthnStamperParams = {
@@ -90,7 +90,7 @@ export type CreateWebAuthnStamperParams = {
 
 export type HandleOauthFlowFn = (
   authUrl: string,
-  mode: "popup" | "redirect"
+  mode: "popup" | "redirect",
 ) => Promise<OAuthFlowResponse>;
 
 export type HandleOauthCallbackFn = () => Promise<OAuthFlowResponse | null>;
