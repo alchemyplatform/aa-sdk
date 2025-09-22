@@ -215,6 +215,9 @@ export class AuthClient {
 
   private tekStamperPromise: Promise<TekStamperAndPublicKey> | null = null;
 
+  // TODO: do we care about persisting this across reloads?
+  private pendingOtp: PendingOtp | null = null;
+
   /**
    * Sends an OTP (One-Time Password) to the specified email address for authentication.
    * The OTP will be sent to the user's email and can be submitted using submitOtpCode().
