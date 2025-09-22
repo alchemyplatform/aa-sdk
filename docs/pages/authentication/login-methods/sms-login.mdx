@@ -6,7 +6,7 @@ slug: wallets/authentication/login-methods/sms-login
 
 <Info>
   SMS auth is currently in closed alpha. If you'd like early access please reach
-  out to contact@alchemy.com
+  out to our support team.
 </Info>
 
 Authenticate users with their phone number by sending verification codes via SMS.
@@ -20,7 +20,7 @@ SMS authentication is a two-step process:
 
 The SDK will handle phone number validation, code generation, and delivery automatically.
 
-We support all major countries across europe, asia, north and south america.
+We support all major countries across Europe, Asia, North and South America.
 
 Pricing varies by country and requires specific area codes to be enabled for your account. An overview of the current SMS costs can be found below.
 
@@ -46,12 +46,12 @@ Pricing varies by country and requires specific area codes to be enabled for you
 
         const { authenticate } = useAuthenticate()
 
-        const handleSendCode = (email: string) => {
+        const handleSendCode = (phone: string) => {
         authenticate(
             { type: "sms", phone: "+123456789" },
             {
             onSuccess: () => {
-                // onSuccess only fires once the entire flow is done (email OTP + optional MFA).
+                // onSuccess only fires once the entire flow is done (SMS OTP + optional MFA).
                 // It still runs even if the final step completes in another tab/window.
             },
             onError: (error) => {
@@ -134,12 +134,12 @@ Pricing varies by country and requires specific area codes to be enabled for you
 
         const { authenticate } = useAuthenticate()
 
-        const handleSendCode = (email: string) => {
+        const handleSendCode = (phone: string) => {
         authenticate(
             { type: "sms", phone: "+123456789" },
             {
             onSuccess: () => {
-                // onSuccess only fires once the entire flow is done (email OTP + optional MFA).
+                // onSuccess only fires once the entire flow is done (SMS OTP + optional MFA).
                 // It still runs even if the final step completes in another tab/window.
             },
             onError: (error) => {
@@ -155,7 +155,7 @@ Pricing varies by country and requires specific area codes to be enabled for you
 
         ```tsx twoslash
         import React from "react";
-        import { useAuthenticate } from "@account-kit/react-native"
+        import { useAuthenticate, useSignerStatus } from "@account-kit/react-native"
         import { AlchemySignerStatus } from "@account-kit/signer";
 
         const TrackStatus = () => {
@@ -201,7 +201,7 @@ Pricing varies by country and requires specific area codes to be enabled for you
         Use the `useSignerStatus` hook to determine if the user is authenticated:
 
         ```tsx twoslash
-        import { useAuthenticate } from "@account-kit/react-native"
+        import { useAuthenticate, useSignerStatus } from "@account-kit/react-native"
 
         // Inside your component
         const { isConnected } = useSignerStatus();
@@ -227,4 +227,4 @@ Pricing varies by country and requires specific area codes to be enabled for you
 
 ## Next Steps
 
-- Send [transactions](/wallets/pages/transactions/send-transactions/index
+- Send [transactions](/wallets/pages/transactions/send-transactions/index.mdx)
