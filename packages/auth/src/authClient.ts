@@ -1,5 +1,6 @@
 import { AuthSession } from "./authSession.js";
 import type {
+  AuthSessionState,
   AuthType,
   CreateTekStamperFn,
   CreateWebAuthnStamperFn,
@@ -79,7 +80,7 @@ type PendingOtp = {
  * as the input whose values are the values of the query params.
  */
 function getAndRemoveQueryParams<T extends Record<string, string>>(
-  keys: T
+  keys: T,
 ): { [K in keyof T]: string | undefined } {
   const url = new URL(window.location.href);
   const result: Record<string, string | undefined> = {};
@@ -299,7 +300,7 @@ export class AuthClient {
    * ```
    */
   public async loginWithOauth(
-    params: LoginWithOauthParams
+    params: LoginWithOauthParams,
   ): Promise<AuthSession> {
     const { targetPublicKey } = await this.getTekStamper();
     const oauthConfig = await this.dev_request("prepare-oauth", {
@@ -433,9 +434,9 @@ export class AuthClient {
    * ```
    */
   public async loadAuthSessionState(
-    state: string
+    state: string,
   ): Promise<AuthSession | undefined> {
-    const parsedState = JSON.parse(state);
+    const parsedState: AuthSessionState = JSON.parse(state);
 
     const { type, expirationDateMs, user } = parsedState;
     if (expirationDateMs < Date.now()) {

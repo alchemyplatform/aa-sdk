@@ -13,6 +13,7 @@ import {
 import type {
   AddOauthProviderParams,
   AuthMethods,
+  AuthSessionState,
   AuthType,
   OauthProviderInfo,
   PasskeyInfo,
@@ -100,7 +101,7 @@ export class AuthSession {
     private readonly user: User,
     private readonly bundle?: string,
     private readonly authType?: AuthType,
-    private readonly credentialId?: string
+    private readonly credentialId?: string,
   ) {}
 
   /**
@@ -135,7 +136,7 @@ export class AuthSession {
   }: CreateAuthSessionParams): Promise<AuthSession> {
     const turnkey = new TurnkeyClient(
       { baseUrl: "https://api.turnkey.com" },
-      stamper
+      stamper,
     );
     const stampedRequest = await turnkey.stampGetWhoami({
       organizationId: orgId,
@@ -144,8 +145,7 @@ export class AuthSession {
     const whoamiResponse = await dev_request(apiKey, "whoami", {
       stampedRequest,
     });
-    // TODO: combine whoami response with idToken to get the full user object.
-    // For now, just return the whoami response.
+    // TODO: eventually read email out of the id token to display as the user name
     const user = {
       ...whoamiResponse,
       idToken,
@@ -159,7 +159,7 @@ export class AuthSession {
       user,
       bundle,
       authType,
-      credentialId
+      credentialId,
     );
   }
 
@@ -343,7 +343,7 @@ export class AuthSession {
    * @returns {Promise<OauthProviderInfo>} A promise that resolves to the added provider info
    */
   public async addOauthProvider(
-    params: AddOauthProviderParams
+    params: AddOauthProviderParams,
   ): Promise<OauthProviderInfo> {
     this.throwIfDisconnected();
     return notImplemented(params);
@@ -367,7 +367,7 @@ export class AuthSession {
    * @returns {Promise<PasskeyInfo>} A promise that resolves to the created passkey info
    */
   public async addPasskey(
-    params: CredentialCreationOptions
+    params: CredentialCreationOptions,
   ): Promise<PasskeyInfo> {
     this.throwIfDisconnected();
     return notImplemented(params);
@@ -425,30 +425,33 @@ export class AuthSession {
     this.throwIfDisconnected();
 
     // Calculate expiration time (24 hours from now as default)
+    // TODO: update the expiration date to be user defined once expiration handling is implemented
     const expirationDateMs = Date.now() + 24 * 60 * 60 * 1000;
 
     // Use stored authType or default to "otp" for backward compatibility
     const type = this.authType || "otp";
 
     if (type === "passkey") {
-      return JSON.stringify({
+      const state: AuthSessionState = {
         type: "passkey",
         user: this.user,
         expirationDateMs,
         credentialId: this.credentialId,
-      });
+      };
+      return JSON.stringify(state);
     } else {
       if (!this.bundle) {
         throw new Error(
-          "Bundle is required for non-passkey authentication types"
+          "Bundle is required for non-passkey authentication types",
         );
       }
-      return JSON.stringify({
+      const state: AuthSessionState = {
         type,
         bundle: this.bundle,
         user: this.user,
         expirationDateMs,
-      });
+      };
+      return JSON.stringify(state);
     }
   }
 
