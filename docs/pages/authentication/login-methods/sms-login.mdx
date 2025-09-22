@@ -28,7 +28,7 @@ Pricing varies by country and requires specific area codes to be enabled for you
 
 - Early access to SMS auth configured on your account: [Request early access!]()
 - API key from your [dashboard](https://dashboard.alchemy.com/apps)
-- [Smart Wallets installed and configured in your project](/docs/wallets/pages/react/setup.mdx)
+- [Smart Wallets installed and configured in your project](/wallets/pages/react/setup.mdx)
 - [A "pay gas with any token" policy](https://dashboard.alchemy.com/gas-manager/policy/create)
 - SDK version ≥v4.53.0
 
@@ -157,6 +157,7 @@ Pricing varies by country and requires specific area codes to be enabled for you
         import React from "react";
         import { useAuthenticate, useSignerStatus } from "@account-kit/react-native"
         import { AlchemySignerStatus } from "@account-kit/signer";
+        import { View } from "react-native";
 
         const TrackStatus = () => {
         const { status } = useSignerStatus();
@@ -164,7 +165,7 @@ Pricing varies by country and requires specific area codes to be enabled for you
         return (
             <>
             {status === AlchemySignerStatus.AWAITING_SMS_AUTH && (
-                <div>Prompt the user to enter the OTP code received via SMS</div>
+                <View>Prompt the user to enter the OTP code received via SMS</View>
             )}
             </>
         );
@@ -227,4 +228,4 @@ Pricing varies by country and requires specific area codes to be enabled for you
 
 ## Next Steps
 
-- Send [transactions](/wallets/pages/transactions/send-transactions/index.mdx)
+- Send [transactions](/wallets/transactions/send-transactions/index.mdx)
