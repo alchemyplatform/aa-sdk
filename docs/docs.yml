@@ -71,7 +71,6 @@ navigation:
                 slug: recipes/send-usdc
                 path: wallets/pages/recipes/send-usdc.mdx
               - page: Programmatically create a wallet
-                slug: recipes/programmatic-wallet-creation
                 path: wallets/pages/recipes/programmatic-wallet-creation.mdx
               - page: Onramp Funds
                 slug: recipes/onramp-funds
