@@ -52,7 +52,7 @@ describe("AuthSession", () => {
     vi.mocked(dev_request).mockResolvedValue(mockUser);
   });
 
-  describe("getAuthSessionState", () => {
+  describe("getSerializedState", () => {
     it("should serialize OAuth session state correctly", async () => {
       const authSession = await AuthSession.create({
         apiKey: mockApiKey,

@@ -405,7 +405,7 @@ export class AuthSession {
    * credential IDs (for passkey auth), and expiration time.
    *
    * The serialized state can be stored and later used to restore the session
-   * using AuthClient.loadAuthSessionState().
+   * using AuthClient.restoreAuthSession().
    *
    * @returns {string} A JSON string containing the serialized session state
    *
@@ -417,7 +417,7 @@ export class AuthSession {
    * // Later restore:
    * const savedState = localStorage.getItem('authSession');
    * if (savedState) {
-   *   const restoredSession = await authClient.loadAuthSessionState(JSON.parse(savedState));
+   *   const restoredSession = await authClient.restoreAuthSession(JSON.parse(savedState));
    * }
    * ```
    */

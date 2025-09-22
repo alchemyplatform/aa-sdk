@@ -92,7 +92,7 @@ describe("AuthClient", () => {
     vi.mocked(dev_request).mockResolvedValue(mockUser);
   });
 
-  describe("loadAuthSessionState", () => {
+  describe("restoreAuthSession", () => {
     it("should load valid OAuth session state", async () => {
       const validOAuthState: AuthSessionState = {
         type: "oauth",

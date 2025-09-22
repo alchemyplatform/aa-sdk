@@ -409,7 +409,7 @@ export class AuthClient {
    * Creates an instance of AuthSession from a previously saved authentication session state that has not expired.
    *
    * This method takes a JSON string representation of a serialized AuthSessionState (typically obtained
-   * from AuthSession.getAuthSessionState()) and attempts to restore the authentication session.
+   * from AuthSession.getSerializedState()) and attempts to restore the authentication session.
    * The method will validate the session expiration and handle different authentication types appropriately.
    *
    * @param {string} state - The serialized authentication session state as a JSON string
