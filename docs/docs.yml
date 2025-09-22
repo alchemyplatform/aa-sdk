@@ -143,8 +143,6 @@ navigation:
                 path: wallets/pages/react/mfa/social-login.mdx
           - page: Solana wallets
             path: wallets/pages/react/solana-wallets/get-started.mdx
-          - page: Server wallets
-            path: wallets/pages/signer/authentication/server-wallets.mdx
           - section: Account management
             contents:
               - page: Pregenerate wallets
