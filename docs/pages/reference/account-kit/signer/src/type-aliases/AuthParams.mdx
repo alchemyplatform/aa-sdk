@@ -1,6 +1,6 @@
 ---
 title: AuthParams
-description: Overview of the AuthParams 2097152
+description: Overview of AuthParams
 slug: wallets/reference/account-kit/signer/src/type-aliases/AuthParams
 layout: reference
 ---
@@ -61,7 +61,7 @@ type AuthParams =
   | (object & AccessKeyAuthParams);
 ```
 
-Defined in: [account-kit/signer/src/signer.ts:19](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/signer.ts#L19)
+Defined in: [account-kit/signer/src/signer.ts:19](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/signer/src/signer.ts#L19)
 
 ## Type Declaration
 
@@ -77,11 +77,11 @@ Defined in: [account-kit/signer/src/signer.ts:19](https://github.com/alchemyplat
 
 | Name              | Type                                        | Description | Defined in                                                                                                                                                          |
 | :---------------- | :------------------------------------------ | :---------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `email`           | `string`                                    | -           | [account-kit/signer/src/signer.ts:22](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/signer.ts#L22) |
-| `emailMode?`      | `"magicLink"`                               | `"otp"`     | **Deprecated** This option will be overriden by dashboard settings. Please use the dashboard settings instead. This option will be removed in a future release.     | [account-kit/signer/src/signer.ts:24](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/signer.ts#L24) |
-| `multiFactors?`   | [`VerifyMfaParams`](VerifyMfaParams.mdx)\[] | -           | [account-kit/signer/src/signer.ts:26](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/signer.ts#L26) |
-| `redirectParams?` | `URLSearchParams`                           | -           | [account-kit/signer/src/signer.ts:25](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/signer.ts#L25) |
-| `type`            | `"email"`                                   | -           | [account-kit/signer/src/signer.ts:21](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/signer.ts#L21) |
+| `email`           | `string`                                    | -           | [account-kit/signer/src/signer.ts:22](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/signer/src/signer.ts#L22) |
+| `emailMode?`      | `"magicLink"`                               | `"otp"`     | **Deprecated** This option will be overriden by dashboard settings. Please use the dashboard settings instead. This option will be removed in a future release.     | [account-kit/signer/src/signer.ts:24](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/signer/src/signer.ts#L24) |
+| `multiFactors?`   | [`VerifyMfaParams`](VerifyMfaParams.mdx)\[] | -           | [account-kit/signer/src/signer.ts:26](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/signer/src/signer.ts#L26) |
+| `redirectParams?` | `URLSearchParams`                           | -           | [account-kit/signer/src/signer.ts:25](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/signer/src/signer.ts#L25) |
+| `type`            | `"email"`                                   | -           | [account-kit/signer/src/signer.ts:21](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/signer/src/signer.ts#L21) |
 
 ```ts
 {
@@ -94,10 +94,10 @@ Defined in: [account-kit/signer/src/signer.ts:19](https://github.com/alchemyplat
 
 | Name         | Type      | Defined in                                                                                                                                                          |
 | :----------- | :-------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `bundle`     | `string`  | [account-kit/signer/src/signer.ts:28](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/signer.ts#L28) |
-| `isNewUser?` | `boolean` | [account-kit/signer/src/signer.ts:28](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/signer.ts#L28) |
-| `orgId?`     | `string`  | [account-kit/signer/src/signer.ts:28](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/signer.ts#L28) |
-| `type`       | `"email"` | [account-kit/signer/src/signer.ts:28](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/signer.ts#L28) |
+| `bundle`     | `string`  | [account-kit/signer/src/signer.ts:28](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/signer/src/signer.ts#L28) |
+| `isNewUser?` | `boolean` | [account-kit/signer/src/signer.ts:28](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/signer/src/signer.ts#L28) |
+| `orgId?`     | `string`  | [account-kit/signer/src/signer.ts:28](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/signer/src/signer.ts#L28) |
+| `type`       | `"email"` | [account-kit/signer/src/signer.ts:28](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/signer/src/signer.ts#L28) |
 
 ```ts
 {
@@ -108,8 +108,8 @@ Defined in: [account-kit/signer/src/signer.ts:19](https://github.com/alchemyplat
 
 | Name    | Type     | Defined in                                                                                                                                                          |
 | :------ | :------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `phone` | `string` | [account-kit/signer/src/signer.ts:31](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/signer.ts#L31) |
-| `type`  | `"sms"`  | [account-kit/signer/src/signer.ts:30](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/signer.ts#L30) |
+| `phone` | `string` | [account-kit/signer/src/signer.ts:31](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/signer/src/signer.ts#L31) |
+| `type`  | `"sms"`  | [account-kit/signer/src/signer.ts:30](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/signer/src/signer.ts#L30) |
 
 ```ts
 {
@@ -121,9 +121,9 @@ Defined in: [account-kit/signer/src/signer.ts:19](https://github.com/alchemyplat
 
 | Name            | Type                                                                         | Defined in                                                                                                                                                          |
 | :-------------- | :--------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `creationOpts?` | [`CredentialCreationOptionOverrides`](CredentialCreationOptionOverrides.mdx) | [account-kit/signer/src/signer.ts:36](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/signer.ts#L36) |
-| `email`         | `string`                                                                     | [account-kit/signer/src/signer.ts:35](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/signer.ts#L35) |
-| `type`          | `"passkey"`                                                                  | [account-kit/signer/src/signer.ts:34](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/signer.ts#L34) |
+| `creationOpts?` | [`CredentialCreationOptionOverrides`](CredentialCreationOptionOverrides.mdx) | [account-kit/signer/src/signer.ts:36](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/signer/src/signer.ts#L36) |
+| `email`         | `string`                                                                     | [account-kit/signer/src/signer.ts:35](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/signer/src/signer.ts#L35) |
+| `type`          | `"passkey"`                                                                  | [account-kit/signer/src/signer.ts:34](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/signer/src/signer.ts#L34) |
 
 ```ts
 {
@@ -134,8 +134,8 @@ Defined in: [account-kit/signer/src/signer.ts:19](https://github.com/alchemyplat
 
 | Name        | Type        | Defined in                                                                                                                                                          |
 | :---------- | :---------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `createNew` | `false`     | [account-kit/signer/src/signer.ts:40](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/signer.ts#L40) |
-| `type`      | `"passkey"` | [account-kit/signer/src/signer.ts:39](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/signer.ts#L39) |
+| `createNew` | `false`     | [account-kit/signer/src/signer.ts:40](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/signer/src/signer.ts#L40) |
+| `type`      | `"passkey"` | [account-kit/signer/src/signer.ts:39](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/signer/src/signer.ts#L39) |
 
 ```ts
 {
@@ -148,10 +148,10 @@ Defined in: [account-kit/signer/src/signer.ts:19](https://github.com/alchemyplat
 
 | Name            | Type                                                                         | Defined in                                                                                                                                                          |
 | :-------------- | :--------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `createNew`     | `true`                                                                       | [account-kit/signer/src/signer.ts:44](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/signer.ts#L44) |
-| `creationOpts?` | [`CredentialCreationOptionOverrides`](CredentialCreationOptionOverrides.mdx) | [account-kit/signer/src/signer.ts:46](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/signer.ts#L46) |
-| `type`          | `"passkey"`                                                                  | [account-kit/signer/src/signer.ts:43](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/signer.ts#L43) |
-| `username`      | `string`                                                                     | [account-kit/signer/src/signer.ts:45](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/signer.ts#L45) |
+| `createNew`     | `true`                                                                       | [account-kit/signer/src/signer.ts:44](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/signer/src/signer.ts#L44) |
+| `creationOpts?` | [`CredentialCreationOptionOverrides`](CredentialCreationOptionOverrides.mdx) | [account-kit/signer/src/signer.ts:46](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/signer/src/signer.ts#L46) |
+| `type`          | `"passkey"`                                                                  | [account-kit/signer/src/signer.ts:43](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/signer/src/signer.ts#L43) |
+| `username`      | `string`                                                                     | [account-kit/signer/src/signer.ts:45](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/signer/src/signer.ts#L45) |
 
 `object` & [`OauthProviderConfig`](OauthProviderConfig.mdx) & [`OauthRedirectConfig`](OauthRedirectConfig.mdx)
 
@@ -168,12 +168,12 @@ Defined in: [account-kit/signer/src/signer.ts:19](https://github.com/alchemyplat
 
 | Name           | Type            | Defined in                                                                                                                                                          |
 | :------------- | :-------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `accessToken?` | `string`        | [account-kit/signer/src/signer.ts:60](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/signer.ts#L60) |
-| `bundle`       | `string`        | [account-kit/signer/src/signer.ts:57](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/signer.ts#L57) |
-| `idToken`      | `string`        | [account-kit/signer/src/signer.ts:59](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/signer.ts#L59) |
-| `isNewUser?`   | `boolean`       | [account-kit/signer/src/signer.ts:61](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/signer.ts#L61) |
-| `orgId`        | `string`        | [account-kit/signer/src/signer.ts:58](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/signer.ts#L58) |
-| `type`         | `"oauthReturn"` | [account-kit/signer/src/signer.ts:56](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/signer.ts#L56) |
+| `accessToken?` | `string`        | [account-kit/signer/src/signer.ts:60](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/signer/src/signer.ts#L60) |
+| `bundle`       | `string`        | [account-kit/signer/src/signer.ts:57](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/signer/src/signer.ts#L57) |
+| `idToken`      | `string`        | [account-kit/signer/src/signer.ts:59](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/signer/src/signer.ts#L59) |
+| `isNewUser?`   | `boolean`       | [account-kit/signer/src/signer.ts:61](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/signer/src/signer.ts#L61) |
+| `orgId`        | `string`        | [account-kit/signer/src/signer.ts:58](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/signer/src/signer.ts#L58) |
+| `type`         | `"oauthReturn"` | [account-kit/signer/src/signer.ts:56](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/signer/src/signer.ts#L56) |
 
 ```ts
 {
@@ -185,9 +185,9 @@ Defined in: [account-kit/signer/src/signer.ts:19](https://github.com/alchemyplat
 
 | Name              | Type           | Defined in                                                                                                                                                          |
 | :---------------- | :------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `authProviderId?` | `string`       | [account-kit/signer/src/signer.ts:66](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/signer.ts#L66) |
-| `jwt`             | `string`       | [account-kit/signer/src/signer.ts:65](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/signer.ts#L65) |
-| `type`            | `"custom-jwt"` | [account-kit/signer/src/signer.ts:64](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/signer.ts#L64) |
+| `authProviderId?` | `string`       | [account-kit/signer/src/signer.ts:66](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/signer/src/signer.ts#L66) |
+| `jwt`             | `string`       | [account-kit/signer/src/signer.ts:65](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/signer/src/signer.ts#L65) |
+| `type`            | `"custom-jwt"` | [account-kit/signer/src/signer.ts:64](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/signer/src/signer.ts#L64) |
 
 ```ts
 {
@@ -199,8 +199,8 @@ Defined in: [account-kit/signer/src/signer.ts:19](https://github.com/alchemyplat
 
 | Name            | Type                                        | Defined in                                                                                                                                                          |
 | :-------------- | :------------------------------------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `multiFactors?` | [`VerifyMfaParams`](VerifyMfaParams.mdx)\[] | [account-kit/signer/src/signer.ts:71](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/signer.ts#L71) |
-| `otpCode`       | `string`                                    | [account-kit/signer/src/signer.ts:70](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/signer.ts#L70) |
-| `type`          | `"otp"`                                     | [account-kit/signer/src/signer.ts:69](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/signer.ts#L69) |
+| `multiFactors?` | [`VerifyMfaParams`](VerifyMfaParams.mdx)\[] | [account-kit/signer/src/signer.ts:71](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/signer/src/signer.ts#L71) |
+| `otpCode`       | `string`                                    | [account-kit/signer/src/signer.ts:70](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/signer/src/signer.ts#L70) |
+| `type`          | `"otp"`                                     | [account-kit/signer/src/signer.ts:69](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/signer/src/signer.ts#L69) |
 
 `object` & [`AccessKeyAuthParams`](AccessKeyAuthParams.mdx)

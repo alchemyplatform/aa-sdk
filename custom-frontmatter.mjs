@@ -65,7 +65,7 @@ export function load(app) {
         } else if (page.model.kind === ReflectionKind.Property) {
           description = `Overview of the ${page.model.name} property`;
         } else {
-          description = `Overview of the ${page.model.name} ${page.model.kind}`;
+          description = `Overview of ${page.model.name}`;
         }
       }
 

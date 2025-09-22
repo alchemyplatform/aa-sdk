@@ -5,7 +5,7 @@ slug: wallets/reference/account-kit/react/src/interfaces/SolanaTransaction
 layout: reference
 ---
 
-Defined in: [account-kit/react/src/hooks/useSolanaTransaction.ts:64](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/react/src/hooks/useSolanaTransaction.ts#L64)
+Defined in: [account-kit/react/src/hooks/useSolanaTransaction.ts:64](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/react/src/hooks/useSolanaTransaction.ts#L64)
 
 We wanted to make sure that this will be using the same useMutation that the
 useSendUserOperation does.
@@ -21,11 +21,11 @@ the flattened version here for readability.
 
 | Property                           | Modifier   | Type      | Description                      | Defined in                                                                                                                                                                                                |
 | :--------------------------------- | :--------- | :-------- | :------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| <a id="connection" /> `connection` | `readonly` | `null`    | `Connection`                     | The solana connection used to send the transaction                                                                                                                                                        | [account-kit/react/src/hooks/useSolanaTransaction.ts:68](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/react/src/hooks/useSolanaTransaction.ts#L68) |
-| <a id="data" /> `data`             | `readonly` |           | `void`                           | \{ `hash`: `string`; }                                                                                                                                                                                    | The result of the transaction                                                                                                                                                                             | [account-kit/react/src/hooks/useSolanaTransaction.ts:70](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/react/src/hooks/useSolanaTransaction.ts#L70) |
-| <a id="error" /> `error`           | `readonly` | `null`    | `Error`                          | The error that occurred                                                                                                                                                                                   | [account-kit/react/src/hooks/useSolanaTransaction.ts:74](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/react/src/hooks/useSolanaTransaction.ts#L74) |
-| <a id="ispending" /> `isPending`   | `readonly` | `boolean` | Is the use sending a transaction | [account-kit/react/src/hooks/useSolanaTransaction.ts:72](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/react/src/hooks/useSolanaTransaction.ts#L72) |
-| <a id="signer" /> `signer`         | `readonly` | `null`    | `SolanaSigner`                   | The solana signer used to send the transaction                                                                                                                                                            | [account-kit/react/src/hooks/useSolanaTransaction.ts:66](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/react/src/hooks/useSolanaTransaction.ts#L66) |
+| <a id="connection" /> `connection` | `readonly` | `null`    | `Connection`                     | The solana connection used to send the transaction                                                                                                                                                        | [account-kit/react/src/hooks/useSolanaTransaction.ts:68](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/react/src/hooks/useSolanaTransaction.ts#L68) |
+| <a id="data" /> `data`             | `readonly` |           | `void`                           | \{ `hash`: `string`; }                                                                                                                                                                                    | The result of the transaction                                                                                                                                                                             | [account-kit/react/src/hooks/useSolanaTransaction.ts:70](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/react/src/hooks/useSolanaTransaction.ts#L70) |
+| <a id="error" /> `error`           | `readonly` | `null`    | `Error`                          | The error that occurred                                                                                                                                                                                   | [account-kit/react/src/hooks/useSolanaTransaction.ts:74](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/react/src/hooks/useSolanaTransaction.ts#L74) |
+| <a id="ispending" /> `isPending`   | `readonly` | `boolean` | Is the use sending a transaction | [account-kit/react/src/hooks/useSolanaTransaction.ts:72](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/react/src/hooks/useSolanaTransaction.ts#L72) |
+| <a id="signer" /> `signer`         | `readonly` | `null`    | `SolanaSigner`                   | The solana signer used to send the transaction                                                                                                                                                            | [account-kit/react/src/hooks/useSolanaTransaction.ts:66](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/react/src/hooks/useSolanaTransaction.ts#L66) |
 
 ## Methods
 
@@ -35,7 +35,7 @@ the flattened version here for readability.
 reset(): void;
 ```
 
-Defined in: [account-kit/react/src/hooks/useSolanaTransaction.ts:75](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/react/src/hooks/useSolanaTransaction.ts#L75)
+Defined in: [account-kit/react/src/hooks/useSolanaTransaction.ts:75](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/react/src/hooks/useSolanaTransaction.ts#L75)
 
 #### Returns
 
@@ -49,7 +49,7 @@ Defined in: [account-kit/react/src/hooks/useSolanaTransaction.ts:75](https://git
 sendTransaction(params): void;
 ```
 
-Defined in: [account-kit/react/src/hooks/useSolanaTransaction.ts:77](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/react/src/hooks/useSolanaTransaction.ts#L77)
+Defined in: [account-kit/react/src/hooks/useSolanaTransaction.ts:77](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/react/src/hooks/useSolanaTransaction.ts#L77)
 
 Send the transaction
 
@@ -73,7 +73,7 @@ sendTransactionAsync(params): Promise<{
 }>;
 ```
 
-Defined in: [account-kit/react/src/hooks/useSolanaTransaction.ts:79](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/react/src/hooks/useSolanaTransaction.ts#L79)
+Defined in: [account-kit/react/src/hooks/useSolanaTransaction.ts:79](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/react/src/hooks/useSolanaTransaction.ts#L79)
 
 Send the transaction asynchronously
 

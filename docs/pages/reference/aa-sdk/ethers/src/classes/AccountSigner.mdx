@@ -5,7 +5,7 @@ slug: wallets/reference/aa-sdk/ethers/src/classes/AccountSigner
 layout: reference
 ---
 
-Defined in: [aa-sdk/ethers/src/account-signer.ts:32](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/ethers/src/account-signer.ts#L32)
+Defined in: [aa-sdk/ethers/src/account-signer.ts:32](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/ethers/src/account-signer.ts#L32)
 
 Implementation of the ethers Signer interface to use with Smart Contract Accounts
 
@@ -28,7 +28,7 @@ Implementation of the ethers Signer interface to use with Smart Contract Account
 new AccountSigner<TAccount, TEntryPointVersion>(provider, account): AccountSigner<TAccount, TEntryPointVersion>;
 ```
 
-Defined in: [aa-sdk/ethers/src/account-signer.ts:67](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/ethers/src/account-signer.ts#L67)
+Defined in: [aa-sdk/ethers/src/account-signer.ts:67](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/ethers/src/account-signer.ts#L67)
 
 Creates a new AccountSigner with the given ethers Provider and Smart Contract Account
 
@@ -73,10 +73,10 @@ Signer.constructor;
 | Property                                                                     | Modifier   | Type                                                                                   | Description                | Inherited from     | Defined in                                                                                                                                                                |
 | :--------------------------------------------------------------------------- | :--------- | :------------------------------------------------------------------------------------- | :------------------------- | :----------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | <a id="_issigner" /> `_isSigner`                                             | `readonly` | `boolean`                                                                              | -                          | `Signer._isSigner` | node_modules/@ethersproject/abstract-signer/lib/index.d.ts:29                                                                                                             |
-| <a id="account" /> `account`                                                 | `readonly` | `TAccount`                                                                             | -                          | -                  | [aa-sdk/ethers/src/account-signer.ts:37](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/ethers/src/account-signer.ts#L37) |
-| <a id="provider" /> `provider`                                               | `public`   | [`EthersProviderAdapter`](EthersProviderAdapter.mdx)                                   | the ethers provider to use | `Signer.provider`  | [aa-sdk/ethers/src/account-signer.ts:68](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/ethers/src/account-signer.ts#L68) |
-| <a id="senduseroperation" /> `sendUserOperation`                             | `public`   | (`args`, `overrides?`) => `Promise`\<`SendUserOperationResult`\<`TEntryPointVersion`>> | -                          | -                  | [aa-sdk/ethers/src/account-signer.ts:39](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/ethers/src/account-signer.ts#L39) |
-| <a id="waitforuseroperationtransaction" /> `waitForUserOperationTransaction` | `public`   | (`args`) => `Promise`\<`` `0x${string}` ``>                                            | -                          | -                  | [aa-sdk/ethers/src/account-signer.ts:40](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/ethers/src/account-signer.ts#L40) |
+| <a id="account" /> `account`                                                 | `readonly` | `TAccount`                                                                             | -                          | -                  | [aa-sdk/ethers/src/account-signer.ts:37](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/ethers/src/account-signer.ts#L37) |
+| <a id="provider" /> `provider`                                               | `public`   | [`EthersProviderAdapter`](EthersProviderAdapter.mdx)                                   | the ethers provider to use | `Signer.provider`  | [aa-sdk/ethers/src/account-signer.ts:68](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/ethers/src/account-signer.ts#L68) |
+| <a id="senduseroperation" /> `sendUserOperation`                             | `public`   | (`args`, `overrides?`) => `Promise`\<`SendUserOperationResult`\<`TEntryPointVersion`>> | -                          | -                  | [aa-sdk/ethers/src/account-signer.ts:39](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/ethers/src/account-signer.ts#L39) |
+| <a id="waitforuseroperationtransaction" /> `waitForUserOperationTransaction` | `public`   | (`args`) => `Promise`\<`` `0x${string}` ``>                                            | -                          | -                  | [aa-sdk/ethers/src/account-signer.ts:40](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/ethers/src/account-signer.ts#L40) |
 
 ## Methods
 
@@ -165,7 +165,7 @@ Signer.checkTransaction;
 connect(provider): AccountSigner<TAccount>;
 ```
 
-Defined in: [aa-sdk/ethers/src/account-signer.ts:283](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/ethers/src/account-signer.ts#L283)
+Defined in: [aa-sdk/ethers/src/account-signer.ts:283](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/ethers/src/account-signer.ts#L283)
 
 Sets the provider for the account signer and returns the updated account signer instance.
 Note: this is not necessary since the Provider is required by the constructor. This is useful
@@ -244,7 +244,7 @@ Signer.estimateGas;
 getAddress(): Promise<string>;
 ```
 
-Defined in: [aa-sdk/ethers/src/account-signer.ts:115](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/ethers/src/account-signer.ts#L115)
+Defined in: [aa-sdk/ethers/src/account-signer.ts:115](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/ethers/src/account-signer.ts#L115)
 
 Returns the account address if the account exists.
 
@@ -319,7 +319,7 @@ Signer.getBalance;
 getBundlerClient(): BundlerClient<Transport>;
 ```
 
-Defined in: [aa-sdk/ethers/src/account-signer.ts:251](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/ethers/src/account-signer.ts#L251)
+Defined in: [aa-sdk/ethers/src/account-signer.ts:251](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/ethers/src/account-signer.ts#L251)
 
 Retrieves the BundlerClient instance from the provider.
 
@@ -496,7 +496,7 @@ Signer.resolveName;
 sendTransaction(transaction): Promise<TransactionResponse>;
 ```
 
-Defined in: [aa-sdk/ethers/src/account-signer.ts:194](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/ethers/src/account-signer.ts#L194)
+Defined in: [aa-sdk/ethers/src/account-signer.ts:194](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/ethers/src/account-signer.ts#L194)
 
 Sends a transaction using the account provider and returns the transaction response.
 
@@ -555,7 +555,7 @@ Signer.sendTransaction;
 signMessage(message): Promise<string>;
 ```
 
-Defined in: [aa-sdk/ethers/src/account-signer.ts:150](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/ethers/src/account-signer.ts#L150)
+Defined in: [aa-sdk/ethers/src/account-signer.ts:150](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/ethers/src/account-signer.ts#L150)
 
 Signs a message using the associated account.
 
@@ -610,7 +610,7 @@ Signer.signMessage;
 signTransaction(_transaction): Promise<string>;
 ```
 
-Defined in: [aa-sdk/ethers/src/account-signer.ts:218](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/ethers/src/account-signer.ts#L218)
+Defined in: [aa-sdk/ethers/src/account-signer.ts:218](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/ethers/src/account-signer.ts#L218)
 
 Throws an error indicating that transaction signing is not supported and advises to use `sendUserOperation` instead.
 
