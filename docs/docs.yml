@@ -294,8 +294,8 @@ navigation:
                 slug: entrypoint-revert-codes
             slug: bundler-api
 
-      section: SDK Reference
-      contents:
+      - section: SDK Reference
+        contents:
         - 
           section: AA-SDK core
           path: wallets/pages/reference/typedoc/aa-sdk/core/src/README.mdx

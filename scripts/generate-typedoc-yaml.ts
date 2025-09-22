@@ -401,7 +401,7 @@ function updateDocsYml(sdkReference: SDKReference): void {
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
 
-    if (line.includes("- section: SDK Reference")) {
+    if (line.includes("section: SDK Reference")) {
       startIndex = i;
       // Calculate the indentation level of the SDK Reference section
       currentIndent = line.search(/\S/) / 2; // Assuming 2 spaces per indent level
@@ -436,7 +436,10 @@ function updateDocsYml(sdkReference: SDKReference): void {
   );
 
   // Generate the new SDK Reference YAML content with proper indentation
-  const sdkReferenceYaml = toYAML(sdkReference, currentIndent).split("\n");
+  // The SDK Reference should be formatted as a list item at the current indentation level
+  const sdkReferenceYaml = toYAMLListItem(sdkReference, currentIndent).split(
+    "\n",
+  );
 
   // Replace the section
   const newLines = [
@@ -449,6 +452,42 @@ function updateDocsYml(sdkReference: SDKReference): void {
   fs.writeFileSync(DOCS_YML_FILE, newLines.join("\n"));
 
   console.log(`✅ Updated ${DOCS_YML_FILE} with new SDK Reference structure`);
+}
+
+/**
+ * Convert JavaScript object to YAML list item with proper indentation
+ *
+ * @param {unknown} obj - The object to convert to YAML
+ * @param {number} indent - The current indentation level
+ * @returns {string} The YAML string representation as a list item
+ */
+function toYAMLListItem(obj: unknown, indent: number = 0): string {
+  const spaces = "  ".repeat(indent);
+  let yaml = "";
+
+  if (typeof obj === "object" && obj !== null && !Array.isArray(obj)) {
+    const entries = Object.entries(obj);
+    for (let i = 0; i < entries.length; i++) {
+      const [key, value] = entries[i];
+      if (i === 0) {
+        // First property gets the list item prefix
+        yaml += `${spaces}- ${key}:`;
+      } else {
+        // Subsequent properties are indented to align with the first property
+        yaml += `${spaces}  ${key}:`;
+      }
+
+      if (Array.isArray(value)) {
+        yaml += "\n" + toYAML(value, indent + 1);
+      } else if (typeof value === "object" && value !== null) {
+        yaml += "\n" + toYAML(value, indent + 1);
+      } else {
+        yaml += ` ${value}\n`;
+      }
+    }
+  }
+
+  return yaml;
 }
 
 /**
