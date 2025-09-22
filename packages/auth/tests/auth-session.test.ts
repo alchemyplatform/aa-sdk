@@ -63,7 +63,7 @@ describe("AuthSession", () => {
         authType: "oauth",
       });
 
-      const serializedState = authSession.getAuthSessionState();
+      const serializedState = authSession.getSerializedState();
       const parsedState = JSON.parse(serializedState);
 
       expect(parsedState).toEqual({
@@ -97,7 +97,7 @@ describe("AuthSession", () => {
         authType: "otp",
       });
 
-      const serializedState = authSession.getAuthSessionState();
+      const serializedState = authSession.getSerializedState();
       const parsedState = JSON.parse(serializedState);
 
       expect(parsedState).toEqual({
@@ -123,7 +123,7 @@ describe("AuthSession", () => {
         credentialId: "test-passkey-credential-id",
       });
 
-      const serializedState = authSession.getAuthSessionState();
+      const serializedState = authSession.getSerializedState();
       const parsedState = JSON.parse(serializedState);
 
       expect(parsedState).toEqual({
@@ -153,7 +153,7 @@ describe("AuthSession", () => {
         // No bundle provided
       });
 
-      expect(() => authSession.getAuthSessionState()).toThrow(
+      expect(() => authSession.getSerializedState()).toThrow(
         "Bundle is required for non-passkey authentication types",
       );
     });

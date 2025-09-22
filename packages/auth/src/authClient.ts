@@ -426,7 +426,7 @@ export class AuthClient {
    * // Restore a session from stored JSON string
    * const sessionJson = localStorage.getItem('authSession');
    * if (sessionJson) {
-   *   const authSession = await authClient.loadAuthSessionState(sessionJson);
+   *   const authSession = await authClient.restoreAuthSession(sessionJson);
    *   if (authSession) {
    *     console.log('Session restored successfully');
    *   } else {
@@ -435,7 +435,7 @@ export class AuthClient {
    * }
    * ```
    */
-  public async loadAuthSessionState(
+  public async restoreAuthSession(
     state: string,
   ): Promise<AuthSession | undefined> {
     const parsedState = JSON.parse(state);
