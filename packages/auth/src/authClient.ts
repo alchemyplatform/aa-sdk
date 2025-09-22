@@ -174,7 +174,7 @@ function extractOAuthCallbackParams() {
  * This is a simplified authentication client that provides methods for different authentication types.
  *
  * @example
- * ```ts
+ * ```ts twoslash
  * const authClient = new AuthClient({
  *   apiKey: "your-api-key",
  *   createTekStamper: () => createIframeTekStamper(),
@@ -226,7 +226,7 @@ export class AuthClient {
    * @returns {Promise<void>} Promise that resolves when the OTP has been sent
    *
    * @example
-   * ```ts
+   * ```ts twoslash
    * await authClient.sendEmailOtp({ email: "user@example.com" });
    * // User will receive an OTP code via email
    * ```
@@ -250,7 +250,7 @@ export class AuthClient {
    * @returns {Promise<AuthSession>} Promise that resolves to an auth session instance
    *
    * @example
-   * ```ts
+   * ```ts twoslash
    * // First send OTP
    * await authClient.sendEmailOtp({ email: "user@example.com" });
    *
@@ -293,7 +293,7 @@ export class AuthClient {
    * @returns {Promise<AuthSession>} Promise that resolves to an auth session instance
    *
    * @example
-   * ```ts
+   * ```ts twoslash
    * const authSession = await authClient.loginWithOauth({
    *   type: "oauth",
    *   authProviderId: "google",
@@ -348,7 +348,7 @@ export class AuthClient {
    * @returns {Promise<AuthSession>} Promise that resolves to an auth session instance
    *
    * @example
-   * ```ts
+   * ```ts twoslash
    * // After user returns from OAuth provider with callback URL like:
    * // https://yourapp.com/?alchemy-bundle=eyJ0eXAi...&alchemy-org-id=24c1ac...&alchemy-id-token=eyJ0eXAi...
    *
@@ -391,7 +391,7 @@ export class AuthClient {
    * @returns {Promise<AuthSession>} Promise that resolves to an auth session instance
    *
    * @example
-   * ```ts
+   * ```ts twoslash
    * // New passkey authentication
    * const authSession = await authClient.loginWithPasskey();
    *
@@ -422,7 +422,7 @@ export class AuthClient {
    * @throws {Error} For passkey authentication, throws if credentialId is missing from the session state
    *
    * @example
-   * ```ts
+   * ```ts twoslash
    * // Restore a session from stored JSON string
    * const sessionJson = localStorage.getItem('authSession');
    * if (sessionJson) {

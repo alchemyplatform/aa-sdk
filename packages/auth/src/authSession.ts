@@ -70,7 +70,7 @@ export type SignMessageParams = {
  * - Session serialization for storage and restoration
  *
  * @example
- * ```ts
+ * ```ts twoslash
  * const authSession = await AuthSession.create({
  *   apiKey: "your-api-key",
  *   stamper: turnkeyStamper,
@@ -106,7 +106,7 @@ export class AuthSession {
    * @returns {Promise<AuthSession>} A promise that resolves to a configured AuthSession instance
    *
    * @example
-   * ```ts
+   * ```ts twoslash
    * const authSession = await AuthSession.create({
    *   apiKey: "your-api-key",
    *   stamper: turnkeyStamper,
@@ -186,7 +186,7 @@ export class AuthSession {
    * @returns {Promise<Hex>} A promise that resolves to the signature as a hex string
    *
    * @example
-   * ```ts
+   * ```ts twoslash
    * const signature = await authSession.signRawPayload({
    *   payload: "0x1234...",
    *   mode: "ETHEREUM"
@@ -232,7 +232,7 @@ export class AuthSession {
    * @returns {Promise<Hex>} A promise that resolves to the signature as a hex string
    *
    * @example
-   * ```ts
+   * ```ts twoslash
    * const signature = await authSession.signMessage({
    *   message: "Hello, world!"
    * });
@@ -255,7 +255,7 @@ export class AuthSession {
    * @returns {Promise<Hex>} A promise that resolves to the signature as a hex string
    *
    * @example
-   * ```ts
+   * ```ts twoslash
    * const signature = await authSession.signTypedData({
    *   domain: { name: "MyApp", version: "1" },
    *   types: { Message: [{ name: "content", type: "string" }] },
@@ -370,7 +370,7 @@ export class AuthSession {
    * @returns {string} A JSON string containing the serialized session state
    *
    * @example
-   * ```ts
+   * ```ts twoslash
    * const sessionState = authSession.getAuthSessionState();
    * localStorage.setItem('authSession', sessionState);
    *
