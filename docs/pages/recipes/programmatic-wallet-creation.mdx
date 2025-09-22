@@ -6,7 +6,6 @@ slug: wallets/recipes/programmatic-wallet-creation
 
 This recipe shows how to programmatically create a smart wallet: you’ll generate a signer, spin up a Smart Wallet Client, read the counterfactual address before deployment and deploy the wallet by sending your first gas sponsored `UserOperation` (prepared → signed → sent). You’ll also see what to persist (address, prepared call IDs, tx hash) for later use.
 
-
 ## Step 1: Install required dependencies
 
 ```bash
@@ -70,7 +69,6 @@ const client = createSmartWalletClient({
 
 The counterfactual address is the account address associated with the given signer but the account contract hasn't been deployed yet.
 
-
 ```ts
 const account = await client.requestAccount();
 const address = account.address;
@@ -86,14 +84,20 @@ Use the **capabilities** pipeline with `paymasterService` to sponsor gas via you
 ```ts
 const prepared = await client.prepareCalls({
   from: address,
-  calls: [{ to: "0x0000000000000000000000000000000000000000", data: "0x", value: "0x0" }], // minimal call to deploy the account contract
+  calls: [
+    {
+      to: "0x0000000000000000000000000000000000000000",
+      data: "0x",
+      value: "0x0",
+    },
+  ], // minimal call to deploy the account contract
   capabilities: {
     paymasterService: { policyId: process.env.ALCHEMY_POLICY_ID! },
   },
 });
 
 const signed = await client.signPreparedCalls(prepared);
-const sent   = await client.sendPreparedCalls(signed);
+const sent = await client.sendPreparedCalls(signed);
 
 const txHash = await client.waitForCallsStatus({ id: sent.preparedCallIds[0] });
 console.log("Prepared call IDs:", sent.preparedCallIds);
@@ -102,7 +106,11 @@ console.log("Tx hash:", txHash);
 
 > Persist `address`, `preparedCallIds`, `txHash`, and `chainId` (and store only a signer locator in production—never raw keys).
 
-<Note>For non-sponsored path, remove the `paymasterService` capability in `prepareCalls` and **fund the account** to pay gas. The rest of the flow is unchanged.</Note>
+<Note>
+  For non-sponsored path, remove the `paymasterService` capability in
+  `prepareCalls` and **fund the account** to pay gas. The rest of the flow is
+  unchanged.
+</Note>
 
 ## Full script (copy-paste)
 
@@ -113,7 +121,7 @@ import { LocalAccountSigner } from "@aa-sdk/core";
 import { createSmartWalletClient } from "@account-kit/wallet-client";
 import { alchemy, arbitrumSepolia } from "@account-kit/infra";
 
-const ALCHEMY_API_KEY  = process.env.ALCHEMY_API_KEY!;
+const ALCHEMY_API_KEY = process.env.ALCHEMY_API_KEY!;
 const ALCHEMY_POLICY_ID = process.env.ALCHEMY_POLICY_ID!;
 if (!ALCHEMY_API_KEY || !ALCHEMY_POLICY_ID) {
   throw new Error("Missing ALCHEMY_API_KEY or ALCHEMY_POLICY_ID in env");
@@ -140,14 +148,20 @@ async function main() {
   // 4) Prepare → sign → send (sponsored) to trigger deployment
   const prepared = await client.prepareCalls({
     from: address,
-    calls: [{ to: "0x0000000000000000000000000000000000000000", data: "0x", value: "0x0" }], // minimal call to deploy the account contract
+    calls: [
+      {
+        to: "0x0000000000000000000000000000000000000000",
+        data: "0x",
+        value: "0x0",
+      },
+    ], // minimal call to deploy the account contract
     capabilities: {
       paymasterService: { policyId: ALCHEMY_POLICY_ID },
     },
   });
 
   const signed = await client.signPreparedCalls(prepared);
-  const sent   = await client.sendPreparedCalls(signed);
+  const sent = await client.sendPreparedCalls(signed);
 
   // 5) Wait for inclusion → tx hash
   const txHash = await client.waitForCallsStatus({
@@ -169,7 +183,7 @@ main().then(
   (err) => {
     console.error("❌ Failed:", err);
     process.exit(1);
-  }
+  },
 );
 ```
 
@@ -186,9 +200,9 @@ npx tsx provision.ts
 
 You should see:
 
-* `Counterfactual address: 0x…`
-* `Prepared call IDs: [...]`
-* `Tx hash: 0x…` (open on an **Arbitrum Sepolia** explorer to see the deployment)
+- `Counterfactual address: 0x…`
+- `Prepared call IDs: [...]`
+- `Tx hash: 0x…` (open on an **Arbitrum Sepolia** explorer to see the deployment)
 
 Example:
 
