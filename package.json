@@ -83,7 +83,7 @@
     "postinstall-postinstall": "^2.1.0",
     "prettier": "3.3.3",
     "prool": "^0.0.15",
-    "tsx": "^4.19.2",
+    "tsx": "^4.20.5",
     "turbo": "^2.2.3",
     "typedoc": "^0.28.13",
     "typedoc-plugin-markdown": "^4.8.1",
