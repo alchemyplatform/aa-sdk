@@ -28,7 +28,7 @@ We are excited to have you contribute to the `aa-sdk`. Here's a step-by-step gui
 8. **Docs Changes**:
 
    - To run docs locally: `yarn docs:dev`.
-   - To build docs: `yarn fern:gen`.
+   - To build SDK docs: `yarn docs:sdk`.
    - When editing or adding new docs, make sure you follow the [docs contributing guidelines](docs/CONTRIBUTING.md)
 
 9. **Committing Changes**: Commit your changes using a standardized message format.
