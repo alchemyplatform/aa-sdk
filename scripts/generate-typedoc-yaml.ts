@@ -2,6 +2,7 @@
 
 import fs from "fs";
 import path from "path";
+import yaml from "js-yaml";
 
 /**
  * Script to automatically update the SDK Reference section in docs.yml from TypeDoc-generated MDX files
@@ -65,7 +66,7 @@ const PACKAGE_DISPLAY_NAMES: PackageDisplayNames = {
     infra: "Infra",
     react: "React",
     "react-native": "React Native",
-    "rn-signer": "RN Signer",
+    "rn-signer": "React Native Signer",
     signer: "Signer",
     "smart-contracts": "Smart contracts",
     "wallet-client": "Wallet client",
@@ -437,16 +438,29 @@ function updateDocsYml(sdkReference: SDKReference): void {
     `Found SDK Reference section from line ${startIndex + 1} to ${endIndex}`,
   );
 
-  // Generate the new SDK Reference YAML content with proper indentation
-  // The SDK Reference should be formatted as a list item at the current indentation level
-  const sdkReferenceYaml = toYAMLListItem(sdkReference, currentIndent).split(
-    "\n",
-  );
+  // Generate the new SDK Reference YAML content using js-yaml
+  const sdkReferenceYaml = yaml.dump([sdkReference], {
+    indent: 2,
+    lineWidth: -1, // Disable line wrapping
+    noRefs: true,
+    sortKeys: false,
+  });
+
+  // Add proper indentation to match the existing structure
+  const indentedYaml = sdkReferenceYaml
+    .split("\n")
+    .map((line, index) => {
+      if (line.trim() === "") return line;
+      // First line gets the base indentation, others get additional indentation
+      const baseIndent = "  ".repeat(currentIndent);
+      return `${baseIndent}${line}`;
+    })
+    .slice(0, -1); // Remove the last empty line
 
   // Replace the section
   const newLines = [
     ...lines.slice(0, startIndex),
-    ...sdkReferenceYaml.slice(0, -1), // Remove last empty line
+    ...indentedYaml,
     ...lines.slice(endIndex),
   ];
 
@@ -454,78 +468,6 @@ function updateDocsYml(sdkReference: SDKReference): void {
   fs.writeFileSync(DOCS_YML_FILE, newLines.join("\n"));
 
   console.log(`✅ Updated ${DOCS_YML_FILE} with new SDK Reference structure`);
-}
-
-/**
- * Convert JavaScript object to YAML list item with proper indentation
- *
- * @param {unknown} obj - The object to convert to YAML
- * @param {number} indent - The current indentation level
- * @returns {string} The YAML string representation as a list item
- */
-function toYAMLListItem(obj: unknown, indent: number = 0): string {
-  const spaces = "  ".repeat(indent);
-  let yaml = "";
-
-  if (typeof obj === "object" && obj !== null && !Array.isArray(obj)) {
-    const entries = Object.entries(obj);
-    for (let i = 0; i < entries.length; i++) {
-      const [key, value] = entries[i];
-      if (i === 0) {
-        // First property gets the list item prefix
-        yaml += `${spaces}- ${key}:`;
-      } else {
-        // Subsequent properties are indented to align with the first property
-        yaml += `${spaces}  ${key}:`;
-      }
-
-      if (Array.isArray(value)) {
-        yaml += "\n" + toYAML(value, indent + 1);
-      } else if (typeof value === "object" && value !== null) {
-        yaml += "\n" + toYAML(value, indent + 1);
-      } else {
-        yaml += ` ${value}\n`;
-      }
-    }
-  }
-
-  return yaml;
-}
-
-/**
- * Convert JavaScript object to YAML string with proper indentation
- *
- * @param {unknown} obj - The object to convert to YAML
- * @param {number} indent - The current indentation level
- * @returns {string} The YAML string representation
- */
-function toYAML(obj: unknown, indent: number = 0): string {
-  const spaces = "  ".repeat(indent);
-  let yaml = "";
-
-  if (Array.isArray(obj)) {
-    for (const item of obj) {
-      yaml += `${spaces}- `;
-      if (typeof item === "object" && item !== null) {
-        yaml += "\n" + toYAML(item, indent + 1);
-      } else {
-        yaml += `${item}\n`;
-      }
-    }
-  } else if (typeof obj === "object" && obj !== null) {
-    for (const [key, value] of Object.entries(obj)) {
-      yaml += `${spaces}${key}:`;
-      if (Array.isArray(value)) {
-        yaml += "\n" + toYAML(value, indent + 1);
-      } else if (typeof value === "object" && value !== null) {
-        yaml += "\n" + toYAML(value, indent + 1);
-      } else {
-        yaml += ` ${value}\n`;
-      }
-    }
-  }
-
-  return yaml;
 }
 
 /**

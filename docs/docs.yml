@@ -1963,16 +1963,15 @@ navigation:
                     path: wallets/pages/reference/typedoc/account-kit/react-native/src/variables/useSolanaSigner.mdx
                   - page: useUser
                     path: wallets/pages/reference/typedoc/account-kit/react-native/src/variables/useUser.mdx
-          - section: RN Signer
+          - section: React Native Signer
             path: wallets/pages/reference/typedoc/account-kit/rn-signer/src/README.mdx
             contents:
-              # - section: Classes
-              # contents:
-              # -
-              #   page: RNAlchemySignerSingleton
-              #   path: wallets/pages/reference/typedoc/account-kit/rn-signer/src/classes/RNAlchemySignerSingleton.mdx
-              # - page: RNSignerClient
-              #   path: wallets/pages/reference/typedoc/account-kit/rn-signer/src/classes/RNSignerClient.mdx
+              - section: Classes
+                contents:
+                  - page: RNAlchemySignerSingleton
+                    path: wallets/pages/reference/typedoc/account-kit/rn-signer/src/classes/RNAlchemySignerSingleton.mdx
+                  - page: RNSignerClient
+                    path: wallets/pages/reference/typedoc/account-kit/rn-signer/src/classes/RNSignerClient.mdx
               - section: Functions
                 contents:
                   - page: RNAlchemySigner
