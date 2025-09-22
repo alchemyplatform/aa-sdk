@@ -211,11 +211,13 @@ export async function createMAv2Base<
     value,
   }) =>
     await encodeCallData(
-      encodeFunctionData({
-        abi: modularAccountAbi,
-        functionName: "execute",
-        args: [target, value ?? 0n, data],
-      }),
+      target !== accountAddress
+        ? encodeFunctionData({
+            abi: modularAccountAbi,
+            functionName: "execute",
+            args: [target, value ?? 0n, data],
+          })
+        : data, // If the target is the same as the account address, we don't need to wrap in a call to `execute`.
     );
 
   const encodeBatchExecute: (txs: AccountOp[]) => Promise<Hex> = async (txs) =>
@@ -278,7 +280,28 @@ export async function createMAv2Base<
   };
 
   const getValidationData = async (args: ValidationDataParams) => {
-    if (!(await isAccountDeployed())) {
+    const { validationModuleAddress, entityId } = args;
+
+    // Start both promises in parallel
+    const deployStatusPromise = isAccountDeployed();
+    const validationDataPromise = accountContract.read
+      .getValidationData([
+        serializeModuleEntity({
+          moduleAddress: validationModuleAddress ?? zeroAddress,
+          entityId: entityId ?? Number(maxUint32),
+        }),
+      ])
+      .catch((error) => {
+        // Store the original error for potential re-throwing
+        // If the account is not deployed, we will get an error here that we want to swallow.
+        // Otherwise, we will re-throw the error.
+        return { error };
+      });
+
+    // Check if account is deployed first
+    const deployStatus = await deployStatusPromise;
+
+    if (deployStatus === false) {
       return {
         validationHooks: [],
         executionHooks: [],
@@ -287,13 +310,12 @@ export async function createMAv2Base<
       };
     }
 
-    const { validationModuleAddress, entityId } = args;
-    return await accountContract.read.getValidationData([
-      serializeModuleEntity({
-        moduleAddress: validationModuleAddress ?? zeroAddress,
-        entityId: entityId ?? Number(maxUint32),
-      }),
-    ]);
+    // Only await validation data if account is deployed
+    const validationData = await validationDataPromise;
+    if ("error" in validationData) {
+      throw validationData.error;
+    }
+    return validationData;
   };
 
   const encodeCallData = async (callData: Hex): Promise<Hex> => {
