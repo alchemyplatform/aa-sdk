@@ -356,6 +356,7 @@ function generateSDKReference(): SDKReference {
       if (!srcDir) continue;
 
       // Handle special case for wallet-client which has exports subdirectory
+      let actualPackagePath = fullPackagePath;
       if (packageDir.name === "wallet-client") {
         const exportsDir = srcDir.children.find(
           (child): child is DirectoryItem =>
@@ -363,6 +364,7 @@ function generateSDKReference(): SDKReference {
         );
         if (exportsDir) {
           srcDir = exportsDir;
+          actualPackagePath = `${packageName}/${packageDir.name}/src/exports`;
         }
       }
 
@@ -370,7 +372,7 @@ function generateSDKReference(): SDKReference {
         packageName,
         packageDir.name,
         srcDir,
-        fullPackagePath,
+        actualPackagePath,
       );
 
       if (packageSection.contents.length > 0) {

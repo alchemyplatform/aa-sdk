@@ -1056,7 +1056,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
    * const result = signer.exportWallet()
    * ```
    *
-   * @param {unknown} params export wallet parameters
+   * @param {unknown} params exportWallet parameters
    * @returns {Promise<unknown>} the result of the wallet export operation
    */
   exportWallet: TClient["exportWallet"] = async (params) => {

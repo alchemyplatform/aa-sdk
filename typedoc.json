@@ -20,6 +20,7 @@
   ],
   "fileExtension": ".mdx",
   "out": "./docs/pages/reference/typedoc",
+  "cleanOutputDir": true,
   "tsconfig": "./tsconfig.typedoc.json",
   "frontmatterGlobals": {
     "layout": "reference"
