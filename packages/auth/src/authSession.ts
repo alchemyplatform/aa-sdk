@@ -3,9 +3,12 @@ import {
   hashMessage,
   hashTypedData,
   type Address,
+  type Authorization,
   type HashTypedDataParameters,
   type Hex,
+  type LocalAccount,
   type SignableMessage,
+  parseSignature,
 } from "viem";
 import type {
   AddOauthProviderParams,
@@ -17,8 +20,12 @@ import type {
   User,
 } from "./types";
 import { dev_request } from "./devRequest.js";
-import { create1193Provider } from "./provider.js";
-import type { AlchemyAuthEip1193Provider } from "./provider.js";
+import { toViemLocalAccount } from "./toViemLocalAccount.js";
+import { hashAuthorization } from "viem/utils";
+import {
+  type AlchemyAuthEip1193Provider,
+  create1193Provider,
+} from "./provider.js";
 
 /**
  * Parameters required to create an AuthSession instance
@@ -272,6 +279,39 @@ export class AuthSession {
   }
 
   /**
+   * Signs an EIP-7702 authorization.
+   *
+   * @param {Authorization<number, false>} params - The authorization parameters containing the chain ID, nonce, and address
+   * @returns {Promise<Authorization, number, true>} A promise that resolves to the signed authorization with signature components
+   *
+   * @example
+   * ```ts twoslash
+   * const authorization = await authSession.signAuthorization({
+   *   chainId: 1,
+   *   nonce: 123,
+   *   address: "0x1234567890123456789012345678901234567890"
+   * });
+   * ```
+   */
+  public async signAuthorization(
+    params: Authorization<number, false>,
+  ): Promise<Authorization<number, true>> {
+    const { chainId, nonce, address } = params;
+    const hashedAuth = hashAuthorization({ address, chainId, nonce });
+    const signatureHex = await this.signRawPayload({
+      mode: "ETHEREUM",
+      payload: hashedAuth,
+    });
+    const signature = parseSignature(signatureHex);
+    return {
+      address,
+      chainId,
+      nonce,
+      ...signature,
+    };
+  }
+
+  /**
    * Lists all available authentication methods for this user.
    *
    * Returns information about configured email, OAuth providers, and passkeys.
@@ -416,6 +456,11 @@ export class AuthSession {
     if (this.isDisconnected) {
       throw new Error("Auth session has been disconnected");
     }
+  }
+
+  public toViemLocalAccount(): LocalAccount {
+    this.throwIfDisconnected();
+    return toViemLocalAccount(this);
   }
 
   public getProvider(): AlchemyAuthEip1193Provider {

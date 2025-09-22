@@ -11,6 +11,7 @@ site/.vitepress/cache/**/*
 !/examples/auth-web-example
 !/examples/signer-web-example
 !/examples/react-v5-example
+!/examples/connectors-web-example
 
 **/.turbo/*
 account-kit/rn-signer/lib/*

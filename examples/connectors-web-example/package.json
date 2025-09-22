@@ -12,6 +12,7 @@
     "@alchemy/common": "*",
     "@alchemy/connectors-web": "*",
     "@alchemy/wagmi-core": "*",
+    "@alchemy/wallet-apis": "*",
     "@wagmi/connectors": "^2",
     "@wagmi/core": "^2",
     "react": "^18.3.1",

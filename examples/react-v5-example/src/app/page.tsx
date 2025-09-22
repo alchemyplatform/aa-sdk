@@ -78,7 +78,7 @@ export default function Home() {
       )}
       {/* TODO(jh): sign message */}
       {/* TODO(jh): sign typed data */}
-      {/* TODO(jh): send transaction (using smart wallet client for now) */}
+      {/* TODO(v5): add `useSendCalls` once smart wallet connector is ready */}
     </div>
   );
 }

@@ -5,7 +5,12 @@ import {
   type WebAuthClientParams,
 } from "@alchemy/auth-web";
 import type { AuthClient, AuthSession } from "@alchemy/auth";
-import { type Address, type EIP1193Provider } from "viem";
+import {
+  createWalletClient,
+  type Address,
+  type Client,
+  type EIP1193Provider,
+} from "viem";
 
 export interface AlchemyAuthOptions
   extends Pick<
@@ -51,13 +56,20 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
   let authSessionInstance: AuthSession | undefined;
   let authClientInstance: AuthClient | undefined;
   let currentChainId: number | undefined;
+  // Cache clients by chainId to avoid recreating them unnecessarily.
+  let clients: Record<number, Client> = {};
 
   return createConnector<Provider, Properties>((config) => {
-    const emitAndThrowError = (message: string): never => {
-      const error = new Error(message);
-      config.emitter.emit("error", { error });
-      throw error;
-    };
+    function assertNotNullish<T>(
+      value: T,
+      message: string,
+    ): asserts value is NonNullable<T> {
+      if (value == null) {
+        const error = new Error(message);
+        config.emitter.emit("error", { error });
+        throw error;
+      }
+    }
 
     return {
       id: "alchemyAuth",
@@ -72,12 +84,11 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
       async connect({ chainId } = {}) {
         // Connection is handled through the auth flow (sendEmailOtp -> submitOtpCode)
         // This method is called by wagmi after authentication completes
-        if (!authSessionInstance) {
-          // TODO(v5): Update error message to reflect different auth methods available.
-          emitAndThrowError(
-            "No signer available. Please authenticate first using sendEmailOtp and submitOtpCode, or loginWithOauth.",
-          );
-        }
+        // TODO(v5): Update error message to reflect different auth methods available.
+        assertNotNullish(
+          authClientInstance,
+          "No signer available. Please authenticate first using sendEmailOtp and submitOtpCode, or loginWithOauth.",
+        );
 
         const accounts = await this.getAccounts();
         if (accounts.length === 0) {
@@ -85,13 +96,17 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
         }
 
         const resolvedChainId = chainId ?? config.chains[0]?.id;
-        if (!resolvedChainId) {
-          emitAndThrowError(
-            "No chain ID available. Please provide a chainId parameter or configure chains in your wagmi config.",
-          );
-        }
+        assertNotNullish(
+          resolvedChainId,
+          "No chain ID available. Please provide a chainId parameter or configure chains in your wagmi config.",
+        );
 
         currentChainId = resolvedChainId;
+
+        config.emitter.emit("connect", {
+          chainId: resolvedChainId,
+          accounts,
+        });
 
         return {
           accounts,
@@ -108,10 +123,12 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
           authSessionInstance = undefined;
           authClientInstance = undefined;
           currentChainId = undefined;
+          clients = {};
         } catch (error) {
           // Log disconnect errors but don't throw to avoid breaking flow
           config.emitter.emit("error", { error: error as Error });
         }
+        config.emitter.emit("disconnect");
       },
 
       async getAccounts(): Promise<readonly Address[]> {
@@ -120,27 +137,64 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
         }
 
         const address = authSessionInstance.getAddress();
+
         return [address];
       },
 
       async getChainId() {
         // Return the currently connected chain, or fall back to first configured chain
         const resolvedChainId = currentChainId ?? config.chains[0]?.id;
-        if (!resolvedChainId) {
-          throw new Error(
-            "No chain configured. Please configure chains in your wagmi config.",
-          );
-        }
+        assertNotNullish(
+          resolvedChainId,
+          "No chain configured. Please configure chains in your wagmi config.",
+        );
         return resolvedChainId;
       },
 
       async getProvider() {
-        if (!authSessionInstance) {
+        assertNotNullish(
+          authSessionInstance,
+          "No auth session available. Please authenticate first.",
+        );
+        return authSessionInstance.getProvider();
+      },
+
+      // This is optional, but called by `getConnectorClient`. See here: https://github.com/wevm/wagmi/blob/main/packages/core/src/actions/getConnectorClient.ts
+      // This enables signing 7702 authorizations, since otherwise wagmi will build a client using the 1193 provider, which is unable to sign authorizations.
+      async getClient(params = { chainId: undefined }): Promise<Client> {
+        assertNotNullish(
+          authSessionInstance,
+          "Authentication required. Please configure the alchemyAuth connector with an apiKey.",
+        );
+
+        const chainId = params.chainId ?? currentChainId;
+        assertNotNullish(chainId, "chainId is required to getClient");
+
+        if (clients[chainId]) {
+          return clients[chainId];
+        }
+
+        const chain = config.chains.find((chain) => chain.id === chainId);
+        assertNotNullish(chain, `Chain with id ${chainId} not found in config`);
+
+        const transport = config.transports?.[chainId];
+        if (!transport) {
           throw new Error(
-            "No auth session available. Please authenticate first.",
+            `No transport found for chain with id ${chainId}. Please configure a transport in your wagmi config.`,
           );
         }
-        return authSessionInstance.getProvider();
+
+        const account = authSessionInstance.toViemLocalAccount();
+
+        const client = createWalletClient({
+          account,
+          transport,
+          chain,
+        });
+
+        clients[chainId] = client;
+
+        return client;
       },
 
       async isAuthorized() {
@@ -151,9 +205,15 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
       async switchChain({ chainId }) {
         currentChainId = chainId;
         const targetChain = config.chains.find((chain) => chain.id === chainId);
-        if (!targetChain) {
-          throw new Error(`Chain with id ${chainId} not found in config`);
-        }
+        assertNotNullish(
+          targetChain,
+          `Chain with id ${chainId} not found in config`,
+        );
+
+        config.emitter.emit("change", {
+          chainId,
+          accounts: await this.getAccounts(),
+        });
 
         return targetChain;
       },
@@ -189,11 +249,10 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
       getAuthClient() {
         // TODO: Expand this to support other auth methods (jwt, rpcUrl) when
         // AlchemyConnectionConfig pattern is adopted in future PR
-        if (!options.apiKey) {
-          emitAndThrowError(
-            "Authentication required. Please configure the alchemyAuth connector with an apiKey.",
-          );
-        }
+        assertNotNullish(
+          options.apiKey,
+          "Authentication required. Please configure the alchemyAuth connector with an apiKey.",
+        );
 
         if (!authClientInstance) {
           authClientInstance = createWebAuthClient({
