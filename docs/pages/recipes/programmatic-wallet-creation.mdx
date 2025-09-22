@@ -1,14 +1,13 @@
 ---
 title: How to programmatically create a wallet
-description: >-
-Generate a signer, initialize a Smart Wallet Client, sponsor gas with a policy, derive the counterfactual address and deploy by sending the first UserOperation.
+description: Generate a signer, initialize a Smart Wallet Client, sponsor gas with a policy, derive the counterfactual address and deploy by sending the first UserOperation.
 slug: wallets/recipes/programmatic-wallet-creation
 ---
 
-This recipe shows how to programmatically create a smart wallet: you’ll generate a signer, spin up a Smart Wallet Client, read the counterfactual address before deployment, and deploy the wallet by sending your first gas sponsored UserOperation (prepared → signed → sent). You’ll also see what to persist (address, prepared call IDs, tx hash) for later use.
+This recipe shows how to programmatically create a smart wallet: you’ll generate a signer, spin up a Smart Wallet Client, read the counterfactual address before deployment and deploy the wallet by sending your first gas sponsored `UserOperation` (prepared → signed → sent). You’ll also see what to persist (address, prepared call IDs, tx hash) for later use.
 
 
-## Step 1 — Install required dependencies
+## Step 1: Install required dependencies
 
 ```bash
 # viem: crypto utils (we'll generate a private key)
@@ -23,20 +22,22 @@ npm i -D typescript tsx @types/node
 
 ---
 
-## Step 2 — Environment variables
+## Step 2: Environment variables
 
 Create a `.env` in your project root:
 
-```
-ALCHEMY_API_KEY=YOUR_API_KEY # Get your app API key: https://dashboard.alchemy.com/apps
-ALCHEMY_POLICY_ID=YOUR_POLICY_ID # Get your gas sponsorship policy ID: https://dashboard.alchemy.com/services/gas-manager/configuration
+```bash
+# Get your app API key: https://dashboard.alchemy.com/apps
+ALCHEMY_API_KEY=YOUR_API_KEY
+# Get your gas sponsorship policy ID: https://dashboard.alchemy.com/services/gas-manager/configuration
+ALCHEMY_POLICY_ID=YOUR_POLICY_ID
 ```
 
 ---
 
-## Step 3 — Create a signer
+## Step 3: Create a signer
 
-You can use email/OTP, passkeys or social login (when getting a signer through frontend, see [react quickstart](https://www.alchemy.com/docs/wallets/react/quickstart)), EOAs, KMS/HSM, or custodial signers. For simplicity here, we generate a private key with `viem` and wrap it with `LocalAccountSigner`:
+You can use email/OTP, passkeys, or social login (via the [react quickstart](https://www.alchemy.com/docs/wallets/react/quickstart)) to obtain an embedded signer; or bring your own EOA, KMS/HSM, or custodial signer via the third-party signer interfaces. In this recipe, we keep it simple with a viem-generated private key wrapped by `LocalAccountSigner`:
 
 ```ts
 import { generatePrivateKey } from "viem/accounts";
@@ -48,7 +49,7 @@ const signer = LocalAccountSigner.privateKeyToAccountSigner(pk);
 
 ---
 
-## Step 4 — Create the Smart Wallet Client
+## Step 4: Create the Smart Wallet Client
 
 ```ts
 import { createSmartWalletClient } from "@account-kit/wallet-client";
@@ -65,7 +66,7 @@ const client = createSmartWalletClient({
 
 ---
 
-## Step 5 — Get the counterfactual address
+## Step 5: Get the counterfactual address
 
 The counterfactual address is the account address associated with the given signer but the account contract hasn't been deployed yet.
 
@@ -78,7 +79,7 @@ console.log("Counterfactual address:", address);
 
 ---
 
-## Step 6 — Prepare → sign → send a sponsored call
+## Step 6: Prepare → sign → send a sponsored call
 
 Use the **capabilities** pipeline with `paymasterService` to sponsor gas via your policy and deploy the account contract by sending a gas sponsored UserOperation.
 
@@ -101,13 +102,7 @@ console.log("Tx hash:", txHash);
 
 > Persist `address`, `preparedCallIds`, `txHash`, and `chainId` (and store only a signer locator in production—never raw keys).
 
----
-
-## Optional: Non-sponsored path
-
-Remove the `paymasterService` capability in `prepareCalls` and **fund the account** to pay gas. The rest of the flow is unchanged.
-
----
+<Note>For non-sponsored path, remove the `paymasterService` capability in `prepareCalls` and **fund the account** to pay gas. The rest of the flow is unchanged.</Note>
 
 ## Full script (copy-paste)
 
