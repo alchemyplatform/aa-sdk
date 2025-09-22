@@ -1,0 +1,26 @@
+---
+title: convertEthersSignerToAccountSigner
+description: Overview of the convertEthersSignerToAccountSigner function
+slug: wallets/reference/aa-sdk/ethers/src/functions/convertEthersSignerToAccountSigner
+layout: reference
+---
+
+```ts
+function convertEthersSignerToAccountSigner(signer): SmartAccountSigner<Signer>;
+```
+
+Defined in: [aa-sdk/ethers/src/utils.ts:45](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/ethers/src/utils.ts#L45)
+
+Converts a ethers.js Signer to a SmartAccountSigner
+
+## Parameters
+
+| Parameter | Type     | Description           |
+| :-------- | :------- | :-------------------- |
+| `signer`  | `Signer` | the Signer to convert |
+
+## Returns
+
+`SmartAccountSigner`\<`Signer`>
+
+a signer that can be used to sign and send user operations

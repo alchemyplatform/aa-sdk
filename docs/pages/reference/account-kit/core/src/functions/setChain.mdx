@@ -1,0 +1,36 @@
+---
+title: setChain
+description: Overview of the setChain function
+slug: wallets/reference/account-kit/core/src/functions/setChain
+layout: reference
+---
+
+```ts
+function setChain(config, chain): Promise<void>;
+```
+
+Defined in: [account-kit/core/src/actions/setChain.ts:23](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/core/src/actions/setChain.ts#L23)
+
+Allows you to change the current chain in the core store. Note, this chain
+must be one of the chains configured in your original createConfig call.
+
+## Example
+
+```ts
+import { setChain } from "@account-kit/core";
+import { config } from "./config";
+import { sepolia } from "@account-kit/infra";
+
+await setChain(config, sepolia);
+```
+
+## Parameters
+
+| Parameter | Type                                                                 | Description                                                                 |
+| :-------- | :------------------------------------------------------------------- | :-------------------------------------------------------------------------- |
+| `config`  | [`AlchemyAccountsConfig`](../type-aliases/AlchemyAccountsConfig.mdx) | the accounts config object                                                  |
+| `chain`   | `Chain`                                                              | the chain to change to. It must be present in the connections config object |
+
+## Returns
+
+`Promise`\<`void`>

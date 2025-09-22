@@ -1,0 +1,20 @@
+---
+title: OauthRedirectConfig
+description: Overview of the OauthRedirectConfig 2097152
+slug: wallets/reference/account-kit/signer/src/type-aliases/OauthRedirectConfig
+layout: reference
+---
+
+```ts
+type OauthRedirectConfig =
+  | {
+      mode: "redirect";
+      redirectUrl: string;
+    }
+  | {
+      mode: "popup";
+      redirectUrl?: never;
+    };
+```
+
+Defined in: [account-kit/signer/src/signer.ts:92](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/signer.ts#L92)

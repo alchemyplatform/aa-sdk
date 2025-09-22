@@ -1,0 +1,35 @@
+---
+title: getSolanaConnection
+description: Overview of the getSolanaConnection function
+slug: wallets/reference/account-kit/core/src/functions/getSolanaConnection
+layout: reference
+---
+
+```ts
+function getSolanaConnection(config): null | SolanaConnection;
+```
+
+Defined in: [account-kit/core/src/actions/getSolanaConnection.ts:17](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/core/src/actions/getSolanaConnection.ts#L17)
+
+Used to get the connection for the id
+
+## Example
+
+```ts
+import { getSolanaConnection } from "@account-kit/core";
+import { config } from "./config";
+
+const connection = getSolanaConnection(config);
+```
+
+## Parameters
+
+| Parameter | Type                                                                 | Description        |
+| :-------- | :------------------------------------------------------------------- | :----------------- |
+| `config`  | [`AlchemyAccountsConfig`](../type-aliases/AlchemyAccountsConfig.mdx) | the account config |
+
+## Returns
+
+`null` | [`SolanaConnection`](../type-aliases/SolanaConnection.mdx)
+
+a connection object for the current active chain

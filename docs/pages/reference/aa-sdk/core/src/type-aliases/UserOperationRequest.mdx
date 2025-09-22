@@ -1,0 +1,23 @@
+---
+title: UserOperationRequest
+description: Overview of the UserOperationRequest 2097152
+slug: wallets/reference/aa-sdk/core/src/type-aliases/UserOperationRequest
+layout: reference
+---
+
+```ts
+type UserOperationRequest<TEntryPointVersion> =
+  TEntryPointVersion extends "0.6.0"
+    ? UserOperationRequest_v6
+    : TEntryPointVersion extends "0.7.0"
+      ? UserOperationRequest_v7
+      : never & Eip7702ExtendedFields;
+```
+
+Defined in: [aa-sdk/core/src/types.ts:223](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/types.ts#L223)
+
+## Type Parameters
+
+| Type Parameter                                                                                                             | Default type                                                                                |
+| :------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------ |
+| `TEntryPointVersion` _extends_ [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx) | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx) |

@@ -1,0 +1,55 @@
+---
+title: watchAccount
+description: Overview of the watchAccount function
+slug: wallets/reference/account-kit/core/src/functions/watchAccount
+layout: reference
+---
+
+```ts
+function watchAccount<TAccount>(type, config): (onChange) => any;
+```
+
+Defined in: [account-kit/core/src/actions/watchAccount.ts:24](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/core/src/actions/watchAccount.ts#L24)
+
+Watches for changes to a specific type of account and triggers the provided callback function when changes occur.
+
+## Example
+
+```ts
+import { watchAccount } from "@account-kit/core";
+// see createConfig for more information on how to create a config
+import { config } from "./config";
+
+watchAccount("LightAccount", config)(console.log);
+```
+
+## Type Parameters
+
+| Type Parameter                                                                            | Description                  |
+| :---------------------------------------------------------------------------------------- | :--------------------------- |
+| `TAccount` _extends_ [`SupportedAccountTypes`](../type-aliases/SupportedAccountTypes.mdx) | The type of account to watch |
+
+## Parameters
+
+| Parameter | Type                                                                 | Description                                        |
+| :-------- | :------------------------------------------------------------------- | :------------------------------------------------- |
+| `type`    | `TAccount`                                                           | The type of account to watch                       |
+| `config`  | [`AlchemyAccountsConfig`](../type-aliases/AlchemyAccountsConfig.mdx) | The configuration containing client store settings |
+
+## Returns
+
+A function that accepts a callback to be called when the account changes and returns a function to unsubscribe from the store
+
+```ts
+(onChange): any;
+```
+
+### Parameters
+
+| Parameter  | Type                  |
+| :--------- | :-------------------- |
+| `onChange` | (`account`) => `void` |
+
+### Returns
+
+`any`

@@ -1,0 +1,35 @@
+---
+title: isSigner
+description: Overview of the isSigner function
+slug: wallets/reference/aa-sdk/core/src/functions/isSigner
+layout: reference
+---
+
+```ts
+function isSigner(signer): signer is SmartAccountSigner;
+```
+
+Defined in: [aa-sdk/core/src/signer/schema.ts:18](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/signer/schema.ts#L18)
+
+Checks if the provided object is a `SmartAccountSigner`.
+
+## Example
+
+```ts
+import { isSigner, LocalAccountSigner } from "@aa-sdk/core";
+
+const signer = new LocalAccountSigner(...);
+console.log(isSigner(signer)); // true
+```
+
+## Parameters
+
+| Parameter | Type  | Description         |
+| :-------- | :---- | :------------------ |
+| `signer`  | `any` | the object to check |
+
+## Returns
+
+`signer is SmartAccountSigner`
+
+A boolean indicating whether the object is a `SmartAccountSigner`

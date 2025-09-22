@@ -1,0 +1,43 @@
+---
+title: BigNumberishRangeSchema
+description: Overview of the BigNumberishRangeSchema 32
+slug: wallets/reference/aa-sdk/core/src/variables/BigNumberishRangeSchema
+layout: reference
+---
+
+```ts
+const BigNumberishRangeSchema: ZodObject<
+  {
+    max: ZodOptional<
+      ZodUnion<
+        [
+          ZodType<`0x${string}`, ZodTypeDef, `0x${string}`>,
+          ZodNumber,
+          ZodBigInt,
+        ]
+      >
+    >;
+    min: ZodOptional<
+      ZodUnion<
+        [
+          ZodType<`0x${string}`, ZodTypeDef, `0x${string}`>,
+          ZodNumber,
+          ZodBigInt,
+        ]
+      >
+    >;
+  },
+  "strict",
+  ZodTypeAny,
+  {
+    max?: number | bigint | `0x${string}`;
+    min?: number | bigint | `0x${string}`;
+  },
+  {
+    max?: number | bigint | `0x${string}`;
+    min?: number | bigint | `0x${string}`;
+  }
+>;
+```
+
+Defined in: [aa-sdk/core/src/utils/schema.ts:22](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/utils/schema.ts#L22)

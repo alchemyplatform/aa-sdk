@@ -1,0 +1,42 @@
+---
+title: isSmartAccountWithSigner
+description: Overview of the isSmartAccountWithSigner function
+slug: wallets/reference/aa-sdk/core/src/functions/isSmartAccountWithSigner
+layout: reference
+---
+
+```ts
+function isSmartAccountWithSigner(
+  account,
+): account is SmartContractAccountWithSigner<
+  string,
+  SmartAccountSigner<any>,
+  keyof EntryPointRegistryBase<unknown>
+>;
+```
+
+Defined in: [aa-sdk/core/src/account/smartContractAccount.ts:113](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/account/smartContractAccount.ts#L113)
+
+Determines if the given SmartContractAccount has a signer associated with it.
+
+## Example
+
+```ts
+import { toSmartContractAccount } from "@aa-sdk/core";
+
+const account = await toSmartContractAccount(...);
+
+console.log(isSmartAccountWithSigner(account)); // false: the base account does not have a publicly accessible signer
+```
+
+## Parameters
+
+| Parameter | Type                                                               | Description           |
+| :-------- | :----------------------------------------------------------------- | :-------------------- |
+| `account` | [`SmartContractAccount`](../type-aliases/SmartContractAccount.mdx) | The account to check. |
+
+## Returns
+
+`account is SmartContractAccountWithSigner<string, SmartAccountSigner<any>, keyof EntryPointRegistryBase<unknown>>`
+
+true if the account has a signer, otherwise false.

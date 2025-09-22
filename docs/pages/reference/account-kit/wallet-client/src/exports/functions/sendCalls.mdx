@@ -1,0 +1,67 @@
+---
+title: sendCalls
+description: Overview of the sendCalls function
+slug: wallets/reference/account-kit/wallet-client/src/exports/functions/sendCalls
+layout: reference
+---
+
+```ts
+function sendCalls<TAccount>(
+  client,
+  signer,
+  params,
+): Promise<{
+  preparedCallIds: `0x${string}`[];
+}>;
+```
+
+Defined in: [account-kit/wallet-client/src/client/actions/sendCalls.ts:52](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/wallet-client/src/client/actions/sendCalls.ts#L52)
+
+Prepares, signs, and submits calls. This function internally calls `prepareCalls`, `signPreparedCalls`, and `sendPreparedCalls`.
+
+\<Note>
+If using this action with an ERC-20 paymaster in pre-operation mode with `autoPermit`, the contents of the permit will be hidden
+from the user. It is recommended to use the `prepareCalls` action instead to manually handle the permit signature.
+\</Note>
+
+## Example
+
+```ts
+const result = await client.sendCalls({
+  calls: [
+    {
+      to: "0x1234...",
+      data: "0xabcdef...",
+      value: "0x0",
+    },
+  ],
+  capabilities: {
+    paymasterService: { policyId: "your-policy-id" },
+  },
+});
+
+// The result contains the prepared call IDs
+console.log(result.preparedCallIds);
+```
+
+## Type Parameters
+
+| Type Parameter                   | Default type        |
+| :------------------------------- | :------------------ | ----------- | ------------------- |
+| `TAccount` _extends_ `undefined` | `` `0x${string}` `` | `undefined` | `` `0x${string}` `` |
+
+## Parameters
+
+| Parameter | Type                           | Description                                  |
+| :-------- | :----------------------------- | :------------------------------------------- |
+| `client`  | `InnerWalletApiClient`         | The wallet API client to use for the request |
+| `signer`  | `SmartAccountSigner`           | The signer to use                            |
+| `params`  | `SendCallsParams`\<`TAccount`> | Parameters for sending calls                 |
+
+## Returns
+
+`Promise`\<\{
+`preparedCallIds`: `` `0x${string}` ``\[];
+}>
+
+A Promise that resolves to the result containing the prepared call IDs.

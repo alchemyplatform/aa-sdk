@@ -1,0 +1,45 @@
+---
+title: useSolanaTransaction
+description: Overview of the useSolanaTransaction function
+slug: wallets/reference/account-kit/react/src/functions/useSolanaTransaction
+layout: reference
+---
+
+```ts
+function useSolanaTransaction(opts): SolanaTransaction;
+```
+
+Defined in: [account-kit/react/src/hooks/useSolanaTransaction.ts:124](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/react/src/hooks/useSolanaTransaction.ts#L124)
+
+This is the hook that will be used to send a transaction. It will prioritize external
+connected Solana wallets, falling back to the internal signer when not connected.
+Supports sponsorship for both external wallets and internal signers.
+
+## Example
+
+```ts twoslash
+import { useSolanaTransaction } from "@account-kit/react";
+
+const { mutate } = useSolanaTransaction({
+  policyId: "<policyId>",
+});
+
+mutate({
+  transfer: {
+    amount: 0,
+    toAddress: "<toAddress>",
+  },
+});
+```
+
+## Parameters
+
+| Parameter | Type                          | Description                                                     |
+| :-------- | :---------------------------- | :-------------------------------------------------------------- |
+| `opts`    | `SolanaTransactionHookParams` | Options for the hook to get setup, The transaction is required. |
+
+## Returns
+
+[`SolanaTransaction`](../interfaces/SolanaTransaction.mdx)
+
+The transaction hook.

@@ -1,0 +1,47 @@
+---
+title: getSignerType
+description: Overview of the getSignerType function
+slug: wallets/reference/account-kit/smart-contracts/src/functions/getSignerType
+layout: reference
+---
+
+```ts
+function getSignerType<TTransport, TChain>(params): Promise<SignerType>;
+```
+
+Defined in: [account-kit/smart-contracts/src/msca/plugins/multisig/utils/getSignerType.ts:51](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/msca/plugins/multisig/utils/getSignerType.ts#L51)
+
+Determines the type of signer (Externally Owned Account (EOA) or CONTRACT) based on the provided client, signature, and signer.
+
+## Example
+
+```ts
+import { getSignerType } from "@account-kit/smart-contracts";
+import { LocalAccountSigner } from "@aa-sdk/core";
+import { createPublicClient, generatePrivateKey } from "viem";
+
+const signer = LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey());
+const client = createPublicClient(...);
+const signature = signer.signMessage("Hello World");
+
+const signerType = await getSignerType({ client, signature, signer }); // EOA
+```
+
+## Type Parameters
+
+| Type Parameter                     | Default type |
+| :--------------------------------- | :----------- | ----------- | ------- |
+| `TTransport` _extends_ `Transport` | `Transport`  |
+| `TChain` _extends_ `undefined`     | `Chain`      | `undefined` | `Chain` |
+
+## Parameters
+
+| Parameter | Type                                           | Description                                                |
+| :-------- | :--------------------------------------------- | :--------------------------------------------------------- |
+| `params`  | `GetSignerTypeParams`\<`TTransport`, `TChain`> | the parameters including the client, signature, and signer |
+
+## Returns
+
+`Promise`\<`SignerType`>
+
+A promise that resolves to the signer type, which is either "EOA" or "CONTRACT"

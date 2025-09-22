@@ -1,0 +1,45 @@
+---
+title: useWaitForCallsStatus
+description: Overview of the useWaitForCallsStatus function
+slug: wallets/reference/account-kit/react/src/functions/useWaitForCallsStatus
+layout: reference
+---
+
+```ts
+function useWaitForCallsStatus(params): UseWaitForCallsStatusResult;
+```
+
+Defined in: [account-kit/react/src/hooks/useWaitForCallsStatus.ts:46](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/react/src/hooks/useWaitForCallsStatus.ts#L46)
+
+Hook to wait for calls status to be confirmed.
+It will poll until the calls reach the desired status or until a timeout occurs.
+
+## Example
+
+```tsx twoslash
+import { useWaitForCallsStatus } from "@account-kit/react";
+
+function MyComponent() {
+  const {
+    data: result,
+    isLoading,
+    error,
+  } = useWaitForCallsStatus({
+    client: smartWalletClient,
+    id: "0x1234...", // The call ID from sendPreparedCalls
+    timeout: 30_000, // 30 second timeout
+  });
+}
+```
+
+## Parameters
+
+| Parameter | Type                                                                           | Description             |
+| :-------- | :----------------------------------------------------------------------------- | :---------------------- |
+| `params`  | [`UseWaitForCallsStatusParams`](../interfaces/UseWaitForCallsStatusParams.mdx) | Parameters for the hook |
+
+## Returns
+
+[`UseWaitForCallsStatusResult`](../type-aliases/UseWaitForCallsStatusResult.mdx)
+
+Query result containing the final status

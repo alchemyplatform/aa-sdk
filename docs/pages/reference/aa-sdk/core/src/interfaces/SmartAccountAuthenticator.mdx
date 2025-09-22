@@ -1,0 +1,35 @@
+---
+title: SmartAccountAuthenticator
+description: Extends the  SmartAccountSigner interface with authentication.
+slug: wallets/reference/aa-sdk/core/src/interfaces/SmartAccountAuthenticator
+layout: reference
+---
+
+Defined in: [aa-sdk/core/src/signer/types.ts:19](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/signer/types.ts#L19)
+
+Extends the SmartAccountSigner interface with authentication.
+
+## Extends
+
+- [`SmartAccountSigner`](SmartAccountSigner.mdx)\<`Inner`>
+
+## Type Parameters
+
+| Type Parameter | Default type | Description                                                                                               |
+| :------------- | :----------- | :-------------------------------------------------------------------------------------------------------- |
+| `AuthParams`   | -            | the generic type of the authentication parameters                                                         |
+| `AuthDetails`  | -            | the generic type of the authentication details                                                            |
+| `Inner`        | `any`        | the generic type of the inner client that the signer wraps to provide functionality such as signing, etc. |
+
+## Properties
+
+| Property                                          | Type                                                                         | Inherited from                                                                                                 | Defined in                                                                                                                                                        |
+| :------------------------------------------------ | :--------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <a id="authenticate" /> `authenticate`            | (`params`) => `Promise`\<`AuthDetails`>                                      | -                                                                                                              | [aa-sdk/core/src/signer/types.ts:21](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/signer/types.ts#L21) |
+| <a id="getaddress" /> `getAddress`                | () => `Promise`\<`` `0x${string}` ``>                                        | [`SmartAccountSigner`](SmartAccountSigner.mdx).[`getAddress`](SmartAccountSigner.mdx#getaddress)               | [aa-sdk/core/src/signer/types.ts:52](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/signer/types.ts#L52) |
+| <a id="getauthdetails" /> `getAuthDetails`        | () => `Promise`\<`AuthDetails`>                                              | -                                                                                                              | [aa-sdk/core/src/signer/types.ts:23](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/signer/types.ts#L23) |
+| <a id="inner-1" /> `inner`                        | `Inner`                                                                      | [`SmartAccountSigner`](SmartAccountSigner.mdx).[`inner`](SmartAccountSigner.mdx#inner-1)                       | [aa-sdk/core/src/signer/types.ts:50](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/signer/types.ts#L50) |
+| <a id="signauthorization" /> `signAuthorization?` | (`unsignedAuthorization`) => `Promise`\<`SignedAuthorization`\<`number`>>    | [`SmartAccountSigner`](SmartAccountSigner.mdx).[`signAuthorization`](SmartAccountSigner.mdx#signauthorization) | [aa-sdk/core/src/signer/types.ts:63](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/signer/types.ts#L63) |
+| <a id="signertype" /> `signerType`                | `string`                                                                     | [`SmartAccountSigner`](SmartAccountSigner.mdx).[`signerType`](SmartAccountSigner.mdx#signertype)               | [aa-sdk/core/src/signer/types.ts:49](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/signer/types.ts#L49) |
+| <a id="signmessage" /> `signMessage`              | (`message`) => `Promise`\<`` `0x${string}` ``>                               | [`SmartAccountSigner`](SmartAccountSigner.mdx).[`signMessage`](SmartAccountSigner.mdx#signmessage)             | [aa-sdk/core/src/signer/types.ts:54](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/signer/types.ts#L54) |
+| <a id="signtypeddata" /> `signTypedData`          | \<`TTypedData`, `TPrimaryType`>(`params`) => `Promise`\<`` `0x${string}` ``> | [`SmartAccountSigner`](SmartAccountSigner.mdx).[`signTypedData`](SmartAccountSigner.mdx#signtypeddata)         | [aa-sdk/core/src/signer/types.ts:56](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/signer/types.ts#L56) |

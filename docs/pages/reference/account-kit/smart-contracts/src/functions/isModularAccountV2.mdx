@@ -1,0 +1,26 @@
+---
+title: isModularAccountV2
+description: Overview of the isModularAccountV2 function
+slug: wallets/reference/account-kit/smart-contracts/src/functions/isModularAccountV2
+layout: reference
+---
+
+```ts
+function isModularAccountV2(
+  account,
+): account is
+  | WebauthnModularAccountV2
+  | ModularAccountV2<SmartAccountSigner<any>>;
+```
+
+Defined in: [account-kit/smart-contracts/src/ma-v2/account/common/modularAccountV2Base.ts:364](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/ma-v2/account/common/modularAccountV2Base.ts#L364)
+
+## Parameters
+
+| Parameter | Type                   |
+| :-------- | :--------------------- |
+| `account` | `SmartContractAccount` |
+
+## Returns
+
+account is WebauthnModularAccountV2 | ModularAccountV2\<SmartAccountSigner\<any>>

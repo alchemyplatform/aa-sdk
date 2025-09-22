@@ -1,0 +1,22 @@
+---
+title: EntryPointParameter
+description: Overview of the EntryPointParameter 2097152
+slug: wallets/reference/aa-sdk/core/src/type-aliases/EntryPointParameter
+layout: reference
+---
+
+```ts
+type EntryPointParameter<TEntryPointVersion, TChain> =
+  accountLoupeActions<TEntryPointVersion, DefaultEntryPointVersion> extends true
+    ? object
+    : object;
+```
+
+Defined in: [aa-sdk/core/src/entrypoint/types.ts:110](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/entrypoint/types.ts#L110)
+
+## Type Parameters
+
+| Type Parameter                                                              | Default type |
+| :-------------------------------------------------------------------------- | :----------- |
+| `TEntryPointVersion` _extends_ [`EntryPointVersion`](EntryPointVersion.mdx) | -            |
+| `TChain` _extends_ `Chain`                                                  | `Chain`      |

@@ -1,0 +1,46 @@
+---
+title: CreateMultisigModularAccountParams
+description: Overview of the CreateMultisigModularAccountParams 2097152
+slug: wallets/reference/account-kit/smart-contracts/src/type-aliases/CreateMultisigModularAccountParams
+layout: reference
+---
+
+```ts
+type CreateMultisigModularAccountParams<
+  TTransport,
+  TSigner,
+  TEntryPointVersion,
+> = Pick<
+  ToSmartContractAccountParams<
+    "MultisigModularAccount",
+    TTransport,
+    Chain,
+    TEntryPointVersion
+  >,
+  "transport" | "chain"
+> &
+  object &
+  EntryPointParameter<TEntryPointVersion, Chain>;
+```
+
+Defined in: [account-kit/smart-contracts/src/msca/account/multisigAccount.ts:38](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/msca/account/multisigAccount.ts#L38)
+
+## Type Declaration
+
+| Name              | Type                                                                 | Defined in                                                                                                                                                                                                                        |
+| :---------------- | :------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `accountAddress?` | [`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx)    | [account-kit/smart-contracts/src/msca/account/multisigAccount.ts:57](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/msca/account/multisigAccount.ts#L57) |
+| `factoryAddress?` | [`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx)    | [account-kit/smart-contracts/src/msca/account/multisigAccount.ts:53](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/msca/account/multisigAccount.ts#L53) |
+| `initCode?`       | `Hex`                                                                | [account-kit/smart-contracts/src/msca/account/multisigAccount.ts:54](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/msca/account/multisigAccount.ts#L54) |
+| `owners?`         | [`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx)\[] | [account-kit/smart-contracts/src/msca/account/multisigAccount.ts:56](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/msca/account/multisigAccount.ts#L56) |
+| `salt?`           | `bigint`                                                             | [account-kit/smart-contracts/src/msca/account/multisigAccount.ts:52](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/msca/account/multisigAccount.ts#L52) |
+| `signer`          | `TSigner`                                                            | [account-kit/smart-contracts/src/msca/account/multisigAccount.ts:51](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/msca/account/multisigAccount.ts#L51) |
+| `threshold`       | `bigint`                                                             | [account-kit/smart-contracts/src/msca/account/multisigAccount.ts:55](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/msca/account/multisigAccount.ts#L55) |
+
+## Type Parameters
+
+| Type Parameter                           | Default type         |
+| :--------------------------------------- | :------------------- |
+| `TTransport` _extends_ `Transport`       | `Transport`          |
+| `TSigner` _extends_ `SmartAccountSigner` | `SmartAccountSigner` |
+| `TEntryPointVersion` _extends_ `"0.6.0"` | `"0.6.0"`            |

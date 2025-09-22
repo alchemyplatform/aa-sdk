@@ -1,0 +1,23 @@
+---
+title: IsOneOf
+description: Overview of the IsOneOf 2097152
+slug: wallets/reference/aa-sdk/core/src/type-aliases/IsOneOf
+layout: reference
+---
+
+```ts
+type IsOneOf<T, Union> = IsMemberOrSubtypeOfAComponent<
+  T,
+  Union,
+  EqualsOneOfTheComponents<T, Union>
+>;
+```
+
+Defined in: [aa-sdk/core/src/utils/types.ts:90](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/utils/types.ts#L90)
+
+## Type Parameters
+
+| Type Parameter |
+| :------------- |
+| `T`            |
+| `Union`        |

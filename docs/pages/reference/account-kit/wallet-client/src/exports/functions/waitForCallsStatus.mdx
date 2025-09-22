@@ -1,0 +1,66 @@
+---
+title: waitForCallsStatus
+description: Overview of the waitForCallsStatus function
+slug: wallets/reference/account-kit/wallet-client/src/exports/functions/waitForCallsStatus
+layout: reference
+---
+
+```ts
+function waitForCallsStatus(
+  client,
+  params,
+): Promise<{
+  atomic: boolean;
+  capabilities?:
+    | {
+        [key: string]: any;
+      }
+    | {
+        [key: string]: any;
+      };
+  chainId: number;
+  id: string;
+  receipts?: WalletCallReceipt<bigint, "success" | "reverted">[];
+  status: undefined | "pending" | "success" | "failure";
+  statusCode: number;
+  version: string;
+}>;
+```
+
+Defined in: [account-kit/wallet-client/src/client/actions/waitForCallsStatus.ts:19](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/wallet-client/src/client/actions/waitForCallsStatus.ts#L19)
+
+Waits for the status of a prepared call to be updated, returning after the calls are no longer pending.
+
+## Example
+
+```ts
+const result = await client.waitForCallsStatus({ id: "0x1234..." });
+console.log(result);
+```
+
+## Parameters
+
+| Parameter | Type                           | Description                                                                             |
+| :-------- | :----------------------------- | :-------------------------------------------------------------------------------------- |
+| `client`  | `InnerWalletApiClient`         | The wallet API client to use for the request                                            |
+| `params`  | `WaitForCallsStatusParameters` | Parameters for waiting for calls status, including the call ID and options for polling. |
+
+## Returns
+
+`Promise`\<\{
+`atomic`: `boolean`;
+`capabilities?`: | \{
+\[`key`: `string`]: `any`;
+}
+| \{
+\[`key`: `string`]: `any`;
+};
+`chainId`: `number`;
+`id`: `string`;
+`receipts?`: `WalletCallReceipt`\<`bigint`, `"success"` | `"reverted"`>\[];
+`status`: `undefined` | `"pending"` | `"success"` | `"failure"`;
+`statusCode`: `number`;
+`version`: `string`;
+}>
+
+A Promise that resolves to the result containing the prepared call status, which includes a transaction receipt after the call is executed.

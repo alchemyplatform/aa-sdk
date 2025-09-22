@@ -1,0 +1,27 @@
+---
+title: convertSignerStatusToState
+description: Overview of the convertSignerStatusToState function
+slug: wallets/reference/account-kit/core/src/functions/convertSignerStatusToState
+layout: reference
+---
+
+```ts
+function convertSignerStatusToState(alchemySignerStatus, error): SignerStatus;
+```
+
+Defined in: [account-kit/core/src/store/store.ts:280](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/core/src/store/store.ts#L280)
+
+Converts the AlchemySigner's status to a more readable object
+
+## Parameters
+
+| Parameter             | Type                  | Description                                         |
+| :-------------------- | :-------------------- | :-------------------------------------------------- | ------------------------------------ |
+| `alchemySignerStatus` | `AlchemySignerStatus` | Enum value of the AlchemySigner's status to convert |
+| `error`               | `undefined`           | `ErrorInfo`                                         | the current signer error, if present |
+
+## Returns
+
+[`SignerStatus`](../type-aliases/SignerStatus.mdx)
+
+an object containing the original status as well as booleans to check the current state

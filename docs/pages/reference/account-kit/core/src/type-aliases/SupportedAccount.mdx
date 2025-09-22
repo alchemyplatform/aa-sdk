@@ -1,0 +1,26 @@
+---
+title: SupportedAccount
+description: Overview of the SupportedAccount 2097152
+slug: wallets/reference/account-kit/core/src/type-aliases/SupportedAccount
+layout: reference
+---
+
+```ts
+type SupportedAccount<T> = T extends "LightAccount"
+  ? accountLoupeActions<AlchemySigner>
+  : T extends "MultiOwnerModularAccount"
+    ? accountLoupeActions<AlchemySigner>
+    : T extends "MultiOwnerLightAccount"
+      ? accountLoupeActions<AlchemySigner>
+      : T extends "ModularAccountV2"
+        ? accountLoupeActions<AlchemySigner>
+        : never;
+```
+
+Defined in: [account-kit/core/src/types.ts:48](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/core/src/types.ts#L48)
+
+## Type Parameters
+
+| Type Parameter                                                     |
+| :----------------------------------------------------------------- |
+| `T` _extends_ [`SupportedAccountTypes`](SupportedAccountTypes.mdx) |

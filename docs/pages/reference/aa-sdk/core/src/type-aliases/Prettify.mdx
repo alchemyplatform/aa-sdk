@@ -1,0 +1,29 @@
+---
+title: Prettify
+description: Combines members of an intersection into a readable type.
+slug: wallets/reference/aa-sdk/core/src/type-aliases/Prettify
+layout: reference
+---
+
+```ts
+type Prettify<T> = { [K in keyof T]: T[K] } & object;
+```
+
+Defined in: [aa-sdk/core/src/utils/types.ts:41](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/utils/types.ts#L41)
+
+## Example
+
+```ts
+Prettify<{ a: string } & { b: string } & { c: number, d: bigint }>
+=> { a: string, b: string, c: number, d: bigint }
+```
+
+## Type Parameters
+
+| Type Parameter |
+| :------------- |
+| `T`            |
+
+## See
+
+https://twitter.com/mattpocockuk/status/1622730173446557697?s=20\&t=NdpAcmEFXY01xkqU3KO0Mg

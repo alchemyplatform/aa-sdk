@@ -1,0 +1,30 @@
+---
+title: SendUserOperationParameters
+description: Overview of the SendUserOperationParameters 2097152
+slug: wallets/reference/aa-sdk/core/src/type-aliases/SendUserOperationParameters
+layout: reference
+---
+
+```ts
+type SendUserOperationParameters<TAccount, TContext, TEntryPointVersion> =
+  object &
+    accountLoupeActions<TAccount> &
+    GetContextParameter<TContext> &
+    accountLoupeActions<TEntryPointVersion>;
+```
+
+Defined in: [aa-sdk/core/src/actions/smartAccount/types.ts:35](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/actions/smartAccount/types.ts#L35)
+
+## Type Declaration
+
+| Name | Type | Defined in                                                                                  |
+| :--- | :--- | :------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `uo` |      | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx) | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx) | [aa-sdk/core/src/actions/smartAccount/types.ts:43](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/actions/smartAccount/types.ts#L43) |
+
+## Type Parameters
+
+| Type Parameter                                                                                                                          | Default type                                                                                             |
+| :-------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------- | -------------------------------------------------- | ----------- |
+| `TAccount` _extends_                                                                                                                    | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)              | `undefined`                                        | -           |
+| `TContext` _extends_ [`UserOperationContext`](UserOperationContext.mdx)                                                                 | `undefined`                                                                                              | [`UserOperationContext`](UserOperationContext.mdx) | `undefined` |
+| `TEntryPointVersion` _extends_ [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`TAccount`> | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`TAccount`> |

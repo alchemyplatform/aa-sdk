@@ -1,0 +1,34 @@
+---
+title: splitAggregatedSignature
+description: Overview of the splitAggregatedSignature function
+slug: wallets/reference/account-kit/smart-contracts/src/functions/splitAggregatedSignature
+layout: reference
+---
+
+```ts
+function splitAggregatedSignature<TAccount>(
+  args,
+): Promise<SplitAggregateSignatureResult>;
+```
+
+Defined in: [account-kit/smart-contracts/src/msca/plugins/multisig/utils/splitAggregatedSignature.ts:41](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/msca/plugins/multisig/utils/splitAggregatedSignature.ts#L41)
+
+Takes an aggregated signature and threshold and splits it into its components
+
+## Type Parameters
+
+| Type Parameter                   | Default type           |
+| :------------------------------- | :--------------------- | ----------- | ---------------------- |
+| `TAccount` _extends_ `undefined` | `SmartContractAccount` | `undefined` | `SmartContractAccount` |
+
+## Parameters
+
+| Parameter | Type                                         | Description                 |
+| :-------- | :------------------------------------------- | :-------------------------- |
+| `args`    | `SplitAggregateSignatureParams`\<`TAccount`> | the arguments for the split |
+
+## Returns
+
+`Promise`\<`SplitAggregateSignatureResult`>
+
+the signature split into its upper limits and current signatures

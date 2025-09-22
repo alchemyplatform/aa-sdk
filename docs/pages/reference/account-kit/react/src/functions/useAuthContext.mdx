@@ -1,0 +1,30 @@
+---
+title: useAuthContext
+description: A custom hook that provides the authentication context based on the specified authentication step type. It ensures that the hook is used within an `AuthModalProvider` and throws an error if the context is not available or if the current auth step type does not match the expected type.
+slug: wallets/reference/account-kit/react/src/functions/useAuthContext
+layout: reference
+---
+
+```ts
+function useAuthContext<TType>(type?): AuthContextType<TType>;
+```
+
+Defined in: [account-kit/react/src/components/auth/context.ts:73](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/react/src/components/auth/context.ts#L73)
+
+## Type Parameters
+
+| Type Parameter    | Default type |
+| :---------------- | :----------- | ---------------- | -------------- | --------------- | ------------------ | ------------------ | -------------------------- | -------------------- | -------------------- | ----------- | ------------ | --------------- | ------------------ | ------------ | --- | ----------- | ---------------- | -------------- | --------------- | ------------------ | ------------------ | -------------------------- | -------------------- | -------------------- | ----------- | ------------ | --------------- | ------------------ | ------------ |
+| `TType` _extends_ | `undefined`  | `"email_verify"` | `"otp_verify"` | `"totp_verify"` | `"passkey_verify"` | `"passkey_create"` | `"passkey_create_success"` | `"email_completing"` | `"oauth_completing"` | `"initial"` | `"complete"` | `"eoa_connect"` | `"wallet_connect"` | `"pick_eoa"` |     | `undefined` | `"email_verify"` | `"otp_verify"` | `"totp_verify"` | `"passkey_verify"` | `"passkey_create"` | `"passkey_create_success"` | `"email_completing"` | `"oauth_completing"` | `"initial"` | `"complete"` | `"eoa_connect"` | `"wallet_connect"` | `"pick_eoa"` |
+
+## Parameters
+
+| Parameter | Type    | Description                                                                  |
+| :-------- | :------ | :--------------------------------------------------------------------------- |
+| `type?`   | `TType` | Optional type of authentication step to validate against the current context |
+
+## Returns
+
+`AuthContextType`\<`TType`>
+
+The authentication context for the current component

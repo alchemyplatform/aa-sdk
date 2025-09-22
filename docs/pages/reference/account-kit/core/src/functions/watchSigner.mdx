@@ -1,0 +1,48 @@
+---
+title: watchSigner
+description: Overview of the watchSigner function
+slug: wallets/reference/account-kit/core/src/functions/watchSigner
+layout: reference
+---
+
+```ts
+function watchSigner(config): (onChange) => any;
+```
+
+Defined in: [account-kit/core/src/actions/watchSigner.ts:19](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/core/src/actions/watchSigner.ts#L19)
+
+Subscribe to changes of the signer instance on the client store.
+
+## Example
+
+```ts
+import { watchSigner } from "@account-kit/core";
+// see createConfig for more information on how to create a config
+import { config } from "./config";
+
+watchSigner(config)(console.log);
+```
+
+## Parameters
+
+| Parameter | Type                    | Description                                    |
+| :-------- | :---------------------- | :--------------------------------------------- |
+| `config`  | `AlchemyAccountsConfig` | the account config containing the client store |
+
+## Returns
+
+a function which accepts an onChange callback that will be fired when the signer changes and returns a function to unsubscribe from the store
+
+```ts
+(onChange): any;
+```
+
+### Parameters
+
+| Parameter  | Type                  |
+| :--------- | :-------------------- |
+| `onChange` | (`signer?`) => `void` |
+
+### Returns
+
+`any`

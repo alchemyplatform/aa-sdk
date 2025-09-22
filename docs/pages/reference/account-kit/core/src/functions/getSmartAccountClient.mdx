@@ -1,0 +1,35 @@
+---
+title: getSmartAccountClient
+description: Obtains a smart account client based on the provided parameters and configuration. Supports creating any of the SupportAccountTypes in Account Kit. If the signer is not connected, or an account is already being intializes, this results in a loading state.
+slug: wallets/reference/account-kit/core/src/functions/getSmartAccountClient
+layout: reference
+---
+
+```ts
+function getSmartAccountClient<TChain, TAccount>(
+  params,
+  config,
+): GetSmartAccountClientResult<TChain, SupportedAccount<TAccount>>;
+```
+
+Defined in: [account-kit/core/src/actions/getSmartAccountClient.ts:71](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/core/src/actions/getSmartAccountClient.ts#L71)
+
+## Type Parameters
+
+| Type Parameter                               | Default type            |
+| :------------------------------------------- | :---------------------- | ----------- | ------- |
+| `TChain` _extends_ `undefined`               | `Chain`                 | `undefined` | `Chain` |
+| `TAccount` _extends_ `SupportedAccountTypes` | `SupportedAccountTypes` |
+
+## Parameters
+
+| Parameter | Type                                                                                                    | Description                                                                                         |
+| :-------- | :------------------------------------------------------------------------------------------------------ | :-------------------------------------------------------------------------------------------------- |
+| `params`  | [`GetSmartAccountClientParams`](../type-aliases/GetSmartAccountClientParams.mdx)\<`TChain`, `TAccount`> | Parameters for getting the smart account client, including account parameters and client parameters |
+| `config`  | `AlchemyAccountsConfig`                                                                                 | The configuration containing the client store and other necessary information                       |
+
+## Returns
+
+[`GetSmartAccountClientResult`](../type-aliases/GetSmartAccountClientResult.mdx)\<`TChain`, `SupportedAccount`\<`TAccount`>>
+
+The result object which includes the client, address, and loading status of the client

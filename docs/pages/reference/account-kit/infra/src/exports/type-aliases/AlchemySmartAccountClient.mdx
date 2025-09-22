@@ -1,0 +1,23 @@
+---
+title: AlchemySmartAccountClient
+description: Overview of the AlchemySmartAccountClient 2097152
+slug: wallets/reference/account-kit/infra/src/exports/type-aliases/AlchemySmartAccountClient
+layout: reference
+---
+
+```ts
+type AlchemySmartAccountClient<chain, account, actions, context> = Prettify<
+  AlchemySmartAccountClient_Base<chain, account, actions, context>
+>;
+```
+
+Defined in: [account-kit/infra/src/client/smartAccountClient.ts:96](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/infra/src/client/smartAccountClient.ts#L96)
+
+## Type Parameters
+
+| Type Parameter                                     | Default type                   |
+| :------------------------------------------------- | :----------------------------- | ---------------------- | ----------- |
+| `chain` _extends_ `Chain`                          | `undefined`                    | `Chain`                | `undefined` |
+| `account` _extends_ `SmartContractAccount`         | `undefined`                    | `SmartContractAccount` | `undefined` |
+| `actions` _extends_ `Record`\<`string`, `unknown`> | `Record`\<`string`, `unknown`> |
+| `context` _extends_ `UserOperationContext`         | `undefined`                    | `UserOperationContext` | `undefined` |

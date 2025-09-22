@@ -1,0 +1,28 @@
+---
+title: UseSendUserOperationArgs
+description: Overview of the UseSendUserOperationArgs 2097152
+slug: wallets/reference/account-kit/react/src/type-aliases/UseSendUserOperationArgs
+layout: reference
+---
+
+```ts
+type UseSendUserOperationArgs<TEntryPointVersion, TAccount> = object &
+  UseSendUserOperationMutationArgs<TEntryPointVersion, TAccount>;
+```
+
+Defined in: [account-kit/react/src/hooks/useSendUserOperation.ts:42](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/react/src/hooks/useSendUserOperation.ts#L42)
+
+## Type Declaration
+
+| Name             | Type        | Defined in                                                                                                                                                                                                |
+| :--------------- | :---------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `client`         |             | [`UseSmartAccountClientResult`](UseSmartAccountClientResult.mdx)\[`"client"`]                                                                                                                             | `undefined`                                                                                                                                                                                               | [account-kit/react/src/hooks/useSendUserOperation.ts:46](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/react/src/hooks/useSendUserOperation.ts#L46) |
+| `waitForTxn?`    | `boolean`   | [account-kit/react/src/hooks/useSendUserOperation.ts:47](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/react/src/hooks/useSendUserOperation.ts#L47) |
+| `waitForTxnTag?` | `"pending"` | `"latest"`                                                                                                                                                                                                | [account-kit/react/src/hooks/useSendUserOperation.ts:48](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/react/src/hooks/useSendUserOperation.ts#L48) |
+
+## Type Parameters
+
+| Type Parameter                                                                                    | Default type                                                                 |
+| :------------------------------------------------------------------------------------------------ | :--------------------------------------------------------------------------- |
+| `TEntryPointVersion` _extends_ `GetEntryPointFromAccount`\<`TAccount`>                            | -                                                                            |
+| `TAccount` _extends_ [`accountLoupeActions`](../../../core/src/variables/accountLoupeActions.mdx) | [`accountLoupeActions`](../../../core/src/variables/accountLoupeActions.mdx) |

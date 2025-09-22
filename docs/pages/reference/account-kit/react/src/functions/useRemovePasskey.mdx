@@ -1,0 +1,40 @@
+---
+title: useRemovePasskey
+description: Overview of the useRemovePasskey function
+slug: wallets/reference/account-kit/react/src/functions/useRemovePasskey
+layout: reference
+---
+
+```ts
+function useRemovePasskey(mutationArgs?): UseRemovePasskeyResult;
+```
+
+Defined in: [account-kit/react/src/hooks/useRemovePasskey.ts:42](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/react/src/hooks/useRemovePasskey.ts#L42)
+
+A custom [hook](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useAddPasskey.ts) to handle the addition of a passkey to an already authenticated account, which includes executing a mutation with optional parameters.
+
+## Example
+
+```ts twoslash
+import { useRemovePasskey } from "@account-kit/react";
+
+const { removePasskey, isRemovingPasskey, error } = useRemovePasskey({
+  // these are optional
+  onSuccess: () => {
+    // do something on success
+  },
+  onError: (error) => console.error(error),
+});
+```
+
+## Parameters
+
+| Parameter       | Type                                                                                           | Description       |
+| :-------------- | :--------------------------------------------------------------------------------------------- | :---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `mutationArgs?` | `Partial`\<`Omit`\<`UseMutationOptions`\<`void`, `Error`, `string`, `unknown`>, `"mutationFn"` | `"mutationKey"`>> | Optional arguments for the mutation used for removing a passkey. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useRemovePasskey.ts#L8) |
+
+## Returns
+
+[`UseRemovePasskeyResult`](../type-aliases/UseRemovePasskeyResult.mdx)
+
+An object containing the `removePasskey` function, `removePasskeyAsync` for async execution, a boolean `isRemovingPasskey` to track the mutation status, and any error encountered. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useRemovePasskey.ts#L13)

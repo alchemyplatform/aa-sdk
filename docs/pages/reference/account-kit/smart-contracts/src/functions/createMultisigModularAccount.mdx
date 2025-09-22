@@ -1,0 +1,33 @@
+---
+title: createMultisigModularAccount
+description: Creates a multisig modular account using the provided parameters, including transport, chain, signer, account address, and other account settings. It configures the account with multiple owners and the specified threshold.
+slug: wallets/reference/account-kit/smart-contracts/src/functions/createMultisigModularAccount
+layout: reference
+---
+
+```ts
+function createMultisigModularAccount<TTransport, TSigner>(
+  config,
+): Promise<MultisigModularAccount<TSigner>>;
+```
+
+Defined in: [account-kit/smart-contracts/src/msca/account/multisigAccount.ts:60](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/msca/account/multisigAccount.ts#L60)
+
+## Type Parameters
+
+| Type Parameter                                   | Default type                 |
+| :----------------------------------------------- | :--------------------------- |
+| `TTransport` _extends_ `Transport`               | `Transport`                  |
+| `TSigner` _extends_ `SmartAccountSigner`\<`any`> | `SmartAccountSigner`\<`any`> |
+
+## Parameters
+
+| Parameter | Type                                                                                                                     | Description                                             |
+| :-------- | :----------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------ |
+| `config`  | [`CreateMultisigModularAccountParams`](../type-aliases/CreateMultisigModularAccountParams.mdx)\<`TTransport`, `TSigner`> | The parameters for creating a multisig modular account. |
+
+## Returns
+
+`Promise`\<[`MultisigModularAccount`](../type-aliases/MultisigModularAccount.mdx)\<`TSigner`>>
+
+A promise that resolves to a `MultisigModularAccount` object containing the created account information and methods.

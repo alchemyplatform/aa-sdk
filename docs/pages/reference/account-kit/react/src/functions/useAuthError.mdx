@@ -1,0 +1,32 @@
+---
+title: useAuthError
+description: Overview of the useAuthError function
+slug: wallets/reference/account-kit/react/src/functions/useAuthError
+layout: reference
+---
+
+```ts
+function useAuthError(): UseAuthErrorResult;
+```
+
+Defined in: [account-kit/react/src/hooks/useAuthError.ts:21](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/react/src/hooks/useAuthError.ts#L21)
+
+Returns the error returned from the current auth step, if it exists
+
+## Example
+
+```ts twoslash
+import { useAuthError } from "@account-kit/react";
+
+const error = useAuthError();
+
+if (error) {
+  console.error("Error occurred during auth step", error);
+}
+```
+
+## Returns
+
+[`UseAuthErrorResult`](../type-aliases/UseAuthErrorResult.mdx)
+
+the current Error object

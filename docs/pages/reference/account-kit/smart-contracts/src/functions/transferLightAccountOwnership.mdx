@@ -1,0 +1,61 @@
+---
+title: transferLightAccountOwnership
+description: Overview of the transferLightAccountOwnership function
+slug: wallets/reference/account-kit/smart-contracts/src/functions/transferLightAccountOwnership
+layout: reference
+---
+
+```ts
+function transferLightAccountOwnership<TTransport, TChain, TSigner, TAccount>(
+  client,
+  args,
+): Promise<`0x${string}`>;
+```
+
+Defined in: [account-kit/smart-contracts/src/light-account/actions/transferOwnership.ts:51](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/light-account/actions/transferOwnership.ts#L51)
+
+Transfers the ownership of a light account to a new owner.
+This function ensures that the client is a compatible smart acccount client and that a Light Account is provided.
+If the waitForTxn parameter is true, it will wait for the transaction to be completed before returning.
+
+## Example
+
+```ts
+import {
+  transferOwnership,
+  createLightAccountClient,
+} from "@account-kit/smart-contracts";
+
+const lightAccountClient = createLightAccountClient({
+  signer,
+  transport,
+  chain,
+});
+
+const txHash = await transferOwnership(lightAccountClient, {
+  newOwner: newOwnerSigner,
+  waitForTxn: true, // set to false to return a uoHash instead
+});
+```
+
+## Type Parameters
+
+| Type Parameter                                   | Default type                 |
+| :----------------------------------------------- | :--------------------------- | ----------- | ------- |
+| `TTransport` _extends_ `Transport`               | `Transport`                  |
+| `TChain` _extends_ `undefined`                   | `Chain`                      | `undefined` | `Chain` |
+| `TSigner` _extends_ `SmartAccountSigner`\<`any`> | `SmartAccountSigner`\<`any`> |
+| `TAccount` _extends_ `any`                       | `any`                        |
+
+## Parameters
+
+| Parameter | Type                                                          | Description                                                    |
+| :-------- | :------------------------------------------------------------ | :------------------------------------------------------------- |
+| `client`  | `Client`\<`TTransport`, `TChain`, `TAccount`>                 | The smart account client instance used to execute the transfer |
+| `args`    | `TransferLightAccountOwnershipParams`\<`TSigner`, `TAccount`> | The parameters for transferring ownership                      |
+
+## Returns
+
+`Promise`\<`` `0x${string}` ``>
+
+The transaction or UO hash as a Hex string

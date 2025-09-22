@@ -1,0 +1,60 @@
+---
+title: buildUserOperation
+description: Overview of the buildUserOperation function
+slug: wallets/reference/aa-sdk/core/src/functions/buildUserOperation
+layout: reference
+---
+
+```ts
+function buildUserOperation<
+  TTransport,
+  TChain,
+  TAccount,
+  TContext,
+  TEntryPointVersion,
+>(client_, args): Promise<UserOperationStruct<TEntryPointVersion>>;
+```
+
+Defined in: [aa-sdk/core/src/actions/smartAccount/buildUserOperation.ts:42](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/actions/smartAccount/buildUserOperation.ts#L42)
+
+Builds a user operation using the provided client and operation parameters. Ensures that the account exists and the client is compatible.
+
+## Example
+
+```ts
+import { createSmartAccountClient } from "@aa-sdk/core";
+
+// smart account client is already extended with buildUserOperation
+const client = createSmartAccountClient(...);
+const result = await client.buildUserOperation({
+ uo: {
+   target: "0x...",
+   data: "0x...", // or "0x",
+   value: 0n, // optional
+ },
+ account, // only required if the client above is not connected to an account
+});
+```
+
+## Type Parameters
+
+| Type Parameter                                                                                                        | Default type                                                                            |
+| :-------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------- | ------------------------------------------------------------------ | ------- | ----------- | ------------------------------------------------------------------ |
+| `TTransport` _extends_ `Transport`                                                                                    | `Transport`                                                                             |
+| `TChain` _extends_ `undefined`                                                                                        | `Chain`                                                                                 | `undefined`                                                        | `Chain` |
+| `TAccount` _extends_                                                                                                  | `undefined`                                                                             | [`SmartContractAccount`](../type-aliases/SmartContractAccount.mdx) |         | `undefined` | [`SmartContractAccount`](../type-aliases/SmartContractAccount.mdx) |
+| `TContext` _extends_ `any`                                                                                            | `any`                                                                                   |
+| `TEntryPointVersion` _extends_ keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase.mdx)\<`unknown`> | [`GetEntryPointFromAccount`](../type-aliases/GetEntryPointFromAccount.mdx)\<`TAccount`> |
+
+## Parameters
+
+| Parameter | Type                                                                          | Description                                                                                    |
+| :-------- | :---------------------------------------------------------------------------- | :--------------------------------------------------------------------------------------------- |
+| `client_` | `Client`\<`TTransport`, `TChain`, `TAccount`>                                 | the client instance used to build the user operation                                           |
+| `args`    | `BuildUserOperationParameters`\<`TAccount`, `TContext`, `TEntryPointVersion`> | the parameters required to build the user operation, including account, overrides, and context |
+
+## Returns
+
+`Promise`\<[`UserOperationStruct`](../type-aliases/UserOperationStruct.mdx)\<`TEntryPointVersion`>>
+
+a promise that resolves to a `UserOperationStruct` object containing the built user operation details

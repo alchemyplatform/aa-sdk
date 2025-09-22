@@ -1,0 +1,43 @@
+---
+title: getSigner
+description: Overview of the getSigner function
+slug: wallets/reference/account-kit/core/src/functions/getSigner
+layout: reference
+---
+
+```ts
+function getSigner<T>(config): null | T;
+```
+
+Defined in: [account-kit/core/src/actions/getSigner.ts:19](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/core/src/actions/getSigner.ts#L19)
+
+If there is a signer attached to the client state, it will return it.
+The signer should always be null on the server, and will be set on the client
+if the store was properly hydrated.
+
+## Example
+
+```ts
+import { getSigner } from "@account-kit/core";
+import { config } from "./config";
+
+const signer = getSigner(config);
+```
+
+## Type Parameters
+
+| Type Parameter      |
+| :------------------ |
+| `T` _extends_ `any` |
+
+## Parameters
+
+| Parameter | Type                                                                 | Description                                        |
+| :-------- | :------------------------------------------------------------------- | :------------------------------------------------- |
+| `config`  | [`AlchemyAccountsConfig`](../type-aliases/AlchemyAccountsConfig.mdx) | The account config which contains the client store |
+
+## Returns
+
+`null` | `T`
+
+the instance of the signer present in the store if it exists, otherwise null

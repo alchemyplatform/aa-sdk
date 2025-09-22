@@ -1,0 +1,38 @@
+---
+title: requestAccount
+description: Overview of the requestAccount function
+slug: wallets/reference/account-kit/wallet-client/src/exports/functions/requestAccount
+layout: reference
+---
+
+```ts
+function requestAccount(client, signer, params?): Promise<RequestAccountResult>;
+```
+
+Defined in: [account-kit/wallet-client/src/client/actions/requestAccount.ts:42](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/wallet-client/src/client/actions/requestAccount.ts#L42)
+
+Requests an account for the provided signer using the wallet API client.
+If an account already exists for the signer, it will always return that account unless a new ID is specified.
+If an account already exists, the creationHint will be ignored.
+
+## Example
+
+```ts
+// Request an account with default parameters using a local signer
+const signer = LocalAccountSigner.privateKeyToAccountSigner("0x...");
+const account = await client.requestAccount(signer);
+```
+
+## Parameters
+
+| Parameter | Type                   | Description                                           |
+| :-------- | :--------------------- | :---------------------------------------------------- |
+| `client`  | `InnerWalletApiClient` | The wallet API client to use for the request          |
+| `signer`  | `SmartAccountSigner`   | The signer that will be associated with the account   |
+| `params?` | `RequestAccountParams` | Optional parameters for requesting a specific account |
+
+## Returns
+
+`Promise`\<`RequestAccountResult`>
+
+A Promise that resolves to a SmartContractAccount instance

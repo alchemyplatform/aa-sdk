@@ -1,0 +1,33 @@
+---
+title: createMultiOwnerModularAccount
+description: Creates a multi-owner modular account with the given parameters, including transport, chain, signer, account address, initialization code, entry point, factory address, owners, and salt. Ensures that the owners are unique, ordered, and non-zero.
+slug: wallets/reference/account-kit/smart-contracts/src/functions/createMultiOwnerModularAccount
+layout: reference
+---
+
+```ts
+function createMultiOwnerModularAccount<TTransport, TSigner>(
+  config,
+): Promise<MultiOwnerModularAccount<TSigner>>;
+```
+
+Defined in: [account-kit/smart-contracts/src/msca/account/multiOwnerAccount.ts:58](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/msca/account/multiOwnerAccount.ts#L58)
+
+## Type Parameters
+
+| Type Parameter                                   | Default type                 |
+| :----------------------------------------------- | :--------------------------- |
+| `TTransport` _extends_ `Transport`               | `Transport`                  |
+| `TSigner` _extends_ `SmartAccountSigner`\<`any`> | `SmartAccountSigner`\<`any`> |
+
+## Parameters
+
+| Parameter | Type                                                                                                                         | Description                                                         |
+| :-------- | :--------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------ |
+| `config`  | [`CreateMultiOwnerModularAccountParams`](../type-aliases/CreateMultiOwnerModularAccountParams.mdx)\<`TTransport`, `TSigner`> | Configuration parameters for creating a multi-owner modular account |
+
+## Returns
+
+`Promise`\<[`MultiOwnerModularAccount`](../type-aliases/MultiOwnerModularAccount.mdx)\<`TSigner`>>
+
+A promise that resolves to a `MultiOwnerModularAccount` object containing the created account information and methods

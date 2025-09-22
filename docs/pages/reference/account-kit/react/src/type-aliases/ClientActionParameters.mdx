@@ -1,0 +1,27 @@
+---
+title: ClientActionParameters
+description: Overview of the ClientActionParameters 2097152
+slug: wallets/reference/account-kit/react/src/type-aliases/ClientActionParameters
+layout: reference
+---
+
+```ts
+type ClientActionParameters<TActions, TFunctionName, allArgs> = object;
+```
+
+Defined in: [account-kit/react/src/hooks/useClientActions.ts:63](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/react/src/hooks/useClientActions.ts#L63)
+
+## Type Parameters
+
+| Type Parameter                                                                                | Default type                                                                                                                                                                                                                                               |
+| :-------------------------------------------------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `TActions` _extends_ `object`                                                                 | `object`                                                                                                                                                                                                                                                   |
+| `TFunctionName` _extends_ [`ExecutableFunctionName`](ExecutableFunctionName.mdx)\<`TActions`> | [`ExecutableFunctionName`](ExecutableFunctionName.mdx)\<`TActions`>                                                                                                                                                                                        |
+| `allArgs`                                                                                     | [`ExecutableFunctionArgs`](ExecutableFunctionArgs.mdx)\<`TActions`, `TFunctionName` _extends_ [`ExecutableFunctionName`](ExecutableFunctionName.mdx)\<`TActions`> ? `TFunctionName` : [`ExecutableFunctionName`](ExecutableFunctionName.mdx)\<`TActions`>> |
+
+## Properties
+
+| Property                               | Type            | Defined in                                                                                                                                                                                        |
+| :------------------------------------- | :-------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| <a id="args" /> `args`                 | `allArgs`       | [account-kit/react/src/hooks/useClientActions.ts:77](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/react/src/hooks/useClientActions.ts#L77) |
+| <a id="functionname" /> `functionName` | `TFunctionName` | [account-kit/react/src/hooks/useClientActions.ts:76](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/react/src/hooks/useClientActions.ts#L76) |

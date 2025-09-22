@@ -1,0 +1,38 @@
+---
+title: SessionManagerParamsSchema
+description: Overview of the SessionManagerParamsSchema 32
+slug: wallets/reference/account-kit/signer/src/variables/SessionManagerParamsSchema
+layout: reference
+---
+
+```ts
+const SessionManagerParamsSchema: ZodObject<
+  {
+    client: ZodType<BaseSignerClient, ZodTypeDef, BaseSignerClient>;
+    expirationTimeMs: ZodDefault<ZodNumber>;
+    sessionKey: ZodDefault<ZodString>;
+    storage: ZodUnion<
+      [
+        ZodDefault<ZodEnum<["localStorage", "sessionStorage"]>>,
+        ZodType<Storage, ZodTypeDef, Storage>,
+      ]
+    >;
+  },
+  "strip",
+  ZodTypeAny,
+  {
+    client?: any;
+    expirationTimeMs: number;
+    sessionKey: string;
+    storage: "localStorage" | "sessionStorage" | Storage;
+  },
+  {
+    client?: any;
+    expirationTimeMs?: number;
+    sessionKey?: string;
+    storage?: "localStorage" | "sessionStorage" | Storage;
+  }
+>;
+```
+
+Defined in: [account-kit/signer/src/session/manager.ts:20](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/session/manager.ts#L20)

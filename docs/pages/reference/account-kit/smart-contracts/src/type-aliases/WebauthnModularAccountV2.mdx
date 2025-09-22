@@ -1,0 +1,26 @@
+---
+title: WebauthnModularAccountV2
+description: Overview of the WebauthnModularAccountV2 2097152
+slug: wallets/reference/account-kit/smart-contracts/src/type-aliases/WebauthnModularAccountV2
+layout: reference
+---
+
+```ts
+type WebauthnModularAccountV2 = SmartContractAccount<
+  "ModularAccountV2",
+  "0.7.0"
+> &
+  object;
+```
+
+Defined in: [account-kit/smart-contracts/src/ma-v2/account/common/modularAccountV2Base.ts:78](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/ma-v2/account/common/modularAccountV2Base.ts#L78)
+
+## Type Declaration
+
+| Name                  | Type                                                                     | Defined in                                                                                                                                                                                                                                                  |
+| :-------------------- | :----------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `encodeCallData()`    | (`callData`) => `Promise`\<`Hex`>                                        | [account-kit/smart-contracts/src/ma-v2/account/common/modularAccountV2Base.ts:88](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/ma-v2/account/common/modularAccountV2Base.ts#L88) |
+| `getExecutionData()`  | (`selector`) => `Promise`\<[`ExecutionDataView`](ExecutionDataView.mdx)> | [account-kit/smart-contracts/src/ma-v2/account/common/modularAccountV2Base.ts:84](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/ma-v2/account/common/modularAccountV2Base.ts#L84) |
+| `getValidationData()` | (`args`) => `Promise`\<[`ValidationDataView`](ValidationDataView.mdx)>   | [account-kit/smart-contracts/src/ma-v2/account/common/modularAccountV2Base.ts:85](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/ma-v2/account/common/modularAccountV2Base.ts#L85) |
+| `params`              | `ToWebAuthnAccountParameters`                                            | [account-kit/smart-contracts/src/ma-v2/account/common/modularAccountV2Base.ts:82](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/ma-v2/account/common/modularAccountV2Base.ts#L82) |
+| `signerEntity`        | [`SignerEntity`](SignerEntity.mdx)                                       | [account-kit/smart-contracts/src/ma-v2/account/common/modularAccountV2Base.ts:83](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/ma-v2/account/common/modularAccountV2Base.ts#L83) |

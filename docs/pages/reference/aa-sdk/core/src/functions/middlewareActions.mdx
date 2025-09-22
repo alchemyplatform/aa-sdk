@@ -1,0 +1,53 @@
+---
+title: middlewareActions
+description: Overview of the middlewareActions function
+slug: wallets/reference/aa-sdk/core/src/functions/middlewareActions
+layout: reference
+---
+
+```ts
+function middlewareActions(
+  overrides,
+): <TTransport, TChain, TAccount>(client) => object;
+```
+
+Defined in: [aa-sdk/core/src/middleware/actions.ts:50](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/middleware/actions.ts#L50)
+
+function that takes in ClientMiddlewareConfig used during client initiation
+and returns the middleware actions object that the smart account client extends with
+
+## Parameters
+
+| Parameter   | Type                                                                   | Description                                                             |
+| :---------- | :--------------------------------------------------------------------- | :---------------------------------------------------------------------- |
+| `overrides` | [`ClientMiddlewareConfig`](../type-aliases/ClientMiddlewareConfig.mdx) | config used during client initiation for overriding default middlewares |
+
+## Returns
+
+middleware actions object
+
+```ts
+<TTransport, TChain, TAccount>(client): object;
+```
+
+### Type Parameters
+
+| Type Parameter                     | Default type |
+| :--------------------------------- | :----------- | ------------------------------------------------------------------ | ------- | ----------- | ------------------------------------------------------------------ |
+| `TTransport` _extends_ `Transport` | `Transport`  |
+| `TChain` _extends_ `undefined`     | `Chain`      | `undefined`                                                        | `Chain` |
+| `TAccount` _extends_               | `undefined`  | [`SmartContractAccount`](../type-aliases/SmartContractAccount.mdx) |         | `undefined` | [`SmartContractAccount`](../type-aliases/SmartContractAccount.mdx) |
+
+### Parameters
+
+| Parameter | Type                                                    |
+| :-------- | :------------------------------------------------------ |
+| `client`  | `MiddlewareClient`\<`TTransport`, `TChain`, `TAccount`> |
+
+### Returns
+
+`object`
+
+| Name         | Type                                                       | Defined in                                                                                                                                                                    |
+| :----------- | :--------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `middleware` | [`ClientMiddleware`](../type-aliases/ClientMiddleware.mdx) | [aa-sdk/core/src/middleware/actions.ts:59](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/middleware/actions.ts#L59) |

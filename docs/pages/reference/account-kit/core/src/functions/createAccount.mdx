@@ -1,0 +1,48 @@
+---
+title: createAccount
+description: Overview of the createAccount function
+slug: wallets/reference/account-kit/core/src/functions/createAccount
+layout: reference
+---
+
+```ts
+function createAccount<TAccount>(params, config): Promise<any>;
+```
+
+Defined in: [account-kit/core/src/actions/createAccount.ts:78](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/core/src/actions/createAccount.ts#L78)
+
+Creates an account of a specified type using the provided parameters and configuration. Supports creating LightAccount and MultiOwnerModularAccount types.
+
+## Example
+
+```ts
+import { createAccount } from "@account-kit/core";
+// see createConfig for more information on how to create a config
+import { config } from "./config";
+
+const account = createAccount(
+  {
+    type: "LightAccount",
+  },
+  config,
+);
+```
+
+## Type Parameters
+
+| Type Parameter                                                                            |
+| :---------------------------------------------------------------------------------------- |
+| `TAccount` _extends_ [`SupportedAccountTypes`](../type-aliases/SupportedAccountTypes.mdx) |
+
+## Parameters
+
+| Parameter | Type                                                                          | Description                                                                              |
+| :-------- | :---------------------------------------------------------------------------- | :--------------------------------------------------------------------------------------- |
+| `params`  | [`CreateAccountParams`](../type-aliases/CreateAccountParams.mdx)\<`TAccount`> | The parameters required to create the account, including the type and account parameters |
+| `config`  | [`AlchemyAccountsConfig`](../type-aliases/AlchemyAccountsConfig.mdx)          | The configuration object for Alchemy accounts                                            |
+
+## Returns
+
+`Promise`\<`any`>
+
+A promise that resolves to the created account object

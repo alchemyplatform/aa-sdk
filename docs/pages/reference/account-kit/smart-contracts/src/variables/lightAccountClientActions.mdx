@@ -1,0 +1,51 @@
+---
+title: lightAccountClientActions
+description: Provides a set of actions for managing a light account client, including transferring ownership.
+slug: wallets/reference/account-kit/smart-contracts/src/variables/lightAccountClientActions
+layout: reference
+---
+
+```ts
+const lightAccountClientActions: <TTransport, TChain, TSigner, TAccount>(
+  client,
+) => LightAccountClientActions<TSigner, TAccount>;
+```
+
+Defined in: [account-kit/smart-contracts/src/light-account/decorators/lightAccount.ts:39](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/light-account/decorators/lightAccount.ts#L39)
+
+Provides a set of actions for managing a light account client, including transferring ownership.
+
+## Example
+
+```ts
+import { lightAccountClientActions, createLightAccount } from "@account-kit/smart-contracts";
+import { createAlchemySmartAccountClient } from "@account-kit/infra";
+import { sepolia } from "@account-kit/infra";
+
+const smartAccountClient = createAlchemySmartAccountClient({
+ account: await createLightAccount(...),
+ apiKey: "your-api-key",
+ chain: sepolia,
+}).extend(lightAccountClientActions);
+```
+
+## Type Parameters
+
+| Type Parameter                           | Default type                                                                             |
+| :--------------------------------------- | :--------------------------------------------------------------------------------------- | ----------- | ----------- | ---------------------------------------------------------------------------------------- | ----------- |
+| `TTransport` _extends_ `Transport`       | `Transport`                                                                              |
+| `TChain` _extends_ `Chain`               | `undefined`                                                                              | `Chain`     | `undefined` |
+| `TSigner` _extends_ `SmartAccountSigner` | `SmartAccountSigner`                                                                     |
+| `TAccount` _extends_                     | [`accountLoupeActions`](../../../core/src/variables/accountLoupeActions.mdx)\<`TSigner`> | `undefined` |             | [`accountLoupeActions`](../../../core/src/variables/accountLoupeActions.mdx)\<`TSigner`> | `undefined` |
+
+## Parameters
+
+| Parameter | Type                                          | Description                                                        |
+| :-------- | :-------------------------------------------- | :----------------------------------------------------------------- |
+| `client`  | `Client`\<`TTransport`, `TChain`, `TAccount`> | The client instance for which to provide the light account actions |
+
+## Returns
+
+[`LightAccountClientActions`](../type-aliases/LightAccountClientActions.mdx)\<`TSigner`, `TAccount`>
+
+An object containing the available light account client actions

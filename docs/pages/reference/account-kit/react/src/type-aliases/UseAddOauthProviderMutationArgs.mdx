@@ -1,0 +1,23 @@
+---
+title: UseAddOauthProviderMutationArgs
+description: Overview of the UseAddOauthProviderMutationArgs 2097152
+slug: wallets/reference/account-kit/react/src/type-aliases/UseAddOauthProviderMutationArgs
+layout: reference
+---
+
+```ts
+type UseAddOauthProviderMutationArgs = BaseHookMutationArgs<
+  OauthProviderInfo,
+  Omit<
+    Extract<
+      AuthParams,
+      {
+        type: "oauth";
+      }
+    >,
+    "type"
+  >
+>;
+```
+
+Defined in: [account-kit/react/src/hooks/useAddOauthProvider.ts:20](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/react/src/hooks/useAddOauthProvider.ts#L20)

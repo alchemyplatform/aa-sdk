@@ -1,0 +1,48 @@
+---
+title: watchConnection
+description: Overview of the watchConnection function
+slug: wallets/reference/account-kit/core/src/functions/watchConnection
+layout: reference
+---
+
+```ts
+function watchConnection(config): (onChange) => any;
+```
+
+Defined in: [account-kit/core/src/actions/watchConnection.ts:18](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/core/src/actions/watchConnection.ts#L18)
+
+Subscribe to changes to the active connection
+
+## Example
+
+```ts
+import { watchConnection } from "@account-kit/core";
+// see createConfig for more information on how to create a config
+import { config } from "./config";
+
+watchConnection(config)(console.log);
+```
+
+## Parameters
+
+| Parameter | Type                    | Description        |
+| :-------- | :---------------------- | :----------------- |
+| `config`  | `AlchemyAccountsConfig` | the account config |
+
+## Returns
+
+a function which accepts an onChange callback that will be fired when the connection changes and returns a function to unsubscribe from the store
+
+```ts
+(onChange): any;
+```
+
+### Parameters
+
+| Parameter  | Type                     |
+| :--------- | :----------------------- |
+| `onChange` | (`connection`) => `void` |
+
+### Returns
+
+`any`

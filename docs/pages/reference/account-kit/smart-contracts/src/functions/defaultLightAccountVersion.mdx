@@ -1,0 +1,28 @@
+---
+title: defaultLightAccountVersion
+description: Overview of the defaultLightAccountVersion function
+slug: wallets/reference/account-kit/smart-contracts/src/functions/defaultLightAccountVersion
+layout: reference
+---
+
+```ts
+function defaultLightAccountVersion<
+  TLightAccountType,
+>(): LightAccountVersion<TLightAccountType>;
+```
+
+Defined in: [account-kit/smart-contracts/src/light-account/utils.ts:79](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/light-account/utils.ts#L79)
+
+Get the default light account version for the given light account type
+
+## Type Parameters
+
+| Type Parameter                                   | Description |
+| :----------------------------------------------- | :---------- |
+| `TLightAccountType` _extends_ `LightAccountType` |             |
+
+## Returns
+
+`LightAccountVersion`\<`TLightAccountType`>
+
+the default version for the given light account type

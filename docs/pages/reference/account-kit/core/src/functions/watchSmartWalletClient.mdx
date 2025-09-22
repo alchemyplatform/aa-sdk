@@ -1,0 +1,55 @@
+---
+title: watchSmartWalletClient
+description: Overview of the watchSmartWalletClient function
+slug: wallets/reference/account-kit/core/src/functions/watchSmartWalletClient
+layout: reference
+---
+
+```ts
+function watchSmartWalletClient(config): (onChange) => any;
+```
+
+Defined in: [account-kit/core/src/actions/watchSmartWalletClient.ts:29](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/core/src/actions/watchSmartWalletClient.ts#L29)
+
+Creates a subscription function that watches for changes to the Smart Wallet Client.
+Triggers the onChange callback whenever the signer status or chain changes.
+
+## Example
+
+```ts
+import { watchSmartWalletClient } from "@account-kit/core";
+// see createConfig for more information on how to create a config
+import { config } from "./config.js";
+
+const watchClient = watchSmartWalletClient(config);
+const unsubscribe = watchClient((client) => {
+  console.log("Smart Wallet Client changed:", client);
+});
+
+// Clean up subscription
+unsubscribe();
+```
+
+## Parameters
+
+| Parameter | Type                    | Description                                                              |
+| :-------- | :---------------------- | :----------------------------------------------------------------------- |
+| `config`  | `AlchemyAccountsConfig` | The configuration containing the client store and connection information |
+
+## Returns
+
+A function that accepts an onChange callback and returns an unsubscribe function
+
+```ts
+(onChange): any;
+```
+
+### Parameters
+
+| Parameter  | Type                 |
+| :--------- | :------------------- |
+| `onChange` | (`client`) => `void` |
+
+### Returns
+
+`any`

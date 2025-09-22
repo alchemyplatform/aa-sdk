@@ -1,0 +1,40 @@
+---
+title: predictModularAccountV2Address
+description: Overview of the predictModularAccountV2Address function
+slug: wallets/reference/account-kit/smart-contracts/src/functions/predictModularAccountV2Address
+layout: reference
+---
+
+```ts
+function predictModularAccountV2Address(params): `0x${string}`;
+```
+
+Defined in: [account-kit/smart-contracts/src/ma-v2/account/predictAddress.ts:51](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/ma-v2/account/predictAddress.ts#L51)
+
+Predicts the address of a modular account V2 based on the provided parameters, which include factory address, salt, and implementation address. This function supports different types of accounts including "SMA", "MA", and "WebAuthn".
+
+## Example
+
+```ts
+import { predictModularAccountV2Address } from "@account-kit/smart-contracts";
+
+const accountAddress = predictModularAccountV2Address({
+  factoryAddress: "0xFactoryAddress" as Address,
+  implementationAddress: "0xImplementation" as Address,
+  salt: 0n,
+  type: "SMA",
+  ownerAddress: "0xOwner" as Address,
+});
+```
+
+## Parameters
+
+| Parameter | Type                                   | Description                                                                                                                                                                  |
+| :-------- | :------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `params`  | `PredictModularAccountV2AddressParams` | The parameters for predicting the modular account address, including `factoryAddress`, `salt`, `implementationAddress`, and additional properties based on the account type. |
+
+## Returns
+
+`` `0x${string}` ``
+
+The predicted address for the modular account V2.

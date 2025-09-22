@@ -1,0 +1,78 @@
+---
+title: IStandardExecutorAbi
+description: Overview of the IStandardExecutorAbi 32
+slug: wallets/reference/account-kit/smart-contracts/src/variables/IStandardExecutorAbi
+layout: reference
+---
+
+```ts
+const IStandardExecutorAbi: readonly [
+  {
+    inputs: readonly [
+      {
+        internalType: "address";
+        name: "target";
+        type: "address";
+      },
+      {
+        internalType: "uint256";
+        name: "value";
+        type: "uint256";
+      },
+      {
+        internalType: "bytes";
+        name: "data";
+        type: "bytes";
+      },
+    ];
+    name: "execute";
+    outputs: readonly [
+      {
+        internalType: "bytes";
+        name: "";
+        type: "bytes";
+      },
+    ];
+    stateMutability: "payable";
+    type: "function";
+  },
+  {
+    inputs: readonly [
+      {
+        components: readonly [
+          {
+            internalType: "address";
+            name: "target";
+            type: "address";
+          },
+          {
+            internalType: "uint256";
+            name: "value";
+            type: "uint256";
+          },
+          {
+            internalType: "bytes";
+            name: "data";
+            type: "bytes";
+          },
+        ];
+        internalType: "struct Call[]";
+        name: "calls";
+        type: "tuple[]";
+      },
+    ];
+    name: "executeBatch";
+    outputs: readonly [
+      {
+        internalType: "bytes[]";
+        name: "";
+        type: "bytes[]";
+      },
+    ];
+    stateMutability: "payable";
+    type: "function";
+  },
+];
+```
+
+Defined in: [account-kit/smart-contracts/src/msca/abis/IStandardExecutor.ts:1](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/msca/abis/IStandardExecutor.ts#L1)

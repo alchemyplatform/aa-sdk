@@ -1,0 +1,22 @@
+---
+title: AlchemyMultiOwnerLightAccountClientConfig
+description: Overview of the AlchemyMultiOwnerLightAccountClientConfig 2097152
+slug: wallets/reference/account-kit/smart-contracts/src/type-aliases/AlchemyMultiOwnerLightAccountClientConfig
+layout: reference
+---
+
+```ts
+type AlchemyMultiOwnerLightAccountClientConfig<TSigner> = Omit<
+  accountLoupeActions<HttpTransport, TSigner>,
+  "transport" | "type"
+> &
+  Omit<accountLoupeActions<Chain, accountLoupeActions<TSigner>>, "account">;
+```
+
+Defined in: [account-kit/smart-contracts/src/light-account/clients/multiOwnerAlchemyClient.ts:14](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/light-account/clients/multiOwnerAlchemyClient.ts#L14)
+
+## Type Parameters
+
+| Type Parameter                           | Default type         |
+| :--------------------------------------- | :------------------- |
+| `TSigner` _extends_ `SmartAccountSigner` | `SmartAccountSigner` |

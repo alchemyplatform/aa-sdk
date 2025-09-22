@@ -1,0 +1,25 @@
+---
+title: Erc7677MiddlewareParams
+description: Overview of the Erc7677MiddlewareParams 2097152
+slug: wallets/reference/aa-sdk/core/src/type-aliases/Erc7677MiddlewareParams
+layout: reference
+---
+
+```ts
+type Erc7677MiddlewareParams<TContext, TEntryPointVersion> = object;
+```
+
+Defined in: [aa-sdk/core/src/middleware/erc7677middleware.ts:59](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/middleware/erc7677middleware.ts#L59)
+
+## Type Parameters
+
+| Type Parameter                                                                                                             | Default type                                                                                |
+| :------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------ | -------------------------- | ----------- |
+| `TContext` _extends_ `Record`\<`string`, `any`>                                                                            | `undefined`                                                                                 | `Record`\<`string`, `any`> | `undefined` |
+| `TEntryPointVersion` _extends_ [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx) | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx) |
+
+## Properties
+
+| Property                      | Type                                         | Defined in |
+| :---------------------------- | :------------------------------------------- | :--------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <a id="context" /> `context?` | (`struct`, `args`) => `Promise`\<`TContext`> | `TContext` | [aa-sdk/core/src/middleware/erc7677middleware.ts:65](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/middleware/erc7677middleware.ts#L65) |

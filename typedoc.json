@@ -37,7 +37,7 @@
   // OUTPUT CONFIGURATION
   // Controls where and how documentation files are generated
   // ============================================================================
-  "out": "./docs/pages/reference/typedoc",
+  "out": "./docs/pages/reference",
   "cleanOutputDir": true,
   "fileExtension": ".mdx",
 

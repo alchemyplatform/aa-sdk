@@ -1,0 +1,40 @@
+---
+title: getUserOperationError
+description: Overview of the getUserOperationError function
+slug: wallets/reference/aa-sdk/core/src/functions/getUserOperationError
+layout: reference
+---
+
+```ts
+function getUserOperationError<TTransport, TChain, TAccount>(
+  client,
+  request,
+  entryPoint,
+): Promise<void>;
+```
+
+Defined in: [aa-sdk/core/src/actions/smartAccount/getUserOperationError.ts:28](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/actions/smartAccount/getUserOperationError.ts#L28)
+
+Retrieves the error message from an entrypoint for a User Operation.
+
+## Type Parameters
+
+| Type Parameter                     | Default type |
+| :--------------------------------- | :----------- | ------------------------------------------------------------------ | ------- | ----------- | ------------------------------------------------------------------ |
+| `TTransport` _extends_ `Transport` | `Transport`  |
+| `TChain` _extends_ `undefined`     | `Chain`      | `undefined`                                                        | `Chain` |
+| `TAccount` _extends_               | `undefined`  | [`SmartContractAccount`](../type-aliases/SmartContractAccount.mdx) |         | `undefined` | [`SmartContractAccount`](../type-aliases/SmartContractAccount.mdx) |
+
+## Parameters
+
+| Parameter    | Type                                                               | Description                                      |
+| :----------- | :----------------------------------------------------------------- | :----------------------------------------------- |
+| `client`     | `BaseSmartAccountClient`\<`TTransport`, `TChain`, `TAccount`>      | the smart account client to use for RPC requests |
+| `request`    | [`UserOperationRequest`](../type-aliases/UserOperationRequest.mdx) | the uo request to get the error for              |
+| `entryPoint` | [`EntryPointDef`](../type-aliases/EntryPointDef.mdx)               | the entrypoint instance to send the uo to        |
+
+## Returns
+
+`Promise`\<`void`>
+
+the error message from the entrypoint

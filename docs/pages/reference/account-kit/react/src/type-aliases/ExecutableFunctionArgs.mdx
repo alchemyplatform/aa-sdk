@@ -1,0 +1,21 @@
+---
+title: ExecutableFunctionArgs
+description: Overview of the ExecutableFunctionArgs 2097152
+slug: wallets/reference/account-kit/react/src/type-aliases/ExecutableFunctionArgs
+layout: reference
+---
+
+```ts
+type ExecutableFunctionArgs<TActions, TFunctionName> = Parameters<
+  TActions[TFunctionName]
+>;
+```
+
+Defined in: [account-kit/react/src/hooks/useClientActions.ts:54](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/react/src/hooks/useClientActions.ts#L54)
+
+## Type Parameters
+
+| Type Parameter                                                                                | Default type                                                        |
+| :-------------------------------------------------------------------------------------------- | :------------------------------------------------------------------ |
+| `TActions` _extends_ `object`                                                                 | `object`                                                            |
+| `TFunctionName` _extends_ [`ExecutableFunctionName`](ExecutableFunctionName.mdx)\<`TActions`> | [`ExecutableFunctionName`](ExecutableFunctionName.mdx)\<`TActions`> |

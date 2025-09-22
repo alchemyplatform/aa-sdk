@@ -1,0 +1,48 @@
+---
+title: RNAlchemySigner
+description: Overview of the RNAlchemySigner function
+slug: wallets/reference/account-kit/rn-signer/src/functions/RNAlchemySigner
+layout: reference
+---
+
+```ts
+function RNAlchemySigner(params): RNAlchemySignerSingleton;
+```
+
+Defined in: [account-kit/rn-signer/src/signer.ts:80](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/rn-signer/src/signer.ts#L80)
+
+Factory function to create or retrieve a singleton instance of RNAlchemySigner.
+
+## Example
+
+```ts twoslash
+import { RNAlchemySigner } from "@account-kit/react-native-signer";
+
+const signer = RNAlchemySigner({
+  client: {
+    connection: {
+      apiKey: "YOUR_API_KEY",
+    },
+  },
+  // optional config to override default session manager configs
+  sessionConfig: {
+    expirationTimeMs: 1000 * 60 * 60, // 60 minutes
+  },
+});
+```
+
+## Parameters
+
+| Parameter                                | Type                                                         | Description                                       |
+| :--------------------------------------- | :----------------------------------------------------------- | :------------------------------------------------ | ---------------- | --------------------------------------------------------------------- | --------------------------------------------------------------------- | --------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| `params`                                 | \{ `client`:                                                 | [`RNSignerClient`](../classes/RNSignerClient.mdx) | \{ `connection`: | \{ `apiKey`: `string`; `jwt?`: `undefined`; `rpcUrl?`: `undefined`; } | \{ `apiKey?`: `undefined`; `jwt`: `string`; `rpcUrl?`: `undefined`; } | \{ `apiKey?`: `undefined`; `jwt?`: `undefined`; `rpcUrl`: `string`; } | \{ `apiKey?`: `undefined`; `jwt`: `string`; `rpcUrl`: `string`; } & `object`; `oauthCallbackUrl?`: `string`; `rootOrgId?`: `string`; `rpId?`: `string`; }; `sessionConfig?`: \{ `expirationTimeMs?`: `number`; `sessionKey?`: `string`; }; } | The parameters required to configure the RNAlchemySigner instance. |
+| `params.client`                          |                                                              | [`RNSignerClient`](../classes/RNSignerClient.mdx) | \{ `connection`: | \{ `apiKey`: `string`; `jwt?`: `undefined`; `rpcUrl?`: `undefined`; } | \{ `apiKey?`: `undefined`; `jwt`: `string`; `rpcUrl?`: `undefined`; } | \{ `apiKey?`: `undefined`; `jwt?`: `undefined`; `rpcUrl`: `string`; } | \{ `apiKey?`: `undefined`; `jwt`: `string`; `rpcUrl`: `string`; } & `object`; `oauthCallbackUrl?`: `string`; `rootOrgId?`: `string`; `rpId?`: `string`; }                                                                                    | -                                                                  |
+| `params.sessionConfig?`                  | \{ `expirationTimeMs?`: `number`; `sessionKey?`: `string`; } | -                                                 |
+| `params.sessionConfig.expirationTimeMs?` | `number`                                                     | -                                                 |
+| `params.sessionConfig.sessionKey?`       | `string`                                                     | -                                                 |
+
+## Returns
+
+[`RNAlchemySignerSingleton`](../classes/RNAlchemySignerSingleton.mdx)
+
+The singleton instance of RNAlchemySigner configured with the provided parameters.

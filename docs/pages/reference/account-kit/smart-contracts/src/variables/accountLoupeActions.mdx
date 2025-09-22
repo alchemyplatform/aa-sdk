@@ -1,0 +1,46 @@
+---
+title: accountLoupeActions
+description: "Provides a set of actions for account loupe operations using the specified client. NOTE: this is already added to the client when using any of the Modular Account Clients."
+slug: wallets/reference/account-kit/smart-contracts/src/variables/accountLoupeActions
+layout: reference
+---
+
+```ts
+const accountLoupeActions: <TTransport, TChain, TAccount>(
+  client,
+) => AccountLoupeActions<TAccount>;
+```
+
+Defined in: [account-kit/smart-contracts/src/msca/account-loupe/decorator.ts:69](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/msca/account-loupe/decorator.ts#L69)
+
+Provides a set of actions for account loupe operations using the specified client.
+NOTE: this is already added to the client when using any of the Modular Account Clients.
+
+## Example
+
+```ts
+import { accountLoupeActions } from "@account-kit/smart-contracts";
+import { createSmartAccountClient } from "@aa-sdk/core";
+
+const client = createSmartAccountClient(...).extend(accountLoupeActions);
+```
+
+## Type Parameters
+
+| Type Parameter                              | Default type |
+| :------------------------------------------ | :----------- | ---------------------- | ----------- |
+| `TTransport` _extends_ `Transport`          | `Transport`  |
+| `TChain` _extends_ `Chain`                  | `undefined`  | `Chain`                | `undefined` |
+| `TAccount` _extends_ `SmartContractAccount` | `undefined`  | `SmartContractAccount` | `undefined` |
+
+## Parameters
+
+| Parameter | Type                                          | Description                                                   |
+| :-------- | :-------------------------------------------- | :------------------------------------------------------------ |
+| `client`  | `Client`\<`TTransport`, `TChain`, `TAccount`> | the client to be used for executing the account loupe actions |
+
+## Returns
+
+[`AccountLoupeActions`](../type-aliases/AccountLoupeActions.mdx)\<`TAccount`>
+
+an object containing account loupe actions like `getExecutionFunctionConfig`, `getExecutionHooks`, `getPreValidationHooks`, and `getInstalledPlugins`

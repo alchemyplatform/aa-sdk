@@ -1,0 +1,27 @@
+---
+title: concatPaymasterAndData
+description: Overview of the concatPaymasterAndData function
+slug: wallets/reference/aa-sdk/core/src/functions/concatPaymasterAndData
+layout: reference
+---
+
+```ts
+function concatPaymasterAndData(paymasterAndData): `0x${string}`;
+```
+
+Defined in: [aa-sdk/core/src/utils/userop.ts:216](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/utils/userop.ts#L216)
+
+Utility method for converting the object containing the paymaster address and paymaster data
+to the paymaster and data concatenated hex string
+
+## Parameters
+
+| Parameter          | Type                                                                                                                           | Description        |
+| :----------------- | :----------------------------------------------------------------------------------------------------------------------------- | :----------------- | ------------------------------------------------------------------------------------------------------------- |
+| `paymasterAndData` | `Pick`\<[`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`"0.7.0"`>, `"paymaster"` | `"paymasterData"`> | the object containing the picked paymaster and paymasterData fields of entrypoint v0.7 user operation request |
+
+## Returns
+
+`` `0x${string}` ``
+
+the paymasterAndData hex value of entrypoint v0.6 user operation request paymasterAndData field

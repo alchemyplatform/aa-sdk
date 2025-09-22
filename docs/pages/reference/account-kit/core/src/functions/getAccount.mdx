@@ -1,0 +1,48 @@
+---
+title: getAccount
+description: Overview of the getAccount function
+slug: wallets/reference/account-kit/core/src/functions/getAccount
+layout: reference
+---
+
+```ts
+function getAccount<TAccount>(params, config): GetAccountResult<TAccount>;
+```
+
+Defined in: [account-kit/core/src/actions/getAccount.ts:34](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/core/src/actions/getAccount.ts#L34)
+
+Retrieves the account of the specified type from the client store based on the provided configuration.
+
+## Example
+
+```ts
+import { getAccount } from "@account-kit/core";
+// see createConfig for more information on how to create a config
+import { config } from "./config";
+
+const { account, status } = getAccount(
+  {
+    type: "LightAccount",
+  },
+  config,
+);
+```
+
+## Type Parameters
+
+| Type Parameter                                                                            |
+| :---------------------------------------------------------------------------------------- |
+| `TAccount` _extends_ [`SupportedAccountTypes`](../type-aliases/SupportedAccountTypes.mdx) |
+
+## Parameters
+
+| Parameter | Type                                                                    | Description                                                   |
+| :-------- | :---------------------------------------------------------------------- | :------------------------------------------------------------ |
+| `params`  | [`GetAccountParams`](../type-aliases/GetAccountParams.mdx)\<`TAccount`> | The parameters containing the type of the account to retrieve |
+| `config`  | [`AlchemyAccountsConfig`](../type-aliases/AlchemyAccountsConfig.mdx)    | The configuration containing the client store                 |
+
+## Returns
+
+[`GetAccountResult`](../type-aliases/GetAccountResult.mdx)\<`TAccount`>
+
+The result which includes the account if found and its status

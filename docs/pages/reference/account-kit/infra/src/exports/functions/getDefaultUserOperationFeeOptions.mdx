@@ -1,0 +1,35 @@
+---
+title: getDefaultUserOperationFeeOptions
+description: Overview of the getDefaultUserOperationFeeOptions function
+slug: wallets/reference/account-kit/infra/src/exports/functions/getDefaultUserOperationFeeOptions
+layout: reference
+---
+
+```ts
+function getDefaultUserOperationFeeOptions(chain): any;
+```
+
+Defined in: [account-kit/infra/src/defaults.ts:26](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/infra/src/defaults.ts#L26)
+
+Retrieves the default user operation fee options for a given chain. Adjusts fees for specific chains like Arbitrum and Optimism.
+
+## Example
+
+```ts
+import { getDefaultUserOperationFeeOptions } from "@account-kit/infra";
+import { arbitrum } from "@account-kit/infra";
+
+const feeOpts = getDefaultUserOperationFeeOptions(arbitrum);
+```
+
+## Parameters
+
+| Parameter | Type    | Description                                           |
+| :-------- | :------ | :---------------------------------------------------- |
+| `chain`   | `Chain` | The blockchain chain for which to get the fee options |
+
+## Returns
+
+`any`
+
+An object containing the default fee options for user operations on the specified chain

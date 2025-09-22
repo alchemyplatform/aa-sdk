@@ -1,0 +1,30 @@
+---
+title: useUiConfig
+description: A custom [hook](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useUiConfig.tsx) for accessing UI configuration from the `UiConfigContext`. Allows optional selection of specific parts of the UI config state using a selector function. For editing and updating the underlying UI config on the fly.
+slug: wallets/reference/account-kit/react/src/functions/useUiConfig
+layout: reference
+---
+
+```ts
+function useUiConfig<T>(selector?): T;
+```
+
+Defined in: [account-kit/react/src/hooks/useUiConfig.tsx:63](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/react/src/hooks/useUiConfig.tsx#L63)
+
+## Type Parameters
+
+| Type Parameter | Default type                                         |
+| :------------- | :--------------------------------------------------- |
+| `T`            | [`UiConfigStore`](../type-aliases/UiConfigStore.mdx) |
+
+## Parameters
+
+| Parameter   | Type             | Description                                                                                                                                                                      |
+| :---------- | :--------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `selector?` | (`state`) => `T` | An optional function to select specific parts of the UI config state. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useUiConfig.tsx#L23) |
+
+## Returns
+
+`T`
+
+- The selected state passed through the selector function or the entire state if no selector is provided

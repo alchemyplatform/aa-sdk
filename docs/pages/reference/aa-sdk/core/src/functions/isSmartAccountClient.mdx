@@ -1,0 +1,38 @@
+---
+title: isSmartAccountClient
+description: Overview of the isSmartAccountClient function
+slug: wallets/reference/aa-sdk/core/src/functions/isSmartAccountClient
+layout: reference
+---
+
+```ts
+function isSmartAccountClient<TTransport, TChain, TAccount>(
+  client,
+): client is SmartAccountClient<TTransport, TChain, TAccount>;
+```
+
+Defined in: [aa-sdk/core/src/client/isSmartAccountClient.ts:17](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/client/isSmartAccountClient.ts#L17)
+
+Use this method to assert that a client is a BaseSmartAccountClient.
+Useful for narrowing the type of the client down when used within the
+smart account client decorators
+
+## Type Parameters
+
+| Type Parameter                     | Default type |
+| :--------------------------------- | :----------- | ----------- | ------- |
+| `TTransport` _extends_ `Transport` | `Transport`  |
+| `TChain` _extends_ `undefined`     | `Chain`      | `undefined` | `Chain` |
+| `TAccount` _extends_ `any`         | `any`        |
+
+## Parameters
+
+| Parameter | Type                                          | Description   |
+| :-------- | :-------------------------------------------- | :------------ |
+| `client`  | `Client`\<`TTransport`, `TChain`, `TAccount`> | a viem client |
+
+## Returns
+
+`client is SmartAccountClient<TTransport, TChain, TAccount>`
+
+true if the client is a SmartAccountClient

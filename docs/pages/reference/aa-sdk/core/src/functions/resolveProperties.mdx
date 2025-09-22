@@ -1,0 +1,32 @@
+---
+title: resolveProperties
+description: Overview of the resolveProperties function
+slug: wallets/reference/aa-sdk/core/src/functions/resolveProperties
+layout: reference
+---
+
+```ts
+function resolveProperties<T>(object): Promise<T>;
+```
+
+Defined in: [aa-sdk/core/src/utils/index.ts:37](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/utils/index.ts#L37)
+
+Await all of the properties of a Deferrable object
+
+## Type Parameters
+
+| Type Parameter |
+| :------------- |
+| `T`            |
+
+## Parameters
+
+| Parameter | Type                                                 | Description         |
+| :-------- | :--------------------------------------------------- | :------------------ |
+| `object`  | [`Deferrable`](../type-aliases/Deferrable.mdx)\<`T`> | a Deferrable object |
+
+## Returns
+
+`Promise`\<`T`>
+
+the object with its properties resolved

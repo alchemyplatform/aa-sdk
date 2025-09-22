@@ -1,0 +1,105 @@
+---
+title: prepareSign
+description: Overview of the prepareSign function
+slug: wallets/reference/account-kit/wallet-client/src/exports/functions/prepareSign
+layout: reference
+---
+
+```ts
+function prepareSign<TAccount>(
+  client,
+  params,
+): Promise<{
+  chainId: `0x${string}`;
+  signatureRequest:
+    | {
+        data:
+          | string
+          | {
+              raw: `0x${string}`;
+            };
+        type: "personal_sign";
+      }
+    | {
+        data: {
+          domain?: {
+            chainId?: number;
+            name?: string;
+            salt?: `0x${string}`;
+            verifyingContract?: `0x${string}`;
+            version?: string;
+          };
+          message: {
+            [key: string]: unknown;
+          };
+          primaryType: string;
+          types: {
+            [key: string]: object[];
+          };
+        };
+        type: "eth_signTypedData_v4";
+      };
+}>;
+```
+
+Defined in: [account-kit/wallet-client/src/client/actions/prepareSign.ts:37](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/wallet-client/src/client/actions/prepareSign.ts#L37)
+
+Prepares a signature request for signing messages or transactions.
+
+## Example
+
+```ts
+// Prepare a message to be signed
+const result = await client.prepareSign({
+  from: "0x1234...",
+  type: "personal_sign",
+  data: "Hello, world!",
+});
+```
+
+## Type Parameters
+
+| Type Parameter                   | Default type        |
+| :------------------------------- | :------------------ | ----------- | ------------------- |
+| `TAccount` _extends_ `undefined` | `` `0x${string}` `` | `undefined` | `` `0x${string}` `` |
+
+## Parameters
+
+| Parameter | Type                             | Description                                    |
+| :-------- | :------------------------------- | :--------------------------------------------- |
+| `client`  | `InnerWalletApiClient`           | The wallet API client to use for the request   |
+| `params`  | `PrepareSignParams`\<`TAccount`> | Parameters for preparing the signature request |
+
+## Returns
+
+`Promise`\<\{
+`chainId`: `` `0x${string}` ``;
+`signatureRequest`: | \{
+`data`: | `string`
+| \{
+`raw`: `` `0x${string}` ``;
+};
+`type`: `"personal_sign"`;
+}
+| \{
+`data`: \{
+`domain?`: \{
+`chainId?`: `number`;
+`name?`: `string`;
+`salt?`: `` `0x${string}` ``;
+`verifyingContract?`: `` `0x${string}` ``;
+`version?`: `string`;
+};
+`message`: \{
+\[`key`: `string`]: `unknown`;
+};
+`primaryType`: `string`;
+`types`: \{
+\[`key`: `string`]: `object`\[];
+};
+};
+`type`: `"eth_signTypedData_v4"`;
+};
+}>
+
+A Promise that resolves to the prepare sign result containing a signature request

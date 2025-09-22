@@ -1,0 +1,255 @@
+---
+title: account-kit/core/src
+description: Overview of the account-kit/core/src 2
+slug: wallets/reference/account-kit/core/src/README
+layout: reference
+---
+
+## Classes
+
+| Class                                                          | Description                                                        |
+| :------------------------------------------------------------- | :----------------------------------------------------------------- |
+| [ClientOnlyPropertyError](classes/ClientOnlyPropertyError.mdx) | Error thrown when a client only property is accessed on the server |
+
+## Type Aliases
+
+| Type Alias                                                                  | Description |
+| :-------------------------------------------------------------------------- | :---------- |
+| [AccountConfig](type-aliases/AccountConfig.mdx)                             | -           |
+| [AccountState](type-aliases/AccountState.mdx)                               | -           |
+| [AlchemyAccountsConfig](type-aliases/AlchemyAccountsConfig.mdx)             | -           |
+| [AlchemyClientState](type-aliases/AlchemyClientState.mdx)                   | -           |
+| [AlchemySigner](type-aliases/AlchemySigner.mdx)                             | -           |
+| [AlchemySignerClient](type-aliases/AlchemySignerClient.mdx)                 | -           |
+| [BaseCreateConfigProps](type-aliases/BaseCreateConfigProps.mdx)             | -           |
+| [ClientActions](type-aliases/ClientActions.mdx)                             | -           |
+| [ClientStoreConfig](type-aliases/ClientStoreConfig.mdx)                     | -           |
+| [Connection](type-aliases/Connection.mdx)                                   | -           |
+| [CreateAccountParams](type-aliases/CreateAccountParams.mdx)                 | -           |
+| [CreateConfigProps](type-aliases/CreateConfigProps.mdx)                     | -           |
+| [GetAccountParams](type-aliases/GetAccountParams.mdx)                       | -           |
+| [GetAccountResult](type-aliases/GetAccountResult.mdx)                       | -           |
+| [GetSmartAccountClientParams](type-aliases/GetSmartAccountClientParams.mdx) | -           |
+| [GetSmartAccountClientResult](type-aliases/GetSmartAccountClientResult.mdx) | -           |
+| [GetSmartWalletClientParams](type-aliases/GetSmartWalletClientParams.mdx)   | -           |
+| [GetSmartWalletClientResult](type-aliases/GetSmartWalletClientResult.mdx)   | -           |
+| [GetUserResult](type-aliases/GetUserResult.mdx)                             | -           |
+| [SignerStatus](type-aliases/SignerStatus.mdx)                               | -           |
+| [SolanaConnection](type-aliases/SolanaConnection.mdx)                       | -           |
+| [Store](type-aliases/Store.mdx)                                             | -           |
+| [StoredState](type-aliases/StoredState.mdx)                                 | -           |
+| [StoreState](type-aliases/StoreState.mdx)                                   | -           |
+| [SupportedAccount](type-aliases/SupportedAccount.mdx)                       | -           |
+| [SupportedAccounts](type-aliases/SupportedAccounts.mdx)                     | -           |
+| [SupportedAccountTypes](type-aliases/SupportedAccountTypes.mdx)             | -           |
+
+## Variables
+
+| Variable                                                                 | Description |
+| :----------------------------------------------------------------------- | :---------- |
+| [accountLoupeActions](variables/accountLoupeActions.mdx)                 | -           |
+| [DEFAULT_IFRAME_CONTAINER_ID](variables/DEFAULT_IFRAME_CONTAINER_ID.mdx) | -           |
+
+## Functions
+
+| Function                                                                           | Description                                                                                                                                                                                                                                                     |
+| :--------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [convertSignerStatusToState](functions/convertSignerStatusToState.mdx)             | Converts the AlchemySigner's status to a more readable object                                                                                                                                                                                                   |
+| [cookieStorage](functions/cookieStorage.mdx)                                       | Function to create cookie based Storage                                                                                                                                                                                                                         |
+| [cookieToInitialState](functions/cookieToInitialState.mdx)                         | Converts a cookie into an initial state object                                                                                                                                                                                                                  |
+| [createAccount](functions/createAccount.mdx)                                       | Creates an account of a specified type using the provided parameters and configuration. Supports creating LightAccount and MultiOwnerModularAccount types.                                                                                                      |
+| [createConfig](functions/createConfig.mdx)                                         | Creates an AlchemyAccountsConfig object that can be used in conjunction with the actions exported from `@account-kit/core`.                                                                                                                                     |
+| [createDefaultAccountState](functions/createDefaultAccountState.mdx)               | Creates the default account state for the given chains.                                                                                                                                                                                                         |
+| [createSigner](functions/createSigner.mdx)                                         | Given initial client store parameters, it initializes an AlchemySigner instance. This should only be called on the client.                                                                                                                                      |
+| [defaultAccountState](functions/defaultAccountState.mdx)                           | Returns the default state for an account of a supported type.                                                                                                                                                                                                   |
+| [disconnect](functions/disconnect.mdx)                                             | Disconnects the current signer, accounts, and clears the store.                                                                                                                                                                                                 |
+| [getAccount](functions/getAccount.mdx)                                             | Retrieves the account of the specified type from the client store based on the provided configuration.                                                                                                                                                          |
+| [getBundlerClient](functions/getBundlerClient.mdx)                                 | Retrieves the BundlerClient from the core store of the given AlchemyAccountsConfig.                                                                                                                                                                             |
+| [getChain](functions/getChain.mdx)                                                 | Gets the currently active chain                                                                                                                                                                                                                                 |
+| [getConnection](functions/getConnection.mdx)                                       | Used to get the connection for the currently active chain                                                                                                                                                                                                       |
+| [getSigner](functions/getSigner.mdx)                                               | If there is a signer attached to the client state, it will return it. The signer should always be null on the server, and will be set on the client if the store was properly hydrated.                                                                         |
+| [getSignerStatus](functions/getSignerStatus.mdx)                                   | Retrieves the signer status from the client's store in the provided configuration.                                                                                                                                                                              |
+| [~~getSmartAccountClient~~](functions/getSmartAccountClient.mdx)                   | Obtains a smart account client based on the provided parameters and configuration. Supports creating any of the SupportAccountTypes in Account Kit. If the signer is not connected, or an account is already being intializes, this results in a loading state. |
+| [getSmartWalletClient](functions/getSmartWalletClient.mdx)                         | Creates and returns a Smart Wallet Client instance. Returns undefined if running in a server environment or if no signer is connected. Caches clients by chain ID & address for performance optimization.                                                       |
+| [getSolanaConnection](functions/getSolanaConnection.mdx)                           | Used to get the connection for the id                                                                                                                                                                                                                           |
+| [getUser](functions/getUser.mdx)                                                   | Returns the currently logged in user if using an SCA with the AlchemySigner or the connected EOA details.                                                                                                                                                       |
+| [hydrate](functions/hydrate.mdx)                                                   | Will hydrate the client store with the provided initial state if one is provided.                                                                                                                                                                               |
+| [isLightAccountParams](functions/isLightAccountParams.mdx)                         | -                                                                                                                                                                                                                                                               |
+| [isModularV2AccountParams](functions/isModularV2AccountParams.mdx)                 | -                                                                                                                                                                                                                                                               |
+| [isMultiOwnerLightAccountParams](functions/isMultiOwnerLightAccountParams.mdx)     | -                                                                                                                                                                                                                                                               |
+| [isMultiOwnerModularAccountParams](functions/isMultiOwnerModularAccountParams.mdx) | -                                                                                                                                                                                                                                                               |
+| [parseCookie](functions/parseCookie.mdx)                                           | Helper function that can be used to parse a cookie string on the server or client                                                                                                                                                                               |
+| [reconnect](functions/reconnect.mdx)                                               | This method will use the current state in the client store and attempt to restore connected instances of previously used accounts and the signer.                                                                                                               |
+| [setChain](functions/setChain.mdx)                                                 | Allows you to change the current chain in the core store. Note, this chain must be one of the chains configured in your original createConfig call.                                                                                                             |
+| [watchAccount](functions/watchAccount.mdx)                                         | Watches for changes to a specific type of account and triggers the provided callback function when changes occur.                                                                                                                                               |
+| [watchBundlerClient](functions/watchBundlerClient.mdx)                             | Watches for changes to the bundler client within the given configuration and triggers a callback when changes occur.                                                                                                                                            |
+| [watchChain](functions/watchChain.mdx)                                             | Allows you to subscribe to changes of the chain in the client store.                                                                                                                                                                                            |
+| [watchConnection](functions/watchConnection.mdx)                                   | Subscribe to changes to the active connection                                                                                                                                                                                                                   |
+| [watchSigner](functions/watchSigner.mdx)                                           | Subscribe to changes of the signer instance on the client store.                                                                                                                                                                                                |
+| [watchSignerStatus](functions/watchSignerStatus.mdx)                               | Watches the signer status in the client store and triggers the provided callback function when the status changes.                                                                                                                                              |
+| [watchSmartAccountClient](functions/watchSmartAccountClient.mdx)                   | Watches for changes to the smart account client and triggers the provided callback when a change is detected.                                                                                                                                                   |
+| [watchSmartWalletClient](functions/watchSmartWalletClient.mdx)                     | Creates a subscription function that watches for changes to the Smart Wallet Client. Triggers the onChange callback whenever the signer status or chain changes.                                                                                                |
+| [watchSolanaConnection](functions/watchSolanaConnection.mdx)                       | Subscribe to changes to the solana connection for the id                                                                                                                                                                                                        |
+| [watchUser](functions/watchUser.mdx)                                               | Watches for changes to the user in the client store and triggers the provided callback when a change is detected.                                                                                                                                               |
+
+## References
+
+### AlchemySmartAccountClient
+
+Renames and re-exports [accountLoupeActions](variables/accountLoupeActions.mdx)
+
+---
+
+### AlchemySmartAccountClientConfig
+
+Renames and re-exports [accountLoupeActions](variables/accountLoupeActions.mdx)
+
+---
+
+### createAlchemySmartAccountClient
+
+Renames and re-exports [accountLoupeActions](variables/accountLoupeActions.mdx)
+
+---
+
+### createLightAccount
+
+Renames and re-exports [accountLoupeActions](variables/accountLoupeActions.mdx)
+
+---
+
+### createModularAccount
+
+Renames and re-exports [accountLoupeActions](variables/accountLoupeActions.mdx)
+
+---
+
+### createMultiOwnerLightAccount
+
+Renames and re-exports [accountLoupeActions](variables/accountLoupeActions.mdx)
+
+---
+
+### createMultisigModularAccount
+
+Renames and re-exports [accountLoupeActions](variables/accountLoupeActions.mdx)
+
+---
+
+### getMAInitializationData
+
+Renames and re-exports [accountLoupeActions](variables/accountLoupeActions.mdx)
+
+---
+
+### getMSCAUpgradeToData
+
+Renames and re-exports [accountLoupeActions](variables/accountLoupeActions.mdx)
+
+---
+
+### internalCreateWebSigner
+
+Renames and re-exports [createSigner](functions/createSigner.mdx)
+
+---
+
+### lightAccountClientActions
+
+Renames and re-exports [accountLoupeActions](variables/accountLoupeActions.mdx)
+
+---
+
+### multiOwnerLightAccountClientActions
+
+Renames and re-exports [accountLoupeActions](variables/accountLoupeActions.mdx)
+
+---
+
+### MultiOwnerPlugin
+
+Renames and re-exports [accountLoupeActions](variables/accountLoupeActions.mdx)
+
+---
+
+### multiOwnerPluginActions
+
+Renames and re-exports [accountLoupeActions](variables/accountLoupeActions.mdx)
+
+---
+
+### MultisigPlugin
+
+Renames and re-exports [accountLoupeActions](variables/accountLoupeActions.mdx)
+
+---
+
+### MultisigPluginAbi
+
+Renames and re-exports [accountLoupeActions](variables/accountLoupeActions.mdx)
+
+---
+
+### multisigPluginActions
+
+Renames and re-exports [accountLoupeActions](variables/accountLoupeActions.mdx)
+
+---
+
+### MultisigPluginExecutionFunctionAbi
+
+Renames and re-exports [accountLoupeActions](variables/accountLoupeActions.mdx)
+
+---
+
+### multisigSignatureMiddleware
+
+Renames and re-exports [accountLoupeActions](variables/accountLoupeActions.mdx)
+
+---
+
+### pluginManagerActions
+
+Renames and re-exports [accountLoupeActions](variables/accountLoupeActions.mdx)
+
+---
+
+### SessionKeyAccessListType
+
+Renames and re-exports [accountLoupeActions](variables/accountLoupeActions.mdx)
+
+---
+
+### SessionKeyPermissionsBuilder
+
+Renames and re-exports [accountLoupeActions](variables/accountLoupeActions.mdx)
+
+---
+
+### SessionKeyPlugin
+
+Renames and re-exports [accountLoupeActions](variables/accountLoupeActions.mdx)
+
+---
+
+### SessionKeyPluginAbi
+
+Renames and re-exports [accountLoupeActions](variables/accountLoupeActions.mdx)
+
+---
+
+### sessionKeyPluginActions
+
+Renames and re-exports [accountLoupeActions](variables/accountLoupeActions.mdx)
+
+---
+
+### SessionKeyPluginExecutionFunctionAbi
+
+Renames and re-exports [accountLoupeActions](variables/accountLoupeActions.mdx)
+
+---
+
+### SessionKeySigner
+
+Renames and re-exports [accountLoupeActions](variables/accountLoupeActions.mdx)

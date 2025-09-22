@@ -1,0 +1,65 @@
+---
+title: updateMultiOwnerLightAccountOwners
+description: Updates the owners of a multi-owner light account. This includes adding new owners and removing existing ones.
+slug: wallets/reference/account-kit/smart-contracts/src/variables/updateMultiOwnerLightAccountOwners
+layout: reference
+---
+
+```ts
+const updateMultiOwnerLightAccountOwners: <
+  TTransport,
+  TChain,
+  TSigner,
+  TAccount,
+>(
+  client,
+  args,
+) => Promise<Hex>;
+```
+
+Defined in: [account-kit/smart-contracts/src/light-account/actions/updateOwners.ts:51](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/light-account/actions/updateOwners.ts#L51)
+
+Updates the owners of a multi-owner light account. This includes adding new owners and removing existing ones.
+
+## Example
+
+```ts
+import {
+  updateOwners,
+  createLightAccountClient,
+} from "@account-kit/smart-contracts";
+
+const lightAccountClient = createLightAccountClient({
+  signer,
+  transport,
+  chain,
+});
+
+const txHash = await updateOwners(lightAccountClient, {
+  ownerstoAdd: [newOwnerAddress], // or empty if you just want to remove owners
+  ownersToRemove: [oldOwnerAddress], // or empty if you just want to add owners
+  waitForTxn: true, // set to false to return a uoHash instead
+});
+```
+
+## Type Parameters
+
+| Type Parameter                           | Default type                                                                             |
+| :--------------------------------------- | :--------------------------------------------------------------------------------------- | ----------- | ----------- | ---------------------------------------------------------------------------------------- | ----------- |
+| `TTransport` _extends_ `Transport`       | `Transport`                                                                              |
+| `TChain` _extends_ `Chain`               | `undefined`                                                                              | `Chain`     | `undefined` |
+| `TSigner` _extends_ `SmartAccountSigner` | `SmartAccountSigner`                                                                     |
+| `TAccount` _extends_                     | [`accountLoupeActions`](../../../core/src/variables/accountLoupeActions.mdx)\<`TSigner`> | `undefined` |             | [`accountLoupeActions`](../../../core/src/variables/accountLoupeActions.mdx)\<`TSigner`> | `undefined` |
+
+## Parameters
+
+| Parameter | Type                                                               | Description                                           |
+| :-------- | :----------------------------------------------------------------- | :---------------------------------------------------- |
+| `client`  | `Client`\<`TTransport`, `TChain`, `TAccount`>                      | The client instance used to interact with the account |
+| `args`    | `UpdateMultiOwnerLightAccountOwnersParams`\<`TSigner`, `TAccount`> | The parameters for updating the account owners        |
+
+## Returns
+
+`Promise`\<`Hex`>
+
+A promise that resolves to the transaction hash or the full transaction result if `waitForTxn` is `true`

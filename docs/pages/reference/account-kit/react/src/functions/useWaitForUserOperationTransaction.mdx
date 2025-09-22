@@ -1,0 +1,52 @@
+---
+title: useWaitForUserOperationTransaction
+description: Overview of the useWaitForUserOperationTransaction function
+slug: wallets/reference/account-kit/react/src/functions/useWaitForUserOperationTransaction
+layout: reference
+---
+
+```ts
+function useWaitForUserOperationTransaction(
+  config,
+): UseWaitForUserOperationTransactionResult;
+```
+
+Defined in: [account-kit/react/src/hooks/useWaitForUserOperationTransaction.ts:63](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/react/src/hooks/useWaitForUserOperationTransaction.ts#L63)
+
+Custom [hook](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useWaitForUserOperationTransaction.ts) to wait for a user operation transaction and manage its state (pending, error, result).
+
+## Example
+
+```ts twoslash
+import {
+  useWaitForUserOperationTransaction,
+  useSmartAccountClient,
+} from "@account-kit/react";
+
+const { client } = useSmartAccountClient({});
+const {
+  waitForUserOperationTransaction,
+  waitForUserOperationTransactionResult,
+  isWaitingForUserOperationTransaction,
+  error,
+} = useWaitForUserOperationTransaction({
+  client,
+  // these are optional
+  onSuccess: (result) => {
+    // do something on success
+  },
+  onError: (error) => console.error(error),
+});
+```
+
+## Parameters
+
+| Parameter | Type                                                                                                   | Description                                                                                                                                                                  |
+| :-------- | :----------------------------------------------------------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `config`  | [`UseWaitForUserOperationTransactionArgs`](../type-aliases/UseWaitForUserOperationTransactionArgs.mdx) | Configuration object containing the client. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useWaitForUserOperationTransaction.ts#L15) |
+
+## Returns
+
+[`UseWaitForUserOperationTransactionResult`](../type-aliases/UseWaitForUserOperationTransactionResult.mdx)
+
+An object containing methods and state related to waiting for a user operation transaction. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useWaitForUserOperationTransaction.ts#L19)

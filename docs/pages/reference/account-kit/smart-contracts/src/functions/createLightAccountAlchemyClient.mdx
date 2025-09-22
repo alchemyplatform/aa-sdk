@@ -1,0 +1,38 @@
+---
+title: createLightAccountAlchemyClient
+description: Creates an Alchemy smart account client connected to a Light Account instance.
+slug: wallets/reference/account-kit/smart-contracts/src/functions/createLightAccountAlchemyClient
+layout: reference
+---
+
+```ts
+function createLightAccountAlchemyClient<TSigner>(
+  params,
+): Promise<
+  AlchemySmartAccountClient<
+    undefined | Chain,
+    LightAccount<TSigner>,
+    LightAccountClientActions<TSigner>
+  >
+>;
+```
+
+Defined in: [account-kit/smart-contracts/src/light-account/clients/alchemyClient.ts:22](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/light-account/clients/alchemyClient.ts#L22)
+
+## Type Parameters
+
+| Type Parameter                                   | Default type                 |
+| :----------------------------------------------- | :--------------------------- |
+| `TSigner` _extends_ `SmartAccountSigner`\<`any`> | `SmartAccountSigner`\<`any`> |
+
+## Parameters
+
+| Parameter | Type                                                                                                 |
+| :-------- | :--------------------------------------------------------------------------------------------------- |
+| `params`  | [`AlchemyLightAccountClientConfig`](../type-aliases/AlchemyLightAccountClientConfig.mdx)\<`TSigner`> |
+
+## Returns
+
+`Promise`\<`AlchemySmartAccountClient`\<`undefined` | `Chain`, `LightAccount`\<`TSigner`>, `LightAccountClientActions`\<`TSigner`>>>
+
+A promise that resolves to an `AlchemySmartAccountClient` object containing the created client

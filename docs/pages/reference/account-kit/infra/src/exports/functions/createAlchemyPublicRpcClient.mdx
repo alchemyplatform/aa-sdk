@@ -1,0 +1,42 @@
+---
+title: createAlchemyPublicRpcClient
+description: Overview of the createAlchemyPublicRpcClient function
+slug: wallets/reference/account-kit/infra/src/exports/functions/createAlchemyPublicRpcClient
+layout: reference
+---
+
+```ts
+function createAlchemyPublicRpcClient(params): ClientWithAlchemyMethods;
+```
+
+Defined in: [account-kit/infra/src/client/rpcClient.ts:28](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/infra/src/client/rpcClient.ts#L28)
+
+Creates an Alchemy public RPC client with the provided chain, connection configuration, and optional fetch options. The client has alchemy methods and can dynamically update HTTP headers.
+
+## Example
+
+```ts
+import { createAlchemyPublicRpcClient, alchemy } from "@account-kit/infra";
+import { sepolia } from "@account-kit/infra";
+
+const client = createAlchemyPublicRpcClient({
+  transport: alchemy({
+    apiKey: "ALCHEMY_API_KEY",
+  }),
+  chain: sepolia,
+});
+```
+
+## Parameters
+
+| Parameter          | Type                                                       | Description                                                                         |
+| :----------------- | :--------------------------------------------------------- | :---------------------------------------------------------------------------------- | --------------------------------------------------------- |
+| `params`           | \{ `chain`: `undefined`                                    | `Chain`; `transport`: [`AlchemyTransport`](../type-aliases/AlchemyTransport.mdx); } | The parameters for creating the Alchemy public RPC client |
+| `params.chain`     | `undefined`                                                | `Chain`                                                                             | The blockchain chain configuration                        |
+| `params.transport` | [`AlchemyTransport`](../type-aliases/AlchemyTransport.mdx) | -                                                                                   |
+
+## Returns
+
+[`ClientWithAlchemyMethods`](../type-aliases/ClientWithAlchemyMethods.mdx)
+
+A client object tailored with Alchemy methods and capabilities to interact with the blockchain

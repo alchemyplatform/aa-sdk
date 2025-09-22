@@ -1,0 +1,52 @@
+---
+title: getMAV2UpgradeToData
+description: Overview of the getMAV2UpgradeToData function
+slug: wallets/reference/account-kit/smart-contracts/src/functions/getMAV2UpgradeToData
+layout: reference
+---
+
+```ts
+function getMAV2UpgradeToData<TTransport, TChain, TSigner, TAccount>(
+  client,
+  args,
+): Promise<UpgradeToData & object>;
+```
+
+Defined in: [account-kit/smart-contracts/src/ma-v2/utils.ts:192](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/ma-v2/utils.ts#L192)
+
+Retrieves the data necessary to upgrade to a Modular Account V2 (MA v2).
+Note that the upgrade will be to the Semi Modular Account Storage variant
+
+## Example
+
+```ts
+import {
+  createLightAccountClient,
+  getMAV2UpgradeToData,
+} from "@account-kit/smart-contracts";
+
+const client = createLightAccountClient({});
+const upgradeData = await getMAV2UpgradeToData(client, {});
+```
+
+## Type Parameters
+
+| Type Parameter                                   | Default type                                           |
+| :----------------------------------------------- | :----------------------------------------------------- | ----------- | ------------------------------------------------------ |
+| `TTransport` _extends_ `Transport`               | `Transport`                                            |
+| `TChain` _extends_ `undefined`                   | `Chain`                                                | `undefined` | `Chain`                                                |
+| `TSigner` _extends_ `SmartAccountSigner`\<`any`> | `SmartAccountSigner`\<`any`>                           |
+| `TAccount` _extends_ `undefined`                 | `SmartContractAccountWithSigner`\<`string`, `TSigner`> | `undefined` | `SmartContractAccountWithSigner`\<`string`, `TSigner`> |
+
+## Parameters
+
+| Parameter | Type                                                                                                              | Description                            |
+| :-------- | :---------------------------------------------------------------------------------------------------------------- | :------------------------------------- |
+| `client`  | `SmartAccountClient`\<`TTransport`, `TChain`, `TAccount`>                                                         | The smart account client               |
+| `args`    | `GetAccountParameter`\<`TAccount`, `SmartContractAccount`\<`string`, keyof `EntryPointRegistryBase`\<`unknown`>>> | The arguments required for the upgrade |
+
+## Returns
+
+`Promise`\<`UpgradeToData` & `object`>
+
+A promise that resolves to upgrade data augmented with a function to create a Modular Account V2

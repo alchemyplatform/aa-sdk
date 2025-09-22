@@ -1,0 +1,25 @@
+---
+title: OauthParams
+description: Overview of the OauthParams 2097152
+slug: wallets/reference/account-kit/signer/src/type-aliases/OauthParams
+layout: reference
+---
+
+```ts
+type OauthParams = Extract<
+  accountLoupeActions,
+  {
+    type: "oauth";
+  }
+> &
+  object;
+```
+
+Defined in: [account-kit/signer/src/client/types.ts:98](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/client/types.ts#L98)
+
+## Type Declaration
+
+| Name                 | Type      | Defined in                                                                                                                                                                        |
+| :------------------- | :-------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `expirationSeconds?` | `number`  | [account-kit/signer/src/client/types.ts:99](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/client/types.ts#L99)   |
+| `fetchIdTokenOnly?`  | `boolean` | [account-kit/signer/src/client/types.ts:100](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/client/types.ts#L100) |

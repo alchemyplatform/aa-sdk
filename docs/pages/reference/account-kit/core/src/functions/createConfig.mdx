@@ -1,0 +1,42 @@
+---
+title: createConfig
+description: Overview of the createConfig function
+slug: wallets/reference/account-kit/core/src/functions/createConfig
+layout: reference
+---
+
+```ts
+function createConfig(params): AlchemyAccountsConfig;
+```
+
+Defined in: [account-kit/core/src/createConfig.ts:37](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/core/src/createConfig.ts#L37)
+
+Creates an AlchemyAccountsConfig object that can be used in conjunction with
+the actions exported from `@account-kit/core`.
+
+The config contains core and client stores that can be used to manage account state
+in your application.
+
+## Example
+
+```ts
+import { createConfig } from "@account-kit/core";
+import { sepolia } from "@account-kit/infra";
+
+const config = createConfig({
+  chain: sepolia,
+  transport: alchemy({ apiKey: "your-api-key" }),
+});
+```
+
+## Parameters
+
+| Parameter | Type                                                         | Description                              |
+| :-------- | :----------------------------------------------------------- | :--------------------------------------- |
+| `params`  | [`CreateConfigProps`](../type-aliases/CreateConfigProps.mdx) | The parameters to create the config with |
+
+## Returns
+
+[`AlchemyAccountsConfig`](../type-aliases/AlchemyAccountsConfig.mdx)
+
+An alchemy account config object containing the core and client store

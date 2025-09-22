@@ -1,0 +1,30 @@
+---
+title: getDefaultMultisigModularAccountFactoryAddress
+description: Overview of the getDefaultMultisigModularAccountFactoryAddress function
+slug: wallets/reference/account-kit/smart-contracts/src/functions/getDefaultMultisigModularAccountFactoryAddress
+layout: reference
+---
+
+```ts
+function getDefaultMultisigModularAccountFactoryAddress(chain): `0x${string}`;
+```
+
+Defined in: [account-kit/smart-contracts/src/msca/utils.ts:48](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/msca/utils.ts#L48)
+
+Utility method returning the default multi sig msca factory address given a chain
+
+## Parameters
+
+| Parameter | Type    | Description                                   |
+| :-------- | :------ | :-------------------------------------------- |
+| `chain`   | `Chain` | the chain object for which to get the address |
+
+## Returns
+
+`` `0x${string}` ``
+
+the address for the given chain
+
+## Throws
+
+if the chain doesn't have an address currently deployed

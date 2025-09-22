@@ -1,0 +1,40 @@
+---
+title: account-kit/wallet-client/src/exports
+description: Overview of the account-kit/wallet-client/src/exports 2
+slug: wallets/reference/account-kit/wallet-client/src/exports/README
+layout: reference
+---
+
+## Type Aliases
+
+| Type Alias                                                              | Description |
+| :---------------------------------------------------------------------- | :---------- |
+| [SmartWalletClient](type-aliases/SmartWalletClient.mdx)                 | -           |
+| [SmartWalletClientParams](type-aliases/SmartWalletClientParams.mdx)     | -           |
+| [WalletServerRpcSchemaType](type-aliases/WalletServerRpcSchemaType.mdx) | -           |
+
+## Variables
+
+| Variable                                                     | Description |
+| :----------------------------------------------------------- | :---------- |
+| [WalletServerRpcSchema](variables/WalletServerRpcSchema.mdx) | -           |
+
+## Functions
+
+| Function                                                         | Description                                                                                                                                                                                                                                            |
+| :--------------------------------------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [createSmartWalletClient](functions/createSmartWalletClient.mdx) | Creates a smart wallet client that can be used to interact with a smart account.                                                                                                                                                                       |
+| [formatSign](functions/formatSign.mdx)                           | Formats a signature request for signing messages or transactions.                                                                                                                                                                                      |
+| [getCallsStatus](functions/getCallsStatus.mdx)                   | Gets the status of a prepared call by its ID. This method is used to check the execution status of calls sent via sendPreparedCalls.                                                                                                                   |
+| [grantPermissions](functions/grantPermissions.mdx)               | Grants permissions to a smart account by creating a session. This allows another key to perform operations on behalf of the account.                                                                                                                   |
+| [listAccounts](functions/listAccounts.mdx)                       | Lists all smart accounts for a given signer using the wallet API client.                                                                                                                                                                               |
+| [prepareCalls](functions/prepareCalls.mdx)                       | Prepares a set of contract calls for execution by building a user operation. Returns the built user operation and a signature request that needs to be signed before submitting to sendPreparedCalls.                                                  |
+| [prepareSign](functions/prepareSign.mdx)                         | Prepares a signature request for signing messages or transactions.                                                                                                                                                                                     |
+| [requestAccount](functions/requestAccount.mdx)                   | Requests an account for the provided signer using the wallet API client. If an account already exists for the signer, it will always return that account unless a new ID is specified. If an account already exists, the creationHint will be ignored. |
+| [sendCalls](functions/sendCalls.mdx)                             | Prepares, signs, and submits calls. This function internally calls `prepareCalls`, `signPreparedCalls`, and `sendPreparedCalls`.                                                                                                                       |
+| [sendPreparedCalls](functions/sendPreparedCalls.mdx)             | Sends prepared calls by submitting a signed user operation. This method is used after signing the signature request returned from prepareCalls.                                                                                                        |
+| [signMessage](functions/signMessage.mdx)                         | Signs a message using the smart account. This method requests the account associated with the signer and uses it to sign the message.                                                                                                                  |
+| [signPreparedCalls](functions/signPreparedCalls.mdx)             | Signs prepared calls using the provided signer.                                                                                                                                                                                                        |
+| [signSignatureRequest](functions/signSignatureRequest.mdx)       | Signs a signature request using the provided signer. This method handles different types of signature requests including personal_sign, eth_signTypedData_v4, and authorization.                                                                       |
+| [signTypedData](functions/signTypedData.mdx)                     | Signs typed data (EIP-712) using the smart account. This method requests the account associated with the signer and uses it to sign the typed data.                                                                                                    |
+| [waitForCallsStatus](functions/waitForCallsStatus.mdx)           | Waits for the status of a prepared call to be updated, returning after the calls are no longer pending.                                                                                                                                                |

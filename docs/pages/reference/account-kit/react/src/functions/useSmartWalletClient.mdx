@@ -1,0 +1,56 @@
+---
+title: useSmartWalletClient
+description: Overview of the useSmartWalletClient function
+slug: wallets/reference/account-kit/react/src/functions/useSmartWalletClient
+layout: reference
+---
+
+```ts
+function useSmartWalletClient<TAccount>(params): any;
+```
+
+Defined in: [account-kit/react/src/hooks/useSmartWalletClient.ts:42](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/react/src/hooks/useSmartWalletClient.ts#L42)
+
+React hook that provides a Smart Wallet Client instance.
+Returns undefined if an EOA wallet is connected via wagmi, as Smart Wallet Clients are only for smart accounts.
+The hook automatically subscribes to changes in signer status and chain configuration.
+
+## Example
+
+```tsx twoslash
+import { useSmartWalletClient } from "@account-kit/react";
+
+function MyComponent() {
+  const client = useSmartWalletClient();
+
+  // With specific account address
+  const clientWithAccount = useSmartWalletClient({
+    account: "0x1234...",
+  });
+
+  if (client) {
+    // Use the client for wallet operations
+    console.log("Smart Wallet Client ready:", client);
+  }
+
+  return <div>...</div>;
+}
+```
+
+## Type Parameters
+
+| Type Parameter                   | Default type        |
+| :------------------------------- | :------------------ | ----------- | ------------------- |
+| `TAccount` _extends_ `undefined` | `` `0x${string}` `` | `undefined` | `` `0x${string}` `` |
+
+## Parameters
+
+| Parameter | Type                                      | Description                                                                        |
+| :-------- | :---------------------------------------- | :--------------------------------------------------------------------------------- |
+| `params`  | `GetSmartWalletClientParams`\<`TAccount`> | Parameters for getting the smart wallet client, including optional account address |
+
+## Returns
+
+`any`
+
+The Smart Wallet Client instance or undefined if an EOA is connected or client is unavailable

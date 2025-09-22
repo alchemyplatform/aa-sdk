@@ -1,0 +1,23 @@
+---
+title: UseDropAndReplaceUserOperationMutationArgs
+description: Overview of the UseDropAndReplaceUserOperationMutationArgs 2097152
+slug: wallets/reference/account-kit/react/src/type-aliases/UseDropAndReplaceUserOperationMutationArgs
+layout: reference
+---
+
+```ts
+type UseDropAndReplaceUserOperationMutationArgs<TEntryPointVersion, TAccount> =
+  BaseHookMutationArgs<
+    SendUserOperationResult<TEntryPointVersion>,
+    DropAndReplaceUserOperationParameters<TAccount>
+  >;
+```
+
+Defined in: [account-kit/react/src/hooks/useDropAndReplaceUserOperation.ts:15](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/react/src/hooks/useDropAndReplaceUserOperation.ts#L15)
+
+## Type Parameters
+
+| Type Parameter                                                                                    | Default type                                                                 |
+| :------------------------------------------------------------------------------------------------ | :--------------------------------------------------------------------------- |
+| `TEntryPointVersion` _extends_ `GetEntryPointFromAccount`\<`TAccount`>                            | -                                                                            |
+| `TAccount` _extends_ [`accountLoupeActions`](../../../core/src/variables/accountLoupeActions.mdx) | [`accountLoupeActions`](../../../core/src/variables/accountLoupeActions.mdx) |

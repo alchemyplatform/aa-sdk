@@ -1,0 +1,20 @@
+---
+title: ConnectedUser
+description: Overview of the ConnectedUser 2097152
+slug: wallets/reference/account-kit/react/src/type-aliases/ConnectedUser
+layout: reference
+---
+
+```ts
+type ConnectedUser = Omit<User, "address" | "orgId" | "userId"> & object;
+```
+
+Defined in: [account-kit/react/src/hooks/useConnectedUser.ts:11](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/react/src/hooks/useConnectedUser.ts#L11)
+
+## Type Declaration
+
+| Name       | Type                                                              | Defined in                                                                                                                                                                                        |
+| :--------- | :---------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `address?` | [`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx) | [account-kit/react/src/hooks/useConnectedUser.ts:12](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/react/src/hooks/useConnectedUser.ts#L12) |
+| `orgId?`   | `string`                                                          | [account-kit/react/src/hooks/useConnectedUser.ts:13](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/react/src/hooks/useConnectedUser.ts#L13) |
+| `userId?`  | `string`                                                          | [account-kit/react/src/hooks/useConnectedUser.ts:14](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/react/src/hooks/useConnectedUser.ts#L14) |

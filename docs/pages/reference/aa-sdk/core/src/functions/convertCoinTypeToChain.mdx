@@ -1,0 +1,40 @@
+---
+title: convertCoinTypeToChain
+description: Overview of the convertCoinTypeToChain function
+slug: wallets/reference/aa-sdk/core/src/functions/convertCoinTypeToChain
+layout: reference
+---
+
+```ts
+function convertCoinTypeToChain(coinType): Chain;
+```
+
+Defined in: [aa-sdk/core/src/ens/utils.ts:73](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/ens/utils.ts#L73)
+
+Converts a coin type to its corresponding blockchain chain based on a predefined mapping.
+
+## Example
+
+```ts
+import { convertChainIdToCoinType, convertCoinTypeToChain } from "@aa-sdk/core";
+import { sepolia } from "viem/chains";
+
+const coinType = convertChainIdToCoinType(sepolia.id);
+const chain = convertCoinTypeToChain(coinType);
+```
+
+## Parameters
+
+| Parameter  | Type     | Description                                |
+| :--------- | :------- | :----------------------------------------- |
+| `coinType` | `number` | The numerical identifier for the coin type |
+
+## Returns
+
+`Chain`
+
+The corresponding blockchain chain
+
+## Throws
+
+If the coin type does not map to a supported chain

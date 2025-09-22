@@ -1,0 +1,28 @@
+---
+title: NoUndefined
+description: |-
+  Constructs a type by excluding 
+   from 
+  .
+slug: wallets/reference/aa-sdk/core/src/type-aliases/NoUndefined
+layout: reference
+---
+
+```ts
+type NoUndefined<T> = T extends undefined ? never : T;
+```
+
+Defined in: [aa-sdk/core/src/utils/types.ts:10](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/utils/types.ts#L10)
+
+## Example
+
+```ts
+NoUndefined<string | undefined>
+=> string
+```
+
+## Type Parameters
+
+| Type Parameter |
+| :------------- |
+| `T`            |

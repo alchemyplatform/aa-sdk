@@ -1,0 +1,25 @@
+---
+title: IsUndefined
+description: "Checks if T is "
+slug: wallets/reference/aa-sdk/core/src/type-aliases/IsUndefined
+layout: reference
+---
+
+```ts
+type IsUndefined<T> = [undefined] extends [T] ? true : false;
+```
+
+Defined in: [aa-sdk/core/src/utils/types.ts:20](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/utils/types.ts#L20)
+
+## Example
+
+```ts
+type Result = IsUndefined<undefined>;
+//   ^? type Result = true
+```
+
+## Type Parameters
+
+| Type Parameter | Description   |
+| :------------- | :------------ |
+| `T`            | Type to check |

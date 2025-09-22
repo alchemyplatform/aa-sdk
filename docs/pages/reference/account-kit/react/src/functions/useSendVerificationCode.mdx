@@ -1,0 +1,51 @@
+---
+title: useSendVerificationCode
+description: Overview of the useSendVerificationCode function
+slug: wallets/reference/account-kit/react/src/functions/useSendVerificationCode
+layout: reference
+---
+
+```ts
+function useSendVerificationCode(mutationArgs?): UseSendVerificationCodeResult;
+```
+
+Defined in: [account-kit/react/src/hooks/useSendVerificationCode.ts:74](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/react/src/hooks/useSendVerificationCode.ts#L74)
+
+A custom hook to send OTP verification codes to email or SMS for account verification.
+
+## Example
+
+```ts twoslash
+import { useSendVerificationCode } from "@account-kit/react";
+
+const { sendVerificationCode, isSendingCode, error } = useSendVerificationCode({
+  onSuccess: (data) => {
+    console.log("OTP sent");
+  },
+  onError: (error) => console.error(error),
+});
+
+// Send verification code to email
+sendVerificationCode({
+  type: "email",
+  contact: "user@example.com",
+});
+
+// Send verification code to SMS
+sendVerificationCodeAsync({
+  type: "sms",
+  contact: "+1234567890",
+});
+```
+
+## Parameters
+
+| Parameter       | Type                                                                                                                                                               | Description       |
+| :-------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------------- | ----------------------------------- |
+| `mutationArgs?` | `Partial`\<`Omit`\<`UseMutationOptions`\<`void`, `Error`, [`SendVerificationCodeParams`](../interfaces/SendVerificationCodeParams.mdx), `unknown`>, `"mutationFn"` | `"mutationKey"`>> | Optional arguments for the mutation |
+
+## Returns
+
+[`UseSendVerificationCodeResult`](../type-aliases/UseSendVerificationCodeResult.mdx)
+
+An object containing functions and state for sending verification codes

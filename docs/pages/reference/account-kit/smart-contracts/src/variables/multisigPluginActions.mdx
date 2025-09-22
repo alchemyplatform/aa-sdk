@@ -1,0 +1,44 @@
+---
+title: multisigPluginActions
+description: Provides actions for managing a multisig plugin within the specified client, including reading owners, checking ownership, getting the threshold, proposing user operations, and signing multisig user operations.
+slug: wallets/reference/account-kit/smart-contracts/src/variables/multisigPluginActions
+layout: reference
+---
+
+```ts
+const multisigPluginActions: <TTransport, TChain, TAccount>(
+  client,
+) => MultisigPluginActions<TAccount>;
+```
+
+Defined in: [account-kit/smart-contracts/src/msca/plugins/multisig/extension.ts:74](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/msca/plugins/multisig/extension.ts#L74)
+
+Provides actions for managing a multisig plugin within the specified client, including reading owners, checking ownership, getting the threshold, proposing user operations, and signing multisig user operations.
+
+## Example
+
+```ts
+import { createModularAccountAlchemyClient, multisigPluginActions } from "@account-kit/smart-contracts";
+
+const client = createModularAccountAlchemyClient(...).extend(multisigPluginActions);
+```
+
+## Type Parameters
+
+| Type Parameter                              | Default type |
+| :------------------------------------------ | :----------- | ---------------------- | ----------- |
+| `TTransport` _extends_ `Transport`          | `Transport`  |
+| `TChain` _extends_ `Chain`                  | `undefined`  | `Chain`                | `undefined` |
+| `TAccount` _extends_ `SmartContractAccount` | `undefined`  | `SmartContractAccount` | `undefined` |
+
+## Parameters
+
+| Parameter | Type                                          | Description                                                                   |
+| :-------- | :-------------------------------------------- | :---------------------------------------------------------------------------- |
+| `client`  | `Client`\<`TTransport`, `TChain`, `TAccount`> | The client instance configured with transport, chain, and account information |
+
+## Returns
+
+[`MultisigPluginActions`](../type-aliases/MultisigPluginActions.mdx)\<`TAccount`>
+
+An object containing methods to perform actions related to the multisig plugin

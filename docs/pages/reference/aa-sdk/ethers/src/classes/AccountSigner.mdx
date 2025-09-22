@@ -1,0 +1,661 @@
+---
+title: AccountSigner
+description: Implementation of the ethers Signer interface to use with Smart Contract Accounts
+slug: wallets/reference/aa-sdk/ethers/src/classes/AccountSigner
+layout: reference
+---
+
+Defined in: [aa-sdk/ethers/src/account-signer.ts:32](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/ethers/src/account-signer.ts#L32)
+
+Implementation of the ethers Signer interface to use with Smart Contract Accounts
+
+## Extends
+
+- `Signer`
+
+## Type Parameters
+
+| Type Parameter                                                         | Default type                            |
+| :--------------------------------------------------------------------- | :-------------------------------------- |
+| `TAccount` _extends_ `SmartContractAccount`                            | `SmartContractAccount`                  |
+| `TEntryPointVersion` _extends_ `GetEntryPointFromAccount`\<`TAccount`> | `GetEntryPointFromAccount`\<`TAccount`> |
+
+## Constructors
+
+### Constructor
+
+```ts
+new AccountSigner<TAccount, TEntryPointVersion>(provider, account): AccountSigner<TAccount, TEntryPointVersion>;
+```
+
+Defined in: [aa-sdk/ethers/src/account-signer.ts:67](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/ethers/src/account-signer.ts#L67)
+
+Creates a new AccountSigner with the given ethers Provider and Smart Contract Account
+
+#### Example
+
+```ts
+import { AccountSigner, EthersProviderAdapter } from "@aa-sdk/ethers";
+import { LocalAccountSigner } from "@aa-sdk/core";
+import { sepolia } from "@account-kit/infra";
+import { createLightAccount } from "@account-kit/smart-contracts";
+import { http } from "viem";
+
+const account = await createLightAccount({
+  transport: http("https://rpc.testnet.aepps.com"),
+  chain: sepolia,
+  signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
+});
+
+const provider = new EthersProviderAdapter();
+const signer = new AccountSigner(provider, account);
+```
+
+#### Parameters
+
+| Parameter  | Type                                                 | Description                                                                 |
+| :--------- | :--------------------------------------------------- | :-------------------------------------------------------------------------- |
+| `provider` | [`EthersProviderAdapter`](EthersProviderAdapter.mdx) | the ethers provider to use                                                  |
+| `account`  | `TAccount`                                           | the smart contract account that will be used to sign user ops and send them |
+
+#### Returns
+
+`AccountSigner`\<`TAccount`, `TEntryPointVersion`>
+
+#### Overrides
+
+```ts
+Signer.constructor;
+```
+
+## Properties
+
+| Property                                                                     | Modifier   | Type                                                                                   | Description                | Inherited from     | Defined in                                                                                                                                                                |
+| :--------------------------------------------------------------------------- | :--------- | :------------------------------------------------------------------------------------- | :------------------------- | :----------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| <a id="_issigner" /> `_isSigner`                                             | `readonly` | `boolean`                                                                              | -                          | `Signer._isSigner` | node_modules/@ethersproject/abstract-signer/lib/index.d.ts:29                                                                                                             |
+| <a id="account" /> `account`                                                 | `readonly` | `TAccount`                                                                             | -                          | -                  | [aa-sdk/ethers/src/account-signer.ts:37](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/ethers/src/account-signer.ts#L37) |
+| <a id="provider" /> `provider`                                               | `public`   | [`EthersProviderAdapter`](EthersProviderAdapter.mdx)                                   | the ethers provider to use | `Signer.provider`  | [aa-sdk/ethers/src/account-signer.ts:68](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/ethers/src/account-signer.ts#L68) |
+| <a id="senduseroperation" /> `sendUserOperation`                             | `public`   | (`args`, `overrides?`) => `Promise`\<`SendUserOperationResult`\<`TEntryPointVersion`>> | -                          | -                  | [aa-sdk/ethers/src/account-signer.ts:39](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/ethers/src/account-signer.ts#L39) |
+| <a id="waitforuseroperationtransaction" /> `waitForUserOperationTransaction` | `public`   | (`args`) => `Promise`\<`` `0x${string}` ``>                                            | -                          | -                  | [aa-sdk/ethers/src/account-signer.ts:40](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/ethers/src/account-signer.ts#L40) |
+
+## Methods
+
+### \_checkProvider()
+
+```ts
+_checkProvider(operation?): void;
+```
+
+Defined in: node_modules/@ethersproject/abstract-signer/lib/index.d.ts:42
+
+#### Parameters
+
+| Parameter    | Type     |
+| :----------- | :------- |
+| `operation?` | `string` |
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+```ts
+Signer._checkProvider;
+```
+
+---
+
+### call()
+
+```ts
+call(transaction, blockTag?): Promise<string>;
+```
+
+Defined in: node_modules/@ethersproject/abstract-signer/lib/index.d.ts:34
+
+#### Parameters
+
+| Parameter     | Type                                |
+| :------------ | :---------------------------------- |
+| `transaction` | `Deferrable`\<`TransactionRequest`> |
+| `blockTag?`   | `BlockTag`                          |
+
+#### Returns
+
+`Promise`\<`string`>
+
+#### Inherited from
+
+```ts
+Signer.call;
+```
+
+---
+
+### checkTransaction()
+
+```ts
+checkTransaction(transaction): Deferrable<TransactionRequest>;
+```
+
+Defined in: node_modules/@ethersproject/abstract-signer/lib/index.d.ts:40
+
+#### Parameters
+
+| Parameter     | Type                                |
+| :------------ | :---------------------------------- |
+| `transaction` | `Deferrable`\<`TransactionRequest`> |
+
+#### Returns
+
+`Deferrable`\<`TransactionRequest`>
+
+#### Inherited from
+
+```ts
+Signer.checkTransaction;
+```
+
+---
+
+### connect()
+
+```ts
+connect(provider): AccountSigner<TAccount>;
+```
+
+Defined in: [aa-sdk/ethers/src/account-signer.ts:283](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/ethers/src/account-signer.ts#L283)
+
+Sets the provider for the account signer and returns the updated account signer instance.
+Note: this is not necessary since the Provider is required by the constructor. This is useful
+if you want to change the provider after the account signer has been created.
+
+#### Example
+
+```ts
+import { AccountSigner, EthersProviderAdapter } from "@aa-sdk/ethers";
+import { LocalAccountSigner } from "@aa-sdk/core";
+import { sepolia } from "@account-kit/infra";
+import { createLightAccount } from "@account-kit/smart-contracts";
+import { http } from "viem";
+
+const account = await createLightAccount({
+  transport: http("https://rpc.testnet.aepps.com"),
+  chain: sepolia,
+  signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
+});
+
+const provider = new EthersProviderAdapter();
+const signer = new AccountSigner(provider, account);
+
+signer.connect(provider);
+```
+
+#### Parameters
+
+| Parameter  | Type                                                 | Description                                   |
+| :--------- | :--------------------------------------------------- | :-------------------------------------------- |
+| `provider` | [`EthersProviderAdapter`](EthersProviderAdapter.mdx) | the provider to be set for the account signer |
+
+#### Returns
+
+`AccountSigner`\<`TAccount`>
+
+the updated account signer instance
+
+#### Overrides
+
+```ts
+Signer.connect;
+```
+
+---
+
+### estimateGas()
+
+```ts
+estimateGas(transaction): Promise<BigNumber>;
+```
+
+Defined in: node_modules/@ethersproject/abstract-signer/lib/index.d.ts:33
+
+#### Parameters
+
+| Parameter     | Type                                |
+| :------------ | :---------------------------------- |
+| `transaction` | `Deferrable`\<`TransactionRequest`> |
+
+#### Returns
+
+`Promise`\<`BigNumber`>
+
+#### Inherited from
+
+```ts
+Signer.estimateGas;
+```
+
+---
+
+### getAddress()
+
+```ts
+getAddress(): Promise<string>;
+```
+
+Defined in: [aa-sdk/ethers/src/account-signer.ts:115](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/ethers/src/account-signer.ts#L115)
+
+Returns the account address if the account exists.
+
+#### Example
+
+```ts
+import { AccountSigner, EthersProviderAdapter } from "@aa-sdk/ethers";
+import { LocalAccountSigner } from "@aa-sdk/core";
+import { sepolia } from "@account-kit/infra";
+import { createLightAccount } from "@account-kit/smart-contracts";
+import { http } from "viem";
+
+const account = await createLightAccount({
+  transport: http("https://rpc.testnet.aepps.com"),
+  chain: sepolia,
+  signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
+});
+
+const provider = new EthersProviderAdapter();
+const signer = new AccountSigner(provider, account);
+
+const address = await signer.getAddress();
+```
+
+#### Returns
+
+`Promise`\<`string`>
+
+a promise that resolves to the account address
+
+#### Throws
+
+if the account is not found
+
+#### Overrides
+
+```ts
+Signer.getAddress;
+```
+
+---
+
+### getBalance()
+
+```ts
+getBalance(blockTag?): Promise<BigNumber>;
+```
+
+Defined in: node_modules/@ethersproject/abstract-signer/lib/index.d.ts:31
+
+#### Parameters
+
+| Parameter   | Type       |
+| :---------- | :--------- |
+| `blockTag?` | `BlockTag` |
+
+#### Returns
+
+`Promise`\<`BigNumber`>
+
+#### Inherited from
+
+```ts
+Signer.getBalance;
+```
+
+---
+
+### getBundlerClient()
+
+```ts
+getBundlerClient(): BundlerClient<Transport>;
+```
+
+Defined in: [aa-sdk/ethers/src/account-signer.ts:251](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/ethers/src/account-signer.ts#L251)
+
+Retrieves the BundlerClient instance from the provider.
+
+#### Example
+
+```ts
+import { AccountSigner, EthersProviderAdapter } from "@aa-sdk/ethers";
+import { LocalAccountSigner } from "@aa-sdk/core";
+import { sepolia } from "@account-kit/infra";
+import { createLightAccount } from "@account-kit/smart-contracts";
+import { http } from "viem";
+
+const account = await createLightAccount({
+  transport: http("https://rpc.testnet.aepps.com"),
+  chain: sepolia,
+  signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
+});
+
+const provider = new EthersProviderAdapter();
+const signer = new AccountSigner(provider, account);
+
+const bundler = signer.getBundlerClient();
+```
+
+#### Returns
+
+`BundlerClient`\<`Transport`>
+
+The BundlerClient instance
+
+---
+
+### getChainId()
+
+```ts
+getChainId(): Promise<number>;
+```
+
+Defined in: node_modules/@ethersproject/abstract-signer/lib/index.d.ts:36
+
+#### Returns
+
+`Promise`\<`number`>
+
+#### Inherited from
+
+```ts
+Signer.getChainId;
+```
+
+---
+
+### getFeeData()
+
+```ts
+getFeeData(): Promise<FeeData>;
+```
+
+Defined in: node_modules/@ethersproject/abstract-signer/lib/index.d.ts:38
+
+#### Returns
+
+`Promise`\<`FeeData`>
+
+#### Inherited from
+
+```ts
+Signer.getFeeData;
+```
+
+---
+
+### getGasPrice()
+
+```ts
+getGasPrice(): Promise<BigNumber>;
+```
+
+Defined in: node_modules/@ethersproject/abstract-signer/lib/index.d.ts:37
+
+#### Returns
+
+`Promise`\<`BigNumber`>
+
+#### Inherited from
+
+```ts
+Signer.getGasPrice;
+```
+
+---
+
+### getTransactionCount()
+
+```ts
+getTransactionCount(blockTag?): Promise<number>;
+```
+
+Defined in: node_modules/@ethersproject/abstract-signer/lib/index.d.ts:32
+
+#### Parameters
+
+| Parameter   | Type       |
+| :---------- | :--------- |
+| `blockTag?` | `BlockTag` |
+
+#### Returns
+
+`Promise`\<`number`>
+
+#### Inherited from
+
+```ts
+Signer.getTransactionCount;
+```
+
+---
+
+### populateTransaction()
+
+```ts
+populateTransaction(transaction): Promise<TransactionRequest>;
+```
+
+Defined in: node_modules/@ethersproject/abstract-signer/lib/index.d.ts:41
+
+#### Parameters
+
+| Parameter     | Type                                |
+| :------------ | :---------------------------------- |
+| `transaction` | `Deferrable`\<`TransactionRequest`> |
+
+#### Returns
+
+`Promise`\<`TransactionRequest`>
+
+#### Inherited from
+
+```ts
+Signer.populateTransaction;
+```
+
+---
+
+### resolveName()
+
+```ts
+resolveName(name): Promise<string>;
+```
+
+Defined in: node_modules/@ethersproject/abstract-signer/lib/index.d.ts:39
+
+#### Parameters
+
+| Parameter | Type     |
+| :-------- | :------- |
+| `name`    | `string` |
+
+#### Returns
+
+`Promise`\<`string`>
+
+#### Inherited from
+
+```ts
+Signer.resolveName;
+```
+
+---
+
+### sendTransaction()
+
+```ts
+sendTransaction(transaction): Promise<TransactionResponse>;
+```
+
+Defined in: [aa-sdk/ethers/src/account-signer.ts:194](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/ethers/src/account-signer.ts#L194)
+
+Sends a transaction using the account provider and returns the transaction response.
+
+#### Example
+
+```ts
+import { AccountSigner, EthersProviderAdapter } from "@aa-sdk/ethers";
+import { LocalAccountSigner } from "@aa-sdk/core";
+import { sepolia } from "@account-kit/infra";
+import { createLightAccount } from "@account-kit/smart-contracts";
+import { http } from "viem";
+
+const account = await createLightAccount({
+  transport: http("https://rpc.testnet.aepps.com"),
+  chain: sepolia,
+  signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
+});
+
+const provider = new EthersProviderAdapter();
+const signer = new AccountSigner(provider, account);
+
+const tx = await signer.sendTransaction({
+  to: "0x1234567890123456789012345678901234567890",
+  value: "0x0",
+  data: "0x",
+});
+```
+
+#### Parameters
+
+| Parameter     | Type                                | Description                        |
+| :------------ | :---------------------------------- | :--------------------------------- |
+| `transaction` | `Deferrable`\<`TransactionRequest`> | the transaction request to be sent |
+
+#### Returns
+
+`Promise`\<`TransactionResponse`>
+
+a promise that resolves to the transaction response
+
+#### Throws
+
+if the account is not found in the provider
+
+#### Overrides
+
+```ts
+Signer.sendTransaction;
+```
+
+---
+
+### signMessage()
+
+```ts
+signMessage(message): Promise<string>;
+```
+
+Defined in: [aa-sdk/ethers/src/account-signer.ts:150](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/ethers/src/account-signer.ts#L150)
+
+Signs a message using the associated account.
+
+#### Example
+
+```ts
+import { AccountSigner, EthersProviderAdapter } from "@aa-sdk/ethers";
+import { LocalAccountSigner } from "@aa-sdk/core";
+import { sepolia } from "@account-kit/infra";
+import { createLightAccount } from "@account-kit/smart-contracts";
+import { http } from "viem";
+
+const account = await createLightAccount({
+  transport: http("https://rpc.testnet.aepps.com"),
+  chain: sepolia,
+  signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
+});
+
+const provider = new EthersProviderAdapter();
+const signer = new AccountSigner(provider, account);
+
+const message = await signer.signMessage("hello");
+```
+
+#### Parameters
+
+| Parameter | Type     | Description                      |
+| :-------- | :------- | :------------------------------- | ------------------------ |
+| `message` | `string` | `Uint8Array`\<`ArrayBufferLike`> | the message to be signed |
+
+#### Returns
+
+`Promise`\<`string`>
+
+a promise that resolves to the signed message
+
+#### Throws
+
+if the account is not found
+
+#### Overrides
+
+```ts
+Signer.signMessage;
+```
+
+---
+
+### signTransaction()
+
+```ts
+signTransaction(_transaction): Promise<string>;
+```
+
+Defined in: [aa-sdk/ethers/src/account-signer.ts:218](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/ethers/src/account-signer.ts#L218)
+
+Throws an error indicating that transaction signing is not supported and advises to use `sendUserOperation` instead.
+
+#### Parameters
+
+| Parameter      | Type                                | Description             |
+| :------------- | :---------------------------------- | :---------------------- |
+| `_transaction` | `Deferrable`\<`TransactionRequest`> | The transaction request |
+
+#### Returns
+
+`Promise`\<`string`>
+
+#### Throws
+
+Will always throw an error indicating transaction signing is unsupported
+
+#### Overrides
+
+```ts
+Signer.signTransaction;
+```
+
+---
+
+### isSigner()
+
+```ts
+static isSigner(value): value is Signer;
+```
+
+Defined in: node_modules/@ethersproject/abstract-signer/lib/index.d.ts:43
+
+#### Parameters
+
+| Parameter | Type  |
+| :-------- | :---- |
+| `value`   | `any` |
+
+#### Returns
+
+`value is Signer`
+
+#### Inherited from
+
+```ts
+Signer.isSigner;
+```

@@ -1,0 +1,31 @@
+---
+title: getSmartWalletClient
+description: Creates and returns a Smart Wallet Client instance. Returns undefined if running in a server environment or if no signer is connected. Caches clients by chain ID & address for performance optimization.
+slug: wallets/reference/account-kit/core/src/functions/getSmartWalletClient
+layout: reference
+---
+
+```ts
+function getSmartWalletClient<TAccount>(config, params?): any;
+```
+
+Defined in: [account-kit/core/src/actions/getSmartWalletClient.ts:20](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/core/src/actions/getSmartWalletClient.ts#L20)
+
+## Type Parameters
+
+| Type Parameter                   | Default type        |
+| :------------------------------- | :------------------ | ----------- | ------------------- |
+| `TAccount` _extends_ `undefined` | `` `0x${string}` `` | `undefined` | `` `0x${string}` `` |
+
+## Parameters
+
+| Parameter | Type                                                                                        | Description                                                              |
+| :-------- | :------------------------------------------------------------------------------------------ | :----------------------------------------------------------------------- |
+| `config`  | [`AlchemyAccountsConfig`](../type-aliases/AlchemyAccountsConfig.mdx)                        | The configuration containing the client store and connection information |
+| `params?` | [`GetSmartWalletClientParams`](../type-aliases/GetSmartWalletClientParams.mdx)\<`TAccount`> | Optional parameters including account address                            |
+
+## Returns
+
+`any`
+
+The Smart Wallet Client instance or undefined if not available

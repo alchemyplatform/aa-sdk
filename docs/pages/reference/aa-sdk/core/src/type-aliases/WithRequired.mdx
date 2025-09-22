@@ -1,0 +1,19 @@
+---
+title: WithRequired
+description: Overview of the WithRequired 2097152
+slug: wallets/reference/aa-sdk/core/src/type-aliases/WithRequired
+layout: reference
+---
+
+```ts
+type WithRequired<T, K> = Required<Pick<T, K>>;
+```
+
+Defined in: [aa-sdk/core/src/utils/types.ts:45](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/utils/types.ts#L45)
+
+## Type Parameters
+
+| Type Parameter          |
+| :---------------------- |
+| `T`                     |
+| `K` _extends_ keyof `T` |

@@ -1,0 +1,33 @@
+---
+title: clientHeaderTrack
+description: Overview of the clientHeaderTrack function
+slug: wallets/reference/aa-sdk/core/src/functions/clientHeaderTrack
+layout: reference
+---
+
+```ts
+function clientHeaderTrack<X>(client, crumb): X;
+```
+
+Defined in: [aa-sdk/core/src/client/addBreadcrumb.ts:20](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/client/addBreadcrumb.ts#L20)
+
+Add a crumb to the breadcrumb.
+
+## Type Parameters
+
+| Type Parameter         |
+| :--------------------- |
+| `X` _extends_ `object` |
+
+## Parameters
+
+| Parameter | Type     | Description                                                                                                                       |
+| :-------- | :------- | :-------------------------------------------------------------------------------------------------------------------------------- |
+| `client`  | `X`      | Clients are somethings like viem, that we are adding breadcrumbs to, and could be owning the transport. Usually a alchemy client. |
+| `crumb`   | `string` | The crumb to add to the breadcrumb                                                                                                |
+
+## Returns
+
+`X`
+
+The updated client

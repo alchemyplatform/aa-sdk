@@ -1,0 +1,29 @@
+---
+title: bigIntMultiply
+description: Overview of the bigIntMultiply function
+slug: wallets/reference/aa-sdk/core/src/functions/bigIntMultiply
+layout: reference
+---
+
+```ts
+function bigIntMultiply(base, multiplier, roundingMode): bigint;
+```
+
+Defined in: [aa-sdk/core/src/utils/bigint.ts:79](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/utils/bigint.ts#L79)
+
+Given a bigint and a number (which can be a float), returns the bigint value.
+Note: this function has loss and will round down to the nearest integer.
+
+## Parameters
+
+| Parameter      | Type                                               | Default value           | Description                                                                 |
+| :------------- | :------------------------------------------------- | :---------------------- | :-------------------------------------------------------------------------- |
+| `base`         | `BigNumberish`                                     | `undefined`             | the number to be multiplied                                                 |
+| `multiplier`   | `Multiplier`                                       | `undefined`             | the amount to multiply by                                                   |
+| `roundingMode` | [`RoundingMode`](../enumerations/RoundingMode.mdx) | `RoundingMode.ROUND_UP` | the rounding mode to use when calculating the percent. defaults to ROUND_UP |
+
+## Returns
+
+`bigint`
+
+the bigint value of the multiplication with the number rounded by the rounding mode

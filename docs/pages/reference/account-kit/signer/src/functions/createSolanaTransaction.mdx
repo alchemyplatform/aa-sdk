@@ -1,0 +1,32 @@
+---
+title: createSolanaTransaction
+description: Overview of the createSolanaTransaction function
+slug: wallets/reference/account-kit/signer/src/functions/createSolanaTransaction
+layout: reference
+---
+
+```ts
+function createSolanaTransaction(
+  instructions,
+  connection,
+  address,
+): Promise<VersionedTransaction>;
+```
+
+Defined in: [account-kit/signer/src/utils/solana.ts:82](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/utils/solana.ts#L82)
+
+Creates a regular (non-sponsored) Solana transaction from instructions
+
+## Parameters
+
+| Parameter      | Type                        | Description                                 |
+| :------------- | :-------------------------- | :------------------------------------------ |
+| `instructions` | `TransactionInstruction`\[] | The instructions to create transaction from |
+| `connection`   | `Connection`                | The connection to use                       |
+| `address`      | `string`                    | The payer address                           |
+
+## Returns
+
+`Promise`\<`VersionedTransaction`>
+
+- The transaction

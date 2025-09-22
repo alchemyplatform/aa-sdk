@@ -1,0 +1,62 @@
+---
+title: useClientActions
+description: Overview of the useClientActions function
+slug: wallets/reference/account-kit/react/src/functions/useClientActions
+layout: reference
+---
+
+```ts
+function useClientActions<TTransport, TChain, TActions>(
+  args,
+): UseClientActionsResult<TActions>;
+```
+
+Defined in: [account-kit/react/src/hooks/useClientActions.ts:111](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/react/src/hooks/useClientActions.ts#L111)
+
+A [hook](https://github.com/alchemyplatform/aa-sdk/blob/4c3956c01ce5ae3c157f006bf58fffde758e5d1b/account-kit/react/src/hooks/useClientActions.ts) that allows you to leverage client decorators to execute actions
+and await them in your UX. This is particularly useful for using Plugins
+with Modular Accounts.
+
+## Example
+
+```tsx twoslash
+import React from "react";
+import { useSmartAccountClient } from "@account-kit/react";
+import { sessionKeyPluginActions } from "@account-kit/smart-contracts";
+import { useClientActions } from "@account-kit/react";
+
+const Foo = () => {
+  const { client } = useSmartAccountClient({
+    type: "MultiOwnerModularAccount",
+  });
+  const { executeAction } = useClientActions({
+    client: client,
+    actions: sessionKeyPluginActions,
+  });
+
+  executeAction({
+    functionName: "isAccountSessionKey",
+    args: [{ key: "0x0" }],
+  });
+};
+```
+
+## Type Parameters
+
+| Type Parameter                     | Default type |
+| :--------------------------------- | :----------- | ----------- | ------- |
+| `TTransport` _extends_ `Transport` | `Transport`  |
+| `TChain` _extends_ `undefined`     | `Chain`      | `undefined` | `Chain` |
+| `TActions` _extends_ `object`      | `object`     |
+
+## Parameters
+
+| Parameter | Type                                                                                                      | Description                                                                                                                                           |
+| :-------- | :-------------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `args`    | [`UseClientActionsProps`](../type-aliases/UseClientActionsProps.mdx)\<`TTransport`, `TChain`, `TActions`> | the hooks arguments highlighted below. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useClientActions.ts#L10) |
+
+## Returns
+
+[`UseClientActionsResult`](../type-aliases/UseClientActionsResult.mdx)\<`TActions`>
+
+an object containing methods to execute the actions as well loading and error states [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useClientActions.ts#L21)

@@ -1,0 +1,59 @@
+---
+title: dropAndReplaceUserOperation
+description: Overview of the dropAndReplaceUserOperation function
+slug: wallets/reference/aa-sdk/core/src/functions/dropAndReplaceUserOperation
+layout: reference
+---
+
+```ts
+function dropAndReplaceUserOperation<
+  TTransport,
+  TChain,
+  TAccount,
+  TContext,
+  TEntryPointVersion,
+>(client_, args): Promise<SendUserOperationResult<TEntryPointVersion>>;
+```
+
+Defined in: [aa-sdk/core/src/actions/smartAccount/dropAndReplaceUserOperation.ts:50](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/actions/smartAccount/dropAndReplaceUserOperation.ts#L50)
+
+Drops an existing user operation and replaces it with a new one while ensuring the appropriate fees and overrides are applied.
+
+## Example
+
+```ts
+import {
+ createSmartAccountClient,
+} from "@aa-sdk/core";
+
+// smart account client is already extended with dropAndReplaceUserOperation
+const client = createSmartAccountClient(...);
+const { request } = await client.sendUserOperation(...);
+const result = await client.dropAndReplaceUserOperation({
+ uoToDrop: request,
+ account, // only required if the client above is not connected to an account
+});
+```
+
+## Type Parameters
+
+| Type Parameter                                                         | Default type                            |
+| :--------------------------------------------------------------------- | :-------------------------------------- | ----------- | ------- |
+| `TTransport` _extends_ `Transport`                                     | `Transport`                             |
+| `TChain` _extends_ `undefined`                                         | `Chain`                                 | `undefined` | `Chain` |
+| `TAccount` _extends_ `any`                                             | `any`                                   |
+| `TContext` _extends_ `any`                                             | `any`                                   |
+| `TEntryPointVersion` _extends_ `GetEntryPointFromAccount`\<`TAccount`> | `GetEntryPointFromAccount`\<`TAccount`> |
+
+## Parameters
+
+| Parameter | Type                                                             | Description                                                                                                                            |
+| :-------- | :--------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------- |
+| `client_` | `Client`\<`TTransport`, `TChain`, `TAccount`>                    | The client instance with the transport, chain, and account information                                                                 |
+| `args`    | `DropAndReplaceUserOperationParameters`\<`TAccount`, `TContext`> | The parameters required for dropping and replacing the user operation including the account, operation to drop, overrides, and context |
+
+## Returns
+
+`Promise`\<`SendUserOperationResult`\<`TEntryPointVersion`>>
+
+A promise that resolves to the result of sending the new user operation

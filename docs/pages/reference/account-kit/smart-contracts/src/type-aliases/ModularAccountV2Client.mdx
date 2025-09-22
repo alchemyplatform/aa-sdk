@@ -1,0 +1,23 @@
+---
+title: ModularAccountV2Client
+description: Overview of the ModularAccountV2Client 2097152
+slug: wallets/reference/account-kit/smart-contracts/src/type-aliases/ModularAccountV2Client
+layout: reference
+---
+
+```ts
+type ModularAccountV2Client<TSigner, TChain, TTransport> =
+  TTransport extends accountLoupeActions
+    ? accountLoupeActions<TChain, ModularAccountV2<TSigner>>
+    : SmartAccountClient<TTransport, TChain, ModularAccountV2<TSigner>>;
+```
+
+Defined in: [account-kit/smart-contracts/src/ma-v2/client/client.ts:33](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/ma-v2/client/client.ts#L33)
+
+## Type Parameters
+
+| Type Parameter                           | Default type         |
+| :--------------------------------------- | :------------------- | ---------------------------------------------------------------------------- | ----------- |
+| `TSigner` _extends_ `SmartAccountSigner` | `SmartAccountSigner` |
+| `TChain` _extends_ `Chain`               | `Chain`              |
+| `TTransport` _extends_                   | `Transport`          | [`accountLoupeActions`](../../../core/src/variables/accountLoupeActions.mdx) | `Transport` |

@@ -1,0 +1,36 @@
+---
+title: getUser
+description: Overview of the getUser function
+slug: wallets/reference/account-kit/core/src/functions/getUser
+layout: reference
+---
+
+```ts
+function getUser(config): null | (User & object);
+```
+
+Defined in: [account-kit/core/src/actions/getUser.ts:21](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/core/src/actions/getUser.ts#L21)
+
+Returns the currently logged in user if using an SCA with the AlchemySigner
+or the connected EOA details.
+
+## Example
+
+```ts
+import { getUser } from "@account-kit/core";
+import { config } from "./config";
+
+const user = getUser(config);
+```
+
+## Parameters
+
+| Parameter | Type                    | Description                             |
+| :-------- | :---------------------- | :-------------------------------------- |
+| `config`  | `AlchemyAccountsConfig` | the account config containing app state |
+
+## Returns
+
+`null` | `User` & `object`
+
+the user if the signer or an EOA are connected

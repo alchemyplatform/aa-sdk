@@ -1,0 +1,51 @@
+---
+title: asyncPipe
+description: Overview of the asyncPipe function
+slug: wallets/reference/aa-sdk/core/src/functions/asyncPipe
+layout: reference
+---
+
+```ts
+function asyncPipe<S, O, F>(...fns): (s, o?, f?) => Promise<S>;
+```
+
+Defined in: [aa-sdk/core/src/utils/index.ts:12](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/utils/index.ts#L12)
+
+Utility function that allows for piping a series of async functions together
+
+## Type Parameters
+
+| Type Parameter |
+| :------------- |
+| `S`            |
+| `O`            |
+| `F`            |
+
+## Parameters
+
+| Parameter | Type                                    | Description       |
+| :-------- | :-------------------------------------- | :---------------- |
+| ...`fns`  | (`s`, `o?`, `f?`) => `Promise`\<`S`>\[] | functions to pipe |
+
+## Returns
+
+result of the pipe
+
+```ts
+(
+   s,
+   o?,
+   f?): Promise<S>;
+```
+
+### Parameters
+
+| Parameter | Type |
+| :-------- | :--- |
+| `s`       | `S`  |
+| `o?`      | `O`  |
+| `f?`      | `F`  |
+
+### Returns
+
+`Promise`\<`S`>

@@ -1,0 +1,59 @@
+---
+title: alchemyGasAndPaymasterAndDataMiddleware
+description: Overview of the alchemyGasAndPaymasterAndDataMiddleware function
+slug: wallets/reference/account-kit/infra/src/exports/functions/alchemyGasAndPaymasterAndDataMiddleware
+layout: reference
+---
+
+```ts
+function alchemyGasAndPaymasterAndDataMiddleware(
+  params,
+): Pick<
+  ClientMiddlewareConfig,
+  "dummyPaymasterAndData" | "feeEstimator" | "gasEstimator" | "paymasterAndData"
+>;
+```
+
+Defined in: [account-kit/infra/src/middleware/gasManager.ts:178](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/infra/src/middleware/gasManager.ts#L178)
+
+Paymaster middleware factory that uses Alchemy's Gas Manager for sponsoring
+transactions. Uses Alchemy's custom `alchemy_requestGasAndPaymasterAndData`
+method instead of conforming to the standard ERC-7677 interface. Note that
+if you use `createAlchemySmartAccountClient`, this middleware is already
+used by default and you do not need to manually include it.
+
+## Example
+
+```ts twoslash
+import {
+  sepolia,
+  alchemy,
+  alchemyGasAndPaymasterAndDataMiddleware,
+} from "@account-kit/infra";
+import { createSmartAccountClient } from "@aa-sdk/core";
+
+const client = createSmartAccountClient({
+  transport: alchemy({ apiKey: "your-api-key" }),
+  chain: sepolia,
+  ...alchemyGasAndPaymasterAndDataMiddleware({
+    policyId: "policyId",
+    transport: alchemy({ apiKey: "your-api-key" }),
+  }),
+});
+```
+
+## Parameters
+
+| Parameter | Type                                            | Description          |
+| :-------- | :---------------------------------------------- | :------------------- |
+| `params`  | `AlchemyGasAndPaymasterAndDataMiddlewareParams` | configuration params |
+
+## Returns
+
+`Pick`\<`ClientMiddlewareConfig`,
+| `"dummyPaymasterAndData"`
+| `"feeEstimator"`
+| `"gasEstimator"`
+| `"paymasterAndData"`>
+
+partial client middleware configuration containing `dummyPaymasterAndData`, `feeEstimator`, `gasEstimator`, and `paymasterAndData`

@@ -1,0 +1,24 @@
+---
+title: MultiplierSchema
+description: Overview of the MultiplierSchema 32
+slug: wallets/reference/aa-sdk/core/src/variables/MultiplierSchema
+layout: reference
+---
+
+```ts
+const MultiplierSchema: ZodObject<
+  {
+    multiplier: ZodEffects<ZodNumber, number, number>;
+  },
+  "strict",
+  ZodTypeAny,
+  {
+    multiplier: number;
+  },
+  {
+    multiplier: number;
+  }
+>;
+```
+
+Defined in: [aa-sdk/core/src/utils/schema.ts:31](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/utils/schema.ts#L31)

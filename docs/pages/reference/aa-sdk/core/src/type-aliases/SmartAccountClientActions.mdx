@@ -1,0 +1,23 @@
+---
+title: SmartAccountClientActions
+description: Overview of the SmartAccountClientActions 2097152
+slug: wallets/reference/aa-sdk/core/src/type-aliases/SmartAccountClientActions
+layout: reference
+---
+
+```ts
+type SmartAccountClientActions<chain, account, context> =
+  BaseSmartAccountClientActions<chain, account, context> &
+    BundlerActions &
+    PublicActions;
+```
+
+Defined in: [aa-sdk/core/src/client/smartAccountClient.ts:76](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/client/smartAccountClient.ts#L76)
+
+## Type Parameters
+
+| Type Parameter                                                         | Default type |
+| :--------------------------------------------------------------------- | :----------- | -------------------------------------------------- | ----------- |
+| `chain` _extends_ `Chain`                                              | `undefined`  | `Chain`                                            | `undefined` |
+| `account` _extends_ [`SmartContractAccount`](SmartContractAccount.mdx) | `undefined`  | [`SmartContractAccount`](SmartContractAccount.mdx) | `undefined` |
+| `context` _extends_ [`UserOperationContext`](UserOperationContext.mdx) | `undefined`  | [`UserOperationContext`](UserOperationContext.mdx) | `undefined` |

@@ -1,0 +1,40 @@
+---
+title: SessionKeyPluginActions
+description: Overview of the SessionKeyPluginActions 2097152
+slug: wallets/reference/account-kit/smart-contracts/src/type-aliases/SessionKeyPluginActions
+layout: reference
+---
+
+```ts
+type SessionKeyPluginActions<TAccount, TEntryPointVersion> = Omit<
+  SessionKeyPluginActions_<TAccount>,
+  | "removeSessionKey"
+  | "addSessionKey"
+  | "rotateSessionKey"
+  | "updateKeyPermissions"
+> &
+  object &
+  IsUndefined<TAccount> extends false
+  ? object
+  : object;
+```
+
+Defined in: [account-kit/smart-contracts/src/msca/plugins/session-key/extension.ts:23](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/msca/plugins/session-key/extension.ts#L23)
+
+## Type Declaration
+
+| Name                            | Type                                                                                                        | Defined in                                                                                                                                                                                                                                    |
+| :------------------------------ | :---------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `addSessionKey()`               | (`args`) => `Promise`\<`SendUserOperationResult`\<`TEntryPointVersion`>>                                    | [account-kit/smart-contracts/src/msca/plugins/session-key/extension.ts:51](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/msca/plugins/session-key/extension.ts#L51) |
+| `getAccountSessionKeys()`       | (`args`) => `Promise`\<`ReadonlyArray`\<[`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx)>> | [account-kit/smart-contracts/src/msca/plugins/session-key/extension.ts:41](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/msca/plugins/session-key/extension.ts#L41) |
+| `isAccountSessionKey()`         | (`args`) => `Promise`\<`boolean`>                                                                           | [account-kit/smart-contracts/src/msca/plugins/session-key/extension.ts:36](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/msca/plugins/session-key/extension.ts#L36) |
+| `removeSessionKey()`            | (`args`) => `Promise`\<`SendUserOperationResult`\<`TEntryPointVersion`>>                                    | [account-kit/smart-contracts/src/msca/plugins/session-key/extension.ts:45](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/msca/plugins/session-key/extension.ts#L45) |
+| `rotateSessionKey()`            | (`args`) => `Promise`\<`SendUserOperationResult`\<`TEntryPointVersion`>>                                    | [account-kit/smart-contracts/src/msca/plugins/session-key/extension.ts:61](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/msca/plugins/session-key/extension.ts#L61) |
+| `updateSessionKeyPermissions()` | (`args`) => `Promise`\<`SendUserOperationResult`\<`TEntryPointVersion`>>                                    | [account-kit/smart-contracts/src/msca/plugins/session-key/extension.ts:70](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/msca/plugins/session-key/extension.ts#L70) |
+
+## Type Parameters
+
+| Type Parameter                                                         | Default type                            |
+| :--------------------------------------------------------------------- | :-------------------------------------- | ---------------------- | ----------- |
+| `TAccount` _extends_ `SmartContractAccount`                            | `undefined`                             | `SmartContractAccount` | `undefined` |
+| `TEntryPointVersion` _extends_ `GetEntryPointFromAccount`\<`TAccount`> | `GetEntryPointFromAccount`\<`TAccount`> |

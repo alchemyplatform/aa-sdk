@@ -1,0 +1,26 @@
+---
+title: predictLightAccountAddress
+description: Overview of the predictLightAccountAddress function
+slug: wallets/reference/account-kit/smart-contracts/src/functions/predictLightAccountAddress
+layout: reference
+---
+
+```ts
+function predictLightAccountAddress(params): `0x${string}`;
+```
+
+Defined in: [account-kit/smart-contracts/src/light-account/accounts/predictAddress.ts:29](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/light-account/accounts/predictAddress.ts#L29)
+
+Predicts the address of a light account based on provided parameters such as factory address, salt, owner address, and version.
+
+## Parameters
+
+| Parameter | Type                               | Description                                                                                                               |
+| :-------- | :--------------------------------- | :------------------------------------------------------------------------------------------------------------------------ |
+| `params`  | `PredictLightAccountAddressParams` | The parameters required to predict the light account address, including factory address, salt, owner address, and version |
+
+## Returns
+
+`` `0x${string}` ``
+
+The predicted address of the light account calculated based on the provided parameters

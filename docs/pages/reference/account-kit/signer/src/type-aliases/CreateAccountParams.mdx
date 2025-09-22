@@ -1,0 +1,112 @@
+---
+title: CreateAccountParams
+description: Overview of the CreateAccountParams 2097152
+slug: wallets/reference/account-kit/signer/src/type-aliases/CreateAccountParams
+layout: reference
+---
+
+```ts
+type CreateAccountParams =
+  | {
+      email: string;
+      emailMode?: EmailType;
+      expirationSeconds?: number;
+      redirectParams?: URLSearchParams;
+      type: "email";
+    }
+  | {
+      phone: string;
+      type: "sms";
+    }
+  | {
+      creationOpts?: CredentialCreationOptionOverrides;
+      email: string;
+      type: "passkey";
+    }
+  | {
+      creationOpts?: CredentialCreationOptionOverrides;
+      type: "passkey";
+      username: string;
+    }
+  | {
+      accountId?: string;
+      publicKey: string;
+      type: "accessKey";
+    };
+```
+
+Defined in: [account-kit/signer/src/client/types.ts:45](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/client/types.ts#L45)
+
+## Type Declaration
+
+```ts
+{
+  email: string;
+  emailMode?: EmailType;
+  expirationSeconds?: number;
+  redirectParams?: URLSearchParams;
+  type: "email";
+}
+```
+
+| Name                 | Type                         | Description                                                                                                                                                     | Defined in                                                                                                                                                                      |
+| :------------------- | :--------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `email`              | `string`                     | -                                                                                                                                                               | [account-kit/signer/src/client/types.ts:48](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/client/types.ts#L48) |
+| `emailMode?`         | [`EmailType`](EmailType.mdx) | **Deprecated** This option will be overriden by dashboard settings. Please use the dashboard settings instead. This option will be removed in a future release. | [account-kit/signer/src/client/types.ts:50](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/client/types.ts#L50) |
+| `expirationSeconds?` | `number`                     | -                                                                                                                                                               | [account-kit/signer/src/client/types.ts:51](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/client/types.ts#L51) |
+| `redirectParams?`    | `URLSearchParams`            | -                                                                                                                                                               | [account-kit/signer/src/client/types.ts:52](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/client/types.ts#L52) |
+| `type`               | `"email"`                    | -                                                                                                                                                               | [account-kit/signer/src/client/types.ts:47](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/client/types.ts#L47) |
+
+```ts
+{
+  phone: string;
+  type: "sms";
+}
+```
+
+| Name    | Type     | Defined in                                                                                                                                                                      |
+| :------ | :------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `phone` | `string` | [account-kit/signer/src/client/types.ts:56](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/client/types.ts#L56) |
+| `type`  | `"sms"`  | [account-kit/signer/src/client/types.ts:55](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/client/types.ts#L55) |
+
+```ts
+{
+  creationOpts?: CredentialCreationOptionOverrides;
+  email: string;
+  type: "passkey";
+}
+```
+
+| Name            | Type                                                                         | Defined in                                                                                                                                                                      |
+| :-------------- | :--------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `creationOpts?` | [`CredentialCreationOptionOverrides`](CredentialCreationOptionOverrides.mdx) | [account-kit/signer/src/client/types.ts:61](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/client/types.ts#L61) |
+| `email`         | `string`                                                                     | [account-kit/signer/src/client/types.ts:60](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/client/types.ts#L60) |
+| `type`          | `"passkey"`                                                                  | [account-kit/signer/src/client/types.ts:59](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/client/types.ts#L59) |
+
+```ts
+{
+  creationOpts?: CredentialCreationOptionOverrides;
+  type: "passkey";
+  username: string;
+}
+```
+
+| Name            | Type                                                                         | Defined in                                                                                                                                                                      |
+| :-------------- | :--------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `creationOpts?` | [`CredentialCreationOptionOverrides`](CredentialCreationOptionOverrides.mdx) | [account-kit/signer/src/client/types.ts:66](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/client/types.ts#L66) |
+| `type`          | `"passkey"`                                                                  | [account-kit/signer/src/client/types.ts:64](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/client/types.ts#L64) |
+| `username`      | `string`                                                                     | [account-kit/signer/src/client/types.ts:65](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/client/types.ts#L65) |
+
+```ts
+{
+  accountId?: string;
+  publicKey: string;
+  type: "accessKey";
+}
+```
+
+| Name         | Type          | Defined in                                                                                                                                                                      |
+| :----------- | :------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `accountId?` | `string`      | [account-kit/signer/src/client/types.ts:71](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/client/types.ts#L71) |
+| `publicKey`  | `string`      | [account-kit/signer/src/client/types.ts:70](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/client/types.ts#L70) |
+| `type`       | `"accessKey"` | [account-kit/signer/src/client/types.ts:69](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/client/types.ts#L69) |

@@ -1,0 +1,46 @@
+---
+title: pluginManagerActions
+description: Overview of the pluginManagerActions function
+slug: wallets/reference/account-kit/smart-contracts/src/functions/pluginManagerActions
+layout: reference
+---
+
+```ts
+function pluginManagerActions<TTransport, TChain, TAccount>(
+  client,
+): PluginManagerActions<TAccount>;
+```
+
+Defined in: [account-kit/smart-contracts/src/msca/plugin-manager/decorator.ts:46](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/msca/plugin-manager/decorator.ts#L46)
+
+Provides actions for managing plugins on a given client, including installing and uninstalling plugins.
+NOTE: this is provided by default when using a modular account client
+
+## Example
+
+```ts
+import { pluginManagerActions } from "@account-kit/smart-contracts";
+import { createSmartAccountClient } from "@aa-sdk/core";
+
+const client = createSmartAccountClient(...).extend(pluginManagerActions);
+```
+
+## Type Parameters
+
+| Type Parameter                     | Default type           |
+| :--------------------------------- | :--------------------- | ----------- | ---------------------- |
+| `TTransport` _extends_ `Transport` | `Transport`            |
+| `TChain` _extends_ `undefined`     | `Chain`                | `undefined` | `Chain`                |
+| `TAccount` _extends_ `undefined`   | `SmartContractAccount` | `undefined` | `SmartContractAccount` |
+
+## Parameters
+
+| Parameter | Type                                          | Description                                    |
+| :-------- | :-------------------------------------------- | :--------------------------------------------- |
+| `client`  | `Client`\<`TTransport`, `TChain`, `TAccount`> | The client instance on which to manage plugins |
+
+## Returns
+
+[`PluginManagerActions`](../type-aliases/PluginManagerActions.mdx)\<`TAccount`>
+
+An object containing functions to install and uninstall plugins

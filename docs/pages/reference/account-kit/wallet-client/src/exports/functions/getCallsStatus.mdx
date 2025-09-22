@@ -1,0 +1,58 @@
+---
+title: getCallsStatus
+description: Overview of the getCallsStatus function
+slug: wallets/reference/account-kit/wallet-client/src/exports/functions/getCallsStatus
+layout: reference
+---
+
+```ts
+function getCallsStatus(
+  client,
+  params,
+): Promise<{
+  atomic: boolean;
+  chainId: `0x${string}`;
+  id: `0x${string}`;
+  receipts?: object[];
+  status: 100 | 200 | 400 | 500 | 600;
+}>;
+```
+
+Defined in: [account-kit/wallet-client/src/client/actions/getCallsStatus.ts:35](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/wallet-client/src/client/actions/getCallsStatus.ts#L35)
+
+Gets the status of a prepared call by its ID.
+This method is used to check the execution status of calls sent via sendPreparedCalls.
+
+## Example
+
+```ts
+// After sending prepared calls
+const sendResult = await client.sendPreparedCalls({...});
+
+// Check the status of the first call ID
+const status = await client.getCallsStatus(sendResult.preparedCallIds[0]);
+```
+
+## Parameters
+
+| Parameter | Type                   | Description                                  |
+| :-------- | :--------------------- | :------------------------------------------- |
+| `client`  | `InnerWalletApiClient` | The wallet API client to use for the request |
+| `params`  | `` `0x${string}` ``    | The ID of the prepared call to check         |
+
+## Returns
+
+`Promise`\<\{
+`atomic`: `boolean`;
+`chainId`: `` `0x${string}` ``;
+`id`: `` `0x${string}` ``;
+`receipts?`: `object`\[];
+`status`: `100` | `200` | `400` | `500` | `600`;
+}>
+
+A Promise that resolves to the status information including:
+
+- id: The hex ID of the call
+- chainId: The chain ID in hex format
+- status: The current status of the batch execution
+- receipts: Optional array of transaction receipts if the batch has been executed

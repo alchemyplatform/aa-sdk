@@ -1,0 +1,40 @@
+---
+title: useAddOauthProvider
+description: Overview of the useAddOauthProvider function
+slug: wallets/reference/account-kit/react/src/functions/useAddOauthProvider
+layout: reference
+---
+
+```ts
+function useAddOauthProvider(mutationArgs?): UseAddOauthProviderResult;
+```
+
+Defined in: [account-kit/react/src/hooks/useAddOauthProvider.ts:61](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/react/src/hooks/useAddOauthProvider.ts#L61)
+
+A custom hook to handle adding an OAuth provider to an already authenticated account, which includes executing a mutation with optional parameters.
+
+## Example
+
+```ts twoslash
+import { useAddOauthProvider } from "@account-kit/react";
+
+const { addOauthProvider, isAddingOauthProvider, error } = useAddOauthProvider({
+  // these are optional
+  onSuccess: () => {
+    // do something on success
+  },
+  onError: (error) => console.error(error),
+});
+```
+
+## Parameters
+
+| Parameter       | Type                                                                                                                                                                       | Description       |
+| :-------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------------- | ---------------------------------------------------------------------- |
+| `mutationArgs?` | `Partial`\<`Omit`\<`UseMutationOptions`\<`OauthProviderInfo`, `Error`, `Omit`\<`object` & OauthProviderConfig & OauthRedirectConfig, `"type"`>, `unknown`>, `"mutationFn"` | `"mutationKey"`>> | Optional arguments for the mutation used for adding an OAuth provider. |
+
+## Returns
+
+[`UseAddOauthProviderResult`](../type-aliases/UseAddOauthProviderResult.mdx)
+
+An object containing the `addOauthProvider` function, `addOauthProviderAsync` for async execution, a boolean `isAddingOauthProvider` to track the mutation status, and any error encountered.

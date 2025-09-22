@@ -1,0 +1,44 @@
+---
+title: useAuthModal
+description: Overview of the useAuthModal function
+slug: wallets/reference/account-kit/react/src/functions/useAuthModal
+layout: reference
+---
+
+```ts
+function useAuthModal(): object;
+```
+
+Defined in: [account-kit/react/src/hooks/useAuthModal.ts:31](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/react/src/hooks/useAuthModal.ts#L31)
+
+A [hook](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useAuthModal.ts) that returns the open and close functions for the Auth Modal if uiConfig
+is enabled on the Account Provider
+
+## Example
+
+```tsx twoslash
+import React from "react";
+import { useAuthModal } from "@account-kit/react";
+
+const ComponentWithAuthModal = () => {
+  const { openAuthModal } = useAuthModal();
+
+  return (
+    <div>
+      <button onClick={openAuthModal}>Login</button>
+    </div>
+  );
+};
+```
+
+## Returns
+
+`object`
+
+an object containing methods for opening or closing the auth modal. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useAuthModal.ts#L4)
+
+| Name               | Type         | Defined in                                                                                                                                                                                |
+| :----------------- | :----------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `closeAuthModal()` | () => `void` | [account-kit/react/src/hooks/useAuthModal.ts:44](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/react/src/hooks/useAuthModal.ts#L44) |
+| `isOpen`           | `boolean`    | [account-kit/react/src/hooks/useAuthModal.ts:42](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/react/src/hooks/useAuthModal.ts#L42) |
+| `openAuthModal()`  | () => `void` | [account-kit/react/src/hooks/useAuthModal.ts:43](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/react/src/hooks/useAuthModal.ts#L43) |

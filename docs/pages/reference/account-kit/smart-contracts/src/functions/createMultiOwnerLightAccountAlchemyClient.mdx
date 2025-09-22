@@ -1,0 +1,38 @@
+---
+title: createMultiOwnerLightAccountAlchemyClient
+description: Creates a multi-owner light account Alchemy client using the provided configuration.
+slug: wallets/reference/account-kit/smart-contracts/src/functions/createMultiOwnerLightAccountAlchemyClient
+layout: reference
+---
+
+```ts
+function createMultiOwnerLightAccountAlchemyClient<TSigner>(
+  params,
+): Promise<
+  AlchemySmartAccountClient<
+    undefined | Chain,
+    MultiOwnerLightAccount<TSigner>,
+    MultiOwnerLightAccountClientActions<TSigner>
+  >
+>;
+```
+
+Defined in: [account-kit/smart-contracts/src/light-account/clients/multiOwnerAlchemyClient.ts:25](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/light-account/clients/multiOwnerAlchemyClient.ts#L25)
+
+## Type Parameters
+
+| Type Parameter                                   | Default type                 |
+| :----------------------------------------------- | :--------------------------- |
+| `TSigner` _extends_ `SmartAccountSigner`\<`any`> | `SmartAccountSigner`\<`any`> |
+
+## Parameters
+
+| Parameter | Type                                                                                                                     |
+| :-------- | :----------------------------------------------------------------------------------------------------------------------- |
+| `params`  | [`AlchemyMultiOwnerLightAccountClientConfig`](../type-aliases/AlchemyMultiOwnerLightAccountClientConfig.mdx)\<`TSigner`> |
+
+## Returns
+
+`Promise`\<`AlchemySmartAccountClient`\<`undefined` | `Chain`, `MultiOwnerLightAccount`\<`TSigner`>, `MultiOwnerLightAccountClientActions`\<`TSigner`>>>
+
+A promise that resolves to an `AlchemySmartAccountClient` object containing the created account information and methods

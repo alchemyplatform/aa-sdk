@@ -1,0 +1,32 @@
+---
+title: createBundlerClient
+description: Creates a Bundler Client using the provided configuration parameters, including chain and optional type.
+slug: wallets/reference/aa-sdk/core/src/functions/createBundlerClient
+layout: reference
+---
+
+```ts
+function createBundlerClient<TTransport>(args): BundlerClient<TTransport>;
+```
+
+Defined in: [aa-sdk/core/src/client/bundlerClient.ts:64](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/client/bundlerClient.ts#L64)
+
+Creates a PublicClient with methods for calling Bundler RPC methods
+
+## Type Parameters
+
+| Type Parameter                     |
+| :--------------------------------- |
+| `TTransport` _extends_ `Transport` |
+
+## Parameters
+
+| Parameter | Type                | Description                  |
+| :-------- | :------------------ | :--------------------------- |
+| `args`    | `object` & `object` | configuration for the client |
+
+## Returns
+
+[`BundlerClient`](../type-aliases/BundlerClient.mdx)\<`TTransport`>
+
+a PublicClient with methods for calling Bundler RPC methods

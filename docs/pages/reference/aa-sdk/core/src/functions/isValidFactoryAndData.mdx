@@ -1,0 +1,32 @@
+---
+title: isValidFactoryAndData
+description: Overview of the isValidFactoryAndData function
+slug: wallets/reference/aa-sdk/core/src/functions/isValidFactoryAndData
+layout: reference
+---
+
+```ts
+function isValidFactoryAndData<TEntryPointVersion>(request): boolean;
+```
+
+Defined in: [aa-sdk/core/src/utils/userop.ts:67](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/utils/userop.ts#L67)
+
+Utility method for asserting a UserOperationStruct has valid fields for the paymaster data
+
+## Type Parameters
+
+| Type Parameter                                     | Default type        |
+| :------------------------------------------------- | :------------------ |
+| `TEntryPointVersion` _extends_ `EntryPointVersion` | `EntryPointVersion` |
+
+## Parameters
+
+| Parameter | Type                                         | Description                        |
+| :-------- | :------------------------------------------- | :--------------------------------- |
+| `request` | `UserOperationStruct`\<`TEntryPointVersion`> | a UserOperationRequest to validate |
+
+## Returns
+
+`boolean`
+
+a type guard that asserts the UserOperationStruct is a UserOperationRequest

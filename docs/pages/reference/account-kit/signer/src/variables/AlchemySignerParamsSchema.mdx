@@ -1,0 +1,96 @@
+---
+title: AlchemySignerParamsSchema
+description: Overview of the AlchemySignerParamsSchema 32
+slug: wallets/reference/account-kit/signer/src/variables/AlchemySignerParamsSchema
+layout: reference
+---
+
+```ts
+const AlchemySignerParamsSchema: ZodObject<
+  object & object,
+  "strip",
+  ZodTypeAny,
+  {
+    client:
+      | AlchemySignerWebClient
+      | {
+          connection:
+            | {
+                apiKey: string;
+                jwt?: undefined;
+                rpcUrl?: undefined;
+              }
+            | {
+                apiKey?: undefined;
+                jwt: string;
+                rpcUrl?: undefined;
+              }
+            | {
+                apiKey?: undefined;
+                jwt?: undefined;
+                rpcUrl: string;
+              }
+            | ({
+                apiKey?: undefined;
+                jwt: string;
+                rpcUrl: string;
+              } & object);
+          enablePopupOauth: boolean;
+          iframeConfig: {
+            iframeContainerId: string;
+            iframeElementId: string;
+          };
+          oauthCallbackUrl: string;
+          rootOrgId: string;
+          rpId?: string;
+        };
+    sessionConfig?: {
+      expirationTimeMs: number;
+      sessionKey: string;
+      storage: "localStorage" | "sessionStorage" | Storage;
+    };
+  },
+  {
+    client:
+      | AlchemySignerWebClient
+      | {
+          connection:
+            | {
+                apiKey: string;
+                jwt?: undefined;
+                rpcUrl?: undefined;
+              }
+            | {
+                apiKey?: undefined;
+                jwt: string;
+                rpcUrl?: undefined;
+              }
+            | {
+                apiKey?: undefined;
+                jwt?: undefined;
+                rpcUrl: string;
+              }
+            | ({
+                apiKey?: undefined;
+                jwt: string;
+                rpcUrl: string;
+              } & object);
+          enablePopupOauth?: boolean;
+          iframeConfig: {
+            iframeContainerId: string;
+            iframeElementId?: string;
+          };
+          oauthCallbackUrl?: string;
+          rootOrgId?: string;
+          rpId?: string;
+        };
+    sessionConfig?: {
+      expirationTimeMs?: number;
+      sessionKey?: string;
+      storage?: "localStorage" | "sessionStorage" | Storage;
+    };
+  }
+>;
+```
+
+Defined in: [account-kit/signer/src/signer.ts:105](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/signer.ts#L105)

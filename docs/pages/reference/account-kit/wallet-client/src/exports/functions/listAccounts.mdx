@@ -1,0 +1,61 @@
+---
+title: listAccounts
+description: Overview of the listAccounts function
+slug: wallets/reference/account-kit/wallet-client/src/exports/functions/listAccounts
+layout: reference
+---
+
+```ts
+function listAccounts(
+  client,
+  signer,
+  params,
+): Promise<{
+  accounts: object[];
+  meta: {
+    after: null | string;
+    totalCount: number;
+  };
+}>;
+```
+
+Defined in: [account-kit/wallet-client/src/client/actions/listAccounts.ts:44](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/wallet-client/src/client/actions/listAccounts.ts#L44)
+
+Lists all smart accounts for a given signer using the wallet API client.
+
+## Example
+
+```ts
+// Fetch the first page of accounts
+const firstPage = await client.listAccounts({
+  signerAddress: "0x123...",
+  limit: 10,
+});
+
+// If an 'after' cursor exists, use it to fetch the next page
+const nextPage = await client.listAccounts({
+  signerAddress: "0x123...",
+  limit: 10,
+  after: firstPage.meta.after,
+});
+```
+
+## Parameters
+
+| Parameter | Type                   | Description                                  |
+| :-------- | :--------------------- | :------------------------------------------- |
+| `client`  | `InnerWalletApiClient` | The wallet API client to use for the request |
+| `signer`  | `SmartAccountSigner`   | The signer for which to list accounts        |
+| `params`  | `ListAccountsParams`   | Parameters for listing accounts              |
+
+## Returns
+
+`Promise`\<\{
+`accounts`: `object`\[];
+`meta`: \{
+`after`: `null` | `string`;
+`totalCount`: `number`;
+};
+}>
+
+A Promise that resolves to the list of accounts and pagination metadata

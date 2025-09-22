@@ -1,0 +1,26 @@
+---
+title: SmartWalletClientParams
+description: Overview of the SmartWalletClientParams 2097152
+slug: wallets/reference/account-kit/wallet-client/src/exports/type-aliases/SmartWalletClientParams
+layout: reference
+---
+
+```ts
+type SmartWalletClientParams<TAccount> = Prettify<object &
+  | {
+  policyId?: string;
+  policyIds?: never;
+}
+  | {
+  policyId?: never;
+  policyIds?: string[];
+}>;
+```
+
+Defined in: [account-kit/wallet-client/src/client/index.ts:20](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/wallet-client/src/client/index.ts#L20)
+
+## Type Parameters
+
+| Type Parameter       | Default type                                                         |
+| :------------------- | :------------------------------------------------------------------- | ----------- | --- | -------------------------------------------------------------------- | ----------- |
+| `TAccount` _extends_ | [`Address`](../../../../../aa-sdk/core/src/type-aliases/Address.mdx) | `undefined` |     | [`Address`](../../../../../aa-sdk/core/src/type-aliases/Address.mdx) | `undefined` |

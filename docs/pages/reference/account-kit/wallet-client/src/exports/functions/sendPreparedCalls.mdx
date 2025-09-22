@@ -1,0 +1,61 @@
+---
+title: sendPreparedCalls
+description: Overview of the sendPreparedCalls function
+slug: wallets/reference/account-kit/wallet-client/src/exports/functions/sendPreparedCalls
+layout: reference
+---
+
+```ts
+function sendPreparedCalls(
+  client,
+  params,
+): Promise<{
+  preparedCallIds: `0x${string}`[];
+}>;
+```
+
+Defined in: [account-kit/wallet-client/src/client/actions/sendPreparedCalls.ts:48](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/wallet-client/src/client/actions/sendPreparedCalls.ts#L48)
+
+Sends prepared calls by submitting a signed user operation.
+This method is used after signing the signature request returned from prepareCalls.
+
+## Example
+
+```ts
+// First prepare the calls
+const preparedCalls = await client.prepareCalls({
+  calls: [
+    {
+      to: "0x1234...",
+      data: "0xabcdef...",
+      value: "0x0",
+    },
+  ],
+  capabilities: {
+    paymasterService: { policyId: "your-policy-id" },
+  },
+});
+
+// Then sign the calls
+const signedCalls = await client.signPreparedCalls(preparedCalls);
+
+// Then send the prepared calls with the signature
+const result = await client.sendPreparedCalls({
+  signedCalls,
+});
+```
+
+## Parameters
+
+| Parameter | Type                      | Description                                  |
+| :-------- | :------------------------ | :------------------------------------------- |
+| `client`  | `InnerWalletApiClient`    | The wallet API client to use for the request |
+| `params`  | `SendPreparedCallsParams` | Parameters for sending prepared calls        |
+
+## Returns
+
+`Promise`\<\{
+`preparedCallIds`: `` `0x${string}` ``\[];
+}>
+
+A Promise that resolves to the result containing the prepared call IDs

@@ -1,0 +1,28 @@
+---
+title: buildDeferredActionDigest
+description: Overview of the buildDeferredActionDigest function
+slug: wallets/reference/account-kit/smart-contracts/src/functions/buildDeferredActionDigest
+layout: reference
+---
+
+```ts
+function buildDeferredActionDigest(args): `0x${string}`;
+```
+
+Defined in: [account-kit/smart-contracts/src/ma-v2/utils.ts:309](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/ma-v2/utils.ts#L309)
+
+Creates the digest which must be prepended to the userOp signature.
+
+Assumption: The client this extends is used to sign the typed data.
+
+## Parameters
+
+| Parameter | Type                                                                                     | Description                                   |
+| :-------- | :--------------------------------------------------------------------------------------- | :-------------------------------------------- |
+| `args`    | [`BuildDeferredActionDigestParams`](../type-aliases/BuildDeferredActionDigestParams.mdx) | The argument object containing the following: |
+
+## Returns
+
+`` `0x${string}` ``
+
+The encoded digest to be prepended to the userOp signature

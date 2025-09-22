@@ -1,0 +1,46 @@
+---
+title: multiOwnerPluginActions
+description: "Creates actions for the MultiOwner plugin, including reading owners and checking ownership. NOTE: this is already added to the client returned from createMultiOwnerModularAccountClient"
+slug: wallets/reference/account-kit/smart-contracts/src/variables/multiOwnerPluginActions
+layout: reference
+---
+
+```ts
+const multiOwnerPluginActions: <TTransport, TChain, TAccount>(
+  client,
+) => MultiOwnerPluginActions<TAccount>;
+```
+
+Defined in: [account-kit/smart-contracts/src/msca/plugins/multi-owner/extension.ts:51](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/msca/plugins/multi-owner/extension.ts#L51)
+
+Creates actions for the MultiOwner plugin, including reading owners and checking ownership.
+NOTE: this is already added to the client returned from createMultiOwnerModularAccountClient
+
+## Example
+
+```ts
+import { multiOwnerPluginActions } from "@account-kit/smart-contracts";
+import { createSmartAccountClient } from "@aa-sdk/core";
+
+const client = createSmartAccountClient(...).extend(multiOwnerPluginActions);
+```
+
+## Type Parameters
+
+| Type Parameter                              | Default type |
+| :------------------------------------------ | :----------- | ---------------------- | ----------- |
+| `TTransport` _extends_ `Transport`          | `Transport`  |
+| `TChain` _extends_ `Chain`                  | `undefined`  | `Chain`                | `undefined` |
+| `TAccount` _extends_ `SmartContractAccount` | `undefined`  | `SmartContractAccount` | `undefined` |
+
+## Parameters
+
+| Parameter | Type                                          | Description                                                                  |
+| :-------- | :-------------------------------------------- | :--------------------------------------------------------------------------- |
+| `client`  | `Client`\<`TTransport`, `TChain`, `TAccount`> | the client instance containing the transport, chain, and account information |
+
+## Returns
+
+[`MultiOwnerPluginActions`](../type-aliases/MultiOwnerPluginActions.mdx)\<`TAccount`>
+
+an object containing the actions for the MultiOwner plugin, such as `readOwners` and `isOwnerOf`

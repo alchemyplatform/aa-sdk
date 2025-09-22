@@ -1,0 +1,31 @@
+---
+title: LightAccount
+description: Overview of the LightAccount 2097152
+slug: wallets/reference/account-kit/smart-contracts/src/type-aliases/LightAccount
+layout: reference
+---
+
+```ts
+type LightAccount<TSigner, TLightAccountVersion> = LightAccountBase<
+  TSigner,
+  "LightAccount",
+  TLightAccountVersion
+> &
+  object;
+```
+
+Defined in: [account-kit/smart-contracts/src/light-account/accounts/account.ts:36](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/light-account/accounts/account.ts#L36)
+
+## Type Declaration
+
+| Name                        | Type                                                                                | Defined in                                                                                                                                                                                                                            |
+| :-------------------------- | :---------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `encodeTransferOwnership()` | (`newOwner`) => `Hex`                                                               | [account-kit/smart-contracts/src/light-account/accounts/account.ts:41](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/light-account/accounts/account.ts#L41) |
+| `getOwnerAddress()`         | () => `Promise`\<[`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx)> | [account-kit/smart-contracts/src/light-account/accounts/account.ts:42](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/light-account/accounts/account.ts#L42) |
+
+## Type Parameters
+
+| Type Parameter                                                                                       | Default type                                                        |
+| :--------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------ |
+| `TSigner` _extends_ `SmartAccountSigner`                                                             | `SmartAccountSigner`                                                |
+| `TLightAccountVersion` _extends_ [`LightAccountVersion`](LightAccountVersion.mdx)\<`"LightAccount"`> | [`LightAccountVersion`](LightAccountVersion.mdx)\<`"LightAccount"`> |

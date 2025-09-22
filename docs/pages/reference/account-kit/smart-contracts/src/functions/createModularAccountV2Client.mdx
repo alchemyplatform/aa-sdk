@@ -1,0 +1,120 @@
+---
+title: createModularAccountV2Client
+description: Creates a Modular Account V2 client using the provided configuration parameters.
+slug: wallets/reference/account-kit/smart-contracts/src/functions/createModularAccountV2Client
+layout: reference
+---
+
+Creates a Modular Account V2 client using the provided configuration parameters.
+
+## Example
+
+```ts twoslash
+import { createModularAccountV2Client } from "@account-kit/smart-contracts";
+import { LocalAccountSigner } from "@aa-sdk/core";
+import { alchemy, sepolia } from "@account-kit/infra";
+
+const MNEMONIC = "...";
+const RPC_URL = "...";
+
+const signer = LocalAccountSigner.mnemonicToAccountSigner(MNEMONIC);
+
+const chain = sepolia;
+
+const transport = alchemy({ rpcUrl: RPC_URL });
+
+const policyId = "...";
+
+const modularAccountV2Client = await createModularAccountV2Client({
+  chain,
+  signer,
+  transport,
+  policyId, // NOTE: you may only pass in a gas policy ID if you provide an Alchemy transport!
+});
+```
+
+## Param
+
+The configuration parameters required to create the Modular Account v2 account client
+
+## Call Signature
+
+```ts
+function createModularAccountV2Client<TChain, TSigner>(
+  args,
+): Promise<AlchemySmartAccountClient<TChain, ModularAccountV2<TSigner>>>;
+```
+
+Defined in: [account-kit/smart-contracts/src/ma-v2/client/client.ts:88](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/ma-v2/client/client.ts#L88)
+
+### Type Parameters
+
+| Type Parameter                                   | Default type                 |
+| :----------------------------------------------- | :--------------------------- |
+| `TChain` _extends_ `Chain`                       | `Chain`                      |
+| `TSigner` _extends_ `SmartAccountSigner`\<`any`> | `SmartAccountSigner`\<`any`> |
+
+### Parameters
+
+| Parameter | Type                                                                                                                                                   |
+| :-------- | :----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `args`    | [`CreateModularAccountV2AlchemyClientParams`](../type-aliases/CreateModularAccountV2AlchemyClientParams.mdx)\<`AlchemyTransport`, `TChain`, `TSigner`> |
+
+### Returns
+
+`Promise`\<`AlchemySmartAccountClient`\<`TChain`, [`ModularAccountV2`](../type-aliases/ModularAccountV2.mdx)\<`TSigner`>>>
+
+## Call Signature
+
+```ts
+function createModularAccountV2Client<TTransport, TChain, TSigner>(
+  args,
+): Promise<ModularAccountV2Client<TSigner, TChain, TTransport>>;
+```
+
+Defined in: [account-kit/smart-contracts/src/ma-v2/client/client.ts:99](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/ma-v2/client/client.ts#L99)
+
+### Type Parameters
+
+| Type Parameter                                   | Default type                 |
+| :----------------------------------------------- | :--------------------------- |
+| `TTransport` _extends_ `Transport`               | `Transport`                  |
+| `TChain` _extends_ `Chain`                       | `Chain`                      |
+| `TSigner` _extends_ `SmartAccountSigner`\<`any`> | `SmartAccountSigner`\<`any`> |
+
+### Parameters
+
+| Parameter | Type                                                                                                                               |
+| :-------- | :--------------------------------------------------------------------------------------------------------------------------------- |
+| `args`    | [`CreateModularAccountV2ClientParams`](../type-aliases/CreateModularAccountV2ClientParams.mdx)\<`TTransport`, `TChain`, `TSigner`> |
+
+### Returns
+
+`Promise`\<[`ModularAccountV2Client`](../type-aliases/ModularAccountV2Client.mdx)\<`TSigner`, `TChain`, `TTransport`>>
+
+## Call Signature
+
+```ts
+function createModularAccountV2Client<TTransport, TChain>(
+  args,
+): Promise<WebauthnModularAccountV2Client<TChain, TTransport>>;
+```
+
+Defined in: [account-kit/smart-contracts/src/ma-v2/client/client.ts:107](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/ma-v2/client/client.ts#L107)
+
+### Type Parameters
+
+| Type Parameter                     | Default type |
+| :--------------------------------- | :----------- |
+| `TTransport` _extends_ `Transport` | `Transport`  |
+| `TChain` _extends_ `Chain`         | `Chain`      |
+
+### Parameters
+
+| Parameter | Type                                                                                                                                    |
+| :-------- | :-------------------------------------------------------------------------------------------------------------------------------------- |
+| `args`    | [`CreateWebauthnModularAccountV2ClientParams`](../type-aliases/CreateWebauthnModularAccountV2ClientParams.mdx)\<`TTransport`, `TChain`> |
+
+### Returns
+
+`Promise`\<[`WebauthnModularAccountV2Client`](../type-aliases/WebauthnModularAccountV2Client.mdx)\<`TChain`, `TTransport`>>

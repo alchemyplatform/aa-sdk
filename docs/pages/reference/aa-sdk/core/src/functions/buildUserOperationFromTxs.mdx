@@ -1,0 +1,94 @@
+---
+title: buildUserOperationFromTxs
+description: Overview of the buildUserOperationFromTxs function
+slug: wallets/reference/aa-sdk/core/src/functions/buildUserOperationFromTxs
+layout: reference
+---
+
+```ts
+function buildUserOperationFromTxs<
+  TTransport,
+  TChain,
+  TAccount,
+  TEntryPointVersion,
+  TContext,
+>(
+  client_,
+  args,
+): Promise<BuildUserOperationFromTransactionsResult<TEntryPointVersion>>;
+```
+
+Defined in: [aa-sdk/core/src/actions/smartAccount/buildUserOperationFromTxs.ts:74](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/actions/smartAccount/buildUserOperationFromTxs.ts#L74)
+
+Performs `buildUserOperationFromTx` in batch and builds into a single,
+yet to be signed `UserOperation` (UO) struct. The output user operation struct
+will be filled with all gas fields (and paymaster data if a paymaster is used)
+based on the transactions data (`to`, `data`, `value`, `maxFeePerGas`,
+`maxPriorityFeePerGas`) computed using the configured ClientMiddlewares on the SmartAccountClient.
+
+## Example
+
+```ts
+import type { RpcTransactionRequest } from "viem";
+import { smartAccountClient } from "./smartAccountClient";
+
+const requests: RpcTransactionRequest[] = [
+  {
+    from, // ignored
+    to,
+    data: encodeFunctionData({
+      abi: ContractABI.abi,
+      functionName: "func",
+      args: [arg1, arg2, ...],
+    }),
+  },
+  {
+    from, // ignored
+    to,
+    data: encodeFunctionData({
+      abi: ContractABI.abi,
+      functionName: "func",
+      args: [arg1, arg2, ...],
+    }),
+  },
+];
+const uoStruct = await smartAccountClient.buildUserOperationFromTxs({
+  requests,
+});
+
+// signUserOperation signs the above unsigned user operation struct built
+// using the account connected to the smart account client
+const request = await smartAccountClient.signUserOperation({ uoStruct });
+
+// You can use the BundlerAction `sendRawUserOperation` (packages/core/src/actions/bundler/sendRawUserOperation.ts)
+// to send the signed user operation request to the bundler, requesting the bundler to send the signed uo to the
+// EntryPoint contract pointed at by the entryPoint address parameter
+const entryPointAddress = client.account.getEntryPoint().address;
+const uoHash = await smartAccountClient.sendRawUserOperation({
+  request,
+  entryPoint: entryPointAddress,
+});
+```
+
+## Type Parameters
+
+| Type Parameter                                                         | Default type                            |
+| :--------------------------------------------------------------------- | :-------------------------------------- | ----------- | ------- |
+| `TTransport` _extends_ `Transport`                                     | `Transport`                             |
+| `TChain` _extends_ `undefined`                                         | `Chain`                                 | `undefined` | `Chain` |
+| `TAccount` _extends_ `any`                                             | `any`                                   |
+| `TEntryPointVersion` _extends_ `GetEntryPointFromAccount`\<`TAccount`> | `GetEntryPointFromAccount`\<`TAccount`> |
+| `TContext` _extends_ `any`                                             | `any`                                   |
+
+## Parameters
+
+| Parameter | Type                                                                        | Description                                                                                                                                                                                    |
+| :-------- | :-------------------------------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `client_` | `Client`\<`TTransport`, `TChain`, `TAccount`>                               | the smart account client to use to make RPC calls                                                                                                                                              |
+| `args`    | `BuildTransactionParameters`\<`TAccount`, `TContext`, `TEntryPointVersion`> | an object containing the requests to build as well as, the account if not hoisted, the context, the overrides, and optionally a flag to enable signing of the UO via the underlying middleware |
+
+## Returns
+
+`Promise`\<`BuildUserOperationFromTransactionsResult`\<`TEntryPointVersion`>>
+
+a Promise containing the built user operation

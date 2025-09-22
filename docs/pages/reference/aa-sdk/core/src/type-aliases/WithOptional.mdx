@@ -1,0 +1,19 @@
+---
+title: WithOptional
+description: Overview of the WithOptional 2097152
+slug: wallets/reference/aa-sdk/core/src/type-aliases/WithOptional
+layout: reference
+---
+
+```ts
+type WithOptional<T, K> = Pick<Partial<T>, K>;
+```
+
+Defined in: [aa-sdk/core/src/utils/types.ts:46](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/utils/types.ts#L46)
+
+## Type Parameters
+
+| Type Parameter          |
+| :---------------------- |
+| `T`                     |
+| `K` _extends_ keyof `T` |

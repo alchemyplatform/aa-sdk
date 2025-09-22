@@ -1,0 +1,795 @@
+---
+title: AlchemyWebSigner
+description: A SmartAccountSigner that can be used with any SmartContractAccount
+slug: wallets/reference/account-kit/signer/src/classes/AlchemyWebSigner
+layout: reference
+---
+
+Defined in: [account-kit/signer/src/signer.ts:122](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/signer.ts#L122)
+
+A SmartAccountSigner that can be used with any SmartContractAccount
+
+## Extends
+
+- [`BaseAlchemySigner`](BaseAlchemySigner.mdx)\<[`AlchemySignerWebClient`](AlchemySignerWebClient.mdx)>
+
+## Constructors
+
+### Constructor
+
+```ts
+new AlchemyWebSigner(params): AlchemyWebSigner;
+```
+
+Defined in: [account-kit/signer/src/signer.ts:146](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/signer.ts#L146)
+
+Initializes an instance with the provided Alchemy signer parameters after parsing them with a schema.
+
+#### Example
+
+```ts
+import { AlchemyWebSigner } from "@account-kit/signer";
+
+const signer = new AlchemyWebSigner({
+  client: {
+    connection: {
+      rpcUrl: "/api/rpc",
+    },
+    iframeConfig: {
+      iframeContainerId: "alchemy-signer-iframe-container",
+    },
+  },
+});
+```
+
+#### Parameters
+
+| Parameter                                | Type                                                                                    | Description                                            |
+| :--------------------------------------- | :-------------------------------------------------------------------------------------- | :----------------------------------------------------- | ---------------- | --------------------------------------------------------------------- | --------------------------------------------------------------------- | --------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | --------------- | ------------------------------------------------------------------------------------- |
+| `params`                                 | \{ `client`:                                                                            | [`AlchemySignerWebClient`](AlchemySignerWebClient.mdx) | \{ `connection`: | \{ `apiKey`: `string`; `jwt?`: `undefined`; `rpcUrl?`: `undefined`; } | \{ `apiKey?`: `undefined`; `jwt`: `string`; `rpcUrl?`: `undefined`; } | \{ `apiKey?`: `undefined`; `jwt?`: `undefined`; `rpcUrl`: `string`; } | \{ `apiKey?`: `undefined`; `jwt`: `string`; `rpcUrl`: `string`; } & `object`; `enablePopupOauth?`: `boolean`; `iframeConfig`: \{ `iframeContainerId`: `string`; `iframeElementId?`: `string`; }; `oauthCallbackUrl?`: `string`; `rootOrgId?`: `string`; `rpId?`: `string`; }; `sessionConfig?`: \{ `expirationTimeMs?`: `number`; `sessionKey?`: `string`; `storage?`: `"localStorage"` | `"sessionStorage"` | `Storage`; }; } | The parameters for the Alchemy signer, including the client and session configuration |
+| `params.client`                          |                                                                                         | [`AlchemySignerWebClient`](AlchemySignerWebClient.mdx) | \{ `connection`: | \{ `apiKey`: `string`; `jwt?`: `undefined`; `rpcUrl?`: `undefined`; } | \{ `apiKey?`: `undefined`; `jwt`: `string`; `rpcUrl?`: `undefined`; } | \{ `apiKey?`: `undefined`; `jwt?`: `undefined`; `rpcUrl`: `string`; } | \{ `apiKey?`: `undefined`; `jwt`: `string`; `rpcUrl`: `string`; } & `object`; `enablePopupOauth?`: `boolean`; `iframeConfig`: \{ `iframeContainerId`: `string`; `iframeElementId?`: `string`; }; `oauthCallbackUrl?`: `string`; `rootOrgId?`: `string`; `rpId?`: `string`; }                                                                                                            | -                  |
+| `params.sessionConfig?`                  | \{ `expirationTimeMs?`: `number`; `sessionKey?`: `string`; `storage?`: `"localStorage"` | `"sessionStorage"`                                     | `Storage`; }     | -                                                                     |
+| `params.sessionConfig.expirationTimeMs?` | `number`                                                                                | -                                                      |
+| `params.sessionConfig.sessionKey?`       | `string`                                                                                | -                                                      |
+| `params.sessionConfig.storage?`          | `"localStorage"`                                                                        | `"sessionStorage"`                                     | `Storage`        | -                                                                     |
+
+#### Returns
+
+`AlchemyWebSigner`
+
+#### Overrides
+
+[`BaseAlchemySigner`](BaseAlchemySigner.mdx).[`constructor`](BaseAlchemySigner.mdx#constructor)
+
+## Properties
+
+| Property                                               | Type                                                                                                                                                                                                                                                                                  | Default value         | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 | Inherited from                                                                                                    | Defined in                                                                                                                                                          |
+| :----------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | :-------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | :---------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <a id="addmfa" /> `addMfa`                             | (`params`) => `Promise`\<[`AddMfaResult`](../type-aliases/AddMfaResult.mdx)>                                                                                                                                                                                                          | `undefined`           | Initiates the setup of a new MFA factor for the current user. The factor will need to be verified using verifyMfa before it becomes active. **Example** `import { AlchemyWebSigner } from "@account-kit/signer"; const signer = new AlchemyWebSigner({ client: { connection: { rpcUrl: "/api/rpc", }, iframeConfig: { iframeContainerId: "alchemy-signer-iframe-container", }, }, }); const result = await signer.addMfa({ multiFactorType: "totp" }); // Result contains multiFactorTotpUrl to display as QR code` **Throws** If no user is authenticated                                  | [`BaseAlchemySigner`](BaseAlchemySigner.mdx).[`addMfa`](BaseAlchemySigner.mdx#addmfa)                             | [account-kit/signer/src/base.ts:1696](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/base.ts#L1696) |
+| <a id="addpasskey" /> `addPasskey`                     | (`params?`) => `Promise`\<`string`\[]>                                                                                                                                                                                                                                                | `undefined`           | Adds a passkey to the user's account **Example** `import { AlchemyWebSigner } from "@account-kit/signer"; const signer = new AlchemyWebSigner({ client: { connection: { rpcUrl: "/api/rpc", }, iframeConfig: { iframeContainerId: "alchemy-signer-iframe-container", }, }, }); const result = await signer.addPasskey()`                                                                                                                                                                                                                                                                    | [`BaseAlchemySigner`](BaseAlchemySigner.mdx).[`addPasskey`](BaseAlchemySigner.mdx#addpasskey)                     | [account-kit/signer/src/base.ts:978](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/base.ts#L978)   |
+| <a id="authenticate" /> `authenticate`                 | (`params`) => `Promise`\<[`User`](../type-aliases/User.mdx)>                                                                                                                                                                                                                          | `undefined`           | Authenticate a user with either an email or a passkey and create a session for that user **Example** `import { AlchemyWebSigner } from "@account-kit/signer"; const signer = new AlchemyWebSigner({ client: { connection: { rpcUrl: "/api/rpc", }, iframeConfig: { iframeContainerId: "alchemy-signer-iframe-container", }, }, }); const result = await signer.authenticate({ type: "email", email: "foo@mail.com", });`                                                                                                                                                                    | [`BaseAlchemySigner`](BaseAlchemySigner.mdx).[`authenticate`](BaseAlchemySigner.mdx#authenticate)                 | [account-kit/signer/src/base.ts:314](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/base.ts#L314)   |
+| <a id="disconnect" /> `disconnect`                     | () => `Promise`\<`void`>                                                                                                                                                                                                                                                              | `undefined`           | Clear a user session and log them out **Example** `import { AlchemyWebSigner } from "@account-kit/signer"; const signer = new AlchemyWebSigner({ client: { connection: { rpcUrl: "/api/rpc", }, iframeConfig: { iframeContainerId: "alchemy-signer-iframe-container", }, }, }); await signer.disconnect();`                                                                                                                                                                                                                                                                                 | [`BaseAlchemySigner`](BaseAlchemySigner.mdx).[`disconnect`](BaseAlchemySigner.mdx#disconnect)                     | [account-kit/signer/src/base.ts:448](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/base.ts#L448)   |
+| <a id="exportwallet" /> `exportWallet`                 | (`config`) => `Promise`\<`boolean`>                                                                                                                                                                                                                                                   | `undefined`           | Used to export the wallet for a given user If the user is authenticated with an Email, this will return a seed phrase If the user is authenticated with a Passkey, this will return a private key **Example** `import { AlchemyWebSigner } from "@account-kit/signer"; const signer = new AlchemyWebSigner({ client: { connection: { rpcUrl: "/api/rpc", }, iframeConfig: { iframeContainerId: "alchemy-signer-iframe-container", }, }, }); // the params passed to this are different based on the specific signer const result = signer.exportWallet()` **Param** exportWallet parameters | [`BaseAlchemySigner`](BaseAlchemySigner.mdx).[`exportWallet`](BaseAlchemySigner.mdx#exportwallet)                 | [account-kit/signer/src/base.ts:1050](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/base.ts#L1050) |
+| <a id="getaddress" /> `getAddress`                     | () => `Promise`\<`` `0x${string}` ``>                                                                                                                                                                                                                                                 | `undefined`           | Retrieves the address of the current user by calling the `whoami` method on `this.inner`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   | [`BaseAlchemySigner`](BaseAlchemySigner.mdx).[`getAddress`](BaseAlchemySigner.mdx#getaddress)                     | [account-kit/signer/src/base.ts:493](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/base.ts#L493)   |
+| <a id="getmfafactors" /> `getMfaFactors`               | () => `Promise`\<\{ `multiFactors`: [`MfaFactor`](../type-aliases/MfaFactor.mdx)\[]; }>                                                                                                                                                                                               | `undefined`           | Retrieves the list of MFA factors configured for the current user. **Example** `import { AlchemyWebSigner } from "@account-kit/signer"; const signer = new AlchemyWebSigner({ client: { connection: { rpcUrl: "/api/rpc", }, iframeConfig: { iframeContainerId: "alchemy-signer-iframe-container", }, }, }); const { multiFactors } = await signer.getMfaFactors();` **Throws** If no user is authenticated                                                                                                                                                                                 | [`BaseAlchemySigner`](BaseAlchemySigner.mdx).[`getMfaFactors`](BaseAlchemySigner.mdx#getmfafactors)               | [account-kit/signer/src/base.ts:1664](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/base.ts#L1664) |
+| <a id="getpasskeystatus" /> `getPasskeyStatus`         | () => `Promise`\<\{ `isPasskeyAdded`: `boolean`; }>                                                                                                                                                                                                                                   | `undefined`           | -                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | [`BaseAlchemySigner`](BaseAlchemySigner.mdx).[`getPasskeyStatus`](BaseAlchemySigner.mdx#getpasskeystatus)         | [account-kit/signer/src/base.ts:1018](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/base.ts#L1018) |
+| <a id="inner" /> `inner`                               | [`AlchemySignerWebClient`](AlchemySignerWebClient.mdx)                                                                                                                                                                                                                                | `undefined`           | -                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | [`BaseAlchemySigner`](BaseAlchemySigner.mdx).[`inner`](BaseAlchemySigner.mdx#inner)                               | [account-kit/signer/src/base.ts:123](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/base.ts#L123)   |
+| <a id="removeemail" /> `removeEmail`                   | () => `Promise`\<`void`>                                                                                                                                                                                                                                                              | `undefined`           | Removes the email for the authenticated user, disallowing them from login with that email. **Throws** If the user is not authenticated                                                                                                                                                                                                                                                                                                                                                                                                                                                      | [`BaseAlchemySigner`](BaseAlchemySigner.mdx).[`removeEmail`](BaseAlchemySigner.mdx#removeemail)                   | [account-kit/signer/src/base.ts:889](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/base.ts#L889)   |
+| <a id="removemfa" /> `removeMfa`                       | (`params`) => `Promise`\<\{ `multiFactors`: [`MfaFactor`](../type-aliases/MfaFactor.mdx)\[]; }>                                                                                                                                                                                       | `undefined`           | Removes existing MFA factors by their IDs. **Example** `import { AlchemyWebSigner } from "@account-kit/signer"; const signer = new AlchemyWebSigner({ client: { connection: { rpcUrl: "/api/rpc", }, iframeConfig: { iframeContainerId: "alchemy-signer-iframe-container", }, }, }); const result = await signer.removeMfa({ multiFactorIds: ["factor-id-1", "factor-id-2"] });` **Throws** If no user is authenticated                                                                                                                                                                     | [`BaseAlchemySigner`](BaseAlchemySigner.mdx).[`removeMfa`](BaseAlchemySigner.mdx#removemfa)                       | [account-kit/signer/src/base.ts:1765](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/base.ts#L1765) |
+| <a id="removepasskey" /> `removePasskey`               | (`authenticatorId`) => `Promise`\<`void`>                                                                                                                                                                                                                                             | `undefined`           | Removes a passkey from a user's account **Example** `import { AlchemyWebSigner } from "@account-kit/signer"; const signer = new AlchemyWebSigner({ client: { connection: { rpcUrl: "/api/rpc", }, iframeConfig: { iframeContainerId: "alchemy-signer-iframe-container", }, }, }); const authMethods = await signer.listAuthMethods(); const passkey = authMethods.passkeys[0]; const result = await signer.removePasskey(passkey.authenticatorId);`                                                                                                                                         | [`BaseAlchemySigner`](BaseAlchemySigner.mdx).[`removePasskey`](BaseAlchemySigner.mdx#removepasskey)               | [account-kit/signer/src/base.ts:1010](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/base.ts#L1010) |
+| <a id="removephonenumber" /> `removePhoneNumber`       | () => `Promise`\<`void`>                                                                                                                                                                                                                                                              | `undefined`           | Removes the phone number for the authenticated user, disallowing them from login with that phone number. **Throws** If the user is not authenticated                                                                                                                                                                                                                                                                                                                                                                                                                                        | [`BaseAlchemySigner`](BaseAlchemySigner.mdx).[`removePhoneNumber`](BaseAlchemySigner.mdx#removephonenumber)       | [account-kit/signer/src/base.ts:926](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/base.ts#L926)   |
+| <a id="sendverificationcode" /> `sendVerificationCode` | (`type`, `contact`) => `Promise`\<\{ `otpId`: `string`; }>                                                                                                                                                                                                                            | `undefined`           | Initiates an OTP (One-Time Password) verification process for a user contact. Use this method before calling `setEmail` with verification code to verify ownership of the email address. **Throws** If the user is not authenticated                                                                                                                                                                                                                                                                                                                                                        | [`BaseAlchemySigner`](BaseAlchemySigner.mdx).[`sendVerificationCode`](BaseAlchemySigner.mdx#sendverificationcode) | [account-kit/signer/src/base.ts:942](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/base.ts#L942)   |
+| <a id="setphonenumber" /> `setPhoneNumber`             | (`params`) => `Promise`\<`void`>                                                                                                                                                                                                                                                      | `undefined`           | Sets the phone number for the authenticated user, allowing them to login with that phone number. `sendVerificationCode` should be called first to obtain the code. **Throws** If the user is not authenticated                                                                                                                                                                                                                                                                                                                                                                              | [`BaseAlchemySigner`](BaseAlchemySigner.mdx).[`setPhoneNumber`](BaseAlchemySigner.mdx#setphonenumber)             | [account-kit/signer/src/base.ts:905](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/base.ts#L905)   |
+| <a id="signauthorization" /> `signAuthorization`       | (`unsignedAuthorization`) => `Promise`\<`SignedAuthorization`\<`number`>>                                                                                                                                                                                                             | `undefined`           | Signs an EIP-7702 Authorization and then returns the authorization with the signature. **Example** `twoslash import { AlchemyWebSigner } from "@account-kit/signer"; const signer = new AlchemyWebSigner({ client: { connection: { rpcUrl: "/api/rpc", }, iframeConfig: { iframeContainerId: "alchemy-signer-iframe-container", }, }, }); const tx = await signer.signAuthorization({ contractAddress: "0x1234123412341234123412341234123412341234", chainId: 1, nonce: 0, });`                                                                                                             | [`BaseAlchemySigner`](BaseAlchemySigner.mdx).[`signAuthorization`](BaseAlchemySigner.mdx#signauthorization)       | [account-kit/signer/src/base.ts:673](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/base.ts#L673)   |
+| <a id="signertype" /> `signerType`                     | `"alchemy-signer"`                                                                                                                                                                                                                                                                    | `"rn-alchemy-signer"` | `"alchemy-signer"`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          | -                                                                                                                 | [`BaseAlchemySigner`](BaseAlchemySigner.mdx).[`signerType`](BaseAlchemySigner.mdx#signertype)                                                                       | [account-kit/signer/src/base.ts:122](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/base.ts#L122) |
+| <a id="signmessage" /> `signMessage`                   | (`msg`) => `Promise`\<`` `0x${string}` ``>                                                                                                                                                                                                                                            | `undefined`           | Signs a raw message after hashing it. **Example** `import { AlchemyWebSigner } from "@account-kit/signer"; const signer = new AlchemyWebSigner({ client: { connection: { rpcUrl: "/api/rpc", }, iframeConfig: { iframeContainerId: "alchemy-signer-iframe-container", }, }, }); const signature = await signer.signMessage("Hello, world!");`                                                                                                                                                                                                                                               | [`BaseAlchemySigner`](BaseAlchemySigner.mdx).[`signMessage`](BaseAlchemySigner.mdx#signmessage)                   | [account-kit/signer/src/base.ts:526](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/base.ts#L526)   |
+| <a id="signtransaction" /> `signTransaction`           | \<`serializer`, `transaction`>(`transaction`, `options?`) => `Promise`\<`IsNarrowable`\<`TransactionSerialized`\<`GetTransactionType`\<`transaction`>>, `` `0x${string}` ``> _extends_ `true` ? `TransactionSerialized`\<`GetTransactionType`\<`transaction`>> : `` `0x${string}` ``> | `undefined`           | Serializes a transaction, signs it with a raw message, and then returns the serialized transaction with the signature. **Example** `import { AlchemyWebSigner } from "@account-kit/signer"; const signer = new AlchemyWebSigner({ client: { connection: { rpcUrl: "/api/rpc", }, iframeConfig: { iframeContainerId: "alchemy-signer-iframe-container", }, }, }); const tx = await signer.signTransaction({ to: "0x1234", value: "0x1234", data: "0x1234", });`                                                                                                                              | [`BaseAlchemySigner`](BaseAlchemySigner.mdx).[`signTransaction`](BaseAlchemySigner.mdx#signtransaction)           | [account-kit/signer/src/base.ts:612](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/base.ts#L612)   |
+| <a id="signtypeddata" /> `signTypedData`               | \<`TTypedData`, `TPrimaryType`>(`params`) => `Promise`\<`` `0x${string}` ``>                                                                                                                                                                                                          | `undefined`           | Signs a typed message by first hashing it and then signing the hashed message using the `signRawMessage` method. **Example** `import { AlchemyWebSigner } from "@account-kit/signer"; const signer = new AlchemyWebSigner({ client: { connection: { rpcUrl: "/api/rpc", }, iframeConfig: { iframeContainerId: "alchemy-signer-iframe-container", }, }, }); const signature = await signer.signTypedData({ domain: {}, types: {}, primaryType: "", message: {}, });`                                                                                                                         | [`BaseAlchemySigner`](BaseAlchemySigner.mdx).[`signTypedData`](BaseAlchemySigner.mdx#signtypeddata)               | [account-kit/signer/src/base.ts:568](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/base.ts#L568)   |
+| <a id="verifymfa" /> `verifyMfa`                       | (`params`) => `Promise`\<\{ `multiFactors`: [`MfaFactor`](../type-aliases/MfaFactor.mdx)\[]; }>                                                                                                                                                                                       | `undefined`           | Verifies a newly created MFA factor to complete the setup process. **Example** `import { AlchemyWebSigner } from "@account-kit/signer"; const signer = new AlchemyWebSigner({ client: { connection: { rpcUrl: "/api/rpc", }, iframeConfig: { iframeContainerId: "alchemy-signer-iframe-container", }, }, }); const result = await signer.verifyMfa({ multiFactorId: "factor-id", multiFactorCode: "123456" // 6-digit code from authenticator app });` **Throws** If no user is authenticated                                                                                               | [`BaseAlchemySigner`](BaseAlchemySigner.mdx).[`verifyMfa`](BaseAlchemySigner.mdx#verifymfa)                       | [account-kit/signer/src/base.ts:1729](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/base.ts#L1729) |
+
+## Methods
+
+### addOauthProvider()
+
+```ts
+addOauthProvider(args): Promise<OauthProviderInfo>;
+```
+
+Defined in: [account-kit/signer/src/base.ts:1260](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/base.ts#L1260)
+
+Handles OAuth authentication by augmenting the provided arguments with a type and performing authentication based on the OAuth mode (either using redirect or popup).
+
+#### Parameters
+
+| Parameter | Type                                                                                                                                 | Description                                                               |
+| :-------- | :----------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------ |
+| `args`    | `Omit`\<`Extract`\<[`accountLoupeActions`](../../../core/src/variables/accountLoupeActions.mdx), \{ `type`: `"oauth"`; }>, `"type"`> | Authentication parameters omitting the type, which will be set to "oauth" |
+
+#### Returns
+
+`Promise`\<[`OauthProviderInfo`](../type-aliases/OauthProviderInfo.mdx)>
+
+A promise that resolves to an `OauthProviderInfo` object containing provider information and the ID token.
+
+#### Inherited from
+
+[`BaseAlchemySigner`](BaseAlchemySigner.mdx).[`addOauthProvider`](BaseAlchemySigner.mdx#addoauthprovider)
+
+---
+
+### fetchConfig()
+
+```ts
+protected fetchConfig(): Promise<SignerConfig>;
+```
+
+Defined in: [account-kit/signer/src/base.ts:1882](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/base.ts#L1882)
+
+#### Returns
+
+`Promise`\<`SignerConfig`>
+
+#### Inherited from
+
+[`BaseAlchemySigner`](BaseAlchemySigner.mdx).[`fetchConfig`](BaseAlchemySigner.mdx#fetchconfig)
+
+---
+
+### getAuthDetails()
+
+```ts
+getAuthDetails(): Promise<User>;
+```
+
+Defined in: [account-kit/signer/src/base.ts:479](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/base.ts#L479)
+
+Gets the current logged in user
+If a user has an ongoing session, it will use that session and
+try to authenticate
+
+#### Example
+
+```ts
+import { AlchemyWebSigner } from "@account-kit/signer";
+
+const signer = new AlchemyWebSigner({
+  client: {
+    connection: {
+      rpcUrl: "/api/rpc",
+    },
+    iframeConfig: {
+      iframeContainerId: "alchemy-signer-iframe-container",
+    },
+  },
+});
+
+// throws if not logged in
+const user = await signer.getAuthDetails();
+```
+
+#### Returns
+
+`Promise`\<[`User`](../type-aliases/User.mdx)>
+
+the current user
+
+#### Throws
+
+if there is no user logged in
+
+#### Inherited from
+
+[`BaseAlchemySigner`](BaseAlchemySigner.mdx).[`getAuthDetails`](BaseAlchemySigner.mdx#getauthdetails)
+
+---
+
+### getConfig()
+
+```ts
+getConfig(): Promise<SignerConfig>;
+```
+
+Defined in: [account-kit/signer/src/base.ts:1874](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/base.ts#L1874)
+
+Returns the signer configuration while fetching it if it's not already initialized.
+
+#### Returns
+
+`Promise`\<`SignerConfig`>
+
+A promise that resolves to the signer configuration
+
+#### Inherited from
+
+[`BaseAlchemySigner`](BaseAlchemySigner.mdx).[`getConfig`](BaseAlchemySigner.mdx#getconfig)
+
+---
+
+### getMfaStatus()
+
+```ts
+getMfaStatus(): object;
+```
+
+Defined in: [account-kit/signer/src/base.ts:719](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/base.ts#L719)
+
+Gets the current MFA status
+
+#### Example
+
+```ts
+import { AlchemyWebSigner } from "@account-kit/signer";
+
+const signer = new AlchemyWebSigner({
+  client: {
+    connection: {
+      rpcUrl: "/api/rpc",
+    },
+    iframeConfig: {
+      iframeContainerId: "alchemy-signer-iframe-container",
+    },
+  },
+});
+
+const mfaStatus = signer.getMfaStatus();
+if (mfaStatus === AlchemyMfaStatus.REQUIRED) {
+  // Handle MFA requirement
+}
+```
+
+#### Returns
+
+`object`
+
+The current MFA status
+
+| Name           | Type      | Defined in                                                                                                                                                        |
+| :------------- | :-------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `mfaFactorId?` | `string`  | [account-kit/signer/src/base.ts:721](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/base.ts#L721) |
+| `mfaRequired`  | `boolean` | [account-kit/signer/src/base.ts:720](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/base.ts#L720) |
+
+#### Inherited from
+
+[`BaseAlchemySigner`](BaseAlchemySigner.mdx).[`getMfaStatus`](BaseAlchemySigner.mdx#getmfastatus)
+
+---
+
+### getUser()
+
+Unauthenticated call to look up a user's organizationId by email or phone
+
+#### Example
+
+```ts
+import { AlchemyWebSigner } from "@account-kit/signer";
+
+const signer = new AlchemyWebSigner({
+  client: {
+    connection: {
+      rpcUrl: "/api/rpc",
+    },
+    iframeConfig: {
+      iframeContainerId: "alchemy-signer-iframe-container",
+    },
+  },
+});
+
+const result = await signer.getUser({ type: "email", value: "foo@mail.com" });
+```
+
+#### Param
+
+the params to look up
+
+#### Call Signature
+
+```ts
+getUser(email): Promise<
+  | null
+  | {
+  orgId: string;
+}>;
+```
+
+Defined in: [account-kit/signer/src/base.ts:752](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/base.ts#L752)
+
+Unauthenticated call to look up a user's organizationId by email
+
+##### Deprecated
+
+Use getUser(\{ type: "email", value: email }) instead
+
+##### Example
+
+```ts
+import { AlchemyWebSigner } from "@account-kit/signer";
+
+const signer = new AlchemyWebSigner({
+  client: {
+    connection: {
+      rpcUrl: "/api/rpc",
+    },
+    iframeConfig: {
+      iframeContainerId: "alchemy-signer-iframe-container",
+    },
+  },
+});
+
+const result = await signer.getUser("foo@mail.com");
+```
+
+##### Parameters
+
+| Parameter | Type     | Description         |
+| :-------- | :------- | :------------------ |
+| `email`   | `string` | the email to lookup |
+
+##### Returns
+
+`Promise`\<
+| `null`
+| \{
+`orgId`: `string`;
+}>
+
+the organization id for the user if they exist
+
+##### Inherited from
+
+[`BaseAlchemySigner`](BaseAlchemySigner.mdx).[`getUser`](BaseAlchemySigner.mdx#getuser)
+
+#### Call Signature
+
+```ts
+getUser(params): Promise<
+  | null
+  | {
+  orgId: string;
+}>;
+```
+
+Defined in: [account-kit/signer/src/base.ts:777](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/base.ts#L777)
+
+Unauthenticated call to look up a user's organizationId by email or phone
+
+##### Example
+
+```ts
+import { AlchemyWebSigner } from "@account-kit/signer";
+
+const signer = new AlchemyWebSigner({
+  client: {
+    connection: {
+      rpcUrl: "/api/rpc",
+    },
+    iframeConfig: {
+      iframeContainerId: "alchemy-signer-iframe-container",
+    },
+  },
+});
+
+const result = await signer.getUser({ type: "email", value: "foo@mail.com" });
+```
+
+##### Parameters
+
+| Parameter | Type            |
+| :-------- | :-------------- |
+| `params`  | `GetUserParams` |
+
+##### Returns
+
+`Promise`\<
+| `null`
+| \{
+`orgId`: `string`;
+}>
+
+the organization id for the user if they exist
+
+##### Inherited from
+
+[`BaseAlchemySigner`](BaseAlchemySigner.mdx).[`getUser`](BaseAlchemySigner.mdx#getuser)
+
+---
+
+### initConfig()
+
+```ts
+protected initConfig(): Promise<SignerConfig>;
+```
+
+Defined in: [account-kit/signer/src/base.ts:1864](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/base.ts#L1864)
+
+#### Returns
+
+`Promise`\<`SignerConfig`>
+
+#### Inherited from
+
+[`BaseAlchemySigner`](BaseAlchemySigner.mdx).[`initConfig`](BaseAlchemySigner.mdx#initconfig)
+
+---
+
+### listAuthMethods()
+
+```ts
+listAuthMethods(): Promise<AuthMethods>;
+```
+
+Defined in: [account-kit/signer/src/base.ts:1305](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/base.ts#L1305)
+
+Retrieves a list of auth methods associated with the authenticated user.
+
+#### Returns
+
+`Promise`\<[`AuthMethods`](../type-aliases/AuthMethods.mdx)>
+
+A promise that resolves to an `AuthMethods` object containing the user's email, OAuth providers, and passkeys.
+
+#### Throws
+
+Thrown if the user is not authenticated
+
+#### Inherited from
+
+[`BaseAlchemySigner`](BaseAlchemySigner.mdx).[`listAuthMethods`](BaseAlchemySigner.mdx#listauthmethods)
+
+---
+
+### on()
+
+```ts
+on<E>(event, listener): () => void;
+```
+
+Defined in: [account-kit/signer/src/base.ts:183](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/base.ts#L183)
+
+Allows you to subscribe to events emitted by the signer
+
+#### Type Parameters
+
+| Type Parameter                                                                       |
+| :----------------------------------------------------------------------------------- |
+| `E` _extends_ keyof [`AlchemySignerEvents`](../type-aliases/AlchemySignerEvents.mdx) |
+
+#### Parameters
+
+| Parameter  | Type                                                                   | Description                                   |
+| :--------- | :--------------------------------------------------------------------- | :-------------------------------------------- |
+| `event`    | `E`                                                                    | the event to subscribe to                     |
+| `listener` | [`AlchemySignerEvents`](../type-aliases/AlchemySignerEvents.mdx)\[`E`] | the function to run when the event is emitted |
+
+#### Returns
+
+a function to remove the listener
+
+```ts
+(): void;
+```
+
+##### Returns
+
+`void`
+
+#### Inherited from
+
+[`BaseAlchemySigner`](BaseAlchemySigner.mdx).[`on`](BaseAlchemySigner.mdx#on)
+
+---
+
+### preparePopupOauth()
+
+```ts
+preparePopupOauth(): Promise<OauthConfig>;
+```
+
+Defined in: [account-kit/signer/src/base.ts:285](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/base.ts#L285)
+
+Prepares the config needed to use popup-based OAuth login. This must be
+called before calling `.authenticate` with params `{ type: "oauth", mode:
+"popup" }`, and is recommended to be called on page load.
+
+This method exists because browsers may prevent popups from opening unless
+triggered by user interaction, and so the OAuth config must already have
+been fetched at the time a user clicks a social login button.
+
+#### Example
+
+```ts
+import { AlchemyWebSigner } from "@account-kit/signer";
+
+const signer = new AlchemyWebSigner({
+  client: {
+    connection: {
+      rpcUrl: "/api/rpc",
+    },
+    iframeConfig: {
+      iframeContainerId: "alchemy-signer-iframe-container",
+    },
+  },
+});
+
+await signer.preparePopupOauth();
+```
+
+#### Returns
+
+`Promise`\<[`OauthConfig`](../type-aliases/OauthConfig.mdx)>
+
+the config which must be loaded before
+using popup-based OAuth
+
+#### Inherited from
+
+[`BaseAlchemySigner`](BaseAlchemySigner.mdx).[`preparePopupOauth`](BaseAlchemySigner.mdx#preparepopupoauth)
+
+---
+
+### removeOauthProvider()
+
+```ts
+removeOauthProvider(providerId): Promise<any>;
+```
+
+Defined in: [account-kit/signer/src/base.ts:1292](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/base.ts#L1292)
+
+Removes an OAuth provider by its ID if the user is authenticated.
+
+#### Parameters
+
+| Parameter    | Type     | Description                                                                       |
+| :----------- | :------- | :-------------------------------------------------------------------------------- |
+| `providerId` | `string` | The ID of the OAuth provider to be removed, as obtained from `listOauthProviders` |
+
+#### Returns
+
+`Promise`\<`any`>
+
+A promise indicating the result of the removal process
+
+#### Throws
+
+Thrown if the user is not authenticated
+
+#### Inherited from
+
+[`BaseAlchemySigner`](BaseAlchemySigner.mdx).[`removeOauthProvider`](BaseAlchemySigner.mdx#removeoauthprovider)
+
+---
+
+### setEmail()
+
+Implementation for setEmail method.
+
+#### Param
+
+An object containing the verificationCode (or simply an email for legacy usage)
+
+#### Call Signature
+
+```ts
+setEmail(email): Promise<string>;
+```
+
+Defined in: [account-kit/signer/src/base.ts:842](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/base.ts#L842)
+
+Sets the email for the authenticated user, allowing them to login with that
+email.
+
+##### Deprecated
+
+You must contact Alchemy to enable this feature for your team,
+as there are important security considerations. In particular, you must not
+call this without first validating that the user owns this email account.
+It is recommended to now use the email verification flow instead.
+
+##### Parameters
+
+| Parameter | Type     | Description                   |
+| :-------- | :------- | :---------------------------- |
+| `email`   | `string` | The email to set for the user |
+
+##### Returns
+
+`Promise`\<`string`>
+
+A promise that resolves to the updated email address
+
+##### Throws
+
+If the user is not authenticated
+
+##### Inherited from
+
+[`BaseAlchemySigner`](BaseAlchemySigner.mdx).[`setEmail`](BaseAlchemySigner.mdx#setemail)
+
+#### Call Signature
+
+```ts
+setEmail(params): Promise<string>;
+```
+
+Defined in: [account-kit/signer/src/base.ts:854](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/base.ts#L854)
+
+Uses a verification code to update a user's email, allowing them to login
+with that email. `sendVerificationCode` should be called first to obtain
+the code.
+
+##### Parameters
+
+| Parameter | Type                 | Description                                |
+| :-------- | :------------------- | :----------------------------------------- |
+| `params`  | `VerificationParams` | An object containing the verification code |
+
+##### Returns
+
+`Promise`\<`string`>
+
+A promise that resolves to the updated email address
+
+##### Throws
+
+If the user is not authenticated
+
+##### Inherited from
+
+[`BaseAlchemySigner`](BaseAlchemySigner.mdx).[`setEmail`](BaseAlchemySigner.mdx#setemail)
+
+---
+
+### toSolanaSigner()
+
+```ts
+toSolanaSigner(): SolanaSigner;
+```
+
+Defined in: [account-kit/signer/src/base.ts:1123](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/base.ts#L1123)
+
+Creates a new instance of `SolanaSigner` using the provided inner value.
+This requires the signer to be authenticated first
+
+#### Example
+
+```ts
+import { AlchemyWebSigner } from "@account-kit/signer";
+
+const signer = new AlchemyWebSigner({
+  client: {
+    connection: {
+      rpcUrl: "/api/rpc",
+    },
+    iframeConfig: {
+      iframeContainerId: "alchemy-signer-iframe-container",
+    },
+  },
+});
+
+const solanaSigner = signer.toSolanaSigner();
+```
+
+#### Returns
+
+[`SolanaSigner`](SolanaSigner.mdx)
+
+A new instance of `SolanaSigner`
+
+#### Inherited from
+
+[`BaseAlchemySigner`](BaseAlchemySigner.mdx).[`toSolanaSigner`](BaseAlchemySigner.mdx#tosolanasigner)
+
+---
+
+### toViemAccount()
+
+```ts
+toViemAccount(): object;
+```
+
+Defined in: [account-kit/signer/src/base.ts:1079](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/base.ts#L1079)
+
+This method lets you adapt your AlchemySigner to a viem LocalAccount, which
+will let you use the signer as an EOA directly.
+
+#### Example
+
+```ts
+import { AlchemyWebSigner } from "@account-kit/signer";
+
+const signer = new AlchemyWebSigner({
+  client: {
+    connection: {
+      rpcUrl: "/api/rpc",
+    },
+    iframeConfig: {
+      iframeContainerId: "alchemy-signer-iframe-container",
+    },
+  },
+});
+
+const account = signer.toViemAccount();
+```
+
+#### Returns
+
+`object`
+
+a LocalAccount object that can be used with viem's wallet client
+
+| Name                   | Type                                                                                                                                                                                                                                                                                  | Defined in                                       |
+| :--------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | :----------------------------------------------- |
+| `address`              | `` `0x${string}` ``                                                                                                                                                                                                                                                                   | node_modules/viem/\_types/accounts/types.d.ts:16 |
+| `nonceManager?`        | `NonceManager`                                                                                                                                                                                                                                                                        | node_modules/viem/\_types/accounts/types.d.ts:17 |
+| `publicKey`            | `` `0x${string}` ``                                                                                                                                                                                                                                                                   | node_modules/viem/\_types/accounts/types.d.ts:36 |
+| `sign()?`              | (`parameters`) => `Promise`\<`` `0x${string}` ``>                                                                                                                                                                                                                                     | node_modules/viem/\_types/accounts/types.d.ts:18 |
+| `signAuthorization()?` | (`parameters`) => `Promise`\<`SignAuthorizationReturnType`>                                                                                                                                                                                                                           | node_modules/viem/\_types/accounts/types.d.ts:21 |
+| `signMessage()`        | (`__namedParameters`) => `Promise`\<`` `0x${string}` ``>                                                                                                                                                                                                                              | node_modules/viem/\_types/accounts/types.d.ts:22 |
+| `signTransaction()`    | \<`serializer`, `transaction`>(`transaction`, `options?`) => `Promise`\<`IsNarrowable`\<`TransactionSerialized`\<`GetTransactionType`\<`transaction`>>, `` `0x${string}` ``> _extends_ `true` ? `TransactionSerialized`\<`GetTransactionType`\<`transaction`>> : `` `0x${string}` ``> | node_modules/viem/\_types/accounts/types.d.ts:25 |
+| `signTypedData()`      | \<`typedData`, `primaryType`>(`parameters`) => `Promise`\<`` `0x${string}` ``>                                                                                                                                                                                                        | node_modules/viem/\_types/accounts/types.d.ts:28 |
+| `source`               | `string`                                                                                                                                                                                                                                                                              | node_modules/viem/\_types/accounts/types.d.ts:37 |
+| `type`                 | `"local"`                                                                                                                                                                                                                                                                             | node_modules/viem/\_types/accounts/types.d.ts:38 |
+
+#### Throws
+
+if your signer is not authenticated
+
+#### Inherited from
+
+[`BaseAlchemySigner`](BaseAlchemySigner.mdx).[`toViemAccount`](BaseAlchemySigner.mdx#toviemaccount)
+
+---
+
+### validateMultiFactors()
+
+```ts
+validateMultiFactors(params): Promise<User>;
+```
+
+Defined in: [account-kit/signer/src/base.ts:1805](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/base.ts#L1805)
+
+Validates MFA factors that were required during authentication.
+This function should be called after MFA is required and the user has provided their MFA code.
+It completes the authentication process by validating the MFA factors and completing the auth bundle.
+
+#### Example
+
+```ts
+import { AlchemyWebSigner } from "@account-kit/signer";
+
+const signer = new AlchemyWebSigner({
+  client: {
+    connection: {
+      rpcUrl: "/api/rpc",
+    },
+    iframeConfig: {
+      iframeContainerId: "alchemy-signer-iframe-container",
+    },
+  },
+});
+
+// After MFA is required and user provides code
+const user = await signer.validateMultiFactors({
+  multiFactorCode: "123456", // 6-digit code from authenticator app
+  multiFactorId: "factor-id",
+});
+```
+
+#### Parameters
+
+| Parameter | Type                                                                       | Description                           |
+| :-------- | :------------------------------------------------------------------------- | :------------------------------------ |
+| `params`  | [`ValidateMultiFactorsArgs`](../type-aliases/ValidateMultiFactorsArgs.mdx) | Parameters for validating MFA factors |
+
+#### Returns
+
+`Promise`\<[`User`](../type-aliases/User.mdx)>
+
+A promise that resolves to the authenticated user
+
+#### Throws
+
+If there is no pending MFA context or if orgId is not found
+
+#### Inherited from
+
+[`BaseAlchemySigner`](BaseAlchemySigner.mdx).[`validateMultiFactors`](BaseAlchemySigner.mdx#validatemultifactors)

@@ -1,0 +1,29 @@
+---
+title: GetEntryPointOptions
+description: Overview of the GetEntryPointOptions 2097152
+slug: wallets/reference/aa-sdk/core/src/type-aliases/GetEntryPointOptions
+layout: reference
+---
+
+```ts
+type GetEntryPointOptions<TEntryPointVersion> =
+  accountLoupeActions<TEntryPointVersion, DefaultEntryPointVersion> extends true
+    ?
+        | {
+            addressOverride?: Address;
+            version?: accountLoupeActions<
+              TEntryPointVersion,
+              EntryPointVersion
+            >;
+          }
+        | undefined
+    : object;
+```
+
+Defined in: [aa-sdk/core/src/entrypoint/types.ts:95](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/entrypoint/types.ts#L95)
+
+## Type Parameters
+
+| Type Parameter                                                              | Default type                                               |
+| :-------------------------------------------------------------------------- | :--------------------------------------------------------- |
+| `TEntryPointVersion` _extends_ [`EntryPointVersion`](EntryPointVersion.mdx) | [`DefaultEntryPointVersion`](DefaultEntryPointVersion.mdx) |

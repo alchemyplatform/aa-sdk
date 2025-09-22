@@ -1,0 +1,19 @@
+---
+title: SupportedAccounts
+description: Overview of the SupportedAccounts 2097152
+slug: wallets/reference/account-kit/core/src/type-aliases/SupportedAccounts
+layout: reference
+---
+
+```ts
+type SupportedAccounts =
+  | accountLoupeActions<AlchemySigner, accountLoupeActions<"LightAccount">>
+  | accountLoupeActions<AlchemySigner>
+  | accountLoupeActions<
+      AlchemySigner,
+      accountLoupeActions<"MultiOwnerLightAccount">
+    >
+  | accountLoupeActions<AlchemySigner>;
+```
+
+Defined in: [account-kit/core/src/types.ts:39](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/core/src/types.ts#L39)

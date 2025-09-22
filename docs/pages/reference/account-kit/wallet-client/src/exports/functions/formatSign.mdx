@@ -1,0 +1,53 @@
+---
+title: formatSign
+description: Overview of the formatSign function
+slug: wallets/reference/account-kit/wallet-client/src/exports/functions/formatSign
+layout: reference
+---
+
+```ts
+function formatSign<TAccount>(
+  client,
+  params,
+): Promise<{
+  signature: `0x${string}`;
+}>;
+```
+
+Defined in: [account-kit/wallet-client/src/client/actions/formatSign.ts:41](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/wallet-client/src/client/actions/formatSign.ts#L41)
+
+Formats a signature request for signing messages or transactions.
+
+## Example
+
+```ts
+// Formats a signature
+const result = await client.formatSign({
+  from: "0x1234...",
+  signature: {
+    type: "ecdsa",
+    data: "0xabcd...",
+  },
+});
+```
+
+## Type Parameters
+
+| Type Parameter                   | Default type        |
+| :------------------------------- | :------------------ | ----------- | ------------------- |
+| `TAccount` _extends_ `undefined` | `` `0x${string}` `` | `undefined` | `` `0x${string}` `` |
+
+## Parameters
+
+| Parameter | Type                            | Description                                  |
+| :-------- | :------------------------------ | :------------------------------------------- |
+| `client`  | `InnerWalletApiClient`          | The wallet API client to use for the request |
+| `params`  | `FormatSignParams`\<`TAccount`> | Parameters for formatting the signature      |
+
+## Returns
+
+`Promise`\<\{
+`signature`: `` `0x${string}` ``;
+}>
+
+A Promise that resolves to the formatSign result containing the formatted signature.

@@ -1,0 +1,28 @@
+---
+title: bigIntClamp
+description: Overview of the bigIntClamp function
+slug: wallets/reference/aa-sdk/core/src/functions/bigIntClamp
+layout: reference
+---
+
+```ts
+function bigIntClamp(value, lower, upper): bigint;
+```
+
+Defined in: [aa-sdk/core/src/utils/bigint.ts:41](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/utils/bigint.ts#L41)
+
+Given a bigint and a min-max range, returns the min-max clamped bigint value
+
+## Parameters
+
+| Parameter | Type           | Description                     |
+| :-------- | :------------- | :------------------------------ |
+| `value`   | `BigNumberish` | a bigint value to clamp         |
+| `lower`   | `any`          | lower bound min max tuple value |
+| `upper`   | `any`          | upper bound min max tuple value |
+
+## Returns
+
+`bigint`
+
+the clamped bigint value per given range

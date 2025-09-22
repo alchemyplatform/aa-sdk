@@ -1,0 +1,23 @@
+---
+title: SignerResponse
+description: Overview of the SignerResponse 2097152
+slug: wallets/reference/account-kit/signer/src/type-aliases/SignerResponse
+layout: reference
+---
+
+```ts
+type SignerResponse<T> = Extract<
+  SignerEndpoints[number],
+  {
+    Route: T;
+  }
+>["Response"];
+```
+
+Defined in: [account-kit/signer/src/client/types.ts:170](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/client/types.ts#L170)
+
+## Type Parameters
+
+| Type Parameter                                   |
+| :----------------------------------------------- |
+| `T` _extends_ [`SignerRoutes`](SignerRoutes.mdx) |

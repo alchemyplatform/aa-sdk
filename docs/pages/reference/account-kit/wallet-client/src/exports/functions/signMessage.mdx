@@ -1,0 +1,41 @@
+---
+title: signMessage
+description: Overview of the signMessage function
+slug: wallets/reference/account-kit/wallet-client/src/exports/functions/signMessage
+layout: reference
+---
+
+```ts
+function signMessage(client, signer, params): Promise<`0x${string}`>;
+```
+
+Defined in: [account-kit/wallet-client/src/client/actions/signMessage.ts:31](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/wallet-client/src/client/actions/signMessage.ts#L31)
+
+Signs a message using the smart account.
+This method requests the account associated with the signer and uses it to sign the message.
+
+## Example
+
+```ts
+// Sign a simple text message
+const signature = await client.signMessage("Hello, world!");
+
+// Sign a raw hex message
+const signature = await client.signMessage({
+  raw: "0x48656c6c6f2c20776f726c6421",
+});
+```
+
+## Parameters
+
+| Parameter | Type                   | Description                                  |
+| :-------- | :--------------------- | :------------------------------------------- |
+| `client`  | `InnerWalletApiClient` | The wallet API client to use for the request |
+| `signer`  | `SmartAccountSigner`   | The signer of the smart account              |
+| `params`  | `SignMessageParams`    | Parameters for signing the message           |
+
+## Returns
+
+`Promise`\<`` `0x${string}` ``>
+
+A Promise that resolves to the signed message as a hex string

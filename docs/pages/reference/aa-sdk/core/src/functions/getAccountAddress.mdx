@@ -1,0 +1,38 @@
+---
+title: getAccountAddress
+description: Overview of the getAccountAddress function
+slug: wallets/reference/aa-sdk/core/src/functions/getAccountAddress
+layout: reference
+---
+
+```ts
+function getAccountAddress(params): Promise<`0x${string}`>;
+```
+
+Defined in: [aa-sdk/core/src/account/smartContractAccount.ts:229](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/account/smartContractAccount.ts#L229)
+
+Retrieves the account address. Uses a provided `accountAddress` if available; otherwise, it computes the address using the entry point contract and the initial code.
+
+## Example
+
+```ts
+import { getEntryPoint, getAccountAddress } from "@aa-sdk/core";
+
+const accountAddress = await getAccountAddress({
+  client,
+  entryPoint: getEntryPoint(chain),
+  getAccountInitCode: async () => "0x{factoryAddress}{factoryCallData}",
+});
+```
+
+## Parameters
+
+| Parameter | Type                                                                     | Description              |
+| :-------- | :----------------------------------------------------------------------- | :----------------------- |
+| `params`  | [`GetAccountAddressParams`](../type-aliases/GetAccountAddressParams.mdx) | The configuration object |
+
+## Returns
+
+`Promise`\<`` `0x${string}` ``>
+
+A promise that resolves to the account address

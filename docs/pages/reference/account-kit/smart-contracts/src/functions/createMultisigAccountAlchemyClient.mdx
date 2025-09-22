@@ -1,0 +1,39 @@
+---
+title: createMultisigAccountAlchemyClient
+description: Creates an Alchemy client for a multisig account using the provided configuration.
+slug: wallets/reference/account-kit/smart-contracts/src/functions/createMultisigAccountAlchemyClient
+layout: reference
+---
+
+```ts
+function createMultisigAccountAlchemyClient<TSigner>(
+  params,
+): Promise<
+  AlchemySmartAccountClient<
+    undefined | Chain,
+    MultisigModularAccount<TSigner>,
+    any,
+    MultisigUserOperationContext
+  >
+>;
+```
+
+Defined in: [account-kit/smart-contracts/src/msca/client/multiSigAlchemyClient.ts:36](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/msca/client/multiSigAlchemyClient.ts#L36)
+
+## Type Parameters
+
+| Type Parameter                                   | Default type                 |
+| :----------------------------------------------- | :--------------------------- |
+| `TSigner` _extends_ `SmartAccountSigner`\<`any`> | `SmartAccountSigner`\<`any`> |
+
+## Parameters
+
+| Parameter | Type                                                                                                       |
+| :-------- | :--------------------------------------------------------------------------------------------------------- |
+| `params`  | [`AlchemyMultisigAccountClientConfig`](../type-aliases/AlchemyMultisigAccountClientConfig.mdx)\<`TSigner`> |
+
+## Returns
+
+`Promise`\<`AlchemySmartAccountClient`\<`undefined` | `Chain`, `MultisigModularAccount`\<`TSigner`>, `any`, `MultisigUserOperationContext`>>
+
+A promise that resolves to an Alchemy Smart Account Client for multisig accounts with extended functionalities.

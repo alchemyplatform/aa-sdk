@@ -1,0 +1,56 @@
+---
+title: createConfig
+description: Overview of the createConfig function
+slug: wallets/reference/account-kit/react/src/functions/createConfig
+layout: reference
+---
+
+```ts
+function createConfig(props, ui?): any;
+```
+
+Defined in: [account-kit/react/src/createConfig.ts:52](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/react/src/createConfig.ts#L52)
+
+Wraps the `createConfig` that is exported from `@aa-sdk/core` to allow passing
+an additional argument, the configuration object for the Auth Components UI
+(the modal and AuthCard).
+
+## Example
+
+```ts
+import { sepolia, alchemy } from "@account-kit/infra"
+import { AlchemyAccountsUIConfig, createConfig } from "@account-kit/react"
+import { QueryClient } from "@tanstack/react-query";
+
+const uiConfig: AlchemyAccountsUIConfig = {
+  illustrationStyle: "linear",
+  auth: {
+    sections: [[{ type: "email" }], [{ type: "passkey" }]],
+    addPasskeyOnSignup: true,
+  },
+}
+
+const config = createConfig({
+  transport: alchemy({ apiKey: "your_api_key" })
+  chain: sepolia,
+  ssr: true,
+  sessionConfig: {
+    expirationTimeMs: 1000 * 60 * 60, // 1 hour (defaults to 15 min)
+  },
+}, uiConfig)
+
+export const queryClient = new QueryClient();
+```
+
+## Parameters
+
+| Parameter | Type                | Description                                                |
+| :-------- | :------------------ | :--------------------------------------------------------- |
+| `props`   | `CreateConfigProps` | for creating an alchemy account config                     |
+| `ui?`     | `any`               | (optional) configuration to use for the Auth Components UI |
+
+## Returns
+
+`any`
+
+an alchemy account config object containing the core and client store, as well as the UI config

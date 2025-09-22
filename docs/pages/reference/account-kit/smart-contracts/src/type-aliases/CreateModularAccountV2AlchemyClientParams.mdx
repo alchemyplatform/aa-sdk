@@ -1,0 +1,33 @@
+---
+title: CreateModularAccountV2AlchemyClientParams
+description: Overview of the CreateModularAccountV2AlchemyClientParams 2097152
+slug: wallets/reference/account-kit/smart-contracts/src/type-aliases/CreateModularAccountV2AlchemyClientParams
+layout: reference
+---
+
+```ts
+type CreateModularAccountV2AlchemyClientParams<TTransport, TChain, TSigner> =
+  Omit<
+    CreateModularAccountV2ClientParams<TTransport, TChain, TSigner>,
+    "transport"
+  > &
+    Omit<accountLoupeActions<TChain, LightAccount<TSigner>>, "account"> &
+    object;
+```
+
+Defined in: [account-kit/smart-contracts/src/ma-v2/client/client.ts:75](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/ma-v2/client/client.ts#L75)
+
+## Type Declaration
+
+| Name                     | Type    | Defined in                                                                                                                                                                                                      |
+| :----------------------- | :------ | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `dummyPaymasterAndData?` | `never` | [account-kit/smart-contracts/src/ma-v2/client/client.ts:86](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/ma-v2/client/client.ts#L86) |
+| `paymasterAndData?`      | `never` | [account-kit/smart-contracts/src/ma-v2/client/client.ts:86](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/ma-v2/client/client.ts#L86) |
+
+## Type Parameters
+
+| Type Parameter                           | Default type         |
+| :--------------------------------------- | :------------------- |
+| `TTransport` _extends_ `Transport`       | `Transport`          |
+| `TChain` _extends_ `Chain`               | `Chain`              |
+| `TSigner` _extends_ `SmartAccountSigner` | `SmartAccountSigner` |

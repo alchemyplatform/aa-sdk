@@ -1,0 +1,61 @@
+---
+title: sendTransaction
+description: Overview of the sendTransaction function
+slug: wallets/reference/aa-sdk/core/src/functions/sendTransaction
+layout: reference
+---
+
+```ts
+function sendTransaction<
+  TChain,
+  TAccount,
+  TChainOverride,
+  TContext,
+  TEntryPointVersion,
+>(client_, args, overrides?, context?): Promise<`0x${string}`>;
+```
+
+Defined in: [aa-sdk/core/src/actions/smartAccount/sendTransaction.ts:48](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/actions/smartAccount/sendTransaction.ts#L48)
+
+Sends a transaction using the provided client, arguments, optional overrides, and context.
+This sends a UO and then waits for it to be mined
+
+## Example
+
+```ts
+import { createSmartAccountClient } from "@aa-sdk/core";
+
+// smart account client is already extended with sendTransaction
+const client = createSmartAccountClient(...);
+const result = await client.sendTransaction({
+ to: "0x...",
+ data: "0x...", // or "0x",
+ value: 0n, // optional
+ account, // only required if the client above is not connected to an account
+});
+```
+
+## Type Parameters
+
+| Type Parameter                                                                                                        | Default type                                                                            |
+| :-------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------- | ------------------------------------------------------------------ | ------- | ----------- | ------------------------------------------------------------------ |
+| `TChain` _extends_ `undefined`                                                                                        | `Chain`                                                                                 | `undefined`                                                        | `Chain` |
+| `TAccount` _extends_                                                                                                  | `undefined`                                                                             | [`SmartContractAccount`](../type-aliases/SmartContractAccount.mdx) |         | `undefined` | [`SmartContractAccount`](../type-aliases/SmartContractAccount.mdx) |
+| `TChainOverride` _extends_ `undefined`                                                                                | `Chain`                                                                                 | `undefined`                                                        | `Chain` |
+| `TContext` _extends_                                                                                                  | `undefined`                                                                             | [`UserOperationContext`](../type-aliases/UserOperationContext.mdx) |         | `undefined` | [`UserOperationContext`](../type-aliases/UserOperationContext.mdx) |
+| `TEntryPointVersion` _extends_ keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase.mdx)\<`unknown`> | [`GetEntryPointFromAccount`](../type-aliases/GetEntryPointFromAccount.mdx)\<`TAccount`> |
+
+## Parameters
+
+| Parameter    | Type                                                                                          | Description                                     |
+| :----------- | :-------------------------------------------------------------------------------------------- | :---------------------------------------------- |
+| `client_`    | `Client`\<`Transport`, `TChain`, `TAccount`>                                                  | The client to send the transaction through      |
+| `args`       | `SendTransactionParameters`\<`TChain`, `TAccount`, `TChainOverride`>                          | The parameters required to send the transaction |
+| `overrides?` | [`UserOperationOverrides`](../type-aliases/UserOperationOverrides.mdx)\<`TEntryPointVersion`> | Optional overrides for the user operation       |
+| `context?`   | `TContext`                                                                                    | Optional context for the user operation         |
+
+## Returns
+
+`Promise`\<`` `0x${string}` ``>
+
+A promise that resolves to a hex string representing the transaction hash

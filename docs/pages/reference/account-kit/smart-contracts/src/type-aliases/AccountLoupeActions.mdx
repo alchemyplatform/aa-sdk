@@ -1,0 +1,98 @@
+---
+title: AccountLoupeActions
+description: Overview of the AccountLoupeActions 2097152
+slug: wallets/reference/account-kit/smart-contracts/src/type-aliases/AccountLoupeActions
+layout: reference
+---
+
+```ts
+type AccountLoupeActions<TAccount> = object;
+```
+
+Defined in: [account-kit/smart-contracts/src/msca/account-loupe/decorator.ts:17](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/msca/account-loupe/decorator.ts#L17)
+
+## Type Parameters
+
+| Type Parameter                              | Default type |
+| :------------------------------------------ | :----------- | ---------------------- | ----------- |
+| `TAccount` _extends_ `SmartContractAccount` | `undefined`  | `SmartContractAccount` | `undefined` |
+
+## Methods
+
+### getExecutionFunctionConfig()
+
+```ts
+getExecutionFunctionConfig(args): Promise<ExecutionFunctionConfig>;
+```
+
+Defined in: [account-kit/smart-contracts/src/msca/account-loupe/decorator.ts:26](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/msca/account-loupe/decorator.ts#L26)
+
+#### Parameters
+
+| Parameter | Type                                          |
+| :-------- | :-------------------------------------------- |
+| `args`    | `object` & `GetAccountParameter`\<`TAccount`> |
+
+#### Returns
+
+`Promise`\<[`ExecutionFunctionConfig`](ExecutionFunctionConfig.mdx)>
+
+---
+
+### getExecutionHooks()
+
+```ts
+getExecutionHooks(args): Promise<readonly ExecutionHooks[]>;
+```
+
+Defined in: [account-kit/smart-contracts/src/msca/account-loupe/decorator.ts:33](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/msca/account-loupe/decorator.ts#L33)
+
+#### Parameters
+
+| Parameter | Type                                          |
+| :-------- | :-------------------------------------------- |
+| `args`    | `object` & `GetAccountParameter`\<`TAccount`> |
+
+#### Returns
+
+`Promise`\<readonly [`ExecutionHooks`](ExecutionHooks.mdx)\[]>
+
+---
+
+### getInstalledPlugins()
+
+```ts
+getInstalledPlugins(args): Promise<readonly `0x${string}`[]>;
+```
+
+Defined in: [account-kit/smart-contracts/src/msca/account-loupe/decorator.ts:49](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/msca/account-loupe/decorator.ts#L49)
+
+#### Parameters
+
+| Parameter | Type                               |
+| :-------- | :--------------------------------- |
+| `args`    | `GetAccountParameter`\<`TAccount`> |
+
+#### Returns
+
+`Promise`\<readonly `` `0x${string}` ``\[]>
+
+---
+
+### getPreValidationHooks()
+
+```ts
+getPreValidationHooks(args): Promise<readonly [readonly `0x${string}`[], readonly `0x${string}`[]]>;
+```
+
+Defined in: [account-kit/smart-contracts/src/msca/account-loupe/decorator.ts:43](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/msca/account-loupe/decorator.ts#L43)
+
+#### Parameters
+
+| Parameter | Type                                          |
+| :-------- | :-------------------------------------------- |
+| `args`    | `object` & `GetAccountParameter`\<`TAccount`> |
+
+#### Returns
+
+`Promise`\<readonly \[readonly `` `0x${string}` ``\[], readonly `` `0x${string}` ``\[]]>

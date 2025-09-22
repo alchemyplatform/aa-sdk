@@ -1,0 +1,23 @@
+---
+title: WaitForUserOperationTxParameters
+description: Overview of the WaitForUserOperationTxParameters 2097152
+slug: wallets/reference/aa-sdk/core/src/type-aliases/WaitForUserOperationTxParameters
+layout: reference
+---
+
+```ts
+type WaitForUserOperationTxParameters = object;
+```
+
+Defined in: [aa-sdk/core/src/actions/smartAccount/types.ts:118](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/actions/smartAccount/types.ts#L118)
+
+## Properties
+
+| Property                      | Type        | Description                                                                                                                                                                                                  | Defined in                                                                                                                                                                                      |
+| :---------------------------- | :---------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <a id="hash" /> `hash`        | `Hex`       | -                                                                                                                                                                                                            | [aa-sdk/core/src/actions/smartAccount/types.ts:119](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/actions/smartAccount/types.ts#L119) |
+| <a id="retries" /> `retries?` | `object`    | Exponential backoff paramters that can be used to override the configuration on the client. If not provided, this method will use the paramters passed via the `opts` parameter on the smart account client. | [aa-sdk/core/src/actions/smartAccount/types.ts:130](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/actions/smartAccount/types.ts#L130) |
+| `retries.intervalMs`          | `number`    | the base retry interval or delay between requests                                                                                                                                                            | [aa-sdk/core/src/actions/smartAccount/types.ts:134](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/actions/smartAccount/types.ts#L134) |
+| `retries.maxRetries`          | `number`    | the maximum number of retries before failing                                                                                                                                                                 | [aa-sdk/core/src/actions/smartAccount/types.ts:141](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/actions/smartAccount/types.ts#L141) |
+| `retries.multiplier`          | `number`    | the multiplier to exponentiate based on the number retries setting this to one will result in a linear backoff                                                                                               | [aa-sdk/core/src/actions/smartAccount/types.ts:139](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/actions/smartAccount/types.ts#L139) |
+| <a id="tag" /> `tag?`         | `"pending"` | `"latest"`                                                                                                                                                                                                   | The tag to use for the UO status.                                                                                                                                                               | [aa-sdk/core/src/actions/smartAccount/types.ts:123](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/actions/smartAccount/types.ts#L123) |

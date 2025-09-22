@@ -1,0 +1,33 @@
+---
+title: conditionalReturn
+description: Overview of the conditionalReturn function
+slug: wallets/reference/aa-sdk/core/src/functions/conditionalReturn
+layout: reference
+---
+
+```ts
+function conditionalReturn<T>(condition, value): Promise<undefined | T>;
+```
+
+Defined in: [aa-sdk/core/src/utils/index.ts:152](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/utils/index.ts#L152)
+
+Utility method for checking the condition and return the value if condition holds true, undefined if not.
+
+## Type Parameters
+
+| Type Parameter |
+| :------------- |
+| `T`            |
+
+## Parameters
+
+| Parameter   | Type                  | Description                               |
+| :---------- | :-------------------- | :---------------------------------------- |
+| `condition` | `Promise`\<`boolean`> | condition to check                        |
+| `value`     | () => `Promise`\<`T`> | value to return when condition holds true |
+
+## Returns
+
+`Promise`\<`undefined` | `T`>
+
+the value if condition holds true, undefined if not

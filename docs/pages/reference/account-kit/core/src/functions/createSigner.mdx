@@ -1,0 +1,27 @@
+---
+title: createSigner
+description: Overview of the createSigner function
+slug: wallets/reference/account-kit/core/src/functions/createSigner
+layout: reference
+---
+
+```ts
+function createSigner(params): AlchemyWebSigner;
+```
+
+Defined in: [account-kit/core/src/environments/web/createSigner.ts:12](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/core/src/environments/web/createSigner.ts#L12)
+
+Given initial client store parameters, it initializes an AlchemySigner instance.
+This should only be called on the client.
+
+## Parameters
+
+| Parameter | Type                | Description                        |
+| :-------- | :------------------ | :--------------------------------- |
+| `params`  | `ClientStoreConfig` | to configure and create the signer |
+
+## Returns
+
+`AlchemyWebSigner`
+
+an instance of the AlchemySigner

@@ -1,0 +1,45 @@
+---
+title: toRecord
+description: Overview of the toRecord function
+slug: wallets/reference/aa-sdk/core/src/functions/toRecord
+layout: reference
+---
+
+```ts
+function toRecord<T, K, V>(array, selector, fn): Record<T[K], V>;
+```
+
+Defined in: [aa-sdk/core/src/utils/index.ts:177](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/utils/index.ts#L177)
+
+Converts an array of objects into a record (object) where each key is determined by the specified selector and the value is determined by the provided function.
+
+## Example
+
+```ts
+import { toRecord } from "@aa-sdk/core";
+import { sepolia, mainnet } from "viem/chains";
+
+const addressesByChain = toRecord([sepolia, mainnet], "id", () => "0x..."); // { [sepolia.id]: "0x...", [mainnet.id]: "0x..." }
+```
+
+## Type Parameters
+
+| Type Parameter                 |
+| :----------------------------- | -------- | --------------- | ------ | -------- |
+| `T` _extends_ \{ \[K in string | number   | symbol]: string | number | symbol } |
+| `K` _extends_ `string`         | `number` | `symbol`        |
+| `V`                            |
+
+## Parameters
+
+| Parameter  | Type            | Description                                                                 |
+| :--------- | :-------------- | :-------------------------------------------------------------------------- |
+| `array`    | `T`\[]          | The array of objects to convert to a record                                 |
+| `selector` | `K`             | The key used to select the property that will become the record's key       |
+| `fn`       | (`item`) => `V` | The function that transforms each item in the array into the record's value |
+
+## Returns
+
+`Record`\<`T`\[`K`], `V`>
+
+The resulting record object

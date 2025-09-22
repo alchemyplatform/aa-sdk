@@ -1,0 +1,59 @@
+---
+title: useSetEmail
+description: Overview of the useSetEmail function
+slug: wallets/reference/account-kit/react/src/functions/useSetEmail
+layout: reference
+---
+
+```ts
+function useSetEmail(mutationArgs?): UseSetEmailResult;
+```
+
+Defined in: [account-kit/react/src/hooks/useSetEmail.ts:76](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/react/src/hooks/useSetEmail.ts#L76)
+
+A custom hook to set an email address for an already authenticated account.
+
+**Note:** You should first use the `useSendVerificationCode` hook to send
+a verification code to the email address before calling this hook.
+
+## Example
+
+```ts twoslash
+import { useSetEmail, useSendVerificationCode } from "@account-kit/react";
+
+// First, send verification code
+const { sendVerificationCode } = useSendVerificationCode();
+
+const { setEmail, isSettingEmail, error } = useSetEmail({
+  onSuccess: () => {
+    // do something when email is successfully set
+  },
+  onError: (error) => console.error(error),
+});
+
+// Step 1: Send verification code to email
+await sendVerificationCode({
+  type: "email",
+  contact: "user@example.com",
+});
+
+// Step 2: Update email using verification code
+setEmail({
+  verificationCode: "123456", // code user received
+});
+
+// DEPRECATED: Use with just email string (for backward compatibility)
+setEmail("user@example.com");
+```
+
+## Parameters
+
+| Parameter       | Type                                                                                                                                         | Description       |
+| :-------------- | :------------------------------------------------------------------------------------------------------------------------------------------- | :---------------- | -------------------------------------------- |
+| `mutationArgs?` | `Partial`\<`Omit`\<`UseMutationOptions`\<`void`, `Error`, [`SetEmailParams`](../type-aliases/SetEmailParams.mdx), `unknown`>, `"mutationFn"` | `"mutationKey"`>> | Optional arguments for the setEmail mutation |
+
+## Returns
+
+[`UseSetEmailResult`](../type-aliases/UseSetEmailResult.mdx)
+
+An object containing functions and state for setting the email

@@ -1,0 +1,638 @@
+---
+title: RNSignerClient
+description: Overview of the RNSignerClient class
+slug: wallets/reference/account-kit/rn-signer/src/classes/RNSignerClient
+layout: reference
+---
+
+Defined in: [account-kit/rn-signer/src/client.ts:65](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/rn-signer/src/client.ts#L65)
+
+## Extends
+
+- `BaseSignerClient`\<[`ExportWalletParams`](../type-aliases/ExportWalletParams.mdx), `string`>
+
+## Constructors
+
+### Constructor
+
+```ts
+new RNSignerClient(params): RNSignerClient;
+```
+
+Defined in: [account-kit/rn-signer/src/client.ts:78](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/rn-signer/src/client.ts#L78)
+
+#### Parameters
+
+| Parameter                  | Type             |
+| :------------------------- | :--------------- | --------------------------------------------------------------------- | --------------------------------------------------------------------- | --------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `params`                   | \{ `connection`: | \{ `apiKey`: `string`; `jwt?`: `undefined`; `rpcUrl?`: `undefined`; } | \{ `apiKey?`: `undefined`; `jwt`: `string`; `rpcUrl?`: `undefined`; } | \{ `apiKey?`: `undefined`; `jwt?`: `undefined`; `rpcUrl`: `string`; } | \{ `apiKey?`: `undefined`; `jwt`: `string`; `rpcUrl`: `string`; } & `object`; `oauthCallbackUrl?`: `string`; `rootOrgId?`: `string`; `rpId?`: `string`; } |
+| `params.connection`        |                  | \{ `apiKey`: `string`; `jwt?`: `undefined`; `rpcUrl?`: `undefined`; } | \{ `apiKey?`: `undefined`; `jwt`: `string`; `rpcUrl?`: `undefined`; } | \{ `apiKey?`: `undefined`; `jwt?`: `undefined`; `rpcUrl`: `string`; } | \{ `apiKey?`: `undefined`; `jwt`: `string`; `rpcUrl`: `string`; } & `object`                                                                              |
+| `params.oauthCallbackUrl?` | `string`         |
+| `params.rootOrgId?`        | `string`         |
+| `params.rpId?`             | `string`         |
+
+#### Returns
+
+`RNSignerClient`
+
+#### Overrides
+
+```ts
+BaseSignerClient<
+  ExportWalletParams,
+  string
+>.constructor
+```
+
+## Properties
+
+| Property                                                                                 | Modifier    | Type                                                                                                                          | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | Inherited from                                           | Defined in                                                                                                                                                                |
+| :--------------------------------------------------------------------------------------- | :---------- | :---------------------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <a id="addmfa" /> `addMfa`                                                               | `public`    | (`params`) => `Promise`\<`AddMfaResult`>                                                                                      | Initiates the setup of a new MFA factor for the current user. Mfa will need to be verified before it is active. **Throws** If no user is authenticated **Throws** If an unsupported factor type is provided                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | `BaseSignerClient.addMfa`                                | account-kit/signer/dist/types/client/base.d.ts:350                                                                                                                        |
+| <a id="addoauthprovider" /> `addOauthProvider`                                           | `public`    | (`params`) => `Promise`\<`OauthProviderInfo`>                                                                                 | Adds an OAuth provider for the authenticated user using the provided parameters. Throws an error if the user is not authenticated. **Throws** Throws if the user is not authenticated.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | `BaseSignerClient.addOauthProvider`                      | account-kit/signer/dist/types/client/base.d.ts:197                                                                                                                        |
+| <a id="addpasskey" /> `addPasskey`                                                       | `public`    | (`options`) => `Promise`\<`string`\[]>                                                                                        | Handles the creation of authenticators using WebAuthn attestation and the provided options. Requires the user to be authenticated. **Throws** If the user is not authenticated                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | `BaseSignerClient.addPasskey`                            | account-kit/signer/dist/types/client/base.d.ts:165                                                                                                                        |
+| <a id="eventemitter" /> `eventEmitter`                                                   | `protected` | `EventEmitter`\<`AlchemySignerClientEvents`>                                                                                  | -                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         | `BaseSignerClient.eventEmitter`                          | account-kit/signer/dist/types/client/base.d.ts:25                                                                                                                         |
+| <a id="experimental_addtomultiowner" /> `experimental_addToMultiOwner`                   | `public`    | (`orgId`, `members`) => `Promise`\<`void`>                                                                                    | This will add additional members to an existing multi-sig account                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         | `BaseSignerClient.experimental_addToMultiOwner`          | account-kit/signer/dist/types/client/base.d.ts:310                                                                                                                        |
+| <a id="experimental_createapikey" /> `experimental_createApiKey`                         | `public`    | (`params`) => `Promise`\<`void`>                                                                                              | Creates an API key that can take any action on behalf of the current user. (Note that this method is currently experimental and is subject to change.) **Throws** If there is no authenticated user or the API key creation fails.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | `BaseSignerClient.experimental_createApiKey`             | account-kit/signer/dist/types/client/base.d.ts:249                                                                                                                        |
+| <a id="experimental_createmultiowner" /> `experimental_createMultiOwner`                 | `public`    | (`additionalMembers`) => `Promise`\<\{ `evmSignerAddress`: `` `0x${string}` ``; `members`: `object`\[]; `orgId`: `string`; }> | This will create a multi-owner account with the current user and additional specified signers                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             | `BaseSignerClient.experimental_createMultiOwner`         | account-kit/signer/dist/types/client/base.d.ts:297                                                                                                                        |
+| <a id="experimental_deletefrommultiowner" /> `experimental_deleteFromMultiOwner`         | `public`    | (`orgId`, `members`) => `Promise`\<`void`>                                                                                    | This will remove members from an existing multi-sig account                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | `BaseSignerClient.experimental_deleteFromMultiOwner`     | account-kit/signer/dist/types/client/base.d.ts:317                                                                                                                        |
+| <a id="experimental_multiownersignrawmessage" /> `experimental_multiOwnerSignRawMessage` | `public`    | (`msg`, `orgId`, `orgAddress`) => `Promise`\<`` `0x${string}` ``>                                                             | This will sign on behalf of the multi-owner org, without doing any transformations on the message. For SignMessage or SignTypedData, the caller should hash the message before calling this method and pass that result here.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             | `BaseSignerClient.experimental_multiOwnerSignRawMessage` | account-kit/signer/dist/types/client/base.d.ts:290                                                                                                                        |
+| <a id="getmfafactors" /> `getMfaFactors`                                                 | `public`    | () => `Promise`\<\{ `multiFactors`: `MfaFactor`\[]; }>                                                                        | Retrieves the list of MFA factors configured for the current user. **Throws** If no user is authenticated                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 | `BaseSignerClient.getMfaFactors`                         | account-kit/signer/dist/types/client/base.d.ts:339                                                                                                                        |
+| <a id="getoauthnonce" /> `getOauthNonce`                                                 | `protected` | (`turnkeyPublicKey`) => `string`                                                                                              | Turnkey requires the nonce in the id token to be in this format.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          | `BaseSignerClient.getOauthNonce`                         | account-kit/signer/dist/types/client/base.d.ts:423                                                                                                                        |
+| <a id="getoauthproviderurl" /> `getOauthProviderUrl`                                     | `protected` | (`args`) => `Promise`\<`string`>                                                                                              | Returns the authentication url for the selected OAuth Proivder **Example** `cosnt oauthParams = { authProviderId: "google", isCustomProvider: false, auth0Connection: undefined, scope: undefined, claims: undefined, mode: "redirect", redirectUrl: "https://your-url-path/oauth-return", expirationSeconds: 3000 }; const turnkeyPublicKey = await this.initIframeStamper(); const oauthCallbackUrl = this.oauthCallbackUrl; const oauthConfig = this.getOauthConfig() // Optional value for OauthConfig() const usesRelativeUrl = true // Optional value to determine if we use a relative (or absolute) url for the `redirect_url` const oauthProviderUrl = getOauthProviderUrl({ oauthParams, turnkeyPublicKey, oauthCallbackUrl })` | `BaseSignerClient.getOauthProviderUrl`                   | account-kit/signer/dist/types/client/base.d.ts:414                                                                                                                        |
+| <a id="getpasskeystatus" /> `getPasskeyStatus`                                           | `public`    | () => `Promise`\<\{ `isPasskeyAdded`: `boolean`; }>                                                                           | Retrieves the status of the passkey for the current user. Requires the user to be authenticated. **Throws** If the user is not authenticated                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              | `BaseSignerClient.getPasskeyStatus`                      | account-kit/signer/dist/types/client/base.d.ts:187                                                                                                                        |
+| <a id="getuser" /> `getUser`                                                             | `public`    | () => `null`                                                                                                                  | `User`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | Returns the current user or null if no user is set.      | `BaseSignerClient.getUser`                                                                                                                                                | account-kit/signer/dist/types/client/base.d.ts:323                                                                                                                        |
+| <a id="initoauth" /> `initOauth`                                                         | `public`    | () => `Promise`\<`OauthConfig`>                                                                                               | Asynchronously fetches and sets the OAuth configuration.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  | `BaseSignerClient.initOauth`                             | account-kit/signer/dist/types/client/base.d.ts:38                                                                                                                         |
+| <a id="initotp" /> `initOtp`                                                             | `public`    | (`type`, `contact`) => `Promise`\<\{ `otpId`: `string`; }>                                                                    | Initiates an OTP (One-Time Password) verification process for a user contact. **Throws** When no user is currently authenticated                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          | `BaseSignerClient.initOtp`                               | account-kit/signer/dist/types/client/base.d.ts:155                                                                                                                        |
+| <a id="listauthmethods" /> `listAuthMethods`                                             | `public`    | () => `Promise`\<`AuthMethods`>                                                                                               | Retrieves the list of authentication methods for the current user. **Throws** If the user is not authenticated                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | `BaseSignerClient.listAuthMethods`                       | account-kit/signer/dist/types/client/base.d.ts:211                                                                                                                        |
+| <a id="lookupuserbyemail" /> `lookupUserByEmail`                                         | `public`    | (`email`) => `Promise`\<\{ `orgId`: `null`                                                                                    | `string`; }>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              | Looks up information based on an email address.          | `BaseSignerClient.lookupUserByEmail`                                                                                                                                      | account-kit/signer/dist/types/client/base.d.ts:256                                                                                                                        |
+| <a id="lookupuserbyphone" /> `lookupUserByPhone`                                         | `public`    | (`phone`) => `Promise`\<\{ `orgId`: `null`                                                                                    | `string`; }>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              | Looks up information based on a phone number.            | `BaseSignerClient.lookupUserByPhone`                                                                                                                                      | account-kit/signer/dist/types/client/base.d.ts:265                                                                                                                        |
+| <a id="lookupuserwithpasskey" /> `lookupUserWithPasskey`                                 | `public`    | (`user?`) => `Promise`\<`User`>                                                                                               | Asynchronously handles the authentication process using WebAuthn Stamper. If a user is provided, sets the user and returns it. Otherwise, retrieves the current user and initializes the WebAuthn stamper.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                | `BaseSignerClient.lookupUserWithPasskey`                 | account-kit/signer/dist/types/client/base.d.ts:180                                                                                                                        |
+| <a id="oauthcallbackurl" /> `oauthCallbackUrl`                                           | `public`    | `string`                                                                                                                      | -                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         | -                                                        | [account-kit/rn-signer/src/client.ts:70](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/rn-signer/src/client.ts#L70) |
+| <a id="oauthconfig" /> `oauthConfig`                                                     | `protected` | `undefined`                                                                                                                   | `OauthConfig`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             | -                                                        | `BaseSignerClient.oauthConfig`                                                                                                                                            | account-kit/signer/dist/types/client/base.d.ts:26                                                                                                                         |
+| <a id="on" /> `on`                                                                       | `public`    | \<`E`>(`event`, `listener`) => () => `EventEmitter`\<`AlchemySignerClientEvents`, `any`>                                      | Listen to events emitted by the client                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | `BaseSignerClient.on`                                    | account-kit/signer/dist/types/client/base.d.ts:98                                                                                                                         |
+| <a id="pollactivitycompletion" /> `pollActivityCompletion`                               | `protected` | \<`T`>(`activity`, `organizationId`, `resultKey`) => `Promise`\<`NonNullable`\<`object`\[`T`]>>                               | -                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         | `BaseSignerClient.pollActivityCompletion`                | account-kit/signer/dist/types/client/base.d.ts:416                                                                                                                        |
+| <a id="removeemail" /> `removeEmail`                                                     | `public`    | () => `Promise`\<`void`>                                                                                                      | Removes the email for the authenticated user, disallowing them from login with that email. **Throws** If the user is not authenticated                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | `BaseSignerClient.removeEmail`                           | account-kit/signer/dist/types/client/base.d.ts:128                                                                                                                        |
+| <a id="removemfa" /> `removeMfa`                                                         | `public`    | (`params`) => `Promise`\<\{ `multiFactors`: `MfaFactor`\[]; }>                                                                | Removes existing MFA factors by ID. **Throws** If no user is authenticated                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                | `BaseSignerClient.removeMfa`                             | account-kit/signer/dist/types/client/base.d.ts:368                                                                                                                        |
+| <a id="removeoauthprovider" /> `removeOauthProvider`                                     | `public`    | (`providerId`) => `Promise`\<`void`>                                                                                          | Deletes a specified OAuth provider for the authenticated user. **Throws** If the user is not authenticated                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                | `BaseSignerClient.removeOauthProvider`                   | account-kit/signer/dist/types/client/base.d.ts:204                                                                                                                        |
+| <a id="removepasskey" /> `removePasskey`                                                 | `public`    | (`authenticatorId`) => `Promise`\<`void`>                                                                                     | Removes a passkey authenticator from the user's account. **Throws** If the user is not authenticated.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     | `BaseSignerClient.removePasskey`                         | account-kit/signer/dist/types/client/base.d.ts:173                                                                                                                        |
+| <a id="removephonenumber" /> `removePhoneNumber`                                         | `public`    | () => `Promise`\<`void`>                                                                                                      | Removes the phone number for the authenticated user, disallowing them from login with that phone number. **Throws** If the user is not authenticated                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      | `BaseSignerClient.removePhoneNumber`                     | account-kit/signer/dist/types/client/base.d.ts:145                                                                                                                        |
+| <a id="request" /> `request`                                                             | `public`    | \<`R`>(`route`, `body`) => `Promise`\<`SignerResponse`\<`R`>>                                                                 | Sends a POST request to the given signer route with the specified body and returns the response. Not intended to be used directly, use the specific methods instead on the client instead.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                | `BaseSignerClient.request`                               | account-kit/signer/dist/types/client/base.d.ts:332                                                                                                                        |
+| <a id="rootorg" /> `rootOrg`                                                             | `protected` | `string`                                                                                                                      | -                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         | `BaseSignerClient.rootOrg`                               | account-kit/signer/dist/types/client/base.d.ts:24                                                                                                                         |
+| <a id="rpid" /> `rpId`                                                                   | `public`    | `undefined`                                                                                                                   | `string`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  | -                                                        | -                                                                                                                                                                         | [account-kit/rn-signer/src/client.ts:71](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/rn-signer/src/client.ts#L71) |
+| <a id="setphonenumber" /> `setPhoneNumber`                                               | `public`    | (`otp`) => `Promise`\<`void`>                                                                                                 | Updates the phone number for the authenticated user, allowing them to login with that phone number. Must be called after calling `initOtp` with the phone number. **Throws** If the user is not authenticated                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             | `BaseSignerClient.setPhoneNumber`                        | account-kit/signer/dist/types/client/base.d.ts:138                                                                                                                        |
+| <a id="signrawmessage" /> `signRawMessage`                                               | `public`    | (`msg`, `mode?`) => `Promise`\<`` `0x${string}` ``>                                                                           | This will sign a message with the user's private key, without doing any transformations on the message. For SignMessage or SignTypedData, the caller should hash the message before calling this method and pass that result here.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | `BaseSignerClient.signRawMessage`                        | account-kit/signer/dist/types/client/base.d.ts:277                                                                                                                        |
+| <a id="stampgetorganization" /> `stampGetOrganization`                                   | `public`    | () => `Promise`\<`TSignedRequest`>                                                                                            | Generates a stamped getOrganization request for the current user. **Throws** if no user is authenticated                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  | `BaseSignerClient.stampGetOrganization`                  | account-kit/signer/dist/types/client/base.d.ts:238                                                                                                                        |
+| <a id="stampwhoami" /> `stampWhoami`                                                     | `public`    | () => `Promise`\<`TSignedRequest`>                                                                                            | Generates a stamped whoami request for the current user. This request can then be used to call /signer/v1/whoami to get the user information. This is useful if you want to get the user information in a different context like a server. You can pass the stamped request to the server and then call our API to get the user information. Using this stamp is the most trusted way to get the user information since a stamp can only belong to the user who created it. **Throws** if no organization ID is provided                                                                                                                                                                                                                  | `BaseSignerClient.stampWhoami`                           | account-kit/signer/dist/types/client/base.d.ts:231                                                                                                                        |
+| <a id="turnkeyclient" /> `turnkeyClient`                                                 | `protected` | `TurnkeyClient`                                                                                                               | -                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         | `BaseSignerClient.turnkeyClient`                         | account-kit/signer/dist/types/client/base.d.ts:23                                                                                                                         |
+| <a id="validatemultifactors" /> `validateMultiFactors`                                   | `public`    | (`params`) => `Promise`\<\{ `bundle`: `string`; }>                                                                            | Validates multiple MFA factors using the provided encrypted payload and MFA codes. **Throws** If no credential bundle is returned from the server                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         | `BaseSignerClient.validateMultiFactors`                  | account-kit/signer/dist/types/client/base.d.ts:378                                                                                                                        |
+| <a id="verifymfa" /> `verifyMfa`                                                         | `public`    | (`params`) => `Promise`\<\{ `multiFactors`: `MfaFactor`\[]; }>                                                                | Verifies a newly created MFA factor to complete the setup process. **Throws** If no user is authenticated                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 | `BaseSignerClient.verifyMfa`                             | account-kit/signer/dist/types/client/base.d.ts:358                                                                                                                        |
+| <a id="whoami" /> `whoami`                                                               | `public`    | (`orgId?`, `idToken?`, `accessToken?`) => `Promise`\<`User`>                                                                  | Retrieves the current user or fetches the user information if not already available. **Throws** if no organization ID is provided when there is no current user                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | `BaseSignerClient.whoami`                                | account-kit/signer/dist/types/client/base.d.ts:221                                                                                                                        |
+
+## Accessors
+
+### user
+
+#### Get Signature
+
+```ts
+get protected user(): undefined | User;
+```
+
+Defined in: account-kit/signer/dist/types/client/base.d.ts:39
+
+##### Returns
+
+`undefined` | `User`
+
+#### Set Signature
+
+```ts
+set protected user(user): void;
+```
+
+Defined in: account-kit/signer/dist/types/client/base.d.ts:40
+
+##### Parameters
+
+| Parameter | Type        |
+| :-------- | :---------- | ------ |
+| `user`    | `undefined` | `User` |
+
+##### Returns
+
+`void`
+
+#### Inherited from
+
+```ts
+BaseSignerClient.user;
+```
+
+## Methods
+
+### completeAuthWithBundle()
+
+```ts
+completeAuthWithBundle(params): Promise<User>;
+```
+
+Defined in: [account-kit/rn-signer/src/client.ts:181](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/rn-signer/src/client.ts#L181)
+
+#### Parameters
+
+| Parameter                   | Type                                                         |
+| :-------------------------- | :----------------------------------------------------------- | ------- | ------- | ----------- | --------- | ------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `params`                    | \{ `accessToken?`: `string`; `authenticatingType`: `"email"` | `"otp"` | `"sms"` | `"passkey"` | `"oauth"` | `"otpVerify"` | `"custom-jwt"`; `bundle`: `string`; `connectedEventName`: keyof `AlchemySignerClientEvents`; `idToken?`: `string`; `orgId`: `string`; } |
+| `params.accessToken?`       | `string`                                                     |
+| `params.authenticatingType` | `"email"`                                                    | `"otp"` | `"sms"` | `"passkey"` | `"oauth"` | `"otpVerify"` | `"custom-jwt"`                                                                                                                          |
+| `params.bundle`             | `string`                                                     |
+| `params.connectedEventName` | keyof `AlchemySignerClientEvents`                            |
+| `params.idToken?`           | `string`                                                     |
+| `params.orgId`              | `string`                                                     |
+
+#### Returns
+
+`Promise`\<`User`>
+
+#### Overrides
+
+```ts
+BaseSignerClient.completeAuthWithBundle;
+```
+
+---
+
+### createAccount()
+
+```ts
+createAccount(params): Promise<SignupResponse>;
+```
+
+Defined in: account-kit/signer/dist/types/client/base.d.ts:53
+
+Authenticates the user by either email or passkey account creation flow. Emits events during the process.
+
+#### Parameters
+
+| Parameter | Type                  | Description                                                                                           |
+| :-------- | :-------------------- | :---------------------------------------------------------------------------------------------------- |
+| `params`  | `CreateAccountParams` | The parameters for creating an account, including the type (email or passkey) and additional details. |
+
+#### Returns
+
+`Promise`\<`SignupResponse`>
+
+A promise that resolves with the response object containing the account creation result.
+
+#### Inherited from
+
+```ts
+BaseSignerClient.createAccount;
+```
+
+---
+
+### disconnect()
+
+```ts
+disconnect(): Promise<void>;
+```
+
+Defined in: [account-kit/rn-signer/src/client.ts:295](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/rn-signer/src/client.ts#L295)
+
+#### Returns
+
+`Promise`\<`void`>
+
+#### Overrides
+
+```ts
+BaseSignerClient.disconnect;
+```
+
+---
+
+### exportWallet()
+
+```ts
+exportWallet(params?): Promise<string>;
+```
+
+Defined in: [account-kit/rn-signer/src/client.ts:308](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/rn-signer/src/client.ts#L308)
+
+Exports the wallet and returns the decrypted private key or seed phrase.
+
+#### Parameters
+
+| Parameter | Type                                                           | Description             |
+| :-------- | :------------------------------------------------------------- | :---------------------- |
+| `params?` | [`ExportWalletParams`](../type-aliases/ExportWalletParams.mdx) | exportWallet parameters |
+
+#### Returns
+
+`Promise`\<`string`>
+
+The decrypted private key or seed phrase
+
+#### Throws
+
+If the user is not authenticated or export fails
+
+#### Overrides
+
+```ts
+BaseSignerClient.exportWallet;
+```
+
+---
+
+### getOauthConfig()
+
+```ts
+protected getOauthConfig(): Promise<OauthConfig>;
+```
+
+Defined in: [account-kit/rn-signer/src/client.ts:463](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/rn-signer/src/client.ts#L463)
+
+#### Returns
+
+`Promise`\<`OauthConfig`>
+
+#### Overrides
+
+```ts
+BaseSignerClient.getOauthConfig;
+```
+
+---
+
+### getWebAuthnAttestation()
+
+```ts
+protected getWebAuthnAttestation(options?, userDetails?): Promise<GetWebAuthnAttestationResult & object>;
+```
+
+Defined in: [account-kit/rn-signer/src/client.ts:432](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/rn-signer/src/client.ts#L432)
+
+#### Parameters
+
+| Parameter               | Type                                |
+| :---------------------- | :---------------------------------- |
+| `options?`              | `CredentialCreationOptionOverrides` |
+| `userDetails?`          | \{ `username`: `string`; }          |
+| `userDetails.username?` | `string`                            |
+
+#### Returns
+
+`Promise`\<`GetWebAuthnAttestationResult` & `object`>
+
+#### Overrides
+
+```ts
+BaseSignerClient.getWebAuthnAttestation;
+```
+
+---
+
+### initEmailAuth()
+
+```ts
+initEmailAuth(params): Promise<{
+  multiFactors?: MfaFactor[];
+  orgId: string;
+  otpId?: string;
+}>;
+```
+
+Defined in: [account-kit/rn-signer/src/client.ts:129](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/rn-signer/src/client.ts#L129)
+
+#### Parameters
+
+| Parameter | Type                                            |
+| :-------- | :---------------------------------------------- |
+| `params`  | `Omit`\<`EmailAuthParams`, `"targetPublicKey"`> |
+
+#### Returns
+
+`Promise`\<\{
+`multiFactors?`: `MfaFactor`\[];
+`orgId`: `string`;
+`otpId?`: `string`;
+}>
+
+#### Overrides
+
+```ts
+BaseSignerClient.initEmailAuth;
+```
+
+---
+
+### initSessionStamper()
+
+```ts
+protected initSessionStamper(): Promise<string>;
+```
+
+Defined in: [account-kit/rn-signer/src/client.ts:470](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/rn-signer/src/client.ts#L470)
+
+Initializes the session stamper and returns its public key.
+
+#### Returns
+
+`Promise`\<`string`>
+
+#### Overrides
+
+```ts
+BaseSignerClient.initSessionStamper;
+```
+
+---
+
+### initSmsAuth()
+
+```ts
+initSmsAuth(params): Promise<{
+  orgId: string;
+  otpId?: string;
+}>;
+```
+
+Defined in: [account-kit/rn-signer/src/client.ts:154](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/rn-signer/src/client.ts#L154)
+
+#### Parameters
+
+| Parameter | Type                                          |
+| :-------- | :-------------------------------------------- |
+| `params`  | `Omit`\<`SmsAuthParams`, `"targetPublicKey"`> |
+
+#### Returns
+
+`Promise`\<\{
+`orgId`: `string`;
+`otpId?`: `string`;
+}>
+
+#### Overrides
+
+```ts
+BaseSignerClient.initSmsAuth;
+```
+
+---
+
+### initWebauthnStamper()
+
+```ts
+protected initWebauthnStamper(user, options?): Promise<void>;
+```
+
+Defined in: [account-kit/rn-signer/src/client.ts:474](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/rn-signer/src/client.ts#L474)
+
+#### Parameters
+
+| Parameter  | Type                                |
+| :--------- | :---------------------------------- | ------ |
+| `user`     | `undefined`                         | `User` |
+| `options?` | `CredentialCreationOptionOverrides` |
+
+#### Returns
+
+`Promise`\<`void`>
+
+#### Overrides
+
+```ts
+BaseSignerClient.initWebauthnStamper;
+```
+
+---
+
+### oauthWithPopup()
+
+```ts
+oauthWithPopup(_args): Promise<User>;
+```
+
+Defined in: [account-kit/rn-signer/src/client.ts:289](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/rn-signer/src/client.ts#L289)
+
+#### Parameters
+
+| Parameter | Type  |
+| :-------- | :---- |
+| `_args`   | `any` |
+
+#### Returns
+
+`Promise`\<`User`>
+
+#### Overrides
+
+```ts
+BaseSignerClient.oauthWithPopup;
+```
+
+---
+
+### oauthWithRedirect()
+
+```ts
+oauthWithRedirect(args): Promise<User | IdTokenOnly>;
+```
+
+Defined in: [account-kit/rn-signer/src/client.ts:215](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/rn-signer/src/client.ts#L215)
+
+#### Parameters
+
+| Parameter | Type  |
+| :-------- | :---- |
+| `args`    | `any` |
+
+#### Returns
+
+`Promise`\<`User` | `IdTokenOnly`>
+
+#### Overrides
+
+```ts
+BaseSignerClient.oauthWithRedirect;
+```
+
+---
+
+### setEmail()
+
+#### Call Signature
+
+```ts
+setEmail(email): Promise<string>;
+```
+
+Defined in: account-kit/signer/dist/types/client/base.d.ts:112
+
+Sets the email for the authenticated user, allowing them to login with that
+email.
+
+##### Deprecated
+
+You must contact Alchemy to enable this feature for your team,
+as there are important security considerations. In particular, you must not
+call this without first validating that the user owns this email account.
+Recommended to use the email verification flow instead.
+
+##### Parameters
+
+| Parameter | Type     | Description                   |
+| :-------- | :------- | :---------------------------- |
+| `email`   | `string` | The email to set for the user |
+
+##### Returns
+
+`Promise`\<`string`>
+
+A promise that resolves to the updated email
+
+##### Throws
+
+If the user is not authenticated
+
+##### Inherited from
+
+```ts
+BaseSignerClient.setEmail;
+```
+
+#### Call Signature
+
+```ts
+setEmail(otp): Promise<string>;
+```
+
+Defined in: account-kit/signer/dist/types/client/base.d.ts:121
+
+Sets the email for the authenticated user, allowing them to login with that
+email. Must be called after calling `initOtp` with the email.
+
+##### Parameters
+
+| Parameter | Type              | Description                                                   |
+| :-------- | :---------------- | :------------------------------------------------------------ |
+| `otp`     | `VerificationOtp` | The OTP verification object including the OTP ID and OTP code |
+
+##### Returns
+
+`Promise`\<`string`>
+
+A promise that resolves to the updated email
+
+##### Throws
+
+If the user is not authenticated
+
+##### Inherited from
+
+```ts
+BaseSignerClient.setEmail;
+```
+
+---
+
+### setStamper()
+
+```ts
+protected setStamper(stamper): void;
+```
+
+Defined in: account-kit/signer/dist/types/client/base.d.ts:46
+
+Sets the stamper of the TurnkeyClient.
+
+#### Parameters
+
+| Parameter | Type       | Description                                       |
+| :-------- | :--------- | :------------------------------------------------ |
+| `stamper` | `TStamper` | the stamper function to set for the TurnkeyClient |
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+```ts
+BaseSignerClient.setStamper;
+```
+
+---
+
+### submitJwt()
+
+```ts
+submitJwt(args): Promise<JwtResponse>;
+```
+
+Defined in: [account-kit/rn-signer/src/client.ts:167](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/rn-signer/src/client.ts#L167)
+
+#### Parameters
+
+| Parameter | Type                                      |
+| :-------- | :---------------------------------------- |
+| `args`    | `Omit`\<`JwtParams`, `"targetPublicKey"`> |
+
+#### Returns
+
+`Promise`\<`JwtResponse`>
+
+#### Overrides
+
+```ts
+BaseSignerClient.submitJwt;
+```
+
+---
+
+### submitOtpCode()
+
+```ts
+submitOtpCode(args): Promise<SubmitOtpCodeResponse>;
+```
+
+Defined in: [account-kit/rn-signer/src/client.ts:92](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/rn-signer/src/client.ts#L92)
+
+#### Parameters
+
+| Parameter | Type                                      |
+| :-------- | :---------------------------------------- |
+| `args`    | `Omit`\<`OtpParams`, `"targetPublicKey"`> |
+
+#### Returns
+
+`Promise`\<`SubmitOtpCodeResponse`>
+
+#### Overrides
+
+```ts
+BaseSignerClient.submitOtpCode;
+```
+
+---
+
+### targetPublicKey()
+
+```ts
+targetPublicKey(): Promise<string>;
+```
+
+Defined in: [account-kit/rn-signer/src/client.ts:428](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/rn-signer/src/client.ts#L428)
+
+#### Returns
+
+`Promise`\<`string`>
+
+#### Overrides
+
+```ts
+BaseSignerClient.targetPublicKey;
+```

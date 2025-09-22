@@ -1,0 +1,27 @@
+---
+title: parseCookie
+description: Overview of the parseCookie function
+slug: wallets/reference/account-kit/core/src/functions/parseCookie
+layout: reference
+---
+
+```ts
+function parseCookie(cookie, key): undefined | string;
+```
+
+Defined in: [account-kit/core/src/utils/cookies.ts:118](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/core/src/utils/cookies.ts#L118)
+
+Helper function that can be used to parse a cookie string on the server or client
+
+## Parameters
+
+| Parameter | Type     | Description                    |
+| :-------- | :------- | :----------------------------- |
+| `cookie`  | `string` | the cookie string to parse     |
+| `key`     | `string` | the key of the cookie to parse |
+
+## Returns
+
+`undefined` | `string`
+
+the value of the cookie given a key if it exists, otherwise undefined

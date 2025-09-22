@@ -1,0 +1,21 @@
+---
+title: SubmitOtpCodeResponse
+description: Overview of the SubmitOtpCodeResponse 2097152
+slug: wallets/reference/account-kit/signer/src/type-aliases/SubmitOtpCodeResponse
+layout: reference
+---
+
+```ts
+type SubmitOtpCodeResponse =
+  | {
+      bundle: string;
+      mfaRequired: false;
+    }
+  | {
+      encryptedPayload: string;
+      mfaRequired: true;
+      multiFactors: MfaFactor[];
+    };
+```
+
+Defined in: [account-kit/signer/src/client/types.ts:558](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/client/types.ts#L558)

@@ -1,0 +1,140 @@
+---
+title: IPluginManagerAbi
+description: Overview of the IPluginManagerAbi 32
+slug: wallets/reference/account-kit/smart-contracts/src/variables/IPluginManagerAbi
+layout: reference
+---
+
+```ts
+const IPluginManagerAbi: readonly [
+  {
+    inputs: readonly [
+      {
+        internalType: "address";
+        name: "plugin";
+        type: "address";
+      },
+      {
+        internalType: "bytes32";
+        name: "manifestHash";
+        type: "bytes32";
+      },
+      {
+        internalType: "bytes";
+        name: "pluginInitData";
+        type: "bytes";
+      },
+      {
+        internalType: "FunctionReference[]";
+        name: "dependencies";
+        type: "bytes21[]";
+      },
+    ];
+    name: "installPlugin";
+    outputs: readonly [];
+    stateMutability: "nonpayable";
+    type: "function";
+  },
+  {
+    inputs: readonly [
+      {
+        internalType: "address";
+        name: "plugin";
+        type: "address";
+      },
+      {
+        internalType: "bytes";
+        name: "config";
+        type: "bytes";
+      },
+      {
+        internalType: "bytes";
+        name: "pluginUninstallData";
+        type: "bytes";
+      },
+    ];
+    name: "uninstallPlugin";
+    outputs: readonly [];
+    stateMutability: "nonpayable";
+    type: "function";
+  },
+  {
+    anonymous: false;
+    inputs: readonly [
+      {
+        indexed: true;
+        internalType: "address";
+        name: "plugin";
+        type: "address";
+      },
+      {
+        indexed: true;
+        internalType: "address";
+        name: "providingPlugin";
+        type: "address";
+      },
+    ];
+    name: "PluginIgnoredHookUnapplyCallbackFailure";
+    type: "event";
+  },
+  {
+    anonymous: false;
+    inputs: readonly [
+      {
+        indexed: true;
+        internalType: "address";
+        name: "plugin";
+        type: "address";
+      },
+    ];
+    name: "PluginIgnoredUninstallCallbackFailure";
+    type: "event";
+  },
+  {
+    anonymous: false;
+    inputs: readonly [
+      {
+        indexed: true;
+        internalType: "address";
+        name: "plugin";
+        type: "address";
+      },
+      {
+        indexed: false;
+        internalType: "bytes32";
+        name: "manifestHash";
+        type: "bytes32";
+      },
+      {
+        indexed: false;
+        internalType: "FunctionReference[]";
+        name: "dependencies";
+        type: "bytes21[]";
+      },
+    ];
+    name: "PluginInstalled";
+    type: "event";
+  },
+  {
+    anonymous: false;
+    inputs: readonly [
+      {
+        indexed: true;
+        internalType: "address";
+        name: "plugin";
+        type: "address";
+      },
+      {
+        indexed: true;
+        internalType: "bool";
+        name: "callbacksSucceeded";
+        type: "bool";
+      },
+    ];
+    name: "PluginUninstalled";
+    type: "event";
+  },
+];
+```
+
+Defined in: [account-kit/smart-contracts/src/msca/abis/IPluginManager.ts:1](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/msca/abis/IPluginManager.ts#L1)

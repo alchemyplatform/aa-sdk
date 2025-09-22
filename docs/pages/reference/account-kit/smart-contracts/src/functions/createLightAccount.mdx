@@ -1,0 +1,34 @@
+---
+title: createLightAccount
+description: Creates a light account based on the provided parameters such as transport, chain, signer, init code, and more. Ensures that an account is configured and returned with various capabilities, such as transferring ownership and retrieving the owner's address.
+slug: wallets/reference/account-kit/smart-contracts/src/functions/createLightAccount
+layout: reference
+---
+
+```ts
+function createLightAccount<TTransport, TSigner, TLightAccountVersion>(
+  config,
+): Promise<LightAccount<TSigner, TLightAccountVersion>>;
+```
+
+Defined in: [account-kit/smart-contracts/src/light-account/accounts/account.ts:77](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/light-account/accounts/account.ts#L77)
+
+## Type Parameters
+
+| Type Parameter                                   | Default type                 |
+| :----------------------------------------------- | :--------------------------- | ---------- | ---------- | ---------- |
+| `TTransport` _extends_ `Transport`               | `Transport`                  |
+| `TSigner` _extends_ `SmartAccountSigner`\<`any`> | `SmartAccountSigner`\<`any`> |
+| `TLightAccountVersion` _extends_ `"v1.0.1"`      | `"v1.0.2"`                   | `"v1.1.0"` | `"v2.0.0"` | `"v2.0.0"` |
+
+## Parameters
+
+| Parameter | Type                                                                                                                         | Description                                 |
+| :-------- | :--------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------ |
+| `config`  | [`CreateLightAccountParams`](../type-aliases/CreateLightAccountParams.mdx)\<`TTransport`, `TSigner`, `TLightAccountVersion`> | The parameters for creating a light account |
+
+## Returns
+
+`Promise`\<[`LightAccount`](../type-aliases/LightAccount.mdx)\<`TSigner`, `TLightAccountVersion`>>
+
+A promise that resolves to a `LightAccount` object containing the created account information and methods

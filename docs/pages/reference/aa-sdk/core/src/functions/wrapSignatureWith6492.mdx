@@ -1,0 +1,38 @@
+---
+title: wrapSignatureWith6492
+description: Overview of the wrapSignatureWith6492 function
+slug: wallets/reference/aa-sdk/core/src/functions/wrapSignatureWith6492
+layout: reference
+---
+
+```ts
+function wrapSignatureWith6492(params): `0x${string}`;
+```
+
+Defined in: [aa-sdk/core/src/signer/utils.ts:36](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/signer/utils.ts#L36)
+
+Wraps a given signature with additional data following the EIP-6492 standard.
+
+## Example
+
+```ts
+import { wrapSignatureWith6492 } from "@aa-sdk/core";
+
+const signature = wrapSignatureWith6492({
+  factoryAddress: "0x...",
+  factoryCalldata: "0x...",
+  signature: "0x...",
+});
+```
+
+## Parameters
+
+| Parameter | Type                 | Description                          |
+| :-------- | :------------------- | :----------------------------------- |
+| `params`  | `SignWith6492Params` | The parameters to wrap the signature |
+
+## Returns
+
+`` `0x${string}` ``
+
+The wrapped signature

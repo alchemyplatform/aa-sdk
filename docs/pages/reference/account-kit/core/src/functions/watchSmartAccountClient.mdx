@@ -1,0 +1,59 @@
+---
+title: watchSmartAccountClient
+description: Overview of the watchSmartAccountClient function
+slug: wallets/reference/account-kit/core/src/functions/watchSmartAccountClient
+layout: reference
+---
+
+```ts
+function watchSmartAccountClient<TAccount, TChain>(
+  params,
+  config,
+): (onChange) => any;
+```
+
+Defined in: [account-kit/core/src/actions/watchSmartAccountClient.ts:33](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/core/src/actions/watchSmartAccountClient.ts#L33)
+
+Watches for changes to the smart account client and triggers the provided callback when a change is detected.
+
+## Example
+
+```ts
+import { watchSmartAccountClient } from "@account-kit/core";
+// see createConfig for more information on how to create a config
+import { config } from "./config";
+
+watchSmartAccountClient({ type: "LightAccount" }, config)(console.log);
+```
+
+## Type Parameters
+
+| Type Parameter                               | Default type | Description                   |
+| :------------------------------------------- | :----------- | :---------------------------- | ------- | ------------- | ----------------- | --------- |
+| `TAccount` _extends_ `SupportedAccountTypes` | -            | extends SupportedAccountTypes |
+| `TChain` _extends_ `undefined`               | `Chain`      | `undefined`                   | `Chain` | extends Chain | undefined = Chain | undefined |
+
+## Parameters
+
+| Parameter | Type                                                                                                    | Description                                                      |
+| :-------- | :------------------------------------------------------------------------------------------------------ | :--------------------------------------------------------------- |
+| `params`  | [`GetSmartAccountClientParams`](../type-aliases/GetSmartAccountClientParams.mdx)\<`TChain`, `TAccount`> | the parameters needed to get the smart account client            |
+| `config`  | `AlchemyAccountsConfig`                                                                                 | the configuration containing the client store and other settings |
+
+## Returns
+
+a function that accepts a callback to be called when the client changes and returns a function to unsubscribe from the store
+
+```ts
+(onChange): any;
+```
+
+### Parameters
+
+| Parameter  | Type                 |
+| :--------- | :------------------- |
+| `onChange` | (`client`) => `void` |
+
+### Returns
+
+`any`

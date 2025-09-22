@@ -1,0 +1,50 @@
+---
+title: CreateMultiOwnerLightAccountParams
+description: Overview of the CreateMultiOwnerLightAccountParams 2097152
+slug: wallets/reference/account-kit/smart-contracts/src/type-aliases/CreateMultiOwnerLightAccountParams
+layout: reference
+---
+
+```ts
+type CreateMultiOwnerLightAccountParams<
+  TTransport,
+  TSigner,
+  TLightAccountVersion,
+> = Omit<
+  CreateLightAccountBaseParams<
+    "MultiOwnerLightAccount",
+    TLightAccountVersion,
+    TTransport,
+    TSigner
+  >,
+  | "getAccountInitCode"
+  | "entryPoint"
+  | "version"
+  | "abi"
+  | "accountAddress"
+  | "type"
+> &
+  object;
+```
+
+Defined in: [account-kit/smart-contracts/src/light-account/accounts/multiOwner.ts:49](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/light-account/accounts/multiOwner.ts#L49)
+
+## Type Declaration
+
+| Name              | Type                                                                                                                                                 | Defined in                                                                                                                                                                                                                                  |
+| :---------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `accountAddress?` | [`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx)                                                                                    | [account-kit/smart-contracts/src/light-account/accounts/multiOwner.ts:70](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/light-account/accounts/multiOwner.ts#L70) |
+| `entryPoint?`     | `EntryPointDef`\<[`LightAccountEntryPointVersion`](LightAccountEntryPointVersion.mdx)\<`"MultiOwnerLightAccount"`, `TLightAccountVersion`>, `Chain`> | [account-kit/smart-contracts/src/light-account/accounts/multiOwner.ts:73](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/light-account/accounts/multiOwner.ts#L73) |
+| `factoryAddress?` | [`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx)                                                                                    | [account-kit/smart-contracts/src/light-account/accounts/multiOwner.ts:71](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/light-account/accounts/multiOwner.ts#L71) |
+| `initCode?`       | `Hex`                                                                                                                                                | [account-kit/smart-contracts/src/light-account/accounts/multiOwner.ts:69](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/light-account/accounts/multiOwner.ts#L69) |
+| `owners?`         | [`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx)\[]                                                                                 | [account-kit/smart-contracts/src/light-account/accounts/multiOwner.ts:80](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/light-account/accounts/multiOwner.ts#L80) |
+| `salt?`           | `bigint`                                                                                                                                             | [account-kit/smart-contracts/src/light-account/accounts/multiOwner.ts:68](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/light-account/accounts/multiOwner.ts#L68) |
+| `version?`        | `TLightAccountVersion`                                                                                                                               | [account-kit/smart-contracts/src/light-account/accounts/multiOwner.ts:72](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/light-account/accounts/multiOwner.ts#L72) |
+
+## Type Parameters
+
+| Type Parameter                                                                                                 | Default type                                                                  |
+| :------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------- |
+| `TTransport` _extends_ `Transport`                                                                             | `Transport`                                                                   |
+| `TSigner` _extends_ `SmartAccountSigner`                                                                       | `SmartAccountSigner`                                                          |
+| `TLightAccountVersion` _extends_ [`LightAccountVersion`](LightAccountVersion.mdx)\<`"MultiOwnerLightAccount"`> | [`LightAccountVersion`](LightAccountVersion.mdx)\<`"MultiOwnerLightAccount"`> |

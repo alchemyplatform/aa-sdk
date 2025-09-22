@@ -1,0 +1,36 @@
+---
+title: createMultiOwnerLightAccount
+description: Creates a multi-owner light account using the provided parameters, including transport, chain, signer, initialization code, version, account address, factory address, salt, and owners. Ensures the owners list is deduplicated, ordered, and valid.
+slug: wallets/reference/account-kit/smart-contracts/src/functions/createMultiOwnerLightAccount
+layout: reference
+---
+
+```ts
+function createMultiOwnerLightAccount<
+  TTransport,
+  TSigner,
+  TLightAccountVersion,
+>(config): Promise<MultiOwnerLightAccount<TSigner, TLightAccountVersion>>;
+```
+
+Defined in: [account-kit/smart-contracts/src/light-account/accounts/multiOwner.ts:83](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/light-account/accounts/multiOwner.ts#L83)
+
+## Type Parameters
+
+| Type Parameter                                   | Default type                 |
+| :----------------------------------------------- | :--------------------------- |
+| `TTransport` _extends_ `Transport`               | `Transport`                  |
+| `TSigner` _extends_ `SmartAccountSigner`\<`any`> | `SmartAccountSigner`\<`any`> |
+| `TLightAccountVersion` _extends_ `"v2.0.0"`      | `"v2.0.0"`                   |
+
+## Parameters
+
+| Parameter | Type                                                                                                                                             | Description                                             |
+| :-------- | :----------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------ |
+| `config`  | [`CreateMultiOwnerLightAccountParams`](../type-aliases/CreateMultiOwnerLightAccountParams.mdx)\<`TTransport`, `TSigner`, `TLightAccountVersion`> | The parameters for creating a multi-owner light account |
+
+## Returns
+
+`Promise`\<[`MultiOwnerLightAccount`](../type-aliases/MultiOwnerLightAccount.mdx)\<`TSigner`, `TLightAccountVersion`>>
+
+A promise that resolves to a `MultiOwnerLightAccount` object containing the created account information and methods

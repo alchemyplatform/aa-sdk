@@ -1,0 +1,25 @@
+---
+title: GetEntryPointFromAccount
+description: Overview of the GetEntryPointFromAccount 2097152
+slug: wallets/reference/aa-sdk/core/src/type-aliases/GetEntryPointFromAccount
+layout: reference
+---
+
+```ts
+type GetEntryPointFromAccount<TAccount, TAccountOverride> =
+  GetAccountParameter<TAccount, TAccountOverride> extends SmartContractAccount<
+    string,
+    infer TEntryPointVersion
+  >
+    ? TEntryPointVersion
+    : EntryPointVersion;
+```
+
+Defined in: [aa-sdk/core/src/account/smartContractAccount.ts:64](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/account/smartContractAccount.ts#L64)
+
+## Type Parameters
+
+| Type Parameter                                                                  | Default type                                       |
+| :------------------------------------------------------------------------------ | :------------------------------------------------- | --- |
+| `TAccount` _extends_ [`SmartContractAccount`](SmartContractAccount.mdx)         | `undefined`                                        | -   |
+| `TAccountOverride` _extends_ [`SmartContractAccount`](SmartContractAccount.mdx) | [`SmartContractAccount`](SmartContractAccount.mdx) |

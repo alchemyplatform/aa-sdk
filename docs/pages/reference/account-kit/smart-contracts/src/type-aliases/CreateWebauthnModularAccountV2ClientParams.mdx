@@ -1,0 +1,35 @@
+---
+title: CreateWebauthnModularAccountV2ClientParams
+description: Overview of the CreateWebauthnModularAccountV2ClientParams 2097152
+slug: wallets/reference/account-kit/smart-contracts/src/type-aliases/CreateWebauthnModularAccountV2ClientParams
+layout: reference
+---
+
+```ts
+type CreateWebauthnModularAccountV2ClientParams<TTransport, TChain> =
+  CreateWebauthnModularAccountV2Params<TTransport> &
+    Omit<
+      TTransport extends accountLoupeActions
+        ? accountLoupeActions<TChain>
+        : SmartAccountClientConfig<TTransport, TChain>,
+      "transport" | "account" | "chain"
+    > &
+    object;
+```
+
+Defined in: [account-kit/smart-contracts/src/ma-v2/client/client.ts:60](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/ma-v2/client/client.ts#L60)
+
+## Type Declaration
+
+| Name         | Type                                           | Defined in                                                                                                                                                                                                      |
+| :----------- | :--------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `credential` | `ToWebAuthnAccountParameters`\[`"credential"`] | [account-kit/smart-contracts/src/ma-v2/client/client.ts:70](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/ma-v2/client/client.ts#L70) |
+| `getFn?`     | `ToWebAuthnAccountParameters`\[`"getFn"`]      | [account-kit/smart-contracts/src/ma-v2/client/client.ts:71](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/ma-v2/client/client.ts#L71) |
+| `rpId?`      | `ToWebAuthnAccountParameters`\[`"rpId"`]       | [account-kit/smart-contracts/src/ma-v2/client/client.ts:72](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/ma-v2/client/client.ts#L72) |
+
+## Type Parameters
+
+| Type Parameter             | Default type |
+| :------------------------- | :----------- | ---------------------------------------------------------------------------- | ----------- |
+| `TTransport` _extends_     | `Transport`  | [`accountLoupeActions`](../../../core/src/variables/accountLoupeActions.mdx) | `Transport` |
+| `TChain` _extends_ `Chain` | `Chain`      |

@@ -1,0 +1,58 @@
+---
+title: default7702GasEstimator
+description: A middleware function to estimate the gas usage of a user operation when using an EIP-7702 delegated account. Has an optional custom gas estimator. This function is only compatible with accounts using EntryPoint v0.7.0, and the account must have an implementation address defined in `getImplementationAddress()`.
+slug: wallets/reference/aa-sdk/core/src/variables/default7702GasEstimator
+layout: reference
+---
+
+```ts
+const default7702GasEstimator: (gasEstimator?) => accountLoupeActions;
+```
+
+Defined in: [aa-sdk/core/src/middleware/defaults/7702gasEstimator.ts:41](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/middleware/defaults/7702gasEstimator.ts#L41)
+
+A middleware function to estimate the gas usage of a user operation when using an EIP-7702 delegated account. Has an optional custom gas estimator.
+This function is only compatible with accounts using EntryPoint v0.7.0, and the account must have an implementation address defined in `getImplementationAddress()`.
+
+## Example
+
+```ts twoslash
+import {
+  default7702GasEstimator,
+  default7702UserOpSigner,
+  createSmartAccountClient,
+  type SmartAccountClient,
+} from "@aa-sdk/core";
+import {
+  createModularAccountV2,
+  type CreateModularAccountV2ClientParams,
+} from "@account-kit/smart-contracts";
+
+async function createSMA7702AccountClient(
+  config: CreateModularAccountV2ClientParams,
+): Promise<SmartAccountClient> {
+  const sma7702Account = await createModularAccountV2({
+    ...config,
+    mode: "7702",
+  });
+
+  return createSmartAccountClient({
+    account: sma7702Account,
+    gasEstimator: default7702GasEstimator(config.gasEstimator),
+    signUserOperation: default7702UserOpSigner(config.signUserOperation),
+    ...config,
+  });
+}
+```
+
+## Parameters
+
+| Parameter       | Type                                                                                        | Description                            |
+| :-------------- | :------------------------------------------------------------------------------------------ | :------------------------------------- |
+| `gasEstimator?` | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx) | Optional custom gas estimator function |
+
+## Returns
+
+[`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)
+
+A function that takes user operation struct and parameters, estimates gas usage, and returns the user operation with gas limits.

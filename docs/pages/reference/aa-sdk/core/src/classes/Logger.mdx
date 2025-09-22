@@ -1,0 +1,243 @@
+---
+title: Logger
+description: Logger class provides static methods for logging at different levels such as error, warn, debug, info, and verbose. This class allows setting log levels and log filters to control the logging behavior.
+slug: wallets/reference/aa-sdk/core/src/classes/Logger
+layout: reference
+---
+
+Defined in: [aa-sdk/core/src/logger.ts:13](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/logger.ts#L13)
+
+Logger class provides static methods for logging at different levels such as error, warn, debug, info, and verbose. This class allows setting log levels and log filters to control the logging behavior.
+
+## Constructors
+
+### Constructor
+
+```ts
+new Logger(): Logger;
+```
+
+#### Returns
+
+`Logger`
+
+## Properties
+
+| Property                          | Modifier | Type                                       | Default value   | Defined in                                                                                                                                            |
+| :-------------------------------- | :------- | :----------------------------------------- | :-------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <a id="logfilter" /> `logFilter?` | `static` | `string`                                   | `undefined`     | [aa-sdk/core/src/logger.ts:15](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/logger.ts#L15) |
+| <a id="loglevel" /> `logLevel`    | `static` | [`LogLevel`](../enumerations/LogLevel.mdx) | `LogLevel.INFO` | [aa-sdk/core/src/logger.ts:14](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/logger.ts#L14) |
+
+## Methods
+
+### debug()
+
+```ts
+static debug(msg, ...args): void;
+```
+
+Defined in: [aa-sdk/core/src/logger.ts:99](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/logger.ts#L99)
+
+Logs a debug message to the console if the log level allows it.
+
+#### Example
+
+```ts
+import { Logger } from "@aa-sdk/core";
+
+Logger.debug("Something is happening");
+```
+
+#### Parameters
+
+| Parameter | Type     | Description                                              |
+| :-------- | :------- | :------------------------------------------------------- |
+| `msg`     | `string` | The message to log                                       |
+| ...`args` | `any`\[] | Additional arguments to pass to the console.debug method |
+
+#### Returns
+
+`void`
+
+---
+
+### error()
+
+```ts
+static error(msg, ...args): void;
+```
+
+Defined in: [aa-sdk/core/src/logger.ts:61](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/logger.ts#L61)
+
+Logs an error message to the console if the logging condition is met.
+
+#### Example
+
+```ts
+import { Logger } from "@aa-sdk/core";
+
+Logger.error("An error occurred while processing the request");
+```
+
+#### Parameters
+
+| Parameter | Type     | Description                                                    |
+| :-------- | :------- | :------------------------------------------------------------- |
+| `msg`     | `string` | The primary error message to be logged                         |
+| ...`args` | `any`\[] | Additional arguments to be logged along with the error message |
+
+#### Returns
+
+`void`
+
+---
+
+### info()
+
+```ts
+static info(msg, ...args): void;
+```
+
+Defined in: [aa-sdk/core/src/logger.ts:118](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/logger.ts#L118)
+
+Logs an informational message to the console if the logging level is set to INFO.
+
+#### Example
+
+```ts
+import { Logger } from "@aa-sdk/core";
+
+Logger.info("Something is happening");
+```
+
+#### Parameters
+
+| Parameter | Type     | Description                                       |
+| :-------- | :------- | :------------------------------------------------ |
+| `msg`     | `string` | the message to log                                |
+| ...`args` | `any`\[] | additional arguments to log alongside the message |
+
+#### Returns
+
+`void`
+
+---
+
+### setLogFilter()
+
+```ts
+static setLogFilter(pattern): void;
+```
+
+Defined in: [aa-sdk/core/src/logger.ts:44](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/logger.ts#L44)
+
+Sets the log filter pattern.
+
+#### Example
+
+```ts
+import { Logger } from "@aa-sdk/core";
+
+Logger.setLogFilter("error");
+```
+
+#### Parameters
+
+| Parameter | Type     | Description                          |
+| :-------- | :------- | :----------------------------------- |
+| `pattern` | `string` | The pattern to set as the log filter |
+
+#### Returns
+
+`void`
+
+---
+
+### setLogLevel()
+
+```ts
+static setLogLevel(logLevel): void;
+```
+
+Defined in: [aa-sdk/core/src/logger.ts:28](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/logger.ts#L28)
+
+Sets the log level for logging purposes.
+
+#### Example
+
+```ts
+import { Logger, LogLevel } from "@aa-sdk/core";
+Logger.setLogLevel(LogLevel.DEBUG);
+```
+
+#### Parameters
+
+| Parameter  | Type                                       | Description           |
+| :--------- | :----------------------------------------- | :-------------------- |
+| `logLevel` | [`LogLevel`](../enumerations/LogLevel.mdx) | The desired log level |
+
+#### Returns
+
+`void`
+
+---
+
+### verbose()
+
+```ts
+static verbose(msg, ...args): void;
+```
+
+Defined in: [aa-sdk/core/src/logger.ts:137](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/logger.ts#L137)
+
+Logs a message with additional arguments if the logging level permits it.
+
+#### Example
+
+```ts
+import { Logger } from "@aa-sdk/core";
+
+Logger.verbose("Something is happening");
+```
+
+#### Parameters
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `msg`     | `string` | The message to log                |
+| ...`args` | `any`\[] | Additional arguments to be logged |
+
+#### Returns
+
+`void`
+
+---
+
+### warn()
+
+```ts
+static warn(msg, ...args): void;
+```
+
+Defined in: [aa-sdk/core/src/logger.ts:80](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/logger.ts#L80)
+
+Logs a warning message if the logging conditions are met.
+
+#### Example
+
+```ts
+import { Logger } from "@aa-sdk/core";
+
+Logger.warn("Careful...");
+```
+
+#### Parameters
+
+| Parameter | Type     | Description                                         |
+| :-------- | :------- | :-------------------------------------------------- |
+| `msg`     | `string` | The message to log as a warning                     |
+| ...`args` | `any`\[] | Additional parameters to log along with the message |
+
+#### Returns
+
+`void`

@@ -1,0 +1,48 @@
+---
+title: watchSignerStatus
+description: Overview of the watchSignerStatus function
+slug: wallets/reference/account-kit/core/src/functions/watchSignerStatus
+layout: reference
+---
+
+```ts
+function watchSignerStatus(config): (onChange) => any;
+```
+
+Defined in: [account-kit/core/src/actions/watchSignerStatus.ts:20](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/core/src/actions/watchSignerStatus.ts#L20)
+
+Watches the signer status in the client store and triggers the provided callback function when the status changes.
+
+## Example
+
+```ts
+import { watchSignerStatus } from "@account-kit/core";
+// see createConfig for more information on how to create a config
+import { config } from "./config";
+
+watchSignerStatus(config)(console.log);
+```
+
+## Parameters
+
+| Parameter | Type                                                                 | Description                                          |
+| :-------- | :------------------------------------------------------------------- | :--------------------------------------------------- |
+| `config`  | [`AlchemyAccountsConfig`](../type-aliases/AlchemyAccountsConfig.mdx) | The configuration object containing the client store |
+
+## Returns
+
+A function that accepts a callback to be called when the signer status changes which returns a function to unsubscribe from the store
+
+```ts
+(onChange): any;
+```
+
+### Parameters
+
+| Parameter  | Type                 |
+| :--------- | :------------------- |
+| `onChange` | (`status`) => `void` |
+
+### Returns
+
+`any`

@@ -1,0 +1,29 @@
+---
+title: UseSendUserOperationResult
+description: Overview of the UseSendUserOperationResult 2097152
+slug: wallets/reference/account-kit/react/src/type-aliases/UseSendUserOperationResult
+layout: reference
+---
+
+```ts
+type UseSendUserOperationResult<TEntryPointVersion, TAccount> = object;
+```
+
+Defined in: [account-kit/react/src/hooks/useSendUserOperation.ts:51](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/react/src/hooks/useSendUserOperation.ts#L51)
+
+## Type Parameters
+
+| Type Parameter                                                                                    | Default type                                                                 |
+| :------------------------------------------------------------------------------------------------ | :--------------------------------------------------------------------------- |
+| `TEntryPointVersion` _extends_ `GetEntryPointFromAccount`\<`TAccount`>                            | -                                                                            |
+| `TAccount` _extends_ [`accountLoupeActions`](../../../core/src/variables/accountLoupeActions.mdx) | [`accountLoupeActions`](../../../core/src/variables/accountLoupeActions.mdx) |
+
+## Properties
+
+| Property                                                     | Type                                                                                                                                                                         | Defined in                                                                                                                                                                                                |
+| :----------------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <a id="error" /> `error`                                     | `Error`                                                                                                                                                                      | `null`                                                                                                                                                                                                    | [account-kit/react/src/hooks/useSendUserOperation.ts:71](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/react/src/hooks/useSendUserOperation.ts#L71) |
+| <a id="issendinguseroperation" /> `isSendingUserOperation`   | `boolean`                                                                                                                                                                    | [account-kit/react/src/hooks/useSendUserOperation.ts:70](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/react/src/hooks/useSendUserOperation.ts#L70) |
+| <a id="senduseroperation" /> `sendUserOperation`             | `UseMutateFunction`\<[`SendUserOperationWithEOA`](SendUserOperationWithEOA.mdx)\<`TEntryPointVersion`>, `Error`, `SendUserOperationParameters`\<`TAccount`>, `unknown`>      | [account-kit/react/src/hooks/useSendUserOperation.ts:55](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/react/src/hooks/useSendUserOperation.ts#L55) |
+| <a id="senduseroperationasync" /> `sendUserOperationAsync`   | `UseMutateAsyncFunction`\<[`SendUserOperationWithEOA`](SendUserOperationWithEOA.mdx)\<`TEntryPointVersion`>, `Error`, `SendUserOperationParameters`\<`TAccount`>, `unknown`> | [account-kit/react/src/hooks/useSendUserOperation.ts:61](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/react/src/hooks/useSendUserOperation.ts#L61) |
+| <a id="senduseroperationresult" /> `sendUserOperationResult` |                                                                                                                                                                              | [`SendUserOperationWithEOA`](SendUserOperationWithEOA.mdx)\<`TEntryPointVersion`>                                                                                                                         | `undefined`                                                                                                                                                                                               | [account-kit/react/src/hooks/useSendUserOperation.ts:67](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/react/src/hooks/useSendUserOperation.ts#L67) |

@@ -1,0 +1,40 @@
+---
+title: defineAlchemyChain
+description: Overview of the defineAlchemyChain function
+slug: wallets/reference/account-kit/infra/src/exports/functions/defineAlchemyChain
+layout: reference
+---
+
+```ts
+function defineAlchemyChain(params): Chain;
+```
+
+Defined in: [account-kit/infra/src/chains.ts:50](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/infra/src/chains.ts#L50)
+
+Defines an Alchemy chain configuration by adding an Alchemy-specific RPC base URL to the chain's RPC URLs.
+
+## Example
+
+```ts
+import { defineAlchemyChain } from "@account-kit/infra";
+import { sepolia } from "viem/chains";
+
+const chain = defineAlchemyChain({
+  chain: sepolia,
+  rpcBaseUrl: "https://eth-sepolia.g.alchemy.com/v2",
+});
+```
+
+## Parameters
+
+| Parameter           | Type                                           | Description                                   |
+| :------------------ | :--------------------------------------------- | :-------------------------------------------- |
+| `params`            | \{ `chain`: `Chain`; `rpcBaseUrl`: `string`; } | The parameters for defining the Alchemy chain |
+| `params.chain`      | `Chain`                                        | The original chain configuration              |
+| `params.rpcBaseUrl` | `string`                                       | The Alchemy-specific RPC base URL             |
+
+## Returns
+
+`Chain`
+
+The updated chain configuration with the Alchemy RPC URL added

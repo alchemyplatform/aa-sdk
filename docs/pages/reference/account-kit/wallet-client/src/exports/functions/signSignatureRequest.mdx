@@ -1,0 +1,52 @@
+---
+title: signSignatureRequest
+description: Overview of the signSignatureRequest function
+slug: wallets/reference/account-kit/wallet-client/src/exports/functions/signSignatureRequest
+layout: reference
+---
+
+```ts
+function signSignatureRequest(
+  signer,
+  params,
+): Promise<SignSignatureRequestResult>;
+```
+
+Defined in: [account-kit/wallet-client/src/client/actions/signSignatureRequest.ts:58](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/wallet-client/src/client/actions/signSignatureRequest.ts#L58)
+
+Signs a signature request using the provided signer.
+This method handles different types of signature requests including personal_sign, eth_signTypedData_v4, and authorization.
+
+## Example
+
+```ts
+// Sign a personal message
+const result = await client.signSignatureRequest({
+  type: 'personal_sign',
+  data: 'Hello, world!'
+});
+
+// Sign typed data (EIP-712)
+const result = await client.signSignatureRequest({
+  type: 'eth_signTypedData_v4',
+  data: {
+    domain: { ... },
+    types: { ... },
+    primaryType: '...',
+    message: { ... }
+  }
+});
+```
+
+## Parameters
+
+| Parameter | Type                         | Description                               |
+| :-------- | :--------------------------- | :---------------------------------------- |
+| `signer`  | `SmartAccountSigner`         | The signer to use for signing the request |
+| `params`  | `SignSignatureRequestParams` | The signature request parameters          |
+
+## Returns
+
+`Promise`\<`SignSignatureRequestResult`>
+
+A Promise that resolves to the signature result

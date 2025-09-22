@@ -1,0 +1,21 @@
+---
+title: NotType
+description: Used to ensure type doesn't extend another, for use in & chaining of properties
+slug: wallets/reference/aa-sdk/core/src/type-aliases/NotType
+layout: reference
+---
+
+```ts
+type NotType<A, B> = A extends B ? never : unknown;
+```
+
+Defined in: [aa-sdk/core/src/utils/index.ts:29](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/utils/index.ts#L29)
+
+Used to ensure type doesn't extend another, for use in & chaining of properties
+
+## Type Parameters
+
+| Type Parameter |
+| :------------- |
+| `A`            |
+| `B`            |

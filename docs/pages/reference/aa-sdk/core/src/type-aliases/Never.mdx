@@ -1,0 +1,18 @@
+---
+title: Never
+description: Overview of the Never 2097152
+slug: wallets/reference/aa-sdk/core/src/type-aliases/Never
+layout: reference
+---
+
+```ts
+type Never<T> = T extends object ? { [K in keyof T]?: never } : never;
+```
+
+Defined in: [aa-sdk/core/src/utils/types.ts:22](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/utils/types.ts#L22)
+
+## Type Parameters
+
+| Type Parameter |
+| :------------- |
+| `T`            |

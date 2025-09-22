@@ -1,0 +1,48 @@
+---
+title: simulateUserOperationChanges
+description: Simulates user operation changes including asset changes for a specified user operation and returns the resulting state changes.
+slug: wallets/reference/account-kit/infra/src/exports/variables/simulateUserOperationChanges
+layout: reference
+---
+
+```ts
+const simulateUserOperationChanges: <TChain, TAccount>(
+  client,
+  args,
+) => Promise<SimulateUserOperationAssetChangesResponse>;
+```
+
+Defined in: [account-kit/infra/src/actions/simulateUserOperationChanges.ts:30](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/infra/src/actions/simulateUserOperationChanges.ts#L30)
+
+Simulates user operation changes including asset changes for a specified user operation and returns the resulting state changes.
+
+## Example
+
+```ts
+import { simulateUserOperationChanges, createAlchemyPublicRpcClient } from "@account-kit/infra";
+
+const client = createAlchemyPublicRpcClient(...);
+const response = await simulateUserOperationChanges(client, {
+ uo: ...
+});
+```
+
+## Type Parameters
+
+| Type Parameter                              | Default type |
+| :------------------------------------------ | :----------- | ---------------------- | ----------- |
+| `TChain` _extends_ `Chain`                  | `undefined`  | `Chain`                | `undefined` |
+| `TAccount` _extends_ `SmartContractAccount` | `undefined`  | `SmartContractAccount` | `undefined` |
+
+## Parameters
+
+| Parameter | Type                                                                                                     | Description                                                                    |
+| :-------- | :------------------------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------- |
+| `client`  | `Client`\<`Transport`, `TChain`, `TAccount`, [`AlchemyRpcSchema`](../type-aliases/AlchemyRpcSchema.mdx)> | The client instance used to send the simulation request                        |
+| `args`    | `SendUserOperationParameters`\<`TAccount`>                                                               | The parameters of the user operation including the account and other overrides |
+
+## Returns
+
+`Promise`\<[`SimulateUserOperationAssetChangesResponse`](../type-aliases/SimulateUserOperationAssetChangesResponse.mdx)>
+
+A promise that resolves to the response of the simulation showing the asset changes

@@ -1,0 +1,48 @@
+---
+title: createMAv2Base
+description: Overview of the createMAv2Base function
+slug: wallets/reference/account-kit/smart-contracts/src/functions/createMAv2Base
+layout: reference
+---
+
+## Call Signature
+
+```ts
+function createMAv2Base(config): Promise<WebauthnModularAccountV2>;
+```
+
+Defined in: [account-kit/smart-contracts/src/ma-v2/account/common/modularAccountV2Base.ts:128](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/ma-v2/account/common/modularAccountV2Base.ts#L128)
+
+### Parameters
+
+| Parameter | Type                                                                               |
+| :-------- | :--------------------------------------------------------------------------------- |
+| `config`  | [`CreateWebauthnMAV2BaseParams`](../type-aliases/CreateWebauthnMAV2BaseParams.mdx) |
+
+### Returns
+
+`Promise`\<[`WebauthnModularAccountV2`](../type-aliases/WebauthnModularAccountV2.mdx)>
+
+## Call Signature
+
+```ts
+function createMAv2Base<TSigner>(config): CreateMAV2BaseReturnType<TSigner>;
+```
+
+Defined in: [account-kit/smart-contracts/src/ma-v2/account/common/modularAccountV2Base.ts:132](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/ma-v2/account/common/modularAccountV2Base.ts#L132)
+
+### Type Parameters
+
+| Type Parameter                                   | Default type                 |
+| :----------------------------------------------- | :--------------------------- |
+| `TSigner` _extends_ `SmartAccountSigner`\<`any`> | `SmartAccountSigner`\<`any`> |
+
+### Parameters
+
+| Parameter | Type                                                               |
+| :-------- | :----------------------------------------------------------------- |
+| `config`  | [`CreateMAV2BaseParams`](../type-aliases/CreateMAV2BaseParams.mdx) |
+
+### Returns
+
+[`CreateMAV2BaseReturnType`](../type-aliases/CreateMAV2BaseReturnType.mdx)\<`TSigner`>

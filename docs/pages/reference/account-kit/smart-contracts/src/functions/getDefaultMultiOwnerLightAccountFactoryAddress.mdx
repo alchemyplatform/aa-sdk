@@ -1,0 +1,27 @@
+---
+title: getDefaultMultiOwnerLightAccountFactoryAddress
+description: Overview of the getDefaultMultiOwnerLightAccountFactoryAddress function
+slug: wallets/reference/account-kit/smart-contracts/src/functions/getDefaultMultiOwnerLightAccountFactoryAddress
+layout: reference
+---
+
+```ts
+function getDefaultMultiOwnerLightAccountFactoryAddress(chain, version): any;
+```
+
+Defined in: [account-kit/smart-contracts/src/light-account/utils.ts:109](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/light-account/utils.ts#L109)
+
+Utility method returning the default multi owner light account factory address given a Chain object
+
+## Parameters
+
+| Parameter | Type                                               | Description                                                     |
+| :-------- | :------------------------------------------------- | :-------------------------------------------------------------- |
+| `chain`   | `Chain`                                            | a Chain object                                                  |
+| `version` | `LightAccountVersion`\<`"MultiOwnerLightAccount"`> | the version of the light account to get the factory address for |
+
+## Returns
+
+`any`
+
+an Address for the given chain

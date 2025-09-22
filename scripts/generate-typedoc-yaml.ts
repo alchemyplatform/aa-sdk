@@ -11,7 +11,7 @@ import yaml from "js-yaml";
  */
 
 // Configuration
-const TYPEDOC_DIR = "./docs/pages/reference/typedoc";
+const TYPEDOC_DIR = "./docs/pages/reference";
 const DOCS_YML_FILE = "./docs/docs.yml";
 
 // Type definitions
@@ -125,7 +125,7 @@ function scanDirectory(dirPath: string, basePath: string = ""): ScanItem[] {
         type: "file",
         name: nameWithoutExt,
         path: relativePath.replace(".mdx", ""),
-        mdxPath: `wallets/pages/reference/typedoc/${relativePath}`,
+        mdxPath: `wallets/pages/reference/${relativePath}`,
       });
     }
   }
@@ -201,7 +201,7 @@ function generatePackageSection(
 
   const section: YamlPackageSection = {
     section: displayName,
-    path: `wallets/pages/reference/typedoc/${packagePath}/README.mdx`,
+    path: `wallets/pages/reference/${packagePath}/README.mdx`,
     contents: [],
   };
 

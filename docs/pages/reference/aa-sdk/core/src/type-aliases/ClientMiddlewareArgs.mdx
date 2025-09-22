@@ -1,0 +1,31 @@
+---
+title: ClientMiddlewareArgs
+description: Overview of the ClientMiddlewareArgs 2097152
+slug: wallets/reference/aa-sdk/core/src/type-aliases/ClientMiddlewareArgs
+layout: reference
+---
+
+```ts
+type ClientMiddlewareArgs<TAccount, C, TContext, TEntryPointVersion> = object;
+```
+
+Defined in: [aa-sdk/core/src/middleware/types.ts:14](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/middleware/types.ts#L14)
+
+## Type Parameters
+
+| Type Parameter                                                                                                                          | Default type                                                                                             |
+| :-------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------- | ----------- | --- | ------------------------------------------------------------------------------------------- | ----------- |
+| `TAccount` _extends_ [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)                        | -                                                                                                        |
+| `C` _extends_ [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)                               | -                                                                                                        |
+| `TContext` _extends_                                                                                                                    | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)              | `undefined` |     | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx) | `undefined` |
+| `TEntryPointVersion` _extends_ [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`TAccount`> | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`TAccount`> |
+
+## Properties
+
+| Property                            | Type                                                                                                               | Defined in                                                                                                                                                                |
+| :---------------------------------- | :----------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| <a id="account" /> `account`        | `TAccount`                                                                                                         | [aa-sdk/core/src/middleware/types.ts:26](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/middleware/types.ts#L26) |
+| <a id="client" /> `client`          | `C`                                                                                                                | [aa-sdk/core/src/middleware/types.ts:27](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/middleware/types.ts#L27) |
+| <a id="context" /> `context?`       | `TContext`                                                                                                         | [aa-sdk/core/src/middleware/types.ts:24](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/middleware/types.ts#L24) |
+| <a id="feeoptions" /> `feeOptions?` | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)                        | [aa-sdk/core/src/middleware/types.ts:25](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/middleware/types.ts#L25) |
+| <a id="overrides" /> `overrides?`   | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`TEntryPointVersion`> | [aa-sdk/core/src/middleware/types.ts:23](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/middleware/types.ts#L23) |

@@ -1,0 +1,36 @@
+---
+title: AlchemyMultisigAccountClientConfig
+description: Overview of the AlchemyMultisigAccountClientConfig 2097152
+slug: wallets/reference/account-kit/smart-contracts/src/type-aliases/AlchemyMultisigAccountClientConfig
+layout: reference
+---
+
+```ts
+type AlchemyMultisigAccountClientConfig<TSigner> = Omit<
+  accountLoupeActions<HttpTransport, TSigner>,
+  "transport"
+> &
+  Omit<
+    accountLoupeActions<
+      Chain,
+      accountLoupeActions<TSigner>,
+      accountLoupeActions
+    >,
+    "account"
+  > &
+  object;
+```
+
+Defined in: [account-kit/smart-contracts/src/msca/client/multiSigAlchemyClient.ts:21](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/msca/client/multiSigAlchemyClient.ts#L21)
+
+## Type Declaration
+
+| Name        | Type                                                                         | Defined in                                                                                                                                                                                                                                  |
+| :---------- | :--------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `transport` | [`accountLoupeActions`](../../../core/src/variables/accountLoupeActions.mdx) | [account-kit/smart-contracts/src/msca/client/multiSigAlchemyClient.ts:34](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/msca/client/multiSigAlchemyClient.ts#L34) |
+
+## Type Parameters
+
+| Type Parameter                           | Default type         |
+| :--------------------------------------- | :------------------- |
+| `TSigner` _extends_ `SmartAccountSigner` | `SmartAccountSigner` |

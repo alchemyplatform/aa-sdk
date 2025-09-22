@@ -1,0 +1,34 @@
+---
+title: applyUserOpFeeOption
+description: Overview of the applyUserOpFeeOption function
+slug: wallets/reference/aa-sdk/core/src/functions/applyUserOpFeeOption
+layout: reference
+---
+
+```ts
+function applyUserOpFeeOption<TValue>(value, feeOption?): any;
+```
+
+Defined in: [aa-sdk/core/src/utils/userop.ts:116](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/utils/userop.ts#L116)
+
+Utility method for applying a UserOperationFeeOptionsField value
+over the current value set for the field
+
+## Type Parameters
+
+| Type Parameter           |
+| :----------------------- |
+| `TValue` _extends_ `any` |
+
+## Parameters
+
+| Parameter    | Type     | Description                    |
+| :----------- | :------- | :----------------------------- |
+| `value`      | `TValue` | the current value of the field |
+| `feeOption?` | `any`    | the override value to apply    |
+
+## Returns
+
+`any`
+
+the new value of the field after applying the override

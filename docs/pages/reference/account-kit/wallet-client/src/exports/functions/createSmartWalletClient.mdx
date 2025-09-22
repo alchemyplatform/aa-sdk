@@ -1,0 +1,52 @@
+---
+title: createSmartWalletClient
+description: Overview of the createSmartWalletClient function
+slug: wallets/reference/account-kit/wallet-client/src/exports/functions/createSmartWalletClient
+layout: reference
+---
+
+```ts
+function createSmartWalletClient<TAccount>(params): SmartWalletClient<TAccount>;
+```
+
+Defined in: [account-kit/wallet-client/src/client/index.ts:67](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/wallet-client/src/client/index.ts#L67)
+
+Creates a smart wallet client that can be used to interact with a smart account.
+
+## Example
+
+```ts
+import { LocalAccountSigner } from "@aa-sdk/core";
+import { alchemy, arbitrumSepolia } from "@account-kit/infra";
+import { generatePrivateKey } from "viem/accounts";
+import { createSmartWalletClient } from "@account-kit/wallet-client";
+
+const signer =
+  LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey());
+const transport = alchemy({
+  apiKey: "your-alchemy-api-key",
+});
+const client = createSmartWalletClient({
+  transport,
+  chain: arbitrumSepolia,
+  signer,
+});
+```
+
+## Type Parameters
+
+| Type Parameter                   | Default type        |
+| :------------------------------- | :------------------ | ----------- |
+| `TAccount` _extends_ `undefined` | `` `0x${string}` `` | `undefined` |
+
+## Parameters
+
+| Parameter | Type                                                                                  | Description                                         |
+| :-------- | :------------------------------------------------------------------------------------ | :-------------------------------------------------- |
+| `params`  | [`SmartWalletClientParams`](../type-aliases/SmartWalletClientParams.mdx)\<`TAccount`> | The parameters for creating the smart wallet client |
+
+## Returns
+
+[`SmartWalletClient`](../type-aliases/SmartWalletClient.mdx)\<`TAccount`>
+
+- A viem-compatible client

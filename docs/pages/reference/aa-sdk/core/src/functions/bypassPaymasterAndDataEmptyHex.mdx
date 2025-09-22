@@ -1,0 +1,34 @@
+---
+title: bypassPaymasterAndDataEmptyHex
+description: Overview of the bypassPaymasterAndDataEmptyHex function
+slug: wallets/reference/aa-sdk/core/src/functions/bypassPaymasterAndDataEmptyHex
+layout: reference
+---
+
+```ts
+function bypassPaymasterAndDataEmptyHex<TEntryPointVersion>(overrides): boolean;
+```
+
+Defined in: [aa-sdk/core/src/utils/userop.ts:183](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/utils/userop.ts#L183)
+
+An alternative to `bypassPaymasterAndData` which only returns true if the data parameter
+is "0x," this is useful for cases when middleware should be bypassed ONLY IF the UserOp will
+pay for its own gas
+
+## Type Parameters
+
+| Type Parameter                                     | Default type        |
+| :------------------------------------------------- | :------------------ |
+| `TEntryPointVersion` _extends_ `EntryPointVersion` | `EntryPointVersion` |
+
+## Parameters
+
+| Parameter   | Type  | Description                           |
+| :---------- | :---- | :------------------------------------ |
+| `overrides` | `any` | the user operation overrides to check |
+
+## Returns
+
+`boolean`
+
+whether the paymaster middleware should be bypassed

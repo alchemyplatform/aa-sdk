@@ -1,0 +1,24 @@
+---
+title: Erc7677Client
+description: Overview of the Erc7677Client 2097152
+slug: wallets/reference/aa-sdk/core/src/type-aliases/Erc7677Client
+layout: reference
+---
+
+```ts
+type Erc7677Client<T, TContext> = Client<
+  T,
+  Chain,
+  undefined,
+  Erc7677RpcSchema<TContext>
+>;
+```
+
+Defined in: [aa-sdk/core/src/middleware/erc7677middleware.ts:54](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/middleware/erc7677middleware.ts#L54)
+
+## Type Parameters
+
+| Type Parameter                                  | Default type               |
+| :---------------------------------------------- | :------------------------- |
+| `T` _extends_ `Transport`                       | `Transport`                |
+| `TContext` _extends_ `Record`\<`string`, `any`> | `Record`\<`string`, `any`> |

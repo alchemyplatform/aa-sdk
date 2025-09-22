@@ -1,0 +1,41 @@
+---
+title: ToSmartContractAccountParams
+description: Overview of the ToSmartContractAccountParams 2097152
+slug: wallets/reference/aa-sdk/core/src/type-aliases/ToSmartContractAccountParams
+layout: reference
+---
+
+```ts
+type ToSmartContractAccountParams<Name, TTransport, TChain, TEntryPointVersion> = object & Omit<CustomSource, "signTransaction" | "address"> &
+  | SigningMethods
+  | Never<SigningMethods>;
+```
+
+Defined in: [aa-sdk/core/src/account/smartContractAccount.ts:156](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/account/smartContractAccount.ts#L156)
+
+## Type Declaration
+
+| Name                          | Type                                                                  | Defined in                                                                                                                                                                                          |
+| :---------------------------- | :-------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `accountAddress?`             | [`Address`](Address.mdx)                                              | [aa-sdk/core/src/account/smartContractAccount.ts:166](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/account/smartContractAccount.ts#L166) |
+| `chain`                       | `TChain`                                                              | [aa-sdk/core/src/account/smartContractAccount.ts:164](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/account/smartContractAccount.ts#L164) |
+| `encodeBatchExecute()?`       | (`txs`) => `Promise`\<`Hex`>                                          | [aa-sdk/core/src/account/smartContractAccount.ts:170](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/account/smartContractAccount.ts#L170) |
+| `encodeExecute()`             | (`tx`) => `Promise`\<`Hex`>                                           | [aa-sdk/core/src/account/smartContractAccount.ts:169](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/account/smartContractAccount.ts#L169) |
+| `encodeUpgradeToAndCall()?`   | (`params`) => `Promise`\<`Hex`>                                       | [aa-sdk/core/src/account/smartContractAccount.ts:174](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/account/smartContractAccount.ts#L174) |
+| `entryPoint`                  | [`EntryPointDef`](EntryPointDef.mdx)\<`TEntryPointVersion`, `TChain`> | [aa-sdk/core/src/account/smartContractAccount.ts:165](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/account/smartContractAccount.ts#L165) |
+| `getAccountInitCode()`        | () => `Promise`\<`Hex`>                                               | [aa-sdk/core/src/account/smartContractAccount.ts:167](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/account/smartContractAccount.ts#L167) |
+| `getDummySignature()`         | () => `Hex`                                                           | `Promise`\<`Hex`>                                                                                                                                                                                   | [aa-sdk/core/src/account/smartContractAccount.ts:168](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/account/smartContractAccount.ts#L168) |
+| `getImplementationAddress()?` | () => `Promise`\<[`NullAddress`](NullAddress.mdx)                     | [`Address`](Address.mdx)>                                                                                                                                                                           | [aa-sdk/core/src/account/smartContractAccount.ts:175](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/account/smartContractAccount.ts#L175) |
+| `getNonce()?`                 | (`nonceKey?`) => `Promise`\<`bigint`>                                 | [aa-sdk/core/src/account/smartContractAccount.ts:171](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/account/smartContractAccount.ts#L171) |
+| `signUserOperationHash()?`    | (`uoHash`) => `Promise`\<`Hex`>                                       | [aa-sdk/core/src/account/smartContractAccount.ts:173](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/account/smartContractAccount.ts#L173) |
+| `source`                      | `Name`                                                                | [aa-sdk/core/src/account/smartContractAccount.ts:162](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/account/smartContractAccount.ts#L162) |
+| `transport`                   | `TTransport`                                                          | [aa-sdk/core/src/account/smartContractAccount.ts:163](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/account/smartContractAccount.ts#L163) |
+
+## Type Parameters
+
+| Type Parameter                                                              | Default type                                 |
+| :-------------------------------------------------------------------------- | :------------------------------------------- |
+| `Name` _extends_ `string`                                                   | `string`                                     |
+| `TTransport` _extends_ `Transport`                                          | `Transport`                                  |
+| `TChain` _extends_ `Chain`                                                  | `Chain`                                      |
+| `TEntryPointVersion` _extends_ [`EntryPointVersion`](EntryPointVersion.mdx) | [`EntryPointVersion`](EntryPointVersion.mdx) |

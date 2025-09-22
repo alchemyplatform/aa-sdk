@@ -1,0 +1,38 @@
+---
+title: hydrate
+description: Overview of the hydrate function
+slug: wallets/reference/account-kit/core/src/functions/hydrate
+layout: reference
+---
+
+```ts
+function hydrate(config, initialState?): HydrateResult;
+```
+
+Defined in: [account-kit/core/src/hydrate.ts:37](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/core/src/hydrate.ts#L37)
+
+Will hydrate the client store with the provided initial state if one is provided.
+
+## Example
+
+```ts
+import { hydrate, cookieToInitialState } from "@account-kit/core";
+import { config } from "./config";
+
+const initialState = cookieToInitialState(document.cookie);
+const { onMount } = hydrate(config, initialState);
+// call onMount once your component has mounted
+```
+
+## Parameters
+
+| Parameter       | Type                                                                 | Description                                      |
+| :-------------- | :------------------------------------------------------------------- | :----------------------------------------------- |
+| `config`        | [`AlchemyAccountsConfig`](../type-aliases/AlchemyAccountsConfig.mdx) | the config containing the client store           |
+| `initialState?` | [`StoredState`](../type-aliases/StoredState.mdx)                     | optional param detailing the initial ClientState |
+
+## Returns
+
+`HydrateResult`
+
+an object containing an onMount function that can be called when your component first renders on the client

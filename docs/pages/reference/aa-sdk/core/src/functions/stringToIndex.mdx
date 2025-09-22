@@ -1,0 +1,37 @@
+---
+title: stringToIndex
+description: Overview of the stringToIndex function
+slug: wallets/reference/aa-sdk/core/src/functions/stringToIndex
+layout: reference
+---
+
+```ts
+function stringToIndex(phrase): bigint;
+```
+
+Defined in: [aa-sdk/core/src/utils/bigint.ts:117](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/utils/bigint.ts#L117)
+
+Useful if you want to use a string, such as a user's email address, as salt to generate a unique SmartAccount per user.
+
+example:
+
+```
+const salt = stringToIndex("alice@example.com");
+
+export const account = new SimpleSmartContractAccount({
+  index: salt,
+  // other args omitted...
+});
+```
+
+## Parameters
+
+| Parameter | Type     | Description       |
+| :-------- | :------- | :---------------- |
+| `phrase`  | `string` | any string value. |
+
+## Returns
+
+`bigint`
+
+the bigint value of the hashed string

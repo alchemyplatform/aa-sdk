@@ -1,0 +1,149 @@
+---
+title: BundlerActions
+description: Overview of the BundlerActions 2097152
+slug: wallets/reference/aa-sdk/core/src/type-aliases/BundlerActions
+layout: reference
+---
+
+```ts
+type BundlerActions = object;
+```
+
+Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:54](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/client/decorators/bundlerClient.ts#L54)
+
+## Methods
+
+### estimateUserOperationGas()
+
+```ts
+estimateUserOperationGas<TEntryPointVersion>(
+   request,
+   entryPoint,
+   stateOverride?): Promise<UserOperationEstimateGasResponse<TEntryPointVersion>>;
+```
+
+Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:63](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/client/decorators/bundlerClient.ts#L63)
+
+calls `eth_estimateUserOperationGas` and returns the result
+
+#### Type Parameters
+
+| Type Parameter                                                                                                        | Default type                                                                           |
+| :-------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------- |
+| `TEntryPointVersion` _extends_ keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase.mdx)\<`unknown`> | keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase.mdx)\<`unknown`> |
+
+#### Parameters
+
+| Parameter        | Type                                                                      | Description                                    |
+| :--------------- | :------------------------------------------------------------------------ | :--------------------------------------------- |
+| `request`        | [`UserOperationRequest`](UserOperationRequest.mdx)\<`TEntryPointVersion`> | the UserOperationRequest to estimate gas for   |
+| `entryPoint`     | `` `0x${string}` ``                                                       | the entry point address the op will be sent to |
+| `stateOverride?` | `StateOverride`                                                           | the state override to use for the estimation   |
+
+#### Returns
+
+`Promise`\<[`UserOperationEstimateGasResponse`](../interfaces/UserOperationEstimateGasResponse.mdx)\<`TEntryPointVersion`>>
+
+the gas estimates for the given response
+
+---
+
+### getSupportedEntryPoints()
+
+```ts
+getSupportedEntryPoints(): Promise<`0x${string}`[]>;
+```
+
+Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:110](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/client/decorators/bundlerClient.ts#L110)
+
+calls `eth_supportedEntryPoints` and returns the entry points the RPC supports
+
+#### Returns
+
+`Promise`\<`` `0x${string}` ``\[]>
+
+- an array of the entrypoint addresses supported
+
+---
+
+### getUserOperationByHash()
+
+```ts
+getUserOperationByHash(hash): Promise<
+  | null
+  | UserOperationResponse<EntryPointVersion>>;
+```
+
+Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:91](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/client/decorators/bundlerClient.ts#L91)
+
+calls `eth_getUserOperationByHash` and returns the UserOperationResponse
+
+#### Parameters
+
+| Parameter | Type                | Description                            |
+| :-------- | :------------------ | :------------------------------------- |
+| `hash`    | `` `0x${string}` `` | the hash of the UserOperation to fetch |
+
+#### Returns
+
+`Promise`\<
+| `null`
+| [`UserOperationResponse`](../interfaces/UserOperationResponse.mdx)\<`EntryPointVersion`>>
+
+- the user operation if found or null
+
+---
+
+### getUserOperationReceipt()
+
+```ts
+getUserOperationReceipt(hash, tag?): Promise<null | UserOperationReceipt>;
+```
+
+Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:100](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/client/decorators/bundlerClient.ts#L100)
+
+calls `eth_getUserOperationReceipt` and returns the UserOperationReceipt
+
+#### Parameters
+
+| Parameter | Type                | Description                                          |
+| :-------- | :------------------ | :--------------------------------------------------- | ------------------------------------------------------ |
+| `hash`    | `` `0x${string}` `` | the hash of the UserOperation to get the receipt for |
+| `tag?`    | `"latest"`          | `"pending"`                                          | if client want to get receipt for different block tag. |
+
+#### Returns
+
+`Promise`\<`null` | [`UserOperationReceipt`](../interfaces/UserOperationReceipt.mdx)>
+
+- a user operation receipt or null if not found
+
+---
+
+### sendRawUserOperation()
+
+```ts
+sendRawUserOperation<TEntryPointVersion>(request, entryPoint): Promise<`0x${string}`>;
+```
+
+Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:78](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/client/decorators/bundlerClient.ts#L78)
+
+calls `eth_sendUserOperation` and returns the hash of the sent UserOperation
+
+#### Type Parameters
+
+| Type Parameter                                                                                                        | Default type                                                                           |
+| :-------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------- |
+| `TEntryPointVersion` _extends_ keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase.mdx)\<`unknown`> | keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase.mdx)\<`unknown`> |
+
+#### Parameters
+
+| Parameter    | Type                                                                      | Description                                    |
+| :----------- | :------------------------------------------------------------------------ | :--------------------------------------------- |
+| `request`    | [`UserOperationRequest`](UserOperationRequest.mdx)\<`TEntryPointVersion`> | the UserOperationRequest to send               |
+| `entryPoint` | `` `0x${string}` ``                                                       | the entry point address the op will be sent to |
+
+#### Returns
+
+`Promise`\<`` `0x${string}` ``>
+
+the hash of the sent UserOperation

@@ -1,0 +1,47 @@
+---
+title: alchemyActions
+description: Provides a set of actions for interacting with the Alchemy Smart Account client, including the ability to simulate user operations.
+slug: wallets/reference/account-kit/infra/src/exports/variables/alchemyActions
+layout: reference
+---
+
+```ts
+const alchemyActions: <TTransport, TChain, TAccount, TContext>(
+  client,
+) => AlchemySmartAccountClientActions<TAccount, TContext, TChain>;
+```
+
+Defined in: [account-kit/infra/src/client/decorators/smartAccount.ts:72](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/infra/src/client/decorators/smartAccount.ts#L72)
+
+Provides a set of actions for interacting with the Alchemy Smart Account client, including the ability to simulate user operations.
+
+## Example
+
+```ts
+import { alchemyActions } from "@account-kit/infra";
+import { createPublicClient } from "viem";
+
+const client = createPublicClient(...);
+const clientWithAlchemyActions = client.extend(alchemyActions);
+```
+
+## Type Parameters
+
+| Type Parameter                              | Default type |
+| :------------------------------------------ | :----------- | ---------------------- | ----------- |
+| `TTransport` _extends_ `Transport`          | `Transport`  |
+| `TChain` _extends_ `Chain`                  | `undefined`  | `Chain`                | `undefined` |
+| `TAccount` _extends_ `SmartContractAccount` | `undefined`  | `SmartContractAccount` | `undefined` |
+| `TContext` _extends_ `UserOperationContext` | `undefined`  | `UserOperationContext` | `undefined` |
+
+## Parameters
+
+| Parameter | Type                                          |
+| :-------- | :-------------------------------------------- |
+| `client`  | `Client`\<`TTransport`, `TChain`, `TAccount`> |
+
+## Returns
+
+[`AlchemySmartAccountClientActions`](../type-aliases/AlchemySmartAccountClientActions.mdx)\<`TAccount`, `TContext`, `TChain`>
+
+An object containing Alchemy Smart Account client actions

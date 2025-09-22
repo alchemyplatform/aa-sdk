@@ -1,0 +1,46 @@
+---
+title: Erc7677RpcSchema
+description: Overview of the Erc7677RpcSchema 2097152
+slug: wallets/reference/aa-sdk/core/src/type-aliases/Erc7677RpcSchema
+layout: reference
+---
+
+```ts
+type Erc7677RpcSchema<TContext> = [
+  {
+    Method: "pm_getPaymasterStubData";
+    Parameters: [accountLoupeActions, Address, Hex, TContext];
+    ReturnType: {
+      isFinal?: boolean;
+      paymaster?: Address;
+      paymasterAndData?: Hex;
+      paymasterData?: Hex;
+      paymasterPostOpGasLimit?: Hex;
+      paymasterVerificationGasLimit?: Hex;
+      sponsor?: {
+        icon?: string;
+        name: string;
+      };
+    };
+  },
+  {
+    Method: "pm_getPaymasterData";
+    Parameters: [accountLoupeActions, Address, Hex, TContext];
+    ReturnType: {
+      paymaster?: Address;
+      paymasterAndData?: Hex;
+      paymasterData?: Hex;
+      paymasterPostOpGasLimit?: Hex;
+      paymasterVerificationGasLimit?: Hex;
+    };
+  },
+];
+```
+
+Defined in: [aa-sdk/core/src/middleware/erc7677middleware.ts:25](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/middleware/erc7677middleware.ts#L25)
+
+## Type Parameters
+
+| Type Parameter                                  | Default type               |
+| :---------------------------------------------- | :------------------------- |
+| `TContext` _extends_ `Record`\<`string`, `any`> | `Record`\<`string`, `any`> |

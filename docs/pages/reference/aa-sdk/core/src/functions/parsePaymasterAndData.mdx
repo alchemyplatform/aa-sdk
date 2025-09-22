@@ -1,0 +1,28 @@
+---
+title: parsePaymasterAndData
+description: Overview of the parsePaymasterAndData function
+slug: wallets/reference/aa-sdk/core/src/functions/parsePaymasterAndData
+layout: reference
+---
+
+```ts
+function parsePaymasterAndData(
+  paymasterAndData,
+): Pick<accountLoupeActions<"0.7.0">, "paymaster" | "paymasterData">;
+```
+
+Defined in: [aa-sdk/core/src/utils/userop.ts:199](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/utils/userop.ts#L199)
+
+Utility method for parsing the paymaster address and paymasterData from the paymasterAndData hex string
+
+## Parameters
+
+| Parameter          | Type                | Description                                                                                                                               |
+| :----------------- | :------------------ | :---------------------------------------------------------------------------------------------------------------------------------------- |
+| `paymasterAndData` | `` `0x${string}` `` | the paymaster and data hex string to parse. The hex string refers to the paymasterAndData field of entrypoint v0.6 user operation request |
+
+## Returns
+
+`Pick`\<[`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`"0.7.0"`>, `"paymaster"` | `"paymasterData"`>
+
+the parsed paymaster and paymasterData fields of entrypoint v0.7 user operation request paymaster and paymasterData field

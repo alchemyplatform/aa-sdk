@@ -1,0 +1,44 @@
+---
+title: filterUndefined
+description: Overview of the filterUndefined function
+slug: wallets/reference/aa-sdk/core/src/functions/filterUndefined
+layout: reference
+---
+
+```ts
+function filterUndefined<T>(obj): T;
+```
+
+Defined in: [aa-sdk/core/src/utils/index.ts:99](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/utils/index.ts#L99)
+
+Filters out properties with undefined or null values from the provided object.
+
+## Example
+
+```ts
+import { filterUndefined } from "@aa-sdk/core";
+
+const result = filterUndefined({
+  foo: undefined,
+  bar: null,
+  baz: "baz",
+}); // { baz: "baz" }
+```
+
+## Type Parameters
+
+| Type Parameter |
+| :------------- |
+| `T`            |
+
+## Parameters
+
+| Parameter | Type | Description                                                              |
+| :-------- | :--- | :----------------------------------------------------------------------- |
+| `obj`     | `T`  | the object from which to remove properties with undefined or null values |
+
+## Returns
+
+`T`
+
+the object with undefined or null properties removed

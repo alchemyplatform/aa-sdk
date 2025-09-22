@@ -1,0 +1,269 @@
+---
+title: SignerEndpoints
+description: Overview of the SignerEndpoints 2097152
+slug: wallets/reference/account-kit/signer/src/type-aliases/SignerEndpoints
+layout: reference
+---
+
+```ts
+type SignerEndpoints = [
+  {
+    Body:
+      | (Omit<EmailAuthParams, "redirectParams"> & object)
+      | SmsAuthParams
+      | {
+          passkey: {
+            attestation: Awaited<ReturnType<typeof getWebAuthnAttestation>>;
+            challenge: string;
+          };
+        }
+      | AccessKeyAuthParamsPublicKeyOnly;
+    Response: SignupResponse;
+    Route: "/v1/signup";
+  },
+  {
+    Body: {
+      stampedRequest: TSignedRequest;
+    };
+    Response: User;
+    Route: "/v1/whoami";
+  },
+  {
+    Body: (Omit<EmailAuthParams, "redirectParams"> & object) | SmsAuthParams;
+    Response: {
+      multiFactors?: MfaFactor[];
+      orgId: string;
+      otpId?: string;
+    };
+    Route: "/v1/auth";
+  },
+  {
+    Body: {
+      accessKey?: {
+        accountId?: string;
+        publicKey: string;
+      };
+      email?: string;
+      phone?: string;
+    };
+    Response: {
+      orgId: string | null;
+    };
+    Route: "/v1/lookup";
+  },
+  {
+    Body: {
+      contact: string;
+      otpType: "OTP_TYPE_SMS" | "OTP_TYPE_EMAIL";
+    };
+    Response: {
+      otpId: string;
+    };
+    Route: "/v1/init-otp";
+  },
+  {
+    Body: {
+      otpCode: string;
+      otpId: string;
+    };
+    Response: {
+      verificationToken: string;
+    };
+    Route: "/v1/verify-otp";
+  },
+  {
+    Body: {
+      stampedRequest: TSignedRequest;
+    };
+    Response: {
+      signature: Hex;
+    };
+    Route: "/v1/sign-payload";
+  },
+  {
+    Body: {
+      stampedRequest: TSignedRequest;
+    };
+    Response: void;
+    Route: "/v1/update-email-auth";
+  },
+  {
+    Body: {
+      stampedRequest: TSignedRequest;
+    };
+    Response: void;
+    Route: "/v1/update-phone-auth";
+  },
+  {
+    Body: {
+      stampedRequest: TSignedRequest;
+    };
+    Response: {
+      oauthProviders: OauthProviderInfo[];
+    };
+    Route: "/v1/add-oauth-provider";
+  },
+  {
+    Body: {
+      stampedRequest: TSignedRequest;
+    };
+    Response: void;
+    Route: "/v1/remove-oauth-provider";
+  },
+  {
+    Body: {};
+    Response: AuthMethods;
+    Route: "/v1/list-auth-methods";
+  },
+  {
+    Body: {
+      nonce: string;
+    };
+    Response: OauthConfig;
+    Route: "/v1/prepare-oauth";
+  },
+  {
+    Body: OtpParams;
+    Response: OtpResponse;
+    Route: "/v1/otp";
+  },
+  {
+    Body: {
+      stampedRequest: TSignedRequest;
+    };
+    Response: {
+      multiFactors: MfaFactor[];
+    };
+    Route: "/v1/auth-list-multi-factors";
+  },
+  {
+    Body: {
+      multiFactorIds: string[];
+      stampedRequest: TSignedRequest;
+    };
+    Response: {
+      multiFactors: MfaFactor[];
+    };
+    Route: "/v1/auth-delete-multi-factors";
+  },
+  {
+    Body: {
+      multiFactorType: MultiFactorType;
+      stampedRequest: TSignedRequest;
+    };
+    Response: AddMfaResult;
+    Route: "/v1/auth-request-multi-factor";
+  },
+  {
+    Body: VerifyMfaParams & object;
+    Response: {
+      multiFactors: MfaFactor[];
+    };
+    Route: "/v1/auth-verify-multi-factor";
+  },
+  {
+    Body: JwtParams;
+    Response: JwtResponse;
+    Route: "/v1/auth-jwt";
+  },
+  {
+    Body: {};
+    Response: SignerConfig;
+    Route: "/v1/signer-config";
+  },
+  {
+    Body: {
+      encryptedPayload: string;
+      multiFactors: VerifyMfaParams[];
+    };
+    Response: {
+      multiFactors: MfaFactor[];
+      payload: {
+        credentialBundle?: string;
+      };
+    };
+    Route: "/v1/auth-validate-multi-factors";
+  },
+  {
+    Body: {
+      members: object[];
+    };
+    Response: {
+      result: {
+        evmSignerAddress: Address;
+        members: object[];
+        orgId: string;
+      };
+    };
+    Route: "/v1/multi-owner-create";
+  },
+  {
+    Body: {
+      members: object[];
+      organizationId: string;
+    };
+    Response: {
+      result: TurnkeyApiTypes["v1CreateUsersRequest"];
+    };
+    Route: "/v1/multi-owner-prepare-add";
+  },
+  {
+    Body: {
+      stampedRequest: TSignedRequest;
+    };
+    Response: {
+      result: {
+        members: object[];
+        updateRootQuorumRequest: TurnkeyApiTypes["v1UpdateRootQuorumRequest"];
+      };
+    };
+    Route: "/v1/multi-owner-add";
+  },
+  {
+    Body: {
+      stampedRequest: TSignedRequest;
+    };
+    Response: {
+      result: TurnkeyApiTypes["v1UpdateRootQuorumResult"];
+    };
+    Route: "/v1/multi-owner-update-root-quorum";
+  },
+  {
+    Body: {
+      stampedRequest: TSignedRequest;
+    };
+    Response: {
+      result: {
+        signRawPayloadResult: TurnkeyApiTypes["v1SignRawPayloadResult"];
+      };
+    };
+    Route: "/v1/multi-owner-sign-raw-payload";
+  },
+  {
+    Body: {
+      members: object[];
+      organizationId: string;
+    };
+    Response: {
+      result: {
+        deleteMembersRequest: TurnkeyApiTypes["v1DeleteUsersRequest"];
+        updateRootQuorumRequest: TurnkeyApiTypes["v1UpdateRootQuorumRequest"];
+      };
+    };
+    Route: "/v1/multi-owner-prepare-delete";
+  },
+  {
+    Body: {
+      stampedRequest: TSignedRequest;
+    };
+    Response: {
+      result: {
+        deletedUserIds: string[];
+      };
+    };
+    Route: "/v1/multi-owner-delete";
+  },
+];
+```
+
+Defined in: [account-kit/signer/src/client/types.ts:175](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/signer/src/client/types.ts#L175)

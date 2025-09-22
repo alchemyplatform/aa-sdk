@@ -1,0 +1,31 @@
+---
+title: getDefaultLightAccountFactoryAddress
+description: Overview of the getDefaultLightAccountFactoryAddress function
+slug: wallets/reference/account-kit/smart-contracts/src/functions/getDefaultLightAccountFactoryAddress
+layout: reference
+---
+
+```ts
+function getDefaultLightAccountFactoryAddress(chain, version): `0x${string}`;
+```
+
+Defined in: [account-kit/smart-contracts/src/light-account/utils.ts:91](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/account-kit/smart-contracts/src/light-account/utils.ts#L91)
+
+Utility method returning the default light account factory address given a Chain object
+
+## Parameters
+
+| Parameter | Type                                     | Description                                                     |
+| :-------- | :--------------------------------------- | :-------------------------------------------------------------- |
+| `chain`   | `Chain`                                  | a Chain object                                                  |
+| `version` | `LightAccountVersion`\<`"LightAccount"`> | the version of the light account to get the factory address for |
+
+## Returns
+
+`` `0x${string}` ``
+
+an for the given chain
+
+## Throws
+
+if the chain doesn't have an address currently deployed

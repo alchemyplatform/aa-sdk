@@ -1,0 +1,69 @@
+---
+title: checkGasSponsorshipEligibility
+description: Overview of the checkGasSponsorshipEligibility function
+slug: wallets/reference/aa-sdk/core/src/functions/checkGasSponsorshipEligibility
+layout: reference
+---
+
+```ts
+function checkGasSponsorshipEligibility<TTransport, TChain, TAccount, TContext>(
+  client_,
+  args,
+): Promise<
+  CheckGasSponsorshipEligibilityResult<
+    TAccount,
+    GetEntryPointFromAccount<
+      TAccount,
+      SmartContractAccount<string, keyof EntryPointRegistryBase<unknown>>
+    >
+  >
+>;
+```
+
+Defined in: [aa-sdk/core/src/actions/smartAccount/checkGasSponsorshipEligibility.ts:56](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/actions/smartAccount/checkGasSponsorshipEligibility.ts#L56)
+
+This function verifies the eligibility of the connected account for gas sponsorship concerning the upcoming `UserOperation` (UO) that is intended to be sent.
+Internally, this method invokes `buildUserOperation`, which navigates through the middleware pipeline, including the `PaymasterMiddleware`. Its purpose is to construct the UO struct meant for transmission to the bundler. Following the construction of the UO struct, this function verifies if the resulting structure contains a non-empty `paymasterAndData` field.
+You can utilize this method before sending the user operation to confirm its eligibility for gas sponsorship. Depending on the outcome, it allows you to tailor the user experience accordingly, based on eligibility.
+
+## Example
+
+```ts
+import { smartAccountClient } from "./smartAccountClient";
+// [!code focus:99]
+const { eligible } = await smartAccountClient.checkGasSponsorshipEligibility({
+  uo: {
+    data: "0xCalldata",
+    target: "0xTarget",
+    value: 0n,
+  },
+});
+
+console.log(
+  `User Operation is ${
+    eligible ? "eligible" : "ineligible"
+  } for gas sponsorship.`,
+);
+```
+
+## Type Parameters
+
+| Type Parameter                     | Default type |
+| :--------------------------------- | :----------- | ------------------------------------------------------------------ | ------- | ----------- | ------------------------------------------------------------------ |
+| `TTransport` _extends_ `Transport` | `Transport`  |
+| `TChain` _extends_ `undefined`     | `Chain`      | `undefined`                                                        | `Chain` |
+| `TAccount` _extends_               | `undefined`  | [`SmartContractAccount`](../type-aliases/SmartContractAccount.mdx) |         | `undefined` | [`SmartContractAccount`](../type-aliases/SmartContractAccount.mdx) |
+| `TContext` _extends_ `any`         | `any`        |
+
+## Parameters
+
+| Parameter | Type                                                   | Description                                                    |
+| :-------- | :----------------------------------------------------- | :------------------------------------------------------------- |
+| `client_` | `Client`\<`TTransport`, `TChain`, `TAccount`>          | the smart account client to use for making RPC calls           |
+| `args`    | `SendUserOperationParameters`\<`TAccount`, `TContext`> | containing the user operation, account, context, and overrides |
+
+## Returns
+
+`Promise`\<`CheckGasSponsorshipEligibilityResult`\<`TAccount`, [`GetEntryPointFromAccount`](../type-aliases/GetEntryPointFromAccount.mdx)\<`TAccount`, [`SmartContractAccount`](../type-aliases/SmartContractAccount.mdx)\<`string`, keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase.mdx)\<`unknown`>>>>>
+
+a Promise containing a boolean indicating if the account is elgibile for sponsorship and the sponsored UO

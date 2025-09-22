@@ -1,0 +1,38 @@
+---
+title: BundlerRpcSchema
+description: Overview of the BundlerRpcSchema 2097152
+slug: wallets/reference/aa-sdk/core/src/type-aliases/BundlerRpcSchema
+layout: reference
+---
+
+```ts
+type BundlerRpcSchema = [
+  {
+    Method: "eth_sendUserOperation";
+    Parameters: [UserOperationRequest, Address];
+    ReturnType: Hash;
+  },
+  {
+    Method: "eth_estimateUserOperationGas";
+    Parameters: [UserOperationRequest, Address, RpcStateOverride?];
+    ReturnType: UserOperationEstimateGasResponse;
+  },
+  {
+    Method: "eth_getUserOperationReceipt";
+    Parameters: [Hash, ("pending" | "latest")?];
+    ReturnType: UserOperationReceipt | null;
+  },
+  {
+    Method: "eth_getUserOperationByHash";
+    Parameters: [Hash];
+    ReturnType: UserOperationResponse | null;
+  },
+  {
+    Method: "eth_supportedEntryPoints";
+    Parameters: [];
+    ReturnType: Address[];
+  },
+];
+```
+
+Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:25](https://github.com/alchemyplatform/aa-sdk/blob/923a52171f7246172caf350853843e6680197da9/aa-sdk/core/src/client/decorators/bundlerClient.ts#L25)
