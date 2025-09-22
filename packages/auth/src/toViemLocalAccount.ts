@@ -2,7 +2,7 @@ import { type LocalAccount, type Hex, type TypedDataDefinition } from "viem";
 import type { AuthSession } from "./authSession.js";
 import type { SignAuthorizationReturnType } from "viem/actions";
 
-export const toViemAccount = (authSession: AuthSession): LocalAccount => {
+export const toViemLocalAccount = (authSession: AuthSession): LocalAccount => {
   const address = authSession.getAddress();
   return {
     address,

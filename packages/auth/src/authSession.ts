@@ -20,7 +20,7 @@ import type {
   User,
 } from "./types";
 import { dev_request } from "./devRequest.js";
-import { toViemAccount } from "./toViemAccount.js";
+import { toViemLocalAccount } from "./toViemLocalAccount.js";
 import { hashAuthorization } from "viem/utils";
 import {
   type AlchemyAuthEip1193Provider,
@@ -458,9 +458,9 @@ export class AuthSession {
     }
   }
 
-  public toViemAccount(): LocalAccount {
+  public toViemLocalAccount(): LocalAccount {
     this.throwIfDisconnected();
-    return toViemAccount(this);
+    return toViemLocalAccount(this);
   }
 
   public getProvider(): AlchemyAuthEip1193Provider {

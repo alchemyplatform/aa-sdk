@@ -184,7 +184,7 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
           );
         }
 
-        const account = authSessionInstance.toViemAccount();
+        const account = authSessionInstance.toViemLocalAccount();
 
         const client = createWalletClient({
           account,
