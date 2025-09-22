@@ -6,7 +6,7 @@ slug: wallets/authentication/login-methods/sms-login
 
 <Info>
   SMS auth is currently in closed alpha. If you'd like early access please reach
-  out to our support team.
+  out to contact@alchemy.com.
 </Info>
 
 Authenticate users with their phone number by sending verification codes via SMS.
@@ -15,8 +15,8 @@ Authenticate users with their phone number by sending verification codes via SMS
 
 SMS authentication is a two-step process:
 
-1. The user enters their phone number and requests a verification code. This will trigger a text message with a 6-digit code to their phone number.
-2. The user enters the 6-digit code they receive via SMS to complete authentication
+1. _Send the verification code:_ the user enters their phone number and requests a verification code.
+2. _Submit the verification code:_ the user enters the 6-digit code they receive via SMS to complete authentication.
 
 The SDK will handle phone number validation, code generation, and delivery automatically.
 
@@ -50,20 +50,20 @@ Pricing varies by country and requires specific area codes to be enabled for you
         authenticate(
             { type: "sms", phone: "+123456789" },
             {
-            onSuccess: () => {
-                // onSuccess only fires once the entire flow is done (SMS OTP + optional MFA).
-                // It still runs even if the final step completes in another tab/window.
-            },
-            onError: (error) => {
-                // Handle error
-            },
+                onSuccess: () => {
+                    // onSuccess only fires once the entire flow is done (SMS OTP + optional MFA).
+                    // It still runs even if the final step completes in another tab/window.
+                },
+                onError: (error) => {
+                    // Handle error
+                },
             },
         );
         };
         ```
 
         ### Step 2: Show OTP input on status change
-        Use the `useSignerStatus` hook and `AlchemySignerStatus` enum to react to status changes:
+        Use the `useSignerStatus` hook to show the otp input once the code is sent:
 
         ```tsx twoslash
         import React from "react";
@@ -75,9 +75,9 @@ Pricing varies by country and requires specific area codes to be enabled for you
 
         return (
             <>
-            {status === AlchemySignerStatus.AWAITING_SMS_AUTH && (
-                <div>Prompt the user to enter the OTP code received via SMS</div>
-            )}
+                {status === AlchemySignerStatus.AWAITING_SMS_AUTH && (
+                    <div>Prompt the user to enter the OTP code received via SMS</div>
+                )}
             </>
         );
         };
@@ -97,12 +97,12 @@ Pricing varies by country and requires specific area codes to be enabled for you
             otpCode,
             },
             {
-            onSuccess: () => {
-                // onSuccess only fires once the entire flow is done (SMS OTP).
-            },
-            onError: (error) => {
-                // Handle invalid code error
-            },
+                onSuccess: () => {
+                    // onSuccess only fires once the entire flow is done (SMS OTP).
+                },
+                onError: (error) => {
+                    // Handle invalid code error
+                },
             },
         );
         };
@@ -110,7 +110,7 @@ Pricing varies by country and requires specific area codes to be enabled for you
 
         ### Step 4: Check authentication status
 
-        Use the `useSignerStatus` hook to determine if the user is authenticated:
+        Use the `useSignerStatus` hook we set up before to wait until the user is authenticated:
 
         ```tsx twoslash
         import { useSignerStatus } from "@account-kit/react";
@@ -138,20 +138,20 @@ Pricing varies by country and requires specific area codes to be enabled for you
         authenticate(
             { type: "sms", phone: "+123456789" },
             {
-            onSuccess: () => {
-                // onSuccess only fires once the entire flow is done (SMS OTP + optional MFA).
-                // It still runs even if the final step completes in another tab/window.
-            },
-            onError: (error) => {
-                // Handle error
-            },
+                onSuccess: () => {
+                    // onSuccess only fires once the entire flow is done (SMS OTP + optional MFA).
+                    // It still runs even if the final step completes in another tab/window.
+                },
+                onError: (error) => {
+                    // Handle error
+                },
             },
         );
         };
         ```
 
         ### Step 2: Show OTP input on status change
-        Use the `useSignerStatus` hook and `AlchemySignerStatus` enum to react to status changes:
+        Use the `useSignerStatus` hook to show the otp input once the code is sent:
 
         ```tsx twoslash
         import React from "react";
@@ -164,9 +164,9 @@ Pricing varies by country and requires specific area codes to be enabled for you
 
         return (
             <>
-            {status === AlchemySignerStatus.AWAITING_SMS_AUTH && (
-                <View>Prompt the user to enter the OTP code received via SMS</View>
-            )}
+                {status === AlchemySignerStatus.AWAITING_SMS_AUTH && (
+                    <View>Prompt the user to enter the OTP code received via SMS</View>
+                )}
             </>
         );
         };
@@ -186,12 +186,12 @@ Pricing varies by country and requires specific area codes to be enabled for you
             otpCode,
             },
             {
-            onSuccess: () => {
-                // onSuccess only fires once the entire flow is done (SMS OTP).
-            },
-            onError: (error) => {
-                // Handle invalid code error
-            },
+                onSuccess: () => {
+                    // onSuccess only fires once the entire flow is done (SMS OTP).
+                },
+                onError: (error) => {
+                    // Handle invalid code error
+                },
             },
         );
         };
@@ -199,7 +199,7 @@ Pricing varies by country and requires specific area codes to be enabled for you
 
         ### Step 4: Check authentication status
 
-        Use the `useSignerStatus` hook to determine if the user is authenticated:
+        Use the `useSignerStatus` hook we set up before to wait until the user is authenticated:
 
         ```tsx twoslash
         import { useAuthenticate, useSignerStatus } from "@account-kit/react-native"
