@@ -9,7 +9,7 @@ layout: reference
 function signTypedData(client, signer, params): Promise<`0x${string}`>;
 ```
 
-Defined in: [account-kit/wallet-client/src/client/actions/signTypedData.ts:46](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/wallet-client/src/client/actions/signTypedData.ts#L46)
+Defined in: [account-kit/wallet-client/src/client/actions/signTypedData.ts:46](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/wallet-client/src/client/actions/signTypedData.ts#L46)
 
 Signs typed data (EIP-712) using the smart account.
 This method requests the account associated with the signer and uses it to sign the typed data.
@@ -41,11 +41,60 @@ const signature = await client.signTypedData({
 
 ## Parameters
 
-| Parameter | Type                   | Description                                      |
-| :-------- | :--------------------- | :----------------------------------------------- |
-| `client`  | `InnerWalletApiClient` | The wallet API client to use for the request     |
-| `signer`  | `SmartAccountSigner`   | The signer of the smart account                  |
-| `params`  | `SignTypedDataParams`  | The typed data to sign, following EIP-712 format |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `client`
+      </td>
+
+      <td>
+        `InnerWalletApiClient`
+      </td>
+
+      <td>
+        The wallet API client to use for the request
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `signer`
+      </td>
+
+      <td>
+        `SmartAccountSigner`
+      </td>
+
+      <td>
+        The signer of the smart account
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `params`
+      </td>
+
+      <td>
+        `SignTypedDataParams`
+      </td>
+
+      <td>
+        The typed data to sign, following EIP-712 format
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Returns
 

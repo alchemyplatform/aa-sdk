@@ -9,7 +9,7 @@ layout: reference
 function getAlchemyPaymasterAddress(chain, version): `0x${string}`;
 ```
 
-Defined in: [account-kit/infra/src/gas-manager.ts:82](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/infra/src/gas-manager.ts#L82)
+Defined in: [account-kit/infra/src/gas-manager.ts:82](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/infra/src/gas-manager.ts#L82)
 
 Retrieves the Alchemy paymaster address for the given chain. Returns different addresses based on the chain ID.
 
@@ -23,10 +23,46 @@ const paymasterAddress = getAlchemyPaymasterAddress(sepolia, "0.6.0");
 
 ## Parameters
 
-| Parameter | Type                                       | Description                                           |
-| :-------- | :----------------------------------------- | :---------------------------------------------------- |
-| `chain`   | `Chain`                                    | The chain for which the paymaster address is required |
-| `version` | keyof `EntryPointRegistryBase`\<`unknown`> | The version of the entry point                        |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `chain`
+      </td>
+
+      <td>
+        `Chain`
+      </td>
+
+      <td>
+        The chain for which the paymaster address is required
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `version`
+      </td>
+
+      <td>
+        keyof `EntryPointRegistryBase`\<`unknown`>
+      </td>
+
+      <td>
+        The version of the entry point
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Returns
 

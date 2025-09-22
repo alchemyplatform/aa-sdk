@@ -10,18 +10,77 @@ type SmartContractAccountWithSigner<Name, TSigner, TEntryPointVersion> =
   SmartContractAccount<Name, TEntryPointVersion> & object;
 ```
 
-Defined in: [aa-sdk/core/src/account/smartContractAccount.ts:90](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/account/smartContractAccount.ts#L90)
+Defined in: [aa-sdk/core/src/account/smartContractAccount.ts:90](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/account/smartContractAccount.ts#L90)
 
 ## Type Declaration
 
-| Name          | Type            | Defined in                                                                                                                                                                                        |
-| :------------ | :-------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `getSigner()` | () => `TSigner` | [aa-sdk/core/src/account/smartContractAccount.ts:95](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/account/smartContractAccount.ts#L95) |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Name</th>
+      <th align="left">Type</th>
+      <th align="left">Defined in</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `getSigner()`
+      </td>
+
+      <td>
+        () => `TSigner`
+      </td>
+
+      <td>
+        [aa-sdk/core/src/account/smartContractAccount.ts:95](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/account/smartContractAccount.ts#L95)
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Type Parameters
 
-| Type Parameter                                                                   | Default type                                                 |
-| :------------------------------------------------------------------------------- | :----------------------------------------------------------- |
-| `Name` _extends_ `string`                                                        | `string`                                                     |
-| `TSigner` _extends_ [`SmartAccountSigner`](../interfaces/SmartAccountSigner.mdx) | [`SmartAccountSigner`](../interfaces/SmartAccountSigner.mdx) |
-| `TEntryPointVersion` _extends_ [`EntryPointVersion`](EntryPointVersion.mdx)      | [`EntryPointVersion`](EntryPointVersion.mdx)                 |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `Name` *extends* `string`
+      </td>
+
+      <td>
+        `string`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TSigner` *extends* [`SmartAccountSigner`](../interfaces/SmartAccountSigner.mdx)
+      </td>
+
+      <td>
+        [`SmartAccountSigner`](../interfaces/SmartAccountSigner.mdx)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TEntryPointVersion` *extends* [`EntryPointVersion`](EntryPointVersion.mdx)
+      </td>
+
+      <td>
+        [`EntryPointVersion`](EntryPointVersion.mdx)
+      </td>
+    </tr>
+
+  </tbody>
+</table>

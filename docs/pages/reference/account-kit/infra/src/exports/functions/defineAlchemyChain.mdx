@@ -9,7 +9,7 @@ layout: reference
 function defineAlchemyChain(params): Chain;
 ```
 
-Defined in: [account-kit/infra/src/chains.ts:50](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/infra/src/chains.ts#L50)
+Defined in: [account-kit/infra/src/chains.ts:50](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/infra/src/chains.ts#L50)
 
 Defines an Alchemy chain configuration by adding an Alchemy-specific RPC base URL to the chain's RPC URLs.
 
@@ -27,11 +27,60 @@ const chain = defineAlchemyChain({
 
 ## Parameters
 
-| Parameter           | Type                                           | Description                                   |
-| :------------------ | :--------------------------------------------- | :-------------------------------------------- |
-| `params`            | \{ `chain`: `Chain`; `rpcBaseUrl`: `string`; } | The parameters for defining the Alchemy chain |
-| `params.chain`      | `Chain`                                        | The original chain configuration              |
-| `params.rpcBaseUrl` | `string`                                       | The Alchemy-specific RPC base URL             |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `params`
+      </td>
+
+      <td>
+        \{ `chain`: `Chain`; `rpcBaseUrl`: `string`; }
+      </td>
+
+      <td>
+        The parameters for defining the Alchemy chain
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `params.chain`
+      </td>
+
+      <td>
+        `Chain`
+      </td>
+
+      <td>
+        The original chain configuration
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `params.rpcBaseUrl`
+      </td>
+
+      <td>
+        `string`
+      </td>
+
+      <td>
+        The Alchemy-specific RPC base URL
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Returns
 

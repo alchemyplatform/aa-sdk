@@ -9,7 +9,7 @@ layout: reference
 function signMessage(client, signer, params): Promise<`0x${string}`>;
 ```
 
-Defined in: [account-kit/wallet-client/src/client/actions/signMessage.ts:31](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/wallet-client/src/client/actions/signMessage.ts#L31)
+Defined in: [account-kit/wallet-client/src/client/actions/signMessage.ts:31](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/wallet-client/src/client/actions/signMessage.ts#L31)
 
 Signs a message using the smart account.
 This method requests the account associated with the signer and uses it to sign the message.
@@ -28,11 +28,60 @@ const signature = await client.signMessage({
 
 ## Parameters
 
-| Parameter | Type                   | Description                                  |
-| :-------- | :--------------------- | :------------------------------------------- |
-| `client`  | `InnerWalletApiClient` | The wallet API client to use for the request |
-| `signer`  | `SmartAccountSigner`   | The signer of the smart account              |
-| `params`  | `SignMessageParams`    | Parameters for signing the message           |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `client`
+      </td>
+
+      <td>
+        `InnerWalletApiClient`
+      </td>
+
+      <td>
+        The wallet API client to use for the request
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `signer`
+      </td>
+
+      <td>
+        `SmartAccountSigner`
+      </td>
+
+      <td>
+        The signer of the smart account
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `params`
+      </td>
+
+      <td>
+        `SignMessageParams`
+      </td>
+
+      <td>
+        Parameters for signing the message
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Returns
 

@@ -13,25 +13,183 @@ type CreateWebauthnModularAccountV2Params<TTransport> = Pick<
   object;
 ```
 
-Defined in: [account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts:68](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts#L68)
+Defined in: [account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts:68](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts#L68)
 
 ## Type Declaration
 
-| Name              | Type                                                              | Defined in                                                                                                                                                                                                                            |
-| :---------------- | :---------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `credential`      | `ToWebAuthnAccountParameters`\[`"credential"`]                    | [account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts:75](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts#L75) |
-| `deferredAction?` | `Hex`                                                             | [account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts:79](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts#L79) |
-| `entryPoint?`     | `EntryPointDef`\<`"0.7.0"`, `Chain`>                              | [account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts:78](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts#L78) |
-| `factoryAddress?` | [`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx) | [account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts:82](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts#L82) |
-| `getFn?`          | `ToWebAuthnAccountParameters`\[`"getFn"`]                         | [account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts:76](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts#L76) |
-| `initCode?`       | `Hex`                                                             | [account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts:83](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts#L83) |
-| `mode`            | `"webauthn"`                                                      | [account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts:74](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts#L74) |
-| `rpId?`           | `ToWebAuthnAccountParameters`\[`"rpId"`]                          | [account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts:77](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts#L77) |
-| `salt?`           | `bigint`                                                          | [account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts:81](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts#L81) |
-| `signerEntity?`   | [`SignerEntity`](SignerEntity.mdx)                                | [account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts:80](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts#L80) |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Name</th>
+      <th align="left">Type</th>
+      <th align="left">Defined in</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `credential`
+      </td>
+
+      <td>
+        `ToWebAuthnAccountParameters`\[`"credential"`]
+      </td>
+
+      <td>
+        [account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts:75](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts#L75)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `deferredAction?`
+      </td>
+
+      <td>
+        `Hex`
+      </td>
+
+      <td>
+        [account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts:79](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts#L79)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `entryPoint?`
+      </td>
+
+      <td>
+        `EntryPointDef`\<`"0.7.0"`, `Chain`>
+      </td>
+
+      <td>
+        [account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts:78](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts#L78)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `factoryAddress?`
+      </td>
+
+      <td>
+        [`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx)
+      </td>
+
+      <td>
+        [account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts:82](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts#L82)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `getFn?`
+      </td>
+
+      <td>
+        `ToWebAuthnAccountParameters`\[`"getFn"`]
+      </td>
+
+      <td>
+        [account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts:76](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts#L76)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `initCode?`
+      </td>
+
+      <td>
+        `Hex`
+      </td>
+
+      <td>
+        [account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts:83](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts#L83)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `mode`
+      </td>
+
+      <td>
+        `"webauthn"`
+      </td>
+
+      <td>
+        [account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts:74](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts#L74)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `rpId?`
+      </td>
+
+      <td>
+        `ToWebAuthnAccountParameters`\[`"rpId"`]
+      </td>
+
+      <td>
+        [account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts:77](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts#L77)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `salt?`
+      </td>
+
+      <td>
+        `bigint`
+      </td>
+
+      <td>
+        [account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts:81](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts#L81)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `signerEntity?`
+      </td>
+
+      <td>
+        [`SignerEntity`](SignerEntity.mdx)
+      </td>
+
+      <td>
+        [account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts:80](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts#L80)
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Type Parameters
 
-| Type Parameter                     | Default type |
-| :--------------------------------- | :----------- |
-| `TTransport` _extends_ `Transport` | `Transport`  |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TTransport` *extends* `Transport`
+      </td>
+
+      <td>
+        `Transport`
+      </td>
+    </tr>
+
+  </tbody>
+</table>

@@ -9,22 +9,144 @@ layout: reference
 type ClientMiddleware<TContext> = object;
 ```
 
-Defined in: [aa-sdk/core/src/middleware/types.ts:47](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/middleware/types.ts#L47)
+Defined in: [aa-sdk/core/src/middleware/types.ts:47](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/middleware/types.ts#L47)
 
 ## Type Parameters
 
-| Type Parameter       | Default type                                                                                |
-| :------------------- | :------------------------------------------------------------------------------------------ | ----------- | --- | ------------------------------------------------------------------------------------------- | ----------- |
-| `TContext` _extends_ | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx) | `undefined` |     | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx) | `undefined` |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TContext` *extends*
+        | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)
+        | `undefined`
+      </td>
+
+      <td>
+        | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)
+        | `undefined`
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Properties
 
-| Property                                                   | Type                                                        | Defined in                                                                                                                                                                |
-| :--------------------------------------------------------- | :---------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| <a id="custommiddleware" /> `customMiddleware`             | [`ClientMiddlewareFn`](ClientMiddlewareFn.mdx)\<`TContext`> | [aa-sdk/core/src/middleware/types.ts:55](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/middleware/types.ts#L55) |
-| <a id="dummypaymasteranddata" /> `dummyPaymasterAndData`   | [`ClientMiddlewareFn`](ClientMiddlewareFn.mdx)\<`TContext`> | [aa-sdk/core/src/middleware/types.ts:52](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/middleware/types.ts#L52) |
-| <a id="feeestimator" /> `feeEstimator`                     | [`ClientMiddlewareFn`](ClientMiddlewareFn.mdx)\<`TContext`> | [aa-sdk/core/src/middleware/types.ts:53](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/middleware/types.ts#L53) |
-| <a id="gasestimator" /> `gasEstimator`                     | [`ClientMiddlewareFn`](ClientMiddlewareFn.mdx)\<`TContext`> | [aa-sdk/core/src/middleware/types.ts:54](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/middleware/types.ts#L54) |
-| <a id="paymasteranddata" /> `paymasterAndData`             | [`ClientMiddlewareFn`](ClientMiddlewareFn.mdx)\<`TContext`> | [aa-sdk/core/src/middleware/types.ts:56](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/middleware/types.ts#L56) |
-| <a id="signuseroperation" /> `signUserOperation`           | [`ClientMiddlewareFn`](ClientMiddlewareFn.mdx)\<`TContext`> | [aa-sdk/core/src/middleware/types.ts:58](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/middleware/types.ts#L58) |
-| <a id="useroperationsimulator" /> `userOperationSimulator` | [`ClientMiddlewareFn`](ClientMiddlewareFn.mdx)\<`TContext`> | [aa-sdk/core/src/middleware/types.ts:57](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/middleware/types.ts#L57) |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Property</th>
+      <th align="left">Type</th>
+      <th align="left">Defined in</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        <a id="custommiddleware" /> `customMiddleware`
+      </td>
+
+      <td>
+        [`ClientMiddlewareFn`](ClientMiddlewareFn.mdx)\<`TContext`>
+      </td>
+
+      <td>
+        [aa-sdk/core/src/middleware/types.ts:55](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/middleware/types.ts#L55)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="dummypaymasteranddata" /> `dummyPaymasterAndData`
+      </td>
+
+      <td>
+        [`ClientMiddlewareFn`](ClientMiddlewareFn.mdx)\<`TContext`>
+      </td>
+
+      <td>
+        [aa-sdk/core/src/middleware/types.ts:52](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/middleware/types.ts#L52)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="feeestimator" /> `feeEstimator`
+      </td>
+
+      <td>
+        [`ClientMiddlewareFn`](ClientMiddlewareFn.mdx)\<`TContext`>
+      </td>
+
+      <td>
+        [aa-sdk/core/src/middleware/types.ts:53](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/middleware/types.ts#L53)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="gasestimator" /> `gasEstimator`
+      </td>
+
+      <td>
+        [`ClientMiddlewareFn`](ClientMiddlewareFn.mdx)\<`TContext`>
+      </td>
+
+      <td>
+        [aa-sdk/core/src/middleware/types.ts:54](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/middleware/types.ts#L54)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="paymasteranddata" /> `paymasterAndData`
+      </td>
+
+      <td>
+        [`ClientMiddlewareFn`](ClientMiddlewareFn.mdx)\<`TContext`>
+      </td>
+
+      <td>
+        [aa-sdk/core/src/middleware/types.ts:56](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/middleware/types.ts#L56)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="signuseroperation" /> `signUserOperation`
+      </td>
+
+      <td>
+        [`ClientMiddlewareFn`](ClientMiddlewareFn.mdx)\<`TContext`>
+      </td>
+
+      <td>
+        [aa-sdk/core/src/middleware/types.ts:58](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/middleware/types.ts#L58)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="useroperationsimulator" /> `userOperationSimulator`
+      </td>
+
+      <td>
+        [`ClientMiddlewareFn`](ClientMiddlewareFn.mdx)\<`TContext`>
+      </td>
+
+      <td>
+        [aa-sdk/core/src/middleware/types.ts:57](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/middleware/types.ts#L57)
+      </td>
+    </tr>
+
+  </tbody>
+</table>

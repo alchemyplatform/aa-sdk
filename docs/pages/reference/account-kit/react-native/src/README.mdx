@@ -7,17 +7,96 @@ layout: reference
 
 ## Type Aliases
 
-| Type Alias                                                                    | Description |
-| :---------------------------------------------------------------------------- | :---------- |
-| [AlchemyAccountContextProps](type-aliases/AlchemyAccountContextProps.mdx)     | -           |
-| [AlchemyAccountsProviderProps](type-aliases/AlchemyAccountsProviderProps.mdx) | -           |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Alias</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        [AlchemyAccountContextProps](type-aliases/AlchemyAccountContextProps.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [AlchemyAccountsProviderProps](type-aliases/AlchemyAccountsProviderProps.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Functions
 
-| Function                                                       | Description                                                                                                                                                                            |
-| :------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [AlchemyAccountProvider](functions/AlchemyAccountProvider.mdx) | Provider for Alchemy accounts.                                                                                                                                                         |
-| [createConfig](functions/createConfig.mdx)                     | Creates an AlchemyAccountsConfig by using the provided parameters to configure the core settings, including the required transport. It includes a signer creation function internally. |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Function</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        [AlchemyAccountProvider](functions/AlchemyAccountProvider.mdx)
+      </td>
+
+      <td>
+        Provider for Alchemy accounts.
+
+        **Example**
+
+        ```tsx
+        import { AlchemyAccountProvider, createConfig } from "@account-kit/react";
+        import { sepolia } from "@account-kit/infra";
+        import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+        const config = createConfig({
+         apiKey: "your-api-key",
+         chain: sepolia,
+        });
+
+        const queryClient = new QueryClient();
+
+        function App({ children }: React.PropsWithChildren) {
+         return (
+           <QueryClientProvider queryClient={queryClient}>
+             <AlchemyAccountProvider config={config} queryClient={queryClient}>
+               {children}
+             </AlchemyAccountProvider>
+           </QueryClientProvider>
+         );
+        }
+        ```
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [createConfig](functions/createConfig.mdx)
+      </td>
+
+      <td>
+        Creates an AlchemyAccountsConfig by using the provided parameters to configure the core settings, including the required transport. It includes a signer creation function internally.
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## References
 

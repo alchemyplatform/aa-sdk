@@ -9,18 +9,80 @@ layout: reference
 function bigIntMultiply(base, multiplier, roundingMode): bigint;
 ```
 
-Defined in: [aa-sdk/core/src/utils/bigint.ts:79](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/utils/bigint.ts#L79)
+Defined in: [aa-sdk/core/src/utils/bigint.ts:79](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/utils/bigint.ts#L79)
 
 Given a bigint and a number (which can be a float), returns the bigint value.
 Note: this function has loss and will round down to the nearest integer.
 
 ## Parameters
 
-| Parameter      | Type                                               | Default value           | Description                                                                 |
-| :------------- | :------------------------------------------------- | :---------------------- | :-------------------------------------------------------------------------- |
-| `base`         | `BigNumberish`                                     | `undefined`             | the number to be multiplied                                                 |
-| `multiplier`   | `Multiplier`                                       | `undefined`             | the amount to multiply by                                                   |
-| `roundingMode` | [`RoundingMode`](../enumerations/RoundingMode.mdx) | `RoundingMode.ROUND_UP` | the rounding mode to use when calculating the percent. defaults to ROUND_UP |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Default value</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `base`
+      </td>
+
+      <td>
+        `BigNumberish`
+      </td>
+
+      <td>
+        `undefined`
+      </td>
+
+      <td>
+        the number to be multiplied
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `multiplier`
+      </td>
+
+      <td>
+        `Multiplier`
+      </td>
+
+      <td>
+        `undefined`
+      </td>
+
+      <td>
+        the amount to multiply by
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `roundingMode`
+      </td>
+
+      <td>
+        [`RoundingMode`](../enumerations/RoundingMode.mdx)
+      </td>
+
+      <td>
+        `RoundingMode.ROUND_UP`
+      </td>
+
+      <td>
+        the rounding mode to use when calculating the percent. defaults to ROUND\_UP
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Returns
 

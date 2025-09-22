@@ -9,16 +9,40 @@ layout: reference
 function concatPaymasterAndData(paymasterAndData): `0x${string}`;
 ```
 
-Defined in: [aa-sdk/core/src/utils/userop.ts:216](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/utils/userop.ts#L216)
+Defined in: [aa-sdk/core/src/utils/userop.ts:216](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/utils/userop.ts#L216)
 
 Utility method for converting the object containing the paymaster address and paymaster data
 to the paymaster and data concatenated hex string
 
 ## Parameters
 
-| Parameter          | Type                                                                                                                           | Description        |
-| :----------------- | :----------------------------------------------------------------------------------------------------------------------------- | :----------------- | ------------------------------------------------------------------------------------------------------------- |
-| `paymasterAndData` | `Pick`\<[`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`"0.7.0"`>, `"paymaster"` | `"paymasterData"`> | the object containing the picked paymaster and paymasterData fields of entrypoint v0.7 user operation request |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `paymasterAndData`
+      </td>
+
+      <td>
+        `Pick`\<[`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`"0.7.0"`>, `"paymaster"` | `"paymasterData"`>
+      </td>
+
+      <td>
+        the object containing the picked paymaster and paymasterData fields of
+        entrypoint v0.7 user operation request
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Returns
 

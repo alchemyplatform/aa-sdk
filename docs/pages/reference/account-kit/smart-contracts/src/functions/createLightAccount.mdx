@@ -11,21 +11,80 @@ function createLightAccount<TTransport, TSigner, TLightAccountVersion>(
 ): Promise<LightAccount<TSigner, TLightAccountVersion>>;
 ```
 
-Defined in: [account-kit/smart-contracts/src/light-account/accounts/account.ts:77](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/light-account/accounts/account.ts#L77)
+Defined in: [account-kit/smart-contracts/src/light-account/accounts/account.ts:77](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/light-account/accounts/account.ts#L77)
 
 ## Type Parameters
 
-| Type Parameter                                   | Default type                 |
-| :----------------------------------------------- | :--------------------------- | ---------- | ---------- | ---------- |
-| `TTransport` _extends_ `Transport`               | `Transport`                  |
-| `TSigner` _extends_ `SmartAccountSigner`\<`any`> | `SmartAccountSigner`\<`any`> |
-| `TLightAccountVersion` _extends_ `"v1.0.1"`      | `"v1.0.2"`                   | `"v1.1.0"` | `"v2.0.0"` | `"v2.0.0"` |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TTransport` *extends* `Transport`
+      </td>
+
+      <td>
+        `Transport`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TSigner` *extends* `SmartAccountSigner`\<`any`>
+      </td>
+
+      <td>
+        `SmartAccountSigner`\<`any`>
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TLightAccountVersion` *extends* `"v1.0.1"` | `"v1.0.2"` | `"v1.1.0"` | `"v2.0.0"`
+      </td>
+
+      <td>
+        `"v2.0.0"`
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Parameters
 
-| Parameter | Type                                                                                                                         | Description                                 |
-| :-------- | :--------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------ |
-| `config`  | [`CreateLightAccountParams`](../type-aliases/CreateLightAccountParams.mdx)\<`TTransport`, `TSigner`, `TLightAccountVersion`> | The parameters for creating a light account |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `config`
+      </td>
+
+      <td>
+        [`CreateLightAccountParams`](../type-aliases/CreateLightAccountParams.mdx)\<`TTransport`, `TSigner`, `TLightAccountVersion`>
+      </td>
+
+      <td>
+        The parameters for creating a light account
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Returns
 

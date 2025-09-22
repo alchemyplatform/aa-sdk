@@ -14,18 +14,81 @@ type LightAccount<TSigner, TLightAccountVersion> = LightAccountBase<
   object;
 ```
 
-Defined in: [account-kit/smart-contracts/src/light-account/accounts/account.ts:36](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/light-account/accounts/account.ts#L36)
+Defined in: [account-kit/smart-contracts/src/light-account/accounts/account.ts:36](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/light-account/accounts/account.ts#L36)
 
 ## Type Declaration
 
-| Name                        | Type                                                                                | Defined in                                                                                                                                                                                                                            |
-| :-------------------------- | :---------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `encodeTransferOwnership()` | (`newOwner`) => `Hex`                                                               | [account-kit/smart-contracts/src/light-account/accounts/account.ts:41](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/light-account/accounts/account.ts#L41) |
-| `getOwnerAddress()`         | () => `Promise`\<[`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx)> | [account-kit/smart-contracts/src/light-account/accounts/account.ts:42](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/light-account/accounts/account.ts#L42) |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Name</th>
+      <th align="left">Type</th>
+      <th align="left">Defined in</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `encodeTransferOwnership()`
+      </td>
+
+      <td>
+        (`newOwner`) => `Hex`
+      </td>
+
+      <td>
+        [account-kit/smart-contracts/src/light-account/accounts/account.ts:41](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/light-account/accounts/account.ts#L41)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `getOwnerAddress()`
+      </td>
+
+      <td>
+        () => `Promise`\<[`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx)>
+      </td>
+
+      <td>
+        [account-kit/smart-contracts/src/light-account/accounts/account.ts:42](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/light-account/accounts/account.ts#L42)
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Type Parameters
 
-| Type Parameter                                                                                       | Default type                                                        |
-| :--------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------ |
-| `TSigner` _extends_ `SmartAccountSigner`                                                             | `SmartAccountSigner`                                                |
-| `TLightAccountVersion` _extends_ [`LightAccountVersion`](LightAccountVersion.mdx)\<`"LightAccount"`> | [`LightAccountVersion`](LightAccountVersion.mdx)\<`"LightAccount"`> |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TSigner` *extends* `SmartAccountSigner`
+      </td>
+
+      <td>
+        `SmartAccountSigner`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TLightAccountVersion` *extends* [`LightAccountVersion`](LightAccountVersion.mdx)\<`"LightAccount"`>
+      </td>
+
+      <td>
+        [`LightAccountVersion`](LightAccountVersion.mdx)\<`"LightAccount"`>
+      </td>
+    </tr>
+
+  </tbody>
+</table>

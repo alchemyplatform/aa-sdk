@@ -12,28 +12,112 @@ type ClientMiddlewareFn<TContext> = <TAccount, C, TEntryPointVersion>(
 ) => Promise<accountLoupeActions<accountLoupeActions<TEntryPointVersion>>>;
 ```
 
-Defined in: [aa-sdk/core/src/middleware/types.ts:31](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/middleware/types.ts#L31)
+Defined in: [aa-sdk/core/src/middleware/types.ts:31](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/middleware/types.ts#L31)
 
 ## Type Parameters
 
-| Type Parameter       | Default type                                                                                |
-| :------------------- | :------------------------------------------------------------------------------------------ | ----------- | --- | ------------------------------------------------------------------------------------------- | ----------- |
-| `TContext` _extends_ | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx) | `undefined` |     | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx) | `undefined` |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TContext` *extends*
+        | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)
+        | `undefined`
+      </td>
+
+      <td>
+        | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)
+        | `undefined`
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Type Parameters
 
-| Type Parameter                                                                                                                          | Default type                                                                                             |
-| :-------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------- |
-| `TAccount` _extends_ [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)                        | -                                                                                                        |
-| `C` _extends_ [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)                               | -                                                                                                        |
-| `TEntryPointVersion` _extends_ [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`TAccount`> | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`TAccount`> |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TAccount` *extends* [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `C` *extends* [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TEntryPointVersion` *extends* [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`TAccount`>
+      </td>
+
+      <td>
+        [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`TAccount`>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Parameters
 
-| Parameter | Type                                                                                                                                                                                                             |
-| :-------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `struct`  | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<[`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`TEntryPointVersion`>> |
-| `args`    | [`ClientMiddlewareArgs`](ClientMiddlewareArgs.mdx)\<`TAccount`, `C`, `TContext`, `TEntryPointVersion`>                                                                                                           |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `struct`
+      </td>
+
+      <td>
+        [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<[`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`TEntryPointVersion`>>
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `args`
+      </td>
+
+      <td>
+        [`ClientMiddlewareArgs`](ClientMiddlewareArgs.mdx)\<`TAccount`, `C`, `TContext`, `TEntryPointVersion`>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Returns
 

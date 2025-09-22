@@ -14,18 +14,81 @@ type MultiOwnerLightAccount<TSigner, TLightAccountVersion> = LightAccountBase<
   object;
 ```
 
-Defined in: [account-kit/smart-contracts/src/light-account/accounts/multiOwner.ts:33](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/light-account/accounts/multiOwner.ts#L33)
+Defined in: [account-kit/smart-contracts/src/light-account/accounts/multiOwner.ts:33](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/light-account/accounts/multiOwner.ts#L33)
 
 ## Type Declaration
 
-| Name                   | Type                                                                                            | Defined in                                                                                                                                                                                                                                  |
-| :--------------------- | :---------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `encodeUpdateOwners()` | (`ownersToAdd`, `ownersToRemove`) => `Hex`                                                      | [account-kit/smart-contracts/src/light-account/accounts/multiOwner.ts:42](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/light-account/accounts/multiOwner.ts#L42) |
-| `getOwnerAddresses()`  | () => `Promise`\<readonly [`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx)\[]> | [account-kit/smart-contracts/src/light-account/accounts/multiOwner.ts:46](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/light-account/accounts/multiOwner.ts#L46) |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Name</th>
+      <th align="left">Type</th>
+      <th align="left">Defined in</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `encodeUpdateOwners()`
+      </td>
+
+      <td>
+        (`ownersToAdd`, `ownersToRemove`) => `Hex`
+      </td>
+
+      <td>
+        [account-kit/smart-contracts/src/light-account/accounts/multiOwner.ts:42](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/light-account/accounts/multiOwner.ts#L42)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `getOwnerAddresses()`
+      </td>
+
+      <td>
+        () => `Promise`\<readonly [`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx)\[]>
+      </td>
+
+      <td>
+        [account-kit/smart-contracts/src/light-account/accounts/multiOwner.ts:46](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/light-account/accounts/multiOwner.ts#L46)
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Type Parameters
 
-| Type Parameter                                                                                                 | Default type                                                                  |
-| :------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------- |
-| `TSigner` _extends_ `SmartAccountSigner`                                                                       | `SmartAccountSigner`                                                          |
-| `TLightAccountVersion` _extends_ [`LightAccountVersion`](LightAccountVersion.mdx)\<`"MultiOwnerLightAccount"`> | [`LightAccountVersion`](LightAccountVersion.mdx)\<`"MultiOwnerLightAccount"`> |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TSigner` *extends* `SmartAccountSigner`
+      </td>
+
+      <td>
+        `SmartAccountSigner`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TLightAccountVersion` *extends* [`LightAccountVersion`](LightAccountVersion.mdx)\<`"MultiOwnerLightAccount"`>
+      </td>
+
+      <td>
+        [`LightAccountVersion`](LightAccountVersion.mdx)\<`"MultiOwnerLightAccount"`>
+      </td>
+    </tr>
+
+  </tbody>
+</table>

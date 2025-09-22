@@ -5,7 +5,7 @@ slug: wallets/reference/aa-sdk/ethers/src/classes/AccountSigner
 layout: reference
 ---
 
-Defined in: [aa-sdk/ethers/src/account-signer.ts:32](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/ethers/src/account-signer.ts#L32)
+Defined in: [aa-sdk/ethers/src/account-signer.ts:32](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/ethers/src/account-signer.ts#L32)
 
 Implementation of the ethers Signer interface to use with Smart Contract Accounts
 
@@ -15,10 +15,37 @@ Implementation of the ethers Signer interface to use with Smart Contract Account
 
 ## Type Parameters
 
-| Type Parameter                                                         | Default type                            |
-| :--------------------------------------------------------------------- | :-------------------------------------- |
-| `TAccount` _extends_ `SmartContractAccount`                            | `SmartContractAccount`                  |
-| `TEntryPointVersion` _extends_ `GetEntryPointFromAccount`\<`TAccount`> | `GetEntryPointFromAccount`\<`TAccount`> |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TAccount` *extends* `SmartContractAccount`
+      </td>
+
+      <td>
+        `SmartContractAccount`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TEntryPointVersion` *extends* `GetEntryPointFromAccount`\<`TAccount`>
+      </td>
+
+      <td>
+        `GetEntryPointFromAccount`\<`TAccount`>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Constructors
 
@@ -28,7 +55,7 @@ Implementation of the ethers Signer interface to use with Smart Contract Account
 new AccountSigner<TAccount, TEntryPointVersion>(provider, account): AccountSigner<TAccount, TEntryPointVersion>;
 ```
 
-Defined in: [aa-sdk/ethers/src/account-signer.ts:67](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/ethers/src/account-signer.ts#L67)
+Defined in: [aa-sdk/ethers/src/account-signer.ts:67](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/ethers/src/account-signer.ts#L67)
 
 Creates a new AccountSigner with the given ethers Provider and Smart Contract Account
 
@@ -53,10 +80,46 @@ const signer = new AccountSigner(provider, account);
 
 #### Parameters
 
-| Parameter  | Type                                                 | Description                                                                 |
-| :--------- | :--------------------------------------------------- | :-------------------------------------------------------------------------- |
-| `provider` | [`EthersProviderAdapter`](EthersProviderAdapter.mdx) | the ethers provider to use                                                  |
-| `account`  | `TAccount`                                           | the smart contract account that will be used to sign user ops and send them |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `provider`
+      </td>
+
+      <td>
+        [`EthersProviderAdapter`](EthersProviderAdapter.mdx)
+      </td>
+
+      <td>
+        the ethers provider to use
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `account`
+      </td>
+
+      <td>
+        `TAccount`
+      </td>
+
+      <td>
+        the smart contract account that will be used to sign user ops and send them
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 #### Returns
 
@@ -70,13 +133,155 @@ Signer.constructor;
 
 ## Properties
 
-| Property                                                                     | Modifier   | Type                                                                                   | Description                | Inherited from     | Defined in                                                                                                                                                                |
-| :--------------------------------------------------------------------------- | :--------- | :------------------------------------------------------------------------------------- | :------------------------- | :----------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| <a id="_issigner" /> `_isSigner`                                             | `readonly` | `boolean`                                                                              | -                          | `Signer._isSigner` | node_modules/@ethersproject/abstract-signer/lib/index.d.ts:29                                                                                                             |
-| <a id="account" /> `account`                                                 | `readonly` | `TAccount`                                                                             | -                          | -                  | [aa-sdk/ethers/src/account-signer.ts:37](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/ethers/src/account-signer.ts#L37) |
-| <a id="provider" /> `provider`                                               | `public`   | [`EthersProviderAdapter`](EthersProviderAdapter.mdx)                                   | the ethers provider to use | `Signer.provider`  | [aa-sdk/ethers/src/account-signer.ts:68](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/ethers/src/account-signer.ts#L68) |
-| <a id="senduseroperation" /> `sendUserOperation`                             | `public`   | (`args`, `overrides?`) => `Promise`\<`SendUserOperationResult`\<`TEntryPointVersion`>> | -                          | -                  | [aa-sdk/ethers/src/account-signer.ts:39](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/ethers/src/account-signer.ts#L39) |
-| <a id="waitforuseroperationtransaction" /> `waitForUserOperationTransaction` | `public`   | (`args`) => `Promise`\<`` `0x${string}` ``>                                            | -                          | -                  | [aa-sdk/ethers/src/account-signer.ts:40](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/ethers/src/account-signer.ts#L40) |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Property</th>
+      <th align="left">Modifier</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+      <th align="left">Inherited from</th>
+      <th align="left">Defined in</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        <a id="_issigner" /> `_isSigner`
+      </td>
+
+      <td>
+        `readonly`
+      </td>
+
+      <td>
+        `boolean`
+      </td>
+
+      <td>
+        ‐
+      </td>
+
+      <td>
+        ```ts
+        Signer._isSigner
+        ```
+      </td>
+
+      <td>
+        node\_modules/@ethersproject/abstract-signer/lib/index.d.ts:29
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="account" /> `account`
+      </td>
+
+      <td>
+        `readonly`
+      </td>
+
+      <td>
+        `TAccount`
+      </td>
+
+      <td>
+        ‐
+      </td>
+
+      <td>
+        ‐
+      </td>
+
+      <td>
+        [aa-sdk/ethers/src/account-signer.ts:37](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/ethers/src/account-signer.ts#L37)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="provider" /> `provider`
+      </td>
+
+      <td>
+        `public`
+      </td>
+
+      <td>
+        [`EthersProviderAdapter`](EthersProviderAdapter.mdx)
+      </td>
+
+      <td>
+        the ethers provider to use
+      </td>
+
+      <td>
+        ```ts
+        Signer.provider
+        ```
+      </td>
+
+      <td>
+        [aa-sdk/ethers/src/account-signer.ts:68](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/ethers/src/account-signer.ts#L68)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="senduseroperation" /> `sendUserOperation`
+      </td>
+
+      <td>
+        `public`
+      </td>
+
+      <td>
+        (`args`, `overrides?`) => `Promise`\<`SendUserOperationResult`\<`TEntryPointVersion`>>
+      </td>
+
+      <td>
+        ‐
+      </td>
+
+      <td>
+        ‐
+      </td>
+
+      <td>
+        [aa-sdk/ethers/src/account-signer.ts:39](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/ethers/src/account-signer.ts#L39)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="waitforuseroperationtransaction" /> `waitForUserOperationTransaction`
+      </td>
+
+      <td>
+        `public`
+      </td>
+
+      <td>
+        (`args`) => `Promise`\<`` `0x${string}` ``>
+      </td>
+
+      <td>
+        ‐
+      </td>
+
+      <td>
+        ‐
+      </td>
+
+      <td>
+        [aa-sdk/ethers/src/account-signer.ts:40](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/ethers/src/account-signer.ts#L40)
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Methods
 
@@ -90,9 +295,27 @@ Defined in: node_modules/@ethersproject/abstract-signer/lib/index.d.ts:42
 
 #### Parameters
 
-| Parameter    | Type     |
-| :----------- | :------- |
-| `operation?` | `string` |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `operation?`
+      </td>
+
+      <td>
+        `string`
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 #### Returns
 
@@ -116,10 +339,37 @@ Defined in: node_modules/@ethersproject/abstract-signer/lib/index.d.ts:34
 
 #### Parameters
 
-| Parameter     | Type                                |
-| :------------ | :---------------------------------- |
-| `transaction` | `Deferrable`\<`TransactionRequest`> |
-| `blockTag?`   | `BlockTag`                          |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `transaction`
+      </td>
+
+      <td>
+        `Deferrable`\<`TransactionRequest`>
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `blockTag?`
+      </td>
+
+      <td>
+        `BlockTag`
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 #### Returns
 
@@ -143,9 +393,27 @@ Defined in: node_modules/@ethersproject/abstract-signer/lib/index.d.ts:40
 
 #### Parameters
 
-| Parameter     | Type                                |
-| :------------ | :---------------------------------- |
-| `transaction` | `Deferrable`\<`TransactionRequest`> |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `transaction`
+      </td>
+
+      <td>
+        `Deferrable`\<`TransactionRequest`>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 #### Returns
 
@@ -165,7 +433,7 @@ Signer.checkTransaction;
 connect(provider): AccountSigner<TAccount>;
 ```
 
-Defined in: [aa-sdk/ethers/src/account-signer.ts:283](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/ethers/src/account-signer.ts#L283)
+Defined in: [aa-sdk/ethers/src/account-signer.ts:283](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/ethers/src/account-signer.ts#L283)
 
 Sets the provider for the account signer and returns the updated account signer instance.
 Note: this is not necessary since the Provider is required by the constructor. This is useful
@@ -194,9 +462,32 @@ signer.connect(provider);
 
 #### Parameters
 
-| Parameter  | Type                                                 | Description                                   |
-| :--------- | :--------------------------------------------------- | :-------------------------------------------- |
-| `provider` | [`EthersProviderAdapter`](EthersProviderAdapter.mdx) | the provider to be set for the account signer |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `provider`
+      </td>
+
+      <td>
+        [`EthersProviderAdapter`](EthersProviderAdapter.mdx)
+      </td>
+
+      <td>
+        the provider to be set for the account signer
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 #### Returns
 
@@ -222,9 +513,27 @@ Defined in: node_modules/@ethersproject/abstract-signer/lib/index.d.ts:33
 
 #### Parameters
 
-| Parameter     | Type                                |
-| :------------ | :---------------------------------- |
-| `transaction` | `Deferrable`\<`TransactionRequest`> |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `transaction`
+      </td>
+
+      <td>
+        `Deferrable`\<`TransactionRequest`>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 #### Returns
 
@@ -244,7 +553,7 @@ Signer.estimateGas;
 getAddress(): Promise<string>;
 ```
 
-Defined in: [aa-sdk/ethers/src/account-signer.ts:115](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/ethers/src/account-signer.ts#L115)
+Defined in: [aa-sdk/ethers/src/account-signer.ts:115](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/ethers/src/account-signer.ts#L115)
 
 Returns the account address if the account exists.
 
@@ -297,9 +606,27 @@ Defined in: node_modules/@ethersproject/abstract-signer/lib/index.d.ts:31
 
 #### Parameters
 
-| Parameter   | Type       |
-| :---------- | :--------- |
-| `blockTag?` | `BlockTag` |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `blockTag?`
+      </td>
+
+      <td>
+        `BlockTag`
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 #### Returns
 
@@ -319,7 +646,7 @@ Signer.getBalance;
 getBundlerClient(): BundlerClient<Transport>;
 ```
 
-Defined in: [aa-sdk/ethers/src/account-signer.ts:251](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/ethers/src/account-signer.ts#L251)
+Defined in: [aa-sdk/ethers/src/account-signer.ts:251](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/ethers/src/account-signer.ts#L251)
 
 Retrieves the BundlerClient instance from the provider.
 
@@ -422,9 +749,27 @@ Defined in: node_modules/@ethersproject/abstract-signer/lib/index.d.ts:32
 
 #### Parameters
 
-| Parameter   | Type       |
-| :---------- | :--------- |
-| `blockTag?` | `BlockTag` |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `blockTag?`
+      </td>
+
+      <td>
+        `BlockTag`
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 #### Returns
 
@@ -448,9 +793,27 @@ Defined in: node_modules/@ethersproject/abstract-signer/lib/index.d.ts:41
 
 #### Parameters
 
-| Parameter     | Type                                |
-| :------------ | :---------------------------------- |
-| `transaction` | `Deferrable`\<`TransactionRequest`> |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `transaction`
+      </td>
+
+      <td>
+        `Deferrable`\<`TransactionRequest`>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 #### Returns
 
@@ -474,9 +837,27 @@ Defined in: node_modules/@ethersproject/abstract-signer/lib/index.d.ts:39
 
 #### Parameters
 
-| Parameter | Type     |
-| :-------- | :------- |
-| `name`    | `string` |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `name`
+      </td>
+
+      <td>
+        `string`
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 #### Returns
 
@@ -496,7 +877,7 @@ Signer.resolveName;
 sendTransaction(transaction): Promise<TransactionResponse>;
 ```
 
-Defined in: [aa-sdk/ethers/src/account-signer.ts:194](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/ethers/src/account-signer.ts#L194)
+Defined in: [aa-sdk/ethers/src/account-signer.ts:194](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/ethers/src/account-signer.ts#L194)
 
 Sends a transaction using the account provider and returns the transaction response.
 
@@ -527,9 +908,32 @@ const tx = await signer.sendTransaction({
 
 #### Parameters
 
-| Parameter     | Type                                | Description                        |
-| :------------ | :---------------------------------- | :--------------------------------- |
-| `transaction` | `Deferrable`\<`TransactionRequest`> | the transaction request to be sent |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `transaction`
+      </td>
+
+      <td>
+        `Deferrable`\<`TransactionRequest`>
+      </td>
+
+      <td>
+        the transaction request to be sent
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 #### Returns
 
@@ -555,7 +959,7 @@ Signer.sendTransaction;
 signMessage(message): Promise<string>;
 ```
 
-Defined in: [aa-sdk/ethers/src/account-signer.ts:150](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/ethers/src/account-signer.ts#L150)
+Defined in: [aa-sdk/ethers/src/account-signer.ts:150](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/ethers/src/account-signer.ts#L150)
 
 Signs a message using the associated account.
 
@@ -582,9 +986,32 @@ const message = await signer.signMessage("hello");
 
 #### Parameters
 
-| Parameter | Type     | Description                      |
-| :-------- | :------- | :------------------------------- | ------------------------ |
-| `message` | `string` | `Uint8Array`\<`ArrayBufferLike`> | the message to be signed |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `message`
+      </td>
+
+      <td>
+        `string` | `Uint8Array`\<`ArrayBufferLike`>
+      </td>
+
+      <td>
+        the message to be signed
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 #### Returns
 
@@ -610,15 +1037,38 @@ Signer.signMessage;
 signTransaction(_transaction): Promise<string>;
 ```
 
-Defined in: [aa-sdk/ethers/src/account-signer.ts:218](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/ethers/src/account-signer.ts#L218)
+Defined in: [aa-sdk/ethers/src/account-signer.ts:218](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/ethers/src/account-signer.ts#L218)
 
 Throws an error indicating that transaction signing is not supported and advises to use `sendUserOperation` instead.
 
 #### Parameters
 
-| Parameter      | Type                                | Description             |
-| :------------- | :---------------------------------- | :---------------------- |
-| `_transaction` | `Deferrable`\<`TransactionRequest`> | The transaction request |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `_transaction`
+      </td>
+
+      <td>
+        `Deferrable`\<`TransactionRequest`>
+      </td>
+
+      <td>
+        The transaction request
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 #### Returns
 
@@ -646,9 +1096,27 @@ Defined in: node_modules/@ethersproject/abstract-signer/lib/index.d.ts:43
 
 #### Parameters
 
-| Parameter | Type  |
-| :-------- | :---- |
-| `value`   | `any` |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `value`
+      </td>
+
+      <td>
+        `any`
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 #### Returns
 

@@ -12,20 +12,105 @@ type UninstallPluginParams<TAccount, TContext, TEntryPointVersion> = object &
   GetContextParameter<TContext>;
 ```
 
-Defined in: [account-kit/smart-contracts/src/msca/plugin-manager/uninstallPlugin.ts:22](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/msca/plugin-manager/uninstallPlugin.ts#L22)
+Defined in: [account-kit/smart-contracts/src/msca/plugin-manager/uninstallPlugin.ts:22](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/msca/plugin-manager/uninstallPlugin.ts#L22)
 
 ## Type Declaration
 
-| Name                   | Type                                                              | Defined in                                                                                                                                                                                                                                      |
-| :--------------------- | :---------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `config?`              | `Hash`                                                            | [account-kit/smart-contracts/src/msca/plugin-manager/uninstallPlugin.ts:33](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/msca/plugin-manager/uninstallPlugin.ts#L33) |
-| `pluginAddress`        | [`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx) | [account-kit/smart-contracts/src/msca/plugin-manager/uninstallPlugin.ts:32](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/msca/plugin-manager/uninstallPlugin.ts#L32) |
-| `pluginUninstallData?` | `Hash`                                                            | [account-kit/smart-contracts/src/msca/plugin-manager/uninstallPlugin.ts:34](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/msca/plugin-manager/uninstallPlugin.ts#L34) |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Name</th>
+      <th align="left">Type</th>
+      <th align="left">Defined in</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `config?`
+      </td>
+
+      <td>
+        `Hash`
+      </td>
+
+      <td>
+        [account-kit/smart-contracts/src/msca/plugin-manager/uninstallPlugin.ts:33](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/msca/plugin-manager/uninstallPlugin.ts#L33)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `pluginAddress`
+      </td>
+
+      <td>
+        [`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx)
+      </td>
+
+      <td>
+        [account-kit/smart-contracts/src/msca/plugin-manager/uninstallPlugin.ts:32](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/msca/plugin-manager/uninstallPlugin.ts#L32)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `pluginUninstallData?`
+      </td>
+
+      <td>
+        `Hash`
+      </td>
+
+      <td>
+        [account-kit/smart-contracts/src/msca/plugin-manager/uninstallPlugin.ts:34](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/msca/plugin-manager/uninstallPlugin.ts#L34)
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Type Parameters
 
-| Type Parameter                                                         | Default type                            |
-| :--------------------------------------------------------------------- | :-------------------------------------- | ---------------------- | ----------- |
-| `TAccount` _extends_ `SmartContractAccount`                            | `undefined`                             | `SmartContractAccount` | `undefined` |
-| `TContext` _extends_ `UserOperationContext`                            | `undefined`                             | `UserOperationContext` | `undefined` |
-| `TEntryPointVersion` _extends_ `GetEntryPointFromAccount`\<`TAccount`> | `GetEntryPointFromAccount`\<`TAccount`> |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TAccount` *extends* `SmartContractAccount` | `undefined`
+      </td>
+
+      <td>
+        `SmartContractAccount` | `undefined`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TContext` *extends* `UserOperationContext` | `undefined`
+      </td>
+
+      <td>
+        `UserOperationContext` | `undefined`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TEntryPointVersion` *extends* `GetEntryPointFromAccount`\<`TAccount`>
+      </td>
+
+      <td>
+        `GetEntryPointFromAccount`\<`TAccount`>
+      </td>
+    </tr>
+
+  </tbody>
+</table>

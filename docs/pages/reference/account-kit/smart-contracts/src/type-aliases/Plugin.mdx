@@ -9,20 +9,113 @@ layout: reference
 type Plugin<TAbi> = object;
 ```
 
-Defined in: [account-kit/smart-contracts/src/msca/plugins/types.ts:11](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/msca/plugins/types.ts#L11)
+Defined in: [account-kit/smart-contracts/src/msca/plugins/types.ts:11](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/msca/plugins/types.ts#L11)
 
 ## Type Parameters
 
-| Type Parameter         | Default type |
-| :--------------------- | :----------- |
-| `TAbi` _extends_ `Abi` | `Abi`        |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TAbi` *extends* `Abi`
+      </td>
+
+      <td>
+        `Abi`
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Properties
 
-| Property                             | Type                                                                                                                                                | Defined in                                                                                                                                                                                                    |
-| :----------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| <a id="getcontract" /> `getContract` | \<`C`>(`client`, `address?`) => `GetContractReturnType`\<`TAbi`, `PublicClient`, [`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx)> | [account-kit/smart-contracts/src/msca/plugins/types.ts:17](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/msca/plugins/types.ts#L17) |
-| <a id="meta" /> `meta`               | `object`                                                                                                                                            | [account-kit/smart-contracts/src/msca/plugins/types.ts:12](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/msca/plugins/types.ts#L12) |
-| `meta.addresses`                     | `Record`\<`number`, [`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx)>                                                              | [account-kit/smart-contracts/src/msca/plugins/types.ts:15](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/msca/plugins/types.ts#L15) |
-| `meta.name`                          | `string`                                                                                                                                            | [account-kit/smart-contracts/src/msca/plugins/types.ts:13](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/msca/plugins/types.ts#L13) |
-| `meta.version`                       | `string`                                                                                                                                            | [account-kit/smart-contracts/src/msca/plugins/types.ts:14](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/msca/plugins/types.ts#L14) |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Property</th>
+      <th align="left">Type</th>
+      <th align="left">Defined in</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        <a id="getcontract" /> `getContract`
+      </td>
+
+      <td>
+        \<`C`>(`client`, `address?`) => `GetContractReturnType`\<`TAbi`, `PublicClient`, [`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx)>
+      </td>
+
+      <td>
+        [account-kit/smart-contracts/src/msca/plugins/types.ts:17](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/msca/plugins/types.ts#L17)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="meta" /> `meta`
+      </td>
+
+      <td>
+        `object`
+      </td>
+
+      <td>
+        [account-kit/smart-contracts/src/msca/plugins/types.ts:12](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/msca/plugins/types.ts#L12)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `meta.addresses`
+      </td>
+
+      <td>
+        `Record`\<`number`, [`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx)>
+      </td>
+
+      <td>
+        [account-kit/smart-contracts/src/msca/plugins/types.ts:15](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/msca/plugins/types.ts#L15)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `meta.name`
+      </td>
+
+      <td>
+        `string`
+      </td>
+
+      <td>
+        [account-kit/smart-contracts/src/msca/plugins/types.ts:13](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/msca/plugins/types.ts#L13)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `meta.version`
+      </td>
+
+      <td>
+        `string`
+      </td>
+
+      <td>
+        [account-kit/smart-contracts/src/msca/plugins/types.ts:14](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/msca/plugins/types.ts#L14)
+      </td>
+    </tr>
+
+  </tbody>
+</table>

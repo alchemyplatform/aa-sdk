@@ -12,7 +12,7 @@ function getMAV2UpgradeToData<TTransport, TChain, TSigner, TAccount>(
 ): Promise<UpgradeToData & object>;
 ```
 
-Defined in: [account-kit/smart-contracts/src/ma-v2/utils.ts:192](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/ma-v2/utils.ts#L192)
+Defined in: [account-kit/smart-contracts/src/ma-v2/utils.ts:192](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/ma-v2/utils.ts#L192)
 
 Retrieves the data necessary to upgrade to a Modular Account V2 (MA v2).
 Note that the upgrade will be to the Semi Modular Account Storage variant
@@ -31,19 +31,100 @@ const upgradeData = await getMAV2UpgradeToData(client, {});
 
 ## Type Parameters
 
-| Type Parameter                                   | Default type                                           |
-| :----------------------------------------------- | :----------------------------------------------------- | ----------- | ------------------------------------------------------ |
-| `TTransport` _extends_ `Transport`               | `Transport`                                            |
-| `TChain` _extends_ `undefined`                   | `Chain`                                                | `undefined` | `Chain`                                                |
-| `TSigner` _extends_ `SmartAccountSigner`\<`any`> | `SmartAccountSigner`\<`any`>                           |
-| `TAccount` _extends_ `undefined`                 | `SmartContractAccountWithSigner`\<`string`, `TSigner`> | `undefined` | `SmartContractAccountWithSigner`\<`string`, `TSigner`> |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TTransport` *extends* `Transport`
+      </td>
+
+      <td>
+        `Transport`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TChain` *extends* `undefined` | `Chain`
+      </td>
+
+      <td>
+        `undefined` | `Chain`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TSigner` *extends* `SmartAccountSigner`\<`any`>
+      </td>
+
+      <td>
+        `SmartAccountSigner`\<`any`>
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TAccount` *extends* `undefined` | `SmartContractAccountWithSigner`\<`string`, `TSigner`>
+      </td>
+
+      <td>
+        `undefined` | `SmartContractAccountWithSigner`\<`string`, `TSigner`>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Parameters
 
-| Parameter | Type                                                                                                              | Description                            |
-| :-------- | :---------------------------------------------------------------------------------------------------------------- | :------------------------------------- |
-| `client`  | `SmartAccountClient`\<`TTransport`, `TChain`, `TAccount`>                                                         | The smart account client               |
-| `args`    | `GetAccountParameter`\<`TAccount`, `SmartContractAccount`\<`string`, keyof `EntryPointRegistryBase`\<`unknown`>>> | The arguments required for the upgrade |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `client`
+      </td>
+
+      <td>
+        `SmartAccountClient`\<`TTransport`, `TChain`, `TAccount`>
+      </td>
+
+      <td>
+        The smart account client
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `args`
+      </td>
+
+      <td>
+        `GetAccountParameter`\<`TAccount`, `SmartContractAccount`\<`string`, keyof `EntryPointRegistryBase`\<`unknown`>>>
+      </td>
+
+      <td>
+        The arguments required for the upgrade
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Returns
 

@@ -14,19 +14,99 @@ type ModularAccountV2<TSigner> = SmartContractAccountWithSigner<
   object;
 ```
 
-Defined in: [account-kit/smart-contracts/src/ma-v2/account/common/modularAccountV2Base.ts:67](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/ma-v2/account/common/modularAccountV2Base.ts#L67)
+Defined in: [account-kit/smart-contracts/src/ma-v2/account/common/modularAccountV2Base.ts:67](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/ma-v2/account/common/modularAccountV2Base.ts#L67)
 
 ## Type Declaration
 
-| Name                  | Type                                                                     | Defined in                                                                                                                                                                                                                                                  |
-| :-------------------- | :----------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `encodeCallData()`    | (`callData`) => `Promise`\<`Hex`>                                        | [account-kit/smart-contracts/src/ma-v2/account/common/modularAccountV2Base.ts:75](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/ma-v2/account/common/modularAccountV2Base.ts#L75) |
-| `getExecutionData()`  | (`selector`) => `Promise`\<[`ExecutionDataView`](ExecutionDataView.mdx)> | [account-kit/smart-contracts/src/ma-v2/account/common/modularAccountV2Base.ts:71](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/ma-v2/account/common/modularAccountV2Base.ts#L71) |
-| `getValidationData()` | (`args`) => `Promise`\<[`ValidationDataView`](ValidationDataView.mdx)>   | [account-kit/smart-contracts/src/ma-v2/account/common/modularAccountV2Base.ts:72](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/ma-v2/account/common/modularAccountV2Base.ts#L72) |
-| `signerEntity`        | [`SignerEntity`](SignerEntity.mdx)                                       | [account-kit/smart-contracts/src/ma-v2/account/common/modularAccountV2Base.ts:70](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/ma-v2/account/common/modularAccountV2Base.ts#L70) |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Name</th>
+      <th align="left">Type</th>
+      <th align="left">Defined in</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `encodeCallData()`
+      </td>
+
+      <td>
+        (`callData`) => `Promise`\<`Hex`>
+      </td>
+
+      <td>
+        [account-kit/smart-contracts/src/ma-v2/account/common/modularAccountV2Base.ts:75](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/ma-v2/account/common/modularAccountV2Base.ts#L75)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `getExecutionData()`
+      </td>
+
+      <td>
+        (`selector`) => `Promise`\<[`ExecutionDataView`](ExecutionDataView.mdx)>
+      </td>
+
+      <td>
+        [account-kit/smart-contracts/src/ma-v2/account/common/modularAccountV2Base.ts:71](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/ma-v2/account/common/modularAccountV2Base.ts#L71)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `getValidationData()`
+      </td>
+
+      <td>
+        (`args`) => `Promise`\<[`ValidationDataView`](ValidationDataView.mdx)>
+      </td>
+
+      <td>
+        [account-kit/smart-contracts/src/ma-v2/account/common/modularAccountV2Base.ts:72](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/ma-v2/account/common/modularAccountV2Base.ts#L72)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `signerEntity`
+      </td>
+
+      <td>
+        [`SignerEntity`](SignerEntity.mdx)
+      </td>
+
+      <td>
+        [account-kit/smart-contracts/src/ma-v2/account/common/modularAccountV2Base.ts:70](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/ma-v2/account/common/modularAccountV2Base.ts#L70)
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Type Parameters
 
-| Type Parameter                           | Default type         |
-| :--------------------------------------- | :------------------- |
-| `TSigner` _extends_ `SmartAccountSigner` | `SmartAccountSigner` |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TSigner` *extends* `SmartAccountSigner`
+      </td>
+
+      <td>
+        `SmartAccountSigner`
+      </td>
+    </tr>
+
+  </tbody>
+</table>

@@ -9,7 +9,7 @@ layout: reference
 function combineSignatures(params): `0x${string}`;
 ```
 
-Defined in: [account-kit/smart-contracts/src/msca/plugins/multisig/utils/combineSignatures.ts:38](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/msca/plugins/multisig/utils/combineSignatures.ts#L38)
+Defined in: [account-kit/smart-contracts/src/msca/plugins/multisig/utils/combineSignatures.ts:38](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/msca/plugins/multisig/utils/combineSignatures.ts#L38)
 
 Combines multiple signatures with provided upper limit values for gas fees and returns the concatenated result.
 
@@ -35,9 +35,32 @@ const combinedSignature = combineSignatures({
 
 ## Parameters
 
-| Parameter | Type                      | Description             |
-| :-------- | :------------------------ | :---------------------- |
-| `params`  | `CombineSignaturesParams` | The function parameters |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `params`
+      </td>
+
+      <td>
+        `CombineSignaturesParams`
+      </td>
+
+      <td>
+        The function parameters
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Returns
 

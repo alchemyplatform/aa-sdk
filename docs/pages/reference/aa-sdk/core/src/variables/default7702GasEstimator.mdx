@@ -9,7 +9,7 @@ layout: reference
 const default7702GasEstimator: (gasEstimator?) => accountLoupeActions;
 ```
 
-Defined in: [aa-sdk/core/src/middleware/defaults/7702gasEstimator.ts:41](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/middleware/defaults/7702gasEstimator.ts#L41)
+Defined in: [aa-sdk/core/src/middleware/defaults/7702gasEstimator.ts:41](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/middleware/defaults/7702gasEstimator.ts#L41)
 
 A middleware function to estimate the gas usage of a user operation when using an EIP-7702 delegated account. Has an optional custom gas estimator.
 This function is only compatible with accounts using EntryPoint v0.7.0, and the account must have an implementation address defined in `getImplementationAddress()`.
@@ -47,9 +47,32 @@ async function createSMA7702AccountClient(
 
 ## Parameters
 
-| Parameter       | Type                                                                                        | Description                            |
-| :-------------- | :------------------------------------------------------------------------------------------ | :------------------------------------- |
-| `gasEstimator?` | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx) | Optional custom gas estimator function |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `gasEstimator?`
+      </td>
+
+      <td>
+        [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)
+      </td>
+
+      <td>
+        Optional custom gas estimator function
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Returns
 

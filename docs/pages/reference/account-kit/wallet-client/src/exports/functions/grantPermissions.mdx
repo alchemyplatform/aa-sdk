@@ -13,7 +13,7 @@ function grantPermissions<TAccount>(
 ): Promise<GrantPermissionsResult>;
 ```
 
-Defined in: [account-kit/wallet-client/src/client/actions/grantPermissions.ts:89](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/wallet-client/src/client/actions/grantPermissions.ts#L89)
+Defined in: [account-kit/wallet-client/src/client/actions/grantPermissions.ts:89](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/wallet-client/src/client/actions/grantPermissions.ts#L89)
 
 Grants permissions to a smart account by creating a session.
 This allows another key to perform operations on behalf of the account.
@@ -61,17 +61,84 @@ const result = await client.sendPreparedCalls({
 
 ## Type Parameters
 
-| Type Parameter                   | Default type        |
-| :------------------------------- | :------------------ | ----------- | ------------------- |
-| `TAccount` _extends_ `undefined` | `` `0x${string}` `` | `undefined` | `` `0x${string}` `` |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TAccount` *extends* `undefined` | `` `0x${string}` ``
+      </td>
+
+      <td>
+        `undefined` | `` `0x${string}` ``
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Parameters
 
-| Parameter | Type                   | Description                                  |
-| :-------- | :--------------------- | :------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ------- | ----------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- | --------------------------------------------------------- | ----------------------------------------------------------------- | -------------------------------------------------------------- | ----------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | --------------------------------------- |
-| `client`  | `InnerWalletApiClient` | The wallet API client to use for the request |
-| `signer`  | `SmartAccountSigner`   | The signer of the smart account              |
-| `params`  | \{ \[K in string       | number                                       | symbol]: (Omit\<\{ chainId: \`0x$\{string}\`; expirySec?: number; key: \{ publicKey: \`0x$\{string}\`; type: "secp256k1" | "ecdsa" | "contract" }; permissions: (\{ data: \{ allowance: \`0x$\{(...)}\` }; type: "native-token-transfer" } | \{ data: \{ address: \`0x$\{(...)}\`; allowance: \`0x$\{(...)}\` }; type: "erc20-token-transfer" } | \{ data: \{ limit: \`0x$\{(...)}\` }; type: "gas-limit" } | \{ data: \{ address: \`0x$\{(...)}\` }; type: "contract-access" } | \{ data: \{ functions: (...)\[] }; type: "account-functions" } | \{ data: \{ functions: (...)\[] }; type: "functions-on-all-contracts" } | \{ data: \{ address: \`0x$\{(...)}\`; functions: (...)\[] }; type: "functions-on-contract" } | \{ data?: undefined; type: "root" })\[] } & \{ account: \`0x$\{string}\` }, "account" | "chainId"> & (IsUndefined\<TAccount> extends true ? \{ account: \`0x$\{string}\` } : \{ account?: undefined }))\[K] } | The parameters for granting permissions |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `client`
+      </td>
+
+      <td>
+        `InnerWalletApiClient`
+      </td>
+
+      <td>
+        The wallet API client to use for the request
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `signer`
+      </td>
+
+      <td>
+        `SmartAccountSigner`
+      </td>
+
+      <td>
+        The signer of the smart account
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `params`
+      </td>
+
+      <td>
+        \{ \[K in string | number | symbol]: (Omit\<\{ chainId: \`0x$\{string}\`; expirySec?: number; key: \{ publicKey: \`0x$\{string}\`; type: "secp256k1" | "ecdsa" | "contract" }; permissions: (\{ data: \{ allowance: \`0x$\{(...)}\` }; type: "native-token-transfer" } | \{ data: \{ address: \`0x$\{(...)}\`; allowance: \`0x$\{(...)}\` }; type: "erc20-token-transfer" } | \{ data: \{ limit: \`0x$\{(...)}\` }; type: "gas-limit" } | \{ data: \{ address: \`0x$\{(...)}\` }; type: "contract-access" } | \{ data: \{ functions: (...)\[] }; type: "account-functions" } | \{ data: \{ functions: (...)\[] }; type: "functions-on-all-contracts" } | \{ data: \{ address: \`0x$\{(...)}\`; functions: (...)\[] }; type: "functions-on-contract" } | \{ data?: undefined; type: "root" })\[] } & \{ account: \`0x$\{string}\` }, "account" | "chainId"> & (IsUndefined\<TAccount> extends true ? \{ account: \`0x$\{string}\` } : \{ account?: undefined }))\[K] }
+      </td>
+
+      <td>
+        The parameters for granting permissions
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Returns
 

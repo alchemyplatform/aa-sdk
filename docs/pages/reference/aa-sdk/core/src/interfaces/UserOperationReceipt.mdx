@@ -5,21 +5,187 @@ slug: wallets/reference/aa-sdk/core/src/interfaces/UserOperationReceipt
 layout: reference
 ---
 
-Defined in: [aa-sdk/core/src/types.ts:273](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/types.ts#L273)
+Defined in: [aa-sdk/core/src/types.ts:273](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/types.ts#L273)
 
 ## Properties
 
-| Property                                 | Type                 | Defined in                                                                                                                                            |
-| :--------------------------------------- | :------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| <a id="actualgascost" /> `actualGasCost` | `any`                | [aa-sdk/core/src/types.ts:285](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/types.ts#L285) |
-| <a id="actualgasused" /> `actualGasUsed` | `any`                | [aa-sdk/core/src/types.ts:287](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/types.ts#L287) |
-| <a id="entrypoint" /> `entryPoint`       | `` `0x${string}` ``  | [aa-sdk/core/src/types.ts:277](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/types.ts#L277) |
-| <a id="logs" /> `logs`                   | `string`\[]          | [aa-sdk/core/src/types.ts:293](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/types.ts#L293) |
-| <a id="nonce" /> `nonce`                 | `any`                | [aa-sdk/core/src/types.ts:281](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/types.ts#L281) |
-| <a id="paymaster" /> `paymaster?`        | `` `0x${string}` ``  | [aa-sdk/core/src/types.ts:283](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/types.ts#L283) |
-| <a id="reason" /> `reason?`              | `string`             | [aa-sdk/core/src/types.ts:291](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/types.ts#L291) |
-| <a id="receipt" /> `receipt`             | `TransactionReceipt` | [aa-sdk/core/src/types.ts:295](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/types.ts#L295) |
-| <a id="sender" /> `sender`               | `` `0x${string}` ``  | [aa-sdk/core/src/types.ts:279](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/types.ts#L279) |
-| <a id="status" /> `status`               | `string`             | [aa-sdk/core/src/types.ts:297](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/types.ts#L297) |
-| <a id="success" /> `success`             | `boolean`            | [aa-sdk/core/src/types.ts:289](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/types.ts#L289) |
-| <a id="userophash" /> `userOpHash`       | `` `0x${string}` ``  | [aa-sdk/core/src/types.ts:275](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/types.ts#L275) |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Property</th>
+      <th align="left">Type</th>
+      <th align="left">Defined in</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        <a id="actualgascost" /> `actualGasCost`
+      </td>
+
+      <td>
+        `any`
+      </td>
+
+      <td>
+        [aa-sdk/core/src/types.ts:285](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/types.ts#L285)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="actualgasused" /> `actualGasUsed`
+      </td>
+
+      <td>
+        `any`
+      </td>
+
+      <td>
+        [aa-sdk/core/src/types.ts:287](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/types.ts#L287)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="entrypoint" /> `entryPoint`
+      </td>
+
+      <td>
+        `` `0x${string}` ``
+      </td>
+
+      <td>
+        [aa-sdk/core/src/types.ts:277](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/types.ts#L277)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="logs" /> `logs`
+      </td>
+
+      <td>
+        `string`\[]
+      </td>
+
+      <td>
+        [aa-sdk/core/src/types.ts:293](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/types.ts#L293)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="nonce" /> `nonce`
+      </td>
+
+      <td>
+        `any`
+      </td>
+
+      <td>
+        [aa-sdk/core/src/types.ts:281](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/types.ts#L281)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="paymaster" /> `paymaster?`
+      </td>
+
+      <td>
+        `` `0x${string}` ``
+      </td>
+
+      <td>
+        [aa-sdk/core/src/types.ts:283](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/types.ts#L283)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="reason" /> `reason?`
+      </td>
+
+      <td>
+        `string`
+      </td>
+
+      <td>
+        [aa-sdk/core/src/types.ts:291](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/types.ts#L291)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="receipt" /> `receipt`
+      </td>
+
+      <td>
+        `TransactionReceipt`
+      </td>
+
+      <td>
+        [aa-sdk/core/src/types.ts:295](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/types.ts#L295)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="sender" /> `sender`
+      </td>
+
+      <td>
+        `` `0x${string}` ``
+      </td>
+
+      <td>
+        [aa-sdk/core/src/types.ts:279](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/types.ts#L279)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="status" /> `status`
+      </td>
+
+      <td>
+        `string`
+      </td>
+
+      <td>
+        [aa-sdk/core/src/types.ts:297](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/types.ts#L297)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="success" /> `success`
+      </td>
+
+      <td>
+        `boolean`
+      </td>
+
+      <td>
+        [aa-sdk/core/src/types.ts:289](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/types.ts#L289)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="userophash" /> `userOpHash`
+      </td>
+
+      <td>
+        `` `0x${string}` ``
+      </td>
+
+      <td>
+        [aa-sdk/core/src/types.ts:275](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/types.ts#L275)
+      </td>
+    </tr>
+
+  </tbody>
+</table>

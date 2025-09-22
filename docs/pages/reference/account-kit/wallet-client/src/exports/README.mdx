@@ -7,34 +7,487 @@ layout: reference
 
 ## Type Aliases
 
-| Type Alias                                                              | Description |
-| :---------------------------------------------------------------------- | :---------- |
-| [SmartWalletClient](type-aliases/SmartWalletClient.mdx)                 | -           |
-| [SmartWalletClientParams](type-aliases/SmartWalletClientParams.mdx)     | -           |
-| [WalletServerRpcSchemaType](type-aliases/WalletServerRpcSchemaType.mdx) | -           |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Alias</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        [SmartWalletClient](type-aliases/SmartWalletClient.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [SmartWalletClientParams](type-aliases/SmartWalletClientParams.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [WalletServerRpcSchemaType](type-aliases/WalletServerRpcSchemaType.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Variables
 
-| Variable                                                     | Description |
-| :----------------------------------------------------------- | :---------- |
-| [WalletServerRpcSchema](variables/WalletServerRpcSchema.mdx) | -           |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Variable</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        [WalletServerRpcSchema](variables/WalletServerRpcSchema.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Functions
 
-| Function                                                         | Description                                                                                                                                                                                                                                            |
-| :--------------------------------------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [createSmartWalletClient](functions/createSmartWalletClient.mdx) | Creates a smart wallet client that can be used to interact with a smart account.                                                                                                                                                                       |
-| [formatSign](functions/formatSign.mdx)                           | Formats a signature request for signing messages or transactions.                                                                                                                                                                                      |
-| [getCallsStatus](functions/getCallsStatus.mdx)                   | Gets the status of a prepared call by its ID. This method is used to check the execution status of calls sent via sendPreparedCalls.                                                                                                                   |
-| [grantPermissions](functions/grantPermissions.mdx)               | Grants permissions to a smart account by creating a session. This allows another key to perform operations on behalf of the account.                                                                                                                   |
-| [listAccounts](functions/listAccounts.mdx)                       | Lists all smart accounts for a given signer using the wallet API client.                                                                                                                                                                               |
-| [prepareCalls](functions/prepareCalls.mdx)                       | Prepares a set of contract calls for execution by building a user operation. Returns the built user operation and a signature request that needs to be signed before submitting to sendPreparedCalls.                                                  |
-| [prepareSign](functions/prepareSign.mdx)                         | Prepares a signature request for signing messages or transactions.                                                                                                                                                                                     |
-| [requestAccount](functions/requestAccount.mdx)                   | Requests an account for the provided signer using the wallet API client. If an account already exists for the signer, it will always return that account unless a new ID is specified. If an account already exists, the creationHint will be ignored. |
-| [sendCalls](functions/sendCalls.mdx)                             | Prepares, signs, and submits calls. This function internally calls `prepareCalls`, `signPreparedCalls`, and `sendPreparedCalls`.                                                                                                                       |
-| [sendPreparedCalls](functions/sendPreparedCalls.mdx)             | Sends prepared calls by submitting a signed user operation. This method is used after signing the signature request returned from prepareCalls.                                                                                                        |
-| [signMessage](functions/signMessage.mdx)                         | Signs a message using the smart account. This method requests the account associated with the signer and uses it to sign the message.                                                                                                                  |
-| [signPreparedCalls](functions/signPreparedCalls.mdx)             | Signs prepared calls using the provided signer.                                                                                                                                                                                                        |
-| [signSignatureRequest](functions/signSignatureRequest.mdx)       | Signs a signature request using the provided signer. This method handles different types of signature requests including personal_sign, eth_signTypedData_v4, and authorization.                                                                       |
-| [signTypedData](functions/signTypedData.mdx)                     | Signs typed data (EIP-712) using the smart account. This method requests the account associated with the signer and uses it to sign the typed data.                                                                                                    |
-| [waitForCallsStatus](functions/waitForCallsStatus.mdx)           | Waits for the status of a prepared call to be updated, returning after the calls are no longer pending.                                                                                                                                                |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Function</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        [createSmartWalletClient](functions/createSmartWalletClient.mdx)
+      </td>
+
+      <td>
+        Creates a smart wallet client that can be used to interact with a smart account.
+
+        **Example**
+
+        ```ts
+        import { LocalAccountSigner } from "@aa-sdk/core";
+        import { alchemy, arbitrumSepolia } from "@account-kit/infra";
+        import { generatePrivateKey } from "viem/accounts";
+        import { createSmartWalletClient } from "@account-kit/wallet-client";
+
+        const signer = LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey());
+        const transport = alchemy({
+          apiKey: "your-alchemy-api-key",
+        });
+        const client = createSmartWalletClient({
+          transport,
+          chain: arbitrumSepolia,
+          signer,
+        });
+        ```
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [formatSign](functions/formatSign.mdx)
+      </td>
+
+      <td>
+        Formats a signature request for signing messages or transactions.
+
+        **Example**
+
+        ```ts
+        // Formats a signature
+        const result = await client.formatSign({
+           from: "0x1234...",
+           signature: {
+             type: "ecdsa",
+             data: "0xabcd..."
+           },
+        });
+        ```
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [getCallsStatus](functions/getCallsStatus.mdx)
+      </td>
+
+      <td>
+        Gets the status of a prepared call by its ID.
+        This method is used to check the execution status of calls sent via sendPreparedCalls.
+
+        **Example**
+
+        ```ts
+        // After sending prepared calls
+        const sendResult = await client.sendPreparedCalls({...});
+
+        // Check the status of the first call ID
+        const status = await client.getCallsStatus(sendResult.preparedCallIds[0]);
+        ```
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [grantPermissions](functions/grantPermissions.mdx)
+      </td>
+
+      <td>
+        Grants permissions to a smart account by creating a session.
+        This allows another key to perform operations on behalf of the account.
+
+        **Example**
+
+        ```ts
+        // Create a session key and grant root permissions
+        const sessionKey = LocalAccountSigner.generatePrivateKeySigner();
+        const account = await client.requestAccount();
+
+        const permissions = await client.grantPermissions({
+          account: account.address,
+          expirySec: Math.floor(Date.now() / 1000) + 60 * 60, // 1 hour from now
+          key: {
+            publicKey: await sessionKey.getAddress(),
+            type: "secp256k1",
+          },
+          permissions: [{ type: "root" }],
+        });
+
+        // Use the permissions to prepare a call
+        const preparedCalls = await client.prepareCalls({
+          calls: [{ to: zeroAddress, value: "0x0" }],
+          from: account.address,
+          capabilities: {
+            paymasterService: {
+              policyId: "your-paymaster-policy-id",
+            },
+            permissions,
+          },
+        });
+
+        // Sign with the session key
+        const signedCalls = await signPreparedCalls(sessionKey, preparedCalls);
+
+        // Send the prepared call using the session key
+        const result = await client.sendPreparedCalls({
+          ...signedCalls,
+          capabilities: {
+            permissions,
+          },
+        });
+        ```
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [listAccounts](functions/listAccounts.mdx)
+      </td>
+
+      <td>
+        Lists all smart accounts for a given signer using the wallet API client.
+
+        **Example**
+
+        ```ts
+        // Fetch the first page of accounts
+        const firstPage = await client.listAccounts({
+          signerAddress: "0x123...",
+          limit: 10
+        });
+
+        // If an 'after' cursor exists, use it to fetch the next page
+        const nextPage = await client.listAccounts({
+          signerAddress: "0x123...",
+          limit: 10,
+          after: firstPage.meta.after
+        });
+        ```
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [prepareCalls](functions/prepareCalls.mdx)
+      </td>
+
+      <td>
+        Prepares a set of contract calls for execution by building a user operation.
+        Returns the built user operation and a signature request that needs to be signed
+        before submitting to sendPreparedCalls.
+
+        **Example**
+
+        ```ts
+        // Prepare a sponsored user operation call
+        const result = await client.prepareCalls({
+          calls: [{
+            to: "0x1234...",
+            data: "0xabcdef...",
+            value: "0x0"
+          }],
+          capabilities: {
+            paymasterService: { policyId: "your-policy-id" }
+          }
+        });
+        ```
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [prepareSign](functions/prepareSign.mdx)
+      </td>
+
+      <td>
+        Prepares a signature request for signing messages or transactions.
+
+        **Example**
+
+        ```ts
+        // Prepare a message to be signed
+        const result = await client.prepareSign({
+           from: "0x1234...",
+           type: "personal_sign",
+           data: "Hello, world!",
+        });
+        ```
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [requestAccount](functions/requestAccount.mdx)
+      </td>
+
+      <td>
+        Requests an account for the provided signer using the wallet API client.
+        If an account already exists for the signer, it will always return that account unless a new ID is specified.
+        If an account already exists, the creationHint will be ignored.
+
+        **Example**
+
+        ```ts
+        // Request an account with default parameters using a local signer
+        const signer = LocalAccountSigner.privateKeyToAccountSigner("0x...");
+        const account = await client.requestAccount(signer);
+        ```
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [sendCalls](functions/sendCalls.mdx)
+      </td>
+
+      <td>
+        Prepares, signs, and submits calls. This function internally calls `prepareCalls`, `signPreparedCalls`, and `sendPreparedCalls`.
+
+        \<Note>
+        If using this action with an ERC-20 paymaster in pre-operation mode with `autoPermit`, the contents of the permit will be hidden
+        from the user. It is recommended to use the `prepareCalls` action instead to manually handle the permit signature.
+        \</Note>
+
+        **Example**
+
+        ```ts
+        const result = await client.sendCalls({
+          calls: [{
+            to: "0x1234...",
+            data: "0xabcdef...",
+            value: "0x0"
+          }],
+          capabilities: {
+            paymasterService: { policyId: "your-policy-id" }
+          }
+        });
+
+        // The result contains the prepared call IDs
+        console.log(result.preparedCallIds);
+        ```
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [sendPreparedCalls](functions/sendPreparedCalls.mdx)
+      </td>
+
+      <td>
+        Sends prepared calls by submitting a signed user operation.
+        This method is used after signing the signature request returned from prepareCalls.
+
+        **Example**
+
+        ```ts
+        // First prepare the calls
+        const preparedCalls = await client.prepareCalls({
+          calls: [{
+            to: "0x1234...",
+            data: "0xabcdef...",
+            value: "0x0"
+          }],
+          capabilities: {
+            paymasterService: { policyId: "your-policy-id" }
+          }
+        });
+
+        // Then sign the calls
+        const signedCalls = await client.signPreparedCalls(preparedCalls);
+
+        // Then send the prepared calls with the signature
+        const result = await client.sendPreparedCalls({
+          signedCalls,
+        });
+        ```
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [signMessage](functions/signMessage.mdx)
+      </td>
+
+      <td>
+        Signs a message using the smart account.
+        This method requests the account associated with the signer and uses it to sign the message.
+
+        **Example**
+
+        ```ts
+        // Sign a simple text message
+        const signature = await client.signMessage("Hello, world!");
+
+        // Sign a raw hex message
+        const signature = await client.signMessage({ raw: "0x48656c6c6f2c20776f726c6421" });
+        ```
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [signPreparedCalls](functions/signPreparedCalls.mdx)
+      </td>
+
+      <td>
+        Signs prepared calls using the provided signer.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [signSignatureRequest](functions/signSignatureRequest.mdx)
+      </td>
+
+      <td>
+        Signs a signature request using the provided signer.
+        This method handles different types of signature requests including personal\_sign, eth\_signTypedData\_v4, and authorization.
+
+        **Example**
+
+        ```ts
+        // Sign a personal message
+        const result = await client.signSignatureRequest({
+          type: 'personal_sign',
+          data: 'Hello, world!'
+        });
+
+        // Sign typed data (EIP-712)
+        const result = await client.signSignatureRequest({
+          type: 'eth_signTypedData_v4',
+          data: {
+            domain: { ... },
+            types: { ... },
+            primaryType: '...',
+            message: { ... }
+          }
+        });
+        ```
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [signTypedData](functions/signTypedData.mdx)
+      </td>
+
+      <td>
+        Signs typed data (EIP-712) using the smart account.
+        This method requests the account associated with the signer and uses it to sign the typed data.
+
+        **Example**
+
+        ```ts
+        // Sign typed data
+        const signature = await client.signTypedData({
+          domain: {
+            name: 'Example DApp',
+            version: '1',
+            chainId: 1,
+            verifyingContract: '0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC'
+          },
+          types: {
+            Person: [
+              { name: 'name', type: 'string' },
+              { name: 'wallet', type: 'address' }
+            ]
+          },
+          primaryType: 'Person',
+          message: {
+            name: 'John Doe',
+            wallet: '0xAaAaAaAaAaAaAaAaAaAAAAAAAAaaaAaAaAaaAaAa'
+          }
+        });
+        ```
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [waitForCallsStatus](functions/waitForCallsStatus.mdx)
+      </td>
+
+      <td>
+        Waits for the status of a prepared call to be updated, returning after the calls are no longer pending.
+
+        **Example**
+
+        ```ts
+        const result = await client.waitForCallsStatus({ id: "0x1234..." });
+        console.log(result);
+        ```
+      </td>
+    </tr>
+
+  </tbody>
+</table>

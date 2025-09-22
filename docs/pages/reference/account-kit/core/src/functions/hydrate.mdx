@@ -9,7 +9,7 @@ layout: reference
 function hydrate(config, initialState?): HydrateResult;
 ```
 
-Defined in: [account-kit/core/src/hydrate.ts:37](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/core/src/hydrate.ts#L37)
+Defined in: [account-kit/core/src/hydrate.ts:37](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/core/src/hydrate.ts#L37)
 
 Will hydrate the client store with the provided initial state if one is provided.
 
@@ -26,10 +26,46 @@ const { onMount } = hydrate(config, initialState);
 
 ## Parameters
 
-| Parameter       | Type                                                                 | Description                                      |
-| :-------------- | :------------------------------------------------------------------- | :----------------------------------------------- |
-| `config`        | [`AlchemyAccountsConfig`](../type-aliases/AlchemyAccountsConfig.mdx) | the config containing the client store           |
-| `initialState?` | [`StoredState`](../type-aliases/StoredState.mdx)                     | optional param detailing the initial ClientState |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `config`
+      </td>
+
+      <td>
+        [`AlchemyAccountsConfig`](../type-aliases/AlchemyAccountsConfig.mdx)
+      </td>
+
+      <td>
+        the config containing the client store
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `initialState?`
+      </td>
+
+      <td>
+        [`StoredState`](../type-aliases/StoredState.mdx)
+      </td>
+
+      <td>
+        optional param detailing the initial ClientState
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Returns
 

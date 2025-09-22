@@ -9,7 +9,7 @@ layout: reference
 const bundlerActions: <TClient>(client) => BundlerActions;
 ```
 
-Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:123](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/client/decorators/bundlerClient.ts#L123)
+Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:123](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/client/decorators/bundlerClient.ts#L123)
 
 A viem client decorator that provides Bundler specific actions.
 These actions include estimating gas for user operations, sending raw user operations, retrieving user operations by hash, getting supported entry points, and getting user operation receipts.
@@ -18,15 +18,50 @@ NOTE: this is already added to the client returned from `createBundlerClient`
 
 ## Type Parameters
 
-| Type Parameter                                     |
-| :------------------------------------------------- | ------------------------------------------------------------------- |
-| `TClient` _extends_ `Client`\<`Transport`, `Chain` | `undefined`, `any`, \[`...PublicRpcSchema`, `...BundlerRpcSchema`]> |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TClient` *extends* `Client`\<`Transport`, `Chain` | `undefined`, `any`, \[`...PublicRpcSchema`, `...BundlerRpcSchema`]>
+      </td>
+    </tr>
+  </tbody>
+</table>
 
 ## Parameters
 
-| Parameter | Type      | Description                                                      |
-| :-------- | :-------- | :--------------------------------------------------------------- |
-| `client`  | `TClient` | The client instance that will be used to perform bundler actions |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `client`
+      </td>
+
+      <td>
+        `TClient`
+      </td>
+
+      <td>
+        The client instance that will be used to perform bundler actions
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Returns
 

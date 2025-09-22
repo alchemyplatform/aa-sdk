@@ -17,15 +17,133 @@ type BaseCreateConfigProps = RpcConnectionConfig &
   >;
 ```
 
-Defined in: [account-kit/core/src/types.ts:174](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/core/src/types.ts#L174)
+Defined in: [account-kit/core/src/types.ts:174](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/core/src/types.ts#L174)
 
 ## Type Declaration
 
-| Name                   | Type                                                                                                                                       | Description                                                                                                                                                                                                                                                                                                            | Defined in                                                                                                                                                      |
-| :--------------------- | :----------------------------------------------------------------------------------------------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `accountCreationHint?` | `NonNullable`\<`Parameters`\<[`accountLoupeActions`](../variables/accountLoupeActions.mdx)\[`"requestAccount"`]>\[`0`]>\[`"creationHint"`] | -                                                                                                                                                                                                                                                                                                                      | [account-kit/core/src/types.ts:186](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/core/src/types.ts#L186) |
-| `connectors?`          | `CreateConnectorFn`\[]                                                                                                                     | -                                                                                                                                                                                                                                                                                                                      | [account-kit/core/src/types.ts:184](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/core/src/types.ts#L184) |
-| `enablePopupOauth?`    | `boolean`                                                                                                                                  | If set, calls `preparePopupOauth` immediately upon initializing the signer. If you intend to use popup-based OAuth login, you must either set this option to true or manually ensure that you call `signer.preparePopupOauth()` at some point before the user interaction that triggers the OAuth authentication flow. | [account-kit/core/src/types.ts:197](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/core/src/types.ts#L197) |
-| `sessionConfig?`       | `AlchemySignerParams`\[`"sessionConfig"`] & `object`                                                                                       | -                                                                                                                                                                                                                                                                                                                      | [account-kit/core/src/types.ts:175](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/core/src/types.ts#L175) |
-| `ssr?`                 | `boolean`                                                                                                                                  | Enable this parameter if you are using the config in an SSR setting (eg. NextJS) Turing this setting on will disable automatic hydration of the client store                                                                                                                                                           | [account-kit/core/src/types.ts:180](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/core/src/types.ts#L180) |
-| `storage?`             | `CreateStorageFn`                                                                                                                          | -                                                                                                                                                                                                                                                                                                                      | [account-kit/core/src/types.ts:182](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/core/src/types.ts#L182) |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Name</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+      <th align="left">Defined in</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `accountCreationHint?`
+      </td>
+
+      <td>
+        `NonNullable`\<`Parameters`\<[`accountLoupeActions`](../variables/accountLoupeActions.mdx)\[`"requestAccount"`]>\[`0`]>\[`"creationHint"`]
+      </td>
+
+      <td>
+        ‐
+      </td>
+
+      <td>
+        [account-kit/core/src/types.ts:186](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/core/src/types.ts#L186)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `connectors?`
+      </td>
+
+      <td>
+        `CreateConnectorFn`\[]
+      </td>
+
+      <td>
+        ‐
+      </td>
+
+      <td>
+        [account-kit/core/src/types.ts:184](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/core/src/types.ts#L184)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `enablePopupOauth?`
+      </td>
+
+      <td>
+        `boolean`
+      </td>
+
+      <td>
+        If set, calls `preparePopupOauth` immediately upon initializing the signer.
+        If you intend to use popup-based OAuth login, you must either set this
+        option to true or manually ensure that you call
+        `signer.preparePopupOauth()` at some point before the user interaction that
+        triggers the OAuth authentication flow.
+      </td>
+
+      <td>
+        [account-kit/core/src/types.ts:197](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/core/src/types.ts#L197)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `sessionConfig?`
+      </td>
+
+      <td>
+        `AlchemySignerParams`\[`"sessionConfig"`] & `object`
+      </td>
+
+      <td>
+        ‐
+      </td>
+
+      <td>
+        [account-kit/core/src/types.ts:175](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/core/src/types.ts#L175)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `ssr?`
+      </td>
+
+      <td>
+        `boolean`
+      </td>
+
+      <td>
+        Enable this parameter if you are using the config in an SSR setting (eg. NextJS)
+        Turing this setting on will disable automatic hydration of the client store
+      </td>
+
+      <td>
+        [account-kit/core/src/types.ts:180](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/core/src/types.ts#L180)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `storage?`
+      </td>
+
+      <td>
+        `CreateStorageFn`
+      </td>
+
+      <td>
+        ‐
+      </td>
+
+      <td>
+        [account-kit/core/src/types.ts:182](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/core/src/types.ts#L182)
+      </td>
+    </tr>
+
+  </tbody>
+</table>

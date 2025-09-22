@@ -9,7 +9,7 @@ layout: reference
 function convertChainIdToCoinType(chainId): number;
 ```
 
-Defined in: [aa-sdk/core/src/ens/utils.ts:22](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/ens/utils.ts#L22)
+Defined in: [aa-sdk/core/src/ens/utils.ts:22](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/ens/utils.ts#L22)
 
 Converts a given chain ID to a coin type, following specific standards for mainnet and non-mainnet chains.
 
@@ -24,9 +24,32 @@ const coinType = convertChainIdToCoinType(sepolia.id);
 
 ## Parameters
 
-| Parameter | Type     | Description                                                     |
-| :-------- | :------- | :-------------------------------------------------------------- |
-| `chainId` | `number` | the blockchain chain ID that you want to convert to a coin type |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `chainId`
+      </td>
+
+      <td>
+        `number`
+      </td>
+
+      <td>
+        the blockchain chain ID that you want to convert to a coin type
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Returns
 

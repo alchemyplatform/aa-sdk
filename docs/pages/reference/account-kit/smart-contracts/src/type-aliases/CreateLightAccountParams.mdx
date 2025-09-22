@@ -23,23 +23,147 @@ type CreateLightAccountParams<TTransport, TSigner, TLightAccountVersion> = Omit<
   object;
 ```
 
-Defined in: [account-kit/smart-contracts/src/light-account/accounts/account.ts:46](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/light-account/accounts/account.ts#L46)
+Defined in: [account-kit/smart-contracts/src/light-account/accounts/account.ts:46](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/light-account/accounts/account.ts#L46)
 
 ## Type Declaration
 
-| Name              | Type                                                                                                                                       | Defined in                                                                                                                                                                                                                            |
-| :---------------- | :----------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `accountAddress?` | [`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx)                                                                          | [account-kit/smart-contracts/src/light-account/accounts/account.ts:67](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/light-account/accounts/account.ts#L67) |
-| `entryPoint?`     | `EntryPointDef`\<[`LightAccountEntryPointVersion`](LightAccountEntryPointVersion.mdx)\<`"LightAccount"`, `TLightAccountVersion`>, `Chain`> | [account-kit/smart-contracts/src/light-account/accounts/account.ts:70](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/light-account/accounts/account.ts#L70) |
-| `factoryAddress?` | [`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx)                                                                          | [account-kit/smart-contracts/src/light-account/accounts/account.ts:68](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/light-account/accounts/account.ts#L68) |
-| `initCode?`       | `Hex`                                                                                                                                      | [account-kit/smart-contracts/src/light-account/accounts/account.ts:66](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/light-account/accounts/account.ts#L66) |
-| `salt?`           | `bigint`                                                                                                                                   | [account-kit/smart-contracts/src/light-account/accounts/account.ts:65](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/light-account/accounts/account.ts#L65) |
-| `version?`        | `TLightAccountVersion`                                                                                                                     | [account-kit/smart-contracts/src/light-account/accounts/account.ts:69](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/light-account/accounts/account.ts#L69) |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Name</th>
+      <th align="left">Type</th>
+      <th align="left">Defined in</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `accountAddress?`
+      </td>
+
+      <td>
+        [`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx)
+      </td>
+
+      <td>
+        [account-kit/smart-contracts/src/light-account/accounts/account.ts:67](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/light-account/accounts/account.ts#L67)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `entryPoint?`
+      </td>
+
+      <td>
+        `EntryPointDef`\<[`LightAccountEntryPointVersion`](LightAccountEntryPointVersion.mdx)\<`"LightAccount"`, `TLightAccountVersion`>, `Chain`>
+      </td>
+
+      <td>
+        [account-kit/smart-contracts/src/light-account/accounts/account.ts:70](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/light-account/accounts/account.ts#L70)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `factoryAddress?`
+      </td>
+
+      <td>
+        [`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx)
+      </td>
+
+      <td>
+        [account-kit/smart-contracts/src/light-account/accounts/account.ts:68](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/light-account/accounts/account.ts#L68)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `initCode?`
+      </td>
+
+      <td>
+        `Hex`
+      </td>
+
+      <td>
+        [account-kit/smart-contracts/src/light-account/accounts/account.ts:66](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/light-account/accounts/account.ts#L66)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `salt?`
+      </td>
+
+      <td>
+        `bigint`
+      </td>
+
+      <td>
+        [account-kit/smart-contracts/src/light-account/accounts/account.ts:65](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/light-account/accounts/account.ts#L65)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `version?`
+      </td>
+
+      <td>
+        `TLightAccountVersion`
+      </td>
+
+      <td>
+        [account-kit/smart-contracts/src/light-account/accounts/account.ts:69](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/light-account/accounts/account.ts#L69)
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Type Parameters
 
-| Type Parameter                                                                                       | Default type                                                        |
-| :--------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------ |
-| `TTransport` _extends_ `Transport`                                                                   | `Transport`                                                         |
-| `TSigner` _extends_ `SmartAccountSigner`                                                             | `SmartAccountSigner`                                                |
-| `TLightAccountVersion` _extends_ [`LightAccountVersion`](LightAccountVersion.mdx)\<`"LightAccount"`> | [`LightAccountVersion`](LightAccountVersion.mdx)\<`"LightAccount"`> |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TTransport` *extends* `Transport`
+      </td>
+
+      <td>
+        `Transport`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TSigner` *extends* `SmartAccountSigner`
+      </td>
+
+      <td>
+        `SmartAccountSigner`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TLightAccountVersion` *extends* [`LightAccountVersion`](LightAccountVersion.mdx)\<`"LightAccount"`>
+      </td>
+
+      <td>
+        [`LightAccountVersion`](LightAccountVersion.mdx)\<`"LightAccount"`>
+      </td>
+    </tr>
+
+  </tbody>
+</table>

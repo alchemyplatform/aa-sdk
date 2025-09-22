@@ -9,7 +9,7 @@ layout: reference
 function pick(obj, keys): object;
 ```
 
-Defined in: [aa-sdk/core/src/utils/index.ts:125](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/utils/index.ts#L125)
+Defined in: [aa-sdk/core/src/utils/index.ts:125](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/utils/index.ts#L125)
 
 Picks the specified keys from an object and returns a new object containing only those key-value pairs.
 
@@ -29,10 +29,46 @@ const picked = pick(
 
 ## Parameters
 
-| Parameter | Type                           | Description                        |
-| :-------- | :----------------------------- | :--------------------------------- | -------------------------------------------------------- |
-| `obj`     | `Record`\<`string`, `unknown`> | The object from which to pick keys |
-| `keys`    | `string`                       | `string`\[]                        | A single key or an array of keys to pick from the object |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `obj`
+      </td>
+
+      <td>
+        `Record`\<`string`, `unknown`>
+      </td>
+
+      <td>
+        The object from which to pick keys
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `keys`
+      </td>
+
+      <td>
+        `string` | `string`\[]
+      </td>
+
+      <td>
+        A single key or an array of keys to pick from the object
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Returns
 

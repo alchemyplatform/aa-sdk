@@ -9,7 +9,7 @@ layout: reference
 function useLogout(mutationArgs?): UseLogoutResult;
 ```
 
-Defined in: [account-kit/react/src/hooks/useLogout.ts:38](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/react/src/hooks/useLogout.ts#L38)
+Defined in: [account-kit/react/src/hooks/useLogout.ts:38](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/react/src/hooks/useLogout.ts#L38)
 
 Provides a [hook](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useLogout.ts) to log out a user, disconnecting the signer and triggering the disconnectAsync function.
 This will disconnect both EVM and Solana wallets.
@@ -30,9 +30,32 @@ const { logout, isLoggingOut, error } = useLogout({
 
 ## Parameters
 
-| Parameter       | Type                                                                                         | Description       |
-| :-------------- | :------------------------------------------------------------------------------------------- | :---------------- | ----------------------------------------------------- |
-| `mutationArgs?` | `Partial`\<`Omit`\<`UseMutationOptions`\<`void`, `Error`, `void`, `unknown`>, `"mutationFn"` | `"mutationKey"`>> | optional arguments to customize the mutation behavior |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `mutationArgs?`
+      </td>
+
+      <td>
+        `Partial`\<`Omit`\<`UseMutationOptions`\<`void`, `Error`, `void`, `unknown`>, `"mutationFn"` | `"mutationKey"`>>
+      </td>
+
+      <td>
+        optional arguments to customize the mutation behavior
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Returns
 

@@ -12,21 +12,119 @@ type InstallPluginParams<TAccount, TContext, TEntryPointVersion> = object &
   GetContextParameter<TContext>;
 ```
 
-Defined in: [account-kit/smart-contracts/src/msca/plugin-manager/installPlugin.ts:26](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/msca/plugin-manager/installPlugin.ts#L26)
+Defined in: [account-kit/smart-contracts/src/msca/plugin-manager/installPlugin.ts:26](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/msca/plugin-manager/installPlugin.ts#L26)
 
 ## Type Declaration
 
-| Name              | Type                                                              | Defined in                                                                                                                                                                                                                                  |
-| :---------------- | :---------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `dependencies?`   | [`FunctionReference`](FunctionReference.mdx)\[]                   | [account-kit/smart-contracts/src/msca/plugin-manager/installPlugin.ts:39](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/msca/plugin-manager/installPlugin.ts#L39) |
-| `manifestHash?`   | `Hash`                                                            | [account-kit/smart-contracts/src/msca/plugin-manager/installPlugin.ts:37](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/msca/plugin-manager/installPlugin.ts#L37) |
-| `pluginAddress`   | [`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx) | [account-kit/smart-contracts/src/msca/plugin-manager/installPlugin.ts:36](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/msca/plugin-manager/installPlugin.ts#L36) |
-| `pluginInitData?` | `Hash`                                                            | [account-kit/smart-contracts/src/msca/plugin-manager/installPlugin.ts:38](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/msca/plugin-manager/installPlugin.ts#L38) |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Name</th>
+      <th align="left">Type</th>
+      <th align="left">Defined in</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `dependencies?`
+      </td>
+
+      <td>
+        [`FunctionReference`](FunctionReference.mdx)\[]
+      </td>
+
+      <td>
+        [account-kit/smart-contracts/src/msca/plugin-manager/installPlugin.ts:39](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/msca/plugin-manager/installPlugin.ts#L39)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `manifestHash?`
+      </td>
+
+      <td>
+        `Hash`
+      </td>
+
+      <td>
+        [account-kit/smart-contracts/src/msca/plugin-manager/installPlugin.ts:37](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/msca/plugin-manager/installPlugin.ts#L37)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `pluginAddress`
+      </td>
+
+      <td>
+        [`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx)
+      </td>
+
+      <td>
+        [account-kit/smart-contracts/src/msca/plugin-manager/installPlugin.ts:36](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/msca/plugin-manager/installPlugin.ts#L36)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `pluginInitData?`
+      </td>
+
+      <td>
+        `Hash`
+      </td>
+
+      <td>
+        [account-kit/smart-contracts/src/msca/plugin-manager/installPlugin.ts:38](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/msca/plugin-manager/installPlugin.ts#L38)
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Type Parameters
 
-| Type Parameter                                                         | Default type                            |
-| :--------------------------------------------------------------------- | :-------------------------------------- | ------------------------------ | ----------- |
-| `TAccount` _extends_ `SmartContractAccount`                            | `undefined`                             | `SmartContractAccount`         | `undefined` |
-| `TContext` _extends_ `Record`\<`string`, `unknown`>                    | `undefined`                             | `Record`\<`string`, `unknown`> | `undefined` |
-| `TEntryPointVersion` _extends_ `GetEntryPointFromAccount`\<`TAccount`> | `GetEntryPointFromAccount`\<`TAccount`> |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TAccount` *extends* `SmartContractAccount` | `undefined`
+      </td>
+
+      <td>
+        `SmartContractAccount` | `undefined`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TContext` *extends* `Record`\<`string`, `unknown`> | `undefined`
+      </td>
+
+      <td>
+        `Record`\<`string`, `unknown`> | `undefined`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TEntryPointVersion` *extends* `GetEntryPointFromAccount`\<`TAccount`>
+      </td>
+
+      <td>
+        `GetEntryPointFromAccount`\<`TAccount`>
+      </td>
+    </tr>
+
+  </tbody>
+</table>

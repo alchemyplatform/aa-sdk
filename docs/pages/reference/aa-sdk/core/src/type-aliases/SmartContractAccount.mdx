@@ -11,31 +11,263 @@ type SmartContractAccount<Name, TEntryPointVersion> = LocalAccount<Name> &
   SigningMethods;
 ```
 
-Defined in: [aa-sdk/core/src/account/smartContractAccount.ts:120](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/account/smartContractAccount.ts#L120)
+Defined in: [aa-sdk/core/src/account/smartContractAccount.ts:120](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/account/smartContractAccount.ts#L120)
 
 ## Type Declaration
 
-| Name                         | Type                                                                      | Defined in                                                                                                                                                                                          |
-| :--------------------------- | :------------------------------------------------------------------------ | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `encodeBatchExecute()`       | (`txs`) => `Promise`\<`Hex`>                                              | [aa-sdk/core/src/account/smartContractAccount.ts:127](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/account/smartContractAccount.ts#L127) |
-| `encodeExecute()`            | (`tx`) => `Promise`\<`Hex`>                                               | [aa-sdk/core/src/account/smartContractAccount.ts:126](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/account/smartContractAccount.ts#L126) |
-| `encodeUpgradeToAndCall()`   | (`params`) => `Promise`\<`Hex`>                                           | [aa-sdk/core/src/account/smartContractAccount.ts:136](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/account/smartContractAccount.ts#L136) |
-| `getDummySignature()`        | () => `Hex`                                                               | `Promise`\<`Hex`>                                                                                                                                                                                   | [aa-sdk/core/src/account/smartContractAccount.ts:125](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/account/smartContractAccount.ts#L125) |
-| `getEntryPoint()`            | () => [`EntryPointDef`](EntryPointDef.mdx)\<`TEntryPointVersion`>         | [aa-sdk/core/src/account/smartContractAccount.ts:142](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/account/smartContractAccount.ts#L142) |
-| `getFactoryAddress()`        | () => `Promise`\<[`Address`](Address.mdx)>                                | [aa-sdk/core/src/account/smartContractAccount.ts:140](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/account/smartContractAccount.ts#L140) |
-| `getFactoryData()`           | () => `Promise`\<`Hex`>                                                   | [aa-sdk/core/src/account/smartContractAccount.ts:141](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/account/smartContractAccount.ts#L141) |
-| `getImplementationAddress()` | () => `Promise`\<[`NullAddress`](NullAddress.mdx)                         | [`Address`](Address.mdx)>                                                                                                                                                                           | [aa-sdk/core/src/account/smartContractAccount.ts:143](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/account/smartContractAccount.ts#L143) |
-| `getInitCode()`              | () => `Promise`\<`Hex`>                                                   | [aa-sdk/core/src/account/smartContractAccount.ts:138](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/account/smartContractAccount.ts#L138) |
-| `isAccountDeployed()`        | () => `Promise`\<`boolean`>                                               | [aa-sdk/core/src/account/smartContractAccount.ts:139](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/account/smartContractAccount.ts#L139) |
-| `signMessageWith6492()`      | (`params`) => `Promise`\<`Hex`>                                           | [aa-sdk/core/src/account/smartContractAccount.ts:129](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/account/smartContractAccount.ts#L129) |
-| `signTypedDataWith6492()`    | \<`typedData`, `primaryType`>(`typedDataDefinition`) => `Promise`\<`Hex`> | [aa-sdk/core/src/account/smartContractAccount.ts:130](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/account/smartContractAccount.ts#L130) |
-| `signUserOperationHash()`    | (`uoHash`) => `Promise`\<`Hex`>                                           | [aa-sdk/core/src/account/smartContractAccount.ts:128](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/account/smartContractAccount.ts#L128) |
-| `source`                     | `Name`                                                                    | [aa-sdk/core/src/account/smartContractAccount.ts:124](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/account/smartContractAccount.ts#L124) |
-| `getAccountNonce()`          | (`nonceKey?`) => `Promise`\<`bigint`>                                     | [aa-sdk/core/src/account/smartContractAccount.ts:137](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/account/smartContractAccount.ts#L137) |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Name</th>
+      <th align="left">Type</th>
+      <th align="left">Defined in</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `encodeBatchExecute()`
+      </td>
+
+      <td>
+        (`txs`) => `Promise`\<`Hex`>
+      </td>
+
+      <td>
+        [aa-sdk/core/src/account/smartContractAccount.ts:127](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/account/smartContractAccount.ts#L127)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `encodeExecute()`
+      </td>
+
+      <td>
+        (`tx`) => `Promise`\<`Hex`>
+      </td>
+
+      <td>
+        [aa-sdk/core/src/account/smartContractAccount.ts:126](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/account/smartContractAccount.ts#L126)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `encodeUpgradeToAndCall()`
+      </td>
+
+      <td>
+        (`params`) => `Promise`\<`Hex`>
+      </td>
+
+      <td>
+        [aa-sdk/core/src/account/smartContractAccount.ts:136](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/account/smartContractAccount.ts#L136)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `getDummySignature()`
+      </td>
+
+      <td>
+        () => `Hex` | `Promise`\<`Hex`>
+      </td>
+
+      <td>
+        [aa-sdk/core/src/account/smartContractAccount.ts:125](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/account/smartContractAccount.ts#L125)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `getEntryPoint()`
+      </td>
+
+      <td>
+        () => [`EntryPointDef`](EntryPointDef.mdx)\<`TEntryPointVersion`>
+      </td>
+
+      <td>
+        [aa-sdk/core/src/account/smartContractAccount.ts:142](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/account/smartContractAccount.ts#L142)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `getFactoryAddress()`
+      </td>
+
+      <td>
+        () => `Promise`\<[`Address`](Address.mdx)>
+      </td>
+
+      <td>
+        [aa-sdk/core/src/account/smartContractAccount.ts:140](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/account/smartContractAccount.ts#L140)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `getFactoryData()`
+      </td>
+
+      <td>
+        () => `Promise`\<`Hex`>
+      </td>
+
+      <td>
+        [aa-sdk/core/src/account/smartContractAccount.ts:141](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/account/smartContractAccount.ts#L141)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `getImplementationAddress()`
+      </td>
+
+      <td>
+        () => `Promise`\<[`NullAddress`](NullAddress.mdx) | [`Address`](Address.mdx)>
+      </td>
+
+      <td>
+        [aa-sdk/core/src/account/smartContractAccount.ts:143](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/account/smartContractAccount.ts#L143)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `getInitCode()`
+      </td>
+
+      <td>
+        () => `Promise`\<`Hex`>
+      </td>
+
+      <td>
+        [aa-sdk/core/src/account/smartContractAccount.ts:138](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/account/smartContractAccount.ts#L138)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `isAccountDeployed()`
+      </td>
+
+      <td>
+        () => `Promise`\<`boolean`>
+      </td>
+
+      <td>
+        [aa-sdk/core/src/account/smartContractAccount.ts:139](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/account/smartContractAccount.ts#L139)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `signMessageWith6492()`
+      </td>
+
+      <td>
+        (`params`) => `Promise`\<`Hex`>
+      </td>
+
+      <td>
+        [aa-sdk/core/src/account/smartContractAccount.ts:129](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/account/smartContractAccount.ts#L129)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `signTypedDataWith6492()`
+      </td>
+
+      <td>
+        \<`typedData`, `primaryType`>(`typedDataDefinition`) => `Promise`\<`Hex`>
+      </td>
+
+      <td>
+        [aa-sdk/core/src/account/smartContractAccount.ts:130](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/account/smartContractAccount.ts#L130)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `signUserOperationHash()`
+      </td>
+
+      <td>
+        (`uoHash`) => `Promise`\<`Hex`>
+      </td>
+
+      <td>
+        [aa-sdk/core/src/account/smartContractAccount.ts:128](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/account/smartContractAccount.ts#L128)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `source`
+      </td>
+
+      <td>
+        `Name`
+      </td>
+
+      <td>
+        [aa-sdk/core/src/account/smartContractAccount.ts:124](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/account/smartContractAccount.ts#L124)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `getAccountNonce()`
+      </td>
+
+      <td>
+        (`nonceKey?`) => `Promise`\<`bigint`>
+      </td>
+
+      <td>
+        [aa-sdk/core/src/account/smartContractAccount.ts:137](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/account/smartContractAccount.ts#L137)
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Type Parameters
 
-| Type Parameter                                                              | Default type                                 |
-| :-------------------------------------------------------------------------- | :------------------------------------------- |
-| `Name` _extends_ `string`                                                   | `string`                                     |
-| `TEntryPointVersion` _extends_ [`EntryPointVersion`](EntryPointVersion.mdx) | [`EntryPointVersion`](EntryPointVersion.mdx) |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `Name` *extends* `string`
+      </td>
+
+      <td>
+        `string`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TEntryPointVersion` *extends* [`EntryPointVersion`](EntryPointVersion.mdx)
+      </td>
+
+      <td>
+        [`EntryPointVersion`](EntryPointVersion.mdx)
+      </td>
+    </tr>
+
+  </tbody>
+</table>

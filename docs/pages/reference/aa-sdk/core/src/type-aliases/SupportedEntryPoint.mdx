@@ -9,22 +9,157 @@ layout: reference
 type SupportedEntryPoint<TEntryPointVersion, TChain, TAbi> = object;
 ```
 
-Defined in: [aa-sdk/core/src/entrypoint/types.ts:23](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/entrypoint/types.ts#L23)
+Defined in: [aa-sdk/core/src/entrypoint/types.ts:23](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/entrypoint/types.ts#L23)
 
 ## Type Parameters
 
-| Type Parameter                                                              | Default type                                 |
-| :-------------------------------------------------------------------------- | :------------------------------------------- | ----- |
-| `TEntryPointVersion` _extends_ [`EntryPointVersion`](EntryPointVersion.mdx) | [`EntryPointVersion`](EntryPointVersion.mdx) |
-| `TChain` _extends_ `Chain`                                                  | `Chain`                                      |
-| `TAbi` _extends_ `Abi`                                                      | readonly `unknown`\[]                        | `Abi` |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TEntryPointVersion` *extends* [`EntryPointVersion`](EntryPointVersion.mdx)
+      </td>
+
+      <td>
+        [`EntryPointVersion`](EntryPointVersion.mdx)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TChain` *extends* `Chain`
+      </td>
+
+      <td>
+        `Chain`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TAbi` *extends* `Abi` | readonly `unknown`\[]
+      </td>
+
+      <td>
+        `Abi`
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Properties
 
-| Property                                               | Type                                                                         | Description                                                                                                                                                                                                                                                                                                | Defined in                                                                                                                                                                |
-| :----------------------------------------------------- | :--------------------------------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| <a id="abi" /> `abi`                                   | `GetContractParameters`\<`Transport`, `TChain`, `Account`, `TAbi`>\[`"abi"`] | -                                                                                                                                                                                                                                                                                                          | [aa-sdk/core/src/entrypoint/types.ts:30](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/entrypoint/types.ts#L30) |
-| <a id="address" /> `address`                           | `Record`\<`TChain`\[`"id"`]                                                  | `"default"`, [`Address`](Address.mdx)>                                                                                                                                                                                                                                                                     | -                                                                                                                                                                         | [aa-sdk/core/src/entrypoint/types.ts:29](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/entrypoint/types.ts#L29) |
-| <a id="getuseroperationhash" /> `getUserOperationHash` | (`request`, `entryPointAddress`, `chainId`) => `Hash`                        | Generates a hash for a UserOperation valid from entry point version 0.6 onwards                                                                                                                                                                                                                            | [aa-sdk/core/src/entrypoint/types.ts:40](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/entrypoint/types.ts#L40) |
-| <a id="packuseroperation" /> `packUserOperation`       | (`userOperation`) => `Hex`                                                   | Pack the user operation data into bytes for hashing for entry point version 0.6 onwards Reference: v6: https://github.com/eth-infinitism/account-abstraction/blob/releases/v0.6/test/UserOp.ts#L16-L61 v7: https://github.com/eth-infinitism/account-abstraction/blob/releases/v0.7/test/UserOp.ts#L28-L67 | [aa-sdk/core/src/entrypoint/types.ts:55](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/entrypoint/types.ts#L55) |
-| <a id="version" /> `version`                           | `TEntryPointVersion`                                                         | -                                                                                                                                                                                                                                                                                                          | [aa-sdk/core/src/entrypoint/types.ts:28](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/entrypoint/types.ts#L28) |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Property</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+      <th align="left">Defined in</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        <a id="abi" /> `abi`
+      </td>
+
+      <td>
+        `GetContractParameters`\<`Transport`, `TChain`, `Account`, `TAbi`>\[`"abi"`]
+      </td>
+
+      <td>
+        ‐
+      </td>
+
+      <td>
+        [aa-sdk/core/src/entrypoint/types.ts:30](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/entrypoint/types.ts#L30)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="address" /> `address`
+      </td>
+
+      <td>
+        `Record`\<`TChain`\[`"id"`] | `"default"`, [`Address`](Address.mdx)>
+      </td>
+
+      <td>
+        ‐
+      </td>
+
+      <td>
+        [aa-sdk/core/src/entrypoint/types.ts:29](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/entrypoint/types.ts#L29)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="getuseroperationhash" /> `getUserOperationHash`
+      </td>
+
+      <td>
+        (`request`, `entryPointAddress`, `chainId`) => `Hash`
+      </td>
+
+      <td>
+        Generates a hash for a UserOperation valid from entry point version 0.6 onwards
+      </td>
+
+      <td>
+        [aa-sdk/core/src/entrypoint/types.ts:40](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/entrypoint/types.ts#L40)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="packuseroperation" /> `packUserOperation`
+      </td>
+
+      <td>
+        (`userOperation`) => `Hex`
+      </td>
+
+      <td>
+        Pack the user operation data into bytes for hashing for entry point version 0.6 onwards
+        Reference:
+        v6: https://github.com/eth-infinitism/account-abstraction/blob/releases/v0.6/test/UserOp.ts#L16-L61
+        v7: https://github.com/eth-infinitism/account-abstraction/blob/releases/v0.7/test/UserOp.ts#L28-L67
+      </td>
+
+      <td>
+        [aa-sdk/core/src/entrypoint/types.ts:55](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/entrypoint/types.ts#L55)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="version" /> `version`
+      </td>
+
+      <td>
+        `TEntryPointVersion`
+      </td>
+
+      <td>
+        ‐
+      </td>
+
+      <td>
+        [aa-sdk/core/src/entrypoint/types.ts:28](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/entrypoint/types.ts#L28)
+      </td>
+    </tr>
+
+  </tbody>
+</table>

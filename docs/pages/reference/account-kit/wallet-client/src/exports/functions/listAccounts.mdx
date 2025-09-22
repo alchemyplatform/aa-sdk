@@ -19,7 +19,7 @@ function listAccounts(
 }>;
 ```
 
-Defined in: [account-kit/wallet-client/src/client/actions/listAccounts.ts:44](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/wallet-client/src/client/actions/listAccounts.ts#L44)
+Defined in: [account-kit/wallet-client/src/client/actions/listAccounts.ts:44](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/wallet-client/src/client/actions/listAccounts.ts#L44)
 
 Lists all smart accounts for a given signer using the wallet API client.
 
@@ -42,11 +42,60 @@ const nextPage = await client.listAccounts({
 
 ## Parameters
 
-| Parameter | Type                   | Description                                  |
-| :-------- | :--------------------- | :------------------------------------------- |
-| `client`  | `InnerWalletApiClient` | The wallet API client to use for the request |
-| `signer`  | `SmartAccountSigner`   | The signer for which to list accounts        |
-| `params`  | `ListAccountsParams`   | Parameters for listing accounts              |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `client`
+      </td>
+
+      <td>
+        `InnerWalletApiClient`
+      </td>
+
+      <td>
+        The wallet API client to use for the request
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `signer`
+      </td>
+
+      <td>
+        `SmartAccountSigner`
+      </td>
+
+      <td>
+        The signer for which to list accounts
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `params`
+      </td>
+
+      <td>
+        `ListAccountsParams`
+      </td>
+
+      <td>
+        Parameters for listing accounts
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Returns
 

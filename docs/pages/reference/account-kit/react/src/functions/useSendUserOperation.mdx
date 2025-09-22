@@ -11,7 +11,7 @@ function useSendUserOperation<TEntryPointVersion, TAccount>(
 ): UseSendUserOperationResult<TEntryPointVersion, TAccount>;
 ```
 
-Defined in: [account-kit/react/src/hooks/useSendUserOperation.ts:127](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/react/src/hooks/useSendUserOperation.ts#L127)
+Defined in: [account-kit/react/src/hooks/useSendUserOperation.ts:127](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/react/src/hooks/useSendUserOperation.ts#L127)
 
 A [hook](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useSendUserOperation.ts) that returns functions for sending user operations.
 You can also optionally wait for a user operation to be mined and get the transaction hash before returning using `waitForTx`.
@@ -65,16 +65,66 @@ function ComponentWithSendUserOperation() {
 
 ## Type Parameters
 
-| Type Parameter                                                            | Default type        |
-| :------------------------------------------------------------------------ | :------------------ |
-| `TEntryPointVersion` _extends_ keyof `EntryPointRegistryBase`\<`unknown`> | -                   |
-| `TAccount` _extends_ `SupportedAccounts`                                  | `SupportedAccounts` |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TEntryPointVersion` *extends* keyof `EntryPointRegistryBase`\<`unknown`>
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TAccount` *extends* `SupportedAccounts`
+      </td>
+
+      <td>
+        `SupportedAccounts`
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Parameters
 
-| Parameter | Type                                                                                                          | Description                                                                                                                                                                                                           |
-| :-------- | :------------------------------------------------------------------------------------------------------------ | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `params`  | [`UseSendUserOperationArgs`](../type-aliases/UseSendUserOperationArgs.mdx)\<`TEntryPointVersion`, `TAccount`> | the parameters for the hook including the client, a flag to wait for tx mining, and mutation args. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useSendUserOperation.ts#L45) |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `params`
+      </td>
+
+      <td>
+        [`UseSendUserOperationArgs`](../type-aliases/UseSendUserOperationArgs.mdx)\<`TEntryPointVersion`, `TAccount`>
+      </td>
+
+      <td>
+        the parameters for the hook including the client, a flag to wait for tx mining, and mutation args. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useSendUserOperation.ts#L45)
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Returns
 

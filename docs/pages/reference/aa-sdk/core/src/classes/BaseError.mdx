@@ -5,7 +5,7 @@ slug: wallets/reference/aa-sdk/core/src/classes/BaseError
 layout: reference
 ---
 
-Defined in: [aa-sdk/core/src/errors/base.ts:24](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/errors/base.ts#L24)
+Defined in: [aa-sdk/core/src/errors/base.ts:24](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/errors/base.ts#L24)
 
 A custom error class that extends from `ViemBaseError`. This class allows for error messages to include links to relevant documentation based on provided `docsPath` and `docsSlug` parameters.
 This is based on on viem's BaseError type (obviously from the import and extend)
@@ -53,14 +53,41 @@ we want the errors here to point to our docs if we supply a docsPath though
 new BaseError(shortMessage, args): BaseError;
 ```
 
-Defined in: [aa-sdk/core/src/errors/base.ts:28](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/errors/base.ts#L28)
+Defined in: [aa-sdk/core/src/errors/base.ts:28](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/errors/base.ts#L28)
 
 #### Parameters
 
-| Parameter      | Type                  |
-| :------------- | :-------------------- |
-| `shortMessage` | `string`              |
-| `args`         | `BaseErrorParameters` |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `shortMessage`
+      </td>
+
+      <td>
+        `string`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `args`
+      </td>
+
+      <td>
+        `BaseErrorParameters`
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 #### Returns
 
@@ -74,18 +101,387 @@ ViemBaseError.constructor;
 
 ## Properties
 
-| Property                                     | Modifier | Type        | Default value  | Description                                                                                                                                                                                                                                                                                                                                                                                                                                       | Overrides               | Inherited from                                                                                                            | Defined in                                                                                                                                                      |
-| :------------------------------------------- | :------- | :---------- | :------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | :---------------------- | :------------------------------------------------------------------------------------------------------------------------ | :-------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| <a id="cause" /> `cause?`                    | `public` | `unknown`   | `undefined`    | -                                                                                                                                                                                                                                                                                                                                                                                                                                                 | -                       | `ViemBaseError.cause`                                                                                                     | node_modules/typescript/lib/lib.es2022.error.d.ts:26                                                                                                            |
-| <a id="details" /> `details`                 | `public` | `string`    | `undefined`    | -                                                                                                                                                                                                                                                                                                                                                                                                                                                 | -                       | `ViemBaseError.details`                                                                                                   | node_modules/viem/\_types/errors/base.d.ts:19                                                                                                                   |
-| <a id="docspath" /> `docsPath?`              | `public` | `string`    | `undefined`    | -                                                                                                                                                                                                                                                                                                                                                                                                                                                 | -                       | [`NotAModularAccountV2Error`](NotAModularAccountV2Error.mdx).[`docsPath`](NotAModularAccountV2Error.mdx#docspath)         | node_modules/viem/\_types/errors/base.d.ts:20                                                                                                                   |
-| <a id="message" /> `message`                 | `public` | `string`    | `undefined`    | -                                                                                                                                                                                                                                                                                                                                                                                                                                                 | -                       | `ViemBaseError.message`                                                                                                   | node_modules/typescript/lib/lib.es5.d.ts:1077                                                                                                                   |
-| <a id="metamessages" /> `metaMessages?`      | `public` | `string`\[] | `undefined`    | -                                                                                                                                                                                                                                                                                                                                                                                                                                                 | -                       | [`NotAModularAccountV2Error`](NotAModularAccountV2Error.mdx).[`metaMessages`](NotAModularAccountV2Error.mdx#metamessages) | node_modules/viem/\_types/errors/base.d.ts:21                                                                                                                   |
-| <a id="name" /> `name`                       | `public` | `string`    | `"AASDKError"` | -                                                                                                                                                                                                                                                                                                                                                                                                                                                 | `ViemBaseError.name`    | -                                                                                                                         | [aa-sdk/core/src/errors/base.ts:25](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/errors/base.ts#L25) |
-| <a id="shortmessage" /> `shortMessage`       | `public` | `string`    | `undefined`    | -                                                                                                                                                                                                                                                                                                                                                                                                                                                 | -                       | `ViemBaseError.shortMessage`                                                                                              | node_modules/viem/\_types/errors/base.d.ts:22                                                                                                                   |
-| <a id="stack" /> `stack?`                    | `public` | `string`    | `undefined`    | -                                                                                                                                                                                                                                                                                                                                                                                                                                                 | -                       | `ViemBaseError.stack`                                                                                                     | node_modules/typescript/lib/lib.es5.d.ts:1078                                                                                                                   |
-| <a id="version" /> `version`                 | `public` | `string`    | `VERSION`      | -                                                                                                                                                                                                                                                                                                                                                                                                                                                 | `ViemBaseError.version` | -                                                                                                                         | [aa-sdk/core/src/errors/base.ts:26](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/errors/base.ts#L26) |
-| <a id="stacktracelimit" /> `stackTraceLimit` | `static` | `number`    | `undefined`    | The `Error.stackTraceLimit` property specifies the number of stack frames collected by a stack trace (whether generated by `new Error().stack` or `Error.captureStackTrace(obj)`). The default value is `10` but may be set to any valid JavaScript number. Changes will affect any stack trace captured _after_ the value has been changed. If set to a non-number value, or set to a negative number, stack traces will not capture any frames. | -                       | `ViemBaseError.stackTraceLimit`                                                                                           | node_modules/@types/node/globals.d.ts:161                                                                                                                       |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Property</th>
+      <th align="left">Modifier</th>
+      <th align="left">Type</th>
+      <th align="left">Default value</th>
+      <th align="left">Description</th>
+      <th align="left">Overrides</th>
+      <th align="left">Inherited from</th>
+      <th align="left">Defined in</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        <a id="cause" /> `cause?`
+      </td>
+
+      <td>
+        `public`
+      </td>
+
+      <td>
+        `unknown`
+      </td>
+
+      <td>
+        `undefined`
+      </td>
+
+      <td>
+        ‐
+      </td>
+
+      <td>
+        ‐
+      </td>
+
+      <td>
+        ```ts
+        ViemBaseError.cause
+        ```
+      </td>
+
+      <td>
+        node\_modules/typescript/lib/lib.es2022.error.d.ts:26
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="details" /> `details`
+      </td>
+
+      <td>
+        `public`
+      </td>
+
+      <td>
+        `string`
+      </td>
+
+      <td>
+        `undefined`
+      </td>
+
+      <td>
+        ‐
+      </td>
+
+      <td>
+        ‐
+      </td>
+
+      <td>
+        ```ts
+        ViemBaseError.details
+        ```
+      </td>
+
+      <td>
+        node\_modules/viem/\_types/errors/base.d.ts:19
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="docspath" /> `docsPath?`
+      </td>
+
+      <td>
+        `public`
+      </td>
+
+      <td>
+        `string`
+      </td>
+
+      <td>
+        `undefined`
+      </td>
+
+      <td>
+        ‐
+      </td>
+
+      <td>
+        ‐
+      </td>
+
+      <td>
+        [`NotAModularAccountV2Error`](NotAModularAccountV2Error.mdx).[`docsPath`](NotAModularAccountV2Error.mdx#docspath)
+      </td>
+
+      <td>
+        node\_modules/viem/\_types/errors/base.d.ts:20
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="message" /> `message`
+      </td>
+
+      <td>
+        `public`
+      </td>
+
+      <td>
+        `string`
+      </td>
+
+      <td>
+        `undefined`
+      </td>
+
+      <td>
+        ‐
+      </td>
+
+      <td>
+        ‐
+      </td>
+
+      <td>
+        ```ts
+        ViemBaseError.message
+        ```
+      </td>
+
+      <td>
+        node\_modules/typescript/lib/lib.es5.d.ts:1077
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="metamessages" /> `metaMessages?`
+      </td>
+
+      <td>
+        `public`
+      </td>
+
+      <td>
+        `string`\[]
+      </td>
+
+      <td>
+        `undefined`
+      </td>
+
+      <td>
+        ‐
+      </td>
+
+      <td>
+        ‐
+      </td>
+
+      <td>
+        [`NotAModularAccountV2Error`](NotAModularAccountV2Error.mdx).[`metaMessages`](NotAModularAccountV2Error.mdx#metamessages)
+      </td>
+
+      <td>
+        node\_modules/viem/\_types/errors/base.d.ts:21
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="name" /> `name`
+      </td>
+
+      <td>
+        `public`
+      </td>
+
+      <td>
+        `string`
+      </td>
+
+      <td>
+        `"AASDKError"`
+      </td>
+
+      <td>
+        ‐
+      </td>
+
+      <td>
+        ```ts
+        ViemBaseError.name
+        ```
+      </td>
+
+      <td>
+        ‐
+      </td>
+
+      <td>
+        [aa-sdk/core/src/errors/base.ts:25](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/errors/base.ts#L25)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="shortmessage" /> `shortMessage`
+      </td>
+
+      <td>
+        `public`
+      </td>
+
+      <td>
+        `string`
+      </td>
+
+      <td>
+        `undefined`
+      </td>
+
+      <td>
+        ‐
+      </td>
+
+      <td>
+        ‐
+      </td>
+
+      <td>
+        ```ts
+        ViemBaseError.shortMessage
+        ```
+      </td>
+
+      <td>
+        node\_modules/viem/\_types/errors/base.d.ts:22
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="stack" /> `stack?`
+      </td>
+
+      <td>
+        `public`
+      </td>
+
+      <td>
+        `string`
+      </td>
+
+      <td>
+        `undefined`
+      </td>
+
+      <td>
+        ‐
+      </td>
+
+      <td>
+        ‐
+      </td>
+
+      <td>
+        ```ts
+        ViemBaseError.stack
+        ```
+      </td>
+
+      <td>
+        node\_modules/typescript/lib/lib.es5.d.ts:1078
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="version" /> `version`
+      </td>
+
+      <td>
+        `public`
+      </td>
+
+      <td>
+        `string`
+      </td>
+
+      <td>
+        `VERSION`
+      </td>
+
+      <td>
+        ‐
+      </td>
+
+      <td>
+        ```ts
+        ViemBaseError.version
+        ```
+      </td>
+
+      <td>
+        ‐
+      </td>
+
+      <td>
+        [aa-sdk/core/src/errors/base.ts:26](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/errors/base.ts#L26)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="stacktracelimit" /> `stackTraceLimit`
+      </td>
+
+      <td>
+        `static`
+      </td>
+
+      <td>
+        `number`
+      </td>
+
+      <td>
+        `undefined`
+      </td>
+
+      <td>
+        The `Error.stackTraceLimit` property specifies the number of stack frames
+        collected by a stack trace (whether generated by `new Error().stack` or
+        `Error.captureStackTrace(obj)`).
+
+        The default value is `10` but may be set to any valid JavaScript number. Changes
+        will affect any stack trace captured *after* the value has been changed.
+
+        If set to a non-number value, or set to a negative number, stack traces will
+        not capture any frames.
+      </td>
+
+      <td>
+        ‐
+      </td>
+
+      <td>
+        ```ts
+        ViemBaseError.stackTraceLimit
+        ```
+      </td>
+
+      <td>
+        node\_modules/@types/node/globals.d.ts:161
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Methods
 
@@ -119,9 +515,27 @@ Defined in: node_modules/viem/\_types/errors/base.d.ts:27
 
 ##### Parameters
 
-| Parameter | Type                 |
-| :-------- | :------------------- |
-| `fn`      | (`err`) => `boolean` |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `fn`
+      </td>
+
+      <td>
+        (`err`) => `boolean`
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ##### Returns
 
@@ -189,10 +603,37 @@ a();
 
 #### Parameters
 
-| Parameter         | Type       |
-| :---------------- | :--------- |
-| `targetObject`    | `object`   |
-| `constructorOpt?` | `Function` |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `targetObject`
+      </td>
+
+      <td>
+        `object`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `constructorOpt?`
+      </td>
+
+      <td>
+        `Function`
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 #### Returns
 
@@ -216,10 +657,37 @@ Defined in: node_modules/@types/node/globals.d.ts:149
 
 #### Parameters
 
-| Parameter     | Type          |
-| :------------ | :------------ |
-| `err`         | `Error`       |
-| `stackTraces` | `CallSite`\[] |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `err`
+      </td>
+
+      <td>
+        `Error`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `stackTraces`
+      </td>
+
+      <td>
+        `CallSite`\[]
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 #### Returns
 

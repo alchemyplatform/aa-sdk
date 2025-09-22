@@ -5,7 +5,7 @@ slug: wallets/reference/account-kit/smart-contracts/src/classes/SessionKeyPermis
 layout: reference
 ---
 
-Defined in: [account-kit/smart-contracts/src/msca/plugins/session-key/permissions.ts:62](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/msca/plugins/session-key/permissions.ts#L62)
+Defined in: [account-kit/smart-contracts/src/msca/plugins/session-key/permissions.ts:62](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/msca/plugins/session-key/permissions.ts#L62)
 
 A builder for creating the hex-encoded data for updating session key permissions.
 
@@ -29,7 +29,7 @@ new SessionKeyPermissionsBuilder(): SessionKeyPermissionsBuilder;
 addContractAddressAccessEntry(entry): SessionKeyPermissionsBuilder;
 ```
 
-Defined in: [account-kit/smart-contracts/src/msca/plugins/session-key/permissions.ts:110](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/msca/plugins/session-key/permissions.ts#L110)
+Defined in: [account-kit/smart-contracts/src/msca/plugins/session-key/permissions.ts:110](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/msca/plugins/session-key/permissions.ts#L110)
 
 Adds a contract access entry to the internal list of contract address access entries.
 
@@ -48,9 +48,32 @@ builder.addContractAddressAccessEntry({
 
 #### Parameters
 
-| Parameter | Type                                                             | Description                           |
-| :-------- | :--------------------------------------------------------------- | :------------------------------------ |
-| `entry`   | [`ContractAccessEntry`](../type-aliases/ContractAccessEntry.mdx) | the contract access entry to be added |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `entry`
+      </td>
+
+      <td>
+        [`ContractAccessEntry`](../type-aliases/ContractAccessEntry.mdx)
+      </td>
+
+      <td>
+        the contract access entry to be added
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 #### Returns
 
@@ -66,7 +89,7 @@ the instance of the current class for chaining
 addContractFunctionAccessEntry(entry): SessionKeyPermissionsBuilder;
 ```
 
-Defined in: [account-kit/smart-contracts/src/msca/plugins/session-key/permissions.ts:133](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/msca/plugins/session-key/permissions.ts#L133)
+Defined in: [account-kit/smart-contracts/src/msca/plugins/session-key/permissions.ts:133](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/msca/plugins/session-key/permissions.ts#L133)
 
 Adds a contract method entry to the `_contractMethodAccessEntrys` array.
 
@@ -85,9 +108,32 @@ builder.addContractAddressAccessEntry({
 
 #### Parameters
 
-| Parameter | Type                                                             | Description                           |
-| :-------- | :--------------------------------------------------------------- | :------------------------------------ |
-| `entry`   | [`ContractMethodEntry`](../type-aliases/ContractMethodEntry.mdx) | The contract method entry to be added |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `entry`
+      </td>
+
+      <td>
+        [`ContractMethodEntry`](../type-aliases/ContractMethodEntry.mdx)
+      </td>
+
+      <td>
+        The contract method entry to be added
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 #### Returns
 
@@ -103,7 +149,7 @@ The instance of the class for method chaining
 addErc20TokenSpendLimit(limit): SessionKeyPermissionsBuilder;
 ```
 
-Defined in: [account-kit/smart-contracts/src/msca/plugins/session-key/permissions.ts:200](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/msca/plugins/session-key/permissions.ts#L200)
+Defined in: [account-kit/smart-contracts/src/msca/plugins/session-key/permissions.ts:200](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/msca/plugins/session-key/permissions.ts#L200)
 
 Adds an ERC20 token spend limit to the list of limits and returns the updated object.
 
@@ -122,9 +168,32 @@ builder.addErc20TokenSpendLimit({
 
 #### Parameters
 
-| Parameter | Type                                                     | Description                             |
-| :-------- | :------------------------------------------------------- | :-------------------------------------- |
-| `limit`   | [`Erc20TokenLimit`](../type-aliases/Erc20TokenLimit.mdx) | The ERC20 token spend limit to be added |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `limit`
+      </td>
+
+      <td>
+        [`Erc20TokenLimit`](../type-aliases/Erc20TokenLimit.mdx)
+      </td>
+
+      <td>
+        The ERC20 token spend limit to be added
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 #### Returns
 
@@ -140,7 +209,7 @@ The updated object with the new ERC20 token spend limit
 encode(): `0x${string}`[];
 ```
 
-Defined in: [account-kit/smart-contracts/src/msca/plugins/session-key/permissions.ts:259](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/msca/plugins/session-key/permissions.ts#L259)
+Defined in: [account-kit/smart-contracts/src/msca/plugins/session-key/permissions.ts:259](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/msca/plugins/session-key/permissions.ts#L259)
 
 Encodes various function calls into an array of hexadecimal strings based on the provided permissions and limits.
 
@@ -168,7 +237,7 @@ An array of encoded hexadecimal strings representing the function calls for sett
 setContractAccessControlType(aclType): SessionKeyPermissionsBuilder;
 ```
 
-Defined in: [account-kit/smart-contracts/src/msca/plugins/session-key/permissions.ts:87](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/msca/plugins/session-key/permissions.ts#L87)
+Defined in: [account-kit/smart-contracts/src/msca/plugins/session-key/permissions.ts:87](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/msca/plugins/session-key/permissions.ts#L87)
 
 Sets the access control type for the contract and returns the current instance for method chaining.
 
@@ -183,9 +252,32 @@ builder.setContractAccessControlType(SessionKeyAccessListType.ALLOWLIST);
 
 #### Parameters
 
-| Parameter | Type                                                                       | Description                                 |
-| :-------- | :------------------------------------------------------------------------- | :------------------------------------------ |
-| `aclType` | [`SessionKeyAccessListType`](../enumerations/SessionKeyAccessListType.mdx) | The access control type for the session key |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `aclType`
+      </td>
+
+      <td>
+        [`SessionKeyAccessListType`](../enumerations/SessionKeyAccessListType.mdx)
+      </td>
+
+      <td>
+        The access control type for the session key
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 #### Returns
 
@@ -201,7 +293,7 @@ The current instance for method chaining
 setGasSpendLimit(limit): SessionKeyPermissionsBuilder;
 ```
 
-Defined in: [account-kit/smart-contracts/src/msca/plugins/session-key/permissions.ts:221](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/msca/plugins/session-key/permissions.ts#L221)
+Defined in: [account-kit/smart-contracts/src/msca/plugins/session-key/permissions.ts:221](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/msca/plugins/session-key/permissions.ts#L221)
 
 Sets the gas spend limit and returns the current instance for method chaining.
 
@@ -219,9 +311,32 @@ builder.setGasSpendLimit({
 
 #### Parameters
 
-| Parameter | Type                                                 | Description                   |
-| :-------- | :--------------------------------------------------- | :---------------------------- |
-| `limit`   | [`GasSpendLimit`](../type-aliases/GasSpendLimit.mdx) | The gas spend limit to be set |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `limit`
+      </td>
+
+      <td>
+        [`GasSpendLimit`](../type-aliases/GasSpendLimit.mdx)
+      </td>
+
+      <td>
+        The gas spend limit to be set
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 #### Returns
 
@@ -237,7 +352,7 @@ The current instance for chaining
 setNativeTokenSpendLimit(limit): SessionKeyPermissionsBuilder;
 ```
 
-Defined in: [account-kit/smart-contracts/src/msca/plugins/session-key/permissions.ts:177](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/msca/plugins/session-key/permissions.ts#L177)
+Defined in: [account-kit/smart-contracts/src/msca/plugins/session-key/permissions.ts:177](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/msca/plugins/session-key/permissions.ts#L177)
 
 Sets the native token spend limit and returns the instance for chaining.
 
@@ -255,9 +370,32 @@ builder.setNativeTokenSpendLimit({
 
 #### Parameters
 
-| Parameter | Type                                                       | Description                                |
-| :-------- | :--------------------------------------------------------- | :----------------------------------------- |
-| `limit`   | [`NativeTokenLimit`](../type-aliases/NativeTokenLimit.mdx) | The limit to set for native token spending |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `limit`
+      </td>
+
+      <td>
+        [`NativeTokenLimit`](../type-aliases/NativeTokenLimit.mdx)
+      </td>
+
+      <td>
+        The limit to set for native token spending
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 #### Returns
 
@@ -273,7 +411,7 @@ The instance for chaining
 setRequiredPaymaster(paymaster): SessionKeyPermissionsBuilder;
 ```
 
-Defined in: [account-kit/smart-contracts/src/msca/plugins/session-key/permissions.ts:240](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/msca/plugins/session-key/permissions.ts#L240)
+Defined in: [account-kit/smart-contracts/src/msca/plugins/session-key/permissions.ts:240](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/msca/plugins/session-key/permissions.ts#L240)
 
 Sets the required paymaster address.
 
@@ -288,9 +426,32 @@ builder.setRequiredPaymaster("0x1234");
 
 #### Parameters
 
-| Parameter   | Type                | Description                            |
-| :---------- | :------------------ | :------------------------------------- |
-| `paymaster` | `` `0x${string}` `` | the address of the paymaster to be set |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `paymaster`
+      </td>
+
+      <td>
+        `` `0x${string}` ``
+      </td>
+
+      <td>
+        the address of the paymaster to be set
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 #### Returns
 
@@ -306,7 +467,7 @@ the current instance for method chaining
 setTimeRange(timeRange): SessionKeyPermissionsBuilder;
 ```
 
-Defined in: [account-kit/smart-contracts/src/msca/plugins/session-key/permissions.ts:155](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/msca/plugins/session-key/permissions.ts#L155)
+Defined in: [account-kit/smart-contracts/src/msca/plugins/session-key/permissions.ts:155](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/msca/plugins/session-key/permissions.ts#L155)
 
 Sets the time range for an object and returns the object itself for chaining.
 
@@ -324,9 +485,32 @@ builder.setTimeRange({
 
 #### Parameters
 
-| Parameter   | Type                                         | Description              |
-| :---------- | :------------------------------------------- | :----------------------- |
-| `timeRange` | [`TimeRange`](../type-aliases/TimeRange.mdx) | The time range to be set |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `timeRange`
+      </td>
+
+      <td>
+        [`TimeRange`](../type-aliases/TimeRange.mdx)
+      </td>
+
+      <td>
+        The time range to be set
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 #### Returns
 

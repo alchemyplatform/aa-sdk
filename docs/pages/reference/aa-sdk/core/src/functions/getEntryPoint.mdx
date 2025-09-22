@@ -34,21 +34,75 @@ function getEntryPoint<TEntryPointVersion, TChain>(
 ): EntryPointDefRegistry<TChain>[TEntryPointVersion];
 ```
 
-Defined in: [aa-sdk/core/src/entrypoint/index.ts:40](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/entrypoint/index.ts#L40)
+Defined in: [aa-sdk/core/src/entrypoint/index.ts:40](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/entrypoint/index.ts#L40)
 
 ### Type Parameters
 
-| Type Parameter                                                                                                        | Default type                                                                                                |
-| :-------------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------- |
-| `TEntryPointVersion` _extends_ keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase.mdx)\<`unknown`> | `OneOf`\<`"0.6.0"`, keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase.mdx)\<`unknown`>> |
-| `TChain` _extends_ `Chain`                                                                                            | `Chain`                                                                                                     |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TEntryPointVersion` *extends* keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase.mdx)\<`unknown`>
+      </td>
+
+      <td>
+        `OneOf`\<`"0.6.0"`, keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase.mdx)\<`unknown`>>
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TChain` *extends* `Chain`
+      </td>
+
+      <td>
+        `Chain`
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ### Parameters
 
-| Parameter | Type                                                                                      |
-| :-------- | :---------------------------------------------------------------------------------------- |
-| `chain`   | `TChain`                                                                                  |
-| `options` | [`GetEntryPointOptions`](../type-aliases/GetEntryPointOptions.mdx)\<`TEntryPointVersion`> |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `chain`
+      </td>
+
+      <td>
+        `TChain`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `options`
+      </td>
+
+      <td>
+        [`GetEntryPointOptions`](../type-aliases/GetEntryPointOptions.mdx)\<`TEntryPointVersion`>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ### Returns
 
@@ -63,21 +117,75 @@ function getEntryPoint<TEntryPointVersion, TChain>(
 ): EntryPointDefRegistry<TChain>[TEntryPointVersion];
 ```
 
-Defined in: [aa-sdk/core/src/entrypoint/index.ts:48](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/entrypoint/index.ts#L48)
+Defined in: [aa-sdk/core/src/entrypoint/index.ts:48](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/entrypoint/index.ts#L48)
 
 ### Type Parameters
 
-| Type Parameter                                                                                                                             | Default type                                                                                                |
-| :----------------------------------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------- |
-| `TEntryPointVersion` _extends_ `OneOf`\<`"0.6.0"`, keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase.mdx)\<`unknown`>> | `OneOf`\<`"0.6.0"`, keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase.mdx)\<`unknown`>> |
-| `TChain` _extends_ `Chain`                                                                                                                 | `Chain`                                                                                                     |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TEntryPointVersion` *extends* `OneOf`\<`"0.6.0"`, keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase.mdx)\<`unknown`>>
+      </td>
+
+      <td>
+        `OneOf`\<`"0.6.0"`, keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase.mdx)\<`unknown`>>
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TChain` *extends* `Chain`
+      </td>
+
+      <td>
+        `Chain`
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ### Parameters
 
-| Parameter  | Type                                                                                      |
-| :--------- | :---------------------------------------------------------------------------------------- |
-| `chain`    | `TChain`                                                                                  |
-| `options?` | [`GetEntryPointOptions`](../type-aliases/GetEntryPointOptions.mdx)\<`TEntryPointVersion`> |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `chain`
+      </td>
+
+      <td>
+        `TChain`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `options?`
+      </td>
+
+      <td>
+        [`GetEntryPointOptions`](../type-aliases/GetEntryPointOptions.mdx)\<`TEntryPointVersion`>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ### Returns
 
@@ -92,20 +200,65 @@ function getEntryPoint<TChain>(
 ): OneOf<"0.6.0", keyof EntryPointRegistryBase<unknown>>;
 ```
 
-Defined in: [aa-sdk/core/src/entrypoint/index.ts:57](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/entrypoint/index.ts#L57)
+Defined in: [aa-sdk/core/src/entrypoint/index.ts:57](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/entrypoint/index.ts#L57)
 
 ### Type Parameters
 
-| Type Parameter             | Default type |
-| :------------------------- | :----------- |
-| `TChain` _extends_ `Chain` | `Chain`      |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TChain` *extends* `Chain`
+      </td>
+
+      <td>
+        `Chain`
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ### Parameters
 
-| Parameter  | Type                                                                                                                                                                             |
-| :--------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `chain`    | `TChain`                                                                                                                                                                         |
-| `options?` | [`GetEntryPointOptions`](../type-aliases/GetEntryPointOptions.mdx)\<`OneOf`\<`"0.6.0"`, keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase.mdx)\<`unknown`>>> |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `chain`
+      </td>
+
+      <td>
+        `TChain`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `options?`
+      </td>
+
+      <td>
+        [`GetEntryPointOptions`](../type-aliases/GetEntryPointOptions.mdx)\<`OneOf`\<`"0.6.0"`, keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase.mdx)\<`unknown`>>>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ### Returns
 

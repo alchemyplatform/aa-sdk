@@ -17,7 +17,7 @@ const updateMultiOwnerLightAccountOwners: <
 ) => Promise<Hex>;
 ```
 
-Defined in: [account-kit/smart-contracts/src/light-account/actions/updateOwners.ts:51](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/light-account/actions/updateOwners.ts#L51)
+Defined in: [account-kit/smart-contracts/src/light-account/actions/updateOwners.ts:51](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/light-account/actions/updateOwners.ts#L51)
 
 Updates the owners of a multi-owner light account. This includes adding new owners and removing existing ones.
 
@@ -44,19 +44,103 @@ const txHash = await updateOwners(lightAccountClient, {
 
 ## Type Parameters
 
-| Type Parameter                           | Default type                                                                             |
-| :--------------------------------------- | :--------------------------------------------------------------------------------------- | ----------- | ----------- | ---------------------------------------------------------------------------------------- | ----------- |
-| `TTransport` _extends_ `Transport`       | `Transport`                                                                              |
-| `TChain` _extends_ `Chain`               | `undefined`                                                                              | `Chain`     | `undefined` |
-| `TSigner` _extends_ `SmartAccountSigner` | `SmartAccountSigner`                                                                     |
-| `TAccount` _extends_                     | [`accountLoupeActions`](../../../core/src/variables/accountLoupeActions.mdx)\<`TSigner`> | `undefined` |             | [`accountLoupeActions`](../../../core/src/variables/accountLoupeActions.mdx)\<`TSigner`> | `undefined` |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TTransport` *extends* `Transport`
+      </td>
+
+      <td>
+        `Transport`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TChain` *extends* `Chain` | `undefined`
+      </td>
+
+      <td>
+        `Chain` | `undefined`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TSigner` *extends* `SmartAccountSigner`
+      </td>
+
+      <td>
+        `SmartAccountSigner`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TAccount` *extends*
+        | [`accountLoupeActions`](../../../core/src/variables/accountLoupeActions.mdx)\<`TSigner`>
+        | `undefined`
+      </td>
+
+      <td>
+        | [`accountLoupeActions`](../../../core/src/variables/accountLoupeActions.mdx)\<`TSigner`>
+        | `undefined`
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Parameters
 
-| Parameter | Type                                                               | Description                                           |
-| :-------- | :----------------------------------------------------------------- | :---------------------------------------------------- |
-| `client`  | `Client`\<`TTransport`, `TChain`, `TAccount`>                      | The client instance used to interact with the account |
-| `args`    | `UpdateMultiOwnerLightAccountOwnersParams`\<`TSigner`, `TAccount`> | The parameters for updating the account owners        |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `client`
+      </td>
+
+      <td>
+        `Client`\<`TTransport`, `TChain`, `TAccount`>
+      </td>
+
+      <td>
+        The client instance used to interact with the account
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `args`
+      </td>
+
+      <td>
+        `UpdateMultiOwnerLightAccountOwnersParams`\<`TSigner`, `TAccount`>
+      </td>
+
+      <td>
+        The parameters for updating the account owners
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Returns
 

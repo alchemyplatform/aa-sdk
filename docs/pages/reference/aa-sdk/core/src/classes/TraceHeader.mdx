@@ -5,7 +5,7 @@ slug: wallets/reference/aa-sdk/core/src/classes/TraceHeader
 layout: reference
 ---
 
-Defined in: [aa-sdk/core/src/utils/traceHeader.ts:31](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/utils/traceHeader.ts#L31)
+Defined in: [aa-sdk/core/src/utils/traceHeader.ts:31](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/utils/traceHeader.ts#L31)
 
 Some tools that are useful when dealing with the values
 of the trace header. Follows the W3C trace context standard.
@@ -26,18 +26,80 @@ new TraceHeader(
    traceState): TraceHeader;
 ```
 
-Defined in: [aa-sdk/core/src/utils/traceHeader.ts:45](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/utils/traceHeader.ts#L45)
+Defined in: [aa-sdk/core/src/utils/traceHeader.ts:45](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/utils/traceHeader.ts#L45)
 
 Initializes a new instance with the provided trace identifiers and state information.
 
 #### Parameters
 
-| Parameter    | Type                          | Description                                              |
-| :----------- | :---------------------------- | :------------------------------------------------------- |
-| `traceId`    | `string`                      | The unique identifier for the trace                      |
-| `parentId`   | `string`                      | The identifier of the parent trace                       |
-| `traceFlags` | `string`                      | Flags containing trace-related options                   |
-| `traceState` | `Record`\<`string`, `string`> | The trace state information for additional trace context |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `traceId`
+      </td>
+
+      <td>
+        `string`
+      </td>
+
+      <td>
+        The unique identifier for the trace
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `parentId`
+      </td>
+
+      <td>
+        `string`
+      </td>
+
+      <td>
+        The identifier of the parent trace
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `traceFlags`
+      </td>
+
+      <td>
+        `string`
+      </td>
+
+      <td>
+        Flags containing trace-related options
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `traceState`
+      </td>
+
+      <td>
+        `Record`\<`string`, `string`>
+      </td>
+
+      <td>
+        The trace state information for additional trace context
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 #### Returns
 
@@ -45,12 +107,91 @@ Initializes a new instance with the provided trace identifiers and state informa
 
 ## Properties
 
-| Property                           | Modifier   | Type                          | Defined in                                                                                                                                                                  |
-| :--------------------------------- | :--------- | :---------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| <a id="parentid" /> `parentId`     | `readonly` | `string`                      | [aa-sdk/core/src/utils/traceHeader.ts:33](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/utils/traceHeader.ts#L33) |
-| <a id="traceflags" /> `traceFlags` | `readonly` | `string`                      | [aa-sdk/core/src/utils/traceHeader.ts:34](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/utils/traceHeader.ts#L34) |
-| <a id="traceid" /> `traceId`       | `readonly` | `string`                      | [aa-sdk/core/src/utils/traceHeader.ts:32](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/utils/traceHeader.ts#L32) |
-| <a id="tracestate" /> `traceState` | `readonly` | `Record`\<`string`, `string`> | [aa-sdk/core/src/utils/traceHeader.ts:35](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/utils/traceHeader.ts#L35) |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Property</th>
+      <th align="left">Modifier</th>
+      <th align="left">Type</th>
+      <th align="left">Defined in</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        <a id="parentid" /> `parentId`
+      </td>
+
+      <td>
+        `readonly`
+      </td>
+
+      <td>
+        `string`
+      </td>
+
+      <td>
+        [aa-sdk/core/src/utils/traceHeader.ts:33](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/utils/traceHeader.ts#L33)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="traceflags" /> `traceFlags`
+      </td>
+
+      <td>
+        `readonly`
+      </td>
+
+      <td>
+        `string`
+      </td>
+
+      <td>
+        [aa-sdk/core/src/utils/traceHeader.ts:34](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/utils/traceHeader.ts#L34)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="traceid" /> `traceId`
+      </td>
+
+      <td>
+        `readonly`
+      </td>
+
+      <td>
+        `string`
+      </td>
+
+      <td>
+        [aa-sdk/core/src/utils/traceHeader.ts:32](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/utils/traceHeader.ts#L32)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="tracestate" /> `traceState`
+      </td>
+
+      <td>
+        `readonly`
+      </td>
+
+      <td>
+        `Record`\<`string`, `string`>
+      </td>
+
+      <td>
+        [aa-sdk/core/src/utils/traceHeader.ts:35](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/utils/traceHeader.ts#L35)
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Methods
 
@@ -60,7 +201,7 @@ Initializes a new instance with the provided trace identifiers and state informa
 toTraceHeader(): object;
 ```
 
-Defined in: [aa-sdk/core/src/utils/traceHeader.ts:123](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/utils/traceHeader.ts#L123)
+Defined in: [aa-sdk/core/src/utils/traceHeader.ts:123](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/utils/traceHeader.ts#L123)
 
 Should be able to convert the trace header to the format that is used in the headers of an http request
 
@@ -72,10 +213,46 @@ Should be able to convert the trace header to the format that is used in the hea
 
 The trace header in the format of a record, used in our http client
 
-| Name          | Type                                     | Defined in                                                                                                                                                                    |
-| :------------ | :--------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `traceparent` | `` `00-${string}-${string}-${string}` `` | [aa-sdk/core/src/utils/traceHeader.ts:125](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/utils/traceHeader.ts#L125) |
-| `tracestate`  | `string`                                 | [aa-sdk/core/src/utils/traceHeader.ts:126](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/utils/traceHeader.ts#L126) |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Name</th>
+      <th align="left">Type</th>
+      <th align="left">Defined in</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `traceparent`
+      </td>
+
+      <td>
+        `` `00-${string}-${string}-${string}` ``
+      </td>
+
+      <td>
+        [aa-sdk/core/src/utils/traceHeader.ts:125](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/utils/traceHeader.ts#L125)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `tracestate`
+      </td>
+
+      <td>
+        `string`
+      </td>
+
+      <td>
+        [aa-sdk/core/src/utils/traceHeader.ts:126](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/utils/traceHeader.ts#L126)
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ---
 
@@ -85,7 +262,7 @@ The trace header in the format of a record, used in our http client
 withEvent(eventName): TraceHeader;
 ```
 
-Defined in: [aa-sdk/core/src/utils/traceHeader.ts:145](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/utils/traceHeader.ts#L145)
+Defined in: [aa-sdk/core/src/utils/traceHeader.ts:145](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/utils/traceHeader.ts#L145)
 
 Should be able to create a new trace header with a new event in the trace state,
 as the key of the eventName as breadcrumbs appending onto previous breadcrumbs with the - infix if exists. And the
@@ -95,9 +272,32 @@ trace parent gets updated as according to the docs
 
 #### Parameters
 
-| Parameter   | Type     | Description              |
-| :---------- | :------- | :----------------------- |
-| `eventName` | `string` | The key of the new event |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `eventName`
+      </td>
+
+      <td>
+        `string`
+      </td>
+
+      <td>
+        The key of the new event
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 #### Returns
 
@@ -113,7 +313,7 @@ The new trace header
 static default(): TraceHeader;
 ```
 
-Defined in: [aa-sdk/core/src/utils/traceHeader.ts:66](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/utils/traceHeader.ts#L66)
+Defined in: [aa-sdk/core/src/utils/traceHeader.ts:66](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/utils/traceHeader.ts#L66)
 
 Creating a default trace id that is a random setup for both trace id and parent id
 
@@ -133,7 +333,7 @@ A default trace header
 static fromTraceHeader(headers): undefined | TraceHeader;
 ```
 
-Defined in: [aa-sdk/core/src/utils/traceHeader.ts:84](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/utils/traceHeader.ts#L84)
+Defined in: [aa-sdk/core/src/utils/traceHeader.ts:84](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/utils/traceHeader.ts#L84)
 
 Should be able to consume a trace header from the headers of an http request
 
@@ -141,9 +341,32 @@ Should be able to consume a trace header from the headers of an http request
 
 #### Parameters
 
-| Parameter | Type                          | Description                       |
-| :-------- | :---------------------------- | :-------------------------------- |
-| `headers` | `Record`\<`string`, `string`> | The headers from the http request |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `headers`
+      </td>
+
+      <td>
+        `Record`\<`string`, `string`>
+      </td>
+
+      <td>
+        The headers from the http request
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 #### Returns
 

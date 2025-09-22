@@ -11,12 +11,74 @@ type AlchemyTransportConfig =
   | (SplitTransportConfig & Never<AlchemyConnectionConfig> & object);
 ```
 
-Defined in: [account-kit/infra/src/alchemyTransport.ts:59](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/infra/src/alchemyTransport.ts#L59)
+Defined in: [account-kit/infra/src/alchemyTransport.ts:59](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/infra/src/alchemyTransport.ts#L59)
 
 ## Type Declaration
 
-| Name            | Type                                                     | Description                             | Defined in                                                                                                                                                                            |
-| :-------------- | :------------------------------------------------------- | :-------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `fetchOptions?` | `NoUndefined`\<`HttpTransportConfig`\[`"fetchOptions"`]> | -                                       | [account-kit/infra/src/alchemyTransport.ts:67](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/infra/src/alchemyTransport.ts#L67) |
-| `retryCount?`   | `TransportConfig`\[`"retryCount"`]                       | The max number of times to retry.       | [account-kit/infra/src/alchemyTransport.ts:64](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/infra/src/alchemyTransport.ts#L64) |
-| `retryDelay?`   | `TransportConfig`\[`"retryDelay"`]                       | The base delay (in ms) between retries. | [account-kit/infra/src/alchemyTransport.ts:66](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/infra/src/alchemyTransport.ts#L66) |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Name</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+      <th align="left">Defined in</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `fetchOptions?`
+      </td>
+
+      <td>
+        `NoUndefined`\<`HttpTransportConfig`\[`"fetchOptions"`]>
+      </td>
+
+      <td>
+        ‐
+      </td>
+
+      <td>
+        [account-kit/infra/src/alchemyTransport.ts:67](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/infra/src/alchemyTransport.ts#L67)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `retryCount?`
+      </td>
+
+      <td>
+        `TransportConfig`\[`"retryCount"`]
+      </td>
+
+      <td>
+        The max number of times to retry.
+      </td>
+
+      <td>
+        [account-kit/infra/src/alchemyTransport.ts:64](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/infra/src/alchemyTransport.ts#L64)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `retryDelay?`
+      </td>
+
+      <td>
+        `TransportConfig`\[`"retryDelay"`]
+      </td>
+
+      <td>
+        The base delay (in ms) between retries.
+      </td>
+
+      <td>
+        [account-kit/infra/src/alchemyTransport.ts:66](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/infra/src/alchemyTransport.ts#L66)
+      </td>
+    </tr>
+
+  </tbody>
+</table>

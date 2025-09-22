@@ -10,20 +10,109 @@ type UseDropAndReplaceUserOperationResult<TEntryPointVersion, TAccount> =
   object;
 ```
 
-Defined in: [account-kit/react/src/hooks/useDropAndReplaceUserOperation.ts:30](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/react/src/hooks/useDropAndReplaceUserOperation.ts#L30)
+Defined in: [account-kit/react/src/hooks/useDropAndReplaceUserOperation.ts:30](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/react/src/hooks/useDropAndReplaceUserOperation.ts#L30)
 
 ## Type Parameters
 
-| Type Parameter                                                                                    | Default type                                                                 |
-| :------------------------------------------------------------------------------------------------ | :--------------------------------------------------------------------------- |
-| `TEntryPointVersion` _extends_ `GetEntryPointFromAccount`\<`TAccount`>                            | -                                                                            |
-| `TAccount` _extends_ [`accountLoupeActions`](../../../core/src/variables/accountLoupeActions.mdx) | [`accountLoupeActions`](../../../core/src/variables/accountLoupeActions.mdx) |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TEntryPointVersion` *extends* `GetEntryPointFromAccount`\<`TAccount`>
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TAccount` *extends* [`accountLoupeActions`](../../../core/src/variables/accountLoupeActions.mdx)
+      </td>
+
+      <td>
+        [`accountLoupeActions`](../../../core/src/variables/accountLoupeActions.mdx)
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Properties
 
-| Property                                                                             | Type                                                                                                                                             | Defined in                                                                                                                                                                                                                    |
-| :----------------------------------------------------------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| <a id="dropandreplaceuseroperation" /> `dropAndReplaceUserOperation`                 | `UseMutateFunction`\<`SendUserOperationResult`\<`TEntryPointVersion`>, `Error`, `DropAndReplaceUserOperationParameters`\<`TAccount`>, `unknown`> | [account-kit/react/src/hooks/useDropAndReplaceUserOperation.ts:34](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/react/src/hooks/useDropAndReplaceUserOperation.ts#L34) |
-| <a id="dropandreplaceuseroperationresult" /> `dropAndReplaceUserOperationResult`     | `SendUserOperationResult`\<`TEntryPointVersion`>                                                                                                 | `undefined`                                                                                                                                                                                                                   | [account-kit/react/src/hooks/useDropAndReplaceUserOperation.ts:40](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/react/src/hooks/useDropAndReplaceUserOperation.ts#L40) |
-| <a id="error" /> `error`                                                             | `Error`                                                                                                                                          | `null`                                                                                                                                                                                                                        | [account-kit/react/src/hooks/useDropAndReplaceUserOperation.ts:44](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/react/src/hooks/useDropAndReplaceUserOperation.ts#L44) |
-| <a id="isdroppingandreplacinguseroperation" /> `isDroppingAndReplacingUserOperation` | `boolean`                                                                                                                                        | [account-kit/react/src/hooks/useDropAndReplaceUserOperation.ts:43](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/react/src/hooks/useDropAndReplaceUserOperation.ts#L43) |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Property</th>
+      <th align="left">Type</th>
+      <th align="left">Defined in</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        <a id="dropandreplaceuseroperation" /> `dropAndReplaceUserOperation`
+      </td>
+
+      <td>
+        `UseMutateFunction`\<`SendUserOperationResult`\<`TEntryPointVersion`>, `Error`, `DropAndReplaceUserOperationParameters`\<`TAccount`>, `unknown`>
+      </td>
+
+      <td>
+        [account-kit/react/src/hooks/useDropAndReplaceUserOperation.ts:34](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/react/src/hooks/useDropAndReplaceUserOperation.ts#L34)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="dropandreplaceuseroperationresult" /> `dropAndReplaceUserOperationResult`
+      </td>
+
+      <td>
+        `SendUserOperationResult`\<`TEntryPointVersion`> | `undefined`
+      </td>
+
+      <td>
+        [account-kit/react/src/hooks/useDropAndReplaceUserOperation.ts:40](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/react/src/hooks/useDropAndReplaceUserOperation.ts#L40)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="error" /> `error`
+      </td>
+
+      <td>
+        `Error` | `null`
+      </td>
+
+      <td>
+        [account-kit/react/src/hooks/useDropAndReplaceUserOperation.ts:44](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/react/src/hooks/useDropAndReplaceUserOperation.ts#L44)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="isdroppingandreplacinguseroperation" /> `isDroppingAndReplacingUserOperation`
+      </td>
+
+      <td>
+        `boolean`
+      </td>
+
+      <td>
+        [account-kit/react/src/hooks/useDropAndReplaceUserOperation.ts:43](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/react/src/hooks/useDropAndReplaceUserOperation.ts#L43)
+      </td>
+    </tr>
+
+  </tbody>
+</table>

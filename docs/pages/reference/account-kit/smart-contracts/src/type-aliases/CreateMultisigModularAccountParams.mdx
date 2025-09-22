@@ -23,24 +23,161 @@ type CreateMultisigModularAccountParams<
   EntryPointParameter<TEntryPointVersion, Chain>;
 ```
 
-Defined in: [account-kit/smart-contracts/src/msca/account/multisigAccount.ts:38](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/msca/account/multisigAccount.ts#L38)
+Defined in: [account-kit/smart-contracts/src/msca/account/multisigAccount.ts:38](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/msca/account/multisigAccount.ts#L38)
 
 ## Type Declaration
 
-| Name              | Type                                                                 | Defined in                                                                                                                                                                                                                        |
-| :---------------- | :------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `accountAddress?` | [`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx)    | [account-kit/smart-contracts/src/msca/account/multisigAccount.ts:57](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/msca/account/multisigAccount.ts#L57) |
-| `factoryAddress?` | [`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx)    | [account-kit/smart-contracts/src/msca/account/multisigAccount.ts:53](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/msca/account/multisigAccount.ts#L53) |
-| `initCode?`       | `Hex`                                                                | [account-kit/smart-contracts/src/msca/account/multisigAccount.ts:54](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/msca/account/multisigAccount.ts#L54) |
-| `owners?`         | [`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx)\[] | [account-kit/smart-contracts/src/msca/account/multisigAccount.ts:56](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/msca/account/multisigAccount.ts#L56) |
-| `salt?`           | `bigint`                                                             | [account-kit/smart-contracts/src/msca/account/multisigAccount.ts:52](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/msca/account/multisigAccount.ts#L52) |
-| `signer`          | `TSigner`                                                            | [account-kit/smart-contracts/src/msca/account/multisigAccount.ts:51](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/msca/account/multisigAccount.ts#L51) |
-| `threshold`       | `bigint`                                                             | [account-kit/smart-contracts/src/msca/account/multisigAccount.ts:55](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/msca/account/multisigAccount.ts#L55) |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Name</th>
+      <th align="left">Type</th>
+      <th align="left">Defined in</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `accountAddress?`
+      </td>
+
+      <td>
+        [`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx)
+      </td>
+
+      <td>
+        [account-kit/smart-contracts/src/msca/account/multisigAccount.ts:57](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/msca/account/multisigAccount.ts#L57)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `factoryAddress?`
+      </td>
+
+      <td>
+        [`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx)
+      </td>
+
+      <td>
+        [account-kit/smart-contracts/src/msca/account/multisigAccount.ts:53](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/msca/account/multisigAccount.ts#L53)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `initCode?`
+      </td>
+
+      <td>
+        `Hex`
+      </td>
+
+      <td>
+        [account-kit/smart-contracts/src/msca/account/multisigAccount.ts:54](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/msca/account/multisigAccount.ts#L54)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `owners?`
+      </td>
+
+      <td>
+        [`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx)\[]
+      </td>
+
+      <td>
+        [account-kit/smart-contracts/src/msca/account/multisigAccount.ts:56](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/msca/account/multisigAccount.ts#L56)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `salt?`
+      </td>
+
+      <td>
+        `bigint`
+      </td>
+
+      <td>
+        [account-kit/smart-contracts/src/msca/account/multisigAccount.ts:52](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/msca/account/multisigAccount.ts#L52)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `signer`
+      </td>
+
+      <td>
+        `TSigner`
+      </td>
+
+      <td>
+        [account-kit/smart-contracts/src/msca/account/multisigAccount.ts:51](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/msca/account/multisigAccount.ts#L51)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `threshold`
+      </td>
+
+      <td>
+        `bigint`
+      </td>
+
+      <td>
+        [account-kit/smart-contracts/src/msca/account/multisigAccount.ts:55](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/msca/account/multisigAccount.ts#L55)
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Type Parameters
 
-| Type Parameter                           | Default type         |
-| :--------------------------------------- | :------------------- |
-| `TTransport` _extends_ `Transport`       | `Transport`          |
-| `TSigner` _extends_ `SmartAccountSigner` | `SmartAccountSigner` |
-| `TEntryPointVersion` _extends_ `"0.6.0"` | `"0.6.0"`            |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TTransport` *extends* `Transport`
+      </td>
+
+      <td>
+        `Transport`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TSigner` *extends* `SmartAccountSigner`
+      </td>
+
+      <td>
+        `SmartAccountSigner`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TEntryPointVersion` *extends* `"0.6.0"`
+      </td>
+
+      <td>
+        `"0.6.0"`
+      </td>
+    </tr>
+
+  </tbody>
+</table>

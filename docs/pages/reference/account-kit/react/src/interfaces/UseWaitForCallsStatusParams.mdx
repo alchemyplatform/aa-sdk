@@ -5,7 +5,7 @@ slug: wallets/reference/account-kit/react/src/interfaces/UseWaitForCallsStatusPa
 layout: reference
 ---
 
-Defined in: [account-kit/react/src/hooks/useWaitForCallsStatus.ts:14](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/react/src/hooks/useWaitForCallsStatus.ts#L14)
+Defined in: [account-kit/react/src/hooks/useWaitForCallsStatus.ts:14](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/react/src/hooks/useWaitForCallsStatus.ts#L14)
 
 ## Extends
 
@@ -13,13 +13,239 @@ Defined in: [account-kit/react/src/hooks/useWaitForCallsStatus.ts:14](https://gi
 
 ## Properties
 
-| Property                                      | Type                        | Description                                                                                                      | Inherited from                                                                                                | Defined in                                                                                                                                                                                                  |
-| :-------------------------------------------- | :-------------------------- | :--------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------ | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| <a id="client" /> `client`                    | `any`                       | -                                                                                                                | -                                                                                                             | [account-kit/react/src/hooks/useWaitForCallsStatus.ts:16](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/react/src/hooks/useWaitForCallsStatus.ts#L16) |
-| <a id="id" /> `id`                            | `undefined`                 | `` `0x${string}` ``                                                                                              | -                                                                                                             | -                                                                                                                                                                                                           | [account-kit/react/src/hooks/useWaitForCallsStatus.ts:17](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/react/src/hooks/useWaitForCallsStatus.ts#L17) |
-| <a id="pollinginterval" /> `pollingInterval?` | `number`                    | Polling frequency (in ms). Defaults to the client's pollingInterval config. **Default** `client.pollingInterval` | `Omit.pollingInterval`                                                                                        | node_modules/viem/\_types/actions/wallet/waitForCallsStatus.d.ts:20                                                                                                                                         |
-| <a id="retrycount" /> `retryCount?`           | `number`                    | Number of times to retry if the call bundle failed. **Default** `4 (exponential backoff)`                        | `Omit.retryCount`                                                                                             | node_modules/viem/\_types/actions/wallet/waitForCallsStatus.d.ts:25                                                                                                                                         |
-| <a id="retrydelay" /> `retryDelay?`           | `number`                    | (`config`) => `number`                                                                                           | Time to wait (in ms) between retries. **Default** `({ count }) => ~~(1 << count) * 200` (exponential backoff) | `Omit.retryDelay`                                                                                                                                                                                           | node_modules/viem/\_types/actions/wallet/waitForCallsStatus.d.ts:30                                                                                                                                         |
-| <a id="status" /> `status?`                   | (`parameters`) => `boolean` | The status range to wait for. **Default** `(status) => status >= 200`                                            | `Omit.status`                                                                                                 | node_modules/viem/\_types/actions/wallet/waitForCallsStatus.d.ts:36                                                                                                                                         |
-| <a id="throwonfailure" /> `throwOnFailure?`   | `boolean`                   | Whether to throw an error if the call bundle fails. **Default** `false`                                          | `Omit.throwOnFailure`                                                                                         | node_modules/viem/\_types/actions/wallet/waitForCallsStatus.d.ts:42                                                                                                                                         |
-| <a id="timeout" /> `timeout?`                 | `number`                    | Optional timeout (in milliseconds) to wait before stopping polling. **Default** `60_000`                         | `Omit.timeout`                                                                                                | node_modules/viem/\_types/actions/wallet/waitForCallsStatus.d.ts:48                                                                                                                                         |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Property</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+      <th align="left">Inherited from</th>
+      <th align="left">Defined in</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        <a id="client" /> `client`
+      </td>
+
+      <td>
+        `any`
+      </td>
+
+      <td>
+        ‐
+      </td>
+
+      <td>
+        ‐
+      </td>
+
+      <td>
+        [account-kit/react/src/hooks/useWaitForCallsStatus.ts:16](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/react/src/hooks/useWaitForCallsStatus.ts#L16)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="id" /> `id`
+      </td>
+
+      <td>
+        `undefined` | `` `0x${string}` ``
+      </td>
+
+      <td>
+        ‐
+      </td>
+
+      <td>
+        ‐
+      </td>
+
+      <td>
+        [account-kit/react/src/hooks/useWaitForCallsStatus.ts:17](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/react/src/hooks/useWaitForCallsStatus.ts#L17)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="pollinginterval" /> `pollingInterval?`
+      </td>
+
+      <td>
+        `number`
+      </td>
+
+      <td>
+        Polling frequency (in ms). Defaults to the client's pollingInterval config.
+
+        **Default**
+
+        ```ts
+        client.pollingInterval
+        ```
+      </td>
+
+      <td>
+        ```ts
+        Omit.pollingInterval
+        ```
+      </td>
+
+      <td>
+        node\_modules/viem/\_types/actions/wallet/waitForCallsStatus.d.ts:20
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="retrycount" /> `retryCount?`
+      </td>
+
+      <td>
+        `number`
+      </td>
+
+      <td>
+        Number of times to retry if the call bundle failed.
+
+        **Default**
+
+        ```ts
+        4 (exponential backoff)
+        ```
+      </td>
+
+      <td>
+        ```ts
+        Omit.retryCount
+        ```
+      </td>
+
+      <td>
+        node\_modules/viem/\_types/actions/wallet/waitForCallsStatus.d.ts:25
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="retrydelay" /> `retryDelay?`
+      </td>
+
+      <td>
+        `number` | (`config`) => `number`
+      </td>
+
+      <td>
+        Time to wait (in ms) between retries.
+
+        **Default**
+
+        `({ count }) => ~~(1 << count) * 200` (exponential backoff)
+      </td>
+
+      <td>
+        ```ts
+        Omit.retryDelay
+        ```
+      </td>
+
+      <td>
+        node\_modules/viem/\_types/actions/wallet/waitForCallsStatus.d.ts:30
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="status" /> `status?`
+      </td>
+
+      <td>
+        (`parameters`) => `boolean`
+      </td>
+
+      <td>
+        The status range to wait for.
+
+        **Default**
+
+        ```ts
+        (status) => status >= 200
+        ```
+      </td>
+
+      <td>
+        ```ts
+        Omit.status
+        ```
+      </td>
+
+      <td>
+        node\_modules/viem/\_types/actions/wallet/waitForCallsStatus.d.ts:36
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="throwonfailure" /> `throwOnFailure?`
+      </td>
+
+      <td>
+        `boolean`
+      </td>
+
+      <td>
+        Whether to throw an error if the call bundle fails.
+
+        **Default**
+
+        ```ts
+        false
+        ```
+      </td>
+
+      <td>
+        ```ts
+        Omit.throwOnFailure
+        ```
+      </td>
+
+      <td>
+        node\_modules/viem/\_types/actions/wallet/waitForCallsStatus.d.ts:42
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="timeout" /> `timeout?`
+      </td>
+
+      <td>
+        `number`
+      </td>
+
+      <td>
+        Optional timeout (in milliseconds) to wait before stopping polling.
+
+        **Default**
+
+        ```ts
+        60_000
+        ```
+      </td>
+
+      <td>
+        ```ts
+        Omit.timeout
+        ```
+      </td>
+
+      <td>
+        node\_modules/viem/\_types/actions/wallet/waitForCallsStatus.d.ts:48
+      </td>
+    </tr>
+
+  </tbody>
+</table>

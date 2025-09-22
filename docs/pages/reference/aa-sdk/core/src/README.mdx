@@ -7,252 +7,3003 @@ layout: reference
 
 ## Enumerations
 
-| Enumeration                                         | Description |
-| :-------------------------------------------------- | :---------- |
-| [DeploymentState](enumerations/DeploymentState.mdx) | -           |
-| [LogLevel](enumerations/LogLevel.mdx)               | -           |
-| [RoundingMode](enumerations/RoundingMode.mdx)       | -           |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Enumeration</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        [DeploymentState](enumerations/DeploymentState.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [LogLevel](enumerations/LogLevel.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [RoundingMode](enumerations/RoundingMode.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Classes
 
-| Class                                                                                  | Description                                                                                                                                                                                                                                                                                                                                                  |
-| :------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [AccountNotFoundError](classes/AccountNotFoundError.mdx)                               | This error is thrown when an account could not be found to execute a specific action. It extends the `BaseError` class.                                                                                                                                                                                                                                      |
-| [AccountRequiresOwnerError](classes/AccountRequiresOwnerError.mdx)                     | Represents an error that occurs when an account requires an owner to execute but none is provided.                                                                                                                                                                                                                                                           |
-| [BaseError](classes/BaseError.mdx)                                                     | A custom error class that extends from `ViemBaseError`. This class allows for error messages to include links to relevant documentation based on provided `docsPath` and `docsSlug` parameters. This is based on on viem's BaseError type (obviously from the import and extend) we want the errors here to point to our docs if we supply a docsPath though |
-| [BatchExecutionNotSupportedError](classes/BatchExecutionNotSupportedError.mdx)         | Represents an error indicating that batch execution is not supported for a specific account type.                                                                                                                                                                                                                                                            |
-| [ChainNotFoundError](classes/ChainNotFoundError.mdx)                                   | Error class representing a "Chain Not Found" error, typically thrown when no chain is supplied to the client.                                                                                                                                                                                                                                                |
-| [DefaultFactoryNotDefinedError](classes/DefaultFactoryNotDefinedError.mdx)             | Represents an error that is thrown when no default factory is defined for a specific account type on a given chain and entry point version. This error suggests providing an override via the `factoryAddress` parameter when creating an account.                                                                                                           |
-| [EntityIdOverrideError](classes/EntityIdOverrideError.mdx)                             | Error class denoting that the provided entity id is invalid because it's overriding the native entity id.                                                                                                                                                                                                                                                    |
-| [EntryPointNotFoundError](classes/EntryPointNotFoundError.mdx)                         | Represents an error thrown when an entry point is not found for a specific chain and entry point version. This error indicates that a default entry point does not exist for the given chain and version, and suggests providing an override.                                                                                                                |
-| [FailedToFindTransactionError](classes/FailedToFindTransactionError.mdx)               | Represents an error that occurs when a transaction cannot be found for a given user operation. This error extends from `BaseError`. The `hash` of the transaction is provided to indicate which transaction could not be found.                                                                                                                              |
-| [FailedToGetStorageSlotError](classes/FailedToGetStorageSlotError.mdx)                 | Custom error class `FailedToGetStorageSlotError` which is used to signal a failure when attempting to retrieve a storage slot. This error includes the slot and slot descriptor in its message and inherits from `BaseError`.                                                                                                                                |
-| [GetCounterFactualAddressError](classes/GetCounterFactualAddressError.mdx)             | Custom error class for handling errors when getting a counterfactual address. This extends the `BaseError` class and provides a custom error message and name.                                                                                                                                                                                               |
-| [IncompatibleClientError](classes/IncompatibleClientError.mdx)                         | Represents an error thrown when a client is not compatible with the expected client type for a specific method. The error message provides guidance on how to create a compatible client.                                                                                                                                                                    |
-| [IncorrectAccountType](classes/IncorrectAccountType.mdx)                               | Represents an error thrown when an account type does not match the expected type.                                                                                                                                                                                                                                                                            |
-| [InvalidDeferredActionNonce](classes/InvalidDeferredActionNonce.mdx)                   | Error class denoting that the deferred action nonce used is invalid.                                                                                                                                                                                                                                                                                         |
-| [InvalidEntityIdError](classes/InvalidEntityIdError.mdx)                               | Error class denoting that the provided entity id is invalid because it's too large.                                                                                                                                                                                                                                                                          |
-| [InvalidEntryPointError](classes/InvalidEntryPointError.mdx)                           | Represents an error thrown when an invalid entry point version is encountered for a specific chain. This error extends the `BaseError` class.                                                                                                                                                                                                                |
-| [InvalidModularAccountV2Mode](classes/InvalidModularAccountV2Mode.mdx)                 | Error class denoting that the provided ma v2 account mode is invalid.                                                                                                                                                                                                                                                                                        |
-| [InvalidNonceKeyError](classes/InvalidNonceKeyError.mdx)                               | Error class denoting that the nonce key is invalid because its too large.                                                                                                                                                                                                                                                                                    |
-| [InvalidRpcUrlError](classes/InvalidRpcUrlError.mdx)                                   | Represents an error that occurs when an invalid RPC URL is provided. This class extends the `BaseError` class and includes the invalid URL in the error message.                                                                                                                                                                                             |
-| [InvalidSignerTypeError](classes/InvalidSignerTypeError.mdx)                           | Represents an error thrown when an invalid signer type is provided to the SmartAccountSigner.                                                                                                                                                                                                                                                                |
-| [InvalidUserOperationError](classes/InvalidUserOperationError.mdx)                     | Thrown when a UserOperationStruct is not a valid request                                                                                                                                                                                                                                                                                                     |
-| [LocalAccountSigner](classes/LocalAccountSigner.mdx)                                   | Represents a local account signer and provides methods to sign messages and transactions, as well as static methods to create the signer from mnemonic or private key.                                                                                                                                                                                       |
-| [Logger](classes/Logger.mdx)                                                           | Logger class provides static methods for logging at different levels such as error, warn, debug, info, and verbose. This class allows setting log levels and log filters to control the logging behavior.                                                                                                                                                    |
-| [NotAModularAccountV2Error](classes/NotAModularAccountV2Error.mdx)                     | This error is thrown when an account is not a Modular Account V2                                                                                                                                                                                                                                                                                             |
-| [SignTransactionNotSupportedError](classes/SignTransactionNotSupportedError.mdx)       | Error thrown when attempting to sign a transaction that is not supported by smart contracts.                                                                                                                                                                                                                                                                 |
-| [SmartAccountWithSignerRequiredError](classes/SmartAccountWithSignerRequiredError.mdx) | Error class indicating that a smart account operation requires a signer.                                                                                                                                                                                                                                                                                     |
-| [TraceHeader](classes/TraceHeader.mdx)                                                 | Some tools that are useful when dealing with the values of the trace header. Follows the W3C trace context standard.                                                                                                                                                                                                                                         |
-| [TransactionMissingToParamError](classes/TransactionMissingToParamError.mdx)           | Error thrown when a transaction is missing the `to` address parameter. This class extends the `BaseError` class.                                                                                                                                                                                                                                             |
-| [UpgradesNotSupportedError](classes/UpgradesNotSupportedError.mdx)                     | An error class representing the condition where upgrades are not supported for a specific account type. This error extends the `BaseError` class and provides a custom error message based on the account type.                                                                                                                                              |
-| [UpgradeToAndCallNotSupportedError](classes/UpgradeToAndCallNotSupportedError.mdx)     | Represents an error that occurs when an attempt is made to call `UpgradeToAndCall` on an account type that does not support it. Includes the account type in the error message.                                                                                                                                                                              |
-| [WaitForUserOperationError](classes/WaitForUserOperationError.mdx)                     | Error thrown when waiting for user operation request to be mined.                                                                                                                                                                                                                                                                                            |
-| [WalletClientSigner](classes/WalletClientSigner.mdx)                                   | Represents a wallet client signer for smart accounts, providing methods to get the address, sign messages, and sign typed data.                                                                                                                                                                                                                              |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Class</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        [AccountNotFoundError](classes/AccountNotFoundError.mdx)
+      </td>
+
+      <td>
+        This error is thrown when an account could not be found to execute a specific action. It extends the `BaseError` class.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [AccountRequiresOwnerError](classes/AccountRequiresOwnerError.mdx)
+      </td>
+
+      <td>
+        Represents an error that occurs when an account requires an owner to execute but none is provided.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [BaseError](classes/BaseError.mdx)
+      </td>
+
+      <td>
+        A custom error class that extends from `ViemBaseError`. This class allows for error messages to include links to relevant documentation based on provided `docsPath` and `docsSlug` parameters.
+        This is based on on viem's BaseError type (obviously from the import and extend)
+        we want the errors here to point to our docs if we supply a docsPath though
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [BatchExecutionNotSupportedError](classes/BatchExecutionNotSupportedError.mdx)
+      </td>
+
+      <td>
+        Represents an error indicating that batch execution is not supported for a specific account type.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [ChainNotFoundError](classes/ChainNotFoundError.mdx)
+      </td>
+
+      <td>
+        Error class representing a "Chain Not Found" error, typically thrown when no chain is supplied to the client.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [DefaultFactoryNotDefinedError](classes/DefaultFactoryNotDefinedError.mdx)
+      </td>
+
+      <td>
+        Represents an error that is thrown when no default factory is defined for a specific account type on a given chain and entry point version.
+        This error suggests providing an override via the `factoryAddress` parameter when creating an account.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [EntityIdOverrideError](classes/EntityIdOverrideError.mdx)
+      </td>
+
+      <td>
+        Error class denoting that the provided entity id is invalid because it's overriding the native entity id.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [EntryPointNotFoundError](classes/EntryPointNotFoundError.mdx)
+      </td>
+
+      <td>
+        Represents an error thrown when an entry point is not found for a specific chain and entry point version. This error indicates that a default entry point does not exist for the given chain and version, and suggests providing an override.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [FailedToFindTransactionError](classes/FailedToFindTransactionError.mdx)
+      </td>
+
+      <td>
+        Represents an error that occurs when a transaction cannot be found for a given user operation. This error extends from `BaseError`. The `hash` of the transaction is provided to indicate which transaction could not be found.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [FailedToGetStorageSlotError](classes/FailedToGetStorageSlotError.mdx)
+      </td>
+
+      <td>
+        Custom error class `FailedToGetStorageSlotError` which is used to signal a failure when attempting to retrieve a storage slot. This error includes the slot and slot descriptor in its message and inherits from `BaseError`.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [GetCounterFactualAddressError](classes/GetCounterFactualAddressError.mdx)
+      </td>
+
+      <td>
+        Custom error class for handling errors when getting a counterfactual address. This extends the `BaseError` class and provides a custom error message and name.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [IncompatibleClientError](classes/IncompatibleClientError.mdx)
+      </td>
+
+      <td>
+        Represents an error thrown when a client is not compatible with the expected client type for a specific method. The error message provides guidance on how to create a compatible client.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [IncorrectAccountType](classes/IncorrectAccountType.mdx)
+      </td>
+
+      <td>
+        Represents an error thrown when an account type does not match the expected type.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [InvalidDeferredActionNonce](classes/InvalidDeferredActionNonce.mdx)
+      </td>
+
+      <td>
+        Error class denoting that the deferred action nonce used is invalid.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [InvalidEntityIdError](classes/InvalidEntityIdError.mdx)
+      </td>
+
+      <td>
+        Error class denoting that the provided entity id is invalid because it's too large.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [InvalidEntryPointError](classes/InvalidEntryPointError.mdx)
+      </td>
+
+      <td>
+        Represents an error thrown when an invalid entry point version is encountered for a specific chain. This error extends the `BaseError` class.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [InvalidModularAccountV2Mode](classes/InvalidModularAccountV2Mode.mdx)
+      </td>
+
+      <td>
+        Error class denoting that the provided ma v2 account mode is invalid.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [InvalidNonceKeyError](classes/InvalidNonceKeyError.mdx)
+      </td>
+
+      <td>
+        Error class denoting that the nonce key is invalid because its too large.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [InvalidRpcUrlError](classes/InvalidRpcUrlError.mdx)
+      </td>
+
+      <td>
+        Represents an error that occurs when an invalid RPC URL is provided. This class extends the `BaseError` class and includes the invalid URL in the error message.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [InvalidSignerTypeError](classes/InvalidSignerTypeError.mdx)
+      </td>
+
+      <td>
+        Represents an error thrown when an invalid signer type is provided to the SmartAccountSigner.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [InvalidUserOperationError](classes/InvalidUserOperationError.mdx)
+      </td>
+
+      <td>
+        Thrown when a UserOperationStruct is not a valid request
+
+        extends viem BaseError
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [LocalAccountSigner](classes/LocalAccountSigner.mdx)
+      </td>
+
+      <td>
+        Represents a local account signer and provides methods to sign messages and transactions, as well as static methods to create the signer from mnemonic or private key.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [Logger](classes/Logger.mdx)
+      </td>
+
+      <td>
+        Logger class provides static methods for logging at different levels such as error, warn, debug, info, and verbose. This class allows setting log levels and log filters to control the logging behavior.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [NotAModularAccountV2Error](classes/NotAModularAccountV2Error.mdx)
+      </td>
+
+      <td>
+        This error is thrown when an account is not a Modular Account V2
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [SignTransactionNotSupportedError](classes/SignTransactionNotSupportedError.mdx)
+      </td>
+
+      <td>
+        Error thrown when attempting to sign a transaction that is not supported by smart contracts.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [SmartAccountWithSignerRequiredError](classes/SmartAccountWithSignerRequiredError.mdx)
+      </td>
+
+      <td>
+        Error class indicating that a smart account operation requires a signer.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [TraceHeader](classes/TraceHeader.mdx)
+      </td>
+
+      <td>
+        Some tools that are useful when dealing with the values
+        of the trace header. Follows the W3C trace context standard.
+
+        **See**
+
+        https://www.w3.org/TR/trace-context/
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [TransactionMissingToParamError](classes/TransactionMissingToParamError.mdx)
+      </td>
+
+      <td>
+        Error thrown when a transaction is missing the `to` address parameter. This class extends the `BaseError` class.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [UpgradesNotSupportedError](classes/UpgradesNotSupportedError.mdx)
+      </td>
+
+      <td>
+        An error class representing the condition where upgrades are not supported for a specific account type. This error extends the `BaseError` class and provides a custom error message based on the account type.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [UpgradeToAndCallNotSupportedError](classes/UpgradeToAndCallNotSupportedError.mdx)
+      </td>
+
+      <td>
+        Represents an error that occurs when an attempt is made to call `UpgradeToAndCall` on an account type that does not support it. Includes the account type in the error message.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [WaitForUserOperationError](classes/WaitForUserOperationError.mdx)
+      </td>
+
+      <td>
+        Error thrown when waiting for user operation request to be mined.
+
+        Includes the internal error as well as the request that failed. This request
+        can then be used with dropAndReplaceUserOperation to retry the operation.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [WalletClientSigner](classes/WalletClientSigner.mdx)
+      </td>
+
+      <td>
+        Represents a wallet client signer for smart accounts, providing methods to get the address, sign messages, and sign typed data.
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Interfaces
 
-| Interface                                                                           | Description                                                   |
-| :---------------------------------------------------------------------------------- | :------------------------------------------------------------ |
-| [AccountEntryPointRegistry](interfaces/AccountEntryPointRegistry.mdx)               | -                                                             |
-| [EntryPointDefRegistry](interfaces/EntryPointDefRegistry.mdx)                       | -                                                             |
-| [EntryPointRegistry](interfaces/EntryPointRegistry.mdx)                             | -                                                             |
-| [EntryPointRegistryBase](interfaces/EntryPointRegistryBase.mdx)                     | -                                                             |
-| [SmartAccountAuthenticator](interfaces/SmartAccountAuthenticator.mdx)               | Extends the SmartAccountSigner interface with authentication. |
-| [SmartAccountSigner](interfaces/SmartAccountSigner.mdx)                             | A signer that can sign messages and typed data.               |
-| [SplitTransportParams](interfaces/SplitTransportParams.mdx)                         | -                                                             |
-| [UserOperationEstimateGasResponse](interfaces/UserOperationEstimateGasResponse.mdx) | -                                                             |
-| [UserOperationReceipt](interfaces/UserOperationReceipt.mdx)                         | -                                                             |
-| [UserOperationRequest_v6](interfaces/UserOperationRequest_v6.mdx)                   | -                                                             |
-| [UserOperationRequest_v7](interfaces/UserOperationRequest_v7.mdx)                   | -                                                             |
-| [UserOperationResponse](interfaces/UserOperationResponse.mdx)                       | -                                                             |
-| [UserOperationStruct_v6](interfaces/UserOperationStruct_v6.mdx)                     | -                                                             |
-| [UserOperationStruct_v7](interfaces/UserOperationStruct_v7.mdx)                     | -                                                             |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Interface</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        [AccountEntryPointRegistry](interfaces/AccountEntryPointRegistry.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [EntryPointDefRegistry](interfaces/EntryPointDefRegistry.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [EntryPointRegistry](interfaces/EntryPointRegistry.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [EntryPointRegistryBase](interfaces/EntryPointRegistryBase.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [SmartAccountAuthenticator](interfaces/SmartAccountAuthenticator.mdx)
+      </td>
+
+      <td>
+        Extends the  SmartAccountSigner interface with authentication.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [SmartAccountSigner](interfaces/SmartAccountSigner.mdx)
+      </td>
+
+      <td>
+        A signer that can sign messages and typed data.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [SplitTransportParams](interfaces/SplitTransportParams.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [UserOperationEstimateGasResponse](interfaces/UserOperationEstimateGasResponse.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [UserOperationReceipt](interfaces/UserOperationReceipt.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [UserOperationRequest\_v6](interfaces/UserOperationRequest_v6.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [UserOperationRequest\_v7](interfaces/UserOperationRequest_v7.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [UserOperationResponse](interfaces/UserOperationResponse.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [UserOperationStruct\_v6](interfaces/UserOperationStruct_v6.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [UserOperationStruct\_v7](interfaces/UserOperationStruct_v7.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Type Aliases
 
-| Type Alias                                                                                            | Description                                                                              |
-| :---------------------------------------------------------------------------------------------------- | :--------------------------------------------------------------------------------------- |
-| [Abi](type-aliases/Abi.mdx)                                                                           | Contract [ABI Specification](https://docs.soliditylang.org/en/latest/abi-spec.html#json) |
-| [AccountOp](type-aliases/AccountOp.mdx)                                                               | -                                                                                        |
-| [Address](type-aliases/Address.mdx)                                                                   | -                                                                                        |
-| [AuthorizationRequest](type-aliases/AuthorizationRequest.mdx)                                         | -                                                                                        |
-| [BaseSmartAccountClient](type-aliases/BaseSmartAccountClient.mdx)                                     | -                                                                                        |
-| [BaseSmartAccountClientActions](type-aliases/BaseSmartAccountClientActions.mdx)                       | -                                                                                        |
-| [BatchUserOperationCallData](type-aliases/BatchUserOperationCallData.mdx)                             | -                                                                                        |
-| [BigNumberish](type-aliases/BigNumberish.mdx)                                                         | -                                                                                        |
-| [BigNumberishRange](type-aliases/BigNumberishRange.mdx)                                               | -                                                                                        |
-| [BuildTransactionParameters](type-aliases/BuildTransactionParameters.mdx)                             | -                                                                                        |
-| [BuildUserOperationFromTransactionsResult](type-aliases/BuildUserOperationFromTransactionsResult.mdx) | -                                                                                        |
-| [BuildUserOperationParameters](type-aliases/BuildUserOperationParameters.mdx)                         | -                                                                                        |
-| [BundlerActions](type-aliases/BundlerActions.mdx)                                                     | -                                                                                        |
-| [BundlerClient](type-aliases/BundlerClient.mdx)                                                       | -                                                                                        |
-| [BundlerRpcSchema](type-aliases/BundlerRpcSchema.mdx)                                                 | -                                                                                        |
-| [BytesLike](type-aliases/BytesLike.mdx)                                                               | -                                                                                        |
-| [ClientMiddleware](type-aliases/ClientMiddleware.mdx)                                                 | -                                                                                        |
-| [ClientMiddlewareArgs](type-aliases/ClientMiddlewareArgs.mdx)                                         | -                                                                                        |
-| [ClientMiddlewareConfig](type-aliases/ClientMiddlewareConfig.mdx)                                     | -                                                                                        |
-| [ClientMiddlewareFn](type-aliases/ClientMiddlewareFn.mdx)                                             | -                                                                                        |
-| [ConnectionConfig](type-aliases/ConnectionConfig.mdx)                                                 | -                                                                                        |
-| [ConnectorData](type-aliases/ConnectorData.mdx)                                                       | -                                                                                        |
-| [DefaultEntryPointVersion](type-aliases/DefaultEntryPointVersion.mdx)                                 | -                                                                                        |
-| [Deferrable](type-aliases/Deferrable.mdx)                                                             | -                                                                                        |
-| [DropAndReplaceUserOperationParameters](type-aliases/DropAndReplaceUserOperationParameters.mdx)       | -                                                                                        |
-| [Eip7702ExtendedFields](type-aliases/Eip7702ExtendedFields.mdx)                                       | -                                                                                        |
-| [EmptyHex](type-aliases/EmptyHex.mdx)                                                                 | -                                                                                        |
-| [EntryPointDef](type-aliases/EntryPointDef.mdx)                                                       | -                                                                                        |
-| [EntryPointParameter](type-aliases/EntryPointParameter.mdx)                                           | -                                                                                        |
-| [EntryPointVersion](type-aliases/EntryPointVersion.mdx)                                               | -                                                                                        |
-| [EQ](type-aliases/EQ.mdx)                                                                             | -                                                                                        |
-| [EqualsOneOfTheComponents](type-aliases/EqualsOneOfTheComponents.mdx)                                 | -                                                                                        |
-| [Erc7677Client](type-aliases/Erc7677Client.mdx)                                                       | -                                                                                        |
-| [Erc7677MiddlewareParams](type-aliases/Erc7677MiddlewareParams.mdx)                                   | -                                                                                        |
-| [Erc7677RpcSchema](type-aliases/Erc7677RpcSchema.mdx)                                                 | -                                                                                        |
-| [GetAccountAddressParams](type-aliases/GetAccountAddressParams.mdx)                                   | -                                                                                        |
-| [GetAccountParameter](type-aliases/GetAccountParameter.mdx)                                           | -                                                                                        |
-| [GetContextParameter](type-aliases/GetContextParameter.mdx)                                           | -                                                                                        |
-| [GetEntryPointFromAccount](type-aliases/GetEntryPointFromAccount.mdx)                                 | -                                                                                        |
-| [GetEntryPointOptions](type-aliases/GetEntryPointOptions.mdx)                                         | -                                                                                        |
-| [HttpTransport](type-aliases/HttpTransport.mdx)                                                       | -                                                                                        |
-| [IsMemberOrSubtypeOfAComponent](type-aliases/IsMemberOrSubtypeOfAComponent.mdx)                       | -                                                                                        |
-| [IsOneOf](type-aliases/IsOneOf.mdx)                                                                   | -                                                                                        |
-| [IsUndefined](type-aliases/IsUndefined.mdx)                                                           | -                                                                                        |
-| [Multiplier](type-aliases/Multiplier.mdx)                                                             | -                                                                                        |
-| [Never](type-aliases/Never.mdx)                                                                       | -                                                                                        |
-| [NotType](type-aliases/NotType.mdx)                                                                   | Used to ensure type doesn't extend another, for use in & chaining of properties          |
-| [NoUndefined](type-aliases/NoUndefined.mdx)                                                           | -                                                                                        |
-| [NullAddress](type-aliases/NullAddress.mdx)                                                           | -                                                                                        |
-| [OneOf](type-aliases/OneOf.mdx)                                                                       | -                                                                                        |
-| [OptionalFields](type-aliases/OptionalFields.mdx)                                                     | -                                                                                        |
-| [Prettify](type-aliases/Prettify.mdx)                                                                 | -                                                                                        |
-| [PromiseOrValue](type-aliases/PromiseOrValue.mdx)                                                     | -                                                                                        |
-| [RecordableKeys](type-aliases/RecordableKeys.mdx)                                                     | -                                                                                        |
-| [RequiredBy](type-aliases/RequiredBy.mdx)                                                             | -                                                                                        |
-| [SendTransactionsParameters](type-aliases/SendTransactionsParameters.mdx)                             | -                                                                                        |
-| [SendUserOperationParameters](type-aliases/SendUserOperationParameters.mdx)                           | -                                                                                        |
-| [SendUserOperationResult](type-aliases/SendUserOperationResult.mdx)                                   | -                                                                                        |
-| [SignatureRequest](type-aliases/SignatureRequest.mdx)                                                 | -                                                                                        |
-| [SigningMethods](type-aliases/SigningMethods.mdx)                                                     | -                                                                                        |
-| [SignUserOperationParameters](type-aliases/SignUserOperationParameters.mdx)                           | -                                                                                        |
-| [SmartAccountClient](type-aliases/SmartAccountClient.mdx)                                             | -                                                                                        |
-| [SmartAccountClientActions](type-aliases/SmartAccountClientActions.mdx)                               | -                                                                                        |
-| [SmartAccountClientConfig](type-aliases/SmartAccountClientConfig.mdx)                                 | -                                                                                        |
-| [SmartAccountClientRpcSchema](type-aliases/SmartAccountClientRpcSchema.mdx)                           | -                                                                                        |
-| [SmartContractAccount](type-aliases/SmartContractAccount.mdx)                                         | -                                                                                        |
-| [SmartContractAccountWithSigner](type-aliases/SmartContractAccountWithSigner.mdx)                     | -                                                                                        |
-| [SupportedEntryPoint](type-aliases/SupportedEntryPoint.mdx)                                           | -                                                                                        |
-| [ToSmartContractAccountParams](type-aliases/ToSmartContractAccountParams.mdx)                         | -                                                                                        |
-| [UnpackedSignature](type-aliases/UnpackedSignature.mdx)                                               | -                                                                                        |
-| [UpgradeAccountParams](type-aliases/UpgradeAccountParams.mdx)                                         | -                                                                                        |
-| [UpgradeToAndCallParams](type-aliases/UpgradeToAndCallParams.mdx)                                     | -                                                                                        |
-| [UpgradeToData](type-aliases/UpgradeToData.mdx)                                                       | -                                                                                        |
-| [UserOperationCallData](type-aliases/UserOperationCallData.mdx)                                       | -                                                                                        |
-| [UserOperationContext](type-aliases/UserOperationContext.mdx)                                         | -                                                                                        |
-| [UserOperationFeeOptions](type-aliases/UserOperationFeeOptions.mdx)                                   | -                                                                                        |
-| [UserOperationFeeOptionsField](type-aliases/UserOperationFeeOptionsField.mdx)                         | -                                                                                        |
-| [UserOperationOverrides](type-aliases/UserOperationOverrides.mdx)                                     | -                                                                                        |
-| [UserOperationOverridesParameter](type-aliases/UserOperationOverridesParameter.mdx)                   | -                                                                                        |
-| [UserOperationPaymasterOverrides](type-aliases/UserOperationPaymasterOverrides.mdx)                   | -                                                                                        |
-| [UserOperationRequest](type-aliases/UserOperationRequest.mdx)                                         | -                                                                                        |
-| [UserOperationStruct](type-aliases/UserOperationStruct.mdx)                                           | -                                                                                        |
-| [WaitForUserOperationTxParameters](type-aliases/WaitForUserOperationTxParameters.mdx)                 | -                                                                                        |
-| [WithOptional](type-aliases/WithOptional.mdx)                                                         | -                                                                                        |
-| [WithRequired](type-aliases/WithRequired.mdx)                                                         | -                                                                                        |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Alias</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        [Abi](type-aliases/Abi.mdx)
+      </td>
+
+      <td>
+        Contract [ABI Specification](https://docs.soliditylang.org/en/latest/abi-spec.html#json)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [AccountOp](type-aliases/AccountOp.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [Address](type-aliases/Address.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [AuthorizationRequest](type-aliases/AuthorizationRequest.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [BaseSmartAccountClient](type-aliases/BaseSmartAccountClient.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [BaseSmartAccountClientActions](type-aliases/BaseSmartAccountClientActions.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [BatchUserOperationCallData](type-aliases/BatchUserOperationCallData.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [BigNumberish](type-aliases/BigNumberish.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [BigNumberishRange](type-aliases/BigNumberishRange.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [BuildTransactionParameters](type-aliases/BuildTransactionParameters.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [BuildUserOperationFromTransactionsResult](type-aliases/BuildUserOperationFromTransactionsResult.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [BuildUserOperationParameters](type-aliases/BuildUserOperationParameters.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [BundlerActions](type-aliases/BundlerActions.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [BundlerClient](type-aliases/BundlerClient.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [BundlerRpcSchema](type-aliases/BundlerRpcSchema.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [BytesLike](type-aliases/BytesLike.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [ClientMiddleware](type-aliases/ClientMiddleware.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [ClientMiddlewareArgs](type-aliases/ClientMiddlewareArgs.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [ClientMiddlewareConfig](type-aliases/ClientMiddlewareConfig.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [ClientMiddlewareFn](type-aliases/ClientMiddlewareFn.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [ConnectionConfig](type-aliases/ConnectionConfig.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [ConnectorData](type-aliases/ConnectorData.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [DefaultEntryPointVersion](type-aliases/DefaultEntryPointVersion.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [Deferrable](type-aliases/Deferrable.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [DropAndReplaceUserOperationParameters](type-aliases/DropAndReplaceUserOperationParameters.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [Eip7702ExtendedFields](type-aliases/Eip7702ExtendedFields.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [EmptyHex](type-aliases/EmptyHex.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [EntryPointDef](type-aliases/EntryPointDef.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [EntryPointParameter](type-aliases/EntryPointParameter.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [EntryPointVersion](type-aliases/EntryPointVersion.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [EQ](type-aliases/EQ.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [EqualsOneOfTheComponents](type-aliases/EqualsOneOfTheComponents.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [Erc7677Client](type-aliases/Erc7677Client.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [Erc7677MiddlewareParams](type-aliases/Erc7677MiddlewareParams.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [Erc7677RpcSchema](type-aliases/Erc7677RpcSchema.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [GetAccountAddressParams](type-aliases/GetAccountAddressParams.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [GetAccountParameter](type-aliases/GetAccountParameter.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [GetContextParameter](type-aliases/GetContextParameter.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [GetEntryPointFromAccount](type-aliases/GetEntryPointFromAccount.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [GetEntryPointOptions](type-aliases/GetEntryPointOptions.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [HttpTransport](type-aliases/HttpTransport.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [IsMemberOrSubtypeOfAComponent](type-aliases/IsMemberOrSubtypeOfAComponent.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [IsOneOf](type-aliases/IsOneOf.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [IsUndefined](type-aliases/IsUndefined.mdx)
+      </td>
+
+      <td>
+        **Description**
+
+        Checks if T is `undefined`
+
+        **Example**
+
+        ```ts
+        type Result = IsUndefined<undefined>
+        //   ^? type Result = true
+        ```
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [Multiplier](type-aliases/Multiplier.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [Never](type-aliases/Never.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [NotType](type-aliases/NotType.mdx)
+      </td>
+
+      <td>
+        Used to ensure type doesn't extend another, for use in & chaining of properties
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [NoUndefined](type-aliases/NoUndefined.mdx)
+      </td>
+
+      <td>
+        **Description**
+
+        Constructs a type by excluding `undefined` from `T`.
+
+        **Example**
+
+        ```ts
+        NoUndefined<string | undefined>
+        => string
+        ```
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [NullAddress](type-aliases/NullAddress.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [OneOf](type-aliases/OneOf.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [OptionalFields](type-aliases/OptionalFields.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [Prettify](type-aliases/Prettify.mdx)
+      </td>
+
+      <td>
+        **Description**
+
+        Combines members of an intersection into a readable type.
+
+        **See**
+
+        https://twitter.com/mattpocockuk/status/1622730173446557697?s=20\&t=NdpAcmEFXY01xkqU3KO0Mg
+
+        **Example**
+
+        ```ts
+        Prettify<{ a: string } & { b: string } & { c: number, d: bigint }>
+        => { a: string, b: string, c: number, d: bigint }
+        ```
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [PromiseOrValue](type-aliases/PromiseOrValue.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [RecordableKeys](type-aliases/RecordableKeys.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [RequiredBy](type-aliases/RequiredBy.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [SendTransactionsParameters](type-aliases/SendTransactionsParameters.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [SendUserOperationParameters](type-aliases/SendUserOperationParameters.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [SendUserOperationResult](type-aliases/SendUserOperationResult.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [SignatureRequest](type-aliases/SignatureRequest.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [SigningMethods](type-aliases/SigningMethods.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [SignUserOperationParameters](type-aliases/SignUserOperationParameters.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [SmartAccountClient](type-aliases/SmartAccountClient.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [SmartAccountClientActions](type-aliases/SmartAccountClientActions.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [SmartAccountClientConfig](type-aliases/SmartAccountClientConfig.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [SmartAccountClientRpcSchema](type-aliases/SmartAccountClientRpcSchema.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [SmartContractAccount](type-aliases/SmartContractAccount.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [SmartContractAccountWithSigner](type-aliases/SmartContractAccountWithSigner.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [SupportedEntryPoint](type-aliases/SupportedEntryPoint.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [ToSmartContractAccountParams](type-aliases/ToSmartContractAccountParams.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [UnpackedSignature](type-aliases/UnpackedSignature.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [UpgradeAccountParams](type-aliases/UpgradeAccountParams.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [UpgradeToAndCallParams](type-aliases/UpgradeToAndCallParams.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [UpgradeToData](type-aliases/UpgradeToData.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [UserOperationCallData](type-aliases/UserOperationCallData.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [UserOperationContext](type-aliases/UserOperationContext.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [UserOperationFeeOptions](type-aliases/UserOperationFeeOptions.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [UserOperationFeeOptionsField](type-aliases/UserOperationFeeOptionsField.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [UserOperationOverrides](type-aliases/UserOperationOverrides.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [UserOperationOverridesParameter](type-aliases/UserOperationOverridesParameter.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [UserOperationPaymasterOverrides](type-aliases/UserOperationPaymasterOverrides.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [UserOperationRequest](type-aliases/UserOperationRequest.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [UserOperationStruct](type-aliases/UserOperationStruct.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [WaitForUserOperationTxParameters](type-aliases/WaitForUserOperationTxParameters.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [WithOptional](type-aliases/WithOptional.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [WithRequired](type-aliases/WithRequired.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Variables
 
-| Variable                                                                         | Description                                                                                                                                                                                                                                                                                                                                                                                                               |
-| :------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| [ADD_BREADCRUMB](variables/ADD_BREADCRUMB.mdx)                                   | The symbol that is used to add a breadcrumb to the headers. Is an optional function that is used to add a breadcrumb to the headers.                                                                                                                                                                                                                                                                                      |
-| [BigNumberishRangeSchema](variables/BigNumberishRangeSchema.mdx)                 | -                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| [BigNumberishSchema](variables/BigNumberishSchema.mdx)                           | -                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| [bundlerActions](variables/bundlerActions.mdx)                                   | A viem client decorator that provides Bundler specific actions. These actions include estimating gas for user operations, sending raw user operations, retrieving user operations by hash, getting supported entry points, and getting user operation receipts.                                                                                                                                                           |
-| [ChainSchema](variables/ChainSchema.mdx)                                         | -                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| [ConnectionConfigSchema](variables/ConnectionConfigSchema.mdx)                   | -                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| [createBundlerClientFromExisting](variables/createBundlerClientFromExisting.mdx) | Creates a bundler client from an existing public client with the provided transport and chain.                                                                                                                                                                                                                                                                                                                            |
-| [default7702GasEstimator](variables/default7702GasEstimator.mdx)                 | A middleware function to estimate the gas usage of a user operation when using an EIP-7702 delegated account. Has an optional custom gas estimator. This function is only compatible with accounts using EntryPoint v0.7.0, and the account must have an implementation address defined in `getImplementationAddress()`.                                                                                                  |
-| [default7702UserOpSigner](variables/default7702UserOpSigner.mdx)                 | Provides a default middleware function for signing user operations with a client account when using EIP-7702 delegated accounts. If the signer doesn't support `signAuthorization`, then this just runs the provided `signUserOperation` middleware. This function is only compatible with accounts using EntryPoint v0.7.0, and the account must have an implementation address defined in `getImplementationAddress()`. |
-| [defaultEntryPointVersion](variables/defaultEntryPointVersion.mdx)               | -                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| [defaultGasEstimator](variables/defaultGasEstimator.mdx)                         | Description default gas estimator middleware for `SmartAccountClient` You can override this middleware with your custom gas estimator middleware by passing it to the client constructor                                                                                                                                                                                                                                  |
-| [defaultPaymasterAndData](variables/defaultPaymasterAndData.mdx)                 | Middleware function that sets the `paymasterAndData` field in the given struct based on the entry point version of the account. This is the default used by `createSmartAccountClient` and is not necessary to be used directly.                                                                                                                                                                                          |
-| [defaultUserOpSigner](variables/defaultUserOpSigner.mdx)                         | Provides a default middleware function for signing user operations with a client account. This function validates the request and adds the signature to it. This is already included in the client returned from `createSmartAccountClient`                                                                                                                                                                               |
-| [EntryPointAbi_v6](variables/EntryPointAbi_v6.mdx)                               | -                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| [EntryPointAbi_v7](variables/EntryPointAbi_v7.mdx)                               | -                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| [entryPointRegistry](variables/entryPointRegistry.mdx)                           | -                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| [HexSchema](variables/HexSchema.mdx)                                             | -                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| [minPriorityFeePerBidDefaults](variables/minPriorityFeePerBidDefaults.mdx)       | -                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| [MultiplierSchema](variables/MultiplierSchema.mdx)                               | -                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| [noopMiddleware](variables/noopMiddleware.mdx)                                   | Noop middleware that does nothing and passes the arguments through                                                                                                                                                                                                                                                                                                                                                        |
-| [SignerSchema](variables/SignerSchema.mdx)                                       | -                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| [SimpleAccountAbi_v6](variables/SimpleAccountAbi_v6.mdx)                         | -                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| [SimpleAccountAbi_v7](variables/SimpleAccountAbi_v7.mdx)                         | -                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| [SimpleAccountFactoryAbi](variables/SimpleAccountFactoryAbi.mdx)                 | -                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| [smartAccountClientActions](variables/smartAccountClientActions.mdx)             | Provides a set of smart account client actions to decorate the provided client. These actions include building and signing user operations, sending transactions, and more.                                                                                                                                                                                                                                               |
-| [smartAccountClientMethodKeys](variables/smartAccountClientMethodKeys.mdx)       | -                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| [SmartAccountClientOptsSchema](variables/SmartAccountClientOptsSchema.mdx)       | -                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| [TRACE_HEADER_NAME](variables/TRACE_HEADER_NAME.mdx)                             | These are the headers that are used in the trace headers, could be found in the spec                                                                                                                                                                                                                                                                                                                                      |
-| [TRACE_HEADER_STATE](variables/TRACE_HEADER_STATE.mdx)                           | These are the headers that are used in the trace headers, could be found in the spec                                                                                                                                                                                                                                                                                                                                      |
-| [waitForUserOperationTransaction](variables/waitForUserOperationTransaction.mdx) | Waits for a user operation transaction to be confirmed by checking the receipt periodically until it is found or a maximum number of retries is reached.                                                                                                                                                                                                                                                                  |
-| [webauthnGasEstimator](variables/webauthnGasEstimator.mdx)                       | A middleware function to estimate the gas usage of a user operation when using a Modular Account V2 WebAuthn account. Has an optional custom gas estimator. This function is only compatible with accounts using EntryPoint v0.7.0, and the account must have an implementation address defined in `getImplementationAddress()`.                                                                                          |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Variable</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        [ADD\_BREADCRUMB](variables/ADD_BREADCRUMB.mdx)
+      </td>
+
+      <td>
+        The symbol that is used to add a breadcrumb to the headers. Is an optional
+        function that is used to add a breadcrumb to the headers.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [BigNumberishRangeSchema](variables/BigNumberishRangeSchema.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [BigNumberishSchema](variables/BigNumberishSchema.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [bundlerActions](variables/bundlerActions.mdx)
+      </td>
+
+      <td>
+        A viem client decorator that provides Bundler specific actions.
+        These actions include estimating gas for user operations, sending raw user operations, retrieving user operations by hash, getting supported entry points, and getting user operation receipts.
+
+        NOTE: this is already added to the client returned from `createBundlerClient`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [ChainSchema](variables/ChainSchema.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [ConnectionConfigSchema](variables/ConnectionConfigSchema.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [createBundlerClientFromExisting](variables/createBundlerClientFromExisting.mdx)
+      </td>
+
+      <td>
+        Creates a bundler client from an existing public client with the provided transport and chain.
+
+        **Example**
+
+        ```ts
+        import { createPublicClient } from "viem";
+        import { createBundlerClientFromExisting } from "@aa-sdk/core";
+
+        const publicClient = createPublicClient(...);
+        const bundlerClient = createBundlerClientFromExisting(publicClient);
+        ```
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [default7702GasEstimator](variables/default7702GasEstimator.mdx)
+      </td>
+
+      <td>
+        A middleware function to estimate the gas usage of a user operation when using an EIP-7702 delegated account. Has an optional custom gas estimator.
+        This function is only compatible with accounts using EntryPoint v0.7.0, and the account must have an implementation address defined in `getImplementationAddress()`.
+
+        **Example**
+
+        ```ts twoslash
+        import {
+          default7702GasEstimator,
+          default7702UserOpSigner,
+          createSmartAccountClient,
+          type SmartAccountClient,
+        } from "@aa-sdk/core";
+        import {
+          createModularAccountV2,
+          type CreateModularAccountV2ClientParams,
+        } from "@account-kit/smart-contracts";
+
+        async function createSMA7702AccountClient(
+          config: CreateModularAccountV2ClientParams
+        ): Promise<SmartAccountClient> {
+          const sma7702Account = await createModularAccountV2({ ...config, mode: "7702" });
+
+          return createSmartAccountClient({
+            account: sma7702Account,
+            gasEstimator: default7702GasEstimator(config.gasEstimator),
+            signUserOperation: default7702UserOpSigner(config.signUserOperation),
+            ...config,
+          });
+        }
+        ```
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [default7702UserOpSigner](variables/default7702UserOpSigner.mdx)
+      </td>
+
+      <td>
+        Provides a default middleware function for signing user operations with a client account when using EIP-7702 delegated accounts.
+        If the signer doesn't support `signAuthorization`, then this just runs the provided `signUserOperation` middleware.
+        This function is only compatible with accounts using EntryPoint v0.7.0, and the account must have an implementation address defined in `getImplementationAddress()`.
+
+        **Example**
+
+        ```ts twoslash
+        import {
+          default7702GasEstimator,
+          default7702UserOpSigner,
+          createSmartAccountClient,
+          type SmartAccountClient,
+        } from "@aa-sdk/core";
+        import {
+          createModularAccountV2,
+          type CreateModularAccountV2ClientParams,
+        } from "@account-kit/smart-contracts";
+
+        async function createSMA7702AccountClient(
+          config: CreateModularAccountV2ClientParams
+        ): Promise<SmartAccountClient> {
+          const sma7702Account = await createModularAccountV2({ ...config, mode: "7702" });
+
+          return createSmartAccountClient({
+            account: sma7702Account,
+            gasEstimator: default7702GasEstimator(config.gasEstimator),
+            signUserOperation: default7702UserOpSigner(config.signUserOperation),
+            ...config,
+          });
+        }
+        ```
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [defaultEntryPointVersion](variables/defaultEntryPointVersion.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [defaultGasEstimator](variables/defaultGasEstimator.mdx)
+      </td>
+
+      <td>
+        Description default gas estimator middleware for `SmartAccountClient`
+        You can override this middleware with your custom gas estimator middleware
+        by passing it to the client constructor
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [defaultPaymasterAndData](variables/defaultPaymasterAndData.mdx)
+      </td>
+
+      <td>
+        Middleware function that sets the `paymasterAndData` field in the given struct based on the entry point version of the account.
+        This is the default used by `createSmartAccountClient` and is not necessary to be used directly.
+
+        **Param**
+
+        the user operation structure to be modified
+
+        **Param**
+
+        an object containing the account information
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [defaultUserOpSigner](variables/defaultUserOpSigner.mdx)
+      </td>
+
+      <td>
+        Provides a default middleware function for signing user operations with a client account. This function validates the request and adds the signature to it.
+        This is already included in the client returned from `createSmartAccountClient`
+
+        **Param**
+
+        The user operation structure to be signed
+
+        **Param**
+
+        The middleware context containing the client and account information
+
+        **Param**
+
+        The client object, which should include account and chain information
+
+        **Param**
+
+        Optional, the account used for signing, defaults to the client's account if not provided
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [EntryPointAbi\_v6](variables/EntryPointAbi_v6.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [EntryPointAbi\_v7](variables/EntryPointAbi_v7.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [entryPointRegistry](variables/entryPointRegistry.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [HexSchema](variables/HexSchema.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [minPriorityFeePerBidDefaults](variables/minPriorityFeePerBidDefaults.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [MultiplierSchema](variables/MultiplierSchema.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [noopMiddleware](variables/noopMiddleware.mdx)
+      </td>
+
+      <td>
+        Noop middleware that does nothing and passes the arguments through
+
+        **Param**
+
+        the client middleware arguments passed to the middleware
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [SignerSchema](variables/SignerSchema.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [SimpleAccountAbi\_v6](variables/SimpleAccountAbi_v6.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [SimpleAccountAbi\_v7](variables/SimpleAccountAbi_v7.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [SimpleAccountFactoryAbi](variables/SimpleAccountFactoryAbi.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [smartAccountClientActions](variables/smartAccountClientActions.mdx)
+      </td>
+
+      <td>
+        Provides a set of smart account client actions to decorate the provided client. These actions include building and signing user operations, sending transactions, and more.
+
+        NOTE: this is already added to clients returned from `createSmartAccountClient`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [smartAccountClientMethodKeys](variables/smartAccountClientMethodKeys.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [SmartAccountClientOptsSchema](variables/SmartAccountClientOptsSchema.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [TRACE\_HEADER\_NAME](variables/TRACE_HEADER_NAME.mdx)
+      </td>
+
+      <td>
+        These are the headers that are used in the trace headers, could be found in the spec
+
+        **See**
+
+        https://www.w3.org/TR/trace-context/#design-overview
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [TRACE\_HEADER\_STATE](variables/TRACE_HEADER_STATE.mdx)
+      </td>
+
+      <td>
+        These are the headers that are used in the trace headers, could be found in the spec
+
+        **See**
+
+        https://www.w3.org/TR/trace-context/#design-overview
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [waitForUserOperationTransaction](variables/waitForUserOperationTransaction.mdx)
+      </td>
+
+      <td>
+        Waits for a user operation transaction to be confirmed by checking the receipt periodically until it is found or a maximum number of retries is reached.
+
+        **Example**
+
+        ```ts
+        import { createSmartAccountClient } from "@aa-sdk/core";
+
+        // smart account client is already extended with waitForUserOperationTransaction
+        const client = createSmartAccountClient(...);
+        const result = await client.waitForUserOperationTransaction({
+         hash: "0x...",
+         retries: {...} // optional param to configure the retry amounts
+        });
+        ```
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [webauthnGasEstimator](variables/webauthnGasEstimator.mdx)
+      </td>
+
+      <td>
+        A middleware function to estimate the gas usage of a user operation when using a Modular Account V2 WebAuthn account. Has an optional custom gas estimator.
+        This function is only compatible with accounts using EntryPoint v0.7.0, and the account must have an implementation address defined in `getImplementationAddress()`.
+
+        **Example**
+
+        ```ts twoslash
+        import {
+          webauthnGasEstimator,
+          createSmartAccountClient,
+          type SmartAccountClient,
+        } from "@aa-sdk/core";
+        import {
+          createModularAccountV2,
+          type CreateModularAccountV2ClientParams,
+        } from "@account-kit/smart-contracts";
+
+        const credential = {
+          id: "credential-id",
+          publicKey: "0x...",
+        }
+
+        async function createWebauthnAccountClient(
+          config: CreateModularAccountV2ClientParams
+        ): Promise<SmartAccountClient> {
+          const webauthnAccount = await createModularAccountV2({ ...config, mode: "webauthn", credential });
+
+          return createSmartAccountClient({
+            account: webAuthnAccount,
+            gasEstimator: webauthnGasEstimator(config.gasEstimator),
+            ...config,
+          });
+        }
+        ```
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Functions
 
-| Function                                                                                       | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
-| :--------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [allEqual](functions/allEqual.mdx)                                                             | Utility method for checking if the passed in values are all equal (strictly)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| [applyUserOpFeeOption](functions/applyUserOpFeeOption.mdx)                                     | Utility method for applying a UserOperationFeeOptionsField value over the current value set for the field                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| [applyUserOpOverride](functions/applyUserOpOverride.mdx)                                       | Utility method for applying a UserOperationOverrides field value over the current value set for the field                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| [applyUserOpOverrideOrFeeOption](functions/applyUserOpOverrideOrFeeOption.mdx)                 | Utility method for applying a UserOperationOverrides field value and a UserOperationFeeOptionsField value over the current value set for the field, with the override taking precedence over the fee option                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
-| [asyncPipe](functions/asyncPipe.mdx)                                                           | Utility function that allows for piping a series of async functions together                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| [bigIntClamp](functions/bigIntClamp.mdx)                                                       | Given a bigint and a min-max range, returns the min-max clamped bigint value                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| [bigIntMax](functions/bigIntMax.mdx)                                                           | Returns the max bigint in a list of bigints                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
-| [bigIntMin](functions/bigIntMin.mdx)                                                           | Returns the min bigint in a list of bigints                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
-| [bigIntMultiply](functions/bigIntMultiply.mdx)                                                 | Given a bigint and a number (which can be a float), returns the bigint value. Note: this function has loss and will round down to the nearest integer.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
-| [buildUserOperation](functions/buildUserOperation.mdx)                                         | Builds a user operation using the provided client and operation parameters. Ensures that the account exists and the client is compatible.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| [buildUserOperationFromTx](functions/buildUserOperationFromTx.mdx)                             | Performs `buildUserOperationFromTx` in batch and builds into a single, yet to be signed `UserOperation` (UO) struct. The output user operation struct will be filled with all gas fields (and paymaster data if a paymaster is used) based on the transactions data (`to`, `data`, `value`, `maxFeePerGas`, `maxPriorityFeePerGas`) computed using the configured `ClientMiddlewares` on the `SmartAccountClient`                                                                                                                                                                                                                                                                                                                                               |
-| [buildUserOperationFromTxs](functions/buildUserOperationFromTxs.mdx)                           | Performs `buildUserOperationFromTx` in batch and builds into a single, yet to be signed `UserOperation` (UO) struct. The output user operation struct will be filled with all gas fields (and paymaster data if a paymaster is used) based on the transactions data (`to`, `data`, `value`, `maxFeePerGas`, `maxPriorityFeePerGas`) computed using the configured ClientMiddlewares on the SmartAccountClient.                                                                                                                                                                                                                                                                                                                                                  |
-| [bypassPaymasterAndData](functions/bypassPaymasterAndData.mdx)                                 | Utility method for checking whether the middleware pipeline should bypass the paymaster middleware for the user operation with the given overrides, either because the UserOp is paying for its own gas, or passing a specific paymaster                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
-| [bypassPaymasterAndDataEmptyHex](functions/bypassPaymasterAndDataEmptyHex.mdx)                 | An alternative to `bypassPaymasterAndData` which only returns true if the data parameter is "0x," this is useful for cases when middleware should be bypassed ONLY IF the UserOp will pay for its own gas                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| [checkGasSponsorshipEligibility](functions/checkGasSponsorshipEligibility.mdx)                 | This function verifies the eligibility of the connected account for gas sponsorship concerning the upcoming `UserOperation` (UO) that is intended to be sent. Internally, this method invokes `buildUserOperation`, which navigates through the middleware pipeline, including the `PaymasterMiddleware`. Its purpose is to construct the UO struct meant for transmission to the bundler. Following the construction of the UO struct, this function verifies if the resulting structure contains a non-empty `paymasterAndData` field. You can utilize this method before sending the user operation to confirm its eligibility for gas sponsorship. Depending on the outcome, it allows you to tailor the user experience accordingly, based on eligibility. |
-| [clientHeaderTrack](functions/clientHeaderTrack.mdx)                                           | Add a crumb to the breadcrumb.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
-| [concatPaymasterAndData](functions/concatPaymasterAndData.mdx)                                 | Utility method for converting the object containing the paymaster address and paymaster data to the paymaster and data concatenated hex string                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
-| [conditionalReturn](functions/conditionalReturn.mdx)                                           | Utility method for checking the condition and return the value if condition holds true, undefined if not.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| [convertChainIdToCoinType](functions/convertChainIdToCoinType.mdx)                             | Converts a given chain ID to a coin type, following specific standards for mainnet and non-mainnet chains.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-| [convertCoinTypeToChain](functions/convertCoinTypeToChain.mdx)                                 | Converts a coin type to its corresponding blockchain chain based on a predefined mapping.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| [convertCoinTypeToChainId](functions/convertCoinTypeToChainId.mdx)                             | Converts a coin type to a chain ID based on predefined mappings. This function follows ENSIP-9 for coin type 60 and ENSIP-11 for other coin types.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
-| [createBundlerClient](functions/createBundlerClient.mdx)                                       | Creates a Bundler Client using the provided configuration parameters, including chain and optional type.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
-| [createSmartAccountClient](functions/createSmartAccountClient.mdx)                             | Creates a smart account client using the provided configuration. This client handles various Ethereum transactions and message signing operations.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
-| [createSmartAccountClientFromExisting](functions/createSmartAccountClientFromExisting.mdx)     | Creates a smart account client using an existing client and specific configuration. This function can be used to reuse a pre-existing BundlerClient while customizing other aspects of the smart account.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| [deepHexlify](functions/deepHexlify.mdx)                                                       | Recursively converts all values in an object to hex strings                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
-| [defaultFeeEstimator](functions/defaultFeeEstimator.mdx)                                       | Default fee estimator middleware function that estimates the maximum fee per gas and maximum priority fee per gas for a given client and applies the necessary overrides and fee options.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| [dropAndReplaceUserOperation](functions/dropAndReplaceUserOperation.mdx)                       | Drops an existing user operation and replaces it with a new one while ensuring the appropriate fees and overrides are applied.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
-| [erc7677Middleware](functions/erc7677Middleware.mdx)                                           | Middleware function for interacting with ERC-7677 enabled clients. It supports resolving paymaster and data fields for user operations. This middleware assumes that your RPC provider supports the ERC-7677 methods (pm_getPaymasterStubData and pm_getPaymasterData).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| [filterUndefined](functions/filterUndefined.mdx)                                               | Filters out properties with undefined or null values from the provided object.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
-| [getAccountAddress](functions/getAccountAddress.mdx)                                           | Retrieves the account address. Uses a provided `accountAddress` if available; otherwise, it computes the address using the entry point contract and the initial code.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| [getDefaultUserOperationFeeOptions](functions/getDefaultUserOperationFeeOptions.mdx)           | -                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-| [getEntryPoint](functions/getEntryPoint.mdx)                                                   | Retrieves the entry point definition for the specified chain and version, falling back to the default version if not provided. Throws an error if the entry point address cannot be found.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-| [getUserOperationError](functions/getUserOperationError.mdx)                                   | Retrieves the error message from an entrypoint for a User Operation.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| [isBigNumberish](functions/isBigNumberish.mdx)                                                 | -                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-| [isEntryPointVersion](functions/isEntryPointVersion.mdx)                                       | Checks if the given value is a valid key of the EntryPointRegistry.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
-| [isMultiplier](functions/isMultiplier.mdx)                                                     | -                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-| [isSigner](functions/isSigner.mdx)                                                             | Checks if the provided object is a `SmartAccountSigner`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
-| [isSmartAccountClient](functions/isSmartAccountClient.mdx)                                     | Use this method to assert that a client is a BaseSmartAccountClient. Useful for narrowing the type of the client down when used within the smart account client decorators                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-| [isSmartAccountWithSigner](functions/isSmartAccountWithSigner.mdx)                             | Determines if the given SmartContractAccount has a signer associated with it.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
-| [isValidFactoryAndData](functions/isValidFactoryAndData.mdx)                                   | Utility method for asserting a UserOperationStruct has valid fields for the paymaster data                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-| [isValidPaymasterAndData](functions/isValidPaymasterAndData.mdx)                               | Utility method for asserting a UserOperationRequest has valid fields for the paymaster data                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
-| [isValidRequest](functions/isValidRequest.mdx)                                                 | Utility method for asserting a UserOperationStruct has valid fields for the given entry point version                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| [middlewareActions](functions/middlewareActions.mdx)                                           | function that takes in ClientMiddlewareConfig used during client initiation and returns the middleware actions object that the smart account client extends with                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-| [parseFactoryAddressFromAccountInitCode](functions/parseFactoryAddressFromAccountInitCode.mdx) | Parses the factory address and factory calldata from the provided account initialization code (initCode).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| [parsePaymasterAndData](functions/parsePaymasterAndData.mdx)                                   | Utility method for parsing the paymaster address and paymasterData from the paymasterAndData hex string                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| [pick](functions/pick.mdx)                                                                     | Picks the specified keys from an object and returns a new object containing only those key-value pairs.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| [resolveProperties](functions/resolveProperties.mdx)                                           | Await all of the properties of a Deferrable object                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
-| [sendTransaction](functions/sendTransaction.mdx)                                               | Sends a transaction using the provided client, arguments, optional overrides, and context. This sends a UO and then waits for it to be mined                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| [sendTransactions](functions/sendTransactions.mdx)                                             | Sends transactions using the provided client and transaction parameters. This function builds user operations from the transactions, sends them, and waits for the transaction to be mined.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
-| [sendUserOperation](functions/sendUserOperation.mdx)                                           | Sends a user operation or batch of user operations using the connected account. Before executing, sendUserOperation will run the user operation through the middleware pipeline.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-| [split](functions/split.mdx)                                                                   | The Split Transport allows you to split RPC traffic for specific methods across different RPC providers. This is done by specifying the methods you want handled specially as overrides and providing a fallback transport for all other methods.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-| [stringToIndex](functions/stringToIndex.mdx)                                                   | Useful if you want to use a string, such as a user's email address, as salt to generate a unique SmartAccount per user.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| [takeBytes](functions/takeBytes.mdx)                                                           | Given a bytes string, returns a slice of the bytes                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
-| [toRecord](functions/toRecord.mdx)                                                             | Converts an array of objects into a record (object) where each key is determined by the specified selector and the value is determined by the provided function.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-| [toSmartContractAccount](functions/toSmartContractAccount.mdx)                                 | Converts an account to a smart contract account and sets up various account-related methods using the provided parameters like transport, chain, entry point, and other utilities.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
-| [unpackSignRawMessageBytes](functions/unpackSignRawMessageBytes.mdx)                           | -                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-| [wrapSignatureWith6492](functions/wrapSignatureWith6492.mdx)                                   | Wraps a given signature with additional data following the EIP-6492 standard.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Function</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        [allEqual](functions/allEqual.mdx)
+      </td>
+
+      <td>
+        Utility method for checking if the passed in values are all equal (strictly)
+
+        **Throws**
+
+        if no values are passed in
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [applyUserOpFeeOption](functions/applyUserOpFeeOption.mdx)
+      </td>
+
+      <td>
+        Utility method for applying a UserOperationFeeOptionsField value
+        over the current value set for the field
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [applyUserOpOverride](functions/applyUserOpOverride.mdx)
+      </td>
+
+      <td>
+        Utility method for applying a UserOperationOverrides field value
+        over the current value set for the field
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [applyUserOpOverrideOrFeeOption](functions/applyUserOpOverrideOrFeeOption.mdx)
+      </td>
+
+      <td>
+        Utility method for applying a UserOperationOverrides field value and
+        a UserOperationFeeOptionsField value over the current value set for the field,
+        with the override taking precedence over the fee option
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [asyncPipe](functions/asyncPipe.mdx)
+      </td>
+
+      <td>
+        Utility function that allows for piping a series of async functions together
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [bigIntClamp](functions/bigIntClamp.mdx)
+      </td>
+
+      <td>
+        Given a bigint and a min-max range, returns the min-max clamped bigint value
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [bigIntMax](functions/bigIntMax.mdx)
+      </td>
+
+      <td>
+        Returns the max bigint in a list of bigints
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [bigIntMin](functions/bigIntMin.mdx)
+      </td>
+
+      <td>
+        Returns the min bigint in a list of bigints
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [bigIntMultiply](functions/bigIntMultiply.mdx)
+      </td>
+
+      <td>
+        Given a bigint and a number (which can be a float), returns the bigint value.
+        Note: this function has loss and will round down to the nearest integer.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [buildUserOperation](functions/buildUserOperation.mdx)
+      </td>
+
+      <td>
+        Builds a user operation using the provided client and operation parameters. Ensures that the account exists and the client is compatible.
+
+        **Example**
+
+        ```ts
+        import { createSmartAccountClient } from "@aa-sdk/core";
+
+        // smart account client is already extended with buildUserOperation
+        const client = createSmartAccountClient(...);
+        const result = await client.buildUserOperation({
+         uo: {
+           target: "0x...",
+           data: "0x...", // or "0x",
+           value: 0n, // optional
+         },
+         account, // only required if the client above is not connected to an account
+        });
+        ```
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [buildUserOperationFromTx](functions/buildUserOperationFromTx.mdx)
+      </td>
+
+      <td>
+        Performs `buildUserOperationFromTx` in batch and builds into a single, yet to be signed `UserOperation` (UO) struct. The output user operation struct will be filled with all gas fields (and paymaster data if a paymaster is used) based on the transactions data (`to`, `data`, `value`, `maxFeePerGas`, `maxPriorityFeePerGas`) computed using the configured `ClientMiddlewares` on the `SmartAccountClient`
+
+        **Example**
+
+        ```ts
+        import type { RpcTransactionRequest } from "viem";
+        import { smartAccountClient } from "./smartAccountClient";
+        // [!code focus:99]
+        // buildUserOperationFromTx converts a traditional Ethereum transaction and returns
+        // the unsigned user operation struct after constructing the user operation struct
+        // through the middleware pipeline
+        const tx: RpcTransactionRequest = {
+          from, // ignored
+          to,
+          data: encodeFunctionData({
+            abi: ContractABI.abi,
+            functionName: "func",
+            args: [arg1, arg2, ...],
+          }),
+        };
+        const uoStruct = await smartAccountClient.buildUserOperationFromTx(tx);
+
+        // signUserOperation signs the above unsigned user operation struct built
+        // using the account connected to the smart account client
+        const request = await smartAccountClient.signUserOperation({ uoStruct });
+
+        // You can use the BundlerAction `sendRawUserOperation` (packages/core/src/actions/bundler/sendRawUserOperation.ts)
+        // to send the signed user operation request to the bundler, requesting the bundler to send the signed uo to the
+        // EntryPoint contract pointed at by the entryPoint address parameter
+        const entryPointAddress = client.account.getEntryPoint().address;
+        const uoHash = await smartAccountClient.sendRawUserOperation({ request, entryPoint: entryPointAddress });
+        ```
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [buildUserOperationFromTxs](functions/buildUserOperationFromTxs.mdx)
+      </td>
+
+      <td>
+        Performs `buildUserOperationFromTx` in batch and builds into a single,
+        yet to be signed `UserOperation` (UO) struct. The output user operation struct
+        will be filled with all gas fields (and paymaster data if a paymaster is used)
+        based on the transactions data (`to`, `data`, `value`, `maxFeePerGas`,
+        `maxPriorityFeePerGas`) computed using the configured ClientMiddlewares on the SmartAccountClient.
+
+        **Example**
+
+        ```ts
+        import type { RpcTransactionRequest } from "viem";
+        import { smartAccountClient } from "./smartAccountClient";
+
+        const requests: RpcTransactionRequest[] = [
+          {
+            from, // ignored
+            to,
+            data: encodeFunctionData({
+              abi: ContractABI.abi,
+              functionName: "func",
+              args: [arg1, arg2, ...],
+            }),
+          },
+          {
+            from, // ignored
+            to,
+            data: encodeFunctionData({
+              abi: ContractABI.abi,
+              functionName: "func",
+              args: [arg1, arg2, ...],
+            }),
+          },
+        ];
+        const uoStruct = await smartAccountClient.buildUserOperationFromTxs({
+          requests,
+        });
+
+        // signUserOperation signs the above unsigned user operation struct built
+        // using the account connected to the smart account client
+        const request = await smartAccountClient.signUserOperation({ uoStruct });
+
+        // You can use the BundlerAction `sendRawUserOperation` (packages/core/src/actions/bundler/sendRawUserOperation.ts)
+        // to send the signed user operation request to the bundler, requesting the bundler to send the signed uo to the
+        // EntryPoint contract pointed at by the entryPoint address parameter
+        const entryPointAddress = client.account.getEntryPoint().address;
+        const uoHash = await smartAccountClient.sendRawUserOperation({
+          request,
+          entryPoint: entryPointAddress,
+        });
+        ```
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [bypassPaymasterAndData](functions/bypassPaymasterAndData.mdx)
+      </td>
+
+      <td>
+        Utility method for checking whether the middleware pipeline should
+        bypass the paymaster middleware for the user operation with the given overrides,
+        either because the UserOp is paying for its own gas, or passing a specific paymaster
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [bypassPaymasterAndDataEmptyHex](functions/bypassPaymasterAndDataEmptyHex.mdx)
+      </td>
+
+      <td>
+        An alternative to `bypassPaymasterAndData` which only returns true if the data parameter
+        is "0x," this is useful for cases when middleware should be bypassed ONLY IF the UserOp will
+        pay for its own gas
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [checkGasSponsorshipEligibility](functions/checkGasSponsorshipEligibility.mdx)
+      </td>
+
+      <td>
+        This function verifies the eligibility of the connected account for gas sponsorship concerning the upcoming `UserOperation` (UO) that is intended to be sent.
+        Internally, this method invokes `buildUserOperation`, which navigates through the middleware pipeline, including the `PaymasterMiddleware`. Its purpose is to construct the UO struct meant for transmission to the bundler. Following the construction of the UO struct, this function verifies if the resulting structure contains a non-empty `paymasterAndData` field.
+        You can utilize this method before sending the user operation to confirm its eligibility for gas sponsorship. Depending on the outcome, it allows you to tailor the user experience accordingly, based on eligibility.
+
+        **Example**
+
+        ```ts
+        import { smartAccountClient } from "./smartAccountClient";
+        // [!code focus:99]
+        const { eligible } = await smartAccountClient.checkGasSponsorshipEligibility({
+          uo: {
+            data: "0xCalldata",
+            target: "0xTarget",
+            value: 0n,
+          },
+        });
+
+        console.log(
+          `User Operation is ${
+            eligible ? "eligible" : "ineligible"
+          } for gas sponsorship.`
+        );
+        ```
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [clientHeaderTrack](functions/clientHeaderTrack.mdx)
+      </td>
+
+      <td>
+        Add a crumb to the breadcrumb.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [concatPaymasterAndData](functions/concatPaymasterAndData.mdx)
+      </td>
+
+      <td>
+        Utility method for converting the object containing the paymaster address and paymaster data
+        to the paymaster and data concatenated hex string
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [conditionalReturn](functions/conditionalReturn.mdx)
+      </td>
+
+      <td>
+        Utility method for checking the condition and return the value if condition holds true, undefined if not.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [convertChainIdToCoinType](functions/convertChainIdToCoinType.mdx)
+      </td>
+
+      <td>
+        Converts a given chain ID to a coin type, following specific standards for mainnet and non-mainnet chains.
+
+        **Example**
+
+        ```ts
+        import { convertChainIdToCoinType } from "@aa-sdk/core";
+        import { sepolia } from "viem/chains";
+
+        const coinType = convertChainIdToCoinType(sepolia.id);
+        ```
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [convertCoinTypeToChain](functions/convertCoinTypeToChain.mdx)
+      </td>
+
+      <td>
+        Converts a coin type to its corresponding blockchain chain based on a predefined mapping.
+
+        **Example**
+
+        ```ts
+        import { convertChainIdToCoinType, convertCoinTypeToChain } from "@aa-sdk/core";
+        import { sepolia } from "viem/chains";
+
+        const coinType = convertChainIdToCoinType(sepolia.id);
+        const chain = convertCoinTypeToChain(coinType);
+        ```
+
+        **Throws**
+
+        If the coin type does not map to a supported chain
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [convertCoinTypeToChainId](functions/convertCoinTypeToChainId.mdx)
+      </td>
+
+      <td>
+        Converts a coin type to a chain ID based on predefined mappings. This function follows ENSIP-9 for coin type 60 and ENSIP-11 for other coin types.
+
+        **Example**
+
+        ```ts
+        import { convertChainIdToCoinType, convertCoinTypeToChainId } from "@aa-sdk/core";
+        import { sepolia } from "viem/chains";
+
+        const coinType = convertChainIdToCoinType(sepolia.id);
+        const chainId = convertCoinTypeToChainId(coinType);
+        ```
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [createBundlerClient](functions/createBundlerClient.mdx)
+      </td>
+
+      <td>
+        Creates a Bundler Client using the provided configuration parameters, including chain and optional type.
+
+        **Example**
+
+        ```ts
+        import { createBundlerClient } from "@aa-sdk/core";
+        import { sepolia } from "viem/chains";
+
+        const client = createBundlerClient({
+         chain: sepolia,
+         transport: http("RPC_URL"),
+        });
+        ```
+
+        **Param**
+
+        Configuration for creating the Bundler Client, including parameters for the chain, transport, and optional type
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [createSmartAccountClient](functions/createSmartAccountClient.mdx)
+      </td>
+
+      <td>
+        Creates a smart account client using the provided configuration. This client handles various Ethereum transactions and message signing operations.
+
+        **Example**
+
+        ```ts
+        import { createSmartAccountClient, toSmartContractAccount } from "@aa-sdk/core";
+        import { http } from "viem";
+        import { sepolia } from "viem/chains";
+
+        const client = createSmartAccountClient({
+         chain: sepolia,
+         transport: http("RPC_URL"),
+         // optionally hoist the account
+         account: toSmartContractAccount(...),
+        });
+        ```
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [createSmartAccountClientFromExisting](functions/createSmartAccountClientFromExisting.mdx)
+      </td>
+
+      <td>
+        Creates a smart account client using an existing client and specific configuration. This function can be used to reuse a pre-existing BundlerClient while customizing other aspects of the smart account.
+
+        **Example**
+
+        ```ts
+        import {
+          createBundlerClient,
+          createSmartAccountClientFromExisting,
+          toSmartContractAccount
+        } from "@aa-sdk/core";
+
+        const bundlerClient = createBundlerClient(...);
+        const client = createSmartAccountClientFromExisting({
+         client,
+         account: toSmartContractAccount(...),
+        })
+        ```
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [deepHexlify](functions/deepHexlify.mdx)
+      </td>
+
+      <td>
+        Recursively converts all values in an object to hex strings
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [defaultFeeEstimator](functions/defaultFeeEstimator.mdx)
+      </td>
+
+      <td>
+        Default fee estimator middleware function that estimates the maximum fee per gas and maximum priority fee per gas for a given client and applies the necessary overrides and fee options.
+
+        **Example**
+
+        ```ts
+        import { createSmartAccountClient, defaultFeeEstimator, createBundlerClient } from "@aa-sdk/core";
+
+        const bundlerClient = createBundlerClient(...);
+
+        // NOTE: this is already provided by the smart account client
+        const client = createSmartAccountClient({
+         feeEstimator: defaultFeeEstimator(bundlerClient),
+         ...otherParams
+        });
+        ```
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [dropAndReplaceUserOperation](functions/dropAndReplaceUserOperation.mdx)
+      </td>
+
+      <td>
+        Drops an existing user operation and replaces it with a new one while ensuring the appropriate fees and overrides are applied.
+
+        **Example**
+
+        ```ts
+        import {
+         createSmartAccountClient,
+        } from "@aa-sdk/core";
+
+        // smart account client is already extended with dropAndReplaceUserOperation
+        const client = createSmartAccountClient(...);
+        const { request } = await client.sendUserOperation(...);
+        const result = await client.dropAndReplaceUserOperation({
+         uoToDrop: request,
+         account, // only required if the client above is not connected to an account
+        });
+        ```
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [erc7677Middleware](functions/erc7677Middleware.mdx)
+      </td>
+
+      <td>
+        Middleware function for interacting with ERC-7677 enabled clients. It supports resolving paymaster and data fields for user operations.
+        This middleware assumes that your RPC provider supports the ERC-7677 methods (pm\_getPaymasterStubData and pm\_getPaymasterData).
+
+        **Example**
+
+        ```ts
+        import { createSmartAccountClient, erc7677Middleware } from "@aa-sdk/core";
+        import { http } from "viem";
+        import { sepolia } from "viem/chains";
+
+        const client = createSmartAccountClient({
+         transport: http("rpc-url"),
+         chain: sepolia,
+         // this assumes that your RPC provider supports the ERC-7677 methods AND takes no context
+         ...erc7677Middleware(),
+        })
+        ```
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [filterUndefined](functions/filterUndefined.mdx)
+      </td>
+
+      <td>
+        Filters out properties with undefined or null values from the provided object.
+
+        **Example**
+
+        ```ts
+        import { filterUndefined } from "@aa-sdk/core";
+
+        const result = filterUndefined({
+         foo: undefined,
+         bar: null,
+         baz: "baz",
+        }); // { baz: "baz" }
+        ```
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [getAccountAddress](functions/getAccountAddress.mdx)
+      </td>
+
+      <td>
+        Retrieves the account address. Uses a provided `accountAddress` if available; otherwise, it computes the address using the entry point contract and the initial code.
+
+        **Example**
+
+        ```ts
+        import { getEntryPoint, getAccountAddress } from "@aa-sdk/core";
+
+        const accountAddress = await getAccountAddress({
+         client,
+         entryPoint: getEntryPoint(chain),
+         getAccountInitCode: async () => "0x{factoryAddress}{factoryCallData}",
+        });
+        ```
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [getDefaultUserOperationFeeOptions](functions/getDefaultUserOperationFeeOptions.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [getEntryPoint](functions/getEntryPoint.mdx)
+      </td>
+
+      <td>
+        Retrieves the entry point definition for the specified chain and version, falling back to the default version if not provided. Throws an error if the entry point address cannot be found.
+
+        **Example**
+
+        ```ts
+        import { getEntryPoint } from "@aa-sdk/core";
+        import { sepolia } from "viem/chains";
+
+        const entryPoint060 = getEntryPoint(sepolia);
+        const entryPoint070 = getEntryPoint(sepolia, { version: "0.7.0" });
+        ```
+
+        **Param**
+
+        The chain for which the entry point is being retrieved
+
+        **Param**
+
+        Options containing the version and address overrides for the entry point
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [getUserOperationError](functions/getUserOperationError.mdx)
+      </td>
+
+      <td>
+        Retrieves the error message from an entrypoint for a User Operation.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [isBigNumberish](functions/isBigNumberish.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [isEntryPointVersion](functions/isEntryPointVersion.mdx)
+      </td>
+
+      <td>
+        Checks if the given value is a valid key of the EntryPointRegistry.
+
+        **Example**
+
+        ```ts
+        import { isEntryPointVersion } from "@aa-sdk/core";
+
+        const valid = isEntryPointVersion("0.6.0");
+        const invalid = isEntryPointVersion("0.8.0");
+        ```
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [isMultiplier](functions/isMultiplier.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [isSigner](functions/isSigner.mdx)
+      </td>
+
+      <td>
+        Checks if the provided object is a `SmartAccountSigner`.
+
+        **Example**
+
+        ```ts
+        import { isSigner, LocalAccountSigner } from "@aa-sdk/core";
+
+        const signer = new LocalAccountSigner(...);
+        console.log(isSigner(signer)); // true
+        ```
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [isSmartAccountClient](functions/isSmartAccountClient.mdx)
+      </td>
+
+      <td>
+        Use this method to assert that a client is a BaseSmartAccountClient.
+        Useful for narrowing the type of the client down when used within the
+        smart account client decorators
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [isSmartAccountWithSigner](functions/isSmartAccountWithSigner.mdx)
+      </td>
+
+      <td>
+        Determines if the given SmartContractAccount has a signer associated with it.
+
+        **Example**
+
+        ```ts
+        import { toSmartContractAccount } from "@aa-sdk/core";
+
+        const account = await toSmartContractAccount(...);
+
+        console.log(isSmartAccountWithSigner(account)); // false: the base account does not have a publicly accessible signer
+        ```
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [isValidFactoryAndData](functions/isValidFactoryAndData.mdx)
+      </td>
+
+      <td>
+        Utility method for asserting a UserOperationStruct has valid fields for the paymaster data
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [isValidPaymasterAndData](functions/isValidPaymasterAndData.mdx)
+      </td>
+
+      <td>
+        Utility method for asserting a UserOperationRequest has valid fields for the paymaster data
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [isValidRequest](functions/isValidRequest.mdx)
+      </td>
+
+      <td>
+        Utility method for asserting a UserOperationStruct has valid fields for the given entry point version
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [middlewareActions](functions/middlewareActions.mdx)
+      </td>
+
+      <td>
+        function that takes in ClientMiddlewareConfig used during client initiation
+        and returns the middleware actions object that the smart account client extends with
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [parseFactoryAddressFromAccountInitCode](functions/parseFactoryAddressFromAccountInitCode.mdx)
+      </td>
+
+      <td>
+        Parses the factory address and factory calldata from the provided account initialization code (initCode).
+
+        **Example**
+
+        ```ts
+        import { parseFactoryAddressFromAccountInitCode } from "@aa-sdk/core";
+
+        const [address, calldata] = parseFactoryAddressFromAccountInitCode("0xAddressCalldata");
+        ```
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [parsePaymasterAndData](functions/parsePaymasterAndData.mdx)
+      </td>
+
+      <td>
+        Utility method for parsing the paymaster address and paymasterData from the paymasterAndData hex string
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [pick](functions/pick.mdx)
+      </td>
+
+      <td>
+        Picks the specified keys from an object and returns a new object containing only those key-value pairs.
+
+        **Example**
+
+        ```ts
+        import { pick } from "@aa-sdk/core";
+
+        const picked = pick({
+         foo: "foo",
+         bar: "bar",
+        }, ["foo"]); // { foo: "foo" }
+        ```
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [resolveProperties](functions/resolveProperties.mdx)
+      </td>
+
+      <td>
+        Await all of the properties of a Deferrable object
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [sendTransaction](functions/sendTransaction.mdx)
+      </td>
+
+      <td>
+        Sends a transaction using the provided client, arguments, optional overrides, and context.
+        This sends a UO and then waits for it to be mined
+
+        **Example**
+
+        ```ts
+        import { createSmartAccountClient } from "@aa-sdk/core";
+
+        // smart account client is already extended with sendTransaction
+        const client = createSmartAccountClient(...);
+        const result = await client.sendTransaction({
+         to: "0x...",
+         data: "0x...", // or "0x",
+         value: 0n, // optional
+         account, // only required if the client above is not connected to an account
+        });
+        ```
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [sendTransactions](functions/sendTransactions.mdx)
+      </td>
+
+      <td>
+        Sends transactions using the provided client and transaction parameters. This function builds user operations from the transactions, sends them, and waits for the transaction to be mined.
+
+        **Example**
+
+        ```ts
+        import { createSmartAccountClient } from "@aa-sdk/core";
+
+        // smart account client is already extended with sendTransactions
+        const client = createSmartAccountClient(...);
+        const result = await client.sendTransactions({
+         requests: [{
+           to: "0x...",
+           data: "0x...", // or "0x",
+           value: 0n, // optional
+         }],
+         account, // only required if the client above is not connected to an account
+        });
+        ```
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [sendUserOperation](functions/sendUserOperation.mdx)
+      </td>
+
+      <td>
+        Sends a user operation or batch of user operations using the connected account. Before executing, sendUserOperation will run the user operation through the middleware pipeline.
+
+        **Example**
+
+        ```ts
+        import { createSmartAccountClient, toSmartContractAccount } from "@aa-sdk/core";
+
+        const account = await toSmartContractAccount(...);
+        const result = await createSmartAccountClient(...).sendUserOperation({
+         uo: {
+           target: "0x...",
+           data: "0x...", // or "0x",
+           value: 0n, // optional
+         }
+        });
+        ```
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [split](functions/split.mdx)
+      </td>
+
+      <td>
+        The Split Transport allows you to split RPC traffic for specific methods across
+        different RPC providers. This is done by specifying the methods you want handled
+        specially as overrides and providing a fallback transport for all other methods.
+
+        **Example**
+
+        ```ts
+        import { createPublicClient, http } from "viem";
+        import { split } from "@aa-sdk/core";
+
+        const bundlerMethods = [
+         "eth_sendUserOperation",
+         "eth_estimateUserOperationGas",
+         "eth_getUserOperationReceipt",
+         "eth_getUserOperationByHash",
+         "eth_supportedEntryPoints"
+        ];
+
+        const clientWithSplit = createPublicClient({
+         transport: split({
+             overrides: [{
+                 methods: bundlerMethods,
+                 transport: http(BUNDLER_RPC_URL)
+             }],
+             fallback: http(OTHER_RPC_URL)
+         }),
+        });
+        ```
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [stringToIndex](functions/stringToIndex.mdx)
+      </td>
+
+      <td>
+        Useful if you want to use a string, such as a user's email address, as salt to generate a unique SmartAccount per user.
+
+        example:
+
+        ```
+        const salt = stringToIndex("alice@example.com");
+
+        export const account = new SimpleSmartContractAccount({
+          index: salt,
+          // other args omitted...
+        });
+        ```
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [takeBytes](functions/takeBytes.mdx)
+      </td>
+
+      <td>
+        Given a bytes string, returns a slice of the bytes
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [toRecord](functions/toRecord.mdx)
+      </td>
+
+      <td>
+        Converts an array of objects into a record (object) where each key is determined by the specified selector and the value is determined by the provided function.
+
+        **Example**
+
+        ```ts
+        import { toRecord } from "@aa-sdk/core";
+        import { sepolia, mainnet } from "viem/chains";
+
+        const addressesByChain = toRecord(
+         [sepolia, mainnet],
+         "id",
+         () => "0x..."
+        ); // { [sepolia.id]: "0x...", [mainnet.id]: "0x..." }
+        ```
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [toSmartContractAccount](functions/toSmartContractAccount.mdx)
+      </td>
+
+      <td>
+        Converts an account to a smart contract account and sets up various account-related methods using the provided parameters like transport, chain, entry point, and other utilities.
+
+        **Example**
+
+        ```ts
+        import { http, type SignableMessage } from "viem";
+        import { sepolia } from "viem/chains";
+
+        const myAccount = await toSmartContractAccount({
+         /// REQUIRED PARAMS ///
+         source: "MyAccount",
+         transport: http("RPC_URL"),
+         chain: sepolia,
+         // The EntryPointDef that your account is com"patible with
+         entryPoint: getEntryPoint(sepolia, { version: "0.6.0" }),
+         // This should return a concatenation of your `factoryAddress` and the `callData` for your factory's create account method
+         getAccountInitCode: async () => "0x{factoryAddress}{callData}",
+         // an invalid signature that doesn't cause your account to revert during validation
+         getDummySignature: () => "0x1234...",
+         // given a UO in the form of {target, data, value} should output the calldata for calling your contract's execution method
+         encodeExecute: async (uo) => "0xcalldata",
+         signMessage: async ({ message }: { message: SignableMessage }) => "0x...",
+         signTypedData: async (typedData) => "0x000",
+
+         /// OPTIONAL PARAMS ///
+         // if you already know your account's address, pass that in here to avoid generating a new counterfactual
+         accountAddress: "0xaddressoverride",
+         // if your account supports batching, this should take an array of UOs and return the calldata for calling your contract's batchExecute method
+         encodeBatchExecute: async (uos) => "0x...",
+         // if your contract expects a different signing scheme than the default signMessage scheme, you can override that here
+         signUserOperationHash: async (hash) => "0x...",
+         // allows you to define the calldata for upgrading your account
+         encodeUpgradeToAndCall: async (params) => "0x...",
+        });
+        ```
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [unpackSignRawMessageBytes](functions/unpackSignRawMessageBytes.mdx)
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        [wrapSignatureWith6492](functions/wrapSignatureWith6492.mdx)
+      </td>
+
+      <td>
+        Wraps a given signature with additional data following the EIP-6492 standard.
+
+        **Example**
+
+        ```ts
+        import { wrapSignatureWith6492 } from "@aa-sdk/core";
+
+        const signature = wrapSignatureWith6492({
+         factoryAddress: "0x...",
+         factoryCalldata: "0x...",
+         signature: "0x...",
+        });
+        ```
+      </td>
+    </tr>
+
+  </tbody>
+</table>

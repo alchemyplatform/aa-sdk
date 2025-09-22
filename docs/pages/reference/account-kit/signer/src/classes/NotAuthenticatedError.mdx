@@ -5,7 +5,7 @@ slug: wallets/reference/account-kit/signer/src/classes/NotAuthenticatedError
 layout: reference
 ---
 
-Defined in: [account-kit/signer/src/errors.ts:3](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/signer/src/errors.ts#L3)
+Defined in: [account-kit/signer/src/errors.ts:3](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/signer/src/errors.ts#L3)
 
 ## Extends
 
@@ -19,7 +19,7 @@ Defined in: [account-kit/signer/src/errors.ts:3](https://github.com/alchemyplatf
 new NotAuthenticatedError(): NotAuthenticatedError;
 ```
 
-Defined in: [account-kit/signer/src/errors.ts:5](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/signer/src/errors.ts#L5)
+Defined in: [account-kit/signer/src/errors.ts:5](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/signer/src/errors.ts#L5)
 
 #### Returns
 
@@ -33,18 +33,391 @@ BaseError.constructor;
 
 ## Properties
 
-| Property                                     | Modifier | Type        | Default value             | Description                                                                                                                                                                                                                                                                                                                                                                                                                                       | Overrides        | Inherited from              | Defined in                                                                                                                                                        |
-| :------------------------------------------- | :------- | :---------- | :------------------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | :--------------- | :-------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| <a id="cause" /> `cause?`                    | `public` | `unknown`   | `undefined`               | -                                                                                                                                                                                                                                                                                                                                                                                                                                                 | -                | `BaseError.cause`           | node_modules/typescript/lib/lib.es2022.error.d.ts:26                                                                                                              |
-| <a id="details" /> `details`                 | `public` | `string`    | `undefined`               | -                                                                                                                                                                                                                                                                                                                                                                                                                                                 | -                | `BaseError.details`         | node_modules/viem/\_types/errors/base.d.ts:19                                                                                                                     |
-| <a id="docspath" /> `docsPath?`              | `public` | `string`    | `undefined`               | -                                                                                                                                                                                                                                                                                                                                                                                                                                                 | -                | `BaseError.docsPath`        | node_modules/viem/\_types/errors/base.d.ts:20                                                                                                                     |
-| <a id="message" /> `message`                 | `public` | `string`    | `undefined`               | -                                                                                                                                                                                                                                                                                                                                                                                                                                                 | -                | `BaseError.message`         | node_modules/typescript/lib/lib.es5.d.ts:1077                                                                                                                     |
-| <a id="metamessages" /> `metaMessages?`      | `public` | `string`\[] | `undefined`               | -                                                                                                                                                                                                                                                                                                                                                                                                                                                 | -                | `BaseError.metaMessages`    | node_modules/viem/\_types/errors/base.d.ts:21                                                                                                                     |
-| <a id="name" /> `name`                       | `public` | `string`    | `"NotAuthenticatedError"` | -                                                                                                                                                                                                                                                                                                                                                                                                                                                 | `BaseError.name` | -                           | [account-kit/signer/src/errors.ts:4](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/signer/src/errors.ts#L4) |
-| <a id="shortmessage" /> `shortMessage`       | `public` | `string`    | `undefined`               | -                                                                                                                                                                                                                                                                                                                                                                                                                                                 | -                | `BaseError.shortMessage`    | node_modules/viem/\_types/errors/base.d.ts:22                                                                                                                     |
-| <a id="stack" /> `stack?`                    | `public` | `string`    | `undefined`               | -                                                                                                                                                                                                                                                                                                                                                                                                                                                 | -                | `BaseError.stack`           | node_modules/typescript/lib/lib.es5.d.ts:1078                                                                                                                     |
-| <a id="version" /> `version`                 | `public` | `string`    | `undefined`               | -                                                                                                                                                                                                                                                                                                                                                                                                                                                 | -                | `BaseError.version`         | aa-sdk/core/dist/types/errors/base.d.ts:20                                                                                                                        |
-| <a id="stacktracelimit" /> `stackTraceLimit` | `static` | `number`    | `undefined`               | The `Error.stackTraceLimit` property specifies the number of stack frames collected by a stack trace (whether generated by `new Error().stack` or `Error.captureStackTrace(obj)`). The default value is `10` but may be set to any valid JavaScript number. Changes will affect any stack trace captured _after_ the value has been changed. If set to a non-number value, or set to a negative number, stack traces will not capture any frames. | -                | `BaseError.stackTraceLimit` | node_modules/@types/node/globals.d.ts:161                                                                                                                         |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Property</th>
+      <th align="left">Modifier</th>
+      <th align="left">Type</th>
+      <th align="left">Default value</th>
+      <th align="left">Description</th>
+      <th align="left">Overrides</th>
+      <th align="left">Inherited from</th>
+      <th align="left">Defined in</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        <a id="cause" /> `cause?`
+      </td>
+
+      <td>
+        `public`
+      </td>
+
+      <td>
+        `unknown`
+      </td>
+
+      <td>
+        `undefined`
+      </td>
+
+      <td>
+        ‐
+      </td>
+
+      <td>
+        ‐
+      </td>
+
+      <td>
+        ```ts
+        BaseError.cause
+        ```
+      </td>
+
+      <td>
+        node\_modules/typescript/lib/lib.es2022.error.d.ts:26
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="details" /> `details`
+      </td>
+
+      <td>
+        `public`
+      </td>
+
+      <td>
+        `string`
+      </td>
+
+      <td>
+        `undefined`
+      </td>
+
+      <td>
+        ‐
+      </td>
+
+      <td>
+        ‐
+      </td>
+
+      <td>
+        ```ts
+        BaseError.details
+        ```
+      </td>
+
+      <td>
+        node\_modules/viem/\_types/errors/base.d.ts:19
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="docspath" /> `docsPath?`
+      </td>
+
+      <td>
+        `public`
+      </td>
+
+      <td>
+        `string`
+      </td>
+
+      <td>
+        `undefined`
+      </td>
+
+      <td>
+        ‐
+      </td>
+
+      <td>
+        ‐
+      </td>
+
+      <td>
+        ```ts
+        BaseError.docsPath
+        ```
+      </td>
+
+      <td>
+        node\_modules/viem/\_types/errors/base.d.ts:20
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="message" /> `message`
+      </td>
+
+      <td>
+        `public`
+      </td>
+
+      <td>
+        `string`
+      </td>
+
+      <td>
+        `undefined`
+      </td>
+
+      <td>
+        ‐
+      </td>
+
+      <td>
+        ‐
+      </td>
+
+      <td>
+        ```ts
+        BaseError.message
+        ```
+      </td>
+
+      <td>
+        node\_modules/typescript/lib/lib.es5.d.ts:1077
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="metamessages" /> `metaMessages?`
+      </td>
+
+      <td>
+        `public`
+      </td>
+
+      <td>
+        `string`\[]
+      </td>
+
+      <td>
+        `undefined`
+      </td>
+
+      <td>
+        ‐
+      </td>
+
+      <td>
+        ‐
+      </td>
+
+      <td>
+        ```ts
+        BaseError.metaMessages
+        ```
+      </td>
+
+      <td>
+        node\_modules/viem/\_types/errors/base.d.ts:21
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="name" /> `name`
+      </td>
+
+      <td>
+        `public`
+      </td>
+
+      <td>
+        `string`
+      </td>
+
+      <td>
+        `"NotAuthenticatedError"`
+      </td>
+
+      <td>
+        ‐
+      </td>
+
+      <td>
+        ```ts
+        BaseError.name
+        ```
+      </td>
+
+      <td>
+        ‐
+      </td>
+
+      <td>
+        [account-kit/signer/src/errors.ts:4](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/signer/src/errors.ts#L4)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="shortmessage" /> `shortMessage`
+      </td>
+
+      <td>
+        `public`
+      </td>
+
+      <td>
+        `string`
+      </td>
+
+      <td>
+        `undefined`
+      </td>
+
+      <td>
+        ‐
+      </td>
+
+      <td>
+        ‐
+      </td>
+
+      <td>
+        ```ts
+        BaseError.shortMessage
+        ```
+      </td>
+
+      <td>
+        node\_modules/viem/\_types/errors/base.d.ts:22
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="stack" /> `stack?`
+      </td>
+
+      <td>
+        `public`
+      </td>
+
+      <td>
+        `string`
+      </td>
+
+      <td>
+        `undefined`
+      </td>
+
+      <td>
+        ‐
+      </td>
+
+      <td>
+        ‐
+      </td>
+
+      <td>
+        ```ts
+        BaseError.stack
+        ```
+      </td>
+
+      <td>
+        node\_modules/typescript/lib/lib.es5.d.ts:1078
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="version" /> `version`
+      </td>
+
+      <td>
+        `public`
+      </td>
+
+      <td>
+        `string`
+      </td>
+
+      <td>
+        `undefined`
+      </td>
+
+      <td>
+        ‐
+      </td>
+
+      <td>
+        ‐
+      </td>
+
+      <td>
+        ```ts
+        BaseError.version
+        ```
+      </td>
+
+      <td>
+        aa-sdk/core/dist/types/errors/base.d.ts:20
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="stacktracelimit" /> `stackTraceLimit`
+      </td>
+
+      <td>
+        `static`
+      </td>
+
+      <td>
+        `number`
+      </td>
+
+      <td>
+        `undefined`
+      </td>
+
+      <td>
+        The `Error.stackTraceLimit` property specifies the number of stack frames
+        collected by a stack trace (whether generated by `new Error().stack` or
+        `Error.captureStackTrace(obj)`).
+
+        The default value is `10` but may be set to any valid JavaScript number. Changes
+        will affect any stack trace captured *after* the value has been changed.
+
+        If set to a non-number value, or set to a negative number, stack traces will
+        not capture any frames.
+      </td>
+
+      <td>
+        ‐
+      </td>
+
+      <td>
+        ```ts
+        BaseError.stackTraceLimit
+        ```
+      </td>
+
+      <td>
+        node\_modules/@types/node/globals.d.ts:161
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Methods
 
@@ -78,9 +451,27 @@ Defined in: node_modules/viem/\_types/errors/base.d.ts:27
 
 ##### Parameters
 
-| Parameter | Type                 |
-| :-------- | :------------------- |
-| `fn`      | (`err`) => `boolean` |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `fn`
+      </td>
+
+      <td>
+        (`err`) => `boolean`
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ##### Returns
 
@@ -148,10 +539,37 @@ a();
 
 #### Parameters
 
-| Parameter         | Type       |
-| :---------------- | :--------- |
-| `targetObject`    | `object`   |
-| `constructorOpt?` | `Function` |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `targetObject`
+      </td>
+
+      <td>
+        `object`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `constructorOpt?`
+      </td>
+
+      <td>
+        `Function`
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 #### Returns
 
@@ -175,10 +593,37 @@ Defined in: node_modules/@types/node/globals.d.ts:149
 
 #### Parameters
 
-| Parameter     | Type          |
-| :------------ | :------------ |
-| `err`         | `Error`       |
-| `stackTraces` | `CallSite`\[] |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `err`
+      </td>
+
+      <td>
+        `Error`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `stackTraces`
+      </td>
+
+      <td>
+        `CallSite`\[]
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 #### Returns
 

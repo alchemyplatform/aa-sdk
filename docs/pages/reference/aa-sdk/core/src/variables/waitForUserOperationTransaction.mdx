@@ -12,7 +12,7 @@ const waitForUserOperationTransaction: <TTransport, TChain>(
 ) => Promise<Hex>;
 ```
 
-Defined in: [aa-sdk/core/src/actions/smartAccount/waitForUserOperationTransacation.ts:34](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/actions/smartAccount/waitForUserOperationTransacation.ts#L34)
+Defined in: [aa-sdk/core/src/actions/smartAccount/waitForUserOperationTransacation.ts:34](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/actions/smartAccount/waitForUserOperationTransacation.ts#L34)
 
 Waits for a user operation transaction to be confirmed by checking the receipt periodically until it is found or a maximum number of retries is reached.
 
@@ -31,17 +31,80 @@ const result = await client.waitForUserOperationTransaction({
 
 ## Type Parameters
 
-| Type Parameter                     | Default type |
-| :--------------------------------- | :----------- | ------- | ----------- |
-| `TTransport` _extends_ `Transport` | `Transport`  |
-| `TChain` _extends_ `Chain`         | `undefined`  | `Chain` | `undefined` |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TTransport` *extends* `Transport`
+      </td>
+
+      <td>
+        `Transport`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TChain` *extends* `Chain` | `undefined`
+      </td>
+
+      <td>
+        `Chain` | `undefined`
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Parameters
 
-| Parameter | Type                                                                                       | Description                                    |
-| :-------- | :----------------------------------------------------------------------------------------- | :--------------------------------------------- |
-| `client`  | `Client`\<`TTransport`, `TChain`, `any`>                                                   | -                                              |
-| `args`    | [`WaitForUserOperationTxParameters`](../type-aliases/WaitForUserOperationTxParameters.mdx) | The parameters for the transaction to wait for |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `client`
+      </td>
+
+      <td>
+        `Client`\<`TTransport`, `TChain`, `any`>
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `args`
+      </td>
+
+      <td>
+        [`WaitForUserOperationTxParameters`](../type-aliases/WaitForUserOperationTxParameters.mdx)
+      </td>
+
+      <td>
+        The parameters for the transaction to wait for
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Returns
 

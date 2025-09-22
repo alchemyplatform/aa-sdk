@@ -11,16 +11,39 @@ function middlewareActions(
 ): <TTransport, TChain, TAccount>(client) => object;
 ```
 
-Defined in: [aa-sdk/core/src/middleware/actions.ts:50](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/middleware/actions.ts#L50)
+Defined in: [aa-sdk/core/src/middleware/actions.ts:50](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/middleware/actions.ts#L50)
 
 function that takes in ClientMiddlewareConfig used during client initiation
 and returns the middleware actions object that the smart account client extends with
 
 ## Parameters
 
-| Parameter   | Type                                                                   | Description                                                             |
-| :---------- | :--------------------------------------------------------------------- | :---------------------------------------------------------------------- |
-| `overrides` | [`ClientMiddlewareConfig`](../type-aliases/ClientMiddlewareConfig.mdx) | config used during client initiation for overriding default middlewares |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `overrides`
+      </td>
+
+      <td>
+        [`ClientMiddlewareConfig`](../type-aliases/ClientMiddlewareConfig.mdx)
+      </td>
+
+      <td>
+        config used during client initiation for overriding default middlewares
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Returns
 
@@ -32,22 +55,102 @@ middleware actions object
 
 ### Type Parameters
 
-| Type Parameter                     | Default type |
-| :--------------------------------- | :----------- | ------------------------------------------------------------------ | ------- | ----------- | ------------------------------------------------------------------ |
-| `TTransport` _extends_ `Transport` | `Transport`  |
-| `TChain` _extends_ `undefined`     | `Chain`      | `undefined`                                                        | `Chain` |
-| `TAccount` _extends_               | `undefined`  | [`SmartContractAccount`](../type-aliases/SmartContractAccount.mdx) |         | `undefined` | [`SmartContractAccount`](../type-aliases/SmartContractAccount.mdx) |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TTransport` *extends* `Transport`
+      </td>
+
+      <td>
+        `Transport`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TChain` *extends* `undefined` | `Chain`
+      </td>
+
+      <td>
+        `undefined` | `Chain`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TAccount` *extends*
+        | `undefined`
+        | [`SmartContractAccount`](../type-aliases/SmartContractAccount.mdx)
+      </td>
+
+      <td>
+        | `undefined`
+        | [`SmartContractAccount`](../type-aliases/SmartContractAccount.mdx)
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ### Parameters
 
-| Parameter | Type                                                    |
-| :-------- | :------------------------------------------------------ |
-| `client`  | `MiddlewareClient`\<`TTransport`, `TChain`, `TAccount`> |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `client`
+      </td>
+
+      <td>
+        `MiddlewareClient`\<`TTransport`, `TChain`, `TAccount`>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ### Returns
 
 `object`
 
-| Name         | Type                                                       | Defined in                                                                                                                                                                    |
-| :----------- | :--------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `middleware` | [`ClientMiddleware`](../type-aliases/ClientMiddleware.mdx) | [aa-sdk/core/src/middleware/actions.ts:59](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/middleware/actions.ts#L59) |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Name</th>
+      <th align="left">Type</th>
+      <th align="left">Defined in</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `middleware`
+      </td>
+
+      <td>
+        [`ClientMiddleware`](../type-aliases/ClientMiddleware.mdx)
+      </td>
+
+      <td>
+        [aa-sdk/core/src/middleware/actions.ts:59](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/middleware/actions.ts#L59)
+      </td>
+    </tr>
+
+  </tbody>
+</table>

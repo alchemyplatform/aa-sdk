@@ -9,7 +9,7 @@ layout: reference
 function isAlchemyTransport(transport, chain): transport is AlchemyTransport;
 ```
 
-Defined in: [account-kit/infra/src/alchemyTransport.ts:94](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/infra/src/alchemyTransport.ts#L94)
+Defined in: [account-kit/infra/src/alchemyTransport.ts:94](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/infra/src/alchemyTransport.ts#L94)
 
 A type guard for the transport to determine if it is an Alchemy transport.
 Used in cases where we would like to do switching depending on the transport, where there used
@@ -17,10 +17,46 @@ to be two clients for an alchemy and a non-alchemy, and with this switch we don'
 
 ## Parameters
 
-| Parameter   | Type        | Description                                                                |
-| :---------- | :---------- | :------------------------------------------------------------------------- |
-| `transport` | `Transport` | The transport to check                                                     |
-| `chain`     | `Chain`     | Chain for the transport to run its function to return the transport config |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `transport`
+      </td>
+
+      <td>
+        `Transport`
+      </td>
+
+      <td>
+        The transport to check
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `chain`
+      </td>
+
+      <td>
+        `Chain`
+      </td>
+
+      <td>
+        Chain for the transport to run its function to return the transport config
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Returns
 

@@ -9,20 +9,113 @@ layout: reference
 type UseClientActionsResult<TActions> = object;
 ```
 
-Defined in: [account-kit/react/src/hooks/useClientActions.ts:21](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/react/src/hooks/useClientActions.ts#L21)
+Defined in: [account-kit/react/src/hooks/useClientActions.ts:21](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/react/src/hooks/useClientActions.ts#L21)
 
 ## Type Parameters
 
-| Type Parameter                | Default type |
-| :---------------------------- | :----------- |
-| `TActions` _extends_ `object` | `object`     |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TActions` *extends* `object`
+      </td>
+
+      <td>
+        `object`
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Properties
 
-| Property                                           | Type                                                                                                                       | Defined in                                                                                                                                                                                        |
-| :------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| <a id="data" /> `data`                             | `ReturnType`\<`TActions`\[keyof `TActions`]>                                                                               | `undefined`                                                                                                                                                                                       | [account-kit/react/src/hooks/useClientActions.ts:32](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/react/src/hooks/useClientActions.ts#L32) |
-| <a id="error" /> `error?`                          | `Error`                                                                                                                    | `null`                                                                                                                                                                                            | [account-kit/react/src/hooks/useClientActions.ts:34](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/react/src/hooks/useClientActions.ts#L34) |
-| <a id="executeaction" /> `executeAction`           | \<`TFunctionName`>(`params`) => `void`                                                                                     | [account-kit/react/src/hooks/useClientActions.ts:26](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/react/src/hooks/useClientActions.ts#L26) |
-| <a id="executeactionasync" /> `executeActionAsync` | \<`TFunctionName`>(`params`) => `Promise`\<[`ExecuteableFunctionResult`](ExecuteableFunctionResult.mdx)\<`TFunctionName`>> | [account-kit/react/src/hooks/useClientActions.ts:29](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/react/src/hooks/useClientActions.ts#L29) |
-| <a id="isexecutingaction" /> `isExecutingAction`   | `boolean`                                                                                                                  | [account-kit/react/src/hooks/useClientActions.ts:33](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/react/src/hooks/useClientActions.ts#L33) |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Property</th>
+      <th align="left">Type</th>
+      <th align="left">Defined in</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        <a id="data" /> `data`
+      </td>
+
+      <td>
+        `ReturnType`\<`TActions`\[keyof `TActions`]> | `undefined`
+      </td>
+
+      <td>
+        [account-kit/react/src/hooks/useClientActions.ts:32](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/react/src/hooks/useClientActions.ts#L32)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="error" /> `error?`
+      </td>
+
+      <td>
+        `Error` | `null`
+      </td>
+
+      <td>
+        [account-kit/react/src/hooks/useClientActions.ts:34](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/react/src/hooks/useClientActions.ts#L34)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="executeaction" /> `executeAction`
+      </td>
+
+      <td>
+        \<`TFunctionName`>(`params`) => `void`
+      </td>
+
+      <td>
+        [account-kit/react/src/hooks/useClientActions.ts:26](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/react/src/hooks/useClientActions.ts#L26)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="executeactionasync" /> `executeActionAsync`
+      </td>
+
+      <td>
+        \<`TFunctionName`>(`params`) => `Promise`\<[`ExecuteableFunctionResult`](ExecuteableFunctionResult.mdx)\<`TFunctionName`>>
+      </td>
+
+      <td>
+        [account-kit/react/src/hooks/useClientActions.ts:29](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/react/src/hooks/useClientActions.ts#L29)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="isexecutingaction" /> `isExecutingAction`
+      </td>
+
+      <td>
+        `boolean`
+      </td>
+
+      <td>
+        [account-kit/react/src/hooks/useClientActions.ts:33](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/react/src/hooks/useClientActions.ts#L33)
+      </td>
+    </tr>
+
+  </tbody>
+</table>

@@ -19,21 +19,119 @@ type AlchemySmartAccountClientConfig<chain, account, context> = object &
   >;
 ```
 
-Defined in: [account-kit/infra/src/client/smartAccountClient.ts:40](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/infra/src/client/smartAccountClient.ts#L40)
+Defined in: [account-kit/infra/src/client/smartAccountClient.ts:40](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/infra/src/client/smartAccountClient.ts#L40)
 
 ## Type Declaration
 
-| Name             | Type                             | Defined in                                                                                                                                                                                              |
-| :--------------- | :------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `account?`       | `account`                        | [account-kit/infra/src/client/smartAccountClient.ts:49](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/infra/src/client/smartAccountClient.ts#L49) |
-| `policyId?`      | `string`                         | `string`\[]                                                                                                                                                                                             | [account-kit/infra/src/client/smartAccountClient.ts:51](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/infra/src/client/smartAccountClient.ts#L51) |
-| `policyToken?`   | [`PolicyToken`](PolicyToken.mdx) | [account-kit/infra/src/client/smartAccountClient.ts:52](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/infra/src/client/smartAccountClient.ts#L52) |
-| `useSimulation?` | `boolean`                        | [account-kit/infra/src/client/smartAccountClient.ts:50](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/infra/src/client/smartAccountClient.ts#L50) |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Name</th>
+      <th align="left">Type</th>
+      <th align="left">Defined in</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `account?`
+      </td>
+
+      <td>
+        `account`
+      </td>
+
+      <td>
+        [account-kit/infra/src/client/smartAccountClient.ts:49](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/infra/src/client/smartAccountClient.ts#L49)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `policyId?`
+      </td>
+
+      <td>
+        `string` | `string`\[]
+      </td>
+
+      <td>
+        [account-kit/infra/src/client/smartAccountClient.ts:51](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/infra/src/client/smartAccountClient.ts#L51)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `policyToken?`
+      </td>
+
+      <td>
+        [`PolicyToken`](PolicyToken.mdx)
+      </td>
+
+      <td>
+        [account-kit/infra/src/client/smartAccountClient.ts:52](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/infra/src/client/smartAccountClient.ts#L52)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `useSimulation?`
+      </td>
+
+      <td>
+        `boolean`
+      </td>
+
+      <td>
+        [account-kit/infra/src/client/smartAccountClient.ts:50](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/infra/src/client/smartAccountClient.ts#L50)
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Type Parameters
 
-| Type Parameter                             | Default type |
-| :----------------------------------------- | :----------- | ---------------------- | ----------- |
-| `chain` _extends_ `Chain`                  | `undefined`  | `Chain`                | `undefined` |
-| `account` _extends_ `SmartContractAccount` | `undefined`  | `SmartContractAccount` | `undefined` |
-| `context` _extends_ `UserOperationContext` | `undefined`  | `UserOperationContext` | `undefined` |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `chain` *extends* `Chain` | `undefined`
+      </td>
+
+      <td>
+        `Chain` | `undefined`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `account` *extends* `SmartContractAccount` | `undefined`
+      </td>
+
+      <td>
+        `SmartContractAccount` | `undefined`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `context` *extends* `UserOperationContext` | `undefined`
+      </td>
+
+      <td>
+        `UserOperationContext` | `undefined`
+      </td>
+    </tr>
+
+  </tbody>
+</table>

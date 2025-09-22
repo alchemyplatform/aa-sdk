@@ -13,7 +13,7 @@ function erc7677Middleware<TContext>(
 >;
 ```
 
-Defined in: [aa-sdk/core/src/middleware/erc7677middleware.ts:97](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/middleware/erc7677middleware.ts#L97)
+Defined in: [aa-sdk/core/src/middleware/erc7677middleware.ts:97](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/middleware/erc7677middleware.ts#L97)
 
 Middleware function for interacting with ERC-7677 enabled clients. It supports resolving paymaster and data fields for user operations.
 This middleware assumes that your RPC provider supports the ERC-7677 methods (pm_getPaymasterStubData and pm_getPaymasterData).
@@ -35,15 +35,56 @@ const client = createSmartAccountClient({
 
 ## Type Parameters
 
-| Type Parameter                   | Default type               |
-| :------------------------------- | :------------------------- | ----------- | -------------------------- |
-| `TContext` _extends_ `undefined` | `Record`\<`string`, `any`> | `undefined` | `Record`\<`string`, `any`> |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TContext` *extends* `undefined` | `Record`\<`string`, `any`>
+      </td>
+
+      <td>
+        `undefined` | `Record`\<`string`, `any`>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Parameters
 
-| Parameter | Type                                                                                                       | Description                                                                                                                                                                          |
-| :-------- | :--------------------------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `params?` | [`Erc7677MiddlewareParams`](../type-aliases/Erc7677MiddlewareParams.mdx)\<`TContext`, `EntryPointVersion`> | Middleware parameters including context function or object. Context can be resolved dynamically by passing in a function which takes in the context at the time of sending a user op |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `params?`
+      </td>
+
+      <td>
+        [`Erc7677MiddlewareParams`](../type-aliases/Erc7677MiddlewareParams.mdx)\<`TContext`, `EntryPointVersion`>
+      </td>
+
+      <td>
+        Middleware parameters including context function or object. Context can be resolved dynamically by passing in a function which takes in the context at the time of sending a user op
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Returns
 

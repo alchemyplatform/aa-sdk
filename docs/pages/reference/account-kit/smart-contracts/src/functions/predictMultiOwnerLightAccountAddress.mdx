@@ -9,7 +9,7 @@ layout: reference
 function predictMultiOwnerLightAccountAddress(params): `0x${string}`;
 ```
 
-Defined in: [account-kit/smart-contracts/src/light-account/accounts/predictAddress.ts:117](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/smart-contracts/src/light-account/accounts/predictAddress.ts#L117)
+Defined in: [account-kit/smart-contracts/src/light-account/accounts/predictAddress.ts:117](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/light-account/accounts/predictAddress.ts#L117)
 
 Predicts the address of a **Multi-Owner Light Account** given the factory, salt
 and the set of owner addresses.
@@ -20,9 +20,35 @@ for funding or displaying to users).
 
 ## Parameters
 
-| Parameter | Type                                         | Description                                                                                                                                                                                                    |
-| :-------- | :------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `params`  | `PredictMultiOwnerLightAccountAddressParams` | Object containing: – `factoryAddress` Factory contract that will deploy the account. – `salt` Arbitrary salt used when calling the factory. – `ownerAddresses` Array of owner EOAs (must be deduped & sorted). |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `params`
+      </td>
+
+      <td>
+        `PredictMultiOwnerLightAccountAddressParams`
+      </td>
+
+      <td>
+        Object containing:
+        – `factoryAddress` Factory contract that will deploy the account.
+        – `salt` Arbitrary salt used when calling the factory.
+        – `ownerAddresses` Array of owner EOAs (must be deduped & sorted).
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Returns
 

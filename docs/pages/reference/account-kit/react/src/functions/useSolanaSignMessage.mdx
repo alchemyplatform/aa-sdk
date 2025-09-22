@@ -9,7 +9,7 @@ layout: reference
 function useSolanaSignMessage(opts): SolanaSignedMessage;
 ```
 
-Defined in: [account-kit/react/src/hooks/useSolanaSignMessage.ts:65](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/react/src/hooks/useSolanaSignMessage.ts#L65)
+Defined in: [account-kit/react/src/hooks/useSolanaSignMessage.ts:65](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/react/src/hooks/useSolanaSignMessage.ts#L65)
 
 This is the hook that will be used to sign a message. It will prioritize external
 connected Solana wallets, falling back to the internal signer when not connected.
@@ -31,9 +31,32 @@ signHello({ message: "Hello" });
 
 ## Parameters
 
-| Parameter | Type                         | Description                        |
-| :-------- | :--------------------------- | :--------------------------------- |
-| `opts`    | `UseSolanaSignMessageParams` | Options for the hook to get setup. |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `opts`
+      </td>
+
+      <td>
+        `UseSolanaSignMessageParams`
+      </td>
+
+      <td>
+        Options for the hook to get setup.
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Returns
 

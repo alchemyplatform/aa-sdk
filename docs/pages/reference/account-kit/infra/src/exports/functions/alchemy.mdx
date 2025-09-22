@@ -9,7 +9,7 @@ layout: reference
 function alchemy(config): AlchemyTransport;
 ```
 
-Defined in: [account-kit/infra/src/alchemyTransport.ts:143](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/infra/src/alchemyTransport.ts#L143)
+Defined in: [account-kit/infra/src/alchemyTransport.ts:143](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/infra/src/alchemyTransport.ts#L143)
 
 Creates an Alchemy transport with the specified configuration options.
 When sending all traffic to Alchemy, you must pass in one of rpcUrl, apiKey, or jwt.
@@ -48,9 +48,32 @@ const transport = alchemy({
 
 ## Parameters
 
-| Parameter | Type                                                                   | Description                                         |
-| :-------- | :--------------------------------------------------------------------- | :-------------------------------------------------- |
-| `config`  | [`AlchemyTransportConfig`](../type-aliases/AlchemyTransportConfig.mdx) | The configuration object for the Alchemy transport. |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `config`
+      </td>
+
+      <td>
+        [`AlchemyTransportConfig`](../type-aliases/AlchemyTransportConfig.mdx)
+      </td>
+
+      <td>
+        The configuration object for the Alchemy transport.
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Returns
 

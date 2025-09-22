@@ -9,7 +9,7 @@ layout: reference
 function useAddOauthProvider(mutationArgs?): UseAddOauthProviderResult;
 ```
 
-Defined in: [account-kit/react/src/hooks/useAddOauthProvider.ts:61](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/react/src/hooks/useAddOauthProvider.ts#L61)
+Defined in: [account-kit/react/src/hooks/useAddOauthProvider.ts:61](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/react/src/hooks/useAddOauthProvider.ts#L61)
 
 A custom hook to handle adding an OAuth provider to an already authenticated account, which includes executing a mutation with optional parameters.
 
@@ -29,9 +29,32 @@ const { addOauthProvider, isAddingOauthProvider, error } = useAddOauthProvider({
 
 ## Parameters
 
-| Parameter       | Type                                                                                                                                                                       | Description       |
-| :-------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------------- | ---------------------------------------------------------------------- |
-| `mutationArgs?` | `Partial`\<`Omit`\<`UseMutationOptions`\<`OauthProviderInfo`, `Error`, `Omit`\<`object` & OauthProviderConfig & OauthRedirectConfig, `"type"`>, `unknown`>, `"mutationFn"` | `"mutationKey"`>> | Optional arguments for the mutation used for adding an OAuth provider. |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `mutationArgs?`
+      </td>
+
+      <td>
+        `Partial`\<`Omit`\<`UseMutationOptions`\<`OauthProviderInfo`, `Error`, `Omit`\<`object` & OauthProviderConfig & OauthRedirectConfig, `"type"`>, `unknown`>, `"mutationFn"` | `"mutationKey"`>>
+      </td>
+
+      <td>
+        Optional arguments for the mutation used for adding an OAuth provider.
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Returns
 

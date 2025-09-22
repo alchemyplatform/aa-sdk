@@ -20,7 +20,7 @@ function buildUserOperationFromTx<
 ): Promise<UserOperationStruct<TEntryPointVersion>>;
 ```
 
-Defined in: [aa-sdk/core/src/actions/smartAccount/buildUserOperationFromTx.ts:62](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/aa-sdk/core/src/actions/smartAccount/buildUserOperationFromTx.ts#L62)
+Defined in: [aa-sdk/core/src/actions/smartAccount/buildUserOperationFromTx.ts:62](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/actions/smartAccount/buildUserOperationFromTx.ts#L62)
 
 Performs `buildUserOperationFromTx` in batch and builds into a single, yet to be signed `UserOperation` (UO) struct. The output user operation struct will be filled with all gas fields (and paymaster data if a paymaster is used) based on the transactions data (`to`, `data`, `value`, `maxFeePerGas`, `maxPriorityFeePerGas`) computed using the configured `ClientMiddlewares` on the `SmartAccountClient`
 
@@ -57,22 +57,144 @@ const uoHash = await smartAccountClient.sendRawUserOperation({ request, entryPoi
 
 ## Type Parameters
 
-| Type Parameter                                                                                                        | Default type                                                                            |
-| :-------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------- | ------------------------------------------------------------------ | ------- | ----------- | ------------------------------------------------------------------ |
-| `TChain` _extends_ `undefined`                                                                                        | `Chain`                                                                                 | `undefined`                                                        | `Chain` |
-| `TAccount` _extends_                                                                                                  | `undefined`                                                                             | [`SmartContractAccount`](../type-aliases/SmartContractAccount.mdx) |         | `undefined` | [`SmartContractAccount`](../type-aliases/SmartContractAccount.mdx) |
-| `TChainOverride` _extends_ `undefined`                                                                                | `Chain`                                                                                 | `undefined`                                                        | `Chain` |
-| `TContext` _extends_                                                                                                  | `undefined`                                                                             | [`UserOperationContext`](../type-aliases/UserOperationContext.mdx) |         | `undefined` | [`UserOperationContext`](../type-aliases/UserOperationContext.mdx) |
-| `TEntryPointVersion` _extends_ keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase.mdx)\<`unknown`> | [`GetEntryPointFromAccount`](../type-aliases/GetEntryPointFromAccount.mdx)\<`TAccount`> |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TChain` *extends* `undefined` | `Chain`
+      </td>
+
+      <td>
+        `undefined` | `Chain`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TAccount` *extends*
+        | `undefined`
+        | [`SmartContractAccount`](../type-aliases/SmartContractAccount.mdx)
+      </td>
+
+      <td>
+        | `undefined`
+        | [`SmartContractAccount`](../type-aliases/SmartContractAccount.mdx)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TChainOverride` *extends* `undefined` | `Chain`
+      </td>
+
+      <td>
+        `undefined` | `Chain`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TContext` *extends*
+        | `undefined`
+        | [`UserOperationContext`](../type-aliases/UserOperationContext.mdx)
+      </td>
+
+      <td>
+        | `undefined`
+        | [`UserOperationContext`](../type-aliases/UserOperationContext.mdx)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TEntryPointVersion` *extends* keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase.mdx)\<`unknown`>
+      </td>
+
+      <td>
+        [`GetEntryPointFromAccount`](../type-aliases/GetEntryPointFromAccount.mdx)\<`TAccount`>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Parameters
 
-| Parameter    | Type                                                                                          | Description                                                              |
-| :----------- | :-------------------------------------------------------------------------------------------- | :----------------------------------------------------------------------- |
-| `client_`    | `Client`\<`Transport`, `TChain`, `TAccount`>                                                  | the smart account client to use for RPC requests                         |
-| `args`       | `SendTransactionParameters`\<`TChain`, `TAccount`, `TChainOverride`>                          | the send tx parameters                                                   |
-| `overrides?` | [`UserOperationOverrides`](../type-aliases/UserOperationOverrides.mdx)\<`TEntryPointVersion`> | optional overrides to use for any of the fields                          |
-| `context?`   | `TContext`                                                                                    | if the smart account client requires additinoal context for building UOs |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `client_`
+      </td>
+
+      <td>
+        `Client`\<`Transport`, `TChain`, `TAccount`>
+      </td>
+
+      <td>
+        the smart account client to use for RPC requests
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `args`
+      </td>
+
+      <td>
+        `SendTransactionParameters`\<`TChain`, `TAccount`, `TChainOverride`>
+      </td>
+
+      <td>
+        the send tx parameters
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `overrides?`
+      </td>
+
+      <td>
+        [`UserOperationOverrides`](../type-aliases/UserOperationOverrides.mdx)\<`TEntryPointVersion`>
+      </td>
+
+      <td>
+        optional overrides to use for any of the fields
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `context?`
+      </td>
+
+      <td>
+        `TContext`
+      </td>
+
+      <td>
+        if the smart account client requires additinoal context for building UOs
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Returns
 

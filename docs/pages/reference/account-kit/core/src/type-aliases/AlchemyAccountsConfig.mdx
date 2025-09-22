@@ -9,20 +9,173 @@ layout: reference
 type AlchemyAccountsConfig = object;
 ```
 
-Defined in: [account-kit/core/src/types.ts:59](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/core/src/types.ts#L59)
+Defined in: [account-kit/core/src/types.ts:59](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/core/src/types.ts#L59)
 
 ## Properties
 
-| Property                                              | Type                                                                   | Defined in                                                                                                                                                    |
-| :---------------------------------------------------- | :--------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| <a id="_internal" /> `_internal`                      | `object`                                                               | [account-kit/core/src/types.ts:66](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/core/src/types.ts#L66) |
-| `_internal.createSigner`                              | (`config`) => [`AlchemySigner`](AlchemySigner.mdx)                     | [account-kit/core/src/types.ts:68](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/core/src/types.ts#L68) |
-| `_internal.sessionLength`                             | `number`                                                               | [account-kit/core/src/types.ts:72](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/core/src/types.ts#L72) |
-| `_internal.ssr?`                                      | `boolean`                                                              | [account-kit/core/src/types.ts:70](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/core/src/types.ts#L70) |
-| `_internal.storageKey`                                | `string`                                                               | [account-kit/core/src/types.ts:71](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/core/src/types.ts#L71) |
-| `_internal.wagmiConfig`                               | `WagmiConfig`                                                          | [account-kit/core/src/types.ts:69](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/core/src/types.ts#L69) |
-| <a id="accountcreationhint" /> `accountCreationHint?` | [`CreateConfigProps`](CreateConfigProps.mdx)\[`"accountCreationHint"`] | [account-kit/core/src/types.ts:61](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/core/src/types.ts#L61) |
-| <a id="solana" /> `solana?`                           | `object`                                                               | [account-kit/core/src/types.ts:62](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/core/src/types.ts#L62) |
-| `solana.adapters?`                                    | `WalletAdapter`\[]                                                     | `"detect"`                                                                                                                                                    | [account-kit/core/src/types.ts:63](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/core/src/types.ts#L63) |
-| `solana.connection`                                   | `SolanaWeb3Connection`                                                 | [account-kit/core/src/types.ts:64](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/core/src/types.ts#L64) |
-| <a id="store" /> `store`                              | [`accountLoupeActions`](../variables/accountLoupeActions.mdx)          | [account-kit/core/src/types.ts:60](https://github.com/alchemyplatform/aa-sdk/blob/49e74eee8606f480b200b4612d00d950da8a8742/account-kit/core/src/types.ts#L60) |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Property</th>
+      <th align="left">Type</th>
+      <th align="left">Defined in</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        <a id="_internal" /> `_internal`
+      </td>
+
+      <td>
+        `object`
+      </td>
+
+      <td>
+        [account-kit/core/src/types.ts:66](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/core/src/types.ts#L66)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `_internal.createSigner`
+      </td>
+
+      <td>
+        (`config`) => [`AlchemySigner`](AlchemySigner.mdx)
+      </td>
+
+      <td>
+        [account-kit/core/src/types.ts:68](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/core/src/types.ts#L68)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `_internal.sessionLength`
+      </td>
+
+      <td>
+        `number`
+      </td>
+
+      <td>
+        [account-kit/core/src/types.ts:72](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/core/src/types.ts#L72)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `_internal.ssr?`
+      </td>
+
+      <td>
+        `boolean`
+      </td>
+
+      <td>
+        [account-kit/core/src/types.ts:70](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/core/src/types.ts#L70)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `_internal.storageKey`
+      </td>
+
+      <td>
+        `string`
+      </td>
+
+      <td>
+        [account-kit/core/src/types.ts:71](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/core/src/types.ts#L71)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `_internal.wagmiConfig`
+      </td>
+
+      <td>
+        `WagmiConfig`
+      </td>
+
+      <td>
+        [account-kit/core/src/types.ts:69](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/core/src/types.ts#L69)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="accountcreationhint" /> `accountCreationHint?`
+      </td>
+
+      <td>
+        [`CreateConfigProps`](CreateConfigProps.mdx)\[`"accountCreationHint"`]
+      </td>
+
+      <td>
+        [account-kit/core/src/types.ts:61](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/core/src/types.ts#L61)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="solana" /> `solana?`
+      </td>
+
+      <td>
+        `object`
+      </td>
+
+      <td>
+        [account-kit/core/src/types.ts:62](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/core/src/types.ts#L62)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `solana.adapters?`
+      </td>
+
+      <td>
+        `WalletAdapter`\[] | `"detect"`
+      </td>
+
+      <td>
+        [account-kit/core/src/types.ts:63](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/core/src/types.ts#L63)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `solana.connection`
+      </td>
+
+      <td>
+        `SolanaWeb3Connection`
+      </td>
+
+      <td>
+        [account-kit/core/src/types.ts:64](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/core/src/types.ts#L64)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="store" /> `store`
+      </td>
+
+      <td>
+        [`accountLoupeActions`](../variables/accountLoupeActions.mdx)
+      </td>
+
+      <td>
+        [account-kit/core/src/types.ts:60](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/core/src/types.ts#L60)
+      </td>
+    </tr>
+
+  </tbody>
+</table>
