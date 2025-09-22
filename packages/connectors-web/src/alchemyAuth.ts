@@ -60,11 +60,16 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
   let clients: Record<number, Client> = {};
 
   return createConnector<Provider, Properties>((config) => {
-    const emitAndThrowError = (message: string): never => {
-      const error = new Error(message);
-      config.emitter.emit("error", { error });
-      throw error;
-    };
+    function assertNotNullish<T>(
+      value: T,
+      message: string,
+    ): asserts value is NonNullable<T> {
+      if (value == null) {
+        const error = new Error(message);
+        config.emitter.emit("error", { error });
+        throw error;
+      }
+    }
 
     return {
       id: "alchemyAuth",
@@ -79,12 +84,11 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
       async connect({ chainId } = {}) {
         // Connection is handled through the auth flow (sendEmailOtp -> submitOtpCode)
         // This method is called by wagmi after authentication completes
-        if (!authSessionInstance) {
-          // TODO(v5): Update error message to reflect different auth methods available.
-          emitAndThrowError(
-            "No signer available. Please authenticate first using sendEmailOtp and submitOtpCode, or loginWithOauth.",
-          );
-        }
+        // TODO(v5): Update error message to reflect different auth methods available.
+        assertNotNullish(
+          authClientInstance,
+          "No signer available. Please authenticate first using sendEmailOtp and submitOtpCode, or loginWithOauth.",
+        );
 
         const accounts = await this.getAccounts();
         if (accounts.length === 0) {
@@ -92,11 +96,10 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
         }
 
         const resolvedChainId = chainId ?? config.chains[0]?.id;
-        if (!resolvedChainId) {
-          emitAndThrowError(
-            "No chain ID available. Please provide a chainId parameter or configure chains in your wagmi config.",
-          );
-        }
+        assertNotNullish(
+          resolvedChainId,
+          "No chain ID available. Please provide a chainId parameter or configure chains in your wagmi config.",
+        );
 
         currentChainId = resolvedChainId;
 
@@ -141,45 +144,38 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
       async getChainId() {
         // Return the currently connected chain, or fall back to first configured chain
         const resolvedChainId = currentChainId ?? config.chains[0]?.id;
-        if (!resolvedChainId) {
-          throw new Error(
-            "No chain configured. Please configure chains in your wagmi config.",
-          );
-        }
+        assertNotNullish(
+          resolvedChainId,
+          "No chain configured. Please configure chains in your wagmi config.",
+        );
         return resolvedChainId;
       },
 
       async getProvider() {
-        if (!authSessionInstance) {
-          throw new Error(
-            "No auth session available. Please authenticate first.",
-          );
-        }
+        assertNotNullish(
+          authSessionInstance,
+          "No auth session available. Please authenticate first.",
+        );
         return authSessionInstance.getProvider();
       },
 
       // This is optional, but called by `getConnectorClient`. See here: https://github.com/wevm/wagmi/blob/main/packages/core/src/actions/getConnectorClient.ts
       // This enables signing 7702 authorizations, since otherwise wagmi will build a client using the 1193 provider, which is unable to sign authorizations.
       async getClient(params = { chainId: undefined }): Promise<Client> {
-        if (!authSessionInstance) {
-          emitAndThrowError(
-            "Authentication required. Please configure the alchemyAuth connector with an apiKey.",
-          );
-        }
+        assertNotNullish(
+          authSessionInstance,
+          "Authentication required. Please configure the alchemyAuth connector with an apiKey.",
+        );
 
         const chainId = params.chainId ?? currentChainId;
-        if (!chainId) {
-          throw new Error("chainId is required to getClient");
-        }
+        assertNotNullish(chainId, "chainId is required to getClient");
 
         if (clients[chainId]) {
           return clients[chainId];
         }
 
         const chain = config.chains.find((chain) => chain.id === chainId);
-        if (!chain) {
-          throw new Error(`Chain with id ${chainId} not found in config`);
-        }
+        assertNotNullish(chain, `Chain with id ${chainId} not found in config`);
 
         const transport = config.transports?.[chainId];
         if (!transport) {
@@ -188,7 +184,7 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
           );
         }
 
-        const account = authSessionInstance!.toLocalAccount();
+        const account = authSessionInstance.toViemAccount();
 
         const client = createWalletClient({
           account,
@@ -209,9 +205,10 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
       async switchChain({ chainId }) {
         currentChainId = chainId;
         const targetChain = config.chains.find((chain) => chain.id === chainId);
-        if (!targetChain) {
-          throw new Error(`Chain with id ${chainId} not found in config`);
-        }
+        assertNotNullish(
+          targetChain,
+          `Chain with id ${chainId} not found in config`,
+        );
 
         config.emitter.emit("change", {
           chainId,
@@ -252,11 +249,10 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
       getAuthClient() {
         // TODO: Expand this to support other auth methods (jwt, rpcUrl) when
         // AlchemyConnectionConfig pattern is adopted in future PR
-        if (!options.apiKey) {
-          emitAndThrowError(
-            "Authentication required. Please configure the alchemyAuth connector with an apiKey.",
-          );
-        }
+        assertNotNullish(
+          options.apiKey,
+          "Authentication required. Please configure the alchemyAuth connector with an apiKey.",
+        );
 
         if (!authClientInstance) {
           authClientInstance = createWebAuthClient({

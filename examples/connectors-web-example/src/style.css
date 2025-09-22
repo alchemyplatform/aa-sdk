@@ -20,7 +20,10 @@
   }
 }
 
-#oauth-auth, #email-auth, #wallet-actions, #session-controls {
+#oauth-auth,
+#email-auth,
+#wallet-actions,
+#session-controls {
   margin: 20px 0;
   padding: 20px;
   border: 1px solid #333;
@@ -73,7 +76,8 @@
   background: #333;
 }
 
-.disconnect-btn, .clear-storage-btn {
+.disconnect-btn,
+.clear-storage-btn {
   background: #666;
   color: white;
   border: none;
@@ -83,7 +87,8 @@
   font-size: 0.9rem;
 }
 
-.disconnect-btn:hover, .clear-storage-btn:hover {
+.disconnect-btn:hover,
+.clear-storage-btn:hover {
   background: #555;
 }
 
@@ -114,8 +119,8 @@
   min-height: 20px;
 }
 
-
-input[type="text"], input[type="email"] {
+input[type="text"],
+input[type="email"] {
   padding: 8px 12px;
   margin: 5px;
   border: 1px solid #333;
@@ -143,11 +148,15 @@ input[type="text"], input[type="email"] {
 }
 
 @media (prefers-color-scheme: light) {
-  #oauth-auth, #email-auth, #wallet-actions, #session-controls {
+  #oauth-auth,
+  #email-auth,
+  #wallet-actions,
+  #session-controls {
     border-color: #ddd;
   }
 
-  input[type="text"], input[type="email"] {
+  input[type="text"],
+  input[type="email"] {
     border-color: #ddd;
   }
 }
