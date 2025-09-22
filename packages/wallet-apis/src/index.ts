@@ -27,3 +27,7 @@ export { signTypedData } from "./actions/signTypedData.js";
 // Decorators.
 export type * from "./decorators/smartWalletActions.js";
 export { smartWalletActions } from "./decorators/smartWalletActions.js";
+
+// Client.
+export type * from "./client.js";
+export { createSmartWalletClient } from "./client.js";
