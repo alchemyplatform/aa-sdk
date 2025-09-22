@@ -28,6 +28,11 @@
       "require": "./dist/esm/exports/index.js",
       "import": "./dist/esm/exports/index.js"
     },
+    "./experimental": {
+      "types": "./dist/types/exports/experimental.d.ts",
+      "import": "./dist/esm/exports/experimental.js",
+      "default": "./dist/esm/exports/experimental.js"
+    },
     "./package.json": "./package.json"
   },
   "scripts": {
