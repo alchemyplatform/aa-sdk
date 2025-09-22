@@ -11,12 +11,12 @@ The OTP will be sent to the user's email and can be submitted using submitOtpCod
 ## Import
 
 ```ts
-import { AuthClient } from "@alchemy/signer";
+import { AuthClient } from "@alchemy/auth";
 ```
 
 ## Usage
 
-```ts
+```ts twoslash
 await authClient.sendEmailOtp({ email: "user@example.com" });
 // User will receive an OTP code via email
 ```

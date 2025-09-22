@@ -1,6 +1,7 @@
-import { createConfig, http } from "wagmi";
+import { createConfig } from "wagmi";
 import { arbitrumSepolia } from "wagmi/chains";
 import { alchemyAuth } from "@alchemy/connectors-web";
+import { alchemyTransport } from "@alchemy/common";
 
 export const config = createConfig({
   connectors: [
@@ -10,6 +11,8 @@ export const config = createConfig({
   ],
   chains: [arbitrumSepolia],
   transports: {
-    [arbitrumSepolia.id]: http(),
+    [arbitrumSepolia.id]: alchemyTransport({
+      apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY,
+    }),
   },
 });

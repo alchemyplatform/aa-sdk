@@ -49,8 +49,8 @@
   },
   "dependencies": {
     "@alchemy/common": "*",
-    "@alchemy/signer": "*",
-    "@alchemy/signer-web": "*",
+    "@alchemy/auth": "*",
+    "@alchemy/auth-web": "*",
     "viem": "2.29.2"
   },
   "publishConfig": {

@@ -11,17 +11,17 @@ This method should be called after sendEmailOtp() with the code received via ema
 ## Import
 
 ```ts
-import { AuthClient } from "@alchemy/signer";
+import { AuthClient } from "@alchemy/auth";
 ```
 
 ## Usage
 
-```ts
+```ts twoslash
 // First send OTP
 await authClient.sendEmailOtp({ email: "user@example.com" });
 
 // Then submit the code received via email
-const signer = await authClient.submitOtpCode({ otpCode: "123456" });
+const authSession = await authClient.submitOtpCode({ otpCode: "123456" });
 ```
 
 ## Parameters
@@ -40,5 +40,5 @@ const signer = await authClient.submitOtpCode({ otpCode: "123456" });
 
 ## Returns
 
-`Promise<Signer>`
-Promise that resolves to an authenticated Signer instance
+`Promise<AuthSession>`
+Promise that resolves to an auth session instance

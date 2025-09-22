@@ -1,13 +1,14 @@
 import type { Config, Connector } from "wagmi";
-import type { AuthClient, Signer } from "@alchemy/signer";
+import type { AuthClient, AuthSession } from "@alchemy/auth";
+import { getConnectors } from "@wagmi/core";
 
 /**
  * Extended connector interface that includes Alchemy Auth-specific methods
  */
 export interface AlchemyAuthConnector extends Connector {
   getAuthClient(): AuthClient;
-  getSigner(): Promise<Signer>;
-  setSigner(signer: Signer): void;
+  getAuthSession(): Promise<AuthSession>;
+  setAuthSession(authSession: AuthSession): void;
 }
 
 /**
@@ -22,7 +23,8 @@ export function resolveAlchemyAuthConnector(
   config: Config,
   id = "alchemyAuth",
 ): AlchemyAuthConnector {
-  const connector = config.connectors.find((c) => c.id === id);
+  const connectors = getConnectors(config);
+  const connector = connectors.find((c) => c.id === id);
   if (!connector) {
     throw new Error(`Alchemy connector ("${id}") not found`);
   }

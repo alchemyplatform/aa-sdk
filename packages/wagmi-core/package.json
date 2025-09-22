@@ -50,7 +50,7 @@
   "dependencies": {
     "@alchemy/common": "*",
     "@alchemy/connectors-web": "*",
-    "@alchemy/signer": "*",
+    "@alchemy/auth": "*",
     "viem": "2.29.2"
   },
   "publishConfig": {

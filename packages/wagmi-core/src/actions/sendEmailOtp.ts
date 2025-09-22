@@ -1,5 +1,5 @@
-import type { Config } from "wagmi";
 import { resolveAlchemyAuthConnector } from "@alchemy/connectors-web";
+import type { Config } from "@wagmi/core";
 
 export type SendEmailOtpParameters = {
   email: string;
@@ -22,5 +22,6 @@ export async function sendEmailOtp(
   const connector = resolveAlchemyAuthConnector(config);
 
   const authClient = connector.getAuthClient();
+  // TODO(v5): this fails if the account doesn't exist yet. do we want to handle creating accounts here?
   await authClient.sendEmailOtp({ email: parameters.email });
 }

@@ -10,6 +10,7 @@
     "lint:write": "prettier --write ./src"
   },
   "dependencies": {
+    "@alchemy/common": "*",
     "@alchemy/connectors-web": "*",
     "@alchemy/react": "*",
     "@tanstack/react-query": "^5.28.9",

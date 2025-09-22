@@ -1,7 +1,7 @@
 {
-  "name": "@alchemy/signer",
+  "name": "@alchemy/auth-web",
   "version": "0.0.0",
-  "description": "Alchemy Signer",
+  "description": "Alchemy Auth for Web",
   "author": "Alchemy",
   "license": "MIT",
   "private": false,
@@ -34,7 +34,7 @@
     "build": "yarn clean && yarn build:esm && yarn build:types",
     "build:esm": "tsc --project tsconfig.build.json --outDir ./dist/esm",
     "build:types": "tsc --project tsconfig.build.json --declarationDir ./dist/types --emitDeclarationOnly --declaration --declarationMap",
-    "fern:gen": "node ../../doc-gen/dist/esm/cli.js generate --in ./src/index.ts --out ../../docs/pages/reference/alchemy/signer",
+    "fern:gen": "node ../../doc-gen/dist/esm/cli.js generate --in ./src/index.ts --out ../../docs/pages/reference/alchemy/auth-web",
     "clean": "rm -rf ./dist",
     "test": "vitest",
     "test:run": "vitest run"
@@ -44,6 +44,9 @@
   },
   "dependencies": {
     "@alchemy/common": "*",
+    "@alchemy/auth": "*",
+    "@turnkey/iframe-stamper": "^2.5.0",
+    "@turnkey/webauthn-stamper": "^0.5.1",
     "viem": "2.29.2"
   },
   "publishConfig": {

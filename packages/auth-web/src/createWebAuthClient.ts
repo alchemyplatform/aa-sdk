@@ -1,11 +1,13 @@
-import { AuthClient, OauthCancelledError } from "@alchemy/signer";
+import {
+  AuthClient,
+  OauthCancelledError,
+  type CreateTekStamperFn,
+  type CreateWebAuthnStamperFn,
+} from "@alchemy/auth";
 import { IframeStamper } from "@turnkey/iframe-stamper";
 
 const CHECK_CLOSE_INTERVAL = 500;
 
-/**
- * Configuration parameters for creating a web-based AuthClient
- */
 export type WebAuthClientParams = {
   /** API key for authentication with Alchemy services */
   apiKey: string;
@@ -13,6 +15,10 @@ export type WebAuthClientParams = {
   iframeElementId?: string;
   /** Optional ID for the container element that holds the iframe. Defaults to "turnkey-iframe-container" */
   iframeContainerId?: string;
+  /** Optional custom TEK stamper factory for React Native */
+  createTekStamper?: CreateTekStamperFn;
+  /** Optional custom WebAuthn stamper factory */
+  createWebAuthnStamper?: CreateWebAuthnStamperFn;
 };
 
 /**
@@ -33,7 +39,7 @@ export type WebAuthClientParams = {
  *
  * @example
  * ```ts
- * import { createWebAuthClient } from "@alchemy/signer-web";
+ * import { createWebAuthClient } from "@alchemy/auth-web";
  *
  * const authClient = createWebAuthClient({
  *   apiKey: "your-alchemy-api-key",
@@ -44,10 +50,10 @@ export type WebAuthClientParams = {
  * await authClient.sendEmailOtp({ email: "user@example.com" });
  *
  * // Submit OTP code
- * const signer = await authClient.submitOtpCode({ otpCode: "123456" });
+ * const authSession = await authClient.submitOtpCode({ otpCode: "123456" });
  *
  * // OAuth login
- * const signer = await authClient.loginWithOauth({
+ * const authSession = await authClient.loginWithOauth({
  *   type: "oauth",
  *   authProviderId: "google",
  *   mode: "popup"
@@ -63,6 +69,8 @@ export function createWebAuthClient({
   apiKey,
   iframeElementId = "turnkey-iframe",
   iframeContainerId = "turnkey-iframe-container",
+  createTekStamper,
+  createWebAuthnStamper,
 }: WebAuthClientParams): AuthClient {
   const getOrCreateIframeContainer = () => {
     let iframeContainer = document.getElementById(iframeContainerId);
@@ -78,16 +86,20 @@ export function createWebAuthClient({
   return new AuthClient({
     apiKey,
 
-    createTekStamper: async () => {
-      const iframeContainer = getOrCreateIframeContainer();
-      return new IframeStamper({
-        iframeUrl: "https://auth.turnkey.com",
-        iframeElementId,
-        iframeContainer,
-      });
-    },
+    createTekStamper:
+      createTekStamper ??
+      (async () => {
+        const iframeContainer = getOrCreateIframeContainer();
+        return new IframeStamper({
+          iframeUrl: "https://auth.turnkey.com",
+          iframeElementId,
+          iframeContainer,
+        });
+      }),
 
-    createWebAuthnStamper: () => Promise.reject(new Error("Not implemented")),
+    createWebAuthnStamper:
+      createWebAuthnStamper ??
+      (() => Promise.reject(new Error("Not implemented"))),
     handleOauthFlow: async (authUrl: string, mode: "popup" | "redirect") => {
       switch (mode) {
         case "popup":
@@ -117,7 +129,7 @@ export function createWebAuthClient({
               if (alchemyError) {
                 cleanup();
                 popup?.close();
-                reject(new alchemyError());
+                reject(alchemyError);
               }
               if (!status) {
                 // This message isn't meant for us.

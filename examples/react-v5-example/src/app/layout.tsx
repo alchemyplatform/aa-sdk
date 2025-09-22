@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Providers } from "./providers.js";
+import { Providers } from "./providers.tsx";
 
 export const metadata: Metadata = {
   title: "Alchemy Smart Wallet Demo",
