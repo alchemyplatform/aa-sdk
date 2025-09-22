@@ -16,8 +16,10 @@
   "plugin": [
     "typedoc-plugin-markdown",
     "typedoc-plugin-frontmatter",
+    "typedoc-plugin-remark",
     "./custom-frontmatter.mjs"
   ],
+  "remarkPlugins": ["remark-mdx"],
   "fileExtension": ".mdx",
   "out": "./docs/pages/reference/typedoc",
   "cleanOutputDir": true,
@@ -43,5 +45,9 @@
   "skipErrorChecking": true,
   "compilerOptions": {
     "skipLibCheck": true
-  }
+  },
+  "useHTMLEncodedBrackets": true,
+  "useCodeBlocks": true,
+  "sanitizeComments": true,
+  "typePrintWidth": 80
 }
