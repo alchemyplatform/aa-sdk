@@ -174,12 +174,6 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
       }
     }
 
-    const emitAndThrowError = (message: string): never => {
-      const error = new Error(message);
-      config.emitter.emit("error", { error });
-      throw error;
-    };
-
     // Silent resume logic to try to restore auth session from storage
     async function tryResume(): Promise<boolean> {
       if (authSessionInstance) return true;
@@ -199,7 +193,7 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
         try {
           const sessionStateJson = JSON.stringify(persisted);
           authSessionInstance =
-            await client.loadAuthSessionState(sessionStateJson);
+            await client.restoreAuthSession(sessionStateJson);
 
           if (authSessionInstance) {
             currentChainId = persisted.chainId;
@@ -221,11 +215,12 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
     }
 
     function getAuthClient(): AuthClient {
-      if (!options.apiKey) {
-        emitAndThrowError(
-          "Authentication required. Please configure the alchemyAuth connector with an apiKey.",
-        );
-      }
+      // TODO: Expand this to support other auth methods (jwt, rpcUrl) when
+      // AlchemyConnectionConfig pattern is adopted in future PR
+      assertNotNullish(
+        options.apiKey,
+        "Authentication required. Please configure the alchemyAuth connector with an apiKey.",
+      );
 
       if (!authClientInstance) {
         authClientInstance = createWebAuthClient({
@@ -270,18 +265,16 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
           await tryResume();
         }
 
-        if (!authSessionInstance) {
-          // TODO(v5): Update error message to reflect different auth methods available.
-          emitAndThrowError(
-            "No auth session available. Please authenticate first using sendEmailOtp and submitOtpCode, or loginWithOauth.",
-          );
-        }
+        assertNotNullish(
+          authSessionInstance,
+          "No auth session available. Please authenticate first using sendEmailOtp and submitOtpCode, or loginWithOauth.",
+        );
 
         // Refresh persisted snapshot (e.g., new expiration after token refresh)
         try {
           // Get the real auth session state
           const authSessionStateJson =
-            authSessionInstance!.getAuthSessionState();
+            authSessionInstance!.getSerializedState();
           const authSessionState: AuthSessionState =
             JSON.parse(authSessionStateJson);
 
@@ -323,12 +316,10 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
 
         const resolvedChainId =
           chainId ?? currentChainId ?? config.chains[0]?.id;
-        if (!resolvedChainId) {
-          emitAndThrowError(
-            "No chain ID available. Please provide a chainId parameter or configure chains in your wagmi config.",
-          );
-        }
-
+        assertNotNullish(
+          resolvedChainId,
+          "No chain ID available. Please provide a chainId parameter or configure chains in your wagmi config.",
+        );
         currentChainId = resolvedChainId;
 
         config.emitter.emit("connect", {
@@ -498,7 +489,7 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
         // Persist session state immediately
         try {
           // Get the real auth session state
-          const authSessionStateJson = authSession.getAuthSessionState();
+          const authSessionStateJson = authSession.getSerializedState();
           const authSessionState: AuthSessionState =
             JSON.parse(authSessionStateJson);
 
