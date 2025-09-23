@@ -9,6 +9,7 @@ site/.vitepress/cache/**/*
 /examples/ui-demo/contracts
 /examples/ui-demo/.next/*
 !/examples/auth-web-example
+!/examples/connectors-web-example
 
 **/.turbo/*
 account-kit/rn-signer/lib/*
