@@ -1,3 +1,5 @@
+import { AlchemyRestClient } from "@alchemy/common";
+import type { SignerHttpSchema } from "@alchemy/aa-infra";
 import { AuthSession } from "./authSession.js";
 import type {
   AuthSessionState,
@@ -7,7 +9,6 @@ import type {
   HandleOauthFlowFn,
   TurnkeyTekStamper,
 } from "./types.js";
-import { dev_request } from "./devRequest.js";
 import { getOauthNonce, getOauthProviderUrl } from "./utils.js";
 import { z } from "zod";
 
@@ -41,12 +42,13 @@ const AuthSessionStateSchema = z.discriminatedUnion("type", [
  * Configuration parameters for creating an AuthClient instance
  */
 export type AuthClientParams = {
-  // TODO: put this back when the transport is ready.
-  // transport: AlchemyTransport;
-  // TODO: this is temporary for testing before the transport is ready.
-  /** API key for authentication with Alchemy services */
-  apiKey: string;
-  /** Function to create a TEK (Turnkey Ephemeral Key) stamper */
+  /** API key for authentication with Alchemy services. */
+  apiKey?: string;
+  /** JWT token for authentication with Alchemy services. */
+  jwt?: string;
+  /** Custom URL (optional - defaults to Alchemy's chain-agnostic URL, but can be used to override it) */
+  url?: string;
+  /** Function to create a TEK (Traffic Encryption Key) stamper */
   createTekStamper: CreateTekStamperFn;
   /** Function to create a WebAuthn stamper for passkey authentication */
   createWebAuthnStamper: CreateWebAuthnStamperFn;
@@ -218,11 +220,12 @@ function extractOAuthCallbackParams() {
  * ```
  */
 export class AuthClient {
-  // TODO: temporary for testing before the transport is ready.
-  private readonly apiKey: string;
-  private readonly createTekStamper: CreateTekStamperFn;
-  private readonly createWebAuthnStamper: CreateWebAuthnStamperFn;
-  private readonly handleOauthFlow: HandleOauthFlowFn;
+  private constructor(
+    private readonly signerHttpClient: AlchemyRestClient<SignerHttpSchema>,
+    private readonly createTekStamper: CreateTekStamperFn,
+    private readonly createWebAuthnStamper: CreateWebAuthnStamperFn,
+    private readonly handleOauthFlow: HandleOauthFlowFn,
+  ) {}
 
   /**
    * Creates a new AuthClient instance
@@ -232,12 +235,19 @@ export class AuthClient {
    * @param {CreateTekStamperFn} params.createTekStamper - Function to create a TEK stamper
    * @param {CreateWebAuthnStamperFn} params.createWebAuthnStamper - Function to create a WebAuthn stamper
    * @param {HandleOauthFlowFn} params.handleOauthFlow - Function to handle OAuth authentication flow
+   * @returns {AuthClient} A new AuthClient instance
    */
-  constructor(params: AuthClientParams) {
-    this.apiKey = params.apiKey;
-    this.createTekStamper = params.createTekStamper;
-    this.createWebAuthnStamper = params.createWebAuthnStamper;
-    this.handleOauthFlow = params.handleOauthFlow;
+  public static create(params: AuthClientParams): AuthClient {
+    return new AuthClient(
+      new AlchemyRestClient({
+        apiKey: params.apiKey,
+        jwt: params.jwt,
+        url: params.url,
+      }),
+      params.createTekStamper,
+      params.createWebAuthnStamper,
+      params.handleOauthFlow,
+    );
   }
 
   private tekStamperPromise: Promise<TekStamperAndPublicKey> | null = null;
@@ -261,12 +271,16 @@ export class AuthClient {
    */
   public async sendEmailOtp({ email }: SendEmailOtpParams): Promise<void> {
     const { targetPublicKey } = await this.getTekStamper();
-    const { otpId, orgId } = await this.dev_request("auth", {
-      email,
-      emailMode: "otp",
-      targetPublicKey,
+    const { otpId, orgId } = await this.signerHttpClient.request({
+      route: "signer/v1/auth",
+      method: "POST",
+      body: {
+        email,
+        emailMode: "otp",
+        targetPublicKey,
+      },
     });
-    this.pendingOtp = { otpId, orgId };
+    this.pendingOtp = { otpId: otpId!, orgId };
   }
 
   /**
@@ -294,15 +308,14 @@ export class AuthClient {
     }
     const { otpId, orgId } = this.pendingOtp;
     const { targetPublicKey } = await this.getTekStamper();
-    const { credentialBundle } = await this.dev_request("otp", {
-      otpId,
-      otpCode,
-      orgId,
-      targetPublicKey,
+    const { credentialBundle } = await this.signerHttpClient.request({
+      route: "signer/v1/otp",
+      method: "POST",
+      body: { otpId, otpCode, orgId, targetPublicKey },
     });
     this.pendingOtp = null;
     return this.completeAuthWithBundle({
-      bundle: credentialBundle,
+      bundle: credentialBundle!,
       orgId,
       authType: "otp",
     });
@@ -333,8 +346,10 @@ export class AuthClient {
     params: LoginWithOauthParams,
   ): Promise<AuthSession> {
     const { targetPublicKey } = await this.getTekStamper();
-    const oauthConfig = await this.dev_request("prepare-oauth", {
-      nonce: getOauthNonce(targetPublicKey),
+    const oauthConfig = await this.signerHttpClient.request({
+      route: "signer/v1/prepare-oauth",
+      method: "POST",
+      body: { nonce: getOauthNonce(targetPublicKey) },
     });
     const authUrl = getOauthProviderUrl({
       oauthParams:
@@ -404,7 +419,6 @@ export class AuthClient {
         authType: "oauth",
       });
     }
-    console.log("No OAuth callback parameters found");
     return null;
   }
 
@@ -508,7 +522,7 @@ export class AuthClient {
       throw new Error("Failed to inject credential bundle");
     }
     const authSession = await AuthSession.create({
-      apiKey: this.apiKey,
+      signerHttpClient: this.signerHttpClient,
       stamper,
       orgId,
       idToken,
@@ -544,11 +558,6 @@ export class AuthClient {
     if (!result.success)
       throw new Error("Parsed state is not of type AuthSessionState");
     return parsedState;
-  }
-
-  // TODO: remove this and use transport instead once it's ready.
-  private dev_request(path: string, body: unknown): Promise<any> {
-    return dev_request(this.apiKey, path, body);
   }
 }
 function notImplemented(..._: unknown[]): Promise<never> {

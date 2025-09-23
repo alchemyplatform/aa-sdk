@@ -1124,8 +1124,6 @@ navigation:
                 contents:
                   - section: AuthClient
                     contents:
-                      - page: constructor
-                        path: wallets/pages/reference/alchemy/signer/classes/AuthClient/constructor.mdx
                       - page: handleOauthRedirect
                         path: wallets/pages/reference/alchemy/signer/classes/AuthClient/handleOauthRedirect.mdx
                       - page: restoreAuthSession
@@ -1275,6 +1273,12 @@ navigation:
                 contents:
                   - page: AccountNotFoundError
                     path: wallets/pages/reference/alchemy/common/classes/AccountNotFoundError/constructor.mdx
+                  - section: AlchemyRestClient
+                    contents:
+                      - page: constructor
+                        path: wallets/pages/reference/alchemy/common/classes/AlchemyRestClient/constructor.mdx
+                      - page: request
+                        path: wallets/pages/reference/alchemy/common/classes/AlchemyRestClient/request.mdx
                   - page: ChainNotFoundError
                     path: wallets/pages/reference/alchemy/common/classes/ChainNotFoundError/constructor.mdx
                   - page: ConnectionConfigError

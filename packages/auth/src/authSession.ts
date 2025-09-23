@@ -20,22 +20,21 @@ import type {
   TurnkeyStamper,
   User,
 } from "./types";
-import { dev_request } from "./devRequest.js";
 import { toViemLocalAccount } from "./toViemLocalAccount.js";
 import { hashAuthorization } from "viem/utils";
 import {
   type AlchemyAuthEip1193Provider,
   create1193Provider,
 } from "./provider.js";
+import type { AlchemyRestClient } from "@alchemy/common";
+import type { SignerHttpSchema } from "@alchemy/aa-infra";
 
 /**
  * Parameters required to create an AuthSession instance
  */
 export type CreateAuthSessionParams = {
-  // TODO: replace apiKey with transport once it's ready.
-  // transport: AlchemyTransport;
-  /** API key for authentication with Alchemy services */
-  apiKey: string;
+  /** HTTP client for Signer API */
+  signerHttpClient: AlchemyRestClient<SignerHttpSchema>;
   /** Turnkey stamper instance for signing operations */
   stamper: TurnkeyStamper;
   /** Organization ID */
@@ -95,8 +94,7 @@ export class AuthSession {
   private isDisconnected = false;
 
   private constructor(
-    // TODO: replace apiKey with transport once it's ready.
-    private readonly apiKey: string,
+    private readonly signerHttpClient: AlchemyRestClient<SignerHttpSchema>,
     private readonly turnkey: TurnkeyClient,
     private readonly user: User,
     private readonly bundle?: string,
@@ -126,7 +124,7 @@ export class AuthSession {
    * ```
    */
   public static async create({
-    apiKey,
+    signerHttpClient,
     stamper,
     orgId,
     idToken,
@@ -141,20 +139,22 @@ export class AuthSession {
     const stampedRequest = await turnkey.stampGetWhoami({
       organizationId: orgId,
     });
-    // TODO: use the transport to make this call once it's finalized.
-    const whoamiResponse = await dev_request(apiKey, "whoami", {
-      stampedRequest,
+    const whoamiResponse = await signerHttpClient.request({
+      route: "signer/v1/whoami",
+      method: "POST",
+      body: {
+        stampedRequest,
+      },
     });
     // TODO: eventually read email out of the id token to display as the user name
     const user = {
       ...whoamiResponse,
       idToken,
       orgId,
-      credentialId:
-        authType === "passkey" ? credentialId : whoamiResponse.credentialId,
+      credentialId: authType === "passkey" ? credentialId : undefined,
     };
     return new AuthSession(
-      apiKey,
+      signerHttpClient,
       turnkey,
       user,
       bundle,
@@ -223,8 +223,10 @@ export class AuthSession {
       },
     });
 
-    const { signature } = await this.dev_request("sign-payload", {
-      stampedRequest,
+    const { signature } = await this.signerHttpClient.request({
+      route: "signer/v1/sign-payload",
+      method: "POST",
+      body: { stampedRequest },
     });
     return signature;
   };
@@ -469,11 +471,6 @@ export class AuthSession {
   public getProvider(): AlchemyAuthEip1193Provider {
     this.throwIfDisconnected();
     return create1193Provider(this);
-  }
-
-  // TODO: remove this and use transport instead once it's ready.
-  private dev_request(path: string, body: unknown): Promise<any> {
-    return dev_request(this.apiKey, path, body);
   }
 }
 
