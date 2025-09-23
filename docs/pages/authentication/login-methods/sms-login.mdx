@@ -47,18 +47,18 @@ Pricing varies by country and requires specific area codes to be enabled for you
         const { authenticate } = useAuthenticate()
 
         const handleSendCode = (phone: string) => {
-        authenticate(
-            { type: "sms", phone: "+123456789" },
-            {
-                onSuccess: () => {
-                    // onSuccess only fires once the entire flow is done (SMS OTP + optional MFA).
-                    // It still runs even if the final step completes in another tab/window.
+            authenticate(
+                { type: "sms", phone: "+123456789" },
+                {
+                    onSuccess: () => {
+                        // onSuccess only fires once the entire flow is done (SMS OTP + optional MFA).
+                        // It still runs even if the final step completes in another tab/window.
+                    },
+                    onError: (error) => {
+                        // Handle error
+                    },
                 },
-                onError: (error) => {
-                    // Handle error
-                },
-            },
-        );
+            );
         };
         ```
 
@@ -91,20 +91,20 @@ Pricing varies by country and requires specific area codes to be enabled for you
 
         // When the user submits the OTP code
         const handleVerifyCode = (otpCode: string) => {
-        authenticate(
-            {
-            type: "otp",
-            otpCode,
-            },
-            {
-                onSuccess: () => {
-                    // onSuccess only fires once the entire flow is done (SMS OTP).
+            authenticate(
+                {
+                    type: "otp",
+                    otpCode,
                 },
-                onError: (error) => {
-                    // Handle invalid code error
+                {
+                    onSuccess: () => {
+                        // onSuccess only fires once the entire flow is done (SMS OTP).
+                    },
+                    onError: (error) => {
+                        // Handle invalid code error
+                    },
                 },
-            },
-        );
+            );
         };
         ```
 
@@ -135,18 +135,18 @@ Pricing varies by country and requires specific area codes to be enabled for you
         const { authenticate } = useAuthenticate()
 
         const handleSendCode = (phone: string) => {
-        authenticate(
-            { type: "sms", phone: "+123456789" },
-            {
-                onSuccess: () => {
-                    // onSuccess only fires once the entire flow is done (SMS OTP + optional MFA).
-                    // It still runs even if the final step completes in another tab/window.
+            authenticate(
+                { type: "sms", phone: "+123456789" },
+                {
+                    onSuccess: () => {
+                        // onSuccess only fires once the entire flow is done (SMS OTP + optional MFA).
+                        // It still runs even if the final step completes in another tab/window.
+                    },
+                    onError: (error) => {
+                        // Handle error
+                    },
                 },
-                onError: (error) => {
-                    // Handle error
-                },
-            },
-        );
+            );
         };
         ```
 
@@ -180,20 +180,20 @@ Pricing varies by country and requires specific area codes to be enabled for you
 
         // When the user submits the OTP code
         const handleVerifyCode = (otpCode: string) => {
-        authenticate(
-            {
-            type: "otp",
-            otpCode,
-            },
-            {
-                onSuccess: () => {
-                    // onSuccess only fires once the entire flow is done (SMS OTP).
+            authenticate(
+                {
+                    type: "otp",
+                    otpCode,
                 },
-                onError: (error) => {
-                    // Handle invalid code error
+                {
+                    onSuccess: () => {
+                        // onSuccess only fires once the entire flow is done (SMS OTP).
+                    },
+                    onError: (error) => {
+                        // Handle invalid code error
+                    },
                 },
-            },
-        );
+            );
         };
         ```
 
