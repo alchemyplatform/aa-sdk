@@ -186,7 +186,8 @@ input[type="email"] {
   font-weight: 500;
 }
 
-#test-results, #storage-display {
+#test-results,
+#storage-display {
   margin-top: 10px;
   font-family: monospace;
   font-size: 14px;
