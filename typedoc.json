@@ -107,10 +107,14 @@
   "classPropertiesFormat": "htmlTable",
   "typeAliasPropertiesFormat": "htmlTable",
   "enumMembersFormat": "htmlTable",
-  "propertyMembersFormat": "list",
+  "propertyMembersFormat": "htmlTable",
   "typeDeclarationFormat": "htmlTable",
   "indexFormat": "htmlTable",
   "tableColumnSettings": {
+    "hideInherited": true,
+    "hideModifiers": true,
+    "hideOverrides": true,
+    "hideSources": true,
     "leftAlignHeaders": true
   }
 }
