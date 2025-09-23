@@ -1,0 +1,146 @@
+---
+title: updateMultiOwnerLightAccountOwners
+description: Updates the owners of a multi-owner light account. This includes adding new owners and removing existing ones.
+slug: wallets/reference/account-kit/core/src/variables/updateMultiOwnerLightAccountOwners
+layout: reference
+---
+
+```ts
+const updateMultiOwnerLightAccountOwners: <
+  TTransport,
+  TChain,
+  TSigner,
+  TAccount,
+>(
+  client,
+  args,
+) => Promise<Hex>;
+```
+
+Defined in: account-kit/smart-contracts/dist/types/src/light-account/actions/updateOwners.d.ts:33
+
+Updates the owners of a multi-owner light account. This includes adding new owners and removing existing ones.
+
+## Example
+
+```ts
+import {
+  updateOwners,
+  createLightAccountClient,
+} from "@account-kit/smart-contracts";
+
+const lightAccountClient = createLightAccountClient({
+  signer,
+  transport,
+  chain,
+});
+
+const txHash = await updateOwners(lightAccountClient, {
+  ownerstoAdd: [newOwnerAddress], // or empty if you just want to remove owners
+  ownersToRemove: [oldOwnerAddress], // or empty if you just want to add owners
+  waitForTxn: true, // set to false to return a uoHash instead
+});
+```
+
+## Type Parameters
+
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TTransport` *extends* `Transport`
+      </td>
+
+      <td>
+        `Transport`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TChain` *extends* `Chain` | `undefined`
+      </td>
+
+      <td>
+        `Chain` | `undefined`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TSigner` *extends* `SmartAccountSigner`
+      </td>
+
+      <td>
+        `SmartAccountSigner`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TAccount` *extends* `MultiOwnerLightAccount`\<`TSigner`> | `undefined`
+      </td>
+
+      <td>
+        `MultiOwnerLightAccount`\<`TSigner`> | `undefined`
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+
+## Parameters
+
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `client`
+      </td>
+
+      <td>
+        `Client`\<`TTransport`, `TChain`, `TAccount`>
+      </td>
+
+      <td>
+        The client instance used to interact with the account
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `args`
+      </td>
+
+      <td>
+        `UpdateMultiOwnerLightAccountOwnersParams`\<`TSigner`, `TAccount`>
+      </td>
+
+      <td>
+        The parameters for updating the account owners
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+
+## Returns
+
+`Promise`\<`Hex`>
+
+A promise that resolves to the transaction hash or the full transaction result if `waitForTxn` is `true`

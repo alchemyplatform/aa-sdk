@@ -9,7 +9,7 @@ layout: reference
 type Erc7677RpcSchema<TContext> = [
   {
     Method: "pm_getPaymasterStubData";
-    Parameters: [accountLoupeActions, Address, Hex, TContext];
+    Parameters: [UserOperationRequest, Address, Hex, TContext];
     ReturnType: {
       isFinal?: boolean;
       paymaster?: Address;
@@ -25,7 +25,7 @@ type Erc7677RpcSchema<TContext> = [
   },
   {
     Method: "pm_getPaymasterData";
-    Parameters: [accountLoupeActions, Address, Hex, TContext];
+    Parameters: [UserOperationRequest, Address, Hex, TContext];
     ReturnType: {
       paymaster?: Address;
       paymasterAndData?: Hex;
@@ -37,7 +37,7 @@ type Erc7677RpcSchema<TContext> = [
 ];
 ```
 
-Defined in: [aa-sdk/core/src/middleware/erc7677middleware.ts:25](https://github.com/alchemyplatform/aa-sdk/blob/4987bdd63823427c48ec21401b71fa3cfc2d0675/aa-sdk/core/src/middleware/erc7677middleware.ts#L25)
+Defined in: [aa-sdk/core/src/middleware/erc7677middleware.ts:25](https://github.com/alchemyplatform/aa-sdk/blob/e3c1a23e6e03f44bf2db3afddb97a91b175cba58/aa-sdk/core/src/middleware/erc7677middleware.ts#L25)
 
 ## Type Parameters
 

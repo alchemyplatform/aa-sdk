@@ -6,10 +6,12 @@ layout: reference
 ---
 
 ```ts
-function useSmartWalletClient<TAccount>(params): any;
+function useSmartWalletClient<TAccount>(
+  params,
+): GetSmartWalletClientResult<TAccount>;
 ```
 
-Defined in: [account-kit/react/src/hooks/useSmartWalletClient.ts:42](https://github.com/alchemyplatform/aa-sdk/blob/4987bdd63823427c48ec21401b71fa3cfc2d0675/account-kit/react/src/hooks/useSmartWalletClient.ts#L42)
+Defined in: [account-kit/react/src/hooks/useSmartWalletClient.ts:42](https://github.com/alchemyplatform/aa-sdk/blob/e3c1a23e6e03f44bf2db3afddb97a91b175cba58/account-kit/react/src/hooks/useSmartWalletClient.ts#L42)
 
 React hook that provides a Smart Wallet Client instance.
 Returns undefined if an EOA wallet is connected via wagmi, as Smart Wallet Clients are only for smart accounts.
@@ -92,6 +94,6 @@ function MyComponent() {
 
 ## Returns
 
-`any`
+`GetSmartWalletClientResult`\<`TAccount`>
 
 The Smart Wallet Client instance or undefined if an EOA is connected or client is unavailable

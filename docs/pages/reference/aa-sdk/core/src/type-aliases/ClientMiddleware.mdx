@@ -9,7 +9,7 @@ layout: reference
 type ClientMiddleware<TContext> = object;
 ```
 
-Defined in: [aa-sdk/core/src/middleware/types.ts:47](https://github.com/alchemyplatform/aa-sdk/blob/4987bdd63823427c48ec21401b71fa3cfc2d0675/aa-sdk/core/src/middleware/types.ts#L47)
+Defined in: [aa-sdk/core/src/middleware/types.ts:47](https://github.com/alchemyplatform/aa-sdk/blob/e3c1a23e6e03f44bf2db3afddb97a91b175cba58/aa-sdk/core/src/middleware/types.ts#L47)
 
 ## Type Parameters
 
@@ -24,14 +24,11 @@ Defined in: [aa-sdk/core/src/middleware/types.ts:47](https://github.com/alchemyp
   <tbody>
     <tr>
       <td>
-        `TContext` *extends*
-        | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)
-        | `undefined`
+        `TContext` *extends* `UserOperationContext` | `undefined`
       </td>
 
       <td>
-        | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)
-        | `undefined`
+        `UserOperationContext` | `undefined`
       </td>
     </tr>
 

@@ -7,10 +7,10 @@ layout: reference
 
 ```ts
 type SignUserOperationParameters<TAccount, TEntryPointVersion, TContext> =
-  object & accountLoupeActions<TAccount> & GetContextParameter<TContext>;
+  object & GetAccountParameter<TAccount> & GetContextParameter<TContext>;
 ```
 
-Defined in: [aa-sdk/core/src/actions/smartAccount/types.ts:61](https://github.com/alchemyplatform/aa-sdk/blob/4987bdd63823427c48ec21401b71fa3cfc2d0675/aa-sdk/core/src/actions/smartAccount/types.ts#L61)
+Defined in: [aa-sdk/core/src/actions/smartAccount/types.ts:61](https://github.com/alchemyplatform/aa-sdk/blob/e3c1a23e6e03f44bf2db3afddb97a91b175cba58/aa-sdk/core/src/actions/smartAccount/types.ts#L61)
 
 ## Type Declaration
 
@@ -29,7 +29,7 @@ Defined in: [aa-sdk/core/src/actions/smartAccount/types.ts:61](https://github.co
       </td>
 
       <td>
-        [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`TEntryPointVersion`>
+        `UserOperationStruct`\<`TEntryPointVersion`>
       </td>
     </tr>
 
@@ -49,24 +49,21 @@ Defined in: [aa-sdk/core/src/actions/smartAccount/types.ts:61](https://github.co
   <tbody>
     <tr>
       <td>
-        `TAccount` *extends*
-        | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)
-        | `undefined`
+        `TAccount` *extends* `SmartContractAccount` | `undefined`
       </td>
 
       <td>
-        | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)
-        | `undefined`
+        `SmartContractAccount` | `undefined`
       </td>
     </tr>
 
     <tr>
       <td>
-        `TEntryPointVersion` *extends* [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`TAccount`>
+        `TEntryPointVersion` *extends* `GetEntryPointFromAccount`\<`TAccount`>
       </td>
 
       <td>
-        [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`TAccount`>
+        `GetEntryPointFromAccount`\<`TAccount`>
       </td>
     </tr>
 

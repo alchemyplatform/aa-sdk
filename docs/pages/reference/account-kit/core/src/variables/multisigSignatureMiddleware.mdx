@@ -1,0 +1,40 @@
+---
+title: multisigSignatureMiddleware
+description: A signer middleware to be used with Multisig Account Clients. This middleware handles correctly aggregating signatures passed through as context when sending UserOperations, proposing UserOperations, or adding signatures to a UserOperation.
+slug: wallets/reference/account-kit/core/src/variables/multisigSignatureMiddleware
+layout: reference
+---
+
+```ts
+const multisigSignatureMiddleware: ClientMiddlewareFn<MultisigUserOperationContext>;
+```
+
+Defined in: account-kit/smart-contracts/dist/types/src/msca/plugins/multisig/middleware.d.ts:15
+
+A signer middleware to be used with Multisig Account Clients.
+This middleware handles correctly aggregating signatures passed through
+as context when sending UserOperations, proposing UserOperations, or adding signatures to a UserOperation.
+
+## Param
+
+the user operation struct to be signed
+
+## Param
+
+the parameters to be passed to the middleware
+
+## Param
+
+the account to be used for signing
+
+## Param
+
+the smart account client that will be used for RPC requests
+
+## Param
+
+the context object containing the signatures to be aggregated MultisigUserOperationContext
+
+## Returns
+
+a Promise containing a UserOperation with an aggregated signature in the `signature` field

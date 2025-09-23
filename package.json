@@ -13,7 +13,6 @@
       "templates/*",
       "examples/*",
       "account-kit/rn-signer/example",
-      "doc-gen",
       "docs",
       ".vitest"
     ]
@@ -34,7 +33,7 @@
     "postgenerate": "yarn lint:write",
     "preinstall": "yarn config set ignore-engines true",
     "postinstall": "git submodule update --init --recursive && patch-package && turbo run build --filter='./templates/*'",
-    "build": "yarn build:libs --filter='!@account-kit/react-native-signer' --filter='!@account-kit/react-native-signer-example'",
+    "build": "yarn build:libs --filter='!@account-kit/react-native-signer-example'",
     "postbuild": "yarn lint:write",
     "build:libs": "turbo run build --filter='@account-kit/*' --filter='@aa-sdk/*' --filter='./templates/*'",
     "build:demo": "turbo run build --filter=ui-demo --filter='./templates/*'",
@@ -53,8 +52,8 @@
     "prepare": "husky install && yarn turbo prepare",
     "docs:dev": "./docs/scripts/docs-dev.sh",
     "docs:broken-links": "lychee docs --root-dir /docs",
-    "version": "yarn build:libs",
-    "docs:sdk": "typedoc && tsx scripts/generate-typedoc-yaml.ts"
+    "docs:sdk": "yarn build && typedoc && tsx scripts/generate-typedoc-yaml.ts",
+    "version": "yarn build:libs"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.6.3",

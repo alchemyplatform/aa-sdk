@@ -6,10 +6,10 @@ layout: reference
 ---
 
 ```ts
-function createConfig(props, ui?): any;
+function createConfig(props, ui?): AlchemyAccountsConfigWithUI;
 ```
 
-Defined in: [account-kit/react/src/createConfig.ts:52](https://github.com/alchemyplatform/aa-sdk/blob/4987bdd63823427c48ec21401b71fa3cfc2d0675/account-kit/react/src/createConfig.ts#L52)
+Defined in: [account-kit/react/src/createConfig.ts:52](https://github.com/alchemyplatform/aa-sdk/blob/e3c1a23e6e03f44bf2db3afddb97a91b175cba58/account-kit/react/src/createConfig.ts#L52)
 
 Wraps the `createConfig` that is exported from `@aa-sdk/core` to allow passing
 an additional argument, the configuration object for the Auth Components UI
@@ -60,7 +60,7 @@ export const queryClient = new QueryClient();
       </td>
 
       <td>
-        `CreateConfigProps`
+        [`CreateConfigProps`](../type-aliases/CreateConfigProps.mdx)
       </td>
 
       <td>
@@ -87,6 +87,6 @@ export const queryClient = new QueryClient();
 
 ## Returns
 
-`any`
+[`AlchemyAccountsConfigWithUI`](../type-aliases/AlchemyAccountsConfigWithUI.mdx)
 
 an alchemy account config object containing the core and client store, as well as the UI config

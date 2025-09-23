@@ -1,0 +1,56 @@
+---
+title: CreateModularAccountV2Params
+description: Overview of CreateModularAccountV2Params
+slug: wallets/reference/account-kit/core/src/type-aliases/CreateModularAccountV2Params
+layout: reference
+---
+
+```ts
+type CreateModularAccountV2Params<TTransport, TSigner> = Pick<ToSmartContractAccountParams<"ModularAccountV2", TTransport, Chain, "0.7.0">, "transport" | "chain" | "accountAddress"> & object &
+  | {
+  factoryAddress?: Address;
+  implementationAddress?: Address;
+  initCode?: Hex;
+  mode?: "default";
+  salt?: bigint;
+}
+  | {
+  mode: "7702";
+};
+```
+
+Defined in: account-kit/smart-contracts/dist/types/src/ma-v2/account/modularAccountV2.d.ts:5
+
+## Type Parameters
+
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TTransport` *extends* `Transport`
+      </td>
+
+      <td>
+        `Transport`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TSigner` *extends* `SmartAccountSigner`
+      </td>
+
+      <td>
+        `SmartAccountSigner`
+      </td>
+    </tr>
+
+  </tbody>
+</table>

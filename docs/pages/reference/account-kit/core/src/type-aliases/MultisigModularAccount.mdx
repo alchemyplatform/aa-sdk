@@ -1,0 +1,65 @@
+---
+title: MultisigModularAccount
+description: Overview of MultisigModularAccount
+slug: wallets/reference/account-kit/core/src/type-aliases/MultisigModularAccount
+layout: reference
+---
+
+```ts
+type MultisigModularAccount<TSigner> = SmartContractAccountWithSigner<
+  typeof MULTISIG_ACCOUNT_SOURCE,
+  TSigner,
+  "0.6.0"
+> &
+  object;
+```
+
+Defined in: account-kit/smart-contracts/dist/types/src/msca/account/multisigAccount.d.ts:4
+
+## Type Declaration
+
+<table>
+  <thead>
+    <tr>
+      <th align="left">Name</th>
+      <th align="left">Type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `getLocalThreshold()`
+      </td>
+
+      <td>
+        () => `bigint`
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+
+## Type Parameters
+
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TSigner` *extends* `SmartAccountSigner`
+      </td>
+
+      <td>
+        `SmartAccountSigner`
+      </td>
+    </tr>
+
+  </tbody>
+</table>

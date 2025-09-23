@@ -1,0 +1,23 @@
+---
+title: UseAddOauthProviderMutationArgs
+description: Overview of UseAddOauthProviderMutationArgs
+slug: wallets/reference/account-kit/react-native/src/type-aliases/UseAddOauthProviderMutationArgs
+layout: reference
+---
+
+```ts
+type UseAddOauthProviderMutationArgs = BaseHookMutationArgs<
+  OauthProviderInfo,
+  Omit<
+    Extract<
+      AuthParams,
+      {
+        type: "oauth";
+      }
+    >,
+    "type"
+  >
+>;
+```
+
+Defined in: account-kit/react/dist/types/hooks/useAddOauthProvider.d.ts:4

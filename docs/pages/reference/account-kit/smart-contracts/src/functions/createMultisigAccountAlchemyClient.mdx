@@ -12,13 +12,27 @@ function createMultisigAccountAlchemyClient<TSigner>(
   AlchemySmartAccountClient<
     undefined | Chain,
     MultisigModularAccount<TSigner>,
-    any,
+    ExecutionActions<
+      MultisigModularAccount<TSigner>,
+      MultisigUserOperationContext,
+      keyof EntryPointRegistryBase<unknown>
+    > &
+      ManagementActions<
+        MultisigModularAccount<TSigner>,
+        MultisigUserOperationContext,
+        keyof EntryPointRegistryBase<unknown>
+      > &
+      ReadAndEncodeActions<MultisigModularAccount<TSigner>> &
+      object &
+      object &
+      PluginManagerActions<MultisigModularAccount<TSigner>> &
+      AccountLoupeActions<MultisigModularAccount<TSigner>>,
     MultisigUserOperationContext
   >
 >;
 ```
 
-Defined in: [account-kit/smart-contracts/src/msca/client/multiSigAlchemyClient.ts:36](https://github.com/alchemyplatform/aa-sdk/blob/4987bdd63823427c48ec21401b71fa3cfc2d0675/account-kit/smart-contracts/src/msca/client/multiSigAlchemyClient.ts#L36)
+Defined in: [account-kit/smart-contracts/src/msca/client/multiSigAlchemyClient.ts:36](https://github.com/alchemyplatform/aa-sdk/blob/e3c1a23e6e03f44bf2db3afddb97a91b175cba58/account-kit/smart-contracts/src/msca/client/multiSigAlchemyClient.ts#L36)
 
 ## Type Parameters
 
@@ -70,6 +84,6 @@ Defined in: [account-kit/smart-contracts/src/msca/client/multiSigAlchemyClient.t
 
 ## Returns
 
-`Promise`\<`AlchemySmartAccountClient`\<`undefined` | `Chain`, `MultisigModularAccount`\<`TSigner`>, `any`, `MultisigUserOperationContext`>>
+`Promise`\<[`AlchemySmartAccountClient`](../../../core/src/type-aliases/AlchemySmartAccountClient.mdx)\<`undefined` | `Chain`, [`MultisigModularAccount`](../../../core/src/type-aliases/MultisigModularAccount.mdx)\<`TSigner`>, `ExecutionActions`\<[`MultisigModularAccount`](../../../core/src/type-aliases/MultisigModularAccount.mdx)\<`TSigner`>, [`MultisigUserOperationContext`](../../../core/src/type-aliases/MultisigUserOperationContext.mdx), keyof `EntryPointRegistryBase`\<`unknown`>> & `ManagementActions`\<[`MultisigModularAccount`](../../../core/src/type-aliases/MultisigModularAccount.mdx)\<`TSigner`>, [`MultisigUserOperationContext`](../../../core/src/type-aliases/MultisigUserOperationContext.mdx), keyof `EntryPointRegistryBase`\<`unknown`>> & `ReadAndEncodeActions`\<[`MultisigModularAccount`](../../../core/src/type-aliases/MultisigModularAccount.mdx)\<`TSigner`>> & `object` & `object` & [`PluginManagerActions`](../../../core/src/type-aliases/PluginManagerActions.mdx)\<[`MultisigModularAccount`](../../../core/src/type-aliases/MultisigModularAccount.mdx)\<`TSigner`>> & [`AccountLoupeActions`](../../../core/src/type-aliases/AccountLoupeActions.mdx)\<[`MultisigModularAccount`](../../../core/src/type-aliases/MultisigModularAccount.mdx)\<`TSigner`>>, [`MultisigUserOperationContext`](../../../core/src/type-aliases/MultisigUserOperationContext.mdx)>>
 
 A promise that resolves to an Alchemy Smart Account Client for multisig accounts with extended functionalities.

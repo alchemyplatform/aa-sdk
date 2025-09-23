@@ -1,0 +1,70 @@
+---
+title: LightAccountClientActions
+description: Overview of LightAccountClientActions
+slug: wallets/reference/account-kit/core/src/type-aliases/LightAccountClientActions
+layout: reference
+---
+
+```ts
+type LightAccountClientActions<TSigner, TAccount> = object;
+```
+
+Defined in: account-kit/smart-contracts/dist/types/src/light-account/decorators/lightAccount.d.ts:5
+
+## Type Parameters
+
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TSigner` *extends* `SmartAccountSigner`
+      </td>
+
+      <td>
+        `SmartAccountSigner`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TAccount` *extends* `LightAccount`\<`TSigner`> | `undefined`
+      </td>
+
+      <td>
+        `LightAccount`\<`TSigner`> | `undefined`
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+
+## Properties
+
+<table>
+  <thead>
+    <tr>
+      <th align="left">Property</th>
+      <th align="left">Type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        <a id="transferownership" /> `transferOwnership`
+      </td>
+
+      <td>
+        (`args`) => `Promise`\<`Hex`>
+      </td>
+    </tr>
+
+  </tbody>
+</table>

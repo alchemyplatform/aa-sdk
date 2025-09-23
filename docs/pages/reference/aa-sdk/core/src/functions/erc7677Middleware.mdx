@@ -9,11 +9,11 @@ layout: reference
 function erc7677Middleware<TContext>(
   params?,
 ): Required<
-  Pick<accountLoupeActions, "dummyPaymasterAndData" | "paymasterAndData">
+  Pick<ClientMiddlewareConfig, "dummyPaymasterAndData" | "paymasterAndData">
 >;
 ```
 
-Defined in: [aa-sdk/core/src/middleware/erc7677middleware.ts:97](https://github.com/alchemyplatform/aa-sdk/blob/4987bdd63823427c48ec21401b71fa3cfc2d0675/aa-sdk/core/src/middleware/erc7677middleware.ts#L97)
+Defined in: [aa-sdk/core/src/middleware/erc7677middleware.ts:97](https://github.com/alchemyplatform/aa-sdk/blob/e3c1a23e6e03f44bf2db3afddb97a91b175cba58/aa-sdk/core/src/middleware/erc7677middleware.ts#L97)
 
 Middleware function for interacting with ERC-7677 enabled clients. It supports resolving paymaster and data fields for user operations.
 This middleware assumes that your RPC provider supports the ERC-7677 methods (pm_getPaymasterStubData and pm_getPaymasterData).
@@ -88,6 +88,6 @@ const client = createSmartAccountClient({
 
 ## Returns
 
-`Required`\<`Pick`\<[`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx), `"dummyPaymasterAndData"` | `"paymasterAndData"`>>
+`Required`\<`Pick`\<`ClientMiddlewareConfig`, `"dummyPaymasterAndData"` | `"paymasterAndData"`>>
 
 An object containing middleware functions `dummyPaymasterAndData` and `paymasterAndData` for processing user operations with the paymaster data

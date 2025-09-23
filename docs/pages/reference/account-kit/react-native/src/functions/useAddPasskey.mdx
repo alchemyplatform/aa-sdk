@@ -1,0 +1,63 @@
+---
+title: useAddPasskey
+description: Overview of the useAddPasskey function
+slug: wallets/reference/account-kit/react-native/src/functions/useAddPasskey
+layout: reference
+---
+
+```ts
+function useAddPasskey(mutationArgs?): UseAddPasskeyResult;
+```
+
+Defined in: account-kit/react/dist/types/hooks/useAddPasskey.d.ts:29
+
+A custom [hook](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useAddPasskey.ts) to handle the addition of a passkey to an already authenticated account, which includes executing a mutation with optional parameters.
+
+## Example
+
+```ts twoslash
+import { useAddPasskey } from "@account-kit/react";
+
+const { addPasskey, isAddingPasskey, error } = useAddPasskey({
+  // these are optional
+  onSuccess: () => {
+    // do something on success
+  },
+  onError: (error) => console.error(error),
+});
+```
+
+## Parameters
+
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `mutationArgs?`
+      </td>
+
+      <td>
+        `Partial`\<`Omit`\<`UseMutationOptions`\<`string`\[], `Error`, `undefined` | `void` | `CredentialCreationOptions`, `unknown`>, `"mutationFn"` | `"mutationKey"`>>
+      </td>
+
+      <td>
+        Optional arguments for the mutation used for adding a passkey. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useAddPasskey.ts#L8)
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+
+## Returns
+
+[`UseAddPasskeyResult`](../type-aliases/UseAddPasskeyResult.mdx)
+
+An object containing the `addPasskey` function, `addPasskeyAsync` for async execution, a boolean `isAddingPasskey` to track the mutation status, and any error encountered. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useAddPasskey.ts#L13)

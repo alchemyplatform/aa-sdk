@@ -1,0 +1,101 @@
+---
+title: UseDropAndReplaceUserOperationResult
+description: Overview of UseDropAndReplaceUserOperationResult
+slug: wallets/reference/account-kit/react-native/src/type-aliases/UseDropAndReplaceUserOperationResult
+layout: reference
+---
+
+```ts
+type UseDropAndReplaceUserOperationResult<TEntryPointVersion, TAccount> =
+  object;
+```
+
+Defined in: account-kit/react/dist/types/hooks/useDropAndReplaceUserOperation.d.ts:10
+
+## Type Parameters
+
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TEntryPointVersion` *extends* `GetEntryPointFromAccount`\<`TAccount`>
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TAccount` *extends* `SupportedAccounts`
+      </td>
+
+      <td>
+        `SupportedAccounts`
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+
+## Properties
+
+<table>
+  <thead>
+    <tr>
+      <th align="left">Property</th>
+      <th align="left">Type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        <a id="dropandreplaceuseroperation" /> `dropAndReplaceUserOperation`
+      </td>
+
+      <td>
+        `UseMutateFunction`\<`SendUserOperationResult`\<`TEntryPointVersion`>, `Error`, `DropAndReplaceUserOperationParameters`\<`TAccount`>, `unknown`>
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="dropandreplaceuseroperationresult" /> `dropAndReplaceUserOperationResult`
+      </td>
+
+      <td>
+        `SendUserOperationResult`\<`TEntryPointVersion`> | `undefined`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="error" /> `error`
+      </td>
+
+      <td>
+        `Error` | `null`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="isdroppingandreplacinguseroperation" /> `isDroppingAndReplacingUserOperation`
+      </td>
+
+      <td>
+        `boolean`
+      </td>
+    </tr>
+
+  </tbody>
+</table>

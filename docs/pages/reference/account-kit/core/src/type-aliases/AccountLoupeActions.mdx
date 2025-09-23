@@ -1,0 +1,188 @@
+---
+title: AccountLoupeActions
+description: Overview of AccountLoupeActions
+slug: wallets/reference/account-kit/core/src/type-aliases/AccountLoupeActions
+layout: reference
+---
+
+```ts
+type AccountLoupeActions<TAccount> = object;
+```
+
+Defined in: account-kit/smart-contracts/dist/types/src/msca/account-loupe/decorator.d.ts:4
+
+## Type Parameters
+
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TAccount` *extends* `SmartContractAccount` | `undefined`
+      </td>
+
+      <td>
+        `SmartContractAccount` | `undefined`
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+
+## Methods
+
+### getExecutionFunctionConfig()
+
+```ts
+getExecutionFunctionConfig(args): Promise<ExecutionFunctionConfig>;
+```
+
+Defined in: account-kit/smart-contracts/dist/types/src/msca/account-loupe/decorator.d.ts:5
+
+#### Parameters
+
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `args`
+      </td>
+
+      <td>
+        `object` & `GetAccountParameter`\<`TAccount`>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+
+#### Returns
+
+`Promise`\<[`ExecutionFunctionConfig`](ExecutionFunctionConfig.mdx)>
+
+---
+
+### getExecutionHooks()
+
+```ts
+getExecutionHooks(args): Promise<readonly ExecutionHooks[]>;
+```
+
+Defined in: account-kit/smart-contracts/dist/types/src/msca/account-loupe/decorator.d.ts:8
+
+#### Parameters
+
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `args`
+      </td>
+
+      <td>
+        `object` & `GetAccountParameter`\<`TAccount`>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+
+#### Returns
+
+`Promise`\<readonly [`ExecutionHooks`](ExecutionHooks.mdx)\[]>
+
+---
+
+### getInstalledPlugins()
+
+```ts
+getInstalledPlugins(args): Promise<readonly `0x${string}`[]>;
+```
+
+Defined in: account-kit/smart-contracts/dist/types/src/msca/account-loupe/decorator.d.ts:14
+
+#### Parameters
+
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `args`
+      </td>
+
+      <td>
+        `GetAccountParameter`\<`TAccount`>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+
+#### Returns
+
+`Promise`\<readonly `` `0x${string}` ``\[]>
+
+---
+
+### getPreValidationHooks()
+
+```ts
+getPreValidationHooks(args): Promise<readonly [readonly `0x${string}`[], readonly `0x${string}`[]]>;
+```
+
+Defined in: account-kit/smart-contracts/dist/types/src/msca/account-loupe/decorator.d.ts:11
+
+#### Parameters
+
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `args`
+      </td>
+
+      <td>
+        `object` & `GetAccountParameter`\<`TAccount`>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+
+#### Returns
+
+`Promise`\<readonly \[readonly `` `0x${string}` ``\[], readonly `` `0x${string}` ``\[]]>

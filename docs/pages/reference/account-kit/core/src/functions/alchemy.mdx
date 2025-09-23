@@ -1,0 +1,82 @@
+---
+title: alchemy
+description: Overview of the alchemy function
+slug: wallets/reference/account-kit/core/src/functions/alchemy
+layout: reference
+---
+
+```ts
+function alchemy(config): AlchemyTransport;
+```
+
+Defined in: account-kit/infra/dist/types/alchemyTransport.d.ts:80
+
+Creates an Alchemy transport with the specified configuration options.
+When sending all traffic to Alchemy, you must pass in one of rpcUrl, apiKey, or jwt.
+If you want to send Bundler and Paymaster traffic to Alchemy and Node traffic to a different RPC, you must pass in alchemyConnection and nodeRpcUrl.
+
+## Example
+
+### Basic Example
+
+If the chain you're using is supported for both Bundler and Node RPCs, then you can do the following:
+
+```ts
+import { alchemy } from "@account-kit/infra";
+
+const transport = alchemy({
+  // NOTE: you can also pass in an rpcUrl or jwt here or rpcUrl and jwt
+  apiKey: "your-api-key",
+});
+```
+
+### AA Only Chains
+
+For AA-only chains, you need to specify the alchemyConnection and nodeRpcUrl since Alchemy only
+handles the Bundler and Paymaster RPCs for these chains.
+
+```ts
+import { alchemy } from "@account-kit/infra";
+
+const transport = alchemy({
+  alchemyConnection: {
+    apiKey: "your-api-key",
+  },
+  nodeRpcUrl: "https://zora.rpc.url",
+});
+```
+
+## Parameters
+
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `config`
+      </td>
+
+      <td>
+        [`AlchemyTransportConfig`](../type-aliases/AlchemyTransportConfig.mdx)
+      </td>
+
+      <td>
+        The configuration object for the Alchemy transport.
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+
+## Returns
+
+[`AlchemyTransport`](../type-aliases/AlchemyTransport.mdx)
+
+The configured Alchemy transport object.

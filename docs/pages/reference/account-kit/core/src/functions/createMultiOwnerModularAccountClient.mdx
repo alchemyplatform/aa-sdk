@@ -1,0 +1,191 @@
+---
+title: createMultiOwnerModularAccountClient
+description: Overview of the createMultiOwnerModularAccountClient function
+slug: wallets/reference/account-kit/core/src/functions/createMultiOwnerModularAccountClient
+layout: reference
+---
+
+## Call Signature
+
+```ts
+function createMultiOwnerModularAccountClient<TSigner>(
+  params,
+): Promise<
+  AlchemySmartAccountClient<
+    undefined | Chain,
+    MultiOwnerModularAccount<TSigner>,
+    ExecutionActions<
+      MultiOwnerModularAccount<TSigner>,
+      undefined,
+      keyof EntryPointRegistryBase<unknown>
+    > &
+      ManagementActions<
+        MultiOwnerModularAccount<TSigner>,
+        undefined,
+        keyof EntryPointRegistryBase<unknown>
+      > &
+      ReadAndEncodeActions<MultiOwnerModularAccount<TSigner>> &
+      object &
+      object &
+      PluginManagerActions<MultiOwnerModularAccount<TSigner>> &
+      AccountLoupeActions<MultiOwnerModularAccount<TSigner>>
+  >
+>;
+```
+
+Defined in: account-kit/smart-contracts/dist/types/src/msca/client/client.d.ts:17
+
+### Type Parameters
+
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TSigner` *extends* `SmartAccountSigner`\<`any`>
+      </td>
+
+      <td>
+        `SmartAccountSigner`\<`any`>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+
+### Parameters
+
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `params`
+      </td>
+
+      <td>
+        `Omit`\<[`CreateMultiOwnerModularAccountParams`](../type-aliases/CreateMultiOwnerModularAccountParams.mdx)\<[`HttpTransport`](../../../../aa-sdk/core/src/type-aliases/HttpTransport.mdx), `TSigner`>, `"transport"`> & `Omit`\<[`AlchemySmartAccountClientConfig`](../type-aliases/AlchemySmartAccountClientConfig.mdx)\<`Chain`, [`LightAccount`](../type-aliases/LightAccount.mdx)\<`TSigner`>>, `"account"`> & `object`
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+
+### Returns
+
+`Promise`\<[`AlchemySmartAccountClient`](../type-aliases/AlchemySmartAccountClient.mdx)\<`undefined` | `Chain`, [`MultiOwnerModularAccount`](../type-aliases/MultiOwnerModularAccount.mdx)\<`TSigner`>, `ExecutionActions`\<[`MultiOwnerModularAccount`](../type-aliases/MultiOwnerModularAccount.mdx)\<`TSigner`>, `undefined`, keyof `EntryPointRegistryBase`\<`unknown`>> & `ManagementActions`\<[`MultiOwnerModularAccount`](../type-aliases/MultiOwnerModularAccount.mdx)\<`TSigner`>, `undefined`, keyof `EntryPointRegistryBase`\<`unknown`>> & `ReadAndEncodeActions`\<[`MultiOwnerModularAccount`](../type-aliases/MultiOwnerModularAccount.mdx)\<`TSigner`>> & `object` & `object` & [`PluginManagerActions`](../type-aliases/PluginManagerActions.mdx)\<[`MultiOwnerModularAccount`](../type-aliases/MultiOwnerModularAccount.mdx)\<`TSigner`>> & [`AccountLoupeActions`](../type-aliases/AccountLoupeActions.mdx)\<[`MultiOwnerModularAccount`](../type-aliases/MultiOwnerModularAccount.mdx)\<`TSigner`>>>>
+
+## Call Signature
+
+```ts
+function createMultiOwnerModularAccountClient<TTransport, TChain, TSigner>(
+  args,
+): Promise<
+  SmartAccountClient<
+    CustomTransport,
+    Chain,
+    MultiOwnerModularAccount<TSigner>,
+    ExecutionActions<
+      MultiOwnerModularAccount<TSigner>,
+      undefined,
+      keyof EntryPointRegistryBase<unknown>
+    > &
+      ManagementActions<
+        MultiOwnerModularAccount<TSigner>,
+        undefined,
+        keyof EntryPointRegistryBase<unknown>
+      > &
+      ReadAndEncodeActions<MultiOwnerModularAccount<TSigner>> &
+      object &
+      object &
+      PluginManagerActions<MultiOwnerModularAccount<TSigner>> &
+      AccountLoupeActions<MultiOwnerModularAccount<TSigner>>
+  >
+>;
+```
+
+Defined in: account-kit/smart-contracts/dist/types/src/msca/client/client.d.ts:20
+
+### Type Parameters
+
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TTransport` *extends* `Transport`
+      </td>
+
+      <td>
+        `Transport`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TChain` *extends* `undefined` | `Chain`
+      </td>
+
+      <td>
+        `undefined` | `Chain`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TSigner` *extends* `SmartAccountSigner`\<`any`>
+      </td>
+
+      <td>
+        `SmartAccountSigner`\<`any`>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+
+### Parameters
+
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `args`
+      </td>
+
+      <td>
+        `CreateMultiOwnerModularAccountClientParams`\<`TTransport`, `TChain`, `TSigner`> & `NotType`\<`TTransport`, [`AlchemyTransport`](../type-aliases/AlchemyTransport.mdx)>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+
+### Returns
+
+`Promise`\<`SmartAccountClient`\<`CustomTransport`, `Chain`, [`MultiOwnerModularAccount`](../type-aliases/MultiOwnerModularAccount.mdx)\<`TSigner`>, `ExecutionActions`\<[`MultiOwnerModularAccount`](../type-aliases/MultiOwnerModularAccount.mdx)\<`TSigner`>, `undefined`, keyof `EntryPointRegistryBase`\<`unknown`>> & `ManagementActions`\<[`MultiOwnerModularAccount`](../type-aliases/MultiOwnerModularAccount.mdx)\<`TSigner`>, `undefined`, keyof `EntryPointRegistryBase`\<`unknown`>> & `ReadAndEncodeActions`\<[`MultiOwnerModularAccount`](../type-aliases/MultiOwnerModularAccount.mdx)\<`TSigner`>> & `object` & `object` & [`PluginManagerActions`](../type-aliases/PluginManagerActions.mdx)\<[`MultiOwnerModularAccount`](../type-aliases/MultiOwnerModularAccount.mdx)\<`TSigner`>> & [`AccountLoupeActions`](../type-aliases/AccountLoupeActions.mdx)\<[`MultiOwnerModularAccount`](../type-aliases/MultiOwnerModularAccount.mdx)\<`TSigner`>>>>

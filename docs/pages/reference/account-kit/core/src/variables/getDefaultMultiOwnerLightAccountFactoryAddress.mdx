@@ -1,0 +1,66 @@
+---
+title: getDefaultMultiOwnerLightAccountFactoryAddress
+description: Utility method returning the default multi owner light account factory address given a Chain object
+slug: wallets/reference/account-kit/core/src/variables/getDefaultMultiOwnerLightAccountFactoryAddress
+layout: reference
+---
+
+```ts
+const getDefaultMultiOwnerLightAccountFactoryAddress: (
+  chain,
+  version,
+) => `0x${string}`;
+```
+
+Defined in: account-kit/smart-contracts/dist/types/src/light-account/utils.d.ts:33
+
+Utility method returning the default multi owner light account factory address given a Chain object
+
+## Parameters
+
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `chain`
+      </td>
+
+      <td>
+        `Chain`
+      </td>
+
+      <td>
+        a Chain object
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `version`
+      </td>
+
+      <td>
+        `LightAccountVersion`\<`"MultiOwnerLightAccount"`>
+      </td>
+
+      <td>
+        the version of the light account to get the factory address for
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+
+## Returns
+
+`` `0x${string}` ``
+
+an Address for the given chain

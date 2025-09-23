@@ -68,7 +68,7 @@ function createMultiOwnerModularAccountClient<TSigner>(
 >;
 ```
 
-Defined in: [account-kit/smart-contracts/src/msca/client/client.ts:91](https://github.com/alchemyplatform/aa-sdk/blob/4987bdd63823427c48ec21401b71fa3cfc2d0675/account-kit/smart-contracts/src/msca/client/client.ts#L91)
+Defined in: [account-kit/smart-contracts/src/msca/client/client.ts:91](https://github.com/alchemyplatform/aa-sdk/blob/e3c1a23e6e03f44bf2db3afddb97a91b175cba58/account-kit/smart-contracts/src/msca/client/client.ts#L91)
 
 ### Type Parameters
 
@@ -111,7 +111,7 @@ Defined in: [account-kit/smart-contracts/src/msca/client/client.ts:91](https://g
       </td>
 
       <td>
-        `Omit`\<`CreateMultiOwnerModularAccountParams`\<[`HttpTransport`](../../../../aa-sdk/core/src/type-aliases/HttpTransport.mdx), `TSigner`>, `"transport"`> & `Omit`\<`AlchemySmartAccountClientConfig`\<`Chain`, `LightAccount`\<`TSigner`>>, `"account"`> & `object`
+        `Omit`\<[`CreateMultiOwnerModularAccountParams`](../../../core/src/type-aliases/CreateMultiOwnerModularAccountParams.mdx)\<[`HttpTransport`](../../../../aa-sdk/core/src/type-aliases/HttpTransport.mdx), `TSigner`>, `"transport"`> & `Omit`\<[`AlchemySmartAccountClientConfig`](../../../core/src/type-aliases/AlchemySmartAccountClientConfig.mdx)\<`Chain`, [`LightAccount`](../../../core/src/type-aliases/LightAccount.mdx)\<`TSigner`>>, `"account"`> & `object`
       </td>
     </tr>
 
@@ -120,7 +120,7 @@ Defined in: [account-kit/smart-contracts/src/msca/client/client.ts:91](https://g
 
 ### Returns
 
-`Promise`\<`AlchemySmartAccountClient`\<`undefined` | `Chain`, [`MultiOwnerModularAccount`](../type-aliases/MultiOwnerModularAccount.mdx)\<`TSigner`>, `ExecutionActions`\<[`MultiOwnerModularAccount`](../type-aliases/MultiOwnerModularAccount.mdx)\<`TSigner`>, `undefined`, keyof `EntryPointRegistryBase`\<`unknown`>> & `ManagementActions`\<[`MultiOwnerModularAccount`](../type-aliases/MultiOwnerModularAccount.mdx)\<`TSigner`>, `undefined`, keyof `EntryPointRegistryBase`\<`unknown`>> & `ReadAndEncodeActions`\<[`MultiOwnerModularAccount`](../type-aliases/MultiOwnerModularAccount.mdx)\<`TSigner`>> & `object` & `object` & [`PluginManagerActions`](../type-aliases/PluginManagerActions.mdx)\<[`MultiOwnerModularAccount`](../type-aliases/MultiOwnerModularAccount.mdx)\<`TSigner`>> & [`AccountLoupeActions`](../type-aliases/AccountLoupeActions.mdx)\<[`MultiOwnerModularAccount`](../type-aliases/MultiOwnerModularAccount.mdx)\<`TSigner`>>>>
+`Promise`\<[`AlchemySmartAccountClient`](../../../core/src/type-aliases/AlchemySmartAccountClient.mdx)\<`undefined` | `Chain`, [`MultiOwnerModularAccount`](../type-aliases/MultiOwnerModularAccount.mdx)\<`TSigner`>, `ExecutionActions`\<[`MultiOwnerModularAccount`](../type-aliases/MultiOwnerModularAccount.mdx)\<`TSigner`>, `undefined`, keyof `EntryPointRegistryBase`\<`unknown`>> & `ManagementActions`\<[`MultiOwnerModularAccount`](../type-aliases/MultiOwnerModularAccount.mdx)\<`TSigner`>, `undefined`, keyof `EntryPointRegistryBase`\<`unknown`>> & `ReadAndEncodeActions`\<[`MultiOwnerModularAccount`](../type-aliases/MultiOwnerModularAccount.mdx)\<`TSigner`>> & `object` & `object` & [`PluginManagerActions`](../type-aliases/PluginManagerActions.mdx)\<[`MultiOwnerModularAccount`](../type-aliases/MultiOwnerModularAccount.mdx)\<`TSigner`>> & [`AccountLoupeActions`](../type-aliases/AccountLoupeActions.mdx)\<[`MultiOwnerModularAccount`](../type-aliases/MultiOwnerModularAccount.mdx)\<`TSigner`>>>>
 
 ## Call Signature
 
@@ -151,7 +151,7 @@ function createMultiOwnerModularAccountClient<TTransport, TChain, TSigner>(
 >;
 ```
 
-Defined in: [account-kit/smart-contracts/src/msca/client/client.ts:107](https://github.com/alchemyplatform/aa-sdk/blob/4987bdd63823427c48ec21401b71fa3cfc2d0675/account-kit/smart-contracts/src/msca/client/client.ts#L107)
+Defined in: [account-kit/smart-contracts/src/msca/client/client.ts:107](https://github.com/alchemyplatform/aa-sdk/blob/e3c1a23e6e03f44bf2db3afddb97a91b175cba58/account-kit/smart-contracts/src/msca/client/client.ts#L107)
 
 ### Type Parameters
 
@@ -214,7 +214,7 @@ Defined in: [account-kit/smart-contracts/src/msca/client/client.ts:107](https://
       </td>
 
       <td>
-        `CreateMultiOwnerModularAccountClientParams`\<`TTransport`, `TChain`, `TSigner`> & `NotType`\<`TTransport`, `AlchemyTransport`>
+        `CreateMultiOwnerModularAccountClientParams`\<`TTransport`, `TChain`, `TSigner`> & `NotType`\<`TTransport`, [`AlchemyTransport`](../../../core/src/type-aliases/AlchemyTransport.mdx)>
       </td>
     </tr>
 

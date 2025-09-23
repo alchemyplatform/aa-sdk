@@ -1,0 +1,46 @@
+---
+title: GetMAV2UpgradeToData
+description: Overview of GetMAV2UpgradeToData
+slug: wallets/reference/account-kit/core/src/type-aliases/GetMAV2UpgradeToData
+layout: reference
+---
+
+```ts
+type GetMAV2UpgradeToData<TSigner, TAccount> = GetAccountParameter<TAccount>;
+```
+
+Defined in: account-kit/smart-contracts/dist/types/src/ma-v2/utils.d.ts:20
+
+## Type Parameters
+
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TSigner` *extends* `SmartAccountSigner`
+      </td>
+
+      <td>
+        `SmartAccountSigner`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TAccount` *extends* `SmartContractAccountWithSigner`\<`string`, `TSigner`> | `undefined`
+      </td>
+
+      <td>
+        `SmartContractAccountWithSigner`\<`string`, `TSigner`> | `undefined`
+      </td>
+    </tr>
+
+  </tbody>
+</table>

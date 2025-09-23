@@ -12,12 +12,26 @@ function createModularAccountAlchemyClient<TSigner>(
   AlchemySmartAccountClient<
     undefined | Chain,
     MultiOwnerModularAccount<TSigner>,
-    any
+    ExecutionActions<
+      MultiOwnerModularAccount<TSigner>,
+      undefined,
+      keyof EntryPointRegistryBase<unknown>
+    > &
+      ManagementActions<
+        MultiOwnerModularAccount<TSigner>,
+        undefined,
+        keyof EntryPointRegistryBase<unknown>
+      > &
+      ReadAndEncodeActions<MultiOwnerModularAccount<TSigner>> &
+      object &
+      object &
+      PluginManagerActions<MultiOwnerModularAccount<TSigner>> &
+      AccountLoupeActions<MultiOwnerModularAccount<TSigner>>
   >
 >;
 ```
 
-Defined in: [account-kit/smart-contracts/src/msca/client/alchemyClient.ts:28](https://github.com/alchemyplatform/aa-sdk/blob/4987bdd63823427c48ec21401b71fa3cfc2d0675/account-kit/smart-contracts/src/msca/client/alchemyClient.ts#L28)
+Defined in: [account-kit/smart-contracts/src/msca/client/alchemyClient.ts:28](https://github.com/alchemyplatform/aa-sdk/blob/e3c1a23e6e03f44bf2db3afddb97a91b175cba58/account-kit/smart-contracts/src/msca/client/alchemyClient.ts#L28)
 
 ## Type Parameters
 
@@ -69,6 +83,6 @@ Defined in: [account-kit/smart-contracts/src/msca/client/alchemyClient.ts:28](ht
 
 ## Returns
 
-`Promise`\<`AlchemySmartAccountClient`\<`undefined` | `Chain`, `MultiOwnerModularAccount`\<`TSigner`>, `any`>>
+`Promise`\<[`AlchemySmartAccountClient`](../../../core/src/type-aliases/AlchemySmartAccountClient.mdx)\<`undefined` | `Chain`, [`MultiOwnerModularAccount`](../../../core/src/type-aliases/MultiOwnerModularAccount.mdx)\<`TSigner`>, `ExecutionActions`\<[`MultiOwnerModularAccount`](../../../core/src/type-aliases/MultiOwnerModularAccount.mdx)\<`TSigner`>, `undefined`, keyof `EntryPointRegistryBase`\<`unknown`>> & `ManagementActions`\<[`MultiOwnerModularAccount`](../../../core/src/type-aliases/MultiOwnerModularAccount.mdx)\<`TSigner`>, `undefined`, keyof `EntryPointRegistryBase`\<`unknown`>> & `ReadAndEncodeActions`\<[`MultiOwnerModularAccount`](../../../core/src/type-aliases/MultiOwnerModularAccount.mdx)\<`TSigner`>> & `object` & `object` & [`PluginManagerActions`](../../../core/src/type-aliases/PluginManagerActions.mdx)\<[`MultiOwnerModularAccount`](../../../core/src/type-aliases/MultiOwnerModularAccount.mdx)\<`TSigner`>> & [`AccountLoupeActions`](../../../core/src/type-aliases/AccountLoupeActions.mdx)\<[`MultiOwnerModularAccount`](../../../core/src/type-aliases/MultiOwnerModularAccount.mdx)\<`TSigner`>>>>
 
 A promise that resolves to an `AlchemySmartAccountClient` configured with the desired plugins and actions

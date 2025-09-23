@@ -6,10 +6,13 @@ layout: reference
 ---
 
 ```ts
-function getSmartWalletClient<TAccount>(config, params?): any;
+function getSmartWalletClient<TAccount>(
+  config,
+  params?,
+): GetSmartWalletClientResult<TAccount>;
 ```
 
-Defined in: [account-kit/core/src/actions/getSmartWalletClient.ts:20](https://github.com/alchemyplatform/aa-sdk/blob/4987bdd63823427c48ec21401b71fa3cfc2d0675/account-kit/core/src/actions/getSmartWalletClient.ts#L20)
+Defined in: [account-kit/core/src/actions/getSmartWalletClient.ts:20](https://github.com/alchemyplatform/aa-sdk/blob/e3c1a23e6e03f44bf2db3afddb97a91b175cba58/account-kit/core/src/actions/getSmartWalletClient.ts#L20)
 
 ## Type Parameters
 
@@ -80,6 +83,6 @@ Defined in: [account-kit/core/src/actions/getSmartWalletClient.ts:20](https://gi
 
 ## Returns
 
-`any`
+[`GetSmartWalletClientResult`](../type-aliases/GetSmartWalletClientResult.mdx)\<`TAccount`>
 
 The Smart Wallet Client instance or undefined if not available

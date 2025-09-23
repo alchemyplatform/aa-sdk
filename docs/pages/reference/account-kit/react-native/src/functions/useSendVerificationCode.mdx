@@ -1,0 +1,74 @@
+---
+title: useSendVerificationCode
+description: Overview of the useSendVerificationCode function
+slug: wallets/reference/account-kit/react-native/src/functions/useSendVerificationCode
+layout: reference
+---
+
+```ts
+function useSendVerificationCode(mutationArgs?): UseSendVerificationCodeResult;
+```
+
+Defined in: account-kit/react/dist/types/hooks/useSendVerificationCode.d.ts:48
+
+A custom hook to send OTP verification codes to email or SMS for account verification.
+
+## Example
+
+```ts twoslash
+import { useSendVerificationCode } from "@account-kit/react";
+
+const { sendVerificationCode, isSendingCode, error } = useSendVerificationCode({
+  onSuccess: (data) => {
+    console.log("OTP sent");
+  },
+  onError: (error) => console.error(error),
+});
+
+// Send verification code to email
+sendVerificationCode({
+  type: "email",
+  contact: "user@example.com",
+});
+
+// Send verification code to SMS
+sendVerificationCodeAsync({
+  type: "sms",
+  contact: "+1234567890",
+});
+```
+
+## Parameters
+
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `mutationArgs?`
+      </td>
+
+      <td>
+        `Partial`\<`Omit`\<`UseMutationOptions`\<`void`, `Error`, [`SendVerificationCodeParams`](../interfaces/SendVerificationCodeParams.mdx), `unknown`>, `"mutationFn"` | `"mutationKey"`>>
+      </td>
+
+      <td>
+        Optional arguments for the mutation
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+
+## Returns
+
+[`UseSendVerificationCodeResult`](../type-aliases/UseSendVerificationCodeResult.mdx)
+
+An object containing functions and state for sending verification codes

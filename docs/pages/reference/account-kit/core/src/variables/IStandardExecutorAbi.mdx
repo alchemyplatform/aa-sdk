@@ -1,0 +1,78 @@
+---
+title: IStandardExecutorAbi
+description: Overview of IStandardExecutorAbi
+slug: wallets/reference/account-kit/core/src/variables/IStandardExecutorAbi
+layout: reference
+---
+
+```ts
+const IStandardExecutorAbi: readonly [
+  {
+    inputs: readonly [
+      {
+        internalType: "address";
+        name: "target";
+        type: "address";
+      },
+      {
+        internalType: "uint256";
+        name: "value";
+        type: "uint256";
+      },
+      {
+        internalType: "bytes";
+        name: "data";
+        type: "bytes";
+      },
+    ];
+    name: "execute";
+    outputs: readonly [
+      {
+        internalType: "bytes";
+        name: "";
+        type: "bytes";
+      },
+    ];
+    stateMutability: "payable";
+    type: "function";
+  },
+  {
+    inputs: readonly [
+      {
+        components: readonly [
+          {
+            internalType: "address";
+            name: "target";
+            type: "address";
+          },
+          {
+            internalType: "uint256";
+            name: "value";
+            type: "uint256";
+          },
+          {
+            internalType: "bytes";
+            name: "data";
+            type: "bytes";
+          },
+        ];
+        internalType: "struct Call[]";
+        name: "calls";
+        type: "tuple[]";
+      },
+    ];
+    name: "executeBatch";
+    outputs: readonly [
+      {
+        internalType: "bytes[]";
+        name: "";
+        type: "bytes[]";
+      },
+    ];
+    stateMutability: "payable";
+    type: "function";
+  },
+];
+```
+
+Defined in: account-kit/smart-contracts/dist/types/src/msca/abis/IStandardExecutor.d.ts:1

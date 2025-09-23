@@ -9,14 +9,14 @@ layout: reference
 type CreateModularAccountV2ClientParams<TTransport, TChain, TSigner> =
   CreateModularAccountV2Params<TTransport, TSigner> &
     Omit<
-      TTransport extends accountLoupeActions
-        ? accountLoupeActions<TChain>
+      TTransport extends AlchemyTransport
+        ? AlchemySmartAccountClientConfig<TChain>
         : SmartAccountClientConfig<TTransport, TChain>,
       "transport" | "account" | "chain"
     >;
 ```
 
-Defined in: [account-kit/smart-contracts/src/ma-v2/client/client.ts:48](https://github.com/alchemyplatform/aa-sdk/blob/4987bdd63823427c48ec21401b71fa3cfc2d0675/account-kit/smart-contracts/src/ma-v2/client/client.ts#L48)
+Defined in: [account-kit/smart-contracts/src/ma-v2/client/client.ts:48](https://github.com/alchemyplatform/aa-sdk/blob/e3c1a23e6e03f44bf2db3afddb97a91b175cba58/account-kit/smart-contracts/src/ma-v2/client/client.ts#L48)
 
 ## Type Parameters
 
@@ -33,7 +33,7 @@ Defined in: [account-kit/smart-contracts/src/ma-v2/client/client.ts:48](https://
       <td>
         `TTransport` *extends*
         | `Transport`
-        | [`accountLoupeActions`](../../../core/src/variables/accountLoupeActions.mdx)
+        | [`AlchemyTransport`](../../../core/src/type-aliases/AlchemyTransport.mdx)
       </td>
 
       <td>

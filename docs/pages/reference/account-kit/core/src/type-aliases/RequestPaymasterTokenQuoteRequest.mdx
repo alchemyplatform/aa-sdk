@@ -1,0 +1,25 @@
+---
+title: RequestPaymasterTokenQuoteRequest
+description: Overview of RequestPaymasterTokenQuoteRequest
+slug: wallets/reference/account-kit/core/src/type-aliases/RequestPaymasterTokenQuoteRequest
+layout: reference
+---
+
+```ts
+type RequestPaymasterTokenQuoteRequest = [
+  {
+    dummySignature: Hex;
+    entryPoint: Address;
+    erc20Context?: {
+      maxTokenAmount?: BigInt;
+      permit?: Hex;
+      tokenAddress: Address;
+    };
+    overrides?: UserOperationOverrides;
+    policyId: string;
+    userOperation: UserOperationRequest;
+  },
+];
+```
+
+Defined in: account-kit/infra/dist/types/actions/types.d.ts:61

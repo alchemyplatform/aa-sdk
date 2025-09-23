@@ -9,10 +9,10 @@ layout: reference
 type ClientMiddlewareFn<TContext> = <TAccount, C, TEntryPointVersion>(
   struct,
   args,
-) => Promise<accountLoupeActions<accountLoupeActions<TEntryPointVersion>>>;
+) => Promise<Deferrable<UserOperationStruct<TEntryPointVersion>>>;
 ```
 
-Defined in: [aa-sdk/core/src/middleware/types.ts:31](https://github.com/alchemyplatform/aa-sdk/blob/4987bdd63823427c48ec21401b71fa3cfc2d0675/aa-sdk/core/src/middleware/types.ts#L31)
+Defined in: [aa-sdk/core/src/middleware/types.ts:31](https://github.com/alchemyplatform/aa-sdk/blob/e3c1a23e6e03f44bf2db3afddb97a91b175cba58/aa-sdk/core/src/middleware/types.ts#L31)
 
 ## Type Parameters
 
@@ -27,14 +27,11 @@ Defined in: [aa-sdk/core/src/middleware/types.ts:31](https://github.com/alchemyp
   <tbody>
     <tr>
       <td>
-        `TContext` *extends*
-        | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)
-        | `undefined`
+        `TContext` *extends* `UserOperationContext` | `undefined`
       </td>
 
       <td>
-        | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)
-        | `undefined`
+        `UserOperationContext` | `undefined`
       </td>
     </tr>
 
@@ -54,7 +51,7 @@ Defined in: [aa-sdk/core/src/middleware/types.ts:31](https://github.com/alchemyp
   <tbody>
     <tr>
       <td>
-        `TAccount` *extends* [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)
+        `TAccount` *extends* `SmartContractAccount`
       </td>
 
       <td>
@@ -64,7 +61,7 @@ Defined in: [aa-sdk/core/src/middleware/types.ts:31](https://github.com/alchemyp
 
     <tr>
       <td>
-        `C` *extends* [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)
+        `C` *extends* `MiddlewareClient`
       </td>
 
       <td>
@@ -74,11 +71,11 @@ Defined in: [aa-sdk/core/src/middleware/types.ts:31](https://github.com/alchemyp
 
     <tr>
       <td>
-        `TEntryPointVersion` *extends* [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`TAccount`>
+        `TEntryPointVersion` *extends* `GetEntryPointFromAccount`\<`TAccount`>
       </td>
 
       <td>
-        [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`TAccount`>
+        `GetEntryPointFromAccount`\<`TAccount`>
       </td>
     </tr>
 
@@ -102,7 +99,7 @@ Defined in: [aa-sdk/core/src/middleware/types.ts:31](https://github.com/alchemyp
       </td>
 
       <td>
-        [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<[`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`TEntryPointVersion`>>
+        `Deferrable`\<`UserOperationStruct`\<`TEntryPointVersion`>>
       </td>
     </tr>
 
@@ -121,4 +118,4 @@ Defined in: [aa-sdk/core/src/middleware/types.ts:31](https://github.com/alchemyp
 
 ## Returns
 
-`Promise`\<[`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<[`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`TEntryPointVersion`>>>
+`Promise`\<`Deferrable`\<`UserOperationStruct`\<`TEntryPointVersion`>>>

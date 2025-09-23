@@ -11,7 +11,7 @@ const smartAccountClientActions: <TTransport, TChain, TAccount, TContext>(
 ) => BaseSmartAccountClientActions<TChain, TAccount, TContext>;
 ```
 
-Defined in: [aa-sdk/core/src/client/decorators/smartAccountClient.ts:143](https://github.com/alchemyplatform/aa-sdk/blob/4987bdd63823427c48ec21401b71fa3cfc2d0675/aa-sdk/core/src/client/decorators/smartAccountClient.ts#L143)
+Defined in: [aa-sdk/core/src/client/decorators/smartAccountClient.ts:143](https://github.com/alchemyplatform/aa-sdk/blob/e3c1a23e6e03f44bf2db3afddb97a91b175cba58/aa-sdk/core/src/client/decorators/smartAccountClient.ts#L143)
 
 Provides a set of smart account client actions to decorate the provided client. These actions include building and signing user operations, sending transactions, and more.
 
@@ -50,27 +50,21 @@ NOTE: this is already added to clients returned from `createSmartAccountClient`
 
     <tr>
       <td>
-        `TAccount` *extends*
-        | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)
-        | `undefined`
+        `TAccount` *extends* `SmartContractAccount` | `undefined`
       </td>
 
       <td>
-        | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)
-        | `undefined`
+        `SmartContractAccount` | `undefined`
       </td>
     </tr>
 
     <tr>
       <td>
-        `TContext` *extends*
-        | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)
-        | `undefined`
+        `TContext` *extends* `UserOperationContext` | `undefined`
       </td>
 
       <td>
-        | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)
-        | `undefined`
+        `UserOperationContext` | `undefined`
       </td>
     </tr>
 

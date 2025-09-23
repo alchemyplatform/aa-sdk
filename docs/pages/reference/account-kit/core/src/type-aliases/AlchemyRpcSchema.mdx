@@ -1,0 +1,34 @@
+---
+title: AlchemyRpcSchema
+description: Overview of AlchemyRpcSchema
+slug: wallets/reference/account-kit/core/src/type-aliases/AlchemyRpcSchema
+layout: reference
+---
+
+```ts
+type AlchemyRpcSchema = [
+  {
+    Method: "alchemy_simulateUserOperationAssetChanges";
+    Parameters: SimulateUserOperationAssetChangesRequest;
+    ReturnType: SimulateUserOperationAssetChangesResponse;
+  },
+  {
+    Method: "rundler_maxPriorityFeePerGas";
+    Parameters: [];
+    ReturnType: UserOperationRequest["maxPriorityFeePerGas"];
+  },
+  ...Erc7677RpcSchema<{ policyId: string }>,
+  {
+    Method: "alchemy_requestGasAndPaymasterAndData";
+    Parameters: RequestGasAndPaymasterAndDataRequest;
+    ReturnType: RequestGasAndPaymasterAndDataResponse;
+  },
+  {
+    Method: "alchemy_requestPaymasterTokenQuote";
+    Parameters: RequestPaymasterTokenQuoteRequest;
+    ReturnType: RequestPaymasterTokenQuoteResponse;
+  },
+];
+```
+
+Defined in: account-kit/infra/dist/types/client/types.d.ts:4

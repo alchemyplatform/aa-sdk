@@ -9,7 +9,7 @@ layout: reference
 type BundlerActions = object;
 ```
 
-Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:54](https://github.com/alchemyplatform/aa-sdk/blob/4987bdd63823427c48ec21401b71fa3cfc2d0675/aa-sdk/core/src/client/decorators/bundlerClient.ts#L54)
+Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:54](https://github.com/alchemyplatform/aa-sdk/blob/e3c1a23e6e03f44bf2db3afddb97a91b175cba58/aa-sdk/core/src/client/decorators/bundlerClient.ts#L54)
 
 ## Methods
 
@@ -22,7 +22,7 @@ estimateUserOperationGas<TEntryPointVersion>(
    stateOverride?): Promise<UserOperationEstimateGasResponse<TEntryPointVersion>>;
 ```
 
-Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:63](https://github.com/alchemyplatform/aa-sdk/blob/4987bdd63823427c48ec21401b71fa3cfc2d0675/aa-sdk/core/src/client/decorators/bundlerClient.ts#L63)
+Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:63](https://github.com/alchemyplatform/aa-sdk/blob/e3c1a23e6e03f44bf2db3afddb97a91b175cba58/aa-sdk/core/src/client/decorators/bundlerClient.ts#L63)
 
 calls `eth_estimateUserOperationGas` and returns the result
 
@@ -121,7 +121,7 @@ the gas estimates for the given response
 getSupportedEntryPoints(): Promise<`0x${string}`[]>;
 ```
 
-Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:110](https://github.com/alchemyplatform/aa-sdk/blob/4987bdd63823427c48ec21401b71fa3cfc2d0675/aa-sdk/core/src/client/decorators/bundlerClient.ts#L110)
+Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:110](https://github.com/alchemyplatform/aa-sdk/blob/e3c1a23e6e03f44bf2db3afddb97a91b175cba58/aa-sdk/core/src/client/decorators/bundlerClient.ts#L110)
 
 calls `eth_supportedEntryPoints` and returns the entry points the RPC supports
 
@@ -141,7 +141,7 @@ getUserOperationByHash(hash): Promise<
   | UserOperationResponse<EntryPointVersion>>;
 ```
 
-Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:91](https://github.com/alchemyplatform/aa-sdk/blob/4987bdd63823427c48ec21401b71fa3cfc2d0675/aa-sdk/core/src/client/decorators/bundlerClient.ts#L91)
+Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:91](https://github.com/alchemyplatform/aa-sdk/blob/e3c1a23e6e03f44bf2db3afddb97a91b175cba58/aa-sdk/core/src/client/decorators/bundlerClient.ts#L91)
 
 calls `eth_getUserOperationByHash` and returns the UserOperationResponse
 
@@ -190,7 +190,7 @@ calls `eth_getUserOperationByHash` and returns the UserOperationResponse
 getUserOperationReceipt(hash, tag?): Promise<null | UserOperationReceipt>;
 ```
 
-Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:100](https://github.com/alchemyplatform/aa-sdk/blob/4987bdd63823427c48ec21401b71fa3cfc2d0675/aa-sdk/core/src/client/decorators/bundlerClient.ts#L100)
+Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:100](https://github.com/alchemyplatform/aa-sdk/blob/e3c1a23e6e03f44bf2db3afddb97a91b175cba58/aa-sdk/core/src/client/decorators/bundlerClient.ts#L100)
 
 calls `eth_getUserOperationReceipt` and returns the UserOperationReceipt
 
@@ -251,7 +251,7 @@ calls `eth_getUserOperationReceipt` and returns the UserOperationReceipt
 sendRawUserOperation<TEntryPointVersion>(request, entryPoint): Promise<`0x${string}`>;
 ```
 
-Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:78](https://github.com/alchemyplatform/aa-sdk/blob/4987bdd63823427c48ec21401b71fa3cfc2d0675/aa-sdk/core/src/client/decorators/bundlerClient.ts#L78)
+Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:78](https://github.com/alchemyplatform/aa-sdk/blob/e3c1a23e6e03f44bf2db3afddb97a91b175cba58/aa-sdk/core/src/client/decorators/bundlerClient.ts#L78)
 
 calls `eth_sendUserOperation` and returns the hash of the sent UserOperation
 

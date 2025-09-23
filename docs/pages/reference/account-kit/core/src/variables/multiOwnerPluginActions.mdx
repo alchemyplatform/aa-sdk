@@ -1,0 +1,105 @@
+---
+title: multiOwnerPluginActions
+description: "Creates actions for the MultiOwner plugin, including reading owners and checking ownership. NOTE: this is already added to the client returned from createMultiOwnerModularAccountClient"
+slug: wallets/reference/account-kit/core/src/variables/multiOwnerPluginActions
+layout: reference
+---
+
+```ts
+const multiOwnerPluginActions: <TTransport, TChain, TAccount>(
+  client,
+) => MultiOwnerPluginActions<TAccount>;
+```
+
+Defined in: account-kit/smart-contracts/dist/types/src/msca/plugins/multi-owner/extension.d.ts:28
+
+Creates actions for the MultiOwner plugin, including reading owners and checking ownership.
+NOTE: this is already added to the client returned from createMultiOwnerModularAccountClient
+
+## Example
+
+```ts
+import { multiOwnerPluginActions } from "@account-kit/smart-contracts";
+import { createSmartAccountClient } from "@aa-sdk/core";
+
+const client = createSmartAccountClient(...).extend(multiOwnerPluginActions);
+```
+
+## Type Parameters
+
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TTransport` *extends* `Transport`
+      </td>
+
+      <td>
+        `Transport`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TChain` *extends* `Chain` | `undefined`
+      </td>
+
+      <td>
+        `Chain` | `undefined`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TAccount` *extends* `SmartContractAccount` | `undefined`
+      </td>
+
+      <td>
+        `SmartContractAccount` | `undefined`
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+
+## Parameters
+
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `client`
+      </td>
+
+      <td>
+        `Client`\<`TTransport`, `TChain`, `TAccount`>
+      </td>
+
+      <td>
+        the client instance containing the transport, chain, and account information
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+
+## Returns
+
+[`MultiOwnerPluginActions`](../type-aliases/MultiOwnerPluginActions.mdx)\<`TAccount`>
+
+an object containing the actions for the MultiOwner plugin, such as `readOwners` and `isOwnerOf`

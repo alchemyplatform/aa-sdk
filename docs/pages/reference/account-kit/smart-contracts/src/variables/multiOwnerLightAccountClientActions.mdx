@@ -16,7 +16,7 @@ const multiOwnerLightAccountClientActions: <
 ) => MultiOwnerLightAccountClientActions<TSigner, TAccount>;
 ```
 
-Defined in: [account-kit/smart-contracts/src/light-account/decorators/multiOwnerLightAccount.ts:39](https://github.com/alchemyplatform/aa-sdk/blob/4987bdd63823427c48ec21401b71fa3cfc2d0675/account-kit/smart-contracts/src/light-account/decorators/multiOwnerLightAccount.ts#L39)
+Defined in: [account-kit/smart-contracts/src/light-account/decorators/multiOwnerLightAccount.ts:39](https://github.com/alchemyplatform/aa-sdk/blob/e3c1a23e6e03f44bf2db3afddb97a91b175cba58/account-kit/smart-contracts/src/light-account/decorators/multiOwnerLightAccount.ts#L39)
 
 Generates client actions for a multi-owner light account, including the ability to update owners.
 
@@ -77,14 +77,11 @@ const smartAccountClient = createAlchemySmartAccountClient({
 
     <tr>
       <td>
-        `TAccount` *extends*
-        | [`accountLoupeActions`](../../../core/src/variables/accountLoupeActions.mdx)\<`TSigner`>
-        | `undefined`
+        `TAccount` *extends* `MultiOwnerLightAccount`\<`TSigner`> | `undefined`
       </td>
 
       <td>
-        | [`accountLoupeActions`](../../../core/src/variables/accountLoupeActions.mdx)\<`TSigner`>
-        | `undefined`
+        `MultiOwnerLightAccount`\<`TSigner`> | `undefined`
       </td>
     </tr>
 

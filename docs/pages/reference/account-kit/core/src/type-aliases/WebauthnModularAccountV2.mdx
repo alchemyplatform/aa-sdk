@@ -1,0 +1,80 @@
+---
+title: WebauthnModularAccountV2
+description: Overview of WebauthnModularAccountV2
+slug: wallets/reference/account-kit/core/src/type-aliases/WebauthnModularAccountV2
+layout: reference
+---
+
+```ts
+type WebauthnModularAccountV2 = SmartContractAccount<
+  "ModularAccountV2",
+  "0.7.0"
+> &
+  object;
+```
+
+Defined in: account-kit/smart-contracts/dist/types/src/ma-v2/account/common/modularAccountV2Base.d.ts:35
+
+## Type Declaration
+
+<table>
+  <thead>
+    <tr>
+      <th align="left">Name</th>
+      <th align="left">Type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `encodeCallData()`
+      </td>
+
+      <td>
+        (`callData`) => `Promise`\<`Hex`>
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `getExecutionData()`
+      </td>
+
+      <td>
+        (`selector`) => `Promise`\<[`ExecutionDataView`](ExecutionDataView.mdx)>
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `getValidationData()`
+      </td>
+
+      <td>
+        (`args`) => `Promise`\<[`ValidationDataView`](ValidationDataView.mdx)>
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `params`
+      </td>
+
+      <td>
+        `ToWebAuthnAccountParameters`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `signerEntity`
+      </td>
+
+      <td>
+        [`SignerEntity`](SignerEntity.mdx)
+      </td>
+    </tr>
+
+  </tbody>
+</table>

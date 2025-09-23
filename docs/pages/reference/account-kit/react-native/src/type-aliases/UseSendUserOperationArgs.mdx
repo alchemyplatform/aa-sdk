@@ -1,0 +1,92 @@
+---
+title: UseSendUserOperationArgs
+description: Overview of UseSendUserOperationArgs
+slug: wallets/reference/account-kit/react-native/src/type-aliases/UseSendUserOperationArgs
+layout: reference
+---
+
+```ts
+type UseSendUserOperationArgs<TEntryPointVersion, TAccount> = object &
+  UseSendUserOperationMutationArgs<TEntryPointVersion, TAccount>;
+```
+
+Defined in: account-kit/react/dist/types/hooks/useSendUserOperation.d.ts:12
+
+## Type Declaration
+
+<table>
+  <thead>
+    <tr>
+      <th align="left">Name</th>
+      <th align="left">Type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `client`
+      </td>
+
+      <td>
+        | [`UseSmartAccountClientResult`](UseSmartAccountClientResult.mdx)\[`"client"`]
+        | `undefined`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `waitForTxn?`
+      </td>
+
+      <td>
+        `boolean`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `waitForTxnTag?`
+      </td>
+
+      <td>
+        `"pending"` | `"latest"`
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+
+## Type Parameters
+
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TEntryPointVersion` *extends* `GetEntryPointFromAccount`\<`TAccount`>
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TAccount` *extends* `SupportedAccounts`
+      </td>
+
+      <td>
+        `SupportedAccounts`
+      </td>
+    </tr>
+
+  </tbody>
+</table>

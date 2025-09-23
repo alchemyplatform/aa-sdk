@@ -1,0 +1,43 @@
+---
+title: AlchemyModularAccountClientConfig
+description: Overview of AlchemyModularAccountClientConfig
+slug: wallets/reference/account-kit/core/src/type-aliases/AlchemyModularAccountClientConfig
+layout: reference
+---
+
+```ts
+type AlchemyModularAccountClientConfig<TSigner> = Omit<
+  CreateMultiOwnerModularAccountParams<HttpTransport, TSigner>,
+  "transport"
+> &
+  Omit<
+    AlchemySmartAccountClientConfig<Chain, LightAccount<TSigner>>,
+    "account"
+  >;
+```
+
+Defined in: account-kit/smart-contracts/dist/types/src/msca/client/alchemyClient.d.ts:5
+
+## Type Parameters
+
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TSigner` *extends* `SmartAccountSigner`
+      </td>
+
+      <td>
+        `SmartAccountSigner`
+      </td>
+    </tr>
+
+  </tbody>
+</table>

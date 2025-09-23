@@ -1,0 +1,68 @@
+---
+title: useSolanaTransaction
+description: Overview of the useSolanaTransaction function
+slug: wallets/reference/account-kit/react-native/src/functions/useSolanaTransaction
+layout: reference
+---
+
+```ts
+function useSolanaTransaction(opts?): SolanaTransaction;
+```
+
+Defined in: account-kit/react/dist/types/hooks/useSolanaTransaction.d.ts:99
+
+This is the hook that will be used to send a transaction. It will prioritize external
+connected Solana wallets, falling back to the internal signer when not connected.
+Supports sponsorship for both external wallets and internal signers.
+
+## Example
+
+```ts twoslash
+import { useSolanaTransaction } from "@account-kit/react";
+
+const { mutate } = useSolanaTransaction({
+  policyId: "<policyId>",
+});
+
+mutate({
+  transfer: {
+    amount: 0,
+    toAddress: "<toAddress>",
+  },
+});
+```
+
+## Parameters
+
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `opts?`
+      </td>
+
+      <td>
+        [`SolanaTransactionHookParams`](../type-aliases/SolanaTransactionHookParams.mdx)
+      </td>
+
+      <td>
+        Options for the hook to get setup, The transaction is required.
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+
+## Returns
+
+[`SolanaTransaction`](../interfaces/SolanaTransaction.mdx)
+
+The transaction hook.

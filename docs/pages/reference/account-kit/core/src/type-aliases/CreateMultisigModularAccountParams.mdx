@@ -1,0 +1,154 @@
+---
+title: CreateMultisigModularAccountParams
+description: Overview of CreateMultisigModularAccountParams
+slug: wallets/reference/account-kit/core/src/type-aliases/CreateMultisigModularAccountParams
+layout: reference
+---
+
+```ts
+type CreateMultisigModularAccountParams<
+  TTransport,
+  TSigner,
+  TEntryPointVersion,
+> = Pick<
+  ToSmartContractAccountParams<
+    "MultisigModularAccount",
+    TTransport,
+    Chain,
+    TEntryPointVersion
+  >,
+  "transport" | "chain"
+> &
+  object &
+  EntryPointParameter<TEntryPointVersion, Chain>;
+```
+
+Defined in: account-kit/smart-contracts/dist/types/src/msca/account/multisigAccount.d.ts:7
+
+## Type Declaration
+
+<table>
+  <thead>
+    <tr>
+      <th align="left">Name</th>
+      <th align="left">Type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `accountAddress?`
+      </td>
+
+      <td>
+        [`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `factoryAddress?`
+      </td>
+
+      <td>
+        [`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `initCode?`
+      </td>
+
+      <td>
+        `Hex`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `owners?`
+      </td>
+
+      <td>
+        [`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx)\[]
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `salt?`
+      </td>
+
+      <td>
+        `bigint`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `signer`
+      </td>
+
+      <td>
+        `TSigner`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `threshold`
+      </td>
+
+      <td>
+        `bigint`
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+
+## Type Parameters
+
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TTransport` *extends* `Transport`
+      </td>
+
+      <td>
+        `Transport`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TSigner` *extends* `SmartAccountSigner`
+      </td>
+
+      <td>
+        `SmartAccountSigner`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TEntryPointVersion` *extends* `"0.6.0"`
+      </td>
+
+      <td>
+        `"0.6.0"`
+      </td>
+    </tr>
+
+  </tbody>
+</table>

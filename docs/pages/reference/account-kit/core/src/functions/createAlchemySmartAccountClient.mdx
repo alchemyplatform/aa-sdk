@@ -1,0 +1,86 @@
+---
+title: createAlchemySmartAccountClient
+description: Overview of the createAlchemySmartAccountClient function
+slug: wallets/reference/account-kit/core/src/functions/createAlchemySmartAccountClient
+layout: reference
+---
+
+```ts
+function createAlchemySmartAccountClient<TChain, TAccount, TContext>(
+  params,
+): AlchemySmartAccountClient<TChain, TAccount, Record<string, never>, TContext>;
+```
+
+Defined in: account-kit/infra/dist/types/client/smartAccountClient.d.ts:22
+
+## Type Parameters
+
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TChain` *extends* `Chain`
+      </td>
+
+      <td>
+        `Chain`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TAccount` *extends* `undefined` | `SmartContractAccount`
+      </td>
+
+      <td>
+        `undefined` | `SmartContractAccount`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TContext` *extends* `undefined` | `UserOperationContext`
+      </td>
+
+      <td>
+        `undefined` | `UserOperationContext`
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+
+## Parameters
+
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `params`
+      </td>
+
+      <td>
+        [`AlchemySmartAccountClientConfig`](../type-aliases/AlchemySmartAccountClientConfig.mdx)\<`TChain`, `TAccount`, `TContext`>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+
+## Returns
+
+[`AlchemySmartAccountClient`](../type-aliases/AlchemySmartAccountClient.mdx)\<`TChain`, `TAccount`, `Record`\<`string`, `never`>, `TContext`>

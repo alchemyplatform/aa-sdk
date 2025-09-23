@@ -8,10 +8,13 @@ layout: reference
 ```ts
 function useSmartAccountClient<TChain, TAccount>(
   args,
-): GetSmartAccountClientResult<TChain, TAccount>;
+): UseSmartAccountClientResult<
+  TChain,
+  SupportedAccount<TAccount extends undefined ? "ModularAccountV2" : TAccount>
+>;
 ```
 
-Defined in: [account-kit/react/src/hooks/useSmartAccountClient.ts:37](https://github.com/alchemyplatform/aa-sdk/blob/4987bdd63823427c48ec21401b71fa3cfc2d0675/account-kit/react/src/hooks/useSmartAccountClient.ts#L37)
+Defined in: [account-kit/react/src/hooks/useSmartAccountClient.ts:37](https://github.com/alchemyplatform/aa-sdk/blob/e3c1a23e6e03f44bf2db3afddb97a91b175cba58/account-kit/react/src/hooks/useSmartAccountClient.ts#L37)
 
 ## Type Parameters
 
@@ -36,7 +39,7 @@ Defined in: [account-kit/react/src/hooks/useSmartAccountClient.ts:37](https://gi
 
     <tr>
       <td>
-        `TAccount` *extends* `any`
+        `TAccount` *extends* `undefined` | `SupportedAccountTypes`
       </td>
 
       <td>
@@ -73,6 +76,6 @@ Defined in: [account-kit/react/src/hooks/useSmartAccountClient.ts:37](https://gi
 
 ## Returns
 
-`GetSmartAccountClientResult`\<`TChain`, `TAccount`>
+[`UseSmartAccountClientResult`](../type-aliases/UseSmartAccountClientResult.mdx)\<`TChain`, `SupportedAccount`\<`TAccount` _extends_ `undefined` ? `"ModularAccountV2"` : `TAccount`>>
 
 An object containing the smart account client, the address, and a loading state. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useSmartAccountClient.ts#L24)
