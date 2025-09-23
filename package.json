@@ -60,7 +60,6 @@
     "@commitlint/config-conventional": "^17.6.3",
     "@types/js-yaml": "^4.0.9",
     "add": "^2.0.6",
-    "ak-docgen": "*",
     "dotenv-cli": "^7.4.2",
     "eslint": "^8.51.0",
     "eslint-config-react-app": "^7.0.1",
