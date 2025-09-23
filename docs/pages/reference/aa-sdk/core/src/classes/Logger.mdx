@@ -5,7 +5,7 @@ slug: wallets/reference/aa-sdk/core/src/classes/Logger
 layout: reference
 ---
 
-Defined in: [aa-sdk/core/src/logger.ts:13](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/aa-sdk/core/src/logger.ts#L13)
+Defined in: [aa-sdk/core/src/logger.ts:13](https://github.com/alchemyplatform/aa-sdk/blob/4987bdd63823427c48ec21401b71fa3cfc2d0675/aa-sdk/core/src/logger.ts#L13)
 
 Logger class provides static methods for logging at different levels such as error, warn, debug, info, and verbose. This class allows setting log levels and log filters to control the logging behavior.
 
@@ -27,10 +27,8 @@ new Logger(): Logger;
   <thead>
     <tr>
       <th align="left">Property</th>
-      <th align="left">Modifier</th>
       <th align="left">Type</th>
       <th align="left">Default value</th>
-      <th align="left">Defined in</th>
     </tr>
   </thead>
 
@@ -41,19 +39,11 @@ new Logger(): Logger;
       </td>
 
       <td>
-        `static`
-      </td>
-
-      <td>
         `string`
       </td>
 
       <td>
         `undefined`
-      </td>
-
-      <td>
-        [aa-sdk/core/src/logger.ts:15](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/aa-sdk/core/src/logger.ts#L15)
       </td>
     </tr>
 
@@ -63,19 +53,11 @@ new Logger(): Logger;
       </td>
 
       <td>
-        `static`
-      </td>
-
-      <td>
         [`LogLevel`](../enumerations/LogLevel.mdx)
       </td>
 
       <td>
         `LogLevel.INFO`
-      </td>
-
-      <td>
-        [aa-sdk/core/src/logger.ts:14](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/aa-sdk/core/src/logger.ts#L14)
       </td>
     </tr>
 
@@ -90,7 +72,7 @@ new Logger(): Logger;
 static debug(msg, ...args): void;
 ```
 
-Defined in: [aa-sdk/core/src/logger.ts:99](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/aa-sdk/core/src/logger.ts#L99)
+Defined in: [aa-sdk/core/src/logger.ts:99](https://github.com/alchemyplatform/aa-sdk/blob/4987bdd63823427c48ec21401b71fa3cfc2d0675/aa-sdk/core/src/logger.ts#L99)
 
 Logs a debug message to the console if the log level allows it.
 
@@ -157,7 +139,7 @@ Logger.debug("Something is happening");
 static error(msg, ...args): void;
 ```
 
-Defined in: [aa-sdk/core/src/logger.ts:61](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/aa-sdk/core/src/logger.ts#L61)
+Defined in: [aa-sdk/core/src/logger.ts:61](https://github.com/alchemyplatform/aa-sdk/blob/4987bdd63823427c48ec21401b71fa3cfc2d0675/aa-sdk/core/src/logger.ts#L61)
 
 Logs an error message to the console if the logging condition is met.
 
@@ -224,7 +206,7 @@ Logger.error("An error occurred while processing the request");
 static info(msg, ...args): void;
 ```
 
-Defined in: [aa-sdk/core/src/logger.ts:118](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/aa-sdk/core/src/logger.ts#L118)
+Defined in: [aa-sdk/core/src/logger.ts:118](https://github.com/alchemyplatform/aa-sdk/blob/4987bdd63823427c48ec21401b71fa3cfc2d0675/aa-sdk/core/src/logger.ts#L118)
 
 Logs an informational message to the console if the logging level is set to INFO.
 
@@ -291,7 +273,7 @@ Logger.info("Something is happening");
 static setLogFilter(pattern): void;
 ```
 
-Defined in: [aa-sdk/core/src/logger.ts:44](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/aa-sdk/core/src/logger.ts#L44)
+Defined in: [aa-sdk/core/src/logger.ts:44](https://github.com/alchemyplatform/aa-sdk/blob/4987bdd63823427c48ec21401b71fa3cfc2d0675/aa-sdk/core/src/logger.ts#L44)
 
 Sets the log filter pattern.
 
@@ -344,7 +326,7 @@ Logger.setLogFilter("error");
 static setLogLevel(logLevel): void;
 ```
 
-Defined in: [aa-sdk/core/src/logger.ts:28](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/aa-sdk/core/src/logger.ts#L28)
+Defined in: [aa-sdk/core/src/logger.ts:28](https://github.com/alchemyplatform/aa-sdk/blob/4987bdd63823427c48ec21401b71fa3cfc2d0675/aa-sdk/core/src/logger.ts#L28)
 
 Sets the log level for logging purposes.
 
@@ -396,7 +378,7 @@ Logger.setLogLevel(LogLevel.DEBUG);
 static verbose(msg, ...args): void;
 ```
 
-Defined in: [aa-sdk/core/src/logger.ts:137](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/aa-sdk/core/src/logger.ts#L137)
+Defined in: [aa-sdk/core/src/logger.ts:137](https://github.com/alchemyplatform/aa-sdk/blob/4987bdd63823427c48ec21401b71fa3cfc2d0675/aa-sdk/core/src/logger.ts#L137)
 
 Logs a message with additional arguments if the logging level permits it.
 
@@ -463,7 +445,7 @@ Logger.verbose("Something is happening");
 static warn(msg, ...args): void;
 ```
 
-Defined in: [aa-sdk/core/src/logger.ts:80](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/aa-sdk/core/src/logger.ts#L80)
+Defined in: [aa-sdk/core/src/logger.ts:80](https://github.com/alchemyplatform/aa-sdk/blob/4987bdd63823427c48ec21401b71fa3cfc2d0675/aa-sdk/core/src/logger.ts#L80)
 
 Logs a warning message if the logging conditions are met.
 

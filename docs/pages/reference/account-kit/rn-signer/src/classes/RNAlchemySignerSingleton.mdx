@@ -5,7 +5,7 @@ slug: wallets/reference/account-kit/rn-signer/src/classes/RNAlchemySignerSinglet
 layout: reference
 ---
 
-Defined in: [account-kit/rn-signer/src/signer.ts:22](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/account-kit/rn-signer/src/signer.ts#L22)
+Defined in: [account-kit/rn-signer/src/signer.ts:22](https://github.com/alchemyplatform/aa-sdk/blob/4987bdd63823427c48ec21401b71fa3cfc2d0675/account-kit/rn-signer/src/signer.ts#L22)
 
 ## Extends
 
@@ -17,11 +17,8 @@ Defined in: [account-kit/rn-signer/src/signer.ts:22](https://github.com/alchemyp
   <thead>
     <tr>
       <th align="left">Property</th>
-      <th align="left">Modifier</th>
       <th align="left">Type</th>
       <th align="left">Description</th>
-      <th align="left">Inherited from</th>
-      <th align="left">Defined in</th>
     </tr>
   </thead>
 
@@ -29,10 +26,6 @@ Defined in: [account-kit/rn-signer/src/signer.ts:22](https://github.com/alchemyp
     <tr>
       <td>
         <a id="addmfa" /> `addMfa`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -67,25 +60,11 @@ Defined in: [account-kit/rn-signer/src/signer.ts:22](https://github.com/alchemyp
 
         If no user is authenticated
       </td>
-
-      <td>
-        ```ts
-        BaseAlchemySigner.addMfa
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/base.d.ts:670
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="addoauthprovider" /> `addOauthProvider`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -95,25 +74,11 @@ Defined in: [account-kit/rn-signer/src/signer.ts:22](https://github.com/alchemyp
       <td>
         Handles OAuth authentication by augmenting the provided arguments with a type and performing authentication based on the OAuth mode (either using redirect or popup).
       </td>
-
-      <td>
-        ```ts
-        BaseAlchemySigner.addOauthProvider
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/base.d.ts:586
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="addpasskey" /> `addPasskey`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -142,25 +107,11 @@ Defined in: [account-kit/rn-signer/src/signer.ts:22](https://github.com/alchemyp
         const result = await signer.addPasskey()
         ```
       </td>
-
-      <td>
-        ```ts
-        BaseAlchemySigner.addPasskey
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/base.d.ts:465
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="authenticate" /> `authenticate`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -192,25 +143,11 @@ Defined in: [account-kit/rn-signer/src/signer.ts:22](https://github.com/alchemyp
         });
         ```
       </td>
-
-      <td>
-        ```ts
-        BaseAlchemySigner.authenticate
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/base.d.ts:117
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="disconnect" /> `disconnect`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -239,25 +176,11 @@ Defined in: [account-kit/rn-signer/src/signer.ts:22](https://github.com/alchemyp
         await signer.disconnect();
         ```
       </td>
-
-      <td>
-        ```ts
-        BaseAlchemySigner.disconnect
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/base.d.ts:142
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="exportwallet" /> `exportWallet`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -293,25 +216,11 @@ Defined in: [account-kit/rn-signer/src/signer.ts:22](https://github.com/alchemyp
 
         exportWallet parameters
       </td>
-
-      <td>
-        ```ts
-        BaseAlchemySigner.exportWallet
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/base.d.ts:524
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="fetchconfig" /> `fetchConfig`
-      </td>
-
-      <td>
-        `protected`
       </td>
 
       <td>
@@ -321,25 +230,11 @@ Defined in: [account-kit/rn-signer/src/signer.ts:22](https://github.com/alchemyp
       <td>
         ‐
       </td>
-
-      <td>
-        ```ts
-        BaseAlchemySigner.fetchConfig
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/base.d.ts:771
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="getaddress" /> `getAddress`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -349,25 +244,11 @@ Defined in: [account-kit/rn-signer/src/signer.ts:22](https://github.com/alchemyp
       <td>
         Retrieves the address of the current user by calling the `whoami` method on `this.inner`.
       </td>
-
-      <td>
-        ```ts
-        BaseAlchemySigner.getAddress
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/base.d.ts:176
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="getauthdetails" /> `getAuthDetails`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -403,25 +284,11 @@ Defined in: [account-kit/rn-signer/src/signer.ts:22](https://github.com/alchemyp
 
         if there is no user logged in
       </td>
-
-      <td>
-        ```ts
-        BaseAlchemySigner.getAuthDetails
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/base.d.ts:170
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="getconfig" /> `getConfig`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -431,25 +298,11 @@ Defined in: [account-kit/rn-signer/src/signer.ts:22](https://github.com/alchemyp
       <td>
         Returns the signer configuration while fetching it if it's not already initialized.
       </td>
-
-      <td>
-        ```ts
-        BaseAlchemySigner.getConfig
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/base.d.ts:770
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="getmfafactors" /> `getMfaFactors`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -482,25 +335,11 @@ Defined in: [account-kit/rn-signer/src/signer.ts:22](https://github.com/alchemyp
 
         If no user is authenticated
       </td>
-
-      <td>
-        ```ts
-        BaseAlchemySigner.getMfaFactors
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/base.d.ts:640
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="getmfastatus" /> `getMfaStatus`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -532,25 +371,11 @@ Defined in: [account-kit/rn-signer/src/signer.ts:22](https://github.com/alchemyp
         }
         ```
       </td>
-
-      <td>
-        ```ts
-        BaseAlchemySigner.getMfaStatus
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/base.d.ts:320
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="getpasskeystatus" /> `getPasskeyStatus`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -560,25 +385,11 @@ Defined in: [account-kit/rn-signer/src/signer.ts:22](https://github.com/alchemyp
       <td>
         ‐
       </td>
-
-      <td>
-        ```ts
-        BaseAlchemySigner.getPasskeyStatus
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/base.d.ts:494
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="initconfig" /> `initConfig`
-      </td>
-
-      <td>
-        `protected`
       </td>
 
       <td>
@@ -588,25 +399,11 @@ Defined in: [account-kit/rn-signer/src/signer.ts:22](https://github.com/alchemyp
       <td>
         ‐
       </td>
-
-      <td>
-        ```ts
-        BaseAlchemySigner.initConfig
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/base.d.ts:764
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="inner" /> `inner`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -616,25 +413,11 @@ Defined in: [account-kit/rn-signer/src/signer.ts:22](https://github.com/alchemyp
       <td>
         ‐
       </td>
-
-      <td>
-        ```ts
-        BaseAlchemySigner.inner
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/base.d.ts:37
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="listauthmethods" /> `listAuthMethods`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -648,25 +431,11 @@ Defined in: [account-kit/rn-signer/src/signer.ts:22](https://github.com/alchemyp
 
         Thrown if the user is not authenticated
       </td>
-
-      <td>
-        ```ts
-        BaseAlchemySigner.listAuthMethods
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/base.d.ts:603
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="on" /> `on`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -676,25 +445,11 @@ Defined in: [account-kit/rn-signer/src/signer.ts:22](https://github.com/alchemyp
       <td>
         Allows you to subscribe to events emitted by the signer
       </td>
-
-      <td>
-        ```ts
-        BaseAlchemySigner.on
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/base.d.ts:59
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="preparepopupoauth" /> `preparePopupOauth`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -729,25 +484,11 @@ Defined in: [account-kit/rn-signer/src/signer.ts:22](https://github.com/alchemyp
         await signer.preparePopupOauth();
         ```
       </td>
-
-      <td>
-        ```ts
-        BaseAlchemySigner.preparePopupOauth
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/base.d.ts:89
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="removeemail" /> `removeEmail`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -761,25 +502,11 @@ Defined in: [account-kit/rn-signer/src/signer.ts:22](https://github.com/alchemyp
 
         If the user is not authenticated
       </td>
-
-      <td>
-        ```ts
-        BaseAlchemySigner.removeEmail
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/base.d.ts:411
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="removemfa" /> `removeMfa`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -814,25 +541,11 @@ Defined in: [account-kit/rn-signer/src/signer.ts:22](https://github.com/alchemyp
 
         If no user is authenticated
       </td>
-
-      <td>
-        ```ts
-        BaseAlchemySigner.removeMfa
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/base.d.ts:729
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="removeoauthprovider" /> `removeOauthProvider`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -846,25 +559,11 @@ Defined in: [account-kit/rn-signer/src/signer.ts:22](https://github.com/alchemyp
 
         Thrown if the user is not authenticated
       </td>
-
-      <td>
-        ```ts
-        BaseAlchemySigner.removeOauthProvider
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/base.d.ts:596
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="removepasskey" /> `removePasskey`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -896,25 +595,11 @@ Defined in: [account-kit/rn-signer/src/signer.ts:22](https://github.com/alchemyp
         const result = await signer.removePasskey(passkey.authenticatorId);
         ```
       </td>
-
-      <td>
-        ```ts
-        BaseAlchemySigner.removePasskey
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/base.d.ts:493
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="removephonenumber" /> `removePhoneNumber`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -928,25 +613,11 @@ Defined in: [account-kit/rn-signer/src/signer.ts:22](https://github.com/alchemyp
 
         If the user is not authenticated
       </td>
-
-      <td>
-        ```ts
-        BaseAlchemySigner.removePhoneNumber
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/base.d.ts:428
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="sendverificationcode" /> `sendVerificationCode`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -961,25 +632,11 @@ Defined in: [account-kit/rn-signer/src/signer.ts:22](https://github.com/alchemyp
 
         If the user is not authenticated
       </td>
-
-      <td>
-        ```ts
-        BaseAlchemySigner.sendVerificationCode
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/base.d.ts:438
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="setphonenumber" /> `setPhoneNumber`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -994,25 +651,11 @@ Defined in: [account-kit/rn-signer/src/signer.ts:22](https://github.com/alchemyp
 
         If the user is not authenticated
       </td>
-
-      <td>
-        ```ts
-        BaseAlchemySigner.setPhoneNumber
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/base.d.ts:421
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="signauthorization" /> `signAuthorization`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -1045,25 +688,11 @@ Defined in: [account-kit/rn-signer/src/signer.ts:22](https://github.com/alchemyp
         });
         ```
       </td>
-
-      <td>
-        ```ts
-        BaseAlchemySigner.signAuthorization
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/base.d.ts:293
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="signertype" /> `signerType`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -1073,25 +702,11 @@ Defined in: [account-kit/rn-signer/src/signer.ts:22](https://github.com/alchemyp
       <td>
         ‐
       </td>
-
-      <td>
-        ```ts
-        BaseAlchemySigner.signerType
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/base.d.ts:36
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="signmessage" /> `signMessage`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -1120,25 +735,11 @@ Defined in: [account-kit/rn-signer/src/signer.ts:22](https://github.com/alchemyp
         const signature = await signer.signMessage("Hello, world!");
         ```
       </td>
-
-      <td>
-        ```ts
-        BaseAlchemySigner.signMessage
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/base.d.ts:201
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="signtransaction" /> `signTransaction`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -1171,25 +772,11 @@ Defined in: [account-kit/rn-signer/src/signer.ts:22](https://github.com/alchemyp
         });
         ```
       </td>
-
-      <td>
-        ```ts
-        BaseAlchemySigner.signTransaction
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/base.d.ts:262
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="signtypeddata" /> `signTypedData`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -1223,25 +810,11 @@ Defined in: [account-kit/rn-signer/src/signer.ts:22](https://github.com/alchemyp
         });
         ```
       </td>
-
-      <td>
-        ```ts
-        BaseAlchemySigner.signTypedData
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/base.d.ts:231
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="tosolanasigner" /> `toSolanaSigner`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -1271,25 +844,11 @@ Defined in: [account-kit/rn-signer/src/signer.ts:22](https://github.com/alchemyp
         const solanaSigner = signer.toSolanaSigner();
         ```
       </td>
-
-      <td>
-        ```ts
-        BaseAlchemySigner.toSolanaSigner
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/base.d.ts:575
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="toviemaccount" /> `toViemAccount`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -1323,25 +882,11 @@ Defined in: [account-kit/rn-signer/src/signer.ts:22](https://github.com/alchemyp
 
         if your signer is not authenticated
       </td>
-
-      <td>
-        ```ts
-        BaseAlchemySigner.toViemAccount
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/base.d.ts:550
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="verifymfa" /> `verifyMfa`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -1376,16 +921,6 @@ Defined in: [account-kit/rn-signer/src/signer.ts:22](https://github.com/alchemyp
         **Throws**
 
         If no user is authenticated
-      </td>
-
-      <td>
-        ```ts
-        BaseAlchemySigner.verifyMfa
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/base.d.ts:699
       </td>
     </tr>
 
@@ -1765,7 +1300,7 @@ BaseAlchemySigner.validateMultiFactors;
 static getInstance(params): RNAlchemySignerSingleton;
 ```
 
-Defined in: [account-kit/rn-signer/src/signer.ts:49](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/account-kit/rn-signer/src/signer.ts#L49)
+Defined in: [account-kit/rn-signer/src/signer.ts:49](https://github.com/alchemyplatform/aa-sdk/blob/4987bdd63823427c48ec21401b71fa3cfc2d0675/account-kit/rn-signer/src/signer.ts#L49)
 
 #### Parameters
 

@@ -10,11 +10,9 @@ import yaml from "js-yaml";
  * and directly updates the docs.yml file by replacing the existing SDK Reference section.
  */
 
-// Configuration
 const TYPEDOC_DIR = "./docs/pages/reference";
 const DOCS_YML_FILE = "./docs/docs.yml";
 
-// Type definitions
 interface FileItem {
   type: "file";
   name: string;
@@ -55,7 +53,6 @@ interface SDKReference {
 type PackageDisplayNames = Record<string, Record<string, string>>;
 type TypeSections = Record<string, string>;
 
-// Package name mapping for better display names
 const PACKAGE_DISPLAY_NAMES: PackageDisplayNames = {
   "aa-sdk": {
     core: "AA-SDK core",
@@ -73,7 +70,6 @@ const PACKAGE_DISPLAY_NAMES: PackageDisplayNames = {
   },
 } as const;
 
-// Type section ordering and display names
 const TYPE_SECTIONS: TypeSections = {
   functions: "Functions",
   classes: "Classes",
@@ -140,7 +136,6 @@ function scanDirectory(dirPath: string, basePath: string = ""): ScanItem[] {
  * @returns {string} The display name
  */
 function toDisplayName(fileName: string): string {
-  // Handle special cases
   const specialCases: Record<string, string> = {
     createConfig: "createConfig",
     useAccount: "useAccount",
@@ -279,7 +274,6 @@ function generatePackageSection(
         }
       }
 
-      // Add components section if we have any
       if (components.length > 0) {
         section.contents.push({
           section: "Components",
@@ -287,7 +281,6 @@ function generatePackageSection(
         });
       }
 
-      // Add hooks section if we have any
       if (hooks.length > 0) {
         section.contents.push({
           section: "Hooks",
@@ -331,13 +324,11 @@ function generateSDKReference(): SDKReference {
     contents: [],
   };
 
-  // Process each top-level directory (aa-sdk, account-kit)
   for (const topLevel of structure) {
     if (topLevel.type !== "directory") continue;
 
     const packageName = topLevel.name;
 
-    // Skip certain directories
     if (["_media", "modules.mdx", "README.mdx"].includes(packageName)) {
       continue;
     }
@@ -348,7 +339,6 @@ function generateSDKReference(): SDKReference {
 
       const fullPackagePath = `${packageName}/${packageDir.name}/src`;
 
-      // Find the src directory
       let srcDir = packageDir.children.find(
         (child): child is DirectoryItem =>
           child.type === "directory" && child.name === "src",
@@ -392,11 +382,9 @@ function generateSDKReference(): SDKReference {
  * @returns {void}
  */
 function updateDocsYml(sdkReference: SDKReference): void {
-  // Read the existing docs.yml file
   const docsContent = fs.readFileSync(DOCS_YML_FILE, "utf-8");
   const lines = docsContent.split("\n");
 
-  // Find the start and end of the SDK Reference section
   let startIndex = -1;
   let endIndex = -1;
   let currentIndent = 0;
@@ -407,7 +395,7 @@ function updateDocsYml(sdkReference: SDKReference): void {
     if (line.includes("section: SDK Reference")) {
       startIndex = i;
       // Calculate the indentation level of the SDK Reference section
-      currentIndent = line.search(/\S/) / 2; // Assuming 2 spaces per indent level
+      currentIndent = line.search(/\S/) / 2;
       continue;
     }
 
@@ -429,7 +417,6 @@ function updateDocsYml(sdkReference: SDKReference): void {
     throw new Error('Could not find "SDK Reference" section in docs.yml');
   }
 
-  // If no end found, assume it goes to the end of file
   if (endIndex === -1) {
     endIndex = lines.length;
   }
@@ -438,7 +425,6 @@ function updateDocsYml(sdkReference: SDKReference): void {
     `Found SDK Reference section from line ${startIndex + 1} to ${endIndex}`,
   );
 
-  // Generate the new SDK Reference YAML content using js-yaml
   const sdkReferenceYaml = yaml.dump([sdkReference], {
     indent: 2,
     lineWidth: -1, // Disable line wrapping
@@ -446,35 +432,26 @@ function updateDocsYml(sdkReference: SDKReference): void {
     sortKeys: false,
   });
 
-  // Add proper indentation to match the existing structure
   const indentedYaml = sdkReferenceYaml
     .split("\n")
     .map((line, index) => {
       if (line.trim() === "") return line;
-      // First line gets the base indentation, others get additional indentation
       const baseIndent = "  ".repeat(currentIndent);
       return `${baseIndent}${line}`;
     })
-    .slice(0, -1); // Remove the last empty line
+    .slice(0, -1);
 
-  // Replace the section
   const newLines = [
     ...lines.slice(0, startIndex),
     ...indentedYaml,
     ...lines.slice(endIndex),
   ];
 
-  // Write back to the file
   fs.writeFileSync(DOCS_YML_FILE, newLines.join("\n"));
 
   console.log(`✅ Updated ${DOCS_YML_FILE} with new SDK Reference structure`);
 }
 
-/**
- * Main execution
- *
- * @returns {void}
- */
 function main(): void {
   try {
     console.log("Generating SDK Reference structure...");
@@ -483,13 +460,11 @@ function main(): void {
 
     console.log(`📊 Found ${sdkReference.contents.length} packages`);
 
-    // Display summary
     console.log("\n📋 Package Summary:");
     for (const pkg of sdkReference.contents) {
       console.log(`  - ${pkg.section}: ${pkg.contents.length} sections`);
     }
 
-    // Update docs.yml directly
     console.log(`\n🔄 Updating ${DOCS_YML_FILE}...`);
     updateDocsYml(sdkReference);
 
@@ -506,7 +481,6 @@ function main(): void {
   }
 }
 
-// Run the script
 if (import.meta.url === `file://${process.argv[1]}`) {
   main();
 }

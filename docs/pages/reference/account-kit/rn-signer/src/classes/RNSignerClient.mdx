@@ -5,7 +5,7 @@ slug: wallets/reference/account-kit/rn-signer/src/classes/RNSignerClient
 layout: reference
 ---
 
-Defined in: [account-kit/rn-signer/src/client.ts:65](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/account-kit/rn-signer/src/client.ts#L65)
+Defined in: [account-kit/rn-signer/src/client.ts:65](https://github.com/alchemyplatform/aa-sdk/blob/4987bdd63823427c48ec21401b71fa3cfc2d0675/account-kit/rn-signer/src/client.ts#L65)
 
 ## Extends
 
@@ -19,7 +19,7 @@ Defined in: [account-kit/rn-signer/src/client.ts:65](https://github.com/alchemyp
 new RNSignerClient(params): RNSignerClient;
 ```
 
-Defined in: [account-kit/rn-signer/src/client.ts:78](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/account-kit/rn-signer/src/client.ts#L78)
+Defined in: [account-kit/rn-signer/src/client.ts:78](https://github.com/alchemyplatform/aa-sdk/blob/4987bdd63823427c48ec21401b71fa3cfc2d0675/account-kit/rn-signer/src/client.ts#L78)
 
 #### Parameters
 
@@ -104,11 +104,8 @@ BaseSignerClient<
   <thead>
     <tr>
       <th align="left">Property</th>
-      <th align="left">Modifier</th>
       <th align="left">Type</th>
       <th align="left">Description</th>
-      <th align="left">Inherited from</th>
-      <th align="left">Defined in</th>
     </tr>
   </thead>
 
@@ -116,10 +113,6 @@ BaseSignerClient<
     <tr>
       <td>
         <a id="addmfa" /> `addMfa`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -137,25 +130,11 @@ BaseSignerClient<
 
         If an unsupported factor type is provided
       </td>
-
-      <td>
-        ```ts
-        BaseSignerClient.addMfa
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/client/base.d.ts:363
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="addoauthprovider" /> `addOauthProvider`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -169,25 +148,11 @@ BaseSignerClient<
 
         Throws if the user is not authenticated.
       </td>
-
-      <td>
-        ```ts
-        BaseSignerClient.addOauthProvider
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/client/base.d.ts:201
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="addpasskey" /> `addPasskey`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -201,25 +166,11 @@ BaseSignerClient<
 
         If the user is not authenticated
       </td>
-
-      <td>
-        ```ts
-        BaseSignerClient.addPasskey
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/client/base.d.ts:169
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="eventemitter" /> `eventEmitter`
-      </td>
-
-      <td>
-        `protected`
       </td>
 
       <td>
@@ -229,25 +180,11 @@ BaseSignerClient<
       <td>
         ‐
       </td>
-
-      <td>
-        ```ts
-        BaseSignerClient.eventEmitter
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/client/base.d.ts:29
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="experimental_addtomultiowner" /> `experimental_addToMultiOwner`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -257,25 +194,11 @@ BaseSignerClient<
       <td>
         This will add additional members to an existing multi-sig account
       </td>
-
-      <td>
-        ```ts
-        BaseSignerClient.experimental_addToMultiOwner
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/client/base.d.ts:323
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="experimental_createapikey" /> `experimental_createApiKey`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -290,25 +213,11 @@ BaseSignerClient<
 
         If there is no authenticated user or the API key creation fails.
       </td>
-
-      <td>
-        ```ts
-        BaseSignerClient.experimental_createApiKey
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/client/base.d.ts:253
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="experimental_createmultiowner" /> `experimental_createMultiOwner`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -318,25 +227,11 @@ BaseSignerClient<
       <td>
         This will create a multi-owner account with the current user and additional specified signers
       </td>
-
-      <td>
-        ```ts
-        BaseSignerClient.experimental_createMultiOwner
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/client/base.d.ts:310
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="experimental_deletefrommultiowner" /> `experimental_deleteFromMultiOwner`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -346,25 +241,11 @@ BaseSignerClient<
       <td>
         This will remove members from an existing multi-sig account
       </td>
-
-      <td>
-        ```ts
-        BaseSignerClient.experimental_deleteFromMultiOwner
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/client/base.d.ts:330
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="experimental_multiownersignrawmessage" /> `experimental_multiOwnerSignRawMessage`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -376,25 +257,11 @@ BaseSignerClient<
         For SignMessage or SignTypedData, the caller should hash the message before calling this method and pass
         that result here.
       </td>
-
-      <td>
-        ```ts
-        BaseSignerClient.experimental_multiOwnerSignRawMessage
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/client/base.d.ts:303
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="getmfafactors" /> `getMfaFactors`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -408,25 +275,11 @@ BaseSignerClient<
 
         If no user is authenticated
       </td>
-
-      <td>
-        ```ts
-        BaseSignerClient.getMfaFactors
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/client/base.d.ts:352
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="getoauthnonce" /> `getOauthNonce`
-      </td>
-
-      <td>
-        `protected`
       </td>
 
       <td>
@@ -436,25 +289,11 @@ BaseSignerClient<
       <td>
         Turnkey requires the nonce in the id token to be in this format.
       </td>
-
-      <td>
-        ```ts
-        BaseSignerClient.getOauthNonce
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/client/base.d.ts:436
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="getoauthproviderurl" /> `getOauthProviderUrl`
-      </td>
-
-      <td>
-        `protected`
       </td>
 
       <td>
@@ -492,25 +331,11 @@ BaseSignerClient<
 
         ```
       </td>
-
-      <td>
-        ```ts
-        BaseSignerClient.getOauthProviderUrl
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/client/base.d.ts:427
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="getpasskeystatus" /> `getPasskeyStatus`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -524,25 +349,11 @@ BaseSignerClient<
 
         If the user is not authenticated
       </td>
-
-      <td>
-        ```ts
-        BaseSignerClient.getPasskeyStatus
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/client/base.d.ts:191
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="getuser" /> `getUser`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -552,25 +363,11 @@ BaseSignerClient<
       <td>
         Returns the current user or null if no user is set.
       </td>
-
-      <td>
-        ```ts
-        BaseSignerClient.getUser
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/client/base.d.ts:336
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="initoauth" /> `initOauth`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -580,25 +377,11 @@ BaseSignerClient<
       <td>
         Asynchronously fetches and sets the OAuth configuration.
       </td>
-
-      <td>
-        ```ts
-        BaseSignerClient.initOauth
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/client/base.d.ts:42
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="initotp" /> `initOtp`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -612,25 +395,11 @@ BaseSignerClient<
 
         When no user is currently authenticated
       </td>
-
-      <td>
-        ```ts
-        BaseSignerClient.initOtp
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/client/base.d.ts:159
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="listauthmethods" /> `listAuthMethods`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -644,25 +413,11 @@ BaseSignerClient<
 
         If the user is not authenticated
       </td>
-
-      <td>
-        ```ts
-        BaseSignerClient.listAuthMethods
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/client/base.d.ts:215
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="lookupuserbyaccesskey" /> `lookupUserByAccessKey`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -672,25 +427,11 @@ BaseSignerClient<
       <td>
         Looks up information based on an access key.
       </td>
-
-      <td>
-        ```ts
-        BaseSignerClient.lookupUserByAccessKey
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/client/base.d.ts:278
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="lookupuserbyemail" /> `lookupUserByEmail`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -700,25 +441,11 @@ BaseSignerClient<
       <td>
         Looks up information based on an email address.
       </td>
-
-      <td>
-        ```ts
-        BaseSignerClient.lookupUserByEmail
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/client/base.d.ts:260
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="lookupuserbyphone" /> `lookupUserByPhone`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -728,25 +455,11 @@ BaseSignerClient<
       <td>
         Looks up information based on a phone number.
       </td>
-
-      <td>
-        ```ts
-        BaseSignerClient.lookupUserByPhone
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/client/base.d.ts:269
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="lookupuserwithpasskey" /> `lookupUserWithPasskey`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -756,25 +469,11 @@ BaseSignerClient<
       <td>
         Asynchronously handles the authentication process using WebAuthn Stamper. If a user is provided, sets the user and returns it. Otherwise, retrieves the current user and initializes the WebAuthn stamper.
       </td>
-
-      <td>
-        ```ts
-        BaseSignerClient.lookupUserWithPasskey
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/client/base.d.ts:184
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="oauthcallbackurl" /> `oauthCallbackUrl`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -784,23 +483,11 @@ BaseSignerClient<
       <td>
         ‐
       </td>
-
-      <td>
-        ‐
-      </td>
-
-      <td>
-        [account-kit/rn-signer/src/client.ts:70](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/account-kit/rn-signer/src/client.ts#L70)
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="oauthconfig" /> `oauthConfig`
-      </td>
-
-      <td>
-        `protected`
       </td>
 
       <td>
@@ -810,25 +497,11 @@ BaseSignerClient<
       <td>
         ‐
       </td>
-
-      <td>
-        ```ts
-        BaseSignerClient.oauthConfig
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/client/base.d.ts:30
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="on" /> `on`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -838,25 +511,11 @@ BaseSignerClient<
       <td>
         Listen to events emitted by the client
       </td>
-
-      <td>
-        ```ts
-        BaseSignerClient.on
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/client/base.d.ts:102
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="pollactivitycompletion" /> `pollActivityCompletion`
-      </td>
-
-      <td>
-        `protected`
       </td>
 
       <td>
@@ -866,25 +525,11 @@ BaseSignerClient<
       <td>
         ‐
       </td>
-
-      <td>
-        ```ts
-        BaseSignerClient.pollActivityCompletion
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/client/base.d.ts:429
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="removeemail" /> `removeEmail`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -898,25 +543,11 @@ BaseSignerClient<
 
         If the user is not authenticated
       </td>
-
-      <td>
-        ```ts
-        BaseSignerClient.removeEmail
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/client/base.d.ts:132
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="removemfa" /> `removeMfa`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -930,25 +561,11 @@ BaseSignerClient<
 
         If no user is authenticated
       </td>
-
-      <td>
-        ```ts
-        BaseSignerClient.removeMfa
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/client/base.d.ts:381
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="removeoauthprovider" /> `removeOauthProvider`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -962,25 +579,11 @@ BaseSignerClient<
 
         If the user is not authenticated
       </td>
-
-      <td>
-        ```ts
-        BaseSignerClient.removeOauthProvider
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/client/base.d.ts:208
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="removepasskey" /> `removePasskey`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -994,25 +597,11 @@ BaseSignerClient<
 
         If the user is not authenticated.
       </td>
-
-      <td>
-        ```ts
-        BaseSignerClient.removePasskey
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/client/base.d.ts:177
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="removephonenumber" /> `removePhoneNumber`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -1026,25 +615,11 @@ BaseSignerClient<
 
         If the user is not authenticated
       </td>
-
-      <td>
-        ```ts
-        BaseSignerClient.removePhoneNumber
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/client/base.d.ts:149
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="request" /> `request`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -1055,25 +630,11 @@ BaseSignerClient<
         Sends a POST request to the given signer route with the specified body and returns the response.
         Not intended to be used directly, use the specific methods instead on the client instead.
       </td>
-
-      <td>
-        ```ts
-        BaseSignerClient.request
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/client/base.d.ts:345
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="rootorg" /> `rootOrg`
-      </td>
-
-      <td>
-        `protected`
       </td>
 
       <td>
@@ -1083,25 +644,11 @@ BaseSignerClient<
       <td>
         ‐
       </td>
-
-      <td>
-        ```ts
-        BaseSignerClient.rootOrg
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/client/base.d.ts:28
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="rpid" /> `rpId`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -1111,23 +658,11 @@ BaseSignerClient<
       <td>
         ‐
       </td>
-
-      <td>
-        ‐
-      </td>
-
-      <td>
-        [account-kit/rn-signer/src/client.ts:71](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/account-kit/rn-signer/src/client.ts#L71)
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="setphonenumber" /> `setPhoneNumber`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -1142,25 +677,11 @@ BaseSignerClient<
 
         If the user is not authenticated
       </td>
-
-      <td>
-        ```ts
-        BaseSignerClient.setPhoneNumber
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/client/base.d.ts:142
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="signrawmessage" /> `signRawMessage`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -1172,25 +693,11 @@ BaseSignerClient<
         For SignMessage or SignTypedData, the caller should hash the message before calling this method and pass
         that result here.
       </td>
-
-      <td>
-        ```ts
-        BaseSignerClient.signRawMessage
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/client/base.d.ts:290
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="stampgetorganization" /> `stampGetOrganization`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -1204,25 +711,11 @@ BaseSignerClient<
 
         if no user is authenticated
       </td>
-
-      <td>
-        ```ts
-        BaseSignerClient.stampGetOrganization
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/client/base.d.ts:242
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="stampwhoami" /> `stampWhoami`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -1239,25 +732,11 @@ BaseSignerClient<
 
         if no organization ID is provided
       </td>
-
-      <td>
-        ```ts
-        BaseSignerClient.stampWhoami
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/client/base.d.ts:235
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="turnkeyclient" /> `turnkeyClient`
-      </td>
-
-      <td>
-        `protected`
       </td>
 
       <td>
@@ -1267,25 +746,11 @@ BaseSignerClient<
       <td>
         ‐
       </td>
-
-      <td>
-        ```ts
-        BaseSignerClient.turnkeyClient
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/client/base.d.ts:27
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="validatemultifactors" /> `validateMultiFactors`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -1299,25 +764,11 @@ BaseSignerClient<
 
         If no credential bundle is returned from the server
       </td>
-
-      <td>
-        ```ts
-        BaseSignerClient.validateMultiFactors
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/client/base.d.ts:391
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="verifymfa" /> `verifyMfa`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -1331,25 +782,11 @@ BaseSignerClient<
 
         If no user is authenticated
       </td>
-
-      <td>
-        ```ts
-        BaseSignerClient.verifyMfa
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/client/base.d.ts:371
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="whoami" /> `whoami`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -1362,16 +799,6 @@ BaseSignerClient<
         **Throws**
 
         if no organization ID is provided when there is no current user
-      </td>
-
-      <td>
-        ```ts
-        BaseSignerClient.whoami
-        ```
-      </td>
-
-      <td>
-        account-kit/signer/dist/types/client/base.d.ts:225
       </td>
     </tr>
 
@@ -1444,7 +871,7 @@ BaseSignerClient.user;
 completeAuthWithBundle(params): Promise<User>;
 ```
 
-Defined in: [account-kit/rn-signer/src/client.ts:181](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/account-kit/rn-signer/src/client.ts#L181)
+Defined in: [account-kit/rn-signer/src/client.ts:181](https://github.com/alchemyplatform/aa-sdk/blob/4987bdd63823427c48ec21401b71fa3cfc2d0675/account-kit/rn-signer/src/client.ts#L181)
 
 #### Parameters
 
@@ -1601,7 +1028,7 @@ BaseSignerClient.createAccount;
 disconnect(): Promise<void>;
 ```
 
-Defined in: [account-kit/rn-signer/src/client.ts:295](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/account-kit/rn-signer/src/client.ts#L295)
+Defined in: [account-kit/rn-signer/src/client.ts:295](https://github.com/alchemyplatform/aa-sdk/blob/4987bdd63823427c48ec21401b71fa3cfc2d0675/account-kit/rn-signer/src/client.ts#L295)
 
 #### Returns
 
@@ -1621,7 +1048,7 @@ BaseSignerClient.disconnect;
 exportWallet(params?): Promise<string>;
 ```
 
-Defined in: [account-kit/rn-signer/src/client.ts:308](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/account-kit/rn-signer/src/client.ts#L308)
+Defined in: [account-kit/rn-signer/src/client.ts:308](https://github.com/alchemyplatform/aa-sdk/blob/4987bdd63823427c48ec21401b71fa3cfc2d0675/account-kit/rn-signer/src/client.ts#L308)
 
 Exports the wallet and returns the decrypted private key or seed phrase.
 
@@ -1678,7 +1105,7 @@ BaseSignerClient.exportWallet;
 protected getOauthConfig(): Promise<OauthConfig>;
 ```
 
-Defined in: [account-kit/rn-signer/src/client.ts:463](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/account-kit/rn-signer/src/client.ts#L463)
+Defined in: [account-kit/rn-signer/src/client.ts:463](https://github.com/alchemyplatform/aa-sdk/blob/4987bdd63823427c48ec21401b71fa3cfc2d0675/account-kit/rn-signer/src/client.ts#L463)
 
 #### Returns
 
@@ -1698,7 +1125,7 @@ BaseSignerClient.getOauthConfig;
 protected getWebAuthnAttestation(options?, userDetails?): Promise<GetWebAuthnAttestationResult & object>;
 ```
 
-Defined in: [account-kit/rn-signer/src/client.ts:432](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/account-kit/rn-signer/src/client.ts#L432)
+Defined in: [account-kit/rn-signer/src/client.ts:432](https://github.com/alchemyplatform/aa-sdk/blob/4987bdd63823427c48ec21401b71fa3cfc2d0675/account-kit/rn-signer/src/client.ts#L432)
 
 #### Parameters
 
@@ -1766,7 +1193,7 @@ initEmailAuth(params): Promise<{
 }>;
 ```
 
-Defined in: [account-kit/rn-signer/src/client.ts:129](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/account-kit/rn-signer/src/client.ts#L129)
+Defined in: [account-kit/rn-signer/src/client.ts:129](https://github.com/alchemyplatform/aa-sdk/blob/4987bdd63823427c48ec21401b71fa3cfc2d0675/account-kit/rn-signer/src/client.ts#L129)
 
 #### Parameters
 
@@ -1814,7 +1241,7 @@ BaseSignerClient.initEmailAuth;
 protected initSessionStamper(): Promise<string>;
 ```
 
-Defined in: [account-kit/rn-signer/src/client.ts:470](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/account-kit/rn-signer/src/client.ts#L470)
+Defined in: [account-kit/rn-signer/src/client.ts:470](https://github.com/alchemyplatform/aa-sdk/blob/4987bdd63823427c48ec21401b71fa3cfc2d0675/account-kit/rn-signer/src/client.ts#L470)
 
 Initializes the session stamper and returns its public key.
 
@@ -1839,7 +1266,7 @@ initSmsAuth(params): Promise<{
 }>;
 ```
 
-Defined in: [account-kit/rn-signer/src/client.ts:154](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/account-kit/rn-signer/src/client.ts#L154)
+Defined in: [account-kit/rn-signer/src/client.ts:154](https://github.com/alchemyplatform/aa-sdk/blob/4987bdd63823427c48ec21401b71fa3cfc2d0675/account-kit/rn-signer/src/client.ts#L154)
 
 #### Parameters
 
@@ -1886,7 +1313,7 @@ BaseSignerClient.initSmsAuth;
 protected initWebauthnStamper(user, options?): Promise<void>;
 ```
 
-Defined in: [account-kit/rn-signer/src/client.ts:474](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/account-kit/rn-signer/src/client.ts#L474)
+Defined in: [account-kit/rn-signer/src/client.ts:474](https://github.com/alchemyplatform/aa-sdk/blob/4987bdd63823427c48ec21401b71fa3cfc2d0675/account-kit/rn-signer/src/client.ts#L474)
 
 #### Parameters
 
@@ -1940,7 +1367,7 @@ BaseSignerClient.initWebauthnStamper;
 oauthWithPopup(_args): Promise<User>;
 ```
 
-Defined in: [account-kit/rn-signer/src/client.ts:289](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/account-kit/rn-signer/src/client.ts#L289)
+Defined in: [account-kit/rn-signer/src/client.ts:289](https://github.com/alchemyplatform/aa-sdk/blob/4987bdd63823427c48ec21401b71fa3cfc2d0675/account-kit/rn-signer/src/client.ts#L289)
 
 #### Parameters
 
@@ -1984,7 +1411,7 @@ BaseSignerClient.oauthWithPopup;
 oauthWithRedirect(args): Promise<User | IdTokenOnly>;
 ```
 
-Defined in: [account-kit/rn-signer/src/client.ts:215](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/account-kit/rn-signer/src/client.ts#L215)
+Defined in: [account-kit/rn-signer/src/client.ts:215](https://github.com/alchemyplatform/aa-sdk/blob/4987bdd63823427c48ec21401b71fa3cfc2d0675/account-kit/rn-signer/src/client.ts#L215)
 
 #### Parameters
 
@@ -2202,7 +1629,7 @@ BaseSignerClient.setStamper;
 submitJwt(args): Promise<JwtResponse>;
 ```
 
-Defined in: [account-kit/rn-signer/src/client.ts:167](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/account-kit/rn-signer/src/client.ts#L167)
+Defined in: [account-kit/rn-signer/src/client.ts:167](https://github.com/alchemyplatform/aa-sdk/blob/4987bdd63823427c48ec21401b71fa3cfc2d0675/account-kit/rn-signer/src/client.ts#L167)
 
 #### Parameters
 
@@ -2246,7 +1673,7 @@ BaseSignerClient.submitJwt;
 submitOtpCode(args): Promise<SubmitOtpCodeResponse>;
 ```
 
-Defined in: [account-kit/rn-signer/src/client.ts:92](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/account-kit/rn-signer/src/client.ts#L92)
+Defined in: [account-kit/rn-signer/src/client.ts:92](https://github.com/alchemyplatform/aa-sdk/blob/4987bdd63823427c48ec21401b71fa3cfc2d0675/account-kit/rn-signer/src/client.ts#L92)
 
 #### Parameters
 
@@ -2290,7 +1717,7 @@ BaseSignerClient.submitOtpCode;
 targetPublicKey(): Promise<string>;
 ```
 
-Defined in: [account-kit/rn-signer/src/client.ts:428](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/account-kit/rn-signer/src/client.ts#L428)
+Defined in: [account-kit/rn-signer/src/client.ts:428](https://github.com/alchemyplatform/aa-sdk/blob/4987bdd63823427c48ec21401b71fa3cfc2d0675/account-kit/rn-signer/src/client.ts#L428)
 
 #### Returns
 

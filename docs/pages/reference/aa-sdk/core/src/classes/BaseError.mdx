@@ -5,7 +5,7 @@ slug: wallets/reference/aa-sdk/core/src/classes/BaseError
 layout: reference
 ---
 
-Defined in: [aa-sdk/core/src/errors/base.ts:24](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/aa-sdk/core/src/errors/base.ts#L24)
+Defined in: [aa-sdk/core/src/errors/base.ts:24](https://github.com/alchemyplatform/aa-sdk/blob/4987bdd63823427c48ec21401b71fa3cfc2d0675/aa-sdk/core/src/errors/base.ts#L24)
 
 A custom error class that extends from `ViemBaseError`. This class allows for error messages to include links to relevant documentation based on provided `docsPath` and `docsSlug` parameters.
 This is based on on viem's BaseError type (obviously from the import and extend)
@@ -53,7 +53,7 @@ we want the errors here to point to our docs if we supply a docsPath though
 new BaseError(shortMessage, args): BaseError;
 ```
 
-Defined in: [aa-sdk/core/src/errors/base.ts:28](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/aa-sdk/core/src/errors/base.ts#L28)
+Defined in: [aa-sdk/core/src/errors/base.ts:28](https://github.com/alchemyplatform/aa-sdk/blob/4987bdd63823427c48ec21401b71fa3cfc2d0675/aa-sdk/core/src/errors/base.ts#L28)
 
 #### Parameters
 
@@ -105,13 +105,9 @@ ViemBaseError.constructor;
   <thead>
     <tr>
       <th align="left">Property</th>
-      <th align="left">Modifier</th>
       <th align="left">Type</th>
       <th align="left">Default value</th>
       <th align="left">Description</th>
-      <th align="left">Overrides</th>
-      <th align="left">Inherited from</th>
-      <th align="left">Defined in</th>
     </tr>
   </thead>
 
@@ -119,10 +115,6 @@ ViemBaseError.constructor;
     <tr>
       <td>
         <a id="cause" /> `cause?`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -136,29 +128,11 @@ ViemBaseError.constructor;
       <td>
         ‐
       </td>
-
-      <td>
-        ‐
-      </td>
-
-      <td>
-        ```ts
-        ViemBaseError.cause
-        ```
-      </td>
-
-      <td>
-        node\_modules/typescript/lib/lib.es2022.error.d.ts:26
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="details" /> `details`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -171,20 +145,6 @@ ViemBaseError.constructor;
 
       <td>
         ‐
-      </td>
-
-      <td>
-        ‐
-      </td>
-
-      <td>
-        ```ts
-        ViemBaseError.details
-        ```
-      </td>
-
-      <td>
-        node\_modules/viem/\_types/errors/base.d.ts:19
       </td>
     </tr>
 
@@ -194,10 +154,6 @@ ViemBaseError.constructor;
       </td>
 
       <td>
-        `public`
-      </td>
-
-      <td>
         `string`
       </td>
 
@@ -207,18 +163,6 @@ ViemBaseError.constructor;
 
       <td>
         ‐
-      </td>
-
-      <td>
-        ‐
-      </td>
-
-      <td>
-        [`NotAModularAccountV2Error`](NotAModularAccountV2Error.mdx).[`docsPath`](NotAModularAccountV2Error.mdx#docspath)
-      </td>
-
-      <td>
-        node\_modules/viem/\_types/errors/base.d.ts:20
       </td>
     </tr>
 
@@ -228,10 +172,6 @@ ViemBaseError.constructor;
       </td>
 
       <td>
-        `public`
-      </td>
-
-      <td>
         `string`
       </td>
 
@@ -242,29 +182,11 @@ ViemBaseError.constructor;
       <td>
         ‐
       </td>
-
-      <td>
-        ‐
-      </td>
-
-      <td>
-        ```ts
-        ViemBaseError.message
-        ```
-      </td>
-
-      <td>
-        node\_modules/typescript/lib/lib.es5.d.ts:1077
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="metamessages" /> `metaMessages?`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -278,27 +200,11 @@ ViemBaseError.constructor;
       <td>
         ‐
       </td>
-
-      <td>
-        ‐
-      </td>
-
-      <td>
-        [`NotAModularAccountV2Error`](NotAModularAccountV2Error.mdx).[`metaMessages`](NotAModularAccountV2Error.mdx#metamessages)
-      </td>
-
-      <td>
-        node\_modules/viem/\_types/errors/base.d.ts:21
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="name" /> `name`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -312,29 +218,11 @@ ViemBaseError.constructor;
       <td>
         ‐
       </td>
-
-      <td>
-        ```ts
-        ViemBaseError.name
-        ```
-      </td>
-
-      <td>
-        ‐
-      </td>
-
-      <td>
-        [aa-sdk/core/src/errors/base.ts:25](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/aa-sdk/core/src/errors/base.ts#L25)
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="shortmessage" /> `shortMessage`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -347,20 +235,6 @@ ViemBaseError.constructor;
 
       <td>
         ‐
-      </td>
-
-      <td>
-        ‐
-      </td>
-
-      <td>
-        ```ts
-        ViemBaseError.shortMessage
-        ```
-      </td>
-
-      <td>
-        node\_modules/viem/\_types/errors/base.d.ts:22
       </td>
     </tr>
 
@@ -370,10 +244,6 @@ ViemBaseError.constructor;
       </td>
 
       <td>
-        `public`
-      </td>
-
-      <td>
         `string`
       </td>
 
@@ -384,29 +254,11 @@ ViemBaseError.constructor;
       <td>
         ‐
       </td>
-
-      <td>
-        ‐
-      </td>
-
-      <td>
-        ```ts
-        ViemBaseError.stack
-        ```
-      </td>
-
-      <td>
-        node\_modules/typescript/lib/lib.es5.d.ts:1078
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="version" /> `version`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -420,29 +272,11 @@ ViemBaseError.constructor;
       <td>
         ‐
       </td>
-
-      <td>
-        ```ts
-        ViemBaseError.version
-        ```
-      </td>
-
-      <td>
-        ‐
-      </td>
-
-      <td>
-        [aa-sdk/core/src/errors/base.ts:26](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/aa-sdk/core/src/errors/base.ts#L26)
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="stacktracelimit" /> `stackTraceLimit`
-      </td>
-
-      <td>
-        `static`
       </td>
 
       <td>
@@ -463,20 +297,6 @@ ViemBaseError.constructor;
 
         If set to a non-number value, or set to a negative number, stack traces will
         not capture any frames.
-      </td>
-
-      <td>
-        ‐
-      </td>
-
-      <td>
-        ```ts
-        ViemBaseError.stackTraceLimit
-        ```
-      </td>
-
-      <td>
-        node\_modules/@types/node/globals.d.ts:161
       </td>
     </tr>
 

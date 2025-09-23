@@ -5,7 +5,7 @@ slug: wallets/reference/account-kit/signer/src/classes/AlchemyServerSigner
 layout: reference
 ---
 
-Defined in: [account-kit/signer/src/serverSigner.ts:31](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/account-kit/signer/src/serverSigner.ts#L31)
+Defined in: [account-kit/signer/src/serverSigner.ts:31](https://github.com/alchemyplatform/aa-sdk/blob/4987bdd63823427c48ec21401b71fa3cfc2d0675/account-kit/signer/src/serverSigner.ts#L31)
 
 AlchemyServerSigner is a signer that can sign messages and typed data using an access key.
 It extends the SmartAccountSigner interface and uses the ServerSignerClient to sign requests.
@@ -23,7 +23,7 @@ Primarily intended to be used server-side.
 new AlchemyServerSigner(client): AlchemyServerSigner;
 ```
 
-Defined in: [account-kit/signer/src/serverSigner.ts:40](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/account-kit/signer/src/serverSigner.ts#L40)
+Defined in: [account-kit/signer/src/serverSigner.ts:40](https://github.com/alchemyplatform/aa-sdk/blob/4987bdd63823427c48ec21401b71fa3cfc2d0675/account-kit/signer/src/serverSigner.ts#L40)
 
 Creates an instance of AlchemyServerSigner.
 
@@ -68,7 +68,6 @@ Creates an instance of AlchemyServerSigner.
       <th align="left">Property</th>
       <th align="left">Type</th>
       <th align="left">Default value</th>
-      <th align="left">Defined in</th>
     </tr>
   </thead>
 
@@ -85,10 +84,6 @@ Creates an instance of AlchemyServerSigner.
       <td>
         `undefined`
       </td>
-
-      <td>
-        [account-kit/signer/src/serverSigner.ts:32](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/account-kit/signer/src/serverSigner.ts#L32)
-      </td>
     </tr>
 
     <tr>
@@ -103,10 +98,6 @@ Creates an instance of AlchemyServerSigner.
       <td>
         `"alchemy-server-signer"`
       </td>
-
-      <td>
-        [account-kit/signer/src/serverSigner.ts:33](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/account-kit/signer/src/serverSigner.ts#L33)
-      </td>
     </tr>
 
   </tbody>
@@ -120,7 +111,7 @@ Creates an instance of AlchemyServerSigner.
 getAddress(): Promise<`0x${string}`>;
 ```
 
-Defined in: [account-kit/signer/src/serverSigner.ts:50](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/account-kit/signer/src/serverSigner.ts#L50)
+Defined in: [account-kit/signer/src/serverSigner.ts:50](https://github.com/alchemyplatform/aa-sdk/blob/4987bdd63823427c48ec21401b71fa3cfc2d0675/account-kit/signer/src/serverSigner.ts#L50)
 
 Gets the address of the user from the signer client.
 
@@ -148,7 +139,7 @@ SmartAccountSigner.getAddress;
 signAuthorization(unsignedAuthorization): Promise<SignedAuthorization<number>>;
 ```
 
-Defined in: [account-kit/signer/src/serverSigner.ts:86](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/account-kit/signer/src/serverSigner.ts#L86)
+Defined in: [account-kit/signer/src/serverSigner.ts:86](https://github.com/alchemyplatform/aa-sdk/blob/4987bdd63823427c48ec21401b71fa3cfc2d0675/account-kit/signer/src/serverSigner.ts#L86)
 
 Signs an authorization using the inner client.
 
@@ -201,7 +192,7 @@ SmartAccountSigner.signAuthorization;
 signMessage(msg): Promise<`0x${string}`>;
 ```
 
-Defined in: [account-kit/signer/src/serverSigner.ts:61](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/account-kit/signer/src/serverSigner.ts#L61)
+Defined in: [account-kit/signer/src/serverSigner.ts:61](https://github.com/alchemyplatform/aa-sdk/blob/4987bdd63823427c48ec21401b71fa3cfc2d0675/account-kit/signer/src/serverSigner.ts#L61)
 
 Signs a message using the inner client.
 
@@ -254,7 +245,7 @@ SmartAccountSigner.signMessage;
 signTypedData<TTypedData, TPrimaryType>(params): Promise<`0x${string}`>;
 ```
 
-Defined in: [account-kit/signer/src/serverSigner.ts:72](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/account-kit/signer/src/serverSigner.ts#L72)
+Defined in: [account-kit/signer/src/serverSigner.ts:72](https://github.com/alchemyplatform/aa-sdk/blob/4987bdd63823427c48ec21401b71fa3cfc2d0675/account-kit/signer/src/serverSigner.ts#L72)
 
 Signs typed data using the inner client.
 
@@ -548,7 +539,7 @@ SmartAccountSigner.signTypedData;
 toSolanaSigner(): SolanaSigner;
 ```
 
-Defined in: [account-kit/signer/src/serverSigner.ts:122](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/account-kit/signer/src/serverSigner.ts#L122)
+Defined in: [account-kit/signer/src/serverSigner.ts:122](https://github.com/alchemyplatform/aa-sdk/blob/4987bdd63823427c48ec21401b71fa3cfc2d0675/account-kit/signer/src/serverSigner.ts#L122)
 
 Creates a new instance of `SolanaSigner` using the inner client.
 

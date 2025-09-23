@@ -5,7 +5,7 @@ slug: wallets/reference/aa-sdk/core/src/classes/WalletClientSigner
 layout: reference
 ---
 
-Defined in: [aa-sdk/core/src/signer/wallet-client.ts:17](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/aa-sdk/core/src/signer/wallet-client.ts#L17)
+Defined in: [aa-sdk/core/src/signer/wallet-client.ts:17](https://github.com/alchemyplatform/aa-sdk/blob/4987bdd63823427c48ec21401b71fa3cfc2d0675/aa-sdk/core/src/signer/wallet-client.ts#L17)
 
 Represents a wallet client signer for smart accounts, providing methods to get the address, sign messages, and sign typed data.
 
@@ -21,7 +21,7 @@ Represents a wallet client signer for smart accounts, providing methods to get t
 new WalletClientSigner(client, signerType): WalletClientSigner;
 ```
 
-Defined in: [aa-sdk/core/src/signer/wallet-client.ts:42](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/aa-sdk/core/src/signer/wallet-client.ts#L42)
+Defined in: [aa-sdk/core/src/signer/wallet-client.ts:42](https://github.com/alchemyplatform/aa-sdk/blob/4987bdd63823427c48ec21401b71fa3cfc2d0675/aa-sdk/core/src/signer/wallet-client.ts#L42)
 
 Initializes a signer with a given wallet client and signer type.
 
@@ -1287,10 +1287,8 @@ If the signer type is invalid
   <thead>
     <tr>
       <th align="left">Property</th>
-      <th align="left">Modifier</th>
       <th align="left">Type</th>
       <th align="left">Description</th>
-      <th align="left">Defined in</th>
     </tr>
   </thead>
 
@@ -1298,10 +1296,6 @@ If the signer type is invalid
     <tr>
       <td>
         <a id="getaddress" /> `getAddress`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -1327,19 +1321,11 @@ If the signer type is invalid
         console.log(await signer.getAddress());
         ```
       </td>
-
-      <td>
-        [aa-sdk/core/src/signer/wallet-client.ts:70](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/aa-sdk/core/src/signer/wallet-client.ts#L70)
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="inner" /> `inner`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -1349,19 +1335,11 @@ If the signer type is invalid
       <td>
         ‐
       </td>
-
-      <td>
-        [aa-sdk/core/src/signer/wallet-client.ts:19](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/aa-sdk/core/src/signer/wallet-client.ts#L19)
-      </td>
     </tr>
 
     <tr>
       <td>
         `inner.account`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -1371,19 +1349,11 @@ If the signer type is invalid
       <td>
         The Account of the Client.
       </td>
-
-      <td>
-        node\_modules/viem/\_types/clients/createClient.d.ts:73
-      </td>
     </tr>
 
     <tr>
       <td>
         `inner.addChain`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -1408,19 +1378,11 @@ If the signer type is invalid
         await client.addChain({ chain: optimism })
         ```
       </td>
-
-      <td>
-        node\_modules/viem/\_types/clients/decorators/wallet.d.ts:48
-      </td>
     </tr>
 
     <tr>
       <td>
         `inner.batch?`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -1430,19 +1392,11 @@ If the signer type is invalid
       <td>
         Flags for batch settings.
       </td>
-
-      <td>
-        node\_modules/viem/\_types/clients/createClient.d.ts:75
-      </td>
     </tr>
 
     <tr>
       <td>
         `inner.batch.multicall?`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -1452,19 +1406,11 @@ If the signer type is invalid
       <td>
         Toggle to enable `eth_call` multicall aggregation.
       </td>
-
-      <td>
-        node\_modules/viem/\_types/clients/createClient.d.ts:20
-      </td>
     </tr>
 
     <tr>
       <td>
         `inner.cacheTime`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -1474,19 +1420,11 @@ If the signer type is invalid
       <td>
         Time (in ms) that cached data will remain in memory.
       </td>
-
-      <td>
-        node\_modules/viem/\_types/clients/createClient.d.ts:77
-      </td>
     </tr>
 
     <tr>
       <td>
         `inner.ccipRead?`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -1496,19 +1434,11 @@ If the signer type is invalid
       <td>
         [CCIP Read](https://eips.ethereum.org/EIPS/eip-3668) configuration.
       </td>
-
-      <td>
-        node\_modules/viem/\_types/clients/createClient.d.ts:79
-      </td>
     </tr>
 
     <tr>
       <td>
         `inner.chain`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -1518,19 +1448,11 @@ If the signer type is invalid
       <td>
         Chain for the client.
       </td>
-
-      <td>
-        node\_modules/viem/\_types/clients/createClient.d.ts:81
-      </td>
     </tr>
 
     <tr>
       <td>
         `inner.deployContract`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -1562,19 +1484,11 @@ If the signer type is invalid
         })
         ```
       </td>
-
-      <td>
-        node\_modules/viem/\_types/clients/decorators/wallet.d.ts:74
-      </td>
     </tr>
 
     <tr>
       <td>
         `inner.experimental_blockTag?`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -1584,19 +1498,11 @@ If the signer type is invalid
       <td>
         Default block tag to use for RPC requests.
       </td>
-
-      <td>
-        node\_modules/viem/\_types/clients/createClient.d.ts:83
-      </td>
     </tr>
 
     <tr>
       <td>
         `inner.extend`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -1606,19 +1512,11 @@ If the signer type is invalid
       <td>
         ‐
       </td>
-
-      <td>
-        node\_modules/viem/\_types/clients/createClient.d.ts:69
-      </td>
     </tr>
 
     <tr>
       <td>
         `inner.getAddresses`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -1644,19 +1542,11 @@ If the signer type is invalid
         const accounts = await client.getAddresses()
         ```
       </td>
-
-      <td>
-        node\_modules/viem/\_types/clients/decorators/wallet.d.ts:93
-      </td>
     </tr>
 
     <tr>
       <td>
         `inner.getCallsStatus`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -1683,19 +1573,11 @@ If the signer type is invalid
         const { receipts, status } = await client.getCallsStatus({ id: '0xdeadbeef' })
         ```
       </td>
-
-      <td>
-        node\_modules/viem/\_types/clients/decorators/wallet.d.ts:114
-      </td>
     </tr>
 
     <tr>
       <td>
         `inner.getCapabilities`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -1724,19 +1606,11 @@ If the signer type is invalid
         })
         ```
       </td>
-
-      <td>
-        node\_modules/viem/\_types/clients/decorators/wallet.d.ts:137
-      </td>
     </tr>
 
     <tr>
       <td>
         `inner.getChainId`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -1763,19 +1637,11 @@ If the signer type is invalid
         // 1
         ```
       </td>
-
-      <td>
-        node\_modules/viem/\_types/clients/decorators/wallet.d.ts:157
-      </td>
     </tr>
 
     <tr>
       <td>
         `inner.getPermissions`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -1801,19 +1667,11 @@ If the signer type is invalid
         const permissions = await client.getPermissions()
         ```
       </td>
-
-      <td>
-        node\_modules/viem/\_types/clients/decorators/wallet.d.ts:176
-      </td>
     </tr>
 
     <tr>
       <td>
         `inner.key`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -1823,19 +1681,11 @@ If the signer type is invalid
       <td>
         A key for the client.
       </td>
-
-      <td>
-        node\_modules/viem/\_types/clients/createClient.d.ts:85
-      </td>
     </tr>
 
     <tr>
       <td>
         `inner.name`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -1845,19 +1695,11 @@ If the signer type is invalid
       <td>
         A name for the client.
       </td>
-
-      <td>
-        node\_modules/viem/\_types/clients/createClient.d.ts:87
-      </td>
     </tr>
 
     <tr>
       <td>
         `inner.pollingInterval`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -1867,19 +1709,11 @@ If the signer type is invalid
       <td>
         Frequency (in ms) for polling enabled actions & events. Defaults to 4\_000 milliseconds.
       </td>
-
-      <td>
-        node\_modules/viem/\_types/clients/createClient.d.ts:89
-      </td>
     </tr>
 
     <tr>
       <td>
         `inner.prepareAuthorization`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -1927,19 +1761,11 @@ If the signer type is invalid
         })
         ```
       </td>
-
-      <td>
-        node\_modules/viem/\_types/clients/decorators/wallet.d.ts:218
-      </td>
     </tr>
 
     <tr>
       <td>
         `inner.prepareTransactionRequest`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -1985,19 +1811,11 @@ If the signer type is invalid
         })
         ```
       </td>
-
-      <td>
-        node\_modules/viem/\_types/clients/decorators/wallet.d.ts:257
-      </td>
     </tr>
 
     <tr>
       <td>
         `inner.request`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -2007,19 +1825,11 @@ If the signer type is invalid
       <td>
         Request function wrapped with friendly error handling
       </td>
-
-      <td>
-        node\_modules/viem/\_types/clients/createClient.d.ts:91
-      </td>
     </tr>
 
     <tr>
       <td>
         `inner.requestAddresses`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -2049,19 +1859,11 @@ If the signer type is invalid
         const accounts = await client.requestAddresses()
         ```
       </td>
-
-      <td>
-        node\_modules/viem/\_types/clients/decorators/wallet.d.ts:280
-      </td>
     </tr>
 
     <tr>
       <td>
         `inner.requestPermissions`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -2089,19 +1891,11 @@ If the signer type is invalid
         })
         ```
       </td>
-
-      <td>
-        node\_modules/viem/\_types/clients/decorators/wallet.d.ts:302
-      </td>
     </tr>
 
     <tr>
       <td>
         `inner.sendCalls`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -2140,19 +1934,11 @@ If the signer type is invalid
         })
         ```
       </td>
-
-      <td>
-        node\_modules/viem/\_types/clients/decorators/wallet.d.ts:335
-      </td>
     </tr>
 
     <tr>
       <td>
         `inner.sendRawTransaction`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -2182,19 +1968,11 @@ If the signer type is invalid
         })
         ```
       </td>
-
-      <td>
-        node\_modules/viem/\_types/clients/decorators/wallet.d.ts:360
-      </td>
     </tr>
 
     <tr>
       <td>
         `inner.sendTransaction`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -2244,19 +2022,11 @@ If the signer type is invalid
         })
         ```
       </td>
-
-      <td>
-        node\_modules/viem/\_types/clients/decorators/wallet.d.ts:403
-      </td>
     </tr>
 
     <tr>
       <td>
         `inner.showCallsStatus`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -2284,19 +2054,11 @@ If the signer type is invalid
         await client.showCallsStatus({ id: '0xdeadbeef' })
         ```
       </td>
-
-      <td>
-        node\_modules/viem/\_types/clients/decorators/wallet.d.ts:425
-      </td>
     </tr>
 
     <tr>
       <td>
         `inner.signAuthorization`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -2346,19 +2108,11 @@ If the signer type is invalid
         })
         ```
       </td>
-
-      <td>
-        node\_modules/viem/\_types/clients/decorators/wallet.d.ts:468
-      </td>
     </tr>
 
     <tr>
       <td>
         `inner.signMessage`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -2410,19 +2164,11 @@ If the signer type is invalid
         })
         ```
       </td>
-
-      <td>
-        node\_modules/viem/\_types/clients/decorators/wallet.d.ts:512
-      </td>
     </tr>
 
     <tr>
       <td>
         `inner.signTransaction`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -2473,19 +2219,11 @@ If the signer type is invalid
         const signature = await client.signTransaction(request)
         ```
       </td>
-
-      <td>
-        node\_modules/viem/\_types/clients/decorators/wallet.d.ts:556
-      </td>
     </tr>
 
     <tr>
       <td>
         `inner.signTypedData`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -2588,19 +2326,11 @@ If the signer type is invalid
         })
         ```
       </td>
-
-      <td>
-        node\_modules/viem/\_types/clients/decorators/wallet.d.ts:653
-      </td>
     </tr>
 
     <tr>
       <td>
         `inner.switchChain`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -2626,19 +2356,11 @@ If the signer type is invalid
         await client.switchChain({ id: optimism.id })
         ```
       </td>
-
-      <td>
-        node\_modules/viem/\_types/clients/decorators/wallet.d.ts:674
-      </td>
     </tr>
 
     <tr>
       <td>
         `inner.transport`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -2648,19 +2370,11 @@ If the signer type is invalid
       <td>
         The RPC transport
       </td>
-
-      <td>
-        node\_modules/viem/\_types/clients/createClient.d.ts:93
-      </td>
     </tr>
 
     <tr>
       <td>
         `inner.type`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -2670,19 +2384,11 @@ If the signer type is invalid
       <td>
         The type of client.
       </td>
-
-      <td>
-        node\_modules/viem/\_types/clients/createClient.d.ts:95
-      </td>
     </tr>
 
     <tr>
       <td>
         `inner.uid`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -2692,19 +2398,11 @@ If the signer type is invalid
       <td>
         A unique ID for the client.
       </td>
-
-      <td>
-        node\_modules/viem/\_types/clients/createClient.d.ts:97
-      </td>
     </tr>
 
     <tr>
       <td>
         `inner.waitForCallsStatus`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -2731,19 +2429,11 @@ If the signer type is invalid
         const { receipts, status } = await waitForCallsStatus(client, { id: '0xdeadbeef' })
         ```
       </td>
-
-      <td>
-        node\_modules/viem/\_types/clients/decorators/wallet.d.ts:696
-      </td>
     </tr>
 
     <tr>
       <td>
         `inner.watchAsset`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -2776,19 +2466,11 @@ If the signer type is invalid
         })
         ```
       </td>
-
-      <td>
-        node\_modules/viem/\_types/clients/decorators/wallet.d.ts:723
-      </td>
     </tr>
 
     <tr>
       <td>
         `inner.writeContract`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -2843,19 +2525,11 @@ If the signer type is invalid
         const hash = await client.writeContract(request)
         ```
       </td>
-
-      <td>
-        node\_modules/viem/\_types/clients/decorators/wallet.d.ts:771
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="signertype" /> `signerType`
-      </td>
-
-      <td>
-        `public`
       </td>
 
       <td>
@@ -2865,19 +2539,11 @@ If the signer type is invalid
       <td>
         ‐
       </td>
-
-      <td>
-        [aa-sdk/core/src/signer/wallet-client.ts:18](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/aa-sdk/core/src/signer/wallet-client.ts#L18)
-      </td>
     </tr>
 
     <tr>
       <td>
         <a id="signmessage" /> `signMessage`
-      </td>
-
-      <td>
-        `readonly`
       </td>
 
       <td>
@@ -2903,10 +2569,6 @@ If the signer type is invalid
         console.log(await signer.signMessage("hello"));
         ```
       </td>
-
-      <td>
-        [aa-sdk/core/src/signer/wallet-client.ts:96](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/aa-sdk/core/src/signer/wallet-client.ts#L96)
-      </td>
     </tr>
 
   </tbody>
@@ -2920,7 +2582,7 @@ If the signer type is invalid
 signTypedData<TTypedData, TPrimaryType>(typedData): Promise<`0x${string}`>;
 ```
 
-Defined in: [aa-sdk/core/src/signer/wallet-client.ts:130](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/aa-sdk/core/src/signer/wallet-client.ts#L130)
+Defined in: [aa-sdk/core/src/signer/wallet-client.ts:130](https://github.com/alchemyplatform/aa-sdk/blob/4987bdd63823427c48ec21401b71fa3cfc2d0675/aa-sdk/core/src/signer/wallet-client.ts#L130)
 
 Signs the provided typed data using the account's private key.
 
