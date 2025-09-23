@@ -260,22 +260,6 @@ function handleClearStorage() {
   }
 }
 
-// Force disconnect handler (used by testing)
-async function handleForceDisconnect() {
-  try {
-    await disconnect(config);
-    localStorage.clear();
-    sessionStorage.clear();
-    updateStatus("disconnect-status", "Force disconnect completed!");
-  } catch (error) {
-    console.error("Force disconnect error:", error);
-    updateStatus(
-      "disconnect-status",
-      `Force disconnect error: ${(error as Error).message}`,
-    );
-  }
-}
-
 document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
   <div>
     <div id="account">
