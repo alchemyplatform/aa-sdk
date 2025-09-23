@@ -18,6 +18,7 @@ import {
   maxUint152,
   maxUint32,
   zeroAddress,
+  isAddressEqual,
   type Address,
   type Chain,
   type Hex,
@@ -211,7 +212,7 @@ export async function createMAv2Base<
     value,
   }) =>
     await encodeCallData(
-      target !== accountAddress
+      !isAddressEqual(target, accountAddress)
         ? encodeFunctionData({
             abi: modularAccountAbi,
             functionName: "execute",
@@ -267,7 +268,21 @@ export async function createMAv2Base<
   });
 
   const getExecutionData = async (selector: Hex) => {
-    if (!(await isAccountDeployed())) {
+    // Start both promises in parallel
+    const deployStatusPromise = isAccountDeployed();
+    const executionDataPromise = accountContract.read
+      .getExecutionData([selector])
+      .catch((error) => {
+        // Store the original error for potential re-throwing
+        // If the account is not deployed, we will get an error here that we want to swallow.
+        // Otherwise, we will re-throw the error.
+        return { error };
+      });
+
+    // Check if account is deployed first
+    const deployStatus = await deployStatusPromise;
+
+    if (deployStatus === false) {
       return {
         module: zeroAddress,
         skipRuntimeValidation: false,
@@ -276,7 +291,12 @@ export async function createMAv2Base<
       };
     }
 
-    return await accountContract.read.getExecutionData([selector]);
+    // Only await execution data if account is deployed
+    const executionData = await executionDataPromise;
+    if ("error" in executionData) {
+      throw executionData.error;
+    }
+    return executionData;
   };
 
   const getValidationData = async (args: ValidationDataParams) => {
