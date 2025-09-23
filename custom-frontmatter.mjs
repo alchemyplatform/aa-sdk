@@ -65,19 +65,25 @@ export function load(app) {
         }
       }
 
+      // For README.mdx files, remove "/src" and "/src/exports" from title and description
+      const isReadmeFile = page.url && page.url.endsWith("README.mdx");
+      if (isReadmeFile) {
+        title = title.replace(/\/src\/exports$/, "").replace(/\/src$/, "");
+        description = description
+          .replace(/\/src\/exports/g, "")
+          .replace(/\/src/g, "");
+      }
+
       // Generate slug from the URL path
       let slug = "";
       if (page.url) {
-        slug = page.url.replace(/\.mdx$/, "");
+        slug = `wallets/reference/${page.url.replace(/\.mdx$/, "")}`;
 
-        // Convert to the format expected by the docs site
-        // e.g., "aa-sdk/core/src/classes/AccountNotFoundError.mdx" -> "wallets/reference/aa-sdk/core/classes/AccountNotFoundError"
-        if (slug.startsWith("aa-sdk/")) {
-          slug = `wallets/reference/${slug}`;
-        } else if (slug.startsWith("account-kit/")) {
-          slug = `wallets/reference/${slug}`;
-        } else {
-          slug = `wallets/reference/${slug}`;
+        // For README.mdx files, also clean up the slug
+        if (isReadmeFile) {
+          slug = slug
+            .replace(/\/src\/exports\/README$/, "")
+            .replace(/\/src\/README$/, "");
         }
       }
 
