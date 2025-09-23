@@ -25,6 +25,9 @@ globalThis.Buffer = Buffer;
 
 // E2E Testing Variables
 const STORAGE_KEY = "alchemyAuth.authSession";
+// Wagmi prefixes all storage keys with "wagmi." to namespace localStorage entries
+const WAGMI_STORAGE_PREFIX = "wagmi.";
+
 let testResults: { [key: string]: boolean } = {};
 
 // DOM helper functions
@@ -532,7 +535,9 @@ function setupSessionControls() {
 function getStorageContents() {
   try {
     // Use the correct wagmi storage key format
-    const stored = localStorage.getItem(`wagmi.${STORAGE_KEY}`);
+    const stored = localStorage.getItem(
+      `${WAGMI_STORAGE_PREFIX}${STORAGE_KEY}`,
+    );
     return stored ? JSON.parse(stored) : null;
   } catch (error) {
     console.warn("Error reading storage:", error);
@@ -540,7 +545,7 @@ function getStorageContents() {
   }
 }
 
-function updateTestResults() {
+function updatePersistenceTestResults() {
   const resultsElement = document.getElementById("test-results");
   if (resultsElement) {
     const resultsHTML = Object.entries(testResults)
@@ -595,7 +600,7 @@ async function handleTestPersistence() {
         "No storage found - session may not be persisting",
       );
       testResults["Storage persistence"] = false;
-      updateTestResults();
+      updatePersistenceTestResults();
       return;
     }
 
@@ -629,19 +634,19 @@ async function handleTestPersistence() {
         if (newAccount.status !== "connected") {
           updateStatus(
             "test-status",
-            "❌ Reconnect failed - session restoration broken",
+            "Reconnect failed - session restoration broken",
           );
           testResults["Session restoration"] = false;
-          updateTestResults();
+          updatePersistenceTestResults();
           return;
         }
       } catch (reconnectError) {
         updateStatus(
           "test-status",
-          `❌ Reconnect error: ${(reconnectError as Error).message}`,
+          `Reconnect error: ${(reconnectError as Error).message}`,
         );
         testResults["Session restoration"] = false;
-        updateTestResults();
+        updatePersistenceTestResults();
         return;
       }
     }
@@ -662,7 +667,7 @@ async function handleTestPersistence() {
     testResults["Session not expired"] = notExpired;
     testResults["Storage persistence"] = !!storage;
 
-    updateTestResults();
+    updatePersistenceTestResults();
 
     if (isConnected && addressMatch && chainMatch && notExpired) {
       updateStatus(
@@ -677,7 +682,7 @@ async function handleTestPersistence() {
       if (!notExpired) issues.push("session expired");
       updateStatus(
         "test-status",
-        `❌ Persistence test FAILED: ${issues.join(", ")}`,
+        `Persistence test FAILED: ${issues.join(", ")}`,
       );
     }
   } catch (error) {
@@ -707,21 +712,21 @@ async function handleTestResume() {
     testResults["Session authorized"] = isAuthorized;
 
     if (isAuthorized) {
-      updateStatus("test-status", `✅ Resume test PASSED (${authTime}ms)`);
+      updateStatus("test-status", `Resume test PASSED (${authTime}ms)`);
       testResults["Resume available"] = true;
     } else {
-      updateStatus("test-status", "❌ Resume test FAILED - No valid session");
+      updateStatus("test-status", "Resume test FAILED - No valid session");
       testResults["Resume available"] = false;
     }
 
-    updateTestResults();
+    updatePersistenceTestResults();
   } catch (error) {
     updateStatus(
       "test-status",
       `Resume test error: ${(error as Error).message}`,
     );
     testResults["Resume available"] = false;
-    updateTestResults();
+    updatePersistenceTestResults();
   }
 }
 
@@ -736,7 +741,7 @@ async function handleManualConnect() {
 
     const alchemyConnector = resolveAlchemyAuthConnector(config);
     if (!alchemyConnector) {
-      updateStatus("test-status", "❌ Could not find Alchemy connector");
+      updateStatus("test-status", "Could not find Alchemy connector");
       return;
     }
 
@@ -747,7 +752,7 @@ async function handleManualConnect() {
     if (!isAuthorized) {
       updateStatus(
         "test-status",
-        "❌ Connector not authorized - no valid session",
+        "Connector not authorized - no valid session",
       );
       return;
     }
@@ -778,7 +783,7 @@ async function handleManualConnect() {
   } catch (error) {
     updateStatus(
       "test-status",
-      `❌ Manual connect failed: ${(error as Error).message}`,
+      `Manual connect failed: ${(error as Error).message}`,
     );
     console.error("Manual connect error:", error);
   }
@@ -793,7 +798,7 @@ async function handleTestClearStorage() {
 
     updateStorageDisplay();
     testResults = {};
-    updateTestResults();
+    updatePersistenceTestResults();
     updateStatus("test-status", "Storage cleared successfully!");
   } catch (error) {
     updateStatus(
@@ -817,7 +822,7 @@ function setupPersistenceTesting() {
   clearStorageBtn?.addEventListener("click", handleTestClearStorage);
 
   // Initial display update
-  updateTestResults();
+  updatePersistenceTestResults();
   updateStorageDisplay();
 }
 

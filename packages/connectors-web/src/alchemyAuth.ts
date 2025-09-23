@@ -65,7 +65,7 @@ function isPersistedAuthSession(obj: any): obj is PersistedAuthSessionV1 {
 }
 
 // Type-safe storage helpers
-async function getStoredSession(
+async function getStoredAuthSession(
   storage: Storage | null | undefined,
 ): Promise<PersistedAuthSessionV1 | null> {
   if (!storage) return null;
@@ -95,7 +95,7 @@ async function getStoredSession(
   }
 }
 
-async function setStoredSession(
+async function setStoredAuthSession(
   storage: Storage | null | undefined,
   session: PersistedAuthSessionV1,
 ): Promise<boolean> {
@@ -116,7 +116,7 @@ async function setStoredSession(
   }
 }
 
-async function clearStoredSession(
+async function clearStoredAuthSession(
   storage: Storage | null | undefined,
 ): Promise<void> {
   if (!storage) return;
@@ -180,24 +180,22 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
       throw error;
     };
 
-    // Silent resume logic - attempts to restore session from storage
+    // Silent resume logic to try to restore auth session from storage
     async function tryResume(): Promise<boolean> {
       if (authSessionInstance) return true;
 
       try {
-        const persisted = await getStoredSession(config.storage);
+        const persisted = await getStoredAuthSession(config.storage);
         if (!persisted) return false;
 
         // Check if session is still valid (not expired)
         if (Date.now() >= persisted.expirationDateMs) {
-          await clearStoredSession(config.storage);
+          await clearStoredAuthSession(config.storage);
           return false;
         }
 
-        // Get auth client
-        const client = getAuthClient();
-
         // Attempt to restore the auth session
+        const client = getAuthClient();
         try {
           const sessionStateJson = JSON.stringify(persisted);
           authSessionInstance =
@@ -215,7 +213,6 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
           return false;
         }
       } catch (error) {
-        // Clean up on any error
         try {
           await config.storage?.removeItem(STORAGE_KEY);
         } catch {}
@@ -223,7 +220,6 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
       }
     }
 
-    // Helper to get auth client with mock methods attached
     function getAuthClient(): AuthClient {
       if (!options.apiKey) {
         emitAndThrowError(
@@ -277,7 +273,7 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
         if (!authSessionInstance) {
           // TODO(v5): Update error message to reflect different auth methods available.
           emitAndThrowError(
-            "No signer available. Please authenticate first using sendEmailOtp and submitOtpCode, or loginWithOauth.",
+            "No auth session available. Please authenticate first using sendEmailOtp and submitOtpCode, or loginWithOauth.",
           );
         }
 
@@ -308,7 +304,7 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
                   user: authSessionState.user,
                 };
 
-          const success = await setStoredSession(config.storage, toPersist);
+          const success = await setStoredAuthSession(config.storage, toPersist);
           if (!success) {
             console.warn("Failed to update persisted session during connect");
           }
@@ -363,7 +359,7 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
           clients = {};
 
           // Clear persisted storage
-          await clearStoredSession(config.storage);
+          await clearStoredAuthSession(config.storage);
         }
         config.emitter.emit("disconnect");
       },
@@ -435,10 +431,9 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
       },
 
       async isAuthorized(): Promise<boolean> {
-        // Fast check - no heavy operations
         if (authSessionInstance) return true;
 
-        const stored = await getStoredSession(config.storage);
+        const stored = await getStoredAuthSession(config.storage);
         return !!stored && Date.now() < stored.expirationDateMs;
       },
 
@@ -485,7 +480,7 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
         }
       },
 
-      // Custom methods for Alchemy Auth
+      // --- Custom methods for Alchemy Auth are defined below this comment ---
       getAuthClient,
 
       async getAuthSession() {
@@ -526,18 +521,11 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
                   user: authSessionState.user,
                 };
 
-          void setStoredSession(config.storage, toPersist);
+          void setStoredAuthSession(config.storage, toPersist);
         } catch (error) {
           console.warn("Failed to persist auth session:", error);
           // Don't throw - persistence failure shouldn't break auth flow
         }
-      },
-
-      setSigner(signer: any) {
-        // Store the signer instance for future use
-        // For now, we'll just store it as part of the auth session or connector state
-        // This method is called after successful authentication to provide the signer
-        console.log("Signer set:", signer);
       },
     };
   });
