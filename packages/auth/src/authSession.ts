@@ -13,28 +13,28 @@ import {
 import type {
   AddOauthProviderParams,
   AuthMethods,
+  AuthSessionState,
   AuthType,
   OauthProviderInfo,
   PasskeyInfo,
   TurnkeyStamper,
   User,
 } from "./types";
-import { dev_request } from "./devRequest.js";
 import { toViemLocalAccount } from "./toViemLocalAccount.js";
 import { hashAuthorization } from "viem/utils";
 import {
   type AlchemyAuthEip1193Provider,
   create1193Provider,
 } from "./provider.js";
+import type { AlchemyRestClient } from "@alchemy/common";
+import type { SignerHttpSchema } from "@alchemy/aa-infra";
 
 /**
  * Parameters required to create an AuthSession instance
  */
 export type CreateAuthSessionParams = {
-  // TODO: replace apiKey with transport once it's ready.
-  // transport: AlchemyTransport;
-  /** API key for authentication with Alchemy services */
-  apiKey: string;
+  /** HTTP client for Signer API */
+  signerHttpClient: AlchemyRestClient<SignerHttpSchema>;
   /** Turnkey stamper instance for signing operations */
   stamper: TurnkeyStamper;
   /** Organization ID */
@@ -87,15 +87,14 @@ export type SignMessageParams = {
  * });
  *
  * const signature = await authSession.signMessage({ message: "Hello World" });
- * const sessionState = authSession.getAuthSessionState();
+ * const sessionState = authSession.getSerializedState();
  * ```
  */
 export class AuthSession {
   private isDisconnected = false;
 
   private constructor(
-    // TODO: replace apiKey with transport once it's ready.
-    private readonly apiKey: string,
+    private readonly signerHttpClient: AlchemyRestClient<SignerHttpSchema>,
     private readonly turnkey: TurnkeyClient,
     private readonly user: User,
     private readonly bundle?: string,
@@ -125,7 +124,7 @@ export class AuthSession {
    * ```
    */
   public static async create({
-    apiKey,
+    signerHttpClient,
     stamper,
     orgId,
     idToken,
@@ -140,21 +139,22 @@ export class AuthSession {
     const stampedRequest = await turnkey.stampGetWhoami({
       organizationId: orgId,
     });
-    // TODO: use the transport to make this call once it's finalized.
-    const whoamiResponse = await dev_request(apiKey, "whoami", {
-      stampedRequest,
+    const whoamiResponse = await signerHttpClient.request({
+      route: "signer/v1/whoami",
+      method: "POST",
+      body: {
+        stampedRequest,
+      },
     });
-    // TODO: combine whoami response with idToken to get the full user object.
-    // For now, just return the whoami response.
+    // TODO: eventually read email out of the id token to display as the user name
     const user = {
       ...whoamiResponse,
       idToken,
       orgId,
-      credentialId:
-        authType === "passkey" ? credentialId : whoamiResponse.credentialId,
+      credentialId: authType === "passkey" ? credentialId : undefined,
     };
     return new AuthSession(
-      apiKey,
+      signerHttpClient,
       turnkey,
       user,
       bundle,
@@ -223,8 +223,10 @@ export class AuthSession {
       },
     });
 
-    const { signature } = await this.dev_request("sign-payload", {
-      stampedRequest,
+    const { signature } = await this.signerHttpClient.request({
+      route: "signer/v1/sign-payload",
+      method: "POST",
+      body: { stampedRequest },
     });
     return signature;
   };
@@ -405,50 +407,53 @@ export class AuthSession {
    * credential IDs (for passkey auth), and expiration time.
    *
    * The serialized state can be stored and later used to restore the session
-   * using AuthClient.loadAuthSessionState().
+   * using AuthClient.restoreAuthSession().
    *
    * @returns {string} A JSON string containing the serialized session state
    *
    * @example
    * ```ts twoslash
-   * const sessionState = authSession.getAuthSessionState();
+   * const sessionState = authSession.getSerializedState();
    * localStorage.setItem('authSession', sessionState);
    *
    * // Later restore:
    * const savedState = localStorage.getItem('authSession');
    * if (savedState) {
-   *   const restoredSession = await authClient.loadAuthSessionState(JSON.parse(savedState));
+   *   const restoredSession = await authClient.restoreAuthSession(JSON.parse(savedState));
    * }
    * ```
    */
-  public getAuthSessionState(): string {
+  public getSerializedState(): string {
     this.throwIfDisconnected();
 
     // Calculate expiration time (24 hours from now as default)
+    // TODO: update the expiration date to be user defined once expiration handling is implemented
     const expirationDateMs = Date.now() + 24 * 60 * 60 * 1000;
 
     // Use stored authType or default to "otp" for backward compatibility
     const type = this.authType || "otp";
 
     if (type === "passkey") {
-      return JSON.stringify({
+      const state: AuthSessionState = {
         type: "passkey",
         user: this.user,
         expirationDateMs,
         credentialId: this.credentialId,
-      });
+      };
+      return JSON.stringify(state);
     } else {
       if (!this.bundle) {
         throw new Error(
           "Bundle is required for non-passkey authentication types",
         );
       }
-      return JSON.stringify({
+      const state: AuthSessionState = {
         type,
         bundle: this.bundle,
         user: this.user,
         expirationDateMs,
-      });
+      };
+      return JSON.stringify(state);
     }
   }
 
@@ -466,11 +471,6 @@ export class AuthSession {
   public getProvider(): AlchemyAuthEip1193Provider {
     this.throwIfDisconnected();
     return create1193Provider(this);
-  }
-
-  // TODO: remove this and use transport instead once it's ready.
-  private dev_request(path: string, body: unknown): Promise<any> {
-    return dev_request(this.apiKey, path, body);
   }
 }
 

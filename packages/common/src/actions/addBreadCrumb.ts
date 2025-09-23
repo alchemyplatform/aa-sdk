@@ -2,9 +2,9 @@ import { createClient, type Client } from "viem";
 import { headersUpdate } from "../tracing/updateHeaders.js";
 import {
   alchemyTransport,
-  convertHeadersToObject,
   type AlchemyTransport,
 } from "../transport/alchemy.js";
+import { convertHeadersToObject } from "../utils/headers.js";
 
 /**
  * TODO: need to figure out if there's a better way than this...

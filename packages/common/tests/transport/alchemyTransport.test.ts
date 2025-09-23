@@ -401,19 +401,6 @@ describe("Alchemy Transport Tests", () => {
     });
   });
 
-  describe("makeHttpRequest functionality", () => {
-    it("should expose makeHttpRequest for HTTP operations", () => {
-      const transport = alchemyTransport({
-        url: "https://eth-mainnet.g.alchemy.com/v2/test-key",
-      });
-
-      const result = transport({ chain: sepolia });
-
-      expect(result.value?.makeHttpRequest).toBeDefined();
-      expect(typeof result.value?.makeHttpRequest).toBe("function");
-    });
-  });
-
   describe("Comprehensive Header Verification", () => {
     it.each([
       {

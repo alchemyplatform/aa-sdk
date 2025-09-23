@@ -10,11 +10,8 @@ import type {
   CreateWebAuthnStamperFn,
   HandleOauthFlowFn,
 } from "../src/types.js";
-
-// Mock the dev_request module
-vi.mock("../src/devRequest.js", () => ({
-  dev_request: vi.fn(),
-}));
+import type { SignerHttpSchema } from "@alchemy/aa-infra";
+import type { AlchemyRestClient } from "@alchemy/common";
 
 // Mock Turnkey client
 vi.mock("@turnkey/http", () => ({
@@ -35,12 +32,10 @@ describe("AuthClient", () => {
   let mockTekStamper: TurnkeyTekStamper;
   let mockWebAuthnStamper: TurnkeyStamper;
   let mockUser: User;
-  let mockApiKey: string;
+  let mockSignerHttpClient: AlchemyRestClient<SignerHttpSchema>;
 
   beforeEach(async () => {
     vi.clearAllMocks();
-
-    mockApiKey = "test-api-key";
 
     mockUser = {
       email: "test@example.com",
@@ -80,19 +75,28 @@ describe("AuthClient", () => {
       idToken: "test-id-token",
     });
 
-    authClient = new AuthClient({
-      apiKey: mockApiKey,
-      createTekStamper: mockCreateTekStamper,
-      createWebAuthnStamper: mockCreateWebAuthnStamper,
-      handleOauthFlow: mockHandleOauthFlow,
-    });
+    mockSignerHttpClient = {
+      request: vi.fn(),
+    } as any;
 
-    // Mock the dev_request to return user data for whoami calls
-    const { dev_request } = await import("../src/devRequest.js");
-    vi.mocked(dev_request).mockResolvedValue(mockUser);
+    vi.mocked(mockSignerHttpClient.request).mockImplementation(
+      async (params) => {
+        if (params.route === "signer/v1/whoami") {
+          return mockUser;
+        }
+        throw new Error(`Unexpected route: ${params.route}`);
+      },
+    );
+
+    authClient = new (AuthClient as any)(
+      mockSignerHttpClient,
+      mockCreateTekStamper,
+      mockCreateWebAuthnStamper,
+      mockHandleOauthFlow,
+    );
   });
 
-  describe("loadAuthSessionState", () => {
+  describe("restoreAuthSession", () => {
     it("should load valid OAuth session state", async () => {
       const validOAuthState: AuthSessionState = {
         type: "oauth",
@@ -101,7 +105,7 @@ describe("AuthClient", () => {
         user: mockUser,
       };
 
-      const authSession = await authClient.loadAuthSessionState(
+      const authSession = await authClient.restoreAuthSession(
         JSON.stringify(validOAuthState),
       );
 
@@ -129,7 +133,7 @@ describe("AuthClient", () => {
         user: mockUser,
       };
 
-      const authSession = await authClient.loadAuthSessionState(
+      const authSession = await authClient.restoreAuthSession(
         JSON.stringify(validOtpState),
       );
 
@@ -157,7 +161,7 @@ describe("AuthClient", () => {
         user: mockUser,
       };
 
-      const authSession = await authClient.loadAuthSessionState(
+      const authSession = await authClient.restoreAuthSession(
         JSON.stringify(validEmailState),
       );
 
@@ -181,7 +185,7 @@ describe("AuthClient", () => {
       // Mock the loginWithPasskey method to avoid the "not implemented" error
       const mockLoginWithPasskey = vi.spyOn(authClient, "loginWithPasskey");
       const mockAuthSession = await AuthSession.create({
-        apiKey: mockApiKey,
+        signerHttpClient: mockSignerHttpClient,
         stamper: mockWebAuthnStamper,
         orgId: mockUser.orgId,
         idToken: mockUser.idToken,
@@ -197,7 +201,7 @@ describe("AuthClient", () => {
         credentialId: "test-passkey-credential",
       };
 
-      const authSession = await authClient.loadAuthSessionState(
+      const authSession = await authClient.restoreAuthSession(
         JSON.stringify(validPasskeyState),
       );
 
@@ -218,7 +222,7 @@ describe("AuthClient", () => {
       };
 
       await expect(
-        authClient.loadAuthSessionState(JSON.stringify(invalidPasskeyState)),
+        authClient.restoreAuthSession(JSON.stringify(invalidPasskeyState)),
       ).rejects.toThrow("Credential ID is required for passkey authentication");
     });
 
@@ -230,7 +234,7 @@ describe("AuthClient", () => {
         user: mockUser,
       };
 
-      const authSession = await authClient.loadAuthSessionState(
+      const authSession = await authClient.restoreAuthSession(
         JSON.stringify(expiredState),
       );
 
@@ -252,7 +256,7 @@ describe("AuthClient", () => {
       };
 
       await expect(
-        authClient.loadAuthSessionState(JSON.stringify(validState)),
+        authClient.restoreAuthSession(JSON.stringify(validState)),
       ).rejects.toThrow("Failed to inject credential bundle");
     });
   });

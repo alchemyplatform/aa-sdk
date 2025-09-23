@@ -1,24 +1,54 @@
+import { AlchemyRestClient } from "@alchemy/common";
+import type { SignerHttpSchema } from "@alchemy/aa-infra";
 import { AuthSession } from "./authSession.js";
 import type {
+  AuthSessionState,
   AuthType,
   CreateTekStamperFn,
   CreateWebAuthnStamperFn,
   HandleOauthFlowFn,
   TurnkeyTekStamper,
 } from "./types.js";
-import { dev_request } from "./devRequest.js";
 import { getOauthNonce, getOauthProviderUrl } from "./utils.js";
+import { z } from "zod";
+
+const UserSchema = z.object({
+  email: z.string().optional(),
+  orgId: z.string(),
+  userId: z.string(),
+  address: z.string(),
+  solanaAddress: z.string().optional(),
+  credentialId: z.string().optional(),
+  idToken: z.string().optional(),
+  claims: z.record(z.unknown()).optional(),
+});
+
+const AuthSessionStateSchema = z.discriminatedUnion("type", [
+  z.object({
+    type: z.literal("passkey"),
+    user: UserSchema,
+    expirationDateMs: z.number(),
+    credentialId: z.string().optional(),
+  }),
+  z.object({
+    type: z.enum(["email", "oauth", "otp"]),
+    bundle: z.string(),
+    user: UserSchema,
+    expirationDateMs: z.number(),
+  }),
+]);
 
 /**
  * Configuration parameters for creating an AuthClient instance
  */
 export type AuthClientParams = {
-  // TODO: put this back when the transport is ready.
-  // transport: AlchemyTransport;
-  // TODO: this is temporary for testing before the transport is ready.
-  /** API key for authentication with Alchemy services */
-  apiKey: string;
-  /** Function to create a TEK (Turnkey Ephemeral Key) stamper */
+  /** API key for authentication with Alchemy services. */
+  apiKey?: string;
+  /** JWT token for authentication with Alchemy services. */
+  jwt?: string;
+  /** Custom URL (optional - defaults to Alchemy's chain-agnostic URL, but can be used to override it) */
+  url?: string;
+  /** Function to create a TEK (Traffic Encryption Key) stamper */
   createTekStamper: CreateTekStamperFn;
   /** Function to create a WebAuthn stamper for passkey authentication */
   createWebAuthnStamper: CreateWebAuthnStamperFn;
@@ -190,11 +220,12 @@ function extractOAuthCallbackParams() {
  * ```
  */
 export class AuthClient {
-  // TODO: temporary for testing before the transport is ready.
-  private readonly apiKey: string;
-  private readonly createTekStamper: CreateTekStamperFn;
-  private readonly createWebAuthnStamper: CreateWebAuthnStamperFn;
-  private readonly handleOauthFlow: HandleOauthFlowFn;
+  private constructor(
+    private readonly signerHttpClient: AlchemyRestClient<SignerHttpSchema>,
+    private readonly createTekStamper: CreateTekStamperFn,
+    private readonly createWebAuthnStamper: CreateWebAuthnStamperFn,
+    private readonly handleOauthFlow: HandleOauthFlowFn,
+  ) {}
 
   /**
    * Creates a new AuthClient instance
@@ -204,12 +235,19 @@ export class AuthClient {
    * @param {CreateTekStamperFn} params.createTekStamper - Function to create a TEK stamper
    * @param {CreateWebAuthnStamperFn} params.createWebAuthnStamper - Function to create a WebAuthn stamper
    * @param {HandleOauthFlowFn} params.handleOauthFlow - Function to handle OAuth authentication flow
+   * @returns {AuthClient} A new AuthClient instance
    */
-  constructor(params: AuthClientParams) {
-    this.apiKey = params.apiKey;
-    this.createTekStamper = params.createTekStamper;
-    this.createWebAuthnStamper = params.createWebAuthnStamper;
-    this.handleOauthFlow = params.handleOauthFlow;
+  public static create(params: AuthClientParams): AuthClient {
+    return new AuthClient(
+      new AlchemyRestClient({
+        apiKey: params.apiKey,
+        jwt: params.jwt,
+        url: params.url,
+      }),
+      params.createTekStamper,
+      params.createWebAuthnStamper,
+      params.handleOauthFlow,
+    );
   }
 
   private tekStamperPromise: Promise<TekStamperAndPublicKey> | null = null;
@@ -233,12 +271,16 @@ export class AuthClient {
    */
   public async sendEmailOtp({ email }: SendEmailOtpParams): Promise<void> {
     const { targetPublicKey } = await this.getTekStamper();
-    const { otpId, orgId } = await this.dev_request("auth", {
-      email,
-      emailMode: "otp",
-      targetPublicKey,
+    const { otpId, orgId } = await this.signerHttpClient.request({
+      route: "signer/v1/auth",
+      method: "POST",
+      body: {
+        email,
+        emailMode: "otp",
+        targetPublicKey,
+      },
     });
-    this.pendingOtp = { otpId, orgId };
+    this.pendingOtp = { otpId: otpId!, orgId };
   }
 
   /**
@@ -266,15 +308,14 @@ export class AuthClient {
     }
     const { otpId, orgId } = this.pendingOtp;
     const { targetPublicKey } = await this.getTekStamper();
-    const { credentialBundle } = await this.dev_request("otp", {
-      otpId,
-      otpCode,
-      orgId,
-      targetPublicKey,
+    const { credentialBundle } = await this.signerHttpClient.request({
+      route: "signer/v1/otp",
+      method: "POST",
+      body: { otpId, otpCode, orgId, targetPublicKey },
     });
     this.pendingOtp = null;
     return this.completeAuthWithBundle({
-      bundle: credentialBundle,
+      bundle: credentialBundle!,
       orgId,
       authType: "otp",
     });
@@ -305,8 +346,10 @@ export class AuthClient {
     params: LoginWithOauthParams,
   ): Promise<AuthSession> {
     const { targetPublicKey } = await this.getTekStamper();
-    const oauthConfig = await this.dev_request("prepare-oauth", {
-      nonce: getOauthNonce(targetPublicKey),
+    const oauthConfig = await this.signerHttpClient.request({
+      route: "signer/v1/prepare-oauth",
+      method: "POST",
+      body: { nonce: getOauthNonce(targetPublicKey) },
     });
     const authUrl = getOauthProviderUrl({
       oauthParams:
@@ -376,7 +419,6 @@ export class AuthClient {
         authType: "oauth",
       });
     }
-    console.log("No OAuth callback parameters found");
     return null;
   }
 
@@ -412,7 +454,7 @@ export class AuthClient {
    * Creates an instance of AuthSession from a previously saved authentication session state that has not expired.
    *
    * This method takes a JSON string representation of a serialized AuthSessionState (typically obtained
-   * from AuthSession.getAuthSessionState()) and attempts to restore the authentication session.
+   * from AuthSession.getSerializedState()) and attempts to restore the authentication session.
    * The method will validate the session expiration and handle different authentication types appropriately.
    *
    * @param {string} state - The serialized authentication session state as a JSON string
@@ -426,7 +468,7 @@ export class AuthClient {
    * // Restore a session from stored JSON string
    * const sessionJson = localStorage.getItem('authSession');
    * if (sessionJson) {
-   *   const authSession = await authClient.loadAuthSessionState(sessionJson);
+   *   const authSession = await authClient.restoreAuthSession(sessionJson);
    *   if (authSession) {
    *     console.log('Session restored successfully');
    *   } else {
@@ -435,10 +477,10 @@ export class AuthClient {
    * }
    * ```
    */
-  public async loadAuthSessionState(
+  public async restoreAuthSession(
     state: string,
   ): Promise<AuthSession | undefined> {
-    const parsedState = JSON.parse(state);
+    const parsedState: AuthSessionState = this.deserializeState(state);
 
     const { type, expirationDateMs, user } = parsedState;
     if (expirationDateMs < Date.now()) {
@@ -480,7 +522,7 @@ export class AuthClient {
       throw new Error("Failed to inject credential bundle");
     }
     const authSession = await AuthSession.create({
-      apiKey: this.apiKey,
+      signerHttpClient: this.signerHttpClient,
       stamper,
       orgId,
       idToken,
@@ -505,9 +547,17 @@ export class AuthClient {
     return this.tekStamperPromise;
   }
 
-  // TODO: remove this and use transport instead once it's ready.
-  private dev_request(path: string, body: unknown): Promise<any> {
-    return dev_request(this.apiKey, path, body);
+  private deserializeState(serializedState: string): AuthSessionState {
+    let parsedState = undefined;
+    try {
+      parsedState = JSON.parse(serializedState);
+    } catch (error) {
+      throw new Error("Failed to parse serialized state into JSON format");
+    }
+    const result = AuthSessionStateSchema.safeParse(parsedState);
+    if (!result.success)
+      throw new Error("Parsed state is not of type AuthSessionState");
+    return parsedState;
   }
 }
 function notImplemented(..._: unknown[]): Promise<never> {

@@ -8,13 +8,13 @@ import {
   type Transport,
 } from "viem";
 import { BaseError } from "../errors/BaseError.js";
-import { FetchError } from "../errors/FetchError.js";
-import { ServerError } from "../errors/ServerError.js";
 import { mutateRemoveTrackingHeaders } from "../tracing/updateHeaders.js";
-import { VERSION } from "../version.js";
-import type { HttpRequestFn, HttpRequestSchema } from "./types.js";
 import { ChainNotFoundError } from "../errors/ChainNotFoundError.js";
 import { getAlchemyRpcUrl } from "./chainRegistry.js";
+import {
+  convertHeadersToObject,
+  withAlchemyHeaders,
+} from "../utils/headers.js";
 
 /**
  * Configuration options for the Alchemy transport.
@@ -34,24 +34,20 @@ export interface AlchemyTransportConfig
   url?: string;
 }
 
-type AlchemyTransportBase<
-  rpcSchema extends RpcSchema | undefined = undefined,
-  httpSchema extends HttpRequestSchema | undefined = undefined,
-> = Transport<
-  "alchemyHttp",
-  {
-    alchemyRpcUrl: string;
-    fetchOptions: AlchemyTransportConfig["fetchOptions"];
-    config: AlchemyTransportConfig;
-    makeHttpRequest: HttpRequestFn<httpSchema>;
-  },
-  EIP1193RequestFn<rpcSchema>
->;
+type AlchemyTransportBase<rpcSchema extends RpcSchema | undefined = undefined> =
+  Transport<
+    "alchemyHttp",
+    {
+      alchemyRpcUrl: string;
+      fetchOptions: AlchemyTransportConfig["fetchOptions"];
+      config: AlchemyTransportConfig;
+    },
+    EIP1193RequestFn<rpcSchema>
+  >;
 
 export type AlchemyTransport<
   rpcSchema extends RpcSchema | undefined = undefined,
-  httpSchema extends HttpRequestSchema | undefined = undefined,
-> = AlchemyTransportBase<rpcSchema, httpSchema> & {
+> = AlchemyTransportBase<rpcSchema> & {
   updateHeaders(newHeaders: HeadersInit): void;
 };
 
@@ -149,8 +145,7 @@ export function isAlchemyTransport(
  */
 export function alchemyTransport<
   rpcSchema extends RpcSchema | undefined = undefined,
-  httpSchema extends HttpRequestSchema | undefined = undefined,
->(config: AlchemyTransportConfig): AlchemyTransport<rpcSchema, httpSchema> {
+>(config: AlchemyTransportConfig): AlchemyTransport<rpcSchema> {
   const {
     apiKey,
     jwt,
@@ -164,25 +159,11 @@ export function alchemyTransport<
   // Create a copy of fetch options for modification
   const fetchOptions = { ...fetchOptions_ };
 
-  const headersAsObject = convertHeadersToObject(fetchOptions.headers);
-
-  fetchOptions.headers = {
-    ...headersAsObject,
-    "Alchemy-AA-Sdk-Version": VERSION,
-  };
-
-  // Add auth headers if apiKey or jwt is provided
-  if (jwt) {
-    fetchOptions.headers = {
-      ...fetchOptions.headers,
-      Authorization: `Bearer ${jwt}`,
-    };
-  } else if (apiKey) {
-    fetchOptions.headers = {
-      ...fetchOptions.headers,
-      Authorization: `Bearer ${apiKey}`,
-    };
-  }
+  fetchOptions.headers = withAlchemyHeaders({
+    headers: fetchOptions.headers,
+    apiKey,
+    jwt,
+  });
 
   const transport: AlchemyTransportBase = (opts) => {
     const { chain } = opts;
@@ -244,31 +225,6 @@ export function alchemyTransport<
         alchemyRpcUrl: rpcUrl,
         fetchOptions,
         config,
-        async makeHttpRequest(params) {
-          const response = await fetch(`${rpcUrl}/${params.route}`, {
-            method: params.method,
-            body: params.body ? JSON.stringify(params.body) : undefined,
-            headers: fetchOptions.headers as HeadersInit,
-          }).catch((error) => ({
-            error: new FetchError(params.route, params.method, error),
-          }));
-
-          if ("error" in response) {
-            return { error: response.error satisfies BaseError } as any;
-          }
-
-          if (!response.ok) {
-            return {
-              error: new ServerError(
-                await response.text(),
-                response.status,
-                new Error(response.statusText),
-              ) satisfies BaseError,
-            };
-          }
-
-          return { result: await response.json() };
-        },
       },
     );
   };
@@ -284,31 +240,3 @@ export function alchemyTransport<
     },
   });
 }
-
-export const convertHeadersToObject = (
-  headers?: HeadersInit,
-): Record<string, string> => {
-  if (!headers) {
-    return {};
-  }
-
-  if (headers instanceof Headers) {
-    const headersObject = {} as Record<string, string>;
-    headers.forEach((value, key) => {
-      headersObject[key] = value;
-    });
-    return headersObject;
-  }
-
-  if (Array.isArray(headers)) {
-    return headers.reduce(
-      (acc, header) => {
-        acc[header[0]] = header[1];
-        return acc;
-      },
-      {} as Record<string, string>,
-    );
-  }
-
-  return headers;
-};
