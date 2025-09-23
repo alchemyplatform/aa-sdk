@@ -20,15 +20,14 @@ import {
 import { config } from "./wagmi.js";
 import { testSmartWalletWithConnectorClient } from "./test-smart-wallet.js";
 import "./style.css";
+import { resolveAlchemyAuthConnector } from "@alchemy/connectors-web";
 
 globalThis.Buffer = Buffer;
 
-// E2E Testing Variables
+// Storage viewer variables
 const STORAGE_KEY = "alchemyAuth.authSession";
 // Wagmi prefixes all storage keys with "wagmi." to namespace localStorage entries
 const WAGMI_STORAGE_PREFIX = "wagmi.";
-
-let testResults: { [key: string]: boolean } = {};
 
 // DOM helper functions
 function updateStatus(elementId: string, message: string) {
@@ -261,11 +260,6 @@ function handleClearStorage() {
   }
 }
 
-// Helper function to resolve Alchemy connector
-function resolveAlchemyAuthConnector(config: any) {
-  return config.connectors.find((c: any) => c.id === "alchemyAuth");
-}
-
 // Force disconnect handler (used by testing)
 async function handleForceDisconnect() {
   try {
@@ -376,17 +370,12 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
     </div>
 
     <div id="persistence-testing">
-      <h2>🧪 Persistence E2E Tests</h2>
+      <h2>Local Storage Viewer</h2>
       <div class="test-actions">
-        <button id="test-persistence" type="button">Test Persistence</button>
-        <button id="test-resume" type="button">Test Resume</button>
-        <button id="manual-connect" type="button">Manual Connect</button>
         <button id="view-storage" type="button">View Storage</button>
-        <button id="clear-storage" type="button">Clear Storage</button>
       </div>
-      <div id="test-results"></div>
       <div id="storage-display"></div>
-      <div id="test-status"></div>
+      <div id="storage-status"></div>
     </div>
   </div>
 `;
@@ -531,7 +520,7 @@ function setupSessionControls() {
   clearStorageButton?.addEventListener("click", handleClearStorage);
 }
 
-// E2E Persistence Testing Functions
+// Storage viewer functions
 function getStorageContents() {
   try {
     // Use the correct wagmi storage key format
@@ -545,38 +534,28 @@ function getStorageContents() {
   }
 }
 
-function updatePersistenceTestResults() {
-  const resultsElement = document.getElementById("test-results");
-  if (resultsElement) {
-    const resultsHTML = Object.entries(testResults)
-      .map(
-        ([test, passed]) =>
-          `<div class="${passed ? "test-pass" : "test-fail"}">${test}: ${passed ? "PASS" : "FAIL"}</div>`,
-      )
-      .join("");
-    resultsElement.innerHTML = resultsHTML || "<em>No tests run yet</em>";
-  }
-}
-
 function updateStorageDisplay() {
   const storageElement = document.getElementById("storage-display");
   if (storageElement) {
     const storage = getStorageContents();
     if (storage) {
       try {
-        // Handle potential double-encoding by checking if storage is already a string
-        let dataToDisplay = storage;
-        if (typeof storage === "string") {
-          try {
-            dataToDisplay = JSON.parse(storage);
-          } catch {
-            // If parsing fails, display as string
-            dataToDisplay = storage;
-          }
+        // Ensure we have an object, not a string
+        const data =
+          typeof storage === "string" ? JSON.parse(storage) : storage;
+
+        // Handle double-serialized authSessionState for better display
+        const displayData = { ...data };
+        if (
+          displayData.authSessionState &&
+          typeof displayData.authSessionState === "string"
+        ) {
+          displayData.authSessionState = JSON.parse(
+            displayData.authSessionState,
+          );
         }
 
-        // Format with proper indentation
-        const formattedJson = JSON.stringify(dataToDisplay, null, 2);
+        const formattedJson = JSON.stringify(displayData, null, 2);
         storageElement.innerHTML = `<pre>${formattedJson}</pre>`;
       } catch (error) {
         storageElement.innerHTML = `<pre>Error formatting storage: ${error}</pre>`;
@@ -587,242 +566,17 @@ function updateStorageDisplay() {
   }
 }
 
-async function handleTestPersistence() {
-  updateStatus("test-status", "Testing persistence...");
-
-  try {
-    const account = getAccount(config);
-    let storage = getStorageContents();
-
-    if (!storage) {
-      updateStatus(
-        "test-status",
-        "No storage found - session may not be persisting",
-      );
-      testResults["Storage persistence"] = false;
-      updatePersistenceTestResults();
-      return;
-    }
-
-    // Handle potential double-encoding (same logic as updateStorageDisplay)
-    if (typeof storage === "string") {
-      try {
-        storage = JSON.parse(storage);
-      } catch {
-        console.warn("Failed to parse storage JSON");
-      }
-    }
-
-    // If we have storage but aren't connected, try reconnecting
-    if (account.status !== "connected") {
-      updateStatus(
-        "test-status",
-        "🚨 Storage exists but not connected - trying to reconnect...",
-      );
-
-      try {
-        await reconnect(config);
-        // Wait a moment for the connection to settle
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        const newAccount = getAccount(config);
-        console.log(
-          "Debug - After reconnect:",
-          newAccount.status,
-          newAccount.address,
-        );
-
-        if (newAccount.status !== "connected") {
-          updateStatus(
-            "test-status",
-            "Reconnect failed - session restoration broken",
-          );
-          testResults["Session restoration"] = false;
-          updatePersistenceTestResults();
-          return;
-        }
-      } catch (reconnectError) {
-        updateStatus(
-          "test-status",
-          `Reconnect error: ${(reconnectError as Error).message}`,
-        );
-        testResults["Session restoration"] = false;
-        updatePersistenceTestResults();
-        return;
-      }
-    }
-
-    const currentAccount = getAccount(config);
-
-    // Test data consistency
-    const addressMatch =
-      currentAccount.address?.toLowerCase() ===
-      storage.user?.address?.toLowerCase();
-    const chainMatch = currentAccount.chainId === storage.chainId;
-    const notExpired = storage.expirationDateMs > Date.now();
-    const isConnected = currentAccount.status === "connected";
-
-    testResults["Session restoration"] = isConnected;
-    testResults["Address consistency"] = addressMatch;
-    testResults["Chain consistency"] = chainMatch;
-    testResults["Session not expired"] = notExpired;
-    testResults["Storage persistence"] = !!storage;
-
-    updatePersistenceTestResults();
-
-    if (isConnected && addressMatch && chainMatch && notExpired) {
-      updateStatus(
-        "test-status",
-        "✅ Persistence test PASSED - Session restored successfully!",
-      );
-    } else {
-      const issues = [];
-      if (!isConnected) issues.push("not connected");
-      if (!addressMatch) issues.push("address mismatch");
-      if (!chainMatch) issues.push("chain mismatch");
-      if (!notExpired) issues.push("session expired");
-      updateStatus(
-        "test-status",
-        `Persistence test FAILED: ${issues.join(", ")}`,
-      );
-    }
-  } catch (error) {
-    updateStatus(
-      "test-status",
-      `Persistence test error: ${(error as Error).message}`,
-    );
-  }
-}
-
-async function handleTestResume() {
-  updateStatus("test-status", "Testing resume from storage...");
-
-  try {
-    const alchemyConnector = resolveAlchemyAuthConnector(config);
-    if (!alchemyConnector) {
-      updateStatus("test-status", "Error: Could not find Alchemy connector");
-      return;
-    }
-
-    // Test isAuthorized (should be fast)
-    const startTime = Date.now();
-    const isAuthorized = await alchemyConnector.isAuthorized();
-    const authTime = Date.now() - startTime;
-
-    testResults["isAuthorized performance"] = authTime < 100; // Should be < 100ms
-    testResults["Session authorized"] = isAuthorized;
-
-    if (isAuthorized) {
-      updateStatus("test-status", `Resume test PASSED (${authTime}ms)`);
-      testResults["Resume available"] = true;
-    } else {
-      updateStatus("test-status", "Resume test FAILED - No valid session");
-      testResults["Resume available"] = false;
-    }
-
-    updatePersistenceTestResults();
-  } catch (error) {
-    updateStatus(
-      "test-status",
-      `Resume test error: ${(error as Error).message}`,
-    );
-    testResults["Resume available"] = false;
-    updatePersistenceTestResults();
-  }
-}
-
 function handleViewStorage() {
   updateStorageDisplay();
-  updateStatus("test-status", "Storage contents updated");
+  updateStatus("storage-status", "Storage contents updated");
 }
 
-async function handleManualConnect() {
-  try {
-    updateStatus("test-status", "Testing manual connection...");
-
-    const alchemyConnector = resolveAlchemyAuthConnector(config);
-    if (!alchemyConnector) {
-      updateStatus("test-status", "Could not find Alchemy connector");
-      return;
-    }
-
-    console.log("🔍 Testing isAuthorized...");
-    const isAuthorized = await alchemyConnector.isAuthorized();
-    console.log("isAuthorized result:", isAuthorized);
-
-    if (!isAuthorized) {
-      updateStatus(
-        "test-status",
-        "Connector not authorized - no valid session",
-      );
-      return;
-    }
-
-    updateStatus(
-      "test-status",
-      "🔄 Connector authorized, attempting connect...",
-    );
-
-    const connectStart = Date.now();
-    await connect(config, { connector: alchemyConnector });
-    const connectTime = Date.now() - connectStart;
-
-    const account = getAccount(config);
-    console.log("Connect result:", account);
-
-    if (account.status === "connected") {
-      updateStatus(
-        "test-status",
-        `✅ Manual connect succeeded in ${connectTime}ms`,
-      );
-    } else {
-      updateStatus(
-        "test-status",
-        `⚠️ Connect returned but status is: ${account.status}`,
-      );
-    }
-  } catch (error) {
-    updateStatus(
-      "test-status",
-      `Manual connect failed: ${(error as Error).message}`,
-    );
-    console.error("Manual connect error:", error);
-  }
-}
-
-async function handleTestClearStorage() {
-  try {
-    updateStatus("test-status", "Clearing storage...");
-
-    // Use the existing force disconnect which clears everything
-    await handleForceDisconnect();
-
-    updateStorageDisplay();
-    testResults = {};
-    updatePersistenceTestResults();
-    updateStatus("test-status", "Storage cleared successfully!");
-  } catch (error) {
-    updateStatus(
-      "test-status",
-      `Error clearing storage: ${(error as Error).message}`,
-    );
-  }
-}
-
-function setupPersistenceTesting() {
-  const testPersistenceBtn = document.getElementById("test-persistence");
-  const testResumeBtn = document.getElementById("test-resume");
-  const manualConnectBtn = document.getElementById("manual-connect");
+function setupStorageViewer() {
   const viewStorageBtn = document.getElementById("view-storage");
-  const clearStorageBtn = document.getElementById("clear-storage");
 
-  testPersistenceBtn?.addEventListener("click", handleTestPersistence);
-  testResumeBtn?.addEventListener("click", handleTestResume);
-  manualConnectBtn?.addEventListener("click", handleManualConnect);
   viewStorageBtn?.addEventListener("click", handleViewStorage);
-  clearStorageBtn?.addEventListener("click", handleTestClearStorage);
 
   // Initial display update
-  updatePersistenceTestResults();
   updateStorageDisplay();
 }
 
@@ -833,38 +587,20 @@ function setupApp(element: HTMLDivElement) {
   setupOauthAuth();
   setupWalletActions();
   setupSessionControls();
-  setupPersistenceTesting(); // Add E2E testing
+  setupStorageViewer();
 
   // Handle OAuth redirect on page load
   handleOauthRedirectOnLoad();
 
   // Attempt graceful reconnection on page load
-  // Use a slight delay to let the app fully initialize
   setTimeout(async () => {
     try {
-      // Check if we have an Alchemy connector and if it's authorized
       const alchemyConnector = resolveAlchemyAuthConnector(config);
-      if (alchemyConnector) {
-        const isAuthorized = await alchemyConnector.isAuthorized();
-
-        if (isAuthorized) {
-          try {
-            await connect(config, { connector: alchemyConnector });
-          } catch (connectError) {
-            // If direct connect fails, try reconnect as fallback
-            const reconnectPromise = reconnect(config);
-            const timeoutPromise = new Promise((_, reject) => {
-              setTimeout(
-                () => reject(new Error("Reconnect timeout after 15s")),
-                15000,
-              );
-            });
-
-            await Promise.race([reconnectPromise, timeoutPromise]);
-          }
-        }
+      if (alchemyConnector && (await alchemyConnector.isAuthorized())) {
+        // If Alchemy connector is authorized, connect directly to it
+        await connect(config, { connector: alchemyConnector });
       } else {
-        // If no Alchemy connector, try standard reconnect
+        // Otherwise try standard reconnect for other connectors
         await reconnect(config);
       }
     } catch (error) {

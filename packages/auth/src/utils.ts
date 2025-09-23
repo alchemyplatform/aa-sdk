@@ -1,12 +1,10 @@
 import { sha256 } from "viem";
-import { z } from "zod";
 import type {
   AuthProviderConfig,
   AuthProviderCustomization,
   GetOauthProviderUrlArgs,
   KnownAuthProvider,
   OauthState,
-  User,
 } from "./types";
 
 const DEFAULT_PROVIDER_CUSTOMIZATION: Record<
@@ -242,29 +240,4 @@ export function getOauthProviderUrl(args: GetOauthProviderUrlArgs): string {
   const [urlPath, searchParams] = authUrl.href.split("?");
 
   return `${urlPath?.replace(/\/$/, "")}?${searchParams}`;
-}
-
-/**
- * Zod schema for validating User objects
- */
-const UserSchema = z.object({
-  email: z.string().optional(),
-  orgId: z.string(),
-  userId: z.string(),
-  address: z.string(),
-  solanaAddress: z.string().optional(),
-  credentialId: z.string().optional(),
-  idToken: z.string().optional(),
-  claims: z.record(z.unknown()).optional(),
-});
-
-/**
- * Type guard to validate User objects at runtime using Zod
- *
- * @param {any} obj - The object to validate as a User
- * @returns {obj is User} True if the object is a valid User, false otherwise
- */
-export function isValidUser(obj: any): obj is User {
-  const result = UserSchema.safeParse(obj);
-  return result.success;
 }

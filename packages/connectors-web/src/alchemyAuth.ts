@@ -1,18 +1,23 @@
-import { createConnector, type Storage } from "@wagmi/core";
+import { createConnector } from "@wagmi/core";
 import type { CreateConnectorFn } from "wagmi";
 import {
   createWebAuthClient,
   type WebAuthClientParams,
 } from "@alchemy/auth-web";
-import type { AuthClient, AuthSession, AuthSessionState } from "@alchemy/auth";
-import { isValidUser } from "@alchemy/auth";
+import type { AuthClient, AuthSession } from "@alchemy/auth";
 import {
   createWalletClient,
   type Address,
   type Client,
   type EIP1193Provider,
 } from "viem";
-import { z } from "zod";
+import {
+  getStoredAuthSession,
+  setStoredAuthSession,
+  clearStoredAuthSession,
+  getAuthStorageKey,
+  type PersistedAuthSession,
+} from "./store/authSessionStorage.js";
 
 export interface AlchemyAuthOptions
   extends Pick<
@@ -25,107 +30,6 @@ export interface AlchemyAuthOptions
   /** API key for authentication with Alchemy services */
   // TODO: remove this once we use alchemy transport. Optional for now to avoid unnecessary errors.
   apiKey?: string;
-}
-
-// Persistence types - minimal, versioned, encrypted snapshot for storage
-export type PersistedAuthSessionV1 = AuthSessionState & {
-  /** Version for migration handling */
-  v: 1;
-  /** Chain ID for connector-specific context */
-  chainId: number;
-};
-
-// Storage configuration
-const STORAGE_KEY = "alchemyAuth.authSession" as const;
-
-// Zod schema for validating persisted auth session
-const PersistedAuthSessionSchema = z.discriminatedUnion("type", [
-  z.object({
-    v: z.literal(1),
-    type: z.enum(["email", "oauth", "otp"]),
-    bundle: z.string(),
-    expirationDateMs: z.number(),
-    chainId: z.number(),
-    user: z.any().refine(isValidUser, "Invalid user object"),
-  }),
-  z.object({
-    v: z.literal(1),
-    type: z.literal("passkey"),
-    expirationDateMs: z.number(),
-    chainId: z.number(),
-    user: z.any().refine(isValidUser, "Invalid user object"),
-    credentialId: z.string().optional(),
-  }),
-]);
-
-// Type guard for runtime validation of persisted auth session using Zod
-function isPersistedAuthSession(obj: any): obj is PersistedAuthSessionV1 {
-  const result = PersistedAuthSessionSchema.safeParse(obj);
-  return result.success;
-}
-
-// Type-safe storage helpers
-async function getStoredAuthSession(
-  storage: Storage | null | undefined,
-): Promise<PersistedAuthSessionV1 | null> {
-  if (!storage) return null;
-
-  try {
-    const rawString = await storage.getItem(STORAGE_KEY);
-
-    if (!rawString || typeof rawString !== "string") return null;
-
-    const raw = JSON.parse(rawString);
-
-    if (!isPersistedAuthSession(raw)) {
-      // Clean up invalid data
-      await storage.removeItem(STORAGE_KEY);
-      console.warn("Removed invalid stored session data");
-      return null;
-    }
-
-    return raw;
-  } catch (error) {
-    console.warn("Failed to retrieve stored session:", error);
-    // Try to clean up potentially corrupted data
-    try {
-      await storage.removeItem(STORAGE_KEY);
-    } catch {}
-    return null;
-  }
-}
-
-async function setStoredAuthSession(
-  storage: Storage | null | undefined,
-  session: PersistedAuthSessionV1,
-): Promise<boolean> {
-  if (!storage) return false;
-
-  // Validate before storing
-  if (!isPersistedAuthSession(session)) {
-    console.error("Attempted to store invalid session data:", session);
-    return false;
-  }
-
-  try {
-    await storage.setItem(STORAGE_KEY, JSON.stringify(session));
-    return true;
-  } catch (error) {
-    console.warn("Failed to store session:", error);
-    return false;
-  }
-}
-
-async function clearStoredAuthSession(
-  storage: Storage | null | undefined,
-): Promise<void> {
-  if (!storage) return;
-
-  try {
-    await storage.removeItem(STORAGE_KEY);
-  } catch (error) {
-    console.warn("Failed to clear stored session:", error);
-  }
 }
 
 alchemyAuth.type = "alchemy-auth" as const;
@@ -159,8 +63,12 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
   let authSessionInstance: AuthSession | undefined;
   let authClientInstance: AuthClient | undefined;
   let currentChainId: number | undefined;
+
   // Cache clients by chainId to avoid recreating them unnecessarily.
   let clients: Record<number, Client> = {};
+
+  // Store reference to storage event listener for cleanup
+  let storageEventListener: ((e: StorageEvent) => void) | undefined;
 
   return createConnector<Provider, Properties>((config) => {
     function assertNotNullish<T>(
@@ -176,42 +84,54 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
 
     // Silent resume logic to try to restore auth session from storage
     async function tryResume(): Promise<boolean> {
-      if (authSessionInstance) return true;
+      if (authSessionInstance) {
+        return true;
+      }
 
       try {
         const persisted = await getStoredAuthSession(config.storage);
-        if (!persisted) return false;
-
-        // Check if session is still valid (not expired)
-        if (Date.now() >= persisted.expirationDateMs) {
-          await clearStoredAuthSession(config.storage);
+        if (!persisted) {
           return false;
         }
 
         // Attempt to restore the auth session
         const client = getAuthClient();
-        try {
-          const sessionStateJson = JSON.stringify(persisted);
-          authSessionInstance =
-            await client.restoreAuthSession(sessionStateJson);
+        // Pass the auth session state directly to restoreAuthSession
+        // The auth package will handle validation including expiration checks
+        authSessionInstance = await client.restoreAuthSession(
+          persisted.authSessionState,
+        );
 
-          if (authSessionInstance) {
-            currentChainId = persisted.chainId;
-            return true;
-          } else {
-            await config.storage?.removeItem(STORAGE_KEY);
-            return false;
-          }
-        } catch (loadError) {
-          await config.storage?.removeItem(STORAGE_KEY);
-          return false;
+        if (authSessionInstance) {
+          currentChainId = persisted.chainId;
+          return true;
         }
       } catch (error) {
-        try {
-          await config.storage?.removeItem(STORAGE_KEY);
-        } catch {}
-        return false;
+        // Error during restore - continue to cleanup
       }
+
+      // Session was expired, invalid, or error occurred - clean up
+      await clearStoredAuthSession(config.storage);
+      return false;
+    }
+
+    // Helper to persist current auth session state
+    async function persistAuthSession(chainId?: number): Promise<void> {
+      if (!authSessionInstance) return;
+
+      const resolvedChainId = chainId ?? currentChainId ?? config.chains[0]?.id;
+      assertNotNullish(
+        resolvedChainId,
+        "No chain ID available for persisting auth session. Please ensure currentChainId is set or configure chains in your wagmi config.",
+      );
+
+      const toPersist: PersistedAuthSession = {
+        version: 1,
+        chainId: resolvedChainId,
+        authSessionState: authSessionInstance.getSerializedState(),
+      };
+
+      await setStoredAuthSession(config.storage, toPersist);
     }
 
     function getAuthClient(): AuthClient {
@@ -243,11 +163,11 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
         // Set up cross-tab storage event handling for session synchronization
         // This ensures that when a user logs out in one tab, all other tabs
         // automatically disconnect to prevent stale authentication states
-        if (typeof window !== "undefined") {
-          const handleStorageChange = (e: StorageEvent) => {
+        if (typeof window !== "undefined" && !storageEventListener) {
+          storageEventListener = (e: StorageEvent) => {
             // The storage event fires when localStorage is modified in other tabs
             // (it doesn't fire in the same tab that made the change)
-            if (e.key?.endsWith(STORAGE_KEY) && e.newValue === null) {
+            if (e.key?.endsWith(getAuthStorageKey()) && e.newValue === null) {
               // Our auth session was cleared in another tab - disconnect this tab too
               // This prevents scenarios where Tab A logs out but Tab B stays "connected"
               // with a stale session that would fail on actual usage
@@ -255,11 +175,11 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
             }
           };
 
-          window.addEventListener("storage", handleStorageChange);
+          window.addEventListener("storage", storageEventListener);
         }
       },
 
-      async connect({ chainId } = {}) {
+      async connect({ chainId, isReconnecting } = {}) {
         // Perform session restoration here if needed
         if (!authSessionInstance) {
           await tryResume();
@@ -270,43 +190,18 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
           "No auth session available. Please authenticate first using sendEmailOtp and submitOtpCode, or loginWithOauth.",
         );
 
-        // Refresh persisted snapshot (e.g., new expiration after token refresh)
-        try {
-          // Get the real auth session state
-          const authSessionStateJson =
-            authSessionInstance!.getSerializedState();
-          const authSessionState: AuthSessionState =
-            JSON.parse(authSessionStateJson);
-
-          const toPersist: PersistedAuthSessionV1 =
-            authSessionState.type === "passkey"
-              ? {
-                  v: 1,
-                  type: "passkey",
-                  expirationDateMs: authSessionState.expirationDateMs,
-                  chainId: currentChainId || config.chains[0]?.id || 1,
-                  user: authSessionState.user,
-                  credentialId: authSessionState.credentialId,
-                }
-              : {
-                  v: 1,
-                  type: authSessionState.type,
-                  bundle: authSessionState.bundle,
-                  expirationDateMs: authSessionState.expirationDateMs,
-                  chainId: currentChainId || config.chains[0]?.id || 1,
-                  user: authSessionState.user,
-                };
-
-          const success = await setStoredAuthSession(config.storage, toPersist);
-          if (!success) {
-            console.warn("Failed to update persisted session during connect");
+        // Only refresh persisted snapshot on explicit connects, not reconnects
+        // During reconnection, we assume the persisted state is already current
+        if (!isReconnecting) {
+          try {
+            await persistAuthSession();
+          } catch (error) {
+            console.warn(
+              "Failed to update persisted session during connect:",
+              error,
+            );
+            // Don't throw - persistence failure shouldn't break connection
           }
-        } catch (error) {
-          console.warn(
-            "Failed to update persisted session during connect:",
-            error,
-          );
-          // Don't throw - persistence failure shouldn't break connection
         }
 
         const accounts = await this.getAccounts();
@@ -314,8 +209,12 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
           throw new Error("No accounts available from authSession");
         }
 
-        const resolvedChainId =
-          chainId ?? currentChainId ?? config.chains[0]?.id;
+        // During reconnection, prioritize the persisted chain ID to maintain session consistency
+        // For fresh connections, use the provided chainId parameter
+        const resolvedChainId = isReconnecting
+          ? (currentChainId ?? chainId ?? config.chains[0]?.id)
+          : (chainId ?? currentChainId ?? config.chains[0]?.id);
+
         assertNotNullish(
           resolvedChainId,
           "No chain ID available. Please provide a chainId parameter or configure chains in your wagmi config.",
@@ -349,6 +248,12 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
           currentChainId = undefined;
           clients = {};
 
+          // Remove storage event listener to prevent memory leaks
+          if (typeof window !== "undefined" && storageEventListener) {
+            window.removeEventListener("storage", storageEventListener);
+            storageEventListener = undefined;
+          }
+
           // Clear persisted storage
           await clearStoredAuthSession(config.storage);
         }
@@ -361,7 +266,6 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
         }
 
         const address = authSessionInstance.getAddress();
-
         return [address];
       },
 
@@ -422,10 +326,12 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
       },
 
       async isAuthorized(): Promise<boolean> {
-        if (authSessionInstance) return true;
+        if (authSessionInstance) {
+          return true;
+        }
 
         const stored = await getStoredAuthSession(config.storage);
-        return !!stored && Date.now() < stored.expirationDateMs;
+        return !!stored;
       },
 
       async switchChain({ chainId }) {
@@ -435,6 +341,14 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
           targetChain,
           `Chain with id ${chainId} not found in config`,
         );
+
+        // Persist the chain change if we have an active session
+        try {
+          await persistAuthSession(chainId);
+        } catch (error) {
+          console.warn("Failed to persist chain change:", error);
+          // Don't throw - chain switch should still work even if persistence fails
+        }
 
         config.emitter.emit("change", {
           chainId,
@@ -487,36 +401,10 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
         authSessionInstance = authSession;
 
         // Persist session state immediately
-        try {
-          // Get the real auth session state
-          const authSessionStateJson = authSession.getSerializedState();
-          const authSessionState: AuthSessionState =
-            JSON.parse(authSessionStateJson);
-
-          const toPersist: PersistedAuthSessionV1 =
-            authSessionState.type === "passkey"
-              ? {
-                  v: 1,
-                  type: "passkey",
-                  expirationDateMs: authSessionState.expirationDateMs,
-                  chainId: currentChainId || config.chains[0]?.id || 1,
-                  user: authSessionState.user,
-                  credentialId: authSessionState.credentialId,
-                }
-              : {
-                  v: 1,
-                  type: authSessionState.type,
-                  bundle: authSessionState.bundle,
-                  expirationDateMs: authSessionState.expirationDateMs,
-                  chainId: currentChainId || config.chains[0]?.id || 1,
-                  user: authSessionState.user,
-                };
-
-          void setStoredAuthSession(config.storage, toPersist);
-        } catch (error) {
+        void persistAuthSession().catch((error) => {
           console.warn("Failed to persist auth session:", error);
           // Don't throw - persistence failure shouldn't break auth flow
-        }
+        });
       },
     };
   });
