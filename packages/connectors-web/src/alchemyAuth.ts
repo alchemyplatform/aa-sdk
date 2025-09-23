@@ -232,27 +232,21 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
 
       async setup() {
         // Set up cross-tab storage event handling for session synchronization
+        // This ensures that when a user logs out in one tab, all other tabs
+        // automatically disconnect to prevent stale authentication states
         if (typeof window !== "undefined") {
           const handleStorageChange = (e: StorageEvent) => {
-            // Check if our auth session storage key was modified
+            // The storage event fires when localStorage is modified in other tabs
+            // (it doesn't fire in the same tab that made the change)
             if (e.key?.endsWith(STORAGE_KEY) && e.newValue === null) {
-              // Storage was cleared in another tab - disconnect this tab too
-              console.log(
-                "Auth session cleared in another tab, disconnecting...",
-              );
+              // Our auth session was cleared in another tab - disconnect this tab too
+              // This prevents scenarios where Tab A logs out but Tab B stays "connected"
+              // with a stale session that would fail on actual usage
               void this.disconnect();
             }
           };
 
           window.addEventListener("storage", handleStorageChange);
-
-          // Store cleanup function for potential future use
-          // (wagmi doesn't currently call a cleanup method on connectors)
-          if (!(window as any).__alchemyAuthStorageCleanup) {
-            (window as any).__alchemyAuthStorageCleanup = () => {
-              window.removeEventListener("storage", handleStorageChange);
-            };
-          }
         }
       },
 
