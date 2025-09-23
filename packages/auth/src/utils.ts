@@ -1,4 +1,4 @@
-import { OAuthProvidersNotFoundError } from "./errors";
+import { OAuthProvidersNotFoundError } from "./errors.js";
 import { sha256 } from "viem";
 import type {
   AuthProviderConfig,
@@ -62,7 +62,7 @@ const DEFAULT_PROVIDER_CUSTOMIZATION: Record<
  * @returns {AuthProviderCustomization | undefined} default customization parameters
  */
 export function getDefaultProviderCustomization(
-  knownAuthProviderId: KnownAuthProvider
+  knownAuthProviderId: KnownAuthProvider,
 ): AuthProviderCustomization | undefined {
   return DEFAULT_PROVIDER_CUSTOMIZATION[knownAuthProviderId];
 }
@@ -84,7 +84,7 @@ export function getOauthNonce(turnkeyPublicKey: string): string {
  * @returns {string} Base64 URL encoded string
  */
 export function base64UrlEncode(
-  challenge: ArrayBuffer | Uint8Array | string
+  challenge: ArrayBuffer | Uint8Array | string,
 ): string {
   let bytes: Uint8Array;
 
@@ -129,7 +129,7 @@ export function resolveRelativeUrl(url: string): string {
  * as the input whose values are the values of the query params.
  */
 function getAndRemoveQueryParams<T extends Record<string, string>>(
-  keys: T
+  keys: T,
 ): { [K in keyof T]: string | undefined } {
   const url = new URL(window.location.href);
   const result: Record<string, string | undefined> = {};
@@ -303,7 +303,7 @@ export function getOauthProviderUrl(args: GetOauthProviderUrlArgs): string {
 
   if (!isCustomProvider) {
     const defaultCustomization = getDefaultProviderCustomization(
-      authProviderId as KnownAuthProvider
+      authProviderId as KnownAuthProvider,
     );
     scope ??= defaultCustomization?.scope;
     claims ??= defaultCustomization?.claims;
@@ -331,7 +331,7 @@ export function getOauthProviderUrl(args: GetOauthProviderUrlArgs): string {
     fetchIdTokenOnly: oauthParams.fetchIdTokenOnly,
   };
   const state = base64UrlEncode(
-    new TextEncoder().encode(JSON.stringify(stateObject))
+    new TextEncoder().encode(JSON.stringify(stateObject)),
   );
   const authUrl = new URL(authEndpoint);
   const params: Record<string, string> = {
