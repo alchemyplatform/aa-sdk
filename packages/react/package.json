@@ -49,13 +49,12 @@
   },
   "dependencies": {
     "@alchemy/common": "*",
-    "@alchemy/wagmi-core": "*",
-    "viem": "2.29.2"
+    "@alchemy/wagmi-core": "*"
   },
   "peerDependencies": {
     "@tanstack/react-query": "^5.28.9",
-    "react": "^19",
-    "react-dom": "^19",
+    "react": ">=18",
+    "react-dom": ">=18",
     "viem": "^2",
     "wagmi": "^2"
   },
