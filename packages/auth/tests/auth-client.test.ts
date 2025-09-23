@@ -92,7 +92,7 @@ describe("AuthClient", () => {
     vi.mocked(dev_request).mockResolvedValue(mockUser);
   });
 
-  describe("loadAuthSessionState", () => {
+  describe("restoreAuthSession", () => {
     it("should load valid OAuth session state", async () => {
       const validOAuthState: AuthSessionState = {
         type: "oauth",
@@ -101,7 +101,7 @@ describe("AuthClient", () => {
         user: mockUser,
       };
 
-      const authSession = await authClient.loadAuthSessionState(
+      const authSession = await authClient.restoreAuthSession(
         JSON.stringify(validOAuthState),
       );
 
@@ -129,7 +129,7 @@ describe("AuthClient", () => {
         user: mockUser,
       };
 
-      const authSession = await authClient.loadAuthSessionState(
+      const authSession = await authClient.restoreAuthSession(
         JSON.stringify(validOtpState),
       );
 
@@ -157,7 +157,7 @@ describe("AuthClient", () => {
         user: mockUser,
       };
 
-      const authSession = await authClient.loadAuthSessionState(
+      const authSession = await authClient.restoreAuthSession(
         JSON.stringify(validEmailState),
       );
 
@@ -197,7 +197,7 @@ describe("AuthClient", () => {
         credentialId: "test-passkey-credential",
       };
 
-      const authSession = await authClient.loadAuthSessionState(
+      const authSession = await authClient.restoreAuthSession(
         JSON.stringify(validPasskeyState),
       );
 
@@ -218,7 +218,7 @@ describe("AuthClient", () => {
       };
 
       await expect(
-        authClient.loadAuthSessionState(JSON.stringify(invalidPasskeyState)),
+        authClient.restoreAuthSession(JSON.stringify(invalidPasskeyState)),
       ).rejects.toThrow("Credential ID is required for passkey authentication");
     });
 
@@ -230,7 +230,7 @@ describe("AuthClient", () => {
         user: mockUser,
       };
 
-      const authSession = await authClient.loadAuthSessionState(
+      const authSession = await authClient.restoreAuthSession(
         JSON.stringify(expiredState),
       );
 
@@ -252,7 +252,7 @@ describe("AuthClient", () => {
       };
 
       await expect(
-        authClient.loadAuthSessionState(JSON.stringify(validState)),
+        authClient.restoreAuthSession(JSON.stringify(validState)),
       ).rejects.toThrow("Failed to inject credential bundle");
     });
   });

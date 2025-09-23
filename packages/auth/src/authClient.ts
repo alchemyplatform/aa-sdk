@@ -1,5 +1,6 @@
 import { AuthSession } from "./authSession.js";
 import type {
+  AuthSessionState,
   AuthType,
   CreateTekStamperFn,
   CreateWebAuthnStamperFn,
@@ -8,6 +9,33 @@ import type {
 } from "./types.js";
 import { dev_request } from "./devRequest.js";
 import { getOauthNonce, getOauthProviderUrl } from "./utils.js";
+import { z } from "zod";
+
+const UserSchema = z.object({
+  email: z.string().optional(),
+  orgId: z.string(),
+  userId: z.string(),
+  address: z.string(),
+  solanaAddress: z.string().optional(),
+  credentialId: z.string().optional(),
+  idToken: z.string().optional(),
+  claims: z.record(z.unknown()).optional(),
+});
+
+const AuthSessionStateSchema = z.discriminatedUnion("type", [
+  z.object({
+    type: z.literal("passkey"),
+    user: UserSchema,
+    expirationDateMs: z.number(),
+    credentialId: z.string().optional(),
+  }),
+  z.object({
+    type: z.enum(["email", "oauth", "otp"]),
+    bundle: z.string(),
+    user: UserSchema,
+    expirationDateMs: z.number(),
+  }),
+]);
 
 /**
  * Configuration parameters for creating an AuthClient instance
@@ -412,7 +440,7 @@ export class AuthClient {
    * Creates an instance of AuthSession from a previously saved authentication session state that has not expired.
    *
    * This method takes a JSON string representation of a serialized AuthSessionState (typically obtained
-   * from AuthSession.getAuthSessionState()) and attempts to restore the authentication session.
+   * from AuthSession.getSerializedState()) and attempts to restore the authentication session.
    * The method will validate the session expiration and handle different authentication types appropriately.
    *
    * @param {string} state - The serialized authentication session state as a JSON string
@@ -426,7 +454,7 @@ export class AuthClient {
    * // Restore a session from stored JSON string
    * const sessionJson = localStorage.getItem('authSession');
    * if (sessionJson) {
-   *   const authSession = await authClient.loadAuthSessionState(sessionJson);
+   *   const authSession = await authClient.restoreAuthSession(sessionJson);
    *   if (authSession) {
    *     console.log('Session restored successfully');
    *   } else {
@@ -435,10 +463,10 @@ export class AuthClient {
    * }
    * ```
    */
-  public async loadAuthSessionState(
+  public async restoreAuthSession(
     state: string,
   ): Promise<AuthSession | undefined> {
-    const parsedState = JSON.parse(state);
+    const parsedState: AuthSessionState = this.deserializeState(state);
 
     const { type, expirationDateMs, user } = parsedState;
     if (expirationDateMs < Date.now()) {
@@ -503,6 +531,19 @@ export class AuthClient {
       })();
     }
     return this.tekStamperPromise;
+  }
+
+  private deserializeState(serializedState: string): AuthSessionState {
+    let parsedState = undefined;
+    try {
+      parsedState = JSON.parse(serializedState);
+    } catch (error) {
+      throw new Error("Failed to parse serialized state into JSON format");
+    }
+    const result = AuthSessionStateSchema.safeParse(parsedState);
+    if (!result.success)
+      throw new Error("Parsed state is not of type AuthSessionState");
+    return parsedState;
   }
 
   // TODO: remove this and use transport instead once it's ready.

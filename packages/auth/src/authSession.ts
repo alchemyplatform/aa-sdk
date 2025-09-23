@@ -13,6 +13,7 @@ import {
 import type {
   AddOauthProviderParams,
   AuthMethods,
+  AuthSessionState,
   AuthType,
   OauthProviderInfo,
   PasskeyInfo,
@@ -87,7 +88,7 @@ export type SignMessageParams = {
  * });
  *
  * const signature = await authSession.signMessage({ message: "Hello World" });
- * const sessionState = authSession.getAuthSessionState();
+ * const sessionState = authSession.getSerializedState();
  * ```
  */
 export class AuthSession {
@@ -144,8 +145,7 @@ export class AuthSession {
     const whoamiResponse = await dev_request(apiKey, "whoami", {
       stampedRequest,
     });
-    // TODO: combine whoami response with idToken to get the full user object.
-    // For now, just return the whoami response.
+    // TODO: eventually read email out of the id token to display as the user name
     const user = {
       ...whoamiResponse,
       idToken,
@@ -405,50 +405,53 @@ export class AuthSession {
    * credential IDs (for passkey auth), and expiration time.
    *
    * The serialized state can be stored and later used to restore the session
-   * using AuthClient.loadAuthSessionState().
+   * using AuthClient.restoreAuthSession().
    *
    * @returns {string} A JSON string containing the serialized session state
    *
    * @example
    * ```ts twoslash
-   * const sessionState = authSession.getAuthSessionState();
+   * const sessionState = authSession.getSerializedState();
    * localStorage.setItem('authSession', sessionState);
    *
    * // Later restore:
    * const savedState = localStorage.getItem('authSession');
    * if (savedState) {
-   *   const restoredSession = await authClient.loadAuthSessionState(JSON.parse(savedState));
+   *   const restoredSession = await authClient.restoreAuthSession(JSON.parse(savedState));
    * }
    * ```
    */
-  public getAuthSessionState(): string {
+  public getSerializedState(): string {
     this.throwIfDisconnected();
 
     // Calculate expiration time (24 hours from now as default)
+    // TODO: update the expiration date to be user defined once expiration handling is implemented
     const expirationDateMs = Date.now() + 24 * 60 * 60 * 1000;
 
     // Use stored authType or default to "otp" for backward compatibility
     const type = this.authType || "otp";
 
     if (type === "passkey") {
-      return JSON.stringify({
+      const state: AuthSessionState = {
         type: "passkey",
         user: this.user,
         expirationDateMs,
         credentialId: this.credentialId,
-      });
+      };
+      return JSON.stringify(state);
     } else {
       if (!this.bundle) {
         throw new Error(
           "Bundle is required for non-passkey authentication types",
         );
       }
-      return JSON.stringify({
+      const state: AuthSessionState = {
         type,
         bundle: this.bundle,
         user: this.user,
         expirationDateMs,
-      });
+      };
+      return JSON.stringify(state);
     }
   }
 
