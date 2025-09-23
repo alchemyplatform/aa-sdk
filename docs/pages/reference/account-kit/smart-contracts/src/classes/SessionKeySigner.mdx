@@ -5,7 +5,7 @@ slug: wallets/reference/account-kit/smart-contracts/src/classes/SessionKeySigner
 layout: reference
 ---
 
-Defined in: [account-kit/smart-contracts/src/msca/plugins/session-key/signer.ts:28](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/msca/plugins/session-key/signer.ts#L28)
+Defined in: [account-kit/smart-contracts/src/msca/plugins/session-key/signer.ts:28](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/account-kit/smart-contracts/src/msca/plugins/session-key/signer.ts#L28)
 
 A simple session key signer that uses localStorage or sessionStorage to store
 a private key. If the key is not found, it will generate a new one and store
@@ -23,7 +23,7 @@ it in the storage.
 new SessionKeySigner(config_): SessionKeySigner;
 ```
 
-Defined in: [account-kit/smart-contracts/src/msca/plugins/session-key/signer.ts:48](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/msca/plugins/session-key/signer.ts#L48)
+Defined in: [account-kit/smart-contracts/src/msca/plugins/session-key/signer.ts:48](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/account-kit/smart-contracts/src/msca/plugins/session-key/signer.ts#L48)
 
 Initializes a new instance of a session key signer with the provided configuration. This will set the `signerType`, `storageKey`, and `storageType`. It will also manage the session key, either fetching it from storage or generating a new one if it doesn't exist.
 
@@ -132,7 +132,7 @@ const signer = new SessionKeySigner();
       </td>
 
       <td>
-        [account-kit/smart-contracts/src/msca/plugins/session-key/signer.ts:88](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/msca/plugins/session-key/signer.ts#L88)
+        [account-kit/smart-contracts/src/msca/plugins/session-key/signer.ts:88](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/account-kit/smart-contracts/src/msca/plugins/session-key/signer.ts#L88)
       </td>
     </tr>
 
@@ -150,7 +150,7 @@ const signer = new SessionKeySigner();
       </td>
 
       <td>
-        [account-kit/smart-contracts/src/msca/plugins/session-key/signer.ts:32](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/msca/plugins/session-key/signer.ts#L32)
+        [account-kit/smart-contracts/src/msca/plugins/session-key/signer.ts:32](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/account-kit/smart-contracts/src/msca/plugins/session-key/signer.ts#L32)
       </td>
     </tr>
 
@@ -168,7 +168,7 @@ const signer = new SessionKeySigner();
       </td>
 
       <td>
-        [account-kit/smart-contracts/src/msca/plugins/session-key/signer.ts:31](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/msca/plugins/session-key/signer.ts#L31)
+        [account-kit/smart-contracts/src/msca/plugins/session-key/signer.ts:31](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/account-kit/smart-contracts/src/msca/plugins/session-key/signer.ts#L31)
       </td>
     </tr>
 
@@ -195,7 +195,7 @@ const signer = new SessionKeySigner();
       </td>
 
       <td>
-        [account-kit/smart-contracts/src/msca/plugins/session-key/signer.ts:106](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/msca/plugins/session-key/signer.ts#L106)
+        [account-kit/smart-contracts/src/msca/plugins/session-key/signer.ts:106](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/account-kit/smart-contracts/src/msca/plugins/session-key/signer.ts#L106)
       </td>
     </tr>
 
@@ -210,7 +210,7 @@ const signer = new SessionKeySigner();
 generateNewKey(): `0x${string}`;
 ```
 
-Defined in: [account-kit/smart-contracts/src/msca/plugins/session-key/signer.ts:157](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/msca/plugins/session-key/signer.ts#L157)
+Defined in: [account-kit/smart-contracts/src/msca/plugins/session-key/signer.ts:157](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/account-kit/smart-contracts/src/msca/plugins/session-key/signer.ts#L157)
 
 Generates a new private key and stores it in the storage.
 
@@ -237,7 +237,7 @@ The public address of the new key.
 signTypedData<TTypedData, TPrimaryType>(params): Promise<`0x${string}`>;
 ```
 
-Defined in: [account-kit/smart-contracts/src/msca/plugins/session-key/signer.ts:135](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/smart-contracts/src/msca/plugins/session-key/signer.ts#L135)
+Defined in: [account-kit/smart-contracts/src/msca/plugins/session-key/signer.ts:135](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/account-kit/smart-contracts/src/msca/plugins/session-key/signer.ts#L135)
 
 Signs the provided typed data using the inner signer.
 

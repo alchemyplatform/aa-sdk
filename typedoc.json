@@ -107,7 +107,7 @@
   "classPropertiesFormat": "htmlTable",
   "typeAliasPropertiesFormat": "htmlTable",
   "enumMembersFormat": "htmlTable",
-  "propertyMembersFormat": "htmlTable",
+  "propertyMembersFormat": "list",
   "typeDeclarationFormat": "htmlTable",
   "indexFormat": "htmlTable",
   "tableColumnSettings": {

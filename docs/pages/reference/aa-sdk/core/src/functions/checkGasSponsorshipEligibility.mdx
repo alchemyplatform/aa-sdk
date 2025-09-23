@@ -20,7 +20,7 @@ function checkGasSponsorshipEligibility<TTransport, TChain, TAccount, TContext>(
 >;
 ```
 
-Defined in: [aa-sdk/core/src/actions/smartAccount/checkGasSponsorshipEligibility.ts:56](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/actions/smartAccount/checkGasSponsorshipEligibility.ts#L56)
+Defined in: [aa-sdk/core/src/actions/smartAccount/checkGasSponsorshipEligibility.ts:56](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/aa-sdk/core/src/actions/smartAccount/checkGasSponsorshipEligibility.ts#L56)
 
 This function verifies the eligibility of the connected account for gas sponsorship concerning the upcoming `UserOperation` (UO) that is intended to be sent.
 Internally, this method invokes `buildUserOperation`, which navigates through the middleware pipeline, including the `PaymasterMiddleware`. Its purpose is to construct the UO struct meant for transmission to the bundler. Following the construction of the UO struct, this function verifies if the resulting structure contains a non-empty `paymasterAndData` field.

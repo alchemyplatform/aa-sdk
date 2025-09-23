@@ -9,7 +9,7 @@ layout: reference
 function useBundlerClient(): any;
 ```
 
-Defined in: [account-kit/react/src/hooks/useBundlerClient.ts:25](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/account-kit/react/src/hooks/useBundlerClient.ts#L25)
+Defined in: [account-kit/react/src/hooks/useBundlerClient.ts:25](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/account-kit/react/src/hooks/useBundlerClient.ts#L25)
 
 Custom [hook](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useBundlerClient.ts) to get a bundler client using the Alchemy account context.
 It uses `useSyncExternalStore` to watch for any changes in the bundler client configuration and provides the updated bundler client. React hooks don’t handle their own state management directly, so they rely on external stores, like `useSyncExternalStore`, to manage state. `useBundlerClient`’s only job is to call the bundler JSON RPC methods directly; it does not do additional processing, unlike `useSmartAccountClient`. For example, if you call `sendUserOperation`, it expects a fully formed user operation.

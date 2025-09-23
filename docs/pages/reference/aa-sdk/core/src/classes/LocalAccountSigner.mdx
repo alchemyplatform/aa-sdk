@@ -5,7 +5,7 @@ slug: wallets/reference/aa-sdk/core/src/classes/LocalAccountSigner
 layout: reference
 ---
 
-Defined in: [aa-sdk/core/src/signer/local-account.ts:22](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/signer/local-account.ts#L22)
+Defined in: [aa-sdk/core/src/signer/local-account.ts:22](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/aa-sdk/core/src/signer/local-account.ts#L22)
 
 Represents a local account signer and provides methods to sign messages and transactions, as well as static methods to create the signer from mnemonic or private key.
 
@@ -39,7 +39,7 @@ Represents a local account signer and provides methods to sign messages and tran
 new LocalAccountSigner<T>(inner): LocalAccountSigner<T>;
 ```
 
-Defined in: [aa-sdk/core/src/signer/local-account.ts:44](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/signer/local-account.ts#L44)
+Defined in: [aa-sdk/core/src/signer/local-account.ts:44](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/aa-sdk/core/src/signer/local-account.ts#L44)
 
 A function to initialize an object with an inner parameter and derive a signerType from it.
 
@@ -119,7 +119,7 @@ const signer = new LocalAccountSigner(
       </td>
 
       <td>
-        [aa-sdk/core/src/signer/local-account.ts:26](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/signer/local-account.ts#L26)
+        [aa-sdk/core/src/signer/local-account.ts:26](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/aa-sdk/core/src/signer/local-account.ts#L26)
       </td>
     </tr>
 
@@ -141,7 +141,7 @@ const signer = new LocalAccountSigner(
       </td>
 
       <td>
-        [aa-sdk/core/src/signer/local-account.ts:27](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/signer/local-account.ts#L27)
+        [aa-sdk/core/src/signer/local-account.ts:27](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/aa-sdk/core/src/signer/local-account.ts#L27)
       </td>
     </tr>
 
@@ -173,7 +173,7 @@ const signer = new LocalAccountSigner(
       </td>
 
       <td>
-        [aa-sdk/core/src/signer/local-account.ts:64](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/signer/local-account.ts#L64)
+        [aa-sdk/core/src/signer/local-account.ts:64](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/aa-sdk/core/src/signer/local-account.ts#L64)
       </td>
     </tr>
 
@@ -188,7 +188,7 @@ const signer = new LocalAccountSigner(
 readonly getAddress(): Promise<`0x${string}`>;
 ```
 
-Defined in: [aa-sdk/core/src/signer/local-account.ts:140](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/signer/local-account.ts#L140)
+Defined in: [aa-sdk/core/src/signer/local-account.ts:140](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/aa-sdk/core/src/signer/local-account.ts#L140)
 
 Returns the address of the inner object in a specific hexadecimal format.
 
@@ -221,7 +221,7 @@ A promise that resolves to the address in the format `0x{string}`
 signAuthorization(this, unsignedAuthorization): Promise<SignedAuthorization<number>>;
 ```
 
-Defined in: [aa-sdk/core/src/signer/local-account.ts:119](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/signer/local-account.ts#L119)
+Defined in: [aa-sdk/core/src/signer/local-account.ts:119](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/aa-sdk/core/src/signer/local-account.ts#L119)
 
 Signs an unsigned authorization using the provided private key account.
 
@@ -301,7 +301,7 @@ A promise that resolves to the signed authorization.
 readonly signTypedData<TTypedData, TPrimaryType>(params): Promise<`0x${string}`>;
 ```
 
-Defined in: [aa-sdk/core/src/signer/local-account.ts:90](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/signer/local-account.ts#L90)
+Defined in: [aa-sdk/core/src/signer/local-account.ts:90](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/aa-sdk/core/src/signer/local-account.ts#L90)
 
 Signs typed data using the given parameters.
 
@@ -620,7 +620,7 @@ static generatePrivateKeySigner(): LocalAccountSigner<{
 }>;
 ```
 
-Defined in: [aa-sdk/core/src/signer/local-account.ts:200](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/signer/local-account.ts#L200)
+Defined in: [aa-sdk/core/src/signer/local-account.ts:200](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/aa-sdk/core/src/signer/local-account.ts#L200)
 
 Generates a new private key and creates a `LocalAccountSigner` for a `PrivateKeyAccount`.
 
@@ -669,7 +669,7 @@ static mnemonicToAccountSigner(key, opts?): LocalAccountSigner<{
 }>;
 ```
 
-Defined in: [aa-sdk/core/src/signer/local-account.ts:159](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/signer/local-account.ts#L159)
+Defined in: [aa-sdk/core/src/signer/local-account.ts:159](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/aa-sdk/core/src/signer/local-account.ts#L159)
 
 Creates a LocalAccountSigner using the provided mnemonic key and optional HD options.
 
@@ -762,7 +762,7 @@ static privateKeyToAccountSigner(key): LocalAccountSigner<{
 }>;
 ```
 
-Defined in: [aa-sdk/core/src/signer/local-account.ts:181](https://github.com/alchemyplatform/aa-sdk/blob/da19afd63b0ba06a4de95b0d2d7871f64d546304/aa-sdk/core/src/signer/local-account.ts#L181)
+Defined in: [aa-sdk/core/src/signer/local-account.ts:181](https://github.com/alchemyplatform/aa-sdk/blob/08da565ff1e1b5bcae4581d79993c4ed9e522c16/aa-sdk/core/src/signer/local-account.ts#L181)
 
 Creates a `LocalAccountSigner` instance using the provided private key.
 

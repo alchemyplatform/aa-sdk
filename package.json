@@ -54,9 +54,7 @@
     "docs:dev": "./docs/scripts/docs-dev.sh",
     "docs:broken-links": "lychee docs --root-dir /docs",
     "version": "yarn build:libs",
-    "docs:typedoc": "typedoc",
-    "docs:yaml": "npx tsx scripts/generate-typedoc-yaml.ts",
-    "docs:sdk": "yarn docs:typedoc && yarn docs:yaml"
+    "docs:sdk": "typedoc && tsx scripts/generate-typedoc-yaml.ts"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.6.3",
