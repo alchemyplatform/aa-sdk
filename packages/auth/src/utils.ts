@@ -1,3 +1,4 @@
+import { OAuthProvidersNotFoundError } from "./errors";
 import { sha256 } from "viem";
 import type {
   AuthProviderConfig,
@@ -6,6 +7,33 @@ import type {
   KnownAuthProvider,
   OauthState,
 } from "./types";
+import { z } from "zod";
+
+export const UserSchema = z.object({
+  email: z.string().optional(),
+  orgId: z.string(),
+  userId: z.string(),
+  address: z.string(),
+  solanaAddress: z.string().optional(),
+  credentialId: z.string().optional(),
+  idToken: z.string().optional(),
+  claims: z.record(z.unknown()).optional(),
+});
+
+export const AuthSessionStateSchema = z.discriminatedUnion("type", [
+  z.object({
+    type: z.literal("passkey"),
+    user: UserSchema,
+    expirationDateMs: z.number(),
+    credentialId: z.string().optional(),
+  }),
+  z.object({
+    type: z.enum(["email", "oauth", "otp"]),
+    bundle: z.string(),
+    user: UserSchema,
+    expirationDateMs: z.number(),
+  }),
+]);
 
 const DEFAULT_PROVIDER_CUSTOMIZATION: Record<
   KnownAuthProvider,
@@ -34,7 +62,7 @@ const DEFAULT_PROVIDER_CUSTOMIZATION: Record<
  * @returns {AuthProviderCustomization | undefined} default customization parameters
  */
 export function getDefaultProviderCustomization(
-  knownAuthProviderId: KnownAuthProvider,
+  knownAuthProviderId: KnownAuthProvider
 ): AuthProviderCustomization | undefined {
   return DEFAULT_PROVIDER_CUSTOMIZATION[knownAuthProviderId];
 }
@@ -56,7 +84,7 @@ export function getOauthNonce(turnkeyPublicKey: string): string {
  * @returns {string} Base64 URL encoded string
  */
 export function base64UrlEncode(
-  challenge: ArrayBuffer | Uint8Array | string,
+  challenge: ArrayBuffer | Uint8Array | string
 ): string {
   let bytes: Uint8Array;
 
@@ -92,11 +120,103 @@ export function resolveRelativeUrl(url: string): string {
   return a.href;
 }
 
-export class OAuthProvidersError extends Error {
-  override name = "OAuthProvidersError";
-  constructor() {
-    super("OAuth providers not found");
+/**
+ * Reads and removes the specified query params from the URL.
+ *
+ * @param {T} keys object whose values are the query parameter keys to read and
+ * remove
+ * @returns {{ [K in keyof T]: string | undefined }} object with the same keys
+ * as the input whose values are the values of the query params.
+ */
+function getAndRemoveQueryParams<T extends Record<string, string>>(
+  keys: T
+): { [K in keyof T]: string | undefined } {
+  const url = new URL(window.location.href);
+  const result: Record<string, string | undefined> = {};
+  let foundQueryParam = false;
+  for (const [key, param] of Object.entries(keys)) {
+    const value = url.searchParams.get(param) ?? undefined;
+    foundQueryParam ||= value != null;
+    result[key] = value;
+    url.searchParams.delete(param);
   }
+  if (foundQueryParam) {
+    window.history.replaceState(window.history.state, "", url.toString());
+  }
+  return result as { [K in keyof T]: string | undefined };
+}
+
+/**
+ * Attempts to extract OAuth callback parameters from the current URL.
+ * Returns the extracted parameters if this appears to be an OAuth callback,
+ * or null if no OAuth parameters are found.
+ *
+ * @returns {object | null} OAuth callback parameters or null if not a callback
+ */
+export function extractOAuthCallbackParams() {
+  const qpStructure = {
+    status: "alchemy-status",
+    oauthBundle: "alchemy-bundle",
+    oauthOrgId: "alchemy-org-id",
+    idToken: "alchemy-id-token",
+    isSignup: "aa-is-signup",
+    otpId: "alchemy-otp-id",
+    email: "alchemy-email",
+    authProvider: "alchemy-auth-provider",
+    oauthError: "alchemy-error",
+  };
+
+  const {
+    status,
+    oauthBundle,
+    oauthOrgId,
+    idToken,
+    isSignup,
+    otpId,
+    email,
+    authProvider,
+    oauthError,
+  } = getAndRemoveQueryParams(qpStructure);
+
+  // Check if this is an OAuth callback by looking for required OAuth parameters
+  if (oauthBundle && oauthOrgId && idToken) {
+    return {
+      status: "SUCCESS" as const,
+      bundle: oauthBundle,
+      orgId: oauthOrgId,
+      idToken,
+      isSignup: isSignup === "true",
+    };
+  }
+
+  // Check for OAuth error
+  if (oauthError) {
+    return {
+      status: "ERROR" as const,
+      error: oauthError,
+    };
+  }
+
+  // Check for account linking prompt
+  if (
+    status === "ACCOUNT_LINKING_CONFIRMATION_REQUIRED" &&
+    idToken &&
+    email &&
+    authProvider &&
+    otpId &&
+    oauthOrgId
+  ) {
+    return {
+      status: "ACCOUNT_LINKING_CONFIRMATION_REQUIRED" as const,
+      idToken,
+      email,
+      providerName: authProvider,
+      otpId,
+      orgId: oauthOrgId,
+    };
+  }
+
+  return null;
 }
 
 /**
@@ -157,7 +277,7 @@ export function getOauthProviderUrl(args: GetOauthProviderUrlArgs): string {
   const { codeChallenge, requestKey, authProviders } = oauthConfig;
 
   if (!authProviders) {
-    throw new OAuthProvidersError();
+    throw new OAuthProvidersNotFoundError();
   }
 
   let authProvider: AuthProviderConfig | undefined;
@@ -183,7 +303,7 @@ export function getOauthProviderUrl(args: GetOauthProviderUrlArgs): string {
 
   if (!isCustomProvider) {
     const defaultCustomization = getDefaultProviderCustomization(
-      authProviderId as KnownAuthProvider,
+      authProviderId as KnownAuthProvider
     );
     scope ??= defaultCustomization?.scope;
     claims ??= defaultCustomization?.claims;
@@ -211,7 +331,7 @@ export function getOauthProviderUrl(args: GetOauthProviderUrlArgs): string {
     fetchIdTokenOnly: oauthParams.fetchIdTokenOnly,
   };
   const state = base64UrlEncode(
-    new TextEncoder().encode(JSON.stringify(stateObject)),
+    new TextEncoder().encode(JSON.stringify(stateObject))
   );
   const authUrl = new URL(authEndpoint);
   const params: Record<string, string> = {
