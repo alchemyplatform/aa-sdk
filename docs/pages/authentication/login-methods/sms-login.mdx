@@ -22,7 +22,7 @@ The SDK will handle phone number validation, code generation, and delivery autom
 
 We support all major countries across Europe, Asia, North and South America.
 
-Pricing varies by country and requires specific area codes to be enabled for your account. An overview of the current SMS costs can be found below.
+Pricing varies by country and requires specific area codes to be enabled for your account.
 
 ## Prerequisites
 
@@ -40,7 +40,7 @@ Pricing varies by country and requires specific area codes to be enabled for you
         SMS auth is not yet supported with pre-built UI components. Please follow [this guide](/wallets/pages/react/react-hooks) to set up custom UI and configure authentication with hooks.
         </Info>
         ### Step 1: Send the SMS verification code
-        Ensure you pass the phone number including the country code in the format `+<country code><phone number>`.
+        Ensure you pass the phone number including the country code in the format `+<country code><phone number>` (i.e. `+15553219876).
         ```tsx twoslash
         import { useAuthenticate } from "@account-kit/react"
 
@@ -128,7 +128,7 @@ Pricing varies by country and requires specific area codes to be enabled for you
         set up custom UI and configure authentication with hooks.
         </Info>
         ### Step 1: Send the SMS verification code
-        Ensure you pass the phone number including the country code in the format `+<country code><phone number>`.
+        Ensure you pass the phone number including the country code in the format `+<country code><phone number>` (i.e. `+15553219876).
         ```tsx twoslash
         import { useAuthenticate } from "@account-kit/react-native"
 
