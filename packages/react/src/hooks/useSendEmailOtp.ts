@@ -3,7 +3,7 @@
 import type { MutateOptions } from "@tanstack/query-core";
 import { useMutation } from "@tanstack/react-query";
 import type { UseMutationParameters, UseMutationReturnType } from "wagmi/query";
-import { useConfig } from "wagmi"; // TODO(jh): should we have an alchemy useConfig or always use wagmi's internally?
+import { useConfig } from "wagmi";
 import {
   sendEmailOtp,
   type SendEmailOtpParameters,
