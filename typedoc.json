@@ -109,7 +109,7 @@
   "enumMembersFormat": "htmlTable",
   "propertyMembersFormat": "htmlTable",
   "typeDeclarationFormat": "htmlTable",
-  "indexFormat": "htmlTable",
+  "indexFormat": "table",
   "tableColumnSettings": {
     "hideInherited": true,
     "hideModifiers": true,

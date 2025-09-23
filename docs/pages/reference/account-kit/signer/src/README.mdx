@@ -9,875 +9,107 @@ layout: reference
 
 ## Enumerations
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Enumeration</th>
-      <th align="left">Description</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        [AlchemyMfaStatus](enumerations/AlchemyMfaStatus.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [AlchemySignerStatus](enumerations/AlchemySignerStatus.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Enumeration                                                 | Description |
+| :---------------------------------------------------------- | :---------- |
+| [AlchemyMfaStatus](enumerations/AlchemyMfaStatus.mdx)       | -           |
+| [AlchemySignerStatus](enumerations/AlchemySignerStatus.mdx) | -           |
 
 ## Classes
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Class</th>
-      <th align="left">Description</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        [AlchemyServerSigner](classes/AlchemyServerSigner.mdx)
-      </td>
-
-      <td>
-        AlchemyServerSigner is a signer that can sign messages and typed data using an access key.
-        It extends the SmartAccountSigner interface and uses the ServerSignerClient to sign requests.
-        Primarily intended to be used server-side.
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [AlchemySignerWebClient](classes/AlchemySignerWebClient.mdx)
-      </td>
-
-      <td>
-        A lower level client used by the AlchemySigner used to communicate with
-        Alchemy's signer service.
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [AlchemyWebSigner](classes/AlchemyWebSigner.mdx)
-      </td>
-
-      <td>
-        A SmartAccountSigner that can be used with any SmartContractAccount
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [BaseAlchemySigner](classes/BaseAlchemySigner.mdx)
-      </td>
-
-      <td>
-        Base abstract class for Alchemy Signer, providing authentication and session management for smart accounts.
-        Implements the `SmartAccountAuthenticator` interface and handles various signer events.
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [BaseSignerClient](classes/BaseSignerClient.mdx)
-      </td>
-
-      <td>
-        Base class for all Alchemy Signer clients
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [MfaRequiredError](classes/MfaRequiredError.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [NotAuthenticatedError](classes/NotAuthenticatedError.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [OauthCancelledError](classes/OauthCancelledError.mdx)
-      </td>
-
-      <td>
-        This error is thrown when the OAuth flow is cancelled because the auth popup
-        window was closed.
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [OauthFailedError](classes/OauthFailedError.mdx)
-      </td>
-
-      <td>
-        This error is thrown when an error occurs during the OAuth login flow.
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [OAuthProvidersError](classes/OAuthProvidersError.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [ServerSignerClient](classes/ServerSignerClient.mdx)
-      </td>
-
-      <td>
-        ServerSignerClient is a client for signing messages using an access key.
-        It extends the BaseSignerClient and uses the ApiKeyStamper for signing.
-        Primarily intended to be used server-side.
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [SolanaSigner](classes/SolanaSigner.mdx)
-      </td>
-
-      <td>
-        The SolanaSigner class is used to sign transactions and messages for the Solana blockchain.
-        It provides methods to add signatures to transactions and sign messages.
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Class                                                        | Description                                                                                                                                                                                                                         |
+| :----------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [AlchemyServerSigner](classes/AlchemyServerSigner.mdx)       | AlchemyServerSigner is a signer that can sign messages and typed data using an access key. It extends the SmartAccountSigner interface and uses the ServerSignerClient to sign requests. Primarily intended to be used server-side. |
+| [AlchemySignerWebClient](classes/AlchemySignerWebClient.mdx) | A lower level client used by the AlchemySigner used to communicate with Alchemy's signer service.                                                                                                                                   |
+| [AlchemyWebSigner](classes/AlchemyWebSigner.mdx)             | A SmartAccountSigner that can be used with any SmartContractAccount                                                                                                                                                                 |
+| [BaseAlchemySigner](classes/BaseAlchemySigner.mdx)           | Base abstract class for Alchemy Signer, providing authentication and session management for smart accounts. Implements the `SmartAccountAuthenticator` interface and handles various signer events.                                 |
+| [BaseSignerClient](classes/BaseSignerClient.mdx)             | Base class for all Alchemy Signer clients                                                                                                                                                                                           |
+| [MfaRequiredError](classes/MfaRequiredError.mdx)             | -                                                                                                                                                                                                                                   |
+| [NotAuthenticatedError](classes/NotAuthenticatedError.mdx)   | -                                                                                                                                                                                                                                   |
+| [OauthCancelledError](classes/OauthCancelledError.mdx)       | This error is thrown when the OAuth flow is cancelled because the auth popup window was closed.                                                                                                                                     |
+| [OauthFailedError](classes/OauthFailedError.mdx)             | This error is thrown when an error occurs during the OAuth login flow.                                                                                                                                                              |
+| [OAuthProvidersError](classes/OAuthProvidersError.mdx)       | -                                                                                                                                                                                                                                   |
+| [ServerSignerClient](classes/ServerSignerClient.mdx)         | ServerSignerClient is a client for signing messages using an access key. It extends the BaseSignerClient and uses the ApiKeyStamper for signing. Primarily intended to be used server-side.                                         |
+| [SolanaSigner](classes/SolanaSigner.mdx)                     | The SolanaSigner class is used to sign transactions and messages for the Solana blockchain. It provides methods to add signatures to transactions and sign messages.                                                                |
 
 ## Interfaces
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Interface</th>
-      <th align="left">Description</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        [ErrorInfo](interfaces/ErrorInfo.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Interface                             | Description |
+| :------------------------------------ | :---------- |
+| [ErrorInfo](interfaces/ErrorInfo.mdx) | -           |
 
 ## Type Aliases
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Type Alias</th>
-      <th align="left">Description</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        [AccessKeyAuthParams](type-aliases/AccessKeyAuthParams.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [AccessKeyAuthParamsPublicKeyOnly](type-aliases/AccessKeyAuthParamsPublicKeyOnly.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [AddMfaParams](type-aliases/AddMfaParams.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [AddMfaResult](type-aliases/AddMfaResult.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [AddOauthProviderParams](type-aliases/AddOauthProviderParams.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [AlchemySignerClientEvent](type-aliases/AlchemySignerClientEvent.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [AlchemySignerClientEvents](type-aliases/AlchemySignerClientEvents.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [AlchemySignerEvent](type-aliases/AlchemySignerEvent.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [AlchemySignerEvents](type-aliases/AlchemySignerEvents.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [AlchemySignerParams](type-aliases/AlchemySignerParams.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [AuthenticatingEventMetadata](type-aliases/AuthenticatingEventMetadata.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [AuthLinkingPrompt](type-aliases/AuthLinkingPrompt.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [AuthMethods](type-aliases/AuthMethods.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [AuthParams](type-aliases/AuthParams.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [AuthProviderConfig](type-aliases/AuthProviderConfig.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [CreateAccountParams](type-aliases/CreateAccountParams.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [CredentialCreationOptionOverrides](type-aliases/CredentialCreationOptionOverrides.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [EmailAuthParams](type-aliases/EmailAuthParams.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [EmailConfig](type-aliases/EmailConfig.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [EmailType](type-aliases/EmailType.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [experimental\_CreateApiKeyParams](type-aliases/experimental_CreateApiKeyParams.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [ExportWalletOutput](type-aliases/ExportWalletOutput.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [ExportWalletParams](type-aliases/ExportWalletParams.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [GetOauthProviderUrlArgs](type-aliases/GetOauthProviderUrlArgs.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [GetWebAuthnAttestationResult](type-aliases/GetWebAuthnAttestationResult.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [IdTokenOnly](type-aliases/IdTokenOnly.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [JwtParams](type-aliases/JwtParams.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [JwtResponse](type-aliases/JwtResponse.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [KnownAuthProvider](type-aliases/KnownAuthProvider.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [MfaChallenge](type-aliases/MfaChallenge.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [MfaFactor](type-aliases/MfaFactor.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [OauthConfig](type-aliases/OauthConfig.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [OauthMode](type-aliases/OauthMode.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [OauthParams](type-aliases/OauthParams.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [OauthProviderConfig](type-aliases/OauthProviderConfig.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [OauthProviderInfo](type-aliases/OauthProviderInfo.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [OauthRedirectConfig](type-aliases/OauthRedirectConfig.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [OauthState](type-aliases/OauthState.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [OtpParams](type-aliases/OtpParams.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [OtpResponse](type-aliases/OtpResponse.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [PasskeyInfo](type-aliases/PasskeyInfo.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [RemoveMfaParams](type-aliases/RemoveMfaParams.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [SignerBody](type-aliases/SignerBody.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [SignerConfig](type-aliases/SignerConfig.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [SignerEndpoints](type-aliases/SignerEndpoints.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [SignerResponse](type-aliases/SignerResponse.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [SignerRoutes](type-aliases/SignerRoutes.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [SignupResponse](type-aliases/SignupResponse.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [SmsAuthParams](type-aliases/SmsAuthParams.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [SubmitOtpCodeResponse](type-aliases/SubmitOtpCodeResponse.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [User](type-aliases/User.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [ValidateMultiFactorsArgs](type-aliases/ValidateMultiFactorsArgs.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [ValidateMultiFactorsParams](type-aliases/ValidateMultiFactorsParams.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [VerificationOtp](type-aliases/VerificationOtp.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [VerifyMfaParams](type-aliases/VerifyMfaParams.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Type Alias                                                                              | Description |
+| :-------------------------------------------------------------------------------------- | :---------- |
+| [AccessKeyAuthParams](type-aliases/AccessKeyAuthParams.mdx)                             | -           |
+| [AccessKeyAuthParamsPublicKeyOnly](type-aliases/AccessKeyAuthParamsPublicKeyOnly.mdx)   | -           |
+| [AddMfaParams](type-aliases/AddMfaParams.mdx)                                           | -           |
+| [AddMfaResult](type-aliases/AddMfaResult.mdx)                                           | -           |
+| [AddOauthProviderParams](type-aliases/AddOauthProviderParams.mdx)                       | -           |
+| [AlchemySignerClientEvent](type-aliases/AlchemySignerClientEvent.mdx)                   | -           |
+| [AlchemySignerClientEvents](type-aliases/AlchemySignerClientEvents.mdx)                 | -           |
+| [AlchemySignerEvent](type-aliases/AlchemySignerEvent.mdx)                               | -           |
+| [AlchemySignerEvents](type-aliases/AlchemySignerEvents.mdx)                             | -           |
+| [AlchemySignerParams](type-aliases/AlchemySignerParams.mdx)                             | -           |
+| [AuthenticatingEventMetadata](type-aliases/AuthenticatingEventMetadata.mdx)             | -           |
+| [AuthLinkingPrompt](type-aliases/AuthLinkingPrompt.mdx)                                 | -           |
+| [AuthMethods](type-aliases/AuthMethods.mdx)                                             | -           |
+| [AuthParams](type-aliases/AuthParams.mdx)                                               | -           |
+| [AuthProviderConfig](type-aliases/AuthProviderConfig.mdx)                               | -           |
+| [CreateAccountParams](type-aliases/CreateAccountParams.mdx)                             | -           |
+| [CredentialCreationOptionOverrides](type-aliases/CredentialCreationOptionOverrides.mdx) | -           |
+| [EmailAuthParams](type-aliases/EmailAuthParams.mdx)                                     | -           |
+| [EmailConfig](type-aliases/EmailConfig.mdx)                                             | -           |
+| [EmailType](type-aliases/EmailType.mdx)                                                 | -           |
+| [experimental_CreateApiKeyParams](type-aliases/experimental_CreateApiKeyParams.mdx)     | -           |
+| [ExportWalletOutput](type-aliases/ExportWalletOutput.mdx)                               | -           |
+| [ExportWalletParams](type-aliases/ExportWalletParams.mdx)                               | -           |
+| [GetOauthProviderUrlArgs](type-aliases/GetOauthProviderUrlArgs.mdx)                     | -           |
+| [GetWebAuthnAttestationResult](type-aliases/GetWebAuthnAttestationResult.mdx)           | -           |
+| [IdTokenOnly](type-aliases/IdTokenOnly.mdx)                                             | -           |
+| [JwtParams](type-aliases/JwtParams.mdx)                                                 | -           |
+| [JwtResponse](type-aliases/JwtResponse.mdx)                                             | -           |
+| [KnownAuthProvider](type-aliases/KnownAuthProvider.mdx)                                 | -           |
+| [MfaChallenge](type-aliases/MfaChallenge.mdx)                                           | -           |
+| [MfaFactor](type-aliases/MfaFactor.mdx)                                                 | -           |
+| [OauthConfig](type-aliases/OauthConfig.mdx)                                             | -           |
+| [OauthMode](type-aliases/OauthMode.mdx)                                                 | -           |
+| [OauthParams](type-aliases/OauthParams.mdx)                                             | -           |
+| [OauthProviderConfig](type-aliases/OauthProviderConfig.mdx)                             | -           |
+| [OauthProviderInfo](type-aliases/OauthProviderInfo.mdx)                                 | -           |
+| [OauthRedirectConfig](type-aliases/OauthRedirectConfig.mdx)                             | -           |
+| [OauthState](type-aliases/OauthState.mdx)                                               | -           |
+| [OtpParams](type-aliases/OtpParams.mdx)                                                 | -           |
+| [OtpResponse](type-aliases/OtpResponse.mdx)                                             | -           |
+| [PasskeyInfo](type-aliases/PasskeyInfo.mdx)                                             | -           |
+| [RemoveMfaParams](type-aliases/RemoveMfaParams.mdx)                                     | -           |
+| [SignerBody](type-aliases/SignerBody.mdx)                                               | -           |
+| [SignerConfig](type-aliases/SignerConfig.mdx)                                           | -           |
+| [SignerEndpoints](type-aliases/SignerEndpoints.mdx)                                     | -           |
+| [SignerResponse](type-aliases/SignerResponse.mdx)                                       | -           |
+| [SignerRoutes](type-aliases/SignerRoutes.mdx)                                           | -           |
+| [SignupResponse](type-aliases/SignupResponse.mdx)                                       | -           |
+| [SmsAuthParams](type-aliases/SmsAuthParams.mdx)                                         | -           |
+| [SubmitOtpCodeResponse](type-aliases/SubmitOtpCodeResponse.mdx)                         | -           |
+| [User](type-aliases/User.mdx)                                                           | -           |
+| [ValidateMultiFactorsArgs](type-aliases/ValidateMultiFactorsArgs.mdx)                   | -           |
+| [ValidateMultiFactorsParams](type-aliases/ValidateMultiFactorsParams.mdx)               | -           |
+| [VerificationOtp](type-aliases/VerificationOtp.mdx)                                     | -           |
+| [VerifyMfaParams](type-aliases/VerifyMfaParams.mdx)                                     | -           |
 
 ## Variables
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Variable</th>
-      <th align="left">Description</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        [AlchemySignerParamsSchema](variables/AlchemySignerParamsSchema.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [DEFAULT\_SESSION\_MS](variables/DEFAULT_SESSION_MS.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [SessionManagerParamsSchema](variables/SessionManagerParamsSchema.mdx)
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Variable                                                               | Description |
+| :--------------------------------------------------------------------- | :---------- |
+| [AlchemySignerParamsSchema](variables/AlchemySignerParamsSchema.mdx)   | -           |
+| [DEFAULT_SESSION_MS](variables/DEFAULT_SESSION_MS.mdx)                 | -           |
+| [SessionManagerParamsSchema](variables/SessionManagerParamsSchema.mdx) | -           |
 
 ## Functions
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Function</th>
-      <th align="left">Description</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        [createServerSigner](functions/createServerSigner.mdx)
-      </td>
-
-      <td>
-        Creates a new server signer.
-
-        **Example**
-
-        ```ts
-         const signer = await createServerSigner({
-          auth: { accessKey },
-          connection: {
-            apiKey: "alchemy-api-key",
-          }
-        });
-
-        console.log("Signer address:", await signer.getAddress());
-        ```
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [createSolanaSponsoredTransaction](functions/createSolanaSponsoredTransaction.mdx)
-      </td>
-
-      <td>
-        This function wraps instructions in a sponsored transaction using Alchemy's fee payer service
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [createSolanaTransaction](functions/createSolanaTransaction.mdx)
-      </td>
-
-      <td>
-        Creates a regular (non-sponsored) Solana transaction from instructions
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        [generateAccessKey](functions/generateAccessKey.mdx)
-      </td>
-
-      <td>
-        Generates a new access key for use in the server signer
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Function                                                                           | Description                                                                                   |
+| :--------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------- |
+| [createServerSigner](functions/createServerSigner.mdx)                             | Creates a new server signer.                                                                  |
+| [createSolanaSponsoredTransaction](functions/createSolanaSponsoredTransaction.mdx) | This function wraps instructions in a sponsored transaction using Alchemy's fee payer service |
+| [createSolanaTransaction](functions/createSolanaTransaction.mdx)                   | Creates a regular (non-sponsored) Solana transaction from instructions                        |
+| [generateAccessKey](functions/generateAccessKey.mdx)                               | Generates a new access key for use in the server signer                                       |
