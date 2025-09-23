@@ -271,16 +271,37 @@ export class AuthClient {
    */
   public async sendEmailOtp({ email }: SendEmailOtpParams): Promise<void> {
     const { targetPublicKey } = await this.getTekStamper();
-    const { otpId, orgId } = await this.signerHttpClient.request({
-      route: "signer/v1/auth",
+    const { orgId: existingOrgId } = await this.signerHttpClient.request({
+      route: "signer/v1/lookup",
       method: "POST",
       body: {
         email,
-        emailMode: "otp",
-        targetPublicKey,
       },
     });
-    this.pendingOtp = { otpId: otpId!, orgId };
+    const { orgId, otpId } = await (() => {
+      if (!existingOrgId) {
+        return this.signerHttpClient.request({
+          route: "signer/v1/signup",
+          method: "POST",
+          body: {
+            email,
+            emailMode: "otp",
+            targetPublicKey,
+          },
+        });
+      } else {
+        return this.signerHttpClient.request({
+          route: "signer/v1/auth",
+          method: "POST",
+          body: {
+            email,
+            emailMode: "otp",
+            targetPublicKey,
+          },
+        });
+      }
+    })();
+    this.pendingOtp = { otpId: otpId!, orgId: orgId };
   }
 
   /**
