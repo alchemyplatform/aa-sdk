@@ -1,11 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { AuthSession } from "../src/authSession.js";
 import type { User, TurnkeyStamper } from "../src/types.js";
-
-// Mock the dev_request module
-vi.mock("../src/devRequest.js", () => ({
-  dev_request: vi.fn(),
-}));
+import type { AlchemyRestClient } from "@alchemy/common";
+import type { SignerHttpSchema } from "@alchemy/aa-infra";
 
 // Mock Turnkey client
 vi.mock("@turnkey/http", () => ({
@@ -21,12 +18,10 @@ vi.mock("@turnkey/http", () => ({
 describe("AuthSession", () => {
   let mockTurnkeyStamper: TurnkeyStamper;
   let mockUser: User;
-  let mockApiKey: string;
+  let mockSignerHttpClient: AlchemyRestClient<SignerHttpSchema>;
 
   beforeEach(async () => {
     vi.clearAllMocks();
-
-    mockApiKey = "test-api-key";
 
     mockTurnkeyStamper = {
       stamp: vi.fn().mockResolvedValue({
@@ -47,15 +42,24 @@ describe("AuthSession", () => {
       claims: { sub: "test-user-id" },
     };
 
-    // Mock the dev_request to return the user data
-    const { dev_request } = await import("../src/devRequest.js");
-    vi.mocked(dev_request).mockResolvedValue(mockUser);
+    mockSignerHttpClient = {
+      request: vi.fn(),
+    } as any;
+
+    vi.mocked(mockSignerHttpClient.request).mockImplementation(
+      async (params) => {
+        if (params.route === "signer/v1/whoami") {
+          return mockUser;
+        }
+        throw new Error(`Unexpected route: ${params.route}`);
+      },
+    );
   });
 
-  describe("getAuthSessionState", () => {
+  describe("getSerializedState", () => {
     it("should serialize OAuth session state correctly", async () => {
       const authSession = await AuthSession.create({
-        apiKey: mockApiKey,
+        signerHttpClient: mockSignerHttpClient,
         stamper: mockTurnkeyStamper,
         orgId: mockUser.orgId,
         idToken: mockUser.idToken,
@@ -63,7 +67,7 @@ describe("AuthSession", () => {
         authType: "oauth",
       });
 
-      const serializedState = authSession.getAuthSessionState();
+      const serializedState = authSession.getSerializedState();
       const parsedState = JSON.parse(serializedState);
 
       expect(parsedState).toEqual({
@@ -89,7 +93,7 @@ describe("AuthSession", () => {
 
     it("should serialize OTP session state correctly", async () => {
       const authSession = await AuthSession.create({
-        apiKey: mockApiKey,
+        signerHttpClient: mockSignerHttpClient,
         stamper: mockTurnkeyStamper,
         orgId: mockUser.orgId,
         idToken: mockUser.idToken,
@@ -97,7 +101,7 @@ describe("AuthSession", () => {
         authType: "otp",
       });
 
-      const serializedState = authSession.getAuthSessionState();
+      const serializedState = authSession.getSerializedState();
       const parsedState = JSON.parse(serializedState);
 
       expect(parsedState).toEqual({
@@ -115,7 +119,7 @@ describe("AuthSession", () => {
 
     it("should serialize passkey session state correctly", async () => {
       const authSession = await AuthSession.create({
-        apiKey: mockApiKey,
+        signerHttpClient: mockSignerHttpClient,
         stamper: mockTurnkeyStamper,
         orgId: mockUser.orgId,
         idToken: mockUser.idToken,
@@ -123,7 +127,7 @@ describe("AuthSession", () => {
         credentialId: "test-passkey-credential-id",
       });
 
-      const serializedState = authSession.getAuthSessionState();
+      const serializedState = authSession.getSerializedState();
       const parsedState = JSON.parse(serializedState);
 
       expect(parsedState).toEqual({
@@ -145,7 +149,7 @@ describe("AuthSession", () => {
 
     it("should throw error when trying to serialize non-passkey auth without bundle", async () => {
       const authSession = await AuthSession.create({
-        apiKey: mockApiKey,
+        signerHttpClient: mockSignerHttpClient,
         stamper: mockTurnkeyStamper,
         orgId: mockUser.orgId,
         idToken: mockUser.idToken,
@@ -153,7 +157,7 @@ describe("AuthSession", () => {
         // No bundle provided
       });
 
-      expect(() => authSession.getAuthSessionState()).toThrow(
+      expect(() => authSession.getSerializedState()).toThrow(
         "Bundle is required for non-passkey authentication types",
       );
     });

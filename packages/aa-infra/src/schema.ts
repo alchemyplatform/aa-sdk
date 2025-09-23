@@ -134,3 +134,85 @@ export type RundlerMaxPriorityFeePerGasSchema = {
 };
 
 export type RundlerRpcSchema = [RundlerMaxPriorityFeePerGasSchema];
+
+export type SignerHttpSchema = [
+  {
+    Route: "signer/v1/auth";
+    Method: "POST";
+    Body: {
+      email?: string;
+      emailMode?: "magicLink" | "otp";
+      phone?: string;
+      targetPublicKey: string;
+      expirationSeconds?: number;
+      redirectParamas?: string;
+      multiFactors?: { multiFactorId: string; multiFactorCode: string }[];
+    };
+    Response: {
+      orgId: string;
+      otpId?: string;
+      multiFactors?: { multiFactorType: string; multiFactorId: string }[];
+    };
+  },
+  {
+    Route: "signer/v1/otp";
+    Method: "POST";
+    Body: {
+      orgId: string;
+      otpId: string;
+      otpCode: string;
+      targetPublicKey: string;
+      expirationSeconds?: number;
+    };
+    Response: {
+      status:
+        | "MFA_REQUIRED"
+        | "ACCOUNT_LINKING_CONFIRMATION_REQUIRED"
+        | "SUCCESS"
+        | "FETCHED_ID_TOKEN_ONLY";
+      encryptedPayload?: string;
+      multiFactors?: { multiFactorType: string; multiFactorId: string }[];
+      credentialBundle?: string;
+    };
+  },
+  {
+    Route: "signer/v1/prepare-oauth";
+    Method: "POST";
+    Body: { nonce: string };
+    Response: {
+      codeChallenge: string;
+      requestKey: string;
+      authProviders: {
+        id: string;
+        clientId: string;
+        authEndpoint: string;
+        isCustomProvider?: boolean;
+      }[];
+    };
+  },
+  {
+    Route: "signer/v1/whoami";
+    Method: "POST";
+    Body: StampedRequestBody;
+    Response: {
+      userId: string;
+      orgId: string;
+      address: Address;
+      email?: string;
+      solanaAddress?: string;
+    };
+  },
+  {
+    Route: "signer/v1/sign-payload";
+    Method: "POST";
+    Body: StampedRequestBody;
+    Response: { signature: Hex };
+  },
+];
+
+export type StampedRequestBody = {
+  stampedRequest: {
+    body: string;
+    stamp: { stampHeaderName: string; stampHeaderValue: string };
+  };
+};
