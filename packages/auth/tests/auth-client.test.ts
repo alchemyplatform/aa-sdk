@@ -1,6 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { AuthClient } from "../src/authClient.js";
-import { AuthSession, DEFAULT_SESSION_EXPIRATION_MS } from "../src/authSession.js";
+import {
+  AuthSession,
+  DEFAULT_SESSION_EXPIRATION_MS,
+} from "../src/authSession.js";
 import type {
   AuthSessionState,
   User,
