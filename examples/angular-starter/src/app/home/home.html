@@ -1,0 +1,101 @@
+<div class="home-container">
+  <h2>Smart Wallets Angular Demo</h2>
+
+  @if (account(); as acc) {
+    <div class="account-info">
+      <h3>✅ Connected Account</h3>
+      <p>Status: {{ acc.status }}</p>
+      @if (acc.status === 'READY' && acc.account) {
+        <p>Address: Connected</p>
+        @if (balance) {
+          <p>Balance: {{ balance }} wei</p>
+        }
+      }
+      <button (click)="disconnectWallet()">Disconnect</button>
+    </div>
+
+    <div class="transaction-section">
+      <h3>Send Transaction</h3>
+      <div class="transaction-form">
+        <input
+          type="text"
+          [(ngModel)]="toAddress"
+          placeholder="Recipient address (0x...)"
+          class="address-input"
+          [disabled]="isSendingTx"
+        />
+        <input
+          type="text"
+          [(ngModel)]="amount"
+          placeholder="Amount in wei"
+          class="amount-input"
+          [disabled]="isSendingTx"
+        />
+        <button
+          (click)="sendTransaction()"
+          [disabled]="!toAddress.trim() || !amount.trim() || isSendingTx"
+          class="send-button"
+        >
+          {{ isSendingTx ? 'Sending...' : 'Send Transaction' }}
+        </button>
+      </div>
+    </div>
+  } @else {
+    <div class="auth-section">
+      <app-wallet-connect></app-wallet-connect>
+
+      <div class="divider">
+        <span>or</span>
+      </div>
+
+      @if (authStep === null) {
+        <div class="auth-form">
+          <h3>Sign in with Email</h3>
+          <input
+            type="email"
+            [(ngModel)]="email"
+            placeholder="Enter your email"
+            class="email-input"
+            [disabled]="isAuthenticating"
+          />
+          <button
+            (click)="sendOtp()"
+            [disabled]="!email.trim() || isAuthenticating"
+            class="auth-button"
+          >
+            {{ isAuthenticating ? 'Sending...' : 'Send OTP' }}
+          </button>
+        </div>
+      } @else if (authStep === 'otp') {
+        <div class="auth-form">
+          <h3>Enter OTP Code</h3>
+          <p>Check your email for the 6-digit code</p>
+          <input
+            type="text"
+            [(ngModel)]="otpCode"
+            placeholder="Enter 6-digit code"
+            class="otp-input"
+            maxlength="6"
+            [disabled]="isAuthenticating"
+          />
+          <div class="button-group">
+            <button
+              (click)="verifyOtp()"
+              [disabled]="!otpCode.trim() || isAuthenticating"
+              class="auth-button"
+            >
+              {{ isAuthenticating ? 'Verifying...' : 'Verify Code' }}
+            </button>
+            <button
+              (click)="resetAuth()"
+              class="cancel-button"
+              [disabled]="isAuthenticating"
+            >
+              Back
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>
