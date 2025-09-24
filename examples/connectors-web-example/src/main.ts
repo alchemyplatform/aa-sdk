@@ -20,7 +20,6 @@ import {
 import { config } from "./wagmi.js";
 import { testSmartWalletWithConnectorClient } from "./test-smart-wallet.js";
 import "./style.css";
-import { resolveAlchemyAuthConnector } from "@alchemy/connectors-web";
 
 globalThis.Buffer = Buffer;
 
@@ -579,14 +578,7 @@ function setupApp(element: HTMLDivElement) {
   // Attempt graceful reconnection on page load
   setTimeout(async () => {
     try {
-      const alchemyConnector = resolveAlchemyAuthConnector(config);
-      if (alchemyConnector && (await alchemyConnector.isAuthorized())) {
-        // If Alchemy connector is authorized, connect directly to it
-        await connect(config, { connector: alchemyConnector });
-      } else {
-        // Otherwise try standard reconnect for other connectors
-        await reconnect(config);
-      }
+      await reconnect(config);
     } catch (error) {
       // Silent fail - no existing session to reconnect
     }
