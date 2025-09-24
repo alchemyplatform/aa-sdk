@@ -76,6 +76,9 @@ navigation:
               - page: Hyperliquid Transactions
                 slug: recipes/hyperliquid-wallets
                 path: wallets/pages/recipes/hyperliquid-wallets.mdx
+              - page: Smart Wallets with Aave
+                slug: wallets/recipes/smart-wallets-aave
+                path: wallets/pages/recipes/smart-wallets-aave.mdx
               - page: Upgrade to Smart Accounts
                 slug: recipes/upgrade-to-smart-accounts
                 path: wallets/pages/recipes/upgrade-to-smart-accounts.mdx

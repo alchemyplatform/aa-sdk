@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.65.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.64.0...v4.65.0) (2025-09-23)
+
+### Bug Fixes
+
+- commit output of docgen ([#2093](https://github.com/alchemyplatform/aa-sdk/issues/2093)) ([04ab085](https://github.com/alchemyplatform/aa-sdk/commit/04ab085e2393d8064c754a9ab3f4e837fb9490af))
+- support self-call encoding in mav2 with single call ([#2094](https://github.com/alchemyplatform/aa-sdk/issues/2094)) ([6d3151c](https://github.com/alchemyplatform/aa-sdk/commit/6d3151ccb5bd06b39da64babb1b2bda60300fc2f))
+
+### Features
+
+- add swapi decorator for sdk v4 ([#2091](https://github.com/alchemyplatform/aa-sdk/issues/2091)) ([19b08d3](https://github.com/alchemyplatform/aa-sdk/commit/19b08d3c713a14fe35acbde945ac1280a96b1b99))
+
 # [4.64.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.63.2...v4.64.0) (2025-09-19)
 
 ### Bug Fixes
