@@ -47,6 +47,8 @@ export type CreateAuthSessionParams = {
   authType: AuthType;
   /** Credential ID for passkey authentication */
   credentialId?: string;
+  /** Session length in milliseconds */
+  sessionLengthMs?: number;
 };
 
 /**
@@ -97,6 +99,7 @@ export class AuthSession {
     private readonly signerHttpClient: AlchemyRestClient<SignerHttpSchema>,
     private readonly turnkey: TurnkeyClient,
     private readonly user: User,
+    private readonly expirationDateMs: number,
     private readonly bundle?: string,
     private readonly authType?: AuthType,
     private readonly credentialId?: string,
@@ -119,7 +122,8 @@ export class AuthSession {
    *   orgId: "org123",
    *   idToken: "jwt-token",
    *   bundle: "credential-bundle",
-   *   authType: "oauth"
+   *   authType: "oauth",
+   *   sessionLengthMs: 15 * 60 * 1000,
    * });
    * ```
    */
@@ -131,6 +135,7 @@ export class AuthSession {
     bundle,
     authType,
     credentialId,
+    sessionLengthMs,
   }: CreateAuthSessionParams): Promise<AuthSession> {
     const turnkey = new TurnkeyClient(
       { baseUrl: "https://api.turnkey.com" },
@@ -153,10 +158,13 @@ export class AuthSession {
       orgId,
       credentialId: authType === "passkey" ? credentialId : undefined,
     };
+    // Set session expiration based on requested length, default session length is 15 minutes
+    const expirationDateMs = (sessionLengthMs ?? 15 * 60 * 1000) + Date.now();
     return new AuthSession(
       signerHttpClient,
       turnkey,
       user,
+      expirationDateMs,
       bundle,
       authType,
       credentialId,
@@ -426,10 +434,6 @@ export class AuthSession {
   public getSerializedState(): string {
     this.throwIfDisconnected();
 
-    // Calculate expiration time (24 hours from now as default)
-    // TODO: update the expiration date to be user defined once expiration handling is implemented
-    const expirationDateMs = Date.now() + 24 * 60 * 60 * 1000;
-
     // Use stored authType or default to "otp" for backward compatibility
     const type = this.authType || "otp";
 
@@ -437,7 +441,7 @@ export class AuthSession {
       const state: AuthSessionState = {
         type: "passkey",
         user: this.user,
-        expirationDateMs,
+        expirationDateMs: this.expirationDateMs,
         credentialId: this.credentialId,
       };
       return JSON.stringify(state);
@@ -451,7 +455,7 @@ export class AuthSession {
         type,
         bundle: this.bundle,
         user: this.user,
-        expirationDateMs,
+        expirationDateMs: this.expirationDateMs,
       };
       return JSON.stringify(state);
     }
