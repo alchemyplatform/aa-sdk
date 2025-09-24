@@ -9,6 +9,7 @@ import {
 import type { OptionalChainId, InnerWalletApiClient } from "../../types.ts";
 import type { wallet_requestQuote_v0 } from "@alchemy/wallet-api-types/rpc";
 import { AccountNotFoundError } from "@alchemy/common";
+import { mergeClientCapabilities } from "../../utils/capabilities.js";
 
 export type RequestQuoteV0Params<
   TAccount extends Address | undefined = Address | undefined,
@@ -79,15 +80,7 @@ export async function requestQuoteV0<
 
   const capabilities = params.returnRawCalls
     ? undefined
-    : client.policyIds?.length
-      ? {
-          ...params.capabilities,
-          paymasterService: {
-            ...params.capabilities?.paymasterService,
-            policyIds: client.policyIds,
-          },
-        }
-      : params.capabilities;
+    : mergeClientCapabilities(client, params.capabilities);
 
   return await client.request({
     method: "wallet_requestQuote_v0",
@@ -96,7 +89,7 @@ export async function requestQuoteV0<
         ...params,
         chainId: params.chainId ?? toHex(client.chain.id),
         from,
-        ...(params.returnRawCalls ? {} : { capabilities }),
+        ...(capabilities && { capabilities }),
       },
     ],
   });

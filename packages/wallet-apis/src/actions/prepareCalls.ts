@@ -3,6 +3,7 @@ import type { InnerWalletApiClient, OptionalChainId } from "../types.ts";
 import type { Static } from "@sinclair/typebox";
 import type { wallet_prepareCalls } from "@alchemy/wallet-api-types/rpc";
 import { AccountNotFoundError } from "@alchemy/common";
+import { mergeClientCapabilities } from "../utils/capabilities.js";
 
 export type PrepareCallsParams<
   TAccount extends Address | undefined = Address | undefined,
@@ -61,16 +62,7 @@ export async function prepareCalls<
     throw new AccountNotFoundError();
   }
 
-  const capabilities =
-    client.policyIds?.length && !params.capabilities?.paymasterService
-      ? {
-          ...params.capabilities,
-          paymasterService: {
-            ...params.capabilities?.paymasterService,
-            policyIds: client.policyIds,
-          },
-        }
-      : params.capabilities;
+  const capabilities = mergeClientCapabilities(client, params.capabilities);
 
   return await client.request({
     method: "wallet_prepareCalls",
