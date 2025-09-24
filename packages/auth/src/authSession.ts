@@ -30,6 +30,11 @@ import type { AlchemyRestClient } from "@alchemy/common";
 import type { SignerHttpSchema } from "@alchemy/aa-infra";
 
 /**
+ * Default session expiration duration in milliseconds (15 minutes)
+ */
+export const DEFAULT_SESSION_EXPIRATION_MS = 15 * 60 * 1000;
+
+/**
  * Parameters required to create an AuthSession instance
  */
 export type CreateAuthSessionParams = {
@@ -47,6 +52,8 @@ export type CreateAuthSessionParams = {
   authType: AuthType;
   /** Credential ID for passkey authentication */
   credentialId?: string;
+  /** Expiration timestamp - if not provided, defaults to 15 minutes from now */
+  expirationDateMs?: number;
 };
 
 /**
@@ -92,6 +99,7 @@ export type SignMessageParams = {
  */
 export class AuthSession {
   private isDisconnected = false;
+  private expirationDateMs: number;
 
   private constructor(
     private readonly signerHttpClient: AlchemyRestClient<SignerHttpSchema>,
@@ -100,7 +108,12 @@ export class AuthSession {
     private readonly bundle?: string,
     private readonly authType?: AuthType,
     private readonly credentialId?: string,
-  ) {}
+    expirationDateMs?: number,
+  ) {
+    // Use provided expiration or calculate 15 minutes from now as default
+    this.expirationDateMs =
+      expirationDateMs ?? Date.now() + DEFAULT_SESSION_EXPIRATION_MS;
+  }
 
   /**
    * Creates a new AuthSession instance from the provided parameters.
@@ -131,6 +144,7 @@ export class AuthSession {
     bundle,
     authType,
     credentialId,
+    expirationDateMs,
   }: CreateAuthSessionParams): Promise<AuthSession> {
     const turnkey = new TurnkeyClient(
       { baseUrl: "https://api.turnkey.com" },
@@ -160,6 +174,7 @@ export class AuthSession {
       bundle,
       authType,
       credentialId,
+      expirationDateMs,
     );
   }
 
@@ -179,6 +194,22 @@ export class AuthSession {
    */
   public getUser(): User {
     return this.user;
+  }
+
+  /**
+   * Gets the expiration timestamp for this authentication session.
+   *
+   * @returns {number} The session expiration timestamp in milliseconds
+   *
+   * @example
+   * ```ts twoslash
+   * const expirationMs = authSession.getExpirationDateMs();
+   * const isExpired = expirationMs < Date.now();
+   * ```
+   */
+  public getExpirationDateMs(): number {
+    this.throwIfDisconnected();
+    return this.expirationDateMs;
   }
 
   /**
@@ -426,9 +457,8 @@ export class AuthSession {
   public getSerializedState(): string {
     this.throwIfDisconnected();
 
-    // Calculate expiration time (24 hours from now as default)
-    // TODO: update the expiration date to be user defined once expiration handling is implemented
-    const expirationDateMs = Date.now() + 24 * 60 * 60 * 1000;
+    // Use the stored expiration time from the instance
+    const expirationDateMs = this.expirationDateMs;
 
     // Use stored authType or default to "otp" for backward compatibility
     const type = this.authType || "otp";

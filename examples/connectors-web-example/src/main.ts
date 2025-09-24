@@ -236,6 +236,8 @@ async function handleDisconnect() {
     await disconnect(config);
 
     updateStatus("disconnect-status", "Successfully disconnected!");
+
+    setTimeout(updateSessionStatus, 100);
   } catch (error) {
     console.error("Disconnect error details:", error);
     updateStatus(
@@ -344,6 +346,7 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
 
     <div id="session-controls">
       <h2>Session Controls</h2>
+      <div id="session-status"></div>
       <button id="disconnect-btn" type="button" class="disconnect-btn">
         Disconnect
       </button>
@@ -442,6 +445,8 @@ function setupAccountWatcher(element: HTMLDivElement) {
           await handleSwitchChain(chainId);
         });
       });
+
+      updateSessionStatus();
     },
   });
 }
@@ -502,6 +507,8 @@ function setupSessionControls() {
 
   const clearStorageButton = document.getElementById("clear-storage-btn");
   clearStorageButton?.addEventListener("click", handleClearStorage);
+
+  updateSessionStatus();
 }
 
 // Storage viewer functions
@@ -515,6 +522,50 @@ function getStorageContents() {
   } catch (error) {
     console.warn("Error reading storage:", error);
     return null;
+  }
+}
+
+// Session status functions
+function updateSessionStatus() {
+  const storage = getStorageContents();
+  if (storage) {
+    try {
+      const data = typeof storage === "string" ? JSON.parse(storage) : storage;
+
+      // Check for expiration in the main data or nested authSessionState
+      let expirationDateMs = data.expirationDateMs;
+      if (!expirationDateMs && data.authSessionState) {
+        const sessionState =
+          typeof data.authSessionState === "string"
+            ? JSON.parse(data.authSessionState)
+            : data.authSessionState;
+        expirationDateMs = sessionState.expirationDateMs;
+      }
+
+      if (expirationDateMs) {
+        const expirationDate = new Date(expirationDateMs);
+        const isExpired = expirationDateMs < Date.now();
+        const timeUntilExpiry = Math.abs(expirationDateMs - Date.now());
+        const minutesUntilExpiry = Math.round(timeUntilExpiry / (1000 * 60));
+
+        const statusIcon = isExpired ? "🔴" : "🟢";
+        const statusText = isExpired ? "EXPIRED" : "ACTIVE";
+        const timeText = isExpired
+          ? `Expired ${minutesUntilExpiry} minutes ago`
+          : `Expires in ${minutesUntilExpiry} minutes`;
+
+        updateStatus(
+          "session-status",
+          `${statusIcon} Session: ${statusText} | ${timeText} | Expires: ${expirationDate.toLocaleString()}`,
+        );
+      } else {
+        updateStatus("session-status", "ℹ️ No active session");
+      }
+    } catch (error) {
+      updateStatus("session-status", "⚠️ Error reading session status");
+    }
+  } else {
+    updateStatus("session-status", "ℹ️ No stored session");
   }
 }
 
@@ -552,6 +603,7 @@ function updateStorageDisplay() {
 
 function handleViewStorage() {
   updateStorageDisplay();
+  updateSessionStatus();
   updateStatus("storage-status", "Storage contents updated");
 }
 

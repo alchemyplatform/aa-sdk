@@ -500,6 +500,7 @@ export class AuthClient {
       orgId,
       idToken,
       authType: type,
+      expirationDateMs,
     });
   }
 
@@ -510,11 +511,13 @@ export class AuthClient {
     orgId,
     idToken,
     authType,
+    expirationDateMs,
   }: {
     bundle: string;
     orgId: string;
     idToken?: string;
     authType: Exclude<AuthType, "passkey">;
+    expirationDateMs?: number;
   }): Promise<AuthSession> {
     const { stamper } = await this.getTekStamper();
     const success = await stamper.injectCredentialBundle(bundle);
@@ -528,6 +531,7 @@ export class AuthClient {
       idToken,
       bundle,
       authType,
+      expirationDateMs,
     });
     // Forget the reference to the TEK stamper, because in some implementations
     // it may become invalid if it is disconnected later. Future logins should

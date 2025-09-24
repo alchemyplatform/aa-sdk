@@ -16,6 +16,7 @@ import {
   setStoredAuthSession,
   clearStoredAuthSession,
   getAuthStorageKey,
+  isSessionExpired,
   type PersistedAuthSession,
 } from "./store/authSessionStorage.js";
 
@@ -128,6 +129,7 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
       const toPersist: PersistedAuthSession = {
         version: 1,
         chainId: resolvedChainId,
+        expirationDateMs: authSessionInstance.getExpirationDateMs(),
         authSessionState: authSessionInstance.getSerializedState(),
       };
 
@@ -331,7 +333,18 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
         }
 
         const stored = await getStoredAuthSession(config.storage);
-        return !!stored;
+        if (!stored) {
+          return false;
+        }
+
+        // Check if the session has expired
+        if (isSessionExpired(stored)) {
+          // Clean up expired session
+          await clearStoredAuthSession(config.storage);
+          return false;
+        }
+
+        return true;
       },
 
       async switchChain({ chainId }) {
