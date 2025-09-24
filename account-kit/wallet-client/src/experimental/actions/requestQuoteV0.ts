@@ -18,9 +18,9 @@ export type RequestQuoteV0Params<
       (typeof wallet_requestQuote_v0)["properties"]["Request"]["properties"]["params"]
     >[0],
     "from" | "chainId"
-  > &
-    (IsUndefined<TAccount> extends true ? { from: Address } : { from?: never })
->;
+  >
+> &
+  (IsUndefined<TAccount> extends true ? { from: Address } : { from?: never });
 
 export type RequestQuoteV0Result = Prettify<
   Static<typeof wallet_requestQuote_v0>["ReturnType"]
@@ -37,6 +37,18 @@ export async function requestQuoteV0<
     throw new AccountNotFoundError();
   }
 
+  const capabilities = params.returnRawCalls
+    ? undefined
+    : client.policyIds?.length
+      ? {
+          ...params.capabilities,
+          paymasterService: {
+            ...params.capabilities?.paymasterService,
+            policyIds: client.policyIds,
+          },
+        }
+      : params.capabilities;
+
   return await client.request({
     method: "wallet_requestQuote_v0",
     params: [
@@ -44,6 +56,7 @@ export async function requestQuoteV0<
         ...params,
         chainId: toHex(client.chain.id),
         from,
+        ...(params.returnRawCalls ? {} : { capabilities }),
       },
     ],
   });
