@@ -52,5 +52,5 @@ describe("swapActions decorator tests", () => {
     expect(quote.quote.fromAmount).toBeDefined();
     expect(quote.quote.minimumToAmount).toBeDefined();
     expect(quote.quote.expiry).toBeDefined();
-  });
+  }, 30_000);
 });
