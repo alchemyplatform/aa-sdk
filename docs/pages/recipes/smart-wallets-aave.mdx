@@ -1,0 +1,333 @@
+---
+title: Smart Wallets with Aave
+description: >-
+  Learn how to build DeFi applications that interact with Aave using Alchemy
+  Smart Wallets. This recipe covers supplying and withdrawing assets with both
+  Core and Wallets API.
+slug: wallets/recipes/smart-wallets-aave
+---
+
+Learn how to build DeFi applications that interact with Aave using Alchemy Smart Wallets. This recipe covers supplying and withdrawing assets with both Core and Wallet API approaches for seamless user experiences.
+
+## Prerequisites
+
+1. Have DAI available on your chosen chain (default: Arbitrum).
+2. Alchemy API key, Account config and Gas Manager policy ID for sponsored transactions (you can follow the [setup here](https://www.alchemy.com/docs/wallets/react/setup))
+
+## Quick Start
+
+1. **Clone and setup:**
+
+   <CodeBlocks>
+
+   ```bash HTTPS
+   git clone https://github.com/alchemyplatform/smart-wallets-aave.git
+   cd smart-wallets-aave
+   npm install
+   ```
+
+   ```bash SSH
+   git clone git@github.com:alchemyplatform/smart-wallets-aave.git
+   cd smart-wallets-aave
+   npm install
+   ```
+
+   ```bash "GitHub CLI"
+   gh repo clone alchemyplatform/smart-wallets-aave
+   cd smart-wallets-aave
+   npm install
+   ```
+
+   </CodeBlocks>
+
+2. **Configure environment:**
+
+   ```bash
+   cp .env.example .env
+   # Fill in your ALCHEMY_API_KEY, PRIVATE_KEY, and PAYMASTER_POLICY_ID
+   ```
+
+3. **Initialize smart wallet and get address:**
+
+   ```bash
+   npm run account
+   ```
+
+4. **Fund your smart wallet:**
+   Send 0.01+ DAI to the smart wallet address from step 3
+
+5. **Interact with Aave:**
+   ```bash
+   npm run supply   # Supply assets to Aave
+   npm run withdraw # Withdraw assets from Aave
+   ```
+
+<Steps>
+
+<Step title="Configure the integration">
+
+The configuration is centralized in `src/config.ts` for easy customization:
+
+```typescript
+import { arbitrum, sepolia } from "@account-kit/infra";
+
+export const config = {
+  // Network configuration - change this to switch chains
+  chain: arbitrum, // Can be changed to sepolia, polygon, etc.
+
+  // Token and protocol addresses
+  addresses: {
+    dai: {
+      [arbitrum.id]: "0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1",
+      [sepolia.id]: "0x68194a729C2450ad26072b3D33ADaCbcef39D574",
+    },
+    aaveV3Pool: {
+      [arbitrum.id]: "0x794a61358D6845594F94dc1DB02A252b5b4814aD",
+      [sepolia.id]: "0x6Ae43d3271ff6888e7Fc43Fd7321a503ff738951",
+    },
+  },
+
+  // Transaction amounts
+  amounts: {
+    deposit: "0.01", // Amount to deposit
+    withdraw: "0.01", // Amount to withdraw
+  },
+};
+```
+
+</Step>
+
+<Step title="Interact with Aave Protocol">
+
+<Tabs>
+  <Tab title="Core (@aa-sdk/core)">
+
+This approach uses the direct `@aa-sdk/core` implementation for simpler, more streamlined Aave interactions.
+
+```typescript
+import { LocalAccountSigner } from "@aa-sdk/core";
+import { createModularAccountAlchemyClient } from "@account-kit/smart-contracts";
+import { alchemy } from "@account-kit/infra";
+import { reserve, supply, withdraw } from "@aave/client/actions";
+import {
+  currentChain,
+  getCurrentTokenAddress,
+  getCurrentAavePoolAddress,
+  config,
+} from "./config";
+
+// Supply assets to Aave
+async function executeSupply() {
+  const alchemyApiKey = process.env.ALCHEMY_API_KEY!;
+  const privateKey = process.env.PRIVATE_KEY! as `0x${string}`;
+  const policyId = process.env.PAYMASTER_POLICY_ID! as `0x${string}`;
+
+  // Setup signer
+  const signer = LocalAccountSigner.privateKeyToAccountSigner(privateKey);
+
+  // Create smart account client with gas sponsorship
+  const smartAccountClient = await createModularAccountAlchemyClient({
+    transport: alchemy({ apiKey: alchemyApiKey }),
+    policyId, // Enables gas sponsorship
+    chain: currentChain,
+    signer,
+  });
+
+  const accountAddress = smartAccountClient.account.address;
+
+  // Get reserve data from Aave
+  const reserveDataResult = await reserve(client, {
+    market: evmAddress(getCurrentAavePoolAddress()),
+    underlyingToken: evmAddress(getCurrentTokenAddress()),
+    chainId: chainId(currentChain.id),
+    user: accountAddress,
+  });
+
+  const reserveData = reserveDataResult.value;
+
+  // Get supply transaction data
+  const supplyResult = await supply(client, {
+    market: reserveData.market.address,
+    amount: {
+      erc20: {
+        currency: reserveData.underlyingToken.address,
+        value: config.amounts.deposit,
+      },
+    },
+    sender: evmAddress(accountAddress),
+    chainId: reserveData.market.chain.chainId,
+  });
+
+  let supplyData = supplyResult.value;
+
+  // Handle transactions (approval + supply or just supply)
+  if (supplyData.__typename === "ApprovalRequired") {
+    // Send approval transaction
+    const approvalTx = await smartAccountClient.sendUserOperation({
+      account: smartAccountClient.account,
+      uo: {
+        target: supplyData.approval.to,
+        data: supplyData.approval.data,
+      },
+    });
+
+    await smartAccountClient.getUserOperationReceipt(approvalTx.hash);
+
+    // Send supply transaction
+    const supplyTx = await smartAccountClient.sendUserOperation({
+      account: smartAccountClient.account,
+      uo: {
+        target: supplyData.originalTransaction.to,
+        data: supplyData.originalTransaction.data,
+        value: BigInt(supplyData.originalTransaction.value),
+      },
+    });
+
+    console.log("Supply completed! Hash:", supplyTx.hash);
+  }
+}
+
+// Withdraw assets from Aave
+async function executeWithdraw() {
+  // Setup same as supply...
+  const smartAccountClient = await createModularAccountAlchemyClient({
+    transport: alchemy({ apiKey: alchemyApiKey }),
+    policyId,
+    chain: currentChain,
+    signer,
+  });
+
+  // Get withdraw transaction data
+  const withdrawResult = await withdraw(client, {
+    market: reserveData.market.address,
+    amount: {
+      erc20: {
+        currency: reserveData.underlyingToken.address,
+        value: { exact: config.amounts.withdraw }, // or { max: true } for all
+      },
+    },
+    sender: evmAddress(accountAddress),
+    chainId: reserveData.market.chain.chainId,
+  });
+
+  let withdrawData = withdrawResult.value;
+
+  if (withdrawData.__typename === "TransactionRequest") {
+    const withdrawTx = await smartAccountClient.sendUserOperation({
+      account: smartAccountClient.account,
+      uo: {
+        target: withdrawData.to,
+        data: withdrawData.data,
+        value: BigInt(withdrawData.value),
+      },
+    });
+
+    console.log("Withdrawal completed! Hash:", withdrawTx.hash);
+  }
+}
+```
+
+  </Tab>
+  <Tab title="Wallet APIs (@account-kit/wallet-client)">
+
+This approach uses the higher-level wallet-client API with explicit prepare/sign/send workflow for Aave interactions.
+
+```typescript
+import { createSmartWalletClient } from "@account-kit/wallet-client";
+import { alchemy, arbitrum } from "@account-kit/infra";
+import { LocalAccountSigner } from "@aa-sdk/core";
+
+// Setup smart wallet client
+const smartWalletClient = createSmartWalletClient({
+  signer: LocalAccountSigner.privateKeyToAccountSigner(privateKey),
+  chain: arbitrum,
+  transport: alchemy({ apiKey: alchemyApiKey }),
+});
+
+const account = await smartWalletClient.requestAccount();
+
+// Get Aave operation data (supply/withdraw)
+const aaveData = await getAaveOperationData(); // implementation same as Core approach
+
+// Prepare transaction calls based on operation type
+const calls = [];
+if (aaveData.__typename === "ApprovalRequired") {
+  // For supply operations requiring approval
+  calls.push({
+    to: aaveData.approval.to,
+    data: aaveData.approval.data,
+  });
+  calls.push({
+    to: aaveData.originalTransaction.to,
+    data: aaveData.originalTransaction.data,
+    value: toHex(BigInt(aaveData.originalTransaction.value)),
+  });
+} else if (aaveData.__typename === "TransactionRequest") {
+  // For direct operations (withdrawals, approved supplies)
+  calls.push({
+    to: aaveData.to,
+    data: aaveData.data,
+    value: toHex(BigInt(aaveData.value)),
+  });
+}
+
+// Prepare, sign, and send with gas sponsorship
+const preparedCalls = await smartWalletClient.prepareCalls({
+  calls,
+  from: account.address,
+  capabilities: {
+    paymasterService: {
+      policyId: policyId, // Gas sponsorship
+    },
+  },
+});
+
+const signedCalls = await smartWalletClient.signPreparedCalls(preparedCalls);
+const result = await smartWalletClient.sendPreparedCalls(signedCalls);
+
+console.log(
+  "Aave operation completed! Hash:",
+  result.receipts![0]?.transactionHash,
+);
+```
+
+  </Tab>
+</Tabs>
+
+</Step>
+
+<Step title="Available Scripts">
+
+The repository includes convenient scripts for different approaches:
+
+```bash
+# Core implementation (recommended)
+npm run core:account   # Initialize account
+npm run core:supply    # Supply to Aave
+npm run core:withdraw  # Withdraw from Aave
+
+# Wallet APIs implementation
+npm run wallet:account   # Initialize account
+npm run wallet:supply    # Supply to Aave
+npm run wallet:withdraw  # Withdraw from Aave
+
+# Default scripts (use Core)
+npm run account  # Defaults to core:account
+npm run supply   # Defaults to core:supply
+npm run withdraw # Defaults to core:withdraw
+```
+
+</Step>
+
+</Steps>
+
+## Success!
+
+You can now interact with Aave protocol through smart wallets with sponsored gas fees, enabling seamless DeFi experiences for supplying, withdrawing, and managing liquidity without gas complexity.
+
+## Resources
+
+- [Aave V3 Documentation](https://docs.aave.com/developers/)
+- [Alchemy Smart Wallets Quickstart](https://www.alchemy.com/docs/wallets/react/quickstart)
+- [Gas Manager Setup](https://www.alchemy.com/docs/setup-a-gas-manager-policy)
+- [Aave Contract Addresses](https://aave.com/docs/resources/addresses)

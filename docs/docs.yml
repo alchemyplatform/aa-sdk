@@ -70,18 +70,25 @@ navigation:
               - page: Send USDC
                 slug: recipes/send-usdc
                 path: wallets/pages/recipes/send-usdc.mdx
+              - page: Programmatic Wallet Creation
+                path: wallets/pages/recipes/programmatic-wallet-creation.mdx
               - page: Onramp Funds
                 slug: recipes/onramp-funds
                 path: wallets/pages/recipes/onramp-funds.mdx
               - page: Hyperliquid Transactions
                 slug: recipes/hyperliquid-wallets
                 path: wallets/pages/recipes/hyperliquid-wallets.mdx
+              - page: Smart Wallets with Aave
+                slug: wallets/recipes/smart-wallets-aave
+                path: wallets/pages/recipes/smart-wallets-aave.mdx
               - page: Upgrade to Smart Accounts
                 slug: recipes/upgrade-to-smart-accounts
                 path: wallets/pages/recipes/upgrade-to-smart-accounts.mdx
               - page: Multi-chain setup
                 slug: recipes/multi-chain-setup
                 path: wallets/pages/recipes/multi-chain-setup.mdx
+              - link: Multi-chain Balances
+                href: https://www.alchemy.com/docs/how-to-get-crosschain-token-balances
           - page: Supported Chains
             path: wallets/pages/overview/supported-chains.mdx
 
@@ -107,7 +114,9 @@ navigation:
                 path: wallets/pages/react/login-methods/passkey-login.mdx
               - page: Add passkey
                 path: wallets/pages/react/add-passkey.mdx
-              - page: "[NEW] On-chain passkeys"
+              - page: SMS login
+                path: wallets/pages/authentication/login-methods/sms-login.mdx
+              - page: "On-chain passkeys"
                 path: wallets/pages/react/login-methods/onchain-passkeys.mdx
               - page: Adding and removing login methods
                 path: wallets/pages/react/login-methods/adding-and-removing-login-methods.mdx
