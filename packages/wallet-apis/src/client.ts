@@ -5,17 +5,11 @@ import {
   type LocalAccount,
   createWalletClient,
 } from "viem";
-import {
-  smartWalletActions,
-  type SmartWalletActions,
-} from "./decorators/smartWalletActions.js";
+import { smartWalletActions } from "./decorators/smartWalletActions.js";
 import { type AlchemyTransport } from "@alchemy/common";
-import type { BaseWalletClient, SignerClient } from "./types.js";
+import type { SignerClient, SmartWalletClient } from "./types.js";
 import { createInternalState } from "./internal.js";
-import {
-  createEip1193ProviderFromClient,
-  type SmartWalletClientEip1193Provider,
-} from "./provider.js";
+import { createEip1193ProviderFromClient } from "./provider.js";
 
 export type CreateSmartWalletClientParams<
   TAccount extends Address | undefined = Address | undefined,
@@ -51,9 +45,7 @@ export const createSmartWalletClient = <
   signer,
   policyId,
   policyIds,
-}: CreateSmartWalletClientParams<TAccount>): BaseWalletClient<
-  SmartWalletActions<TAccount>
-> & { getProvider: () => SmartWalletClientEip1193Provider } => {
+}: CreateSmartWalletClientParams<TAccount>): SmartWalletClient<TAccount> => {
   const _policyIds = [...(policyId ? [policyId] : []), ...(policyIds ?? [])];
 
   // If the signer is a `LocalAccount` wrap it inside of a client now so

@@ -65,6 +65,7 @@ async function handleSendOtp() {
     updateStatus("auth-status", "OTP sent! Check your email.");
     focusElement("otp-input");
   } catch (error) {
+    console.error(error);
     updateStatus("auth-status", `Error: ${(error as Error).message}`);
   }
 }
@@ -81,6 +82,7 @@ async function handleSubmitOtp() {
     await submitOtpCode(config, { otpCode });
     updateStatus("auth-status", "Authentication successful!");
   } catch (error) {
+    console.error(error);
     updateStatus("auth-status", `Error: ${(error as Error).message}`);
   }
 }
@@ -93,6 +95,7 @@ async function handleOauthLogin(provider: string) {
     await loginWithOauth(config, { provider, mode });
     updateStatus("oauth-status", `${provider} authentication successful!`);
   } catch (error) {
+    console.error(error);
     updateStatus("oauth-status", `Error: ${(error as Error).message}`);
   }
 }
@@ -222,6 +225,7 @@ function handleOauthRedirectOnLoad() {
         );
       })
       .catch((error: Error) => {
+        console.error(error);
         updateStatus("oauth-status", `OAuth redirect error: ${error.message}`);
       });
   }
