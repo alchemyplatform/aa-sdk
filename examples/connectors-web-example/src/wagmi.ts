@@ -1,16 +1,17 @@
 import { baseAccount, injected, walletConnect } from "@wagmi/connectors";
 import { Config, createConfig } from "@wagmi/core";
 import { arbitrumSepolia, mainnet, sepolia } from "@wagmi/core/chains";
-import { alchemyAuth } from "@alchemy/connectors-web";
+import { alchemyAuth, alchemySmartWallet } from "@alchemy/connectors-web";
 import { alchemyTransport } from "@alchemy/common";
 
-const transport = alchemyTransport({
-  apiKey: import.meta.env.VITE_ALCHEMY_API_KEY,
-});
+const apiKey = import.meta.env.VITE_ALCHEMY_API_KEY;
+
+const transport = alchemyTransport({ apiKey });
 
 export const config: Config = createConfig({
   chains: [arbitrumSepolia, mainnet, sepolia],
   connectors: [
+    alchemySmartWallet({ baseConnector: injected(), apiKey }),
     injected(),
     baseAccount(),
     walletConnect({ projectId: import.meta.env.VITE_WC_PROJECT_ID }),
