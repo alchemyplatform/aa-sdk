@@ -92,6 +92,14 @@ export type * from "./components/auth/types.js";
 export { useAuthModal } from "./hooks/useAuthModal.js";
 export { useAuthContext } from "./components/auth/context.js";
 export { Hydrate } from "./hydrate.js";
+
+// Funding components and hooks
+export { useFundingModal } from "./hooks/useFundingModal.js";
+export type * from "./hooks/useFundingModal.js";
+export { useWalletFunding } from "./hooks/useWalletFunding.js";
+export type * from "./hooks/useWalletFunding.js";
+export { useOnramp } from "./hooks/useOnramp.js";
+export type * from "./hooks/useOnramp.js";
 export {
   useSolanaTransaction,
   type SolanaTransaction,

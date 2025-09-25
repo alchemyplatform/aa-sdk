@@ -11,6 +11,7 @@ import { UiConfigProvider } from "./hooks/useUiConfig.js";
 import { Hydrate } from "./hydrate.js";
 import { AlchemyAccountContext } from "./AlchemyAccountContext.js";
 import { SolanaWalletProvider } from "./components/SolanaWalletProvider.js";
+import { FundingProvider } from "./components/funding/provider.js";
 import type { AlchemyClientState } from "@account-kit/core";
 import { type QueryClient } from "@tanstack/react-query";
 import type { AlchemyAccountsConfigWithUI } from "./createConfig.js";
@@ -116,7 +117,7 @@ export const AlchemyAccountProvider = (
                     resetAuthStep,
                   }}
                 >
-                  {children}
+                  <FundingProvider>{children}</FundingProvider>
                   <AuthModal />
                 </AuthModalContext.Provider>
               </UiConfigProvider>

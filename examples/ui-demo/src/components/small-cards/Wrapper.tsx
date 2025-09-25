@@ -5,11 +5,13 @@ import { SolanaNftCard } from "./SolanaNftCard";
 import { TransactionsCard } from "./TransactionsCard";
 import { Erc20SponsorshipCard } from "./Erc20SponsorshipCard";
 import { DepositAndSwapsCard } from "./DepositAndSwapsCard";
+import { FundingCard } from "./FundingCard";
 
 export const SmallCardsWrapper = () => {
   const { accountMode } = useConfigStore();
   return (
     <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 lg:my-6 items-center w-full">
+      <FundingCard />
       <Erc20SponsorshipCard
         accountMode={accountMode}
         key={`erc20-sponsorship-card-${accountMode}`}

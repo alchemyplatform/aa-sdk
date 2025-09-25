@@ -56,6 +56,11 @@ import {
   type SendCallsParams,
   type SendCallsResult,
 } from "./actions/sendCalls.js";
+import {
+  onramp,
+  type OnrampParams,
+  type OnrampResult,
+} from "./actions/onramp.js";
 
 export type SmartWalletActions<
   TAccount extends Address | undefined = Address | undefined,
@@ -88,6 +93,7 @@ export type SmartWalletActions<
   grantPermissions: (
     params: GrantPermissionsParams<TAccount>,
   ) => Promise<GrantPermissionsResult>;
+  onramp: (params?: OnrampParams) => Promise<OnrampResult>;
 };
 
 export function smartWalletClientActions<
@@ -109,5 +115,6 @@ export function smartWalletClientActions<
     signMessage: (params) => signMessage(client, signer, params),
     signTypedData: (params) => signTypedData(client, signer, params),
     grantPermissions: (params) => grantPermissions(client, signer, params),
+    onramp: (params) => onramp(params),
   };
 }

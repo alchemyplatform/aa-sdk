@@ -113,6 +113,11 @@ export type StoreState = {
   chain: Chain;
   connections: Map<number | string, Connection>;
   solana?: SolanaConnection;
+  fundingModal: {
+    isOpen: boolean;
+    token: string;
+    network: string;
+  };
 };
 
 type Expanded<T> = { [K in keyof T]: T[K] };

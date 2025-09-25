@@ -514,7 +514,7 @@ function getAuthenticatorUserId(
     }
     return id;
   }
-  return uuidParse(uuidv4());
+  return uuidParse(uuidv4()) as BufferSource;
 }
 
 function bufferSourceToUint8Array(bufferSource: BufferSource): Uint8Array {

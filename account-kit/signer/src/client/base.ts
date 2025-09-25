@@ -387,14 +387,14 @@ export abstract class BaseSignerClient<
             userTagIds: [],
           },
         })
-      : await this.turnkeyClient.stampUpdateUserEmail({
-          type: "ACTIVITY_TYPE_UPDATE_USER_EMAIL",
+      : await this.turnkeyClient.stampUpdateUser({
+          type: "ACTIVITY_TYPE_UPDATE_USER",
           timestampMs: Date.now().toString(),
           organizationId: this.user.orgId,
           parameters: {
             userId: this.user.userId,
             userEmail: email,
-            verificationToken,
+            userTagIds: [],
           },
         });
 
@@ -444,14 +444,14 @@ export abstract class BaseSignerClient<
     if (phone.trim() && !verificationToken) {
       throw new Error("Verification token is required to change phone number.");
     }
-    const stampedRequest = await this.turnkeyClient.stampUpdateUserPhoneNumber({
-      type: "ACTIVITY_TYPE_UPDATE_USER_PHONE_NUMBER",
+    const stampedRequest = await this.turnkeyClient.stampUpdateUser({
+      type: "ACTIVITY_TYPE_UPDATE_USER",
       timestampMs: Date.now().toString(),
       organizationId: this.user.orgId,
       parameters: {
         userId: this.user.userId,
         userPhoneNumber: phone,
-        verificationToken,
+        userTagIds: [],
       },
     });
     await this.request("/v1/update-phone-auth", {
