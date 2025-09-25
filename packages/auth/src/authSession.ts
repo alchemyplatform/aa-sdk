@@ -52,8 +52,8 @@ export type CreateAuthSessionParams = {
   authType: AuthType;
   /** Credential ID for passkey authentication */
   credentialId?: string;
-  /** Expiration timestamp - if not provided, defaults to 15 minutes from now */
-  expirationDateMs?: number;
+  /** Session duration in milliseconds - if not provided, defaults to 15 minutes */
+  sessionDurationMs?: number;
 };
 
 /**
@@ -108,11 +108,11 @@ export class AuthSession {
     private readonly bundle?: string,
     private readonly authType?: AuthType,
     private readonly credentialId?: string,
-    expirationDateMs?: number,
+    sessionDurationMs?: number,
   ) {
-    // Use provided expiration or calculate 15 minutes from now as default
-    this.expirationDateMs =
-      expirationDateMs ?? Date.now() + DEFAULT_SESSION_EXPIRATION_MS;
+    // Calculate expiration timestamp from duration (defaults to 15 minutes)
+    const durationMs = sessionDurationMs ?? DEFAULT_SESSION_EXPIRATION_MS;
+    this.expirationDateMs = Date.now() + durationMs;
   }
 
   /**
@@ -132,7 +132,8 @@ export class AuthSession {
    *   orgId: "org123",
    *   idToken: "jwt-token",
    *   bundle: "credential-bundle",
-   *   authType: "oauth"
+   *   authType: "oauth",
+   *   sessionDurationMs: 30 * 60 * 1000 // 30 minutes
    * });
    * ```
    */
@@ -144,7 +145,7 @@ export class AuthSession {
     bundle,
     authType,
     credentialId,
-    expirationDateMs,
+    sessionDurationMs,
   }: CreateAuthSessionParams): Promise<AuthSession> {
     const turnkey = new TurnkeyClient(
       { baseUrl: "https://api.turnkey.com" },
@@ -174,7 +175,7 @@ export class AuthSession {
       bundle,
       authType,
       credentialId,
-      expirationDateMs,
+      sessionDurationMs,
     );
   }
 
