@@ -4,21 +4,20 @@ description: Generate a signer, initialize a Smart Wallet Client, sponsor gas wi
 slug: wallets/recipes/programmatic-wallet-creation
 ---
 
-This recipe shows how to programmatically create a smart wallet: you’ll generate a signer, spin up a Smart Wallet Client, read the counterfactual address before deployment and deploy the wallet by sending your first gas sponsored `UserOperation` (prepared → signed → sent). You’ll also see what to persist (address, prepared call IDs, tx hash) for later use.
+This recipe shows how to programmatically create a smart wallet: you’ll generate a signer, spin up a Smart Wallet Client, read the counterfactual address before deployment and deploy the wallet by sending your first gas sponsored `UserOperation` (prepared → signed → sent).
 
 <Steps>
   <Step title="Install required dependencies">
     You'll need the following packages for this recipe:
 
-    - **viem**: Crypto utilities (we'll generate a private key)
-    - **@aa-sdk/core**: `LocalAccountSigner` (wraps the private key as a signer)
+    - **@account-kit/signer**: Server wallet signer and access key generation
     - **@account-kit/infra**: Alchemy transport & chain constants (e.g., `arbitrumSepolia`)
     - **@account-kit/wallet-client**: Smart Wallet Client (prepare/sign/send flows)
     - **dotenv**: Read .env for your API key & policy id
     - **typescript + tsx + @types/node**: Run TypeScript files directly
 
     ```bash
-    npm i viem @aa-sdk/core @account-kit/infra @account-kit/wallet-client dotenv
+    npm i @account-kit/signer @account-kit/infra @account-kit/wallet-client dotenv
     npm i -D typescript tsx @types/node
     ```
   </Step>
@@ -31,18 +30,51 @@ This recipe shows how to programmatically create a smart wallet: you’ll genera
     ALCHEMY_API_KEY=YOUR_API_KEY
     # Get your gas sponsorship policy ID: https://dashboard.alchemy.com/services/gas-manager/configuration
     ALCHEMY_POLICY_ID=YOUR_POLICY_ID
+    # Generate a secure access key for server wallet authentication - see step 2 below
+    ACCESS_KEY=your-secure-access-key-here
     ```
   </Step>
 
-  <Step title="Create a signer">
-    You can use email/OTP, passkeys, or social login (via the [react quickstart](https://www.alchemy.com/docs/wallets/react/quickstart)) to obtain an embedded signer; or bring your own EOA, KMS/HSM, or custodial signer via the third-party signer interfaces. In this recipe, we keep it simple with a viem-generated private key wrapped by `LocalAccountSigner`:
+  <Step title="Generate an access key">
+    Server wallets enable backend applications to programmatically control wallets using access keys, without requiring interactive authentication. This is perfect for automated systems, batch operations, or when you need to sign transactions from your backend.
+
+    **How server wallets work:**
+    - You generate a secure access key that never leaves your server
+    - Alchemy derives a public key from your access key for authentication
+    - The access key is used to sign transactions and messages on behalf of users
+    - No private keys are stored or transmitted to Alchemy's servers
 
     ```ts
-    import { generatePrivateKey } from "viem/accounts";
-    import { LocalAccountSigner } from "@aa-sdk/core";
+    import { generateAccessKey } from "@account-kit/signer";
 
-    const pk = generatePrivateKey(); // demo only; prefer KMS/HSM/etc. in production
-    const signer = LocalAccountSigner.privateKeyToAccountSigner(pk);
+    // Generate a secure access key (do this once and store securely)
+    const accessKey = generateAccessKey();
+    console.log("Access key:", accessKey);
+
+    // Store this securely - you'll need it to control the server signer
+    ```
+
+    <Warning>
+      **Critical: Save your access key securely!**
+
+      This access key is required to control your server wallet and cannot be recovered if lost. Make sure to add it in your .env file and store it in a secure location.
+    </Warning>
+  </Step>
+
+  <Step title="Create a server signer">
+    ```ts
+    import { createServerSigner } from "@account-kit/signer";
+
+    const signer = await createServerSigner({
+      auth: {
+        accessKey: process.env.ACCESS_KEY!,
+      },
+      connection: {
+        apiKey: process.env.ALCHEMY_API_KEY!,
+      },
+    });
+
+    console.log("Signer address:", await signer.getAddress());
     ```
   </Step>
 
@@ -97,8 +129,6 @@ This recipe shows how to programmatically create a smart wallet: you’ll genera
     console.log("Tx hash:", txHash);
     ```
 
-    > Persist `address`, `preparedCallIds`, `txHash`, and `chainId` (and store only a signer locator in production—never raw keys).
-
     <Note>
       For non-sponsored path, remove the `paymasterService` capability in
       `prepareCalls` and **fund the account** to pay gas. The rest of the flow is
@@ -109,21 +139,28 @@ This recipe shows how to programmatically create a smart wallet: you’ll genera
 
     ```ts provision.ts
     import "dotenv/config";
-    import { generatePrivateKey } from "viem/accounts";
-    import { LocalAccountSigner } from "@aa-sdk/core";
+    import { createServerSigner } from "@account-kit/signer";
     import { createSmartWalletClient } from "@account-kit/wallet-client";
     import { alchemy, arbitrumSepolia } from "@account-kit/infra";
 
     const ALCHEMY_API_KEY = process.env.ALCHEMY_API_KEY!;
     const ALCHEMY_POLICY_ID = process.env.ALCHEMY_POLICY_ID!;
-    if (!ALCHEMY_API_KEY || !ALCHEMY_POLICY_ID) {
-      throw new Error("Missing ALCHEMY_API_KEY or ALCHEMY_POLICY_ID in env");
+    const ACCESS_KEY = process.env.ACCESS_KEY!;
+    
+    if (!ALCHEMY_API_KEY || !ALCHEMY_POLICY_ID || !ACCESS_KEY) {
+      throw new Error("Missing ALCHEMY_API_KEY, ALCHEMY_POLICY_ID, or ACCESS_KEY in env");
     }
 
     async function main() {
-      // 1) Signer (demo): viem private key -> LocalAccountSigner
-      const pk = generatePrivateKey(); // demo only
-      const signer = LocalAccountSigner.privateKeyToAccountSigner(pk);
+      // 1) Create server signer using access key
+      const signer = await createServerSigner({
+        auth: {
+          accessKey: ACCESS_KEY,
+        },
+        connection: {
+          apiKey: ALCHEMY_API_KEY,
+        },
+      });
 
       // 2) Transport + Smart Wallet Client
       const transport = alchemy({ apiKey: ALCHEMY_API_KEY });
@@ -164,7 +201,6 @@ This recipe shows how to programmatically create a smart wallet: you’ll genera
       console.log("Prepared call IDs:", sent.preparedCallIds);
       console.log("Tx hash:", txHash);
 
-      // Example: persist { address, chainId: client.chain.id, preparedCallIds: sent.preparedCallIds, txHash }
       return { address, preparedCallIds: sent.preparedCallIds, txHash };
     }
 
@@ -185,7 +221,7 @@ This recipe shows how to programmatically create a smart wallet: you’ll genera
   <Step title="Run it">
     ```bash
     # one-time per project
-    npm i viem @aa-sdk/core @account-kit/infra @account-kit/wallet-client dotenv
+    npm i @account-kit/signer @account-kit/infra @account-kit/wallet-client dotenv
     npm i -D typescript tsx @types/node
 
     # then run
