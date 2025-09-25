@@ -9,34 +9,12 @@ import type {
   HandleOauthFlowFn,
   TurnkeyTekStamper,
 } from "./types.js";
-import { getOauthNonce, getOauthProviderUrl } from "./utils.js";
-import { z } from "zod";
-
-const UserSchema = z.object({
-  email: z.string().optional(),
-  orgId: z.string(),
-  userId: z.string(),
-  address: z.string(),
-  solanaAddress: z.string().optional(),
-  credentialId: z.string().optional(),
-  idToken: z.string().optional(),
-  claims: z.record(z.unknown()).optional(),
-});
-
-const AuthSessionStateSchema = z.discriminatedUnion("type", [
-  z.object({
-    type: z.literal("passkey"),
-    user: UserSchema,
-    expirationDateMs: z.number(),
-    credentialId: z.string().optional(),
-  }),
-  z.object({
-    type: z.enum(["email", "oauth", "otp"]),
-    bundle: z.string(),
-    user: UserSchema,
-    expirationDateMs: z.number(),
-  }),
-]);
+import {
+  getOauthNonce,
+  getOauthProviderUrl,
+  extractOAuthCallbackParams,
+  AuthSessionStateSchema,
+} from "./utils.js";
 
 /**
  * Configuration parameters for creating an AuthClient instance
@@ -99,105 +77,6 @@ type PendingOtp = {
   otpId: string;
   orgId: string;
 };
-
-/**
- * Reads and removes the specified query params from the URL.
- *
- * @param {T} keys object whose values are the query parameter keys to read and
- * remove
- * @returns {{ [K in keyof T]: string | undefined }} object with the same keys
- * as the input whose values are the values of the query params.
- */
-function getAndRemoveQueryParams<T extends Record<string, string>>(
-  keys: T,
-): { [K in keyof T]: string | undefined } {
-  const url = new URL(window.location.href);
-  const result: Record<string, string | undefined> = {};
-  let foundQueryParam = false;
-  for (const [key, param] of Object.entries(keys)) {
-    const value = url.searchParams.get(param) ?? undefined;
-    foundQueryParam ||= value != null;
-    result[key] = value;
-    url.searchParams.delete(param);
-  }
-  if (foundQueryParam) {
-    window.history.replaceState(window.history.state, "", url.toString());
-  }
-  return result as { [K in keyof T]: string | undefined };
-}
-
-/**
- * Attempts to extract OAuth callback parameters from the current URL.
- * Returns the extracted parameters if this appears to be an OAuth callback,
- * or null if no OAuth parameters are found.
- *
- * @returns {object | null} OAuth callback parameters or null if not a callback
- */
-function extractOAuthCallbackParams() {
-  const qpStructure = {
-    status: "alchemy-status",
-    oauthBundle: "alchemy-bundle",
-    oauthOrgId: "alchemy-org-id",
-    idToken: "alchemy-id-token",
-    isSignup: "aa-is-signup",
-    otpId: "alchemy-otp-id",
-    email: "alchemy-email",
-    authProvider: "alchemy-auth-provider",
-    oauthError: "alchemy-error",
-  };
-
-  const {
-    status,
-    oauthBundle,
-    oauthOrgId,
-    idToken,
-    isSignup,
-    otpId,
-    email,
-    authProvider,
-    oauthError,
-  } = getAndRemoveQueryParams(qpStructure);
-
-  // Check if this is an OAuth callback by looking for required OAuth parameters
-  if (oauthBundle && oauthOrgId && idToken) {
-    return {
-      status: "SUCCESS" as const,
-      bundle: oauthBundle,
-      orgId: oauthOrgId,
-      idToken,
-      isSignup: isSignup === "true",
-    };
-  }
-
-  // Check for OAuth error
-  if (oauthError) {
-    return {
-      status: "ERROR" as const,
-      error: oauthError,
-    };
-  }
-
-  // Check for account linking prompt
-  if (
-    status === "ACCOUNT_LINKING_CONFIRMATION_REQUIRED" &&
-    idToken &&
-    email &&
-    authProvider &&
-    otpId &&
-    oauthOrgId
-  ) {
-    return {
-      status: "ACCOUNT_LINKING_CONFIRMATION_REQUIRED" as const,
-      idToken,
-      email,
-      providerName: authProvider,
-      otpId,
-      orgId: oauthOrgId,
-    };
-  }
-
-  return null;
-}
 
 /**
  * AuthClient handles authentication flows including email OTP, OAuth, and passkey authentication.
@@ -271,16 +150,37 @@ export class AuthClient {
    */
   public async sendEmailOtp({ email }: SendEmailOtpParams): Promise<void> {
     const { targetPublicKey } = await this.getTekStamper();
-    const { otpId, orgId } = await this.signerHttpClient.request({
-      route: "signer/v1/auth",
+    const { orgId: existingOrgId } = await this.signerHttpClient.request({
+      route: "signer/v1/lookup",
       method: "POST",
       body: {
         email,
-        emailMode: "otp",
-        targetPublicKey,
       },
     });
-    this.pendingOtp = { otpId: otpId!, orgId };
+    const { orgId, otpId } = await (() => {
+      if (!existingOrgId) {
+        return this.signerHttpClient.request({
+          route: "signer/v1/signup",
+          method: "POST",
+          body: {
+            email,
+            emailMode: "otp",
+            targetPublicKey,
+          },
+        });
+      } else {
+        return this.signerHttpClient.request({
+          route: "signer/v1/auth",
+          method: "POST",
+          body: {
+            email,
+            emailMode: "otp",
+            targetPublicKey,
+          },
+        });
+      }
+    })();
+    this.pendingOtp = { otpId: otpId!, orgId: orgId };
   }
 
   /**
@@ -359,13 +259,7 @@ export class AuthClient {
       oauthConfig,
     });
     const response = await this.handleOauthFlow(authUrl, params.mode);
-    console.log({ response });
     if (response.status === "SUCCESS") {
-      console.log("completeAuthWithBundle", {
-        bundle: response.bundle,
-        orgId: response.orgId,
-        idToken: response.idToken,
-      });
       return this.completeAuthWithBundle({
         bundle: response.bundle!,
         orgId: response.orgId!,

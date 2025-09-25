@@ -155,6 +155,12 @@ export type SignerHttpSchema = [
     };
   },
   {
+    Route: "signer/v1/lookup";
+    Method: "POST";
+    Body: { email?: string; phone?: string };
+    Response: { orgId?: string };
+  },
+  {
     Route: "signer/v1/otp";
     Method: "POST";
     Body: {
@@ -207,6 +213,26 @@ export type SignerHttpSchema = [
     Method: "POST";
     Body: StampedRequestBody;
     Response: { signature: Hex };
+  },
+  {
+    Route: "signer/v1/signup";
+    Method: "POST";
+    Body: {
+      passkey?: PublicKeyCredential;
+      email?: string;
+      emailMode?: "magicLink" | "otp";
+      phone?: string;
+      targetPublicKey?: string;
+      expirationSeconds?: number;
+      redirectParams?: string;
+    };
+    Response: {
+      orgId: string;
+      userId?: string;
+      address?: Address;
+      solanaAddress?: string;
+      otpId?: string;
+    };
   },
 ];
 
