@@ -85,7 +85,7 @@ navigation:
               - page: Multi-chain setup
                 slug: recipes/multi-chain-setup
                 path: wallets/pages/recipes/multi-chain-setup.mdx
-              - link: Multi-chain Token Balances
+              - link: Multi-chain Balances
                 href: https://www.alchemy.com/docs/how-to-get-crosschain-token-balances
           - page: Supported Chains
             path: wallets/pages/overview/supported-chains.mdx
