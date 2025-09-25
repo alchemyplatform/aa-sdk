@@ -147,11 +147,79 @@ input[type="email"] {
   background: #059669;
 }
 
+/* Persistence Testing Styles */
+#persistence-testing {
+  margin: 20px 0;
+  padding: 20px;
+  border: 1px solid #333;
+  border-radius: 8px;
+}
+
+.test-actions {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+}
+
+.test-actions button {
+  padding: 8px 16px;
+  background: #6366f1;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.test-actions button:hover {
+  background: #4f46e5;
+}
+
+.test-pass {
+  color: #10b981;
+  font-weight: 500;
+}
+
+.test-fail {
+  color: #ef4444;
+  font-weight: 500;
+}
+
+#test-results,
+#storage-display {
+  margin-top: 10px;
+  font-family: monospace;
+  font-size: 14px;
+}
+
+#storage-display pre {
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 10px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+@media (prefers-color-scheme: dark) {
+  #persistence-testing {
+    border-color: #444;
+  }
+
+  #storage-display pre {
+    background: #2a2a2a;
+    border-color: #444;
+    color: #e0e0e0;
+  }
+}
+
 @media (prefers-color-scheme: light) {
   #oauth-auth,
   #email-auth,
   #wallet-actions,
-  #session-controls {
+  #session-controls,
+  #persistence-testing {
     border-color: #ddd;
   }
 
