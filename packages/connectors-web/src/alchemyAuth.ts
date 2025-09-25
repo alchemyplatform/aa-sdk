@@ -16,7 +16,6 @@ import {
   setStoredAuthSession,
   clearStoredAuthSession,
   getAuthStorageKey,
-  isSessionExpired,
   type PersistedAuthSession,
 } from "./store/authSessionStorage.js";
 
@@ -71,6 +70,12 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
   // Store reference to storage event listener for cleanup
   let storageEventListener: ((e: StorageEvent) => void) | undefined;
 
+  // Promise that tracks session restoration to prevent race conditions.
+  // This ensures that if multiple methods (getProvider, isAuthorized, etc.)
+  // are called before connect(), they all await the same restoration attempt
+  // rather than triggering multiple concurrent tryResume() calls.
+  // Returns true if the session was restored successfully, false if it was not.
+  let resumePromise: Promise<boolean> | undefined;
   return createConnector<Provider, Properties>((config) => {
     function assertNotNullish<T>(
       value: T,
@@ -129,7 +134,6 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
       const toPersist: PersistedAuthSession = {
         version: 1,
         chainId: resolvedChainId,
-        expirationDateMs: authSessionInstance.getExpirationDateMs(),
         authSessionState: authSessionInstance.getSerializedState(),
       };
 
@@ -156,12 +160,31 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
       return authClientInstance;
     }
 
+    // Helper to ensure session is restored before use
+    async function ensureSession(): Promise<void> {
+      if (authSessionInstance) return;
+
+      if (resumePromise) {
+        const restored = await resumePromise;
+        if (!restored) {
+          throw new Error(
+            "No auth session available. Please authenticate first using sendEmailOtp/submitOtpCode or loginWithOauth.",
+          );
+        }
+      } else {
+        throw new Error(
+          "No auth session available. Please authenticate first using sendEmailOtp/submitOtpCode or loginWithOauth.",
+        );
+      }
+    }
     return {
       id: "alchemyAuth",
       name: "Alchemy Auth",
       type: alchemyAuth.type,
 
       async setup() {
+        // Start session restoration early but don't await to avoid blocking setup
+        resumePromise = tryResume();
         // Set up cross-tab storage event handling for session synchronization
         // This ensures that when a user logs out in one tab, all other tabs
         // automatically disconnect to prevent stale authentication states
@@ -182,15 +205,8 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
       },
 
       async connect({ chainId, isReconnecting } = {}) {
-        // Perform session restoration here if needed
-        if (!authSessionInstance) {
-          await tryResume();
-        }
-
-        assertNotNullish(
-          authSessionInstance,
-          "No auth session available. Please authenticate first using sendEmailOtp and submitOtpCode, or loginWithOauth.",
-        );
+        // Ensure session is restored before connecting
+        await ensureSession();
 
         // Only refresh persisted snapshot on explicit connects, not reconnects
         // During reconnection, we assume the persisted state is already current
@@ -249,6 +265,7 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
           authClientInstance = undefined;
           currentChainId = undefined;
           clients = {};
+          resumePromise = undefined;
 
           // Remove storage event listener to prevent memory leaks
           if (typeof window !== "undefined" && storageEventListener) {
@@ -282,21 +299,13 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
       },
 
       async getProvider() {
-        assertNotNullish(
-          authSessionInstance,
-          "No auth session available. Please authenticate first.",
-        );
-        return authSessionInstance.getProvider();
+        await ensureSession();
+        return authSessionInstance!.getProvider();
       },
 
       // This is optional, but called by `getConnectorClient`. See here: https://github.com/wevm/wagmi/blob/main/packages/core/src/actions/getConnectorClient.ts
       // This enables signing 7702 authorizations, since otherwise wagmi will build a client using the 1193 provider, which is unable to sign authorizations.
       async getClient(params = { chainId: undefined }): Promise<Client> {
-        assertNotNullish(
-          authSessionInstance,
-          "Authentication required. Please configure the alchemyAuth connector with an apiKey.",
-        );
-
         const chainId = params.chainId ?? currentChainId;
         assertNotNullish(chainId, "chainId is required to getClient");
 
@@ -314,7 +323,8 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
           );
         }
 
-        const account = authSessionInstance.toViemLocalAccount();
+        await ensureSession();
+        const account = authSessionInstance!.toViemLocalAccount();
 
         const client = createWalletClient({
           account,
@@ -332,19 +342,17 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
           return true;
         }
 
+        // If we have a resume promise, wait for it to complete
+        if (resumePromise) {
+          const restored = await resumePromise;
+          if (restored) {
+            return true;
+          }
+        }
+
+        // Fallback to checking storage directly
         const stored = await getStoredAuthSession(config.storage);
-        if (!stored) {
-          return false;
-        }
-
-        // Check if the session has expired
-        if (isSessionExpired(stored)) {
-          // Clean up expired session
-          await clearStoredAuthSession(config.storage);
-          return false;
-        }
-
-        return true;
+        return !!stored;
       },
 
       async switchChain({ chainId }) {
@@ -402,16 +410,14 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
       getAuthClient,
 
       async getAuthSession() {
-        if (!authSessionInstance) {
-          throw new Error(
-            "authSession not available. Please authenticate first.",
-          );
-        }
-        return authSessionInstance;
+        await ensureSession();
+        return authSessionInstance!;
       },
 
       setAuthSession(authSession: AuthSession) {
         authSessionInstance = authSession;
+        // Clear the resume promise since we now have a fresh session
+        resumePromise = undefined;
 
         // Persist session state immediately
         void persistAuthSession().catch((error) => {

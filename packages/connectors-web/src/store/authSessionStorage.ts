@@ -7,8 +7,6 @@ export type PersistedAuthSession = {
   version: 1;
   /** Chain ID for connector-specific context */
   chainId: number;
-  /** Session expiration timestamp */
-  expirationDateMs: number;
   /** Opaque serialized auth session state - contents managed by auth package */
   authSessionState: string;
 };
@@ -20,7 +18,6 @@ const STORAGE_KEY = "alchemyAuth.authSession" as const;
 const PersistedAuthSessionSchema = z.object({
   version: z.literal(1),
   chainId: z.number(),
-  expirationDateMs: z.number(),
   authSessionState: z.string(),
 });
 
@@ -28,11 +25,6 @@ const PersistedAuthSessionSchema = z.object({
 function isPersistedAuthSession(obj: unknown): obj is PersistedAuthSession {
   const result = PersistedAuthSessionSchema.safeParse(obj);
   return result.success;
-}
-
-// Helper to check if a session is expired
-export function isSessionExpired(session: PersistedAuthSession): boolean {
-  return session.expirationDateMs < Date.now();
 }
 
 // Type-safe storage helpers
