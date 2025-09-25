@@ -20,6 +20,7 @@ This recipe shows how to programmatically create a smart wallet: you’ll genera
     npm i @account-kit/signer @account-kit/infra @account-kit/wallet-client dotenv
     npm i -D typescript tsx @types/node
     ```
+
   </Step>
 
   <Step title="Environment variables">
@@ -33,6 +34,7 @@ This recipe shows how to programmatically create a smart wallet: you’ll genera
     # Generate a secure access key for server wallet authentication - see step 3 below
     ACCESS_KEY=your-secure-access-key-here
     ```
+
   </Step>
 
   <Step title="Generate an access key">
@@ -59,6 +61,7 @@ This recipe shows how to programmatically create a smart wallet: you’ll genera
 
       This access key is required to control your server wallet and cannot be recovered if lost. Make sure to store it in a secure location.
     </Warning>
+
   </Step>
 
   <Step title="Create a server signer">
@@ -76,6 +79,7 @@ This recipe shows how to programmatically create a smart wallet: you’ll genera
 
     console.log("Signer address:", await signer.getAddress());
     ```
+
   </Step>
 
   <Step title="Create the Smart Wallet Client">
@@ -91,6 +95,7 @@ This recipe shows how to programmatically create a smart wallet: you’ll genera
       signer,
     });
     ```
+
   </Step>
 
   <Step title="Get the counterfactual address">
@@ -101,6 +106,7 @@ This recipe shows how to programmatically create a smart wallet: you’ll genera
     const address = account.address;
     console.log("Counterfactual address:", address);
     ```
+
   </Step>
 
   <Step title="Prepare → sign → send a sponsored call">
@@ -146,7 +152,7 @@ This recipe shows how to programmatically create a smart wallet: you’ll genera
     const ALCHEMY_API_KEY = process.env.ALCHEMY_API_KEY!;
     const ALCHEMY_POLICY_ID = process.env.ALCHEMY_POLICY_ID!;
     const ACCESS_KEY = process.env.ACCESS_KEY!;
-    
+
     if (!ALCHEMY_API_KEY || !ALCHEMY_POLICY_ID || !ACCESS_KEY) {
       throw new Error("Missing ALCHEMY_API_KEY, ALCHEMY_POLICY_ID, or ACCESS_KEY in env");
     }
@@ -277,5 +283,6 @@ This recipe shows how to programmatically create a smart wallet: you’ll genera
     ```
 
     And when opened in an Arbitrum Sepolia explorer, you should see the [deployment](https://sepolia.arbiscan.io/address/0x022fA5358476f0EB881138BD822E5150AFb36c5B#internaltx) 🎉
+
   </Step>
 </Steps>
