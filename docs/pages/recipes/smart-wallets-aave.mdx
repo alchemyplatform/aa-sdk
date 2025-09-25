@@ -18,9 +18,23 @@ Learn how to build DeFi applications that interact with Aave using Alchemy Smart
 
 Check out this video walkthrough, and follow along with the quick start below:
 
-<div style={{position: 'relative', paddingBottom: '56.25%', height: 0, overflow: 'hidden', maxWidth: '100%'}}>
+<div
+  style={{
+    position: "relative",
+    paddingBottom: "56.25%",
+    height: 0,
+    overflow: "hidden",
+    maxWidth: "100%",
+  }}
+>
   <iframe
-    style={{position: 'absolute', top: 0, left: 0, width: '100%', height: '100%'}}
+    style={{
+      position: "absolute",
+      top: 0,
+      left: 0,
+      width: "100%",
+      height: "100%",
+    }}
     src="https://www.youtube.com/embed/-IiXloGXseo?si=wAsVb96E_wShHocy"
     title="YouTube video player"
     frameborder="0"
@@ -303,7 +317,7 @@ const result = await smartWalletClient.sendPreparedCalls(signedCalls);
 
 console.log(
   "Aave operation completed! Hash:",
-  result.receipts![0]?.transactionHash
+  result.receipts![0]?.transactionHash,
 );
 ```
 
