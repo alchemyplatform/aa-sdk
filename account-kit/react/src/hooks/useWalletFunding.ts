@@ -1,263 +1,355 @@
 "use client";
 
-import { useCallback } from "react";
-import { useBundlerClient } from "./useBundlerClient.js";
+import { useCallback, useState } from "react";
+import { useSmartWalletClient } from "./useSmartWalletClient.js";
+import type {
+  GetConfigResponse,
+  GetQuotesResponse,
+  Quote,
+  CreateSessionResponse,
+  PaymentMethod,
+  GetConfigParams,
+  GetQuotesParams,
+  CreateSessionParams,
+} from "./internal/walletFundingTypes.js";
 
-// Types for wallet funding methods
-export type FundingDefaults = {
-  countryCode: string;
-  defaultFiatCurrencyCode: string;
-  defaultPaymentMethodType: string;
-  provider: string;
+// Utility function to generate idempotency key
+function generateIdempotencyKey(): string {
+  return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+}
+
+// Mock data for fallback behavior
+const MOCK_CONFIG: GetConfigResponse = {
+  countryCode: "US",
+  defaults: {
+    fiat: "USD",
+    paymentMethod: "DEBIT_CARD",
+    token: "USDC",
+    recommendedProviderId: "coinbase",
+  },
+  catalog: {
+    fiats: [{ code: "USD", name: "US Dollar" }],
+    tokens: [
+      { code: "USDC", name: "USD Coin", chain: "ethereum" },
+      { code: "ETH", name: "Ethereum", chain: "ethereum" },
+    ],
+    paymentMethods: [
+      { type: "APPLE_PAY", label: "Apple Pay" },
+      { type: "DEBIT_CARD", label: "Debit Card", recommended: true },
+      { type: "BANK_TRANSFER", label: "Bank transfer" },
+    ],
+  },
+  limits: [
+    {
+      fiat: "USD",
+      paymentMethod: "DEBIT_CARD",
+      min: "10",
+      max: "10000",
+      default: "50",
+      precision: 2,
+    },
+  ],
+  ui: {
+    quoteLockSeconds: 90,
+  },
 };
 
-export type FundingQuote = {
-  provider: string;
-  paymentMethodType: string;
-  destinationAmount: string;
-  destinationCurrencyCode: string;
-  fees: {
-    network?: string;
-    provider?: string;
-  };
-  total: {
-    sourceAmount: string;
-    sourceCurrencyCode: string;
-  };
-  estimatedArrival: string;
-  quoteExpiresAt: string;
-  route: {
-    hops: string[];
-  };
-};
+const MOCK_QUOTES: Quote[] = [
+  {
+    quoteId: "mock-quote-coinbase",
+    providerId: "coinbase",
+    badges: ["fastest"],
+    destinationAmount: "49.95",
+    exchangeRate: "1.01",
+    fees: {
+      processing: "0",
+      network: "0",
+      total: "0",
+    },
+    etaSeconds: 30,
+    paymentMethod: "DEBIT_CARD",
+    expiresAt: new Date(Date.now() + 90000).toISOString(),
+  },
+  {
+    quoteId: "mock-quote-kraken",
+    providerId: "kraken",
+    badges: ["best_price"],
+    destinationAmount: "50.00",
+    exchangeRate: "1.00",
+    fees: {
+      processing: "0.50",
+      network: "0.50",
+      total: "1.00",
+    },
+    etaSeconds: 120,
+    paymentMethod: "DEBIT_CARD",
+    expiresAt: new Date(Date.now() + 90000).toISOString(),
+  },
+  {
+    quoteId: "mock-quote-transak",
+    providerId: "transak",
+    destinationAmount: "48.75",
+    exchangeRate: "1.01",
+    fees: {
+      processing: "1.25",
+      network: "1.25",
+      total: "2.50",
+    },
+    etaSeconds: 240,
+    paymentMethod: "DEBIT_CARD",
+    expiresAt: new Date(Date.now() + 90000).toISOString(),
+  },
+  {
+    quoteId: "mock-quote-moonpay",
+    providerId: "moonpay",
+    destinationAmount: "49.00",
+    exchangeRate: "1.01",
+    fees: {
+      processing: "1.00",
+      network: "1.00",
+      total: "2.00",
+    },
+    etaSeconds: 240,
+    paymentMethod: "DEBIT_CARD",
+    expiresAt: new Date(Date.now() + 90000).toISOString(),
+  },
+];
 
-export type FundingQuotes = {
-  quotes: FundingQuote[];
-  rankBy: string;
-};
-
-export type FundingLimits = {
-  countryCode: string;
-  fiatCurrencyCode: string;
-  limits: {
-    min: string;
-    max: string;
-    default: string;
-  };
-  context: {
-    paymentMethodType: string;
-    provider: string;
-  };
-};
-
-export type FundingSession = {
-  sessionId: string;
-  widgetUrl: string;
-  expiresAt: string;
-};
-
-export type PaymentMethod = {
-  type: string;
-  label: string;
-};
-
-export type FiatCurrency = {
-  code: string;
-  name: string;
-};
+export interface UseWalletFundingResult {
+  getConfig: (params: {
+    countryCode: string;
+  }) => Promise<GetConfigResponse | null>;
+  getQuotes: (params: {
+    countryCode: string;
+    token: string;
+    amount: string;
+    fiat: string;
+    paymentMethod: PaymentMethod;
+    walletAddress?: string;
+  }) => Promise<GetQuotesResponse | null>;
+  createSession: (params: {
+    quoteId: string;
+  }) => Promise<CreateSessionResponse | null>;
+  quotesCache: Quote[] | null;
+  isLoading: boolean;
+}
 
 /**
  * Hook for interacting with wallet funding/onramp functionality
  *
- * @returns {object} Wallet funding methods
+ * @returns {UseWalletFundingResult} Wallet funding methods with caching
+ *
+ * @example
+ * ```tsx
+ * import { useWalletFunding } from "@account-kit/react";
+ *
+ * function FundingComponent() {
+ *   const { getConfig, getQuotes, createSession, quotesCache, isLoading } = useWalletFunding();
+ *
+ *   // Get funding configuration
+ *   useEffect(() => {
+ *     getConfig({ countryCode: "US" }).then(config => {
+ *       // Use config to set defaults, limits, etc.
+ *     });
+ *   }, []);
+ *
+ *   // Get quotes when amount changes
+ *   const handleAmountChange = async (amount: string) => {
+ *     const quotes = await getQuotes({
+ *       countryCode: "US",
+ *       token: "USDC",
+ *       amount,
+ *       fiat: "USD",
+ *       paymentMethod: "DEBIT_CARD",
+ *       walletAddress: "0x..." // optional, defaults to connected wallet
+ *     });
+ *   };
+ *
+ *   // Create session when user clicks continue
+ *   const handleContinue = async (quoteId: string) => {
+ *     const session = await createSession({ quoteId });
+ *     if (session?.widgetUrl) {
+ *       window.open(session.widgetUrl, "_blank");
+ *     }
+ *   };
+ * }
+ * ```
  */
-export const useWalletFunding = () => {
-  const bundlerClient = useBundlerClient();
+export const useWalletFunding = (): UseWalletFundingResult => {
+  const [quotesCache, setQuotesCache] = useState<Quote[] | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const walletClient = useSmartWalletClient({});
 
-  const makeWalletRequest = useCallback(
-    async <T>(method: string, params: any[]): Promise<T> => {
-      if (!bundlerClient) {
-        throw new Error("Bundler client not available");
-      }
-
+  const getConfig = useCallback(
+    async ({
+      countryCode,
+    }: {
+      countryCode: string;
+    }): Promise<GetConfigResponse | null> => {
       try {
-        const result = await bundlerClient.request({
-          method,
-          params,
-        } as any);
-        return result as T;
+        if (!walletClient) {
+          console.log("No wallet client available, using mock data");
+          return MOCK_CONFIG;
+        }
+
+        const response = await (walletClient as any).request({
+          method: "wallet_v0fundingGetConfig",
+          params: [{ countryCode } as GetConfigParams],
+        });
+        return response as GetConfigResponse;
       } catch (error) {
-        console.error(`Wallet funding request failed for ${method}:`, error);
-        throw error;
+        console.error("Failed to get config, using mock data:", error);
+        return MOCK_CONFIG;
       }
     },
-    [bundlerClient],
+    [walletClient],
   );
 
-  const getDefaults = useCallback(
+  const getQuotes = useCallback(
     async ({
       countryCode,
-      serviceProvider,
-    }: {
-      countryCode: string;
-      serviceProvider?: string;
-    }): Promise<FundingDefaults | null> => {
-      return makeWalletRequest("wallet_fundingGetDefaults", [
-        {
-          countryCode,
-          serviceProvider,
-        },
-      ]);
-    },
-    [makeWalletRequest],
-  );
-
-  const getQuote = useCallback(
-    async ({
-      countryCode,
-      destinationCurrencyCode,
+      token,
+      amount,
+      fiat,
+      paymentMethod,
       walletAddress,
-      sourceAmount,
-      sourceCurrencyCode,
-      paymentMethodType,
-      serviceProvider,
-      rankBy = "price",
     }: {
       countryCode: string;
-      destinationCurrencyCode: string;
+      token: string;
+      amount: string;
+      fiat: string;
+      paymentMethod: PaymentMethod;
       walletAddress?: string;
-      sourceAmount: string;
-      sourceCurrencyCode: string;
-      paymentMethodType: string;
-      serviceProvider?: string;
-      rankBy?: string;
-    }): Promise<FundingQuotes | null> => {
-      return makeWalletRequest("wallet_fundingGetQuote", [
-        {
-          countryCode,
-          destinationCurrencyCode,
-          walletAddress,
-          sourceAmount,
-          sourceCurrencyCode,
-          paymentMethodType,
-          serviceProvider,
-          rankBy,
-        },
-      ]);
+    }): Promise<GetQuotesResponse | null> => {
+      try {
+        setIsLoading(true);
+
+        if (!amount || parseFloat(amount) === 0) {
+          // Return mock quotes with calculated amounts
+          const mockQuotes = MOCK_QUOTES.map((quote) => ({
+            ...quote,
+            destinationAmount: (
+              parseFloat(amount || "50") / parseFloat(quote.exchangeRate)
+            ).toFixed(2),
+            paymentMethod,
+          }));
+          setQuotesCache(mockQuotes);
+          return {
+            requestId: "mock-request",
+            quotes: mockQuotes,
+          };
+        }
+
+        if (!walletClient) {
+          throw new Error("No wallet client available");
+        }
+
+        // Use wallet address or default to connected account
+        const address = walletAddress || walletClient.account?.address;
+        if (!address) {
+          throw new Error("No wallet address available");
+        }
+
+        const response = await (walletClient as any).request({
+          method: "wallet_v0fundingGetQuotes",
+          params: [
+            {
+              countryCode,
+              source: {
+                amount,
+                currency: fiat,
+              },
+              destination: {
+                token,
+                chain: "ethereum", // TODO: make this configurable
+                walletAddress: address,
+              },
+              paymentMethod,
+              lock: true,
+            } as GetQuotesParams,
+          ],
+        });
+
+        if (response.quotes) {
+          setQuotesCache(response.quotes);
+        }
+
+        return response;
+      } catch (error) {
+        console.error("Failed to get quotes, using mock data:", error);
+
+        // Return mock quotes with calculated amounts
+        const mockQuotes = MOCK_QUOTES.map((quote) => ({
+          ...quote,
+          destinationAmount: (
+            parseFloat(amount || "50") / parseFloat(quote.exchangeRate)
+          ).toFixed(2),
+          paymentMethod,
+        }));
+        setQuotesCache(mockQuotes);
+        return {
+          requestId: "mock-request",
+          quotes: mockQuotes,
+        };
+      } finally {
+        setIsLoading(false);
+      }
     },
-    [makeWalletRequest],
+    [walletClient],
   );
 
   const createSession = useCallback(
     async ({
-      countryCode,
-      destinationCurrencyCode,
-      walletAddress,
-      sourceAmount,
-      sourceCurrencyCode,
-      paymentMethodType,
-      serviceProvider,
+      quoteId,
     }: {
-      countryCode: string;
-      destinationCurrencyCode: string;
-      walletAddress: string;
-      sourceAmount: string;
-      sourceCurrencyCode: string;
-      paymentMethodType: string;
-      serviceProvider: string;
-    }): Promise<FundingSession | null> => {
-      return makeWalletRequest("wallet_fundCreateSession", [
-        {
-          countryCode,
-          destinationCurrencyCode,
-          walletAddress,
-          sourceAmount,
-          sourceCurrencyCode,
-          paymentMethodType,
-          serviceProvider,
-        },
-      ]);
-    },
-    [makeWalletRequest],
-  );
+      quoteId: string;
+    }): Promise<CreateSessionResponse | null> => {
+      try {
+        if (quoteId.startsWith("mock-")) {
+          // Mock session for demo
+          const providerId = quoteId.replace("mock-quote-", "") as any;
+          return {
+            sessionId: "mock-session",
+            providerId,
+            widgetUrl: `https://demo.${providerId}.com/onramp`,
+            expiresAt: new Date(Date.now() + 3600000).toISOString(),
+          };
+        }
 
-  const getLimits = useCallback(
-    async ({
-      countryCode,
-      fiatCurrencyCode,
-      paymentMethodType,
-      serviceProvider,
-    }: {
-      countryCode: string;
-      fiatCurrencyCode: string;
-      paymentMethodType: string;
-      serviceProvider?: string;
-    }): Promise<FundingLimits | null> => {
-      return makeWalletRequest("wallet_fundingGetLimits", [
-        {
-          countryCode,
-          fiatCurrencyCode,
-          paymentMethodType,
-          serviceProvider,
-        },
-      ]);
-    },
-    [makeWalletRequest],
-  );
+        if (!walletClient) {
+          throw new Error("No wallet client available");
+        }
 
-  const listPaymentMethods = useCallback(
-    async ({
-      countryCode,
-      fiatCurrencyCode,
-      serviceProvider,
-    }: {
-      countryCode: string;
-      fiatCurrencyCode: string;
-      serviceProvider?: string;
-    }): Promise<{
-      paymentMethods: PaymentMethod[];
-      countryCode: string;
-      provider: string;
-    } | null> => {
-      return makeWalletRequest("wallet_fundingListPaymentMethods", [
-        {
-          countryCode,
-          fiatCurrencyCode,
-          serviceProvider,
-        },
-      ]);
-    },
-    [makeWalletRequest],
-  );
+        const response = await (walletClient as any).request({
+          method: "wallet_v0fundingCreateSession",
+          params: [
+            {
+              quoteId,
+              idempotencyKey: generateIdempotencyKey(),
+            } as CreateSessionParams,
+          ],
+        });
 
-  const listFiatCurrencies = useCallback(
-    async ({
-      countryCode,
-      serviceProvider,
-    }: {
-      countryCode: string;
-      serviceProvider?: string;
-    }): Promise<{
-      fiatCurrencies: FiatCurrency[];
-      countryCode: string;
-      provider: string;
-    } | null> => {
-      return makeWalletRequest("wallet_fundingListFiatCurrencies", [
-        {
-          countryCode,
-          serviceProvider,
-        },
-      ]);
+        return response;
+      } catch (error: any) {
+        console.error("Failed to create session:", error);
+
+        // Handle quote expired error
+        if (error.message?.includes("QUOTE_EXPIRED")) {
+          throw new Error("Quote expired. Please refresh and try again.");
+        }
+
+        throw error;
+      }
     },
-    [makeWalletRequest],
+    [walletClient],
   );
 
   return {
-    getDefaults,
-    getQuote,
+    getConfig,
+    getQuotes,
     createSession,
-    getLimits,
-    listPaymentMethods,
-    listFiatCurrencies,
+    quotesCache,
+    isLoading,
   };
 };

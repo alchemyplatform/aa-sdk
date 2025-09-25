@@ -3,14 +3,14 @@ import { Building2 } from "../../../icons/building2.js";
 
 export const paymentMethodData = [
   {
-    id: "apple_pay",
+    id: "APPLE_PAY",
     name: "Apple Pay",
     displayName: "Apple Pay",
     icon: "🍎",
     recommended: false,
   },
   {
-    id: "CARD",
+    id: "DEBIT_CARD",
     name: "Debit Card",
     displayName: "Debit card",
     icon: CreditCard,
