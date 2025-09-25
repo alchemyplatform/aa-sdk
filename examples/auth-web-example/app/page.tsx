@@ -26,11 +26,12 @@ export default function Home(): ReactElement {
 
   const handleOauthLogin = useCallback(async () => {
     console.log("Logging in with OAuth...");
-    await authClient.loginWithOauth({
+    const authSession = await authClient.loginWithOauth({
       type: "oauth",
       authProviderId: "google",
       mode: "redirect",
     });
+    setAuthSession(authSession);
     console.log("do we ever get here?");
   }, []);
 
