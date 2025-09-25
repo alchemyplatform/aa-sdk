@@ -11,12 +11,12 @@ import {
 } from "@alchemy/wagmi-core";
 import type { ConfigParameter } from "../types";
 
-type SendEmailOtpMutate = (
+type SwapMutate = (
   variables: SwapParameters,
   options?: MutateOptions<SwapReturnType, Error, SwapParameters> | undefined,
 ) => void;
 
-type SendEmailOtpMutateAsync = (
+type SwapMutateAsync = (
   variables: SwapParameters,
   options?: MutateOptions<SwapReturnType, Error, SwapParameters> | undefined,
 ) => Promise<SwapReturnType>;
@@ -32,8 +32,8 @@ export type UseSwapReturnType = UseMutationReturnType<
   Error,
   SwapParameters
 > & {
-  swap: SendEmailOtpMutate;
-  swapAsync: SendEmailOtpMutateAsync;
+  swap: SwapMutate;
+  swapAsync: SwapMutateAsync;
 };
 
 /**
