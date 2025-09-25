@@ -30,7 +30,7 @@ This recipe shows how to programmatically create a smart wallet: you’ll genera
     ALCHEMY_API_KEY=YOUR_API_KEY
     # Get your gas sponsorship policy ID: https://dashboard.alchemy.com/services/gas-manager/configuration
     ALCHEMY_POLICY_ID=YOUR_POLICY_ID
-    # Generate a secure access key for server wallet authentication - see step 2 below
+    # Generate a secure access key for server wallet authentication - see step 3 below
     ACCESS_KEY=your-secure-access-key-here
     ```
   </Step>
@@ -51,13 +51,13 @@ This recipe shows how to programmatically create a smart wallet: you’ll genera
     const accessKey = generateAccessKey();
     console.log("Access key:", accessKey);
 
-    // Store this securely - you'll need it to control the server signer
+    // Add it to your .env file - you'll need it to control the server signer
     ```
 
     <Warning>
       **Critical: Save your access key securely!**
 
-      This access key is required to control your server wallet and cannot be recovered if lost. Make sure to add it in your .env file and store it in a secure location.
+      This access key is required to control your server wallet and cannot be recovered if lost. Make sure to store it in a secure location.
     </Warning>
   </Step>
 
