@@ -1,25 +1,31 @@
 import { getConnectorClient, type Config } from "@wagmi/core";
 import {
-  hexToNumber,
+  toHex,
   type Address,
+  type Capabilities,
+  type Chain,
   type Hex,
   type Prettify,
-  type UnionOmit,
 } from "viem";
-import {
-  type RequestQuoteV0Params,
-  swapActions,
-} from "@alchemy/wallet-apis/experimental";
+import { swapActions } from "@alchemy/wallet-apis/experimental";
 import { assertSmartWalletClient } from "@alchemy/wallet-apis";
 import type { ConnectorParameter } from "@wagmi/core/internal";
 
 export type SwapParameters = Prettify<
-  UnionOmit<RequestQuoteV0Params<Address>, "returnRawCalls"> &
+  {
+    chain?: Chain;
+    fromToken: Address;
+    toToken: Address;
+    slippageBps?: bigint;
+    postCalls?: { to: Address; data?: Hex; value?: bigint }[];
+    capabilities?: Capabilities;
+  } & ({ fromAmount: bigint } | { minimumToAmount: bigint }) &
     ConnectorParameter
 >;
 
 export type SwapReturnType = Prettify<{
-  ids: Hex[]; // prepared call ids, can be used to track status
+  /** Prepared call ids. Can be used to track calls status. */
+  ids: Hex[];
 }>;
 
 /**
@@ -37,19 +43,10 @@ export async function swap(
   config: Config,
   parameters: SwapParameters,
 ): Promise<SwapReturnType> {
-  const { connector, ...params } = parameters;
-
-  // TODO(jh): convert amounts to wei here? what units does wagmi use for other hooks?
-
-  // TODO(jh): all of the values in the input params should prob match what's normal in wagmi,
-  // then we should convert them to what the wallet api expects here.
-
-  const chainId = parameters.chainId
-    ? hexToNumber(parameters.chainId)
-    : undefined;
+  const { connector, chain, ...params } = parameters;
 
   const client = await getConnectorClient(config, {
-    chainId,
+    chainId: chain ? chain.id : undefined,
     connector,
   });
   assertSmartWalletClient(
@@ -59,7 +56,22 @@ export async function swap(
 
   const experimentalClient = client.extend(swapActions<Address>);
 
-  const quote = await experimentalClient.requestQuoteV0(params);
+  const quote = await experimentalClient.requestQuoteV0({
+    ...params,
+    slippage:
+      params.slippageBps != null ? toHex(params.slippageBps) : undefined,
+    ...("fromAmount" in params
+      ? {
+          fromAmount: toHex(params.fromAmount),
+        }
+      : {
+          minimumToAmount: toHex(params.minimumToAmount),
+        }),
+    postCalls: params.postCalls?.map((call) => ({
+      ...call,
+      value: call.value != null ? toHex(call.value) : undefined,
+    })),
+  });
   if (quote.rawCalls) {
     throw new Error("Unexpected requestQuote result containing raw calls");
   }

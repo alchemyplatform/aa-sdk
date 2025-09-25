@@ -47,7 +47,7 @@ export type RequestQuoteV0Result = Prettify<
  * @returns {Promise<RequestQuoteV0Result>} A Promise that resolves to either prepared calls or raw calls depending on returnRawCalls
  *
  * @example
- * ```ts
+ * ```ts twoslash
  * // Request a quote for smart wallet (prepared calls)
  * const quote = await client.requestQuoteV0({
  *   fromToken: "0xA0b86a33E6441e1d6a8E8C7a8E8E8E8E8E8E8E8E",

@@ -23,6 +23,12 @@ export {
 } from "./actions/handleOauthRedirect.js";
 
 export {
+  swap,
+  type SwapParameters,
+  type SwapReturnType,
+} from "./actions/swap.js";
+
+export {
   createConfig,
   type AlchemyConfig,
   type AlchemyCreateConfigParameters,
