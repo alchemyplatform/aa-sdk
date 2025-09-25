@@ -6,244 +6,240 @@ slug: wallets/recipes/programmatic-wallet-creation
 
 This recipe shows how to programmatically create a smart wallet: you’ll generate a signer, spin up a Smart Wallet Client, read the counterfactual address before deployment and deploy the wallet by sending your first gas sponsored `UserOperation` (prepared → signed → sent). You’ll also see what to persist (address, prepared call IDs, tx hash) for later use.
 
-## Step 1: Install required dependencies
+<Steps>
+  <Step title="Install required dependencies">
+    You'll need the following packages for this recipe:
 
-```bash
-# viem: crypto utils (we'll generate a private key)
-# @aa-sdk/core: LocalAccountSigner (wraps the private key as a signer)
-# @account-kit/infra: Alchemy transport & chain constants (e.g., arbitrumSepolia)
-# @account-kit/wallet-client: Smart Wallet Client (prepare/sign/send flows)
-# dotenv: read .env for your API key & policy id
-# (tsx + typescript + @types/node: run TypeScript files directly)
-npm i viem @aa-sdk/core @account-kit/infra @account-kit/wallet-client dotenv
-npm i -D typescript tsx @types/node
-```
+    - **viem**: Crypto utilities (we'll generate a private key)
+    - **@aa-sdk/core**: `LocalAccountSigner` (wraps the private key as a signer)
+    - **@account-kit/infra**: Alchemy transport & chain constants (e.g., `arbitrumSepolia`)
+    - **@account-kit/wallet-client**: Smart Wallet Client (prepare/sign/send flows)
+    - **dotenv**: Read .env for your API key & policy id
+    - **typescript + tsx + @types/node**: Run TypeScript files directly
 
----
+    ```bash
+    npm i viem @aa-sdk/core @account-kit/infra @account-kit/wallet-client dotenv
+    npm i -D typescript tsx @types/node
+    ```
+  </Step>
 
-## Step 2: Environment variables
+  <Step title="Environment variables">
+    Create a `.env` in your project root:
 
-Create a `.env` in your project root:
+    ```bash
+    # Get your app API key: https://dashboard.alchemy.com/apps
+    ALCHEMY_API_KEY=YOUR_API_KEY
+    # Get your gas sponsorship policy ID: https://dashboard.alchemy.com/services/gas-manager/configuration
+    ALCHEMY_POLICY_ID=YOUR_POLICY_ID
+    ```
+  </Step>
 
-```bash
-# Get your app API key: https://dashboard.alchemy.com/apps
-ALCHEMY_API_KEY=YOUR_API_KEY
-# Get your gas sponsorship policy ID: https://dashboard.alchemy.com/services/gas-manager/configuration
-ALCHEMY_POLICY_ID=YOUR_POLICY_ID
-```
+  <Step title="Create a signer">
+    You can use email/OTP, passkeys, or social login (via the [react quickstart](https://www.alchemy.com/docs/wallets/react/quickstart)) to obtain an embedded signer; or bring your own EOA, KMS/HSM, or custodial signer via the third-party signer interfaces. In this recipe, we keep it simple with a viem-generated private key wrapped by `LocalAccountSigner`:
 
----
+    ```ts
+    import { generatePrivateKey } from "viem/accounts";
+    import { LocalAccountSigner } from "@aa-sdk/core";
 
-## Step 3: Create a signer
+    const pk = generatePrivateKey(); // demo only; prefer KMS/HSM/etc. in production
+    const signer = LocalAccountSigner.privateKeyToAccountSigner(pk);
+    ```
+  </Step>
 
-You can use email/OTP, passkeys, or social login (via the [react quickstart](https://www.alchemy.com/docs/wallets/react/quickstart)) to obtain an embedded signer; or bring your own EOA, KMS/HSM, or custodial signer via the third-party signer interfaces. In this recipe, we keep it simple with a viem-generated private key wrapped by `LocalAccountSigner`:
+  <Step title="Create the Smart Wallet Client">
+    ```ts
+    import { createSmartWalletClient } from "@account-kit/wallet-client";
+    import { alchemy, arbitrumSepolia } from "@account-kit/infra";
 
-```ts
-import { generatePrivateKey } from "viem/accounts";
-import { LocalAccountSigner } from "@aa-sdk/core";
+    const transport = alchemy({ apiKey: process.env.ALCHEMY_API_KEY! });
 
-const pk = generatePrivateKey(); // demo only; prefer KMS/HSM/etc. in production
-const signer = LocalAccountSigner.privateKeyToAccountSigner(pk);
-```
+    const client = createSmartWalletClient({
+      transport,
+      chain: arbitrumSepolia,
+      signer,
+    });
+    ```
+  </Step>
 
----
+  <Step title="Get the counterfactual address">
+    The counterfactual address is the account address associated with the given signer but the account contract hasn't been deployed yet.
 
-## Step 4: Create the Smart Wallet Client
+    ```ts
+    const account = await client.requestAccount();
+    const address = account.address;
+    console.log("Counterfactual address:", address);
+    ```
+  </Step>
 
-```ts
-import { createSmartWalletClient } from "@account-kit/wallet-client";
-import { alchemy, arbitrumSepolia } from "@account-kit/infra";
+  <Step title="Prepare → sign → send a sponsored call">
+    Use the **capabilities** pipeline with `paymasterService` to sponsor gas via your policy and deploy the account contract by sending a gas sponsored UserOperation.
 
-const transport = alchemy({ apiKey: process.env.ALCHEMY_API_KEY! });
-
-const client = createSmartWalletClient({
-  transport,
-  chain: arbitrumSepolia,
-  signer,
-});
-```
-
----
-
-## Step 5: Get the counterfactual address
-
-The counterfactual address is the account address associated with the given signer but the account contract hasn't been deployed yet.
-
-```ts
-const account = await client.requestAccount();
-const address = account.address;
-console.log("Counterfactual address:", address);
-```
-
----
-
-## Step 6: Prepare → sign → send a sponsored call
-
-Use the **capabilities** pipeline with `paymasterService` to sponsor gas via your policy and deploy the account contract by sending a gas sponsored UserOperation.
-
-```ts
-const prepared = await client.prepareCalls({
-  from: address,
-  calls: [
-    {
-      to: "0x0000000000000000000000000000000000000000",
-      data: "0x",
-      value: "0x0",
-    },
-  ], // minimal call to deploy the account contract
-  capabilities: {
-    paymasterService: { policyId: process.env.ALCHEMY_POLICY_ID! },
-  },
-});
-
-const signed = await client.signPreparedCalls(prepared);
-const sent = await client.sendPreparedCalls(signed);
-
-const txHash = await client.waitForCallsStatus({ id: sent.preparedCallIds[0] });
-console.log("Prepared call IDs:", sent.preparedCallIds);
-console.log("Tx hash:", txHash);
-```
-
-> Persist `address`, `preparedCallIds`, `txHash`, and `chainId` (and store only a signer locator in production—never raw keys).
-
-<Note>
-  For non-sponsored path, remove the `paymasterService` capability in
-  `prepareCalls` and **fund the account** to pay gas. The rest of the flow is
-  unchanged.
-</Note>
-
-## Full script (copy-paste)
-
-```ts provision.ts
-import "dotenv/config";
-import { generatePrivateKey } from "viem/accounts";
-import { LocalAccountSigner } from "@aa-sdk/core";
-import { createSmartWalletClient } from "@account-kit/wallet-client";
-import { alchemy, arbitrumSepolia } from "@account-kit/infra";
-
-const ALCHEMY_API_KEY = process.env.ALCHEMY_API_KEY!;
-const ALCHEMY_POLICY_ID = process.env.ALCHEMY_POLICY_ID!;
-if (!ALCHEMY_API_KEY || !ALCHEMY_POLICY_ID) {
-  throw new Error("Missing ALCHEMY_API_KEY or ALCHEMY_POLICY_ID in env");
-}
-
-async function main() {
-  // 1) Signer (demo): viem private key -> LocalAccountSigner
-  const pk = generatePrivateKey(); // demo only
-  const signer = LocalAccountSigner.privateKeyToAccountSigner(pk);
-
-  // 2) Transport + Smart Wallet Client
-  const transport = alchemy({ apiKey: ALCHEMY_API_KEY });
-  const client = createSmartWalletClient({
-    transport,
-    chain: arbitrumSepolia,
-    signer,
-  });
-
-  // 3) Account & counterfactual address
-  const account = await client.requestAccount();
-  const address = account.address;
-  console.log("Counterfactual address:", address);
-
-  // 4) Prepare → sign → send (sponsored) to trigger deployment
-  const prepared = await client.prepareCalls({
-    from: address,
-    calls: [
-      {
-        to: "0x0000000000000000000000000000000000000000",
-        data: "0x",
-        value: "0x0",
+    ```ts
+    const prepared = await client.prepareCalls({
+      from: address,
+      calls: [
+        {
+          to: "0x0000000000000000000000000000000000000000",
+          data: "0x",
+          value: "0x0",
+        },
+      ], // minimal call to deploy the account contract
+      capabilities: {
+        paymasterService: { policyId: process.env.ALCHEMY_POLICY_ID! },
       },
-    ], // minimal call to deploy the account contract
-    capabilities: {
-      paymasterService: { policyId: ALCHEMY_POLICY_ID },
-    },
-  });
+    });
 
-  const signed = await client.signPreparedCalls(prepared);
-  const sent = await client.sendPreparedCalls(signed);
+    const signed = await client.signPreparedCalls(prepared);
+    const sent = await client.sendPreparedCalls(signed);
 
-  // 5) Wait for inclusion → tx hash
-  const txHash = await client.waitForCallsStatus({
-    id: sent.preparedCallIds[0],
-  });
+    const txHash = await client.waitForCallsStatus({ id: sent.preparedCallIds[0] });
+    console.log("Prepared call IDs:", sent.preparedCallIds);
+    console.log("Tx hash:", txHash);
+    ```
 
-  console.log("Prepared call IDs:", sent.preparedCallIds);
-  console.log("Tx hash:", txHash);
+    > Persist `address`, `preparedCallIds`, `txHash`, and `chainId` (and store only a signer locator in production—never raw keys).
 
-  // Example: persist { address, chainId: client.chain.id, preparedCallIds: sent.preparedCallIds, txHash }
-  return { address, preparedCallIds: sent.preparedCallIds, txHash };
-}
+    <Note>
+      For non-sponsored path, remove the `paymasterService` capability in
+      `prepareCalls` and **fund the account** to pay gas. The rest of the flow is
+      unchanged.
+    </Note>
 
-main().then(
-  (res) => {
-    console.log("✅ Wallet provisioned:", res);
-    process.exit(0);
-  },
-  (err) => {
-    console.error("❌ Failed:", err);
-    process.exit(1);
-  },
-);
-```
+    ### Full script (copy-paste)
 
-### Run it
+    ```ts provision.ts
+    import "dotenv/config";
+    import { generatePrivateKey } from "viem/accounts";
+    import { LocalAccountSigner } from "@aa-sdk/core";
+    import { createSmartWalletClient } from "@account-kit/wallet-client";
+    import { alchemy, arbitrumSepolia } from "@account-kit/infra";
 
-```bash
-# one-time per project
-npm i viem @aa-sdk/core @account-kit/infra @account-kit/wallet-client dotenv
-npm i -D typescript tsx @types/node
-
-# then run
-npx tsx provision.ts
-```
-
-You should see:
-
-- `Counterfactual address: 0x…`
-- `Prepared call IDs: [...]`
-- `Tx hash: 0x…` (open on an **Arbitrum Sepolia** explorer to see the deployment)
-
-Example:
-
-```shell
-Counterfactual address: 0x022fA5358476f0EB881138BD822E5150AFb36c5B
-Prepared call IDs: [
-  '0x0000000000000000000000000000000000000000000000000000000000066eee7d4670e76c7186cf2fb9d448e3b8348e316bdb5b142c3ff3149aa703805c81cb'
-]
-Tx hash: {
-  id: '0x0000000000000000000000000000000000000000000000000000000000066eee7d4670e76c7186cf2fb9d448e3b8348e316bdb5b142c3ff3149aa703805c81cb',
-  status: 'success',
-  atomic: true,
-  chainId: 421614,
-  receipts: [
-    {
-      status: 'success',
-      blockHash: '0x180071dc55dbcf7d31dd2fbe1c1a58e3cb5564d0b59c465c4f558236340cecd3',
-      blockNumber: 196845735n,
-      gasUsed: 208770n,
-      transactionHash: '0x2e625854abcb557bc2bc02e97d2f3deaae544a2aface000fbcf1c3573fee1526',
-      logs: [Array]
+    const ALCHEMY_API_KEY = process.env.ALCHEMY_API_KEY!;
+    const ALCHEMY_POLICY_ID = process.env.ALCHEMY_POLICY_ID!;
+    if (!ALCHEMY_API_KEY || !ALCHEMY_POLICY_ID) {
+      throw new Error("Missing ALCHEMY_API_KEY or ALCHEMY_POLICY_ID in env");
     }
-  ],
-  statusCode: 200,
-  version: '2.0.0'
-}
-✅ Wallet provisioned: {
-  address: '0x022fA5358476f0EB881138BD822E5150AFb36c5B',
-  preparedCallIds: [
-    '0x0000000000000000000000000000000000000000000000000000000000066eee7d4670e76c7186cf2fb9d448e3b8348e316bdb5b142c3ff3149aa703805c81cb'
-  ],
-  txHash: {
-    id: '0x0000000000000000000000000000000000000000000000000000000000066eee7d4670e76c7186cf2fb9d448e3b8348e316bdb5b142c3ff3149aa703805c81cb',
-    status: 'success',
-    atomic: true,
-    chainId: 421614,
-    receipts: [ [Object] ],
-    statusCode: 200,
-    version: '2.0.0'
-  }
-}
-```
 
-And when opened in an Arbitrum Sepolia explorer, you should see the [deployment](https://sepolia.arbiscan.io/address/0x022fA5358476f0EB881138BD822E5150AFb36c5B#internaltx) 🎉
+    async function main() {
+      // 1) Signer (demo): viem private key -> LocalAccountSigner
+      const pk = generatePrivateKey(); // demo only
+      const signer = LocalAccountSigner.privateKeyToAccountSigner(pk);
+
+      // 2) Transport + Smart Wallet Client
+      const transport = alchemy({ apiKey: ALCHEMY_API_KEY });
+      const client = createSmartWalletClient({
+        transport,
+        chain: arbitrumSepolia,
+        signer,
+      });
+
+      // 3) Account & counterfactual address
+      const account = await client.requestAccount();
+      const address = account.address;
+      console.log("Counterfactual address:", address);
+
+      // 4) Prepare → sign → send (sponsored) to trigger deployment
+      const prepared = await client.prepareCalls({
+        from: address,
+        calls: [
+          {
+            to: "0x0000000000000000000000000000000000000000",
+            data: "0x",
+            value: "0x0",
+          },
+        ], // minimal call to deploy the account contract
+        capabilities: {
+          paymasterService: { policyId: ALCHEMY_POLICY_ID },
+        },
+      });
+
+      const signed = await client.signPreparedCalls(prepared);
+      const sent = await client.sendPreparedCalls(signed);
+
+      // 5) Wait for inclusion → tx hash
+      const txHash = await client.waitForCallsStatus({
+        id: sent.preparedCallIds[0],
+      });
+
+      console.log("Prepared call IDs:", sent.preparedCallIds);
+      console.log("Tx hash:", txHash);
+
+      // Example: persist { address, chainId: client.chain.id, preparedCallIds: sent.preparedCallIds, txHash }
+      return { address, preparedCallIds: sent.preparedCallIds, txHash };
+    }
+
+    main().then(
+      (res) => {
+        console.log("✅ Wallet provisioned:", res);
+        process.exit(0);
+      },
+      (err) => {
+        console.error("❌ Failed:", err);
+        process.exit(1);
+      },
+    );
+    ```
+
+  </Step>
+
+  <Step title="Run it">
+    ```bash
+    # one-time per project
+    npm i viem @aa-sdk/core @account-kit/infra @account-kit/wallet-client dotenv
+    npm i -D typescript tsx @types/node
+
+    # then run
+    npx tsx provision.ts
+    ```
+
+    You should see:
+
+    - `Counterfactual address: 0x…`
+    - `Prepared call IDs: [...]`
+    - `Tx hash: 0x…` (open on an **Arbitrum Sepolia** explorer to see the deployment)
+
+    Example:
+
+    ```shell
+    Counterfactual address: 0x022fA5358476f0EB881138BD822E5150AFb36c5B
+    Prepared call IDs: [
+      '0x0000000000000000000000000000000000000000000000000000000000066eee7d4670e76c7186cf2fb9d448e3b8348e316bdb5b142c3ff3149aa703805c81cb'
+    ]
+    Tx hash: {
+      id: '0x0000000000000000000000000000000000000000000000000000000000066eee7d4670e76c7186cf2fb9d448e3b8348e316bdb5b142c3ff3149aa703805c81cb',
+      status: 'success',
+      atomic: true,
+      chainId: 421614,
+      receipts: [
+        {
+          status: 'success',
+          blockHash: '0x180071dc55dbcf7d31dd2fbe1c1a58e3cb5564d0b59c465c4f558236340cecd3',
+          blockNumber: 196845735n,
+          gasUsed: 208770n,
+          transactionHash: '0x2e625854abcb557bc2bc02e97d2f3deaae544a2aface000fbcf1c3573fee1526',
+          logs: [Array]
+        }
+      ],
+      statusCode: 200,
+      version: '2.0.0'
+    }
+    ✅ Wallet provisioned: {
+      address: '0x022fA5358476f0EB881138BD822E5150AFb36c5B',
+      preparedCallIds: [
+        '0x0000000000000000000000000000000000000000000000000000000000066eee7d4670e76c7186cf2fb9d448e3b8348e316bdb5b142c3ff3149aa703805c81cb'
+      ],
+      txHash: {
+        id: '0x0000000000000000000000000000000000000000000000000000000000066eee7d4670e76c7186cf2fb9d448e3b8348e316bdb5b142c3ff3149aa703805c81cb',
+        status: 'success',
+        atomic: true,
+        chainId: 421614,
+        receipts: [ [Object] ],
+        statusCode: 200,
+        version: '2.0.0'
+      }
+    }
+    ```
+
+    And when opened in an Arbitrum Sepolia explorer, you should see the [deployment](https://sepolia.arbiscan.io/address/0x022fA5358476f0EB881138BD822E5150AFb36c5B#internaltx) 🎉
+  </Step>
+</Steps>
