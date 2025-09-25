@@ -70,6 +70,8 @@ navigation:
               - page: Send USDC
                 slug: recipes/send-usdc
                 path: wallets/pages/recipes/send-usdc.mdx
+              - page: Programmatic Wallet Creation
+                path: wallets/pages/recipes/programmatic-wallet-creation.mdx
               - page: Onramp Funds
                 slug: recipes/onramp-funds
                 path: wallets/pages/recipes/onramp-funds.mdx
