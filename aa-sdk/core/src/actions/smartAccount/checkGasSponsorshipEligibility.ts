@@ -51,7 +51,7 @@ export type CheckGasSponsorshipEligibilityResult<
  *
  * @param {Client<TTransport, TChain, TAccount>} client_ the smart account client to use for making RPC calls
  * @param {SendUserOperationParameters} args containing the user operation, account, context, and overrides
- * @returns {Promise<CheckGasSponsorshipEligibilityResult<TAccount>>} a Promise containing a boolean indicating if the account is elgibile for sponsorship and the sponsored UO
+ * @returns {Promise<CheckGasSponsorshipEligibilityResult<TAccount>>} a Promise containing a boolean indicating if the account is eligible for sponsorship and the sponsored UO
  */
 export function checkGasSponsorshipEligibility<
   TTransport extends Transport = Transport,
