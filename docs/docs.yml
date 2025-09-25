@@ -1103,8 +1103,8 @@ navigation:
                 contents:
                   - page: alchemyAuth
                     path: wallets/pages/reference/alchemy/connectors-web/functions/alchemyAuth.mdx
-                  - page: resolveAlchemyAuthConnector
-                    path: wallets/pages/reference/alchemy/connectors-web/functions/resolveAlchemyAuthConnector.mdx
+                  - page: alchemySmartWallet
+                    path: wallets/pages/reference/alchemy/connectors-web/functions/alchemySmartWallet.mdx
 
       - section: Alchemy Web Signer
         contents:

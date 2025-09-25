@@ -3,9 +3,6 @@ import {
   type TypedDataDefinition,
   type Address,
   type WalletRpcSchema,
-  type Prettify,
-  type EIP1193RequestFn,
-  type EIP1193Events,
   ProviderRpcError,
   type Capabilities,
 } from "viem";
@@ -17,7 +14,10 @@ import {
   createEip1193HandlerFactory,
   type ExtractRpcMethod,
 } from "@alchemy/common";
-import type { BaseWalletClient } from "./types.js";
+import type {
+  BaseWalletClient,
+  SmartWalletClientEip1193Provider,
+} from "./types.js";
 import type { PrepareCallsParams } from "./actions/prepareCalls.js";
 import type { SmartWalletActions } from "./decorators/smartWalletActions.js";
 import type { WalletServerViemRpcSchema } from "@alchemy/wallet-api-types/rpc";
@@ -35,12 +35,6 @@ export type SmartWalletClient1193Methods = [
   // from the underlying rpc w/o any translation.
   ...WalletServerViemRpcSchema,
 ];
-
-export type SmartWalletClientEip1193Provider = Prettify<
-  EIP1193Events & {
-    request: EIP1193RequestFn<SmartWalletClient1193Methods>;
-  }
->;
 
 const handler = createEip1193HandlerFactory<SmartWalletClient1193Methods>();
 
