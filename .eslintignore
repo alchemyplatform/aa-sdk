@@ -22,3 +22,5 @@ account-kit/java/*
 **/playwright-report/*
 
 /docs-site/**
+
+.eslintrc

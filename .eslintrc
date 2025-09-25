@@ -71,7 +71,9 @@
       "extends": ["plugin:mdx/recommended"],
       "rules": {
         "import/extensions": ["off", "ignorePackages"],
-        "react/jsx-no-undef": "off"
+        "react/jsx-no-undef": "off",
+        "jsx-a11y/anchor-has-content": "off",
+        "jsx-a11y/anchor-is-valid": "off"
       }
     }
   ]

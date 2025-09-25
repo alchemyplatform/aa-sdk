@@ -1,0 +1,37 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "Node16",
+    "strict": true,
+    "composite": false,
+    "declaration": true,
+    "declarationMap": true,
+    "skipLibCheck": true
+  },
+  "include": [
+    "aa-sdk/core/src/**/*",
+    "aa-sdk/ethers/src/**/*",
+    "account-kit/infra/src/**/*",
+    "account-kit/signer/src/**/*",
+    "account-kit/wallet-client/src/**/*",
+    "account-kit/core/src/**/*",
+    "account-kit/react/src/**/*",
+    "account-kit/react-native/src/**/*",
+    "account-kit/smart-contracts/src/**/*",
+    "account-kit/rn-signer/src/**/*"
+  ],
+  "exclude": [
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/*.test-d.ts",
+    "**/*.e2e.test.ts",
+    "**/__tests__/**/*",
+    "**/e2e-tests/**/*",
+    "**/vitest.config.ts",
+    "**/vitest.config.e2e.ts",
+    "**/*.stories.ts",
+    "**/*.stories.tsx",
+    ".vitest/**/*",
+    "**/node_modules/**/*"
+  ]
+}
