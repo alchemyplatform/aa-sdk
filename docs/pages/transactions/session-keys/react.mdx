@@ -1,0 +1,291 @@
+<Info>Required SDK version: ^v4.59.1</Info>
+
+Use the `useGrantPermissions` and `useSendCalls` hooks to create and use session keys in your React application.
+
+<CodeBlocks>
+
+```tsx title="SessionKeyExample.tsx" focus={6-9,19-41}
+import {
+  useGrantPermissions,
+  useSendCalls,
+  useSmartAccountClient,
+} from "@account-kit/react";
+import { type Address, encodeFunctionData, erc20Abi, parseUnits } from "viem";
+import { LocalAccountSigner } from "@aa-sdk/core";
+
+export default function SessionKeyExample() {
+  const { client } = useSmartAccountClient({});
+  const { grantPermissionsAsync } = useGrantPermissions({
+    client,
+  });
+  const { sendCallsAsync } = useSendCalls({
+    client,
+  });
+
+  const DEMO_USDC_ADDRESS: Address =
+    "0xCFf7C6dA719408113DFcb5e36182c6d5aa491443";
+
+  const DEMO_RECIPIENT_ADDRESS: Address =
+    "0x1234567890123456789012345678901234567890";
+
+  const handleCreateSessionKey = async () => {
+    try {
+      // Generate a new session key
+      const sessionKey = LocalAccountSigner.generatePrivateKeySigner();
+
+      // Request account for the owner
+      const account = await client.requestAccount();
+
+      // Grant permissions to the session key
+      const permissions = await grantPermissionsAsync({
+        account: account.address,
+        expirySec: Math.floor(Date.now() / 1000) + 60 * 60, // 1 hour from now
+        key: {
+          publicKey: await sessionKey.getAddress(),
+          type: "secp256k1",
+        },
+        permissions: [
+          {
+            type: "erc20-token-transfer",
+            data: {
+              address: DEMO_USDC_ADDRESS,
+              allowance: parseUnits("100", 6), // 100 USDC limit
+            },
+          },
+          {
+            type: "contract-access",
+            data: {
+              address: DEMO_USDC_ADDRESS,
+            },
+          },
+        ],
+      });
+
+      console.log("Session key created with permissions:", permissions);
+
+      // Store the session key and permissions for later use
+      localStorage.setItem(
+        "sessionKey",
+        JSON.stringify({
+          privateKey: sessionKey.privateKey,
+          permissions: permissions,
+        }),
+      );
+    } catch (error) {
+      console.error("Error creating session key:", error);
+    }
+  };
+
+  const handleUseSessionKey = async () => {
+    try {
+      // Retrieve stored session key
+      const stored = localStorage.getItem("sessionKey");
+      if (!stored) {
+        console.error("No session key found. Create one first.");
+        return;
+      }
+
+      const { privateKey, permissions } = JSON.parse(stored);
+      const sessionKey =
+        LocalAccountSigner.privateKeyToAccountSigner(privateKey);
+
+      // Request account
+      const account = await client.requestAccount();
+
+      // Send a transaction using the session key
+      const { ids } = await sendCallsAsync({
+        calls: [
+          {
+            // Transfer 10 USDC using the session key
+            to: DEMO_USDC_ADDRESS,
+            data: encodeFunctionData({
+              abi: erc20Abi,
+              functionName: "transfer",
+              args: [DEMO_RECIPIENT_ADDRESS, parseUnits("10", 6)],
+            }),
+          },
+        ],
+        capabilities: {
+          permissions,
+        },
+        signer: sessionKey, // Use the session key to sign
+      });
+
+      console.log("Transaction sent with ID:", ids[0]);
+    } catch (error) {
+      console.error("Error using session key:", error);
+    }
+  };
+
+  return (
+    <div>
+      <button onClick={handleCreateSessionKey}>Create Session Key</button>
+      <button onClick={handleUseSessionKey}>Use Session Key</button>
+    </div>
+  );
+}
+```
+
+```tsx title="AdvancedSessionKeyExample.tsx"
+import {
+  useGrantPermissions,
+  useSendCalls,
+  useSmartAccountClient,
+} from "@account-kit/react";
+import { type Address, encodeFunctionData, erc20Abi, parseUnits } from "viem";
+import { LocalAccountSigner } from "@aa-sdk/core";
+
+export default function AdvancedSessionKeyExample() {
+  const { client } = useSmartAccountClient({});
+  const { grantPermissionsAsync } = useGrantPermissions({
+    client,
+  });
+  const { sendCallsAsync } = useSendCalls({
+    client,
+  });
+
+  const DEMO_USDC_ADDRESS: Address =
+    "0xCFf7C6dA719408113DFcb5e36182c6d5aa491443";
+
+  const DEMO_SWAP_ADDRESS: Address =
+    "0xB0AEC4c25E8332256A91bBaf169E3C32dfC3C33C";
+
+  const handleCreateAdvancedSessionKey = async () => {
+    try {
+      // Generate a new session key
+      const sessionKey = LocalAccountSigner.generatePrivateKeySigner();
+
+      // Request account for the owner
+      const account = await client.requestAccount();
+
+      // Grant multiple permissions to create a tightly scoped session key
+      const permissions = await grantPermissionsAsync({
+        account: account.address,
+        expirySec: Math.floor(Date.now() / 1000) + 24 * 60 * 60, // 24 hours from now
+        key: {
+          publicKey: await sessionKey.getAddress(),
+          type: "secp256k1",
+        },
+        permissions: [
+          // Allow spending up to 1000 USDC
+          {
+            type: "erc20-token-transfer",
+            data: {
+              address: DEMO_USDC_ADDRESS,
+              allowance: parseUnits("1000", 6),
+            },
+          },
+          // Allow spending up to 0.1 ETH for gas
+          {
+            type: "native-token-transfer",
+            data: {
+              allowance: parseUnits("0.1", 18),
+            },
+          },
+          // Allow gas spending up to 500,000 gas
+          {
+            type: "gas-limit",
+            data: {
+              limit: "0x7a120", // 500,000 gas in hex
+            },
+          },
+          // Allow specific functions on the swap contract
+          {
+            type: "functions-on-contract",
+            data: {
+              address: DEMO_SWAP_ADDRESS,
+              functions: [
+                "0x38ed1739", // swapExactTokensForTokens
+                "0x7ff36ab5", // swapExactETHForTokens
+              ],
+            },
+          },
+        ],
+      });
+
+      console.log("Advanced session key created:", permissions);
+
+      // Store the session key and permissions
+      localStorage.setItem(
+        "advancedSessionKey",
+        JSON.stringify({
+          privateKey: sessionKey.privateKey,
+          permissions: permissions,
+        }),
+      );
+    } catch (error) {
+      console.error("Error creating advanced session key:", error);
+    }
+  };
+
+  const handleAutomatedSwap = async () => {
+    try {
+      // Retrieve stored session key
+      const stored = localStorage.getItem("advancedSessionKey");
+      if (!stored) {
+        console.error("No advanced session key found. Create one first.");
+        return;
+      }
+
+      const { privateKey, permissions } = JSON.parse(stored);
+      const sessionKey =
+        LocalAccountSigner.privateKeyToAccountSigner(privateKey);
+
+      // Request account
+      const account = await client.requestAccount();
+
+      // Perform an automated swap using the session key
+      const { ids } = await sendCallsAsync({
+        calls: [
+          {
+            // Approve USDC for the swap
+            to: DEMO_USDC_ADDRESS,
+            data: encodeFunctionData({
+              abi: erc20Abi,
+              functionName: "approve",
+              args: [DEMO_SWAP_ADDRESS, parseUnits("100", 6)],
+            }),
+          },
+          {
+            // Execute the swap (this would need the actual swap contract ABI)
+            to: DEMO_SWAP_ADDRESS,
+            data: encodeFunctionData({
+              abi: [], // Replace with actual swap contract ABI
+              functionName: "swapExactTokensForTokens",
+              args: [
+                parseUnits("100", 6), // amountIn
+                parseUnits("0.05", 18), // amountOutMin
+                [
+                  DEMO_USDC_ADDRESS,
+                  "0x0000000000000000000000000000000000000000",
+                ], // path
+                account.address, // to
+                Math.floor(Date.now() / 1000) + 300, // deadline (5 minutes)
+              ],
+            }),
+          },
+        ],
+        capabilities: {
+          permissions,
+        },
+        signer: sessionKey, // Use the session key to sign
+      });
+
+      console.log("Automated swap completed with ID:", ids[0]);
+    } catch (error) {
+      console.error("Error performing automated swap:", error);
+    }
+  };
+
+  return (
+    <div>
+      <button onClick={handleCreateAdvancedSessionKey}>
+        Create Advanced Session Key
+      </button>
+      <button onClick={handleAutomatedSwap}>Perform Automated Swap</button>
+    </div>
+  );
+}
+```
+
+</CodeBlocks>

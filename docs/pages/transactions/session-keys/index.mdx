@@ -1,0 +1,54 @@
+---
+title: Use session keys
+description: Create permissioned secondary keys to perform transactions on behalf of users
+slug: wallets/transactions/session-keys/
+---
+
+Session keys are a powerful feature of Smart Wallets that allow you to assign specific permissions to secondary keys on your users' accounts. These additional keys can perform transactions on behalf of the user, but are bound by the permission restrictions you define. This enables secure, automated interactions while maintaining granular control over what actions can be performed.
+
+## How it works
+
+Session keys allow you to create temporary or permanent secondary signers with scoped permissions that are validated onchain. These keys can perform actions like token transfers, contract interactions, or automated workflows without requiring the user's main private key for each transaction.
+
+Key benefits include:
+
+- **Reduced UX friction**: Skip duplicate confirmations for repeated actions
+- **Automated workflows**: Enable server-side wallet actions for recurring tasks
+- **Enhanced security**: Limit exposure of the main account key
+- **Granular permissions**: Control exactly what, when, and how much a session key can do
+
+<Card
+  title="Supported permissions"
+  icon="shield"
+  iconPosition="left"
+  href="/wallets/transactions/session-keys/supported-permissions"
+>
+  See the full list of supported permissions here.
+</Card>
+
+## Prerequisites
+
+- API key from your [dashboard](https://dashboard.alchemy.com/apps)
+- [Smart Wallets installed and configured in your project](/wallets/pages/react/setup.mdx)
+- A [gas manager policy ID](/wallets/transactions/sponsor-gas/sponsor-gas) if sponsoring gas
+
+## Implementation
+
+<Tabs>
+  <Tab title="React">
+    <Markdown src="react.mdx" />
+  </Tab>
+  <Tab title="JavaScript">
+    <Markdown src="client.mdx" />
+  </Tab>
+  <Tab title="API">
+    <Markdown src="api.mdx" />
+  </Tab>
+</Tabs>
+
+## Next steps
+
+Build more:
+
+- [Sponsor gas for users](/wallets/transactions/sponsor-gas/sponsor-gas)
+- [Send batch transactions](/wallets/transactions/send-batch-transactions)

@@ -1,0 +1,264 @@
+<Info>
+  The examples provided use [foundry](https://getfoundry.sh/) and
+  [jq](https://jqlang.org/) to prepare and parse API requests.
+</Info>
+
+See the [`wallet_createSession` API
+reference](/wallets/api/smart-wallets/wallet-api-endpoints/wallet-api-endpoints/wallet-create-session)
+for full descriptions of the parameters used in the following example.
+
+<Steps>
+  <Step title="(If Needed) Request Account">
+    If the user does not yet have a smart account, you must create one.
+```bash twoslash
+  ACCOUNT_ADDRESS=$(curl --request POST \
+  --url https://api.g.alchemy.com/v2/$ALCHEMY_API_KEY \
+  --header 'accept: application/json' \
+  --data '
+{
+  "id": 1,
+  "jsonrpc": "2.0",
+  "method": "wallet_requestAccount",
+  "params": [
+    { 
+      "signerAddress": "'$SIGNER_ADDRESS'"
+    }
+  ]
+}
+' | jq -r '.result.accountAddress')
+```
+  </Step>
+  <Step title="Create Session Key">
+    Create a session key with specific permissions for the account.
+```bash twoslash
+SESSION_RESPONSE=$(curl --request POST \
+  --url https://api.g.alchemy.com/v2/$ALCHEMY_API_KEY \
+  --header 'accept: application/json' \
+  --data '
+{
+  "id": 1,
+  "jsonrpc": "2.0",
+  "method": "wallet_createSession",
+  "params": [
+    {
+      "account": "'$ACCOUNT_ADDRESS'",
+      "chainId": "'$CHAIN_ID_HEX'",
+      "expirySec": '$(date -d "+1 hour" +%s)',
+      "key": {
+        "publicKey": "'$SESSION_KEY_ADDRESS'",
+        "type": "secp256k1"
+      },
+      "permissions": [
+        {
+          "type": "erc20-token-transfer",
+          "data": {
+            "address": "0xCFf7C6dA719408113DFcb5e36182c6d5aa491443",
+            "allowance": "0x56bc75e2d630e0000"
+          }
+        },
+        {
+          "type": "contract-access",
+          "data": {
+            "address": "0xCFf7C6dA719408113DFcb5e36182c6d5aa491443"
+          }
+        }
+      ]
+    }
+  ]
+}')
+
+SESSION_ID=$(echo $SESSION_RESPONSE | jq -r '.result.sessionId')
+SIGNATURE_REQUEST=$(echo $SESSION_RESPONSE | jq -r '.result.signatureRequest.rawPayload')
+
+````
+  </Step>
+  <Step title="Sign Session Authorization">
+    Sign the signature request using the account owner's key to authorize the session key.
+```bash twoslash
+# Sign the signature request with the owner's private key
+PERMISSION_SIGNATURE=$(cast wallet sign --private-key $OWNER_PRIVATE_KEY $SIGNATURE_REQUEST)
+````
+
+  </Step>
+  <Step title="Prepare Calls With Session Key">
+    Prepare calls using the session key permissions.
+```bash twoslash
+curl --request POST \
+  --url https://api.g.alchemy.com/v2/$ALCHEMY_API_KEY \
+  --header 'accept: application/json' \
+  --data '
+{
+  "id": 1,
+  "jsonrpc": "2.0",
+  "method": "wallet_prepareCalls",
+  "params": [
+    {
+      "capabilities": {
+        "paymasterService": {
+          "policyId": "'$GAS_MANAGER_POLICY_ID'"
+        },
+        "permissions": {
+          "sessionId": "'$SESSION_ID'",
+          "signature": "'$PERMISSION_SIGNATURE'"
+        }
+      },
+      "calls": [
+        {
+          "to": "0xCFf7C6dA719408113DFcb5e36182c6d5aa491443",
+          "data": "'$(cast calldata "transfer(address,uint256)" 0x1234567890123456789012345678901234567890 $(cast parse-units 10 6))'"
+        }
+      ],
+      "from": "'$ACCOUNT_ADDRESS'",
+      "chainId": "'$CHAIN_ID_HEX'"
+    }
+  ]
+}'
+```
+  </Step>
+  <Step title="Sign & Send">
+    Sign the returned signature request with the session key and send using `wallet_sendPreparedCalls`.
+```bash twoslash
+# Sign the userop with the session key
+USEROP_SIGNATURE=$(cast wallet sign --private-key $SESSION_KEY_PRIVATE_KEY $USEROP_HASH)
+
+# Send the prepared calls
+
+curl --request POST \
+ --url https://api.g.alchemy.com/v2/$ALCHEMY_API_KEY \
+ --header 'accept: application/json' \
+ --data '
+{
+"id": 1,
+"jsonrpc": "2.0",
+"method": "wallet_sendPreparedCalls",
+"params": [
+{
+"type": "user-operation-v070",
+"data": {...useropRequest},
+"chainId": "'$CHAIN_ID_HEX'",
+"capabilities": {
+"permissions": {
+"sessionId": "'$SESSION_ID'",
+"signature": "'$PERMISSION_SIGNATURE'"
+}
+},
+"signature": {
+"type": "secp256k1",
+"data": "'$USEROP_SIGNATURE'"
+}
+}
+]
+}'
+
+````
+  </Step>
+</Steps>
+
+## Advanced Session Key Example
+
+Here's an example of creating a session key with multiple permission types:
+
+<Steps>
+  <Step title="Create Advanced Session Key">
+    Create a session key with multiple permission types for more granular control.
+```bash twoslash
+ADVANCED_SESSION_RESPONSE=$(curl --request POST \
+  --url https://api.g.alchemy.com/v2/$ALCHEMY_API_KEY \
+  --header 'accept: application/json' \
+  --data '
+{
+  "id": 1,
+  "jsonrpc": "2.0",
+  "method": "wallet_createSession",
+  "params": [
+    {
+      "account": "'$ACCOUNT_ADDRESS'",
+      "chainId": "'$CHAIN_ID_HEX'",
+      "expirySec": '$(date -d "+24 hours" +%s)',
+      "key": {
+        "publicKey": "'$SESSION_KEY_ADDRESS'",
+        "type": "secp256k1"
+      },
+      "permissions": [
+        {
+          "type": "erc20-token-transfer",
+          "data": {
+            "address": "0xCFf7C6dA719408113DFcb5e36182c6d5aa491443",
+            "allowance": "0x3635c9adc5dea00000"
+          }
+        },
+        {
+          "type": "native-token-transfer",
+          "data": {
+            "allowance": "0x16345785d8a0000"
+          }
+        },
+        {
+          "type": "gas-limit",
+          "data": {
+            "limit": "0x7a120"
+          }
+        },
+        {
+          "type": "functions-on-contract",
+          "data": {
+            "address": "0xB0AEC4c25E8332256A91bBaf169E3C32dfC3C33C",
+            "functions": ["0x38ed1739", "0x7ff36ab5"]
+          }
+        }
+      ]
+    }
+  ]
+}')
+
+ADVANCED_SESSION_ID=$(echo $ADVANCED_SESSION_RESPONSE | jq -r '.result.sessionId')
+ADVANCED_SIGNATURE_REQUEST=$(echo $ADVANCED_SESSION_RESPONSE | jq -r '.result.signatureRequest.rawPayload')
+````
+
+  </Step>
+  <Step title="Sign Advanced Session Authorization">
+    Sign the signature request to authorize the advanced session key.
+```bash twoslash
+ADVANCED_PERMISSION_SIGNATURE=$(cast wallet sign --private-key $OWNER_PRIVATE_KEY $ADVANCED_SIGNATURE_REQUEST)
+```
+  </Step>
+  <Step title="Use Advanced Session Key">
+    Use the advanced session key to perform complex operations like automated swaps.
+```bash twoslash
+curl --request POST \
+  --url https://api.g.alchemy.com/v2/$ALCHEMY_API_KEY \
+  --header 'accept: application/json' \
+  --data '
+{
+  "id": 1,
+  "jsonrpc": "2.0",
+  "method": "wallet_prepareCalls",
+  "params": [
+    {
+      "capabilities": {
+        "paymasterService": {
+          "policyId": "'$GAS_MANAGER_POLICY_ID'"
+        },
+        "permissions": {
+          "sessionId": "'$ADVANCED_SESSION_ID'",
+          "signature": "'$ADVANCED_PERMISSION_SIGNATURE'"
+        }
+      },
+      "calls": [
+        {
+          "to": "0xCFf7C6dA719408113DFcb5e36182c6d5aa491443",
+          "data": "'$(cast calldata "approve(address,uint256)" 0xB0AEC4c25E8332256A91bBaf169E3C32dfC3C33C $(cast parse-units 100 6))'"
+        },
+        {
+          "to": "0xB0AEC4c25E8332256A91bBaf169E3C32dfC3C33C",
+          "data": "'$(cast calldata "swapExactTokensForTokens(uint256,uint256,address[],address,uint256)" $(cast parse-units 100 6) $(cast parse-units 0.05 18) "[\"0xCFf7C6dA719408113DFcb5e36182c6d5aa491443\",\"0x0000000000000000000000000000000000000000\"]" "'$ACCOUNT_ADDRESS'" '$(date -d "+5 minutes" +%s)')'"
+        }
+      ],
+      "from": "'$ACCOUNT_ADDRESS'",
+      "chainId": "'$CHAIN_ID_HEX'"
+    }
+  ]
+}'
+```
+  </Step>
+</Steps>
