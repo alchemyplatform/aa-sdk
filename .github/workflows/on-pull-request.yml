@@ -103,20 +103,12 @@ jobs:
 
       - name: Unit Test
         run: |
-          # Run tests only for packages in packages/ directory that changed since the base branch
+          # Run tests for packages that changed and their dependents
           BASE_BRANCH="${{ github.event.pull_request.base.ref }}"
-          # Check if any files in packages/ directory changed
-          PACKAGES_CHANGED=$(git diff origin/$BASE_BRANCH...HEAD --name-only | grep "^packages/" || echo "")
-          if [ -n "$PACKAGES_CHANGED" ]; then
-            echo "Changes detected in packages/ directory, running selective tests"
-            yarn turbo test:run --filter="./packages/*" --filter="[origin/$BASE_BRANCH...HEAD]" --no-deps --continue
-          else
-            echo "No changes in packages/ directory, skipping package tests"
-          fi
+          yarn turbo test:run --filter="./packages/*" --filter="[origin/$BASE_BRANCH...HEAD]" --continue
         
       - name: Typecheck Test
         run: |
-          # Run typecheck only for packages that changed since the base branch
           yarn test:typecheck
     
   build_ios:
