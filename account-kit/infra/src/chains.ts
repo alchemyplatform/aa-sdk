@@ -569,6 +569,30 @@ export const gensynTestnet: Chain = defineChain({
   testnet: true,
 });
 
+export const gensynMainnet: Chain = defineChain({
+  id: 685689,
+  name: "Gensyn Mainnet",
+  nativeCurrency: { name: "eth", symbol: "eth", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://gensyn-mainnet.g.alchemy.com/v2"],
+    },
+    public: {
+      http: ["https://gensyn-mainnet.g.alchemy.com/v2"],
+    },
+    alchemy: {
+      http: ["https://gensyn-mainnet.g.alchemy.com/v2"],
+    },
+  },
+  blockExplorers: {
+    default: {
+      name: "Block Explorer",
+      url: "https://gensyn-mainnet.explorer.alchemy.com",
+    },
+  },
+  testnet: false,
+});
+
 export const riseTestnet: Chain = defineChain({
   id: 11155931,
   name: "Rise Testnet",

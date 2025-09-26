@@ -43,6 +43,7 @@ export {
   monadTestnet,
   openlootSepolia,
   gensynTestnet,
+  gensynMainnet,
   riseTestnet,
   storyMainnet,
   storyAeneid,
