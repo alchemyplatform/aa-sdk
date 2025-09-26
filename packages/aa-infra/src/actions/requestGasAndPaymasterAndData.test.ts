@@ -2,7 +2,13 @@ import { local060Instance, local070Instance } from "~test/instances.js";
 import { toLightAccount } from "@alchemy/smart-accounts";
 import { requestGasAndPaymasterAndData } from "./requestGasAndPaymasterAndData.js";
 import type { AlchemyTransport } from "@alchemy/common";
-import { createWalletClient, custom, zeroAddress, type Client } from "viem";
+import {
+  createWalletClient,
+  custom,
+  zeroAddress,
+  concat,
+  type Client,
+} from "viem";
 import {
   entryPoint06Address,
   entryPoint07Address,
@@ -25,13 +31,12 @@ describe("requestGasAndPaymasterAndData tests", async () => {
     });
 
     const factoryArgs = await smartAccount.getFactoryArgs();
+    const { factory, factoryData } = factoryArgs;
     const v06UserOperation = {
       sender: smartAccount.address,
       nonce: 0n,
       initCode:
-        factoryArgs.factory && factoryArgs.factoryData
-          ? (`${factoryArgs.factory}${factoryArgs.factoryData.slice(2)}` as const)
-          : ("0x" as const),
+        factory && factoryData ? concat([factory, factoryData]) : undefined,
       callData: await smartAccount.encodeCalls([
         {
           to: zeroAddress,
