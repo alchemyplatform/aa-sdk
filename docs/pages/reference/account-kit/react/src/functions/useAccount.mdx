@@ -1,7 +1,7 @@
 ---
 title: useAccount
-description: Overview of the useAccount function
-slug: wallets/reference/account-kit/react/src/functions/useAccount
+description: Overview of the useAccount hook
+slug: wallets/reference/account-kit/react/hooks/useAccount
 layout: reference
 ---
 
@@ -11,7 +11,7 @@ layout: reference
 function useAccount<TAccount>(params): UseAccountResult<TAccount>;
 ```
 
-Defined in: [account-kit/react/src/hooks/useAccount.ts:54](https://github.com/alchemyplatform/aa-sdk/blob/08ef11b1fc98663df6a97fa93722c7f14b33f1cc/account-kit/react/src/hooks/useAccount.ts#L54)
+Defined in: [account-kit/react/src/hooks/useAccount.ts:54](https://github.com/alchemyplatform/aa-sdk/blob/dc58c113ff1eeb06d4b3f76c505cbbaad47db8fc/account-kit/react/src/hooks/useAccount.ts#L54)
 
 [Hook](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useAccount.ts) to subscribe to account state and interactions, including creation, connection, and status monitoring. It synchronizes with external store updates and provides status-dependent results.
 The supported account types are: LightAccount, MultiOwnerLightAccount, MultiOwnerModularAccount, and ModularAccountV2. Primarily used to get the smart account address before deployment. Dependent on the signer: if the signer has not been initialized and authenticated, `address` and `isLoadingAccount` return null.

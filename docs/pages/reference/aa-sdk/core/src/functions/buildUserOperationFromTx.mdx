@@ -1,7 +1,7 @@
 ---
 title: buildUserOperationFromTx
 description: Overview of the buildUserOperationFromTx function
-slug: wallets/reference/aa-sdk/core/src/functions/buildUserOperationFromTx
+slug: wallets/reference/aa-sdk/core/functions/buildUserOperationFromTx
 layout: reference
 ---
 
@@ -22,7 +22,7 @@ function buildUserOperationFromTx<
 ): Promise<UserOperationStruct<TEntryPointVersion>>;
 ```
 
-Defined in: [aa-sdk/core/src/actions/smartAccount/buildUserOperationFromTx.ts:62](https://github.com/alchemyplatform/aa-sdk/blob/08ef11b1fc98663df6a97fa93722c7f14b33f1cc/aa-sdk/core/src/actions/smartAccount/buildUserOperationFromTx.ts#L62)
+Defined in: [aa-sdk/core/src/actions/smartAccount/buildUserOperationFromTx.ts:62](https://github.com/alchemyplatform/aa-sdk/blob/dc58c113ff1eeb06d4b3f76c505cbbaad47db8fc/aa-sdk/core/src/actions/smartAccount/buildUserOperationFromTx.ts#L62)
 
 Performs `buildUserOperationFromTx` in batch and builds into a single, yet to be signed `UserOperation` (UO) struct. The output user operation struct will be filled with all gas fields (and paymaster data if a paymaster is used) based on the transactions data (`to`, `data`, `value`, `maxFeePerGas`, `maxPriorityFeePerGas`) computed using the configured `ClientMiddlewares` on the `SmartAccountClient`
 

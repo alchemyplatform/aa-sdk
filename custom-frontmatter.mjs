@@ -2,6 +2,44 @@ import { ReflectionKind } from "typedoc";
 import { MarkdownPageEvent } from "typedoc-plugin-markdown";
 
 /**
+ * Determine if a function should be categorized as a component (React components)
+ *
+ * @param {string} fileName - The function name
+ * @param {string} packageName - The package name
+ * @returns {boolean} True if it should be categorized as a component
+ */
+function isReactComponent(fileName, packageName) {
+  // React components typically start with uppercase letter
+  const isUpperCase = fileName[0] === fileName[0].toUpperCase();
+
+  // Known React components
+  const reactComponents = [
+    "AlchemyAccountProvider",
+    "AuthCard",
+    "Dialog",
+    "UiConfigProvider",
+  ];
+
+  return (
+    (packageName === "react" || packageName === "react-native") &&
+    (isUpperCase || reactComponents.includes(fileName))
+  );
+}
+
+/**
+ * Extract package name from URL path
+ *
+ * @param {string} url - The page URL
+ * @returns {string|null} The package name (e.g., 'react', 'react-native', 'core')
+ */
+function extractPackageFromUrl(url) {
+  if (!url) return null;
+
+  const match = url.match(/^(?:account-kit|aa-sdk)\/([^/]+)\//);
+  return match ? match[1] : null;
+}
+
+/**
  * Custom plugin to generate frontmatter with title, description, and slug
  *
  * @param {import('typedoc-plugin-markdown').MarkdownApplication} app
@@ -10,11 +48,14 @@ export function load(app) {
   // Handle frontmatter generation
   app.renderer.on(
     MarkdownPageEvent.BEGIN,
-    /** @param {import('typedoc-plugin-markdown').MarkdownPageEvent} page */
+    /** @param {import('typedoc-plugin-markdown').MarkdownPageEvent} page - The markdown page event containing model and URL information */
     (page) => {
       if (!page.model) return;
 
       let title = page.model.name;
+
+      // Extract package name from URL for categorization
+      const packageName = extractPackageFromUrl(page.url);
 
       if (page.model.kind === ReflectionKind.Class) {
         title = page.model.name;
@@ -54,7 +95,17 @@ export function load(app) {
         } else if (page.model.kind === ReflectionKind.Interface) {
           description = `Overview of the ${page.model.name} interface`;
         } else if (page.model.kind === ReflectionKind.Function) {
-          description = `Overview of the ${page.model.name} function`;
+          // Apply same categorization logic as YAML generator
+          if (isReactComponent(page.model.name, packageName)) {
+            description = `Overview of the ${page.model.name} component`;
+          } else if (
+            page.model.name.startsWith("use") &&
+            (packageName === "react" || packageName === "react-native")
+          ) {
+            description = `Overview of the ${page.model.name} hook`;
+          } else {
+            description = `Overview of the ${page.model.name} function`;
+          }
         } else if (page.model.kind === ReflectionKind.Constructor) {
           description = `Overview of the ${page.model.parent?.name || page.model.name} constructor`;
         } else if (page.model.kind === ReflectionKind.Method) {
@@ -78,13 +129,31 @@ export function load(app) {
       // Generate slug from the URL path
       let slug = "";
       if (page.url) {
-        slug = `wallets/reference/${page.url.replace(/\.mdx$/, "")}`;
+        let processedUrl = page.url
+          .replace(/\.mdx$/, "")
+          .replace(/\/src/g, "")
+          .replace(/\/exports/g, "");
 
-        // For README.mdx files, also clean up the slug
+        if (page.model.kind === ReflectionKind.Function) {
+          if (isReactComponent(page.model.name, packageName)) {
+            // Replace /functions/ with /components/ for React components
+            processedUrl = processedUrl.replace(
+              /\/functions\//,
+              "/components/",
+            );
+          } else if (
+            page.model.name.startsWith("use") &&
+            (packageName === "react" || packageName === "react-native")
+          ) {
+            // Replace /functions/ with /hooks/ for React hooks
+            processedUrl = processedUrl.replace(/\/functions\//, "/hooks/");
+          }
+        }
+
+        slug = `wallets/reference/${processedUrl}`;
+
         if (isReadmeFile) {
-          slug = slug
-            .replace(/\/src\/exports\/README$/, "")
-            .replace(/\/src\/README$/, "");
+          slug = slug.replace(/\/README$/, "");
         }
       }
 
@@ -100,7 +169,7 @@ export function load(app) {
   // Handle adding auto-generated comment to final content
   app.renderer.on(
     MarkdownPageEvent.END,
-    /** @param {import('typedoc-plugin-markdown').MarkdownPageEvent} page */
+    /** @param {import('typedoc-plugin-markdown').MarkdownPageEvent} page - The markdown page event containing content to modify */
     (page) => {
       if (!page.contents) return;
 
