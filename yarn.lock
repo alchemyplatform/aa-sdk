@@ -7343,7 +7343,7 @@
     "@tanstack/react-store" "^0.5.5"
     decode-formdata "^0.8.0"
 
-"@tanstack/react-query@>=5.0.0", "@tanstack/react-query@^5.90.2":
+"@tanstack/react-query@>5.0.0", "@tanstack/react-query@>=5.0.0":
   version "5.90.2"
   resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-5.90.2.tgz#2f045931b7d44bef02c5261fedba75ef1a418726"
   integrity sha512-CLABiR+h5PYfOWr/z+vWFt5VsOA2ekQeRQBFSKlcoW6Ndx/f8rfyVmq4LbgOM4GG2qtxAxjLYLOpCNTYm4uKzw==

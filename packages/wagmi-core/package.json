@@ -27,11 +27,6 @@
       "import": "./dist/esm/index.js",
       "default": "./dist/esm/index.js"
     },
-    "./query": {
-      "types": "./dist/types/query/index.d.ts",
-      "import": "./dist/esm/query/index.js",
-      "default": "./dist/esm/query/index.js"
-    },
     "./package.json": "./package.json"
   },
   "scripts": {
@@ -47,12 +42,10 @@
   "peerDependencies": {
     "wagmi": "^2",
     "@wagmi/core": "^2",
-    "viem": "^2",
-    "@tanstack/query-core": ">=5.0.0"
+    "viem": "^2"
   },
   "devDependencies": {
-    "typescript-template": "*",
-    "@tanstack/query-core": ">=5.0.0"
+    "typescript-template": "*"
   },
   "dependencies": {
     "@alchemy/common": "*",

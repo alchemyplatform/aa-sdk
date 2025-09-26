@@ -1,11 +1,11 @@
 import type { Config } from "wagmi";
 import type { QueryOptions } from "@tanstack/query-core";
+import { filterQueryOptions } from "./utils.js";
 import {
   prepareSwap,
   type PrepareSwapParameters,
   type PrepareSwapReturnType,
-} from "../actions/prepareSwap.js";
-import { filterQueryOptions } from "./utils.js";
+} from "@alchemy/wagmi-core";
 
 // TODO(jh): may want to use `UnionExactPartial<PrepareSwapParameters>` here. test it first.
 export type PrepareSwapOptions = PrepareSwapParameters;

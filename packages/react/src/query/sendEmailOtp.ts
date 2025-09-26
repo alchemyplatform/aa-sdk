@@ -1,9 +1,9 @@
-import type { MutateOptions, MutationOptions } from "@tanstack/query-core";
 import {
   sendEmailOtp,
   type SendEmailOtpParameters,
   type SendEmailOtpReturnType,
-} from "../actions/sendEmailOtp.js";
+} from "@alchemy/wagmi-core";
+import type { MutateOptions, MutationOptions } from "@tanstack/query-core";
 import type { Config } from "wagmi";
 
 export type SendEmailOtpMutate = (

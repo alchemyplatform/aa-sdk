@@ -3,12 +3,12 @@
 import { useQuery, type UseQueryResult } from "@tanstack/react-query";
 import { useConfig } from "wagmi";
 import type { ConfigParameter, QueryParameter } from "../types";
+import type { PrepareSwapReturnType } from "@alchemy/wagmi-core";
 import {
   prepareSwapQueryOptions,
   type PrepareSwapOptions,
   type PrepareSwapQueryKey,
-} from "@alchemy/wagmi-core/query";
-import type { PrepareSwapReturnType } from "@alchemy/wagmi-core";
+} from "../query/prepareSwap.js";
 
 export type UsePrepareSwapParameters = PrepareSwapOptions &
   ConfigParameter &

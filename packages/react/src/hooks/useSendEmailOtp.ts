@@ -12,7 +12,7 @@ import {
   sendEmailOtpMutationOptions,
   type SendEmailOtpMutate,
   type SendEmailOtpMutateAsync,
-} from "@alchemy/wagmi-core/query";
+} from "../query/sendEmailOtp.js";
 
 export type UseSendEmailOtpParameters = ConfigParameter & {
   mutation?:
@@ -94,7 +94,7 @@ export function useSendEmailOtp(
 
   return {
     ...result,
-    sendEmailOtp: mutate as SendEmailOtpMutate,
-    sendEmailOtpAsync: mutateAsync as SendEmailOtpMutateAsync,
+    sendEmailOtp: mutate,
+    sendEmailOtpAsync: mutateAsync,
   };
 }

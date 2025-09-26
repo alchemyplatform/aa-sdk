@@ -12,7 +12,7 @@ import {
   submitSwapMutationOptions,
   type SubmitSwapMutate,
   type SubmitSwapMutateAsync,
-} from "@alchemy/wagmi-core/query";
+} from "../query/submitSwap.js";
 
 export type UseSubmitSubmitSwapParameters = ConfigParameter & {
   mutation?:
@@ -93,7 +93,7 @@ export function useSubmitSwap(
 
   return {
     ...result,
-    submitSwap: mutate as SubmitSwapMutate,
-    submitSwapAsync: mutateAsync as SubmitSwapMutateAsync,
+    submitSwap: mutate,
+    submitSwapAsync: mutateAsync,
   };
 }

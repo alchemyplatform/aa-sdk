@@ -4,7 +4,7 @@ import {
   submitSwap,
   type SubmitSwapParameters,
   type SubmitSwapReturnType,
-} from "../actions/submitSwap.js";
+} from "@alchemy/wagmi-core";
 
 export type SubmitSwapMutate = (
   variables: SubmitSwapParameters,

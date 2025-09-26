@@ -12,7 +12,7 @@ import {
   submitOtpCodeMutationOptions,
   type SubmitOtpCodeMutate,
   type SubmitOtpCodeMutateAsync,
-} from "@alchemy/wagmi-core/query";
+} from "../query/submitOtpCode.js";
 
 export type UseSubmitOtpCodeParameters = ConfigParameter & {
   mutation?:
@@ -104,7 +104,7 @@ export function useSubmitOtpCode(
 
   return {
     ...result,
-    submitOtpCode: mutate as SubmitOtpCodeMutate,
-    submitOtpCodeAsync: mutateAsync as SubmitOtpCodeMutateAsync,
+    submitOtpCode: mutate,
+    submitOtpCodeAsync: mutateAsync,
   };
 }
