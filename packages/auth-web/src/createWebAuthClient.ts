@@ -100,15 +100,37 @@ export function createWebAuthClient({
     createWebAuthnStamper:
       createWebAuthnStamper ??
       (() => Promise.reject(new Error("Not implemented"))),
-    handleOauthFlow: async (authUrl: string, mode: "popup" | "redirect") => {
+    handleOauthFlow: async (
+      params:
+        | {
+            authUrl: string;
+            mode: "redirect";
+          }
+        | {
+            authUrl: Promise<string>;
+            mode: "popup";
+          },
+    ) => {
+      const { authUrl, mode } = params;
       switch (mode) {
         case "popup":
+          // Open popup immediately to avoid popup blockers
           const popup = window.open(
-            authUrl,
-            "_blank",
-            "popup,width=500,height=600",
+            "about:blank",
+            "oauth-popup",
+            "width=500,height=600",
           );
-          // const eventEmitter = this.eventEmitter;
+          if (!popup) {
+            throw new Error(
+              "Popup blocked by browser. Please allow popups for this site.",
+            );
+          }
+          // Wait for auth URL to be ready, then set url in popup
+          const finalAuthUrl = await (typeof authUrl === "string"
+            ? authUrl
+            : authUrl);
+          popup.location.href = finalAuthUrl;
+
           return new Promise((resolve, reject) => {
             const handleMessage = (event: MessageEvent) => {
               if (!event.data) {
