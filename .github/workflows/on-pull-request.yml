@@ -105,7 +105,14 @@ jobs:
         run: |
           # Run tests only for packages that changed since the base branch
           BASE_BRANCH="${{ github.event.pull_request.base.ref }}"
-          yarn turbo test:run --filter="[origin/$BASE_BRANCH...HEAD]" --continue
+          # Exclude config files that don't affect package logic
+          CHANGED_FILES=$(git diff origin/$BASE_BRANCH...HEAD --name-only | grep -v "^\.github/" | grep -v "^turbo\.json$" | grep -v "^\..*" || echo "")
+          if [ -n "$CHANGED_FILES" ]; then
+            echo "Running tests for packages with code changes"
+            yarn turbo test:run --filter="[origin/$BASE_BRANCH...HEAD]" --continue
+          else
+            echo "Only config/CI files changed, skipping package tests"
+          fi
         
       - name: Typecheck Test
         run: |
