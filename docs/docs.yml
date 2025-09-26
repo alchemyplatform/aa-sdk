@@ -213,6 +213,8 @@ navigation:
                 path: wallets/pages/transactions/signing/sign-messages/index.mdx
               - page: Sign typed data
                 path: wallets/pages/transactions/signing/sign-typed-data/index.mdx
+          - page: Configure client
+            path: wallets/pages/concepts/smart-account-client.mdx
       - section: Low-Level Infra
         contents:
           - page: Overview
@@ -2822,8 +2824,6 @@ navigation:
           - page: Types
             slug: resources/types
             path: wallets/pages/resources/types.mdx
-          - page: Smart Account Client
-            path: wallets/pages/concepts/smart-account-client.mdx
           - page: Middleware
             path: wallets/pages/concepts/middleware.mdx
           - section: Smart Account Types
