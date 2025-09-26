@@ -8,6 +8,7 @@ const transport = alchemyTransport({
   apiKey: import.meta.env.VITE_ALCHEMY_API_KEY,
 });
 
+// Dummy comment
 export const config: Config = createConfig({
   chains: [arbitrumSepolia, mainnet, sepolia],
   connectors: [

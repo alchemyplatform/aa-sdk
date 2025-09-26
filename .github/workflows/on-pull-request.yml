@@ -102,10 +102,14 @@ jobs:
         run: yarn build:libs
 
       - name: Unit Test
-        run: yarn test:ci
+        run: |
+          # Run tests only for packages that changed since the base branch
+          yarn turbo test:ci --filter='[origin/main...HEAD]'
         
       - name: Typecheck Test
-        run: yarn test:typecheck
+        run: |
+          # Run typecheck only for packages that changed since the base branch
+          yarn turbo test:typecheck --filter='[origin/main...HEAD]'
     
   build_ios:
     name: Build iOS
