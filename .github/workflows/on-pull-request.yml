@@ -109,7 +109,7 @@ jobs:
       - name: Typecheck Test
         run: |
           # Run typecheck only for packages that changed since the base branch
-          yarn turbo test:typecheck --filter='[origin/main...HEAD]'
+          yarn test:typecheck
     
   build_ios:
     name: Build iOS
