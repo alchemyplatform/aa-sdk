@@ -3,6 +3,9 @@ type DemoEvents = [
     name: "logged_in";
   },
   {
+    name: "clicked_sms_early_access";
+  },
+  {
     name: "authentication_toggled";
     data: {
       auth_type: string;
