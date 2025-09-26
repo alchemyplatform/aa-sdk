@@ -14,7 +14,9 @@ import {
   type PrepareSwapMutateAsync,
 } from "@alchemy/wagmi-core/query";
 
-// TODO(jh): should this be a mutation or query? what does wagmi do for preparing a txn, etc.?
+// TODO(jh): this should probably be a query to better align w/ wagmi?
+// since usePrepareTransactionRequest, useEstimateFeesPerGas, useEstimateGas are all queries.
+// it makes sense b/c it's fetching data and not mutating state in our db or on chain.
 
 export type UsePrepareSwapParameters = ConfigParameter & {
   mutation?:
