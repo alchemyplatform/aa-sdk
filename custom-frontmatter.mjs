@@ -78,13 +78,13 @@ export function load(app) {
       // Generate slug from the URL path
       let slug = "";
       if (page.url) {
-        slug = `wallets/reference/${page.url.replace(/\.mdx$/, "")}`;
+        slug = `wallets/reference/${page.url
+          .replace(/\.mdx$/, "")
+          .replace(/\/src/g, "")
+          .replace(/\/exports/g, "")}`;
 
-        // For README.mdx files, also clean up the slug
         if (isReadmeFile) {
-          slug = slug
-            .replace(/\/src\/exports\/README$/, "")
-            .replace(/\/src\/README$/, "");
+          slug = slug.replace(/\/README$/, "");
         }
       }
 

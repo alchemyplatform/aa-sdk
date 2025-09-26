@@ -1,7 +1,7 @@
 ---
 title: useSigner
 description: Overview of the useSigner function
-slug: wallets/reference/account-kit/react/src/functions/useSigner
+slug: wallets/reference/account-kit/react/functions/useSigner
 layout: reference
 ---
 
@@ -11,7 +11,7 @@ layout: reference
 function useSigner<T>(override?): null | T;
 ```
 
-Defined in: [account-kit/react/src/hooks/useSigner.ts:23](https://github.com/alchemyplatform/aa-sdk/blob/9f926c402d1661309abbf8eae8431e52e8c5e53f/account-kit/react/src/hooks/useSigner.ts#L23)
+Defined in: [account-kit/react/src/hooks/useSigner.ts:23](https://github.com/alchemyplatform/aa-sdk/blob/153785ddc87beb160382c2bae7dbafa4a66ade9a/account-kit/react/src/hooks/useSigner.ts#L23)
 
 [Hook](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useSigner.ts) for accessing the current Alchemy signer within a React component. It uses a synchronous external store for updates.
 This is a good use case if you want to use the signer as an EOA, giving you direct access to it. The signer returned from `useSigner` just does a `personal_sign` or `eth_signTypedData` without any additional logic, but a smart contract account might have additional logic for creating signatures for 1271 validation so `useSignMessage` or `useSignTypeData` instead.
