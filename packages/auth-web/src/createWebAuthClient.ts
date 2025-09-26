@@ -1,6 +1,5 @@
 import {
   AuthClient,
-  OauthCancelledError,
   type CreateTekStamperFn,
   type CreateWebAuthnStamperFn,
 } from "@alchemy/auth";
@@ -183,14 +182,13 @@ export function createWebAuthClient({
                 default:
                   reject(new Error(`Unknown status: ${status}`));
               }
-            }; // handleMessage
+            };
 
             window.addEventListener("message", handleMessage);
 
             const checkCloseIntervalId = setInterval(() => {
               if (popup?.closed) {
                 cleanup();
-                reject(new OauthCancelledError());
               }
             }, CHECK_CLOSE_INTERVAL);
 
