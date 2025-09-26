@@ -29,5 +29,11 @@ export type * from "./decorators/smartWalletActions.js";
 export { smartWalletActions } from "./decorators/smartWalletActions.js";
 
 // Client.
+export type {
+  BaseWalletClient,
+  SignerClient,
+  SmartWalletClient,
+  SmartWalletClientEip1193Provider,
+} from "./types.js";
 export type * from "./client.js";
 export { createSmartWalletClient } from "./client.js";
