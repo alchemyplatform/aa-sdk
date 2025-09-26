@@ -99,7 +99,7 @@ jobs:
         env:
           API_KEY: ${{ secrets.API_KEY }}
           JAVA_OPTS: "-XX:MaxHeapSize=6g"
-        run: yarn build:libs
+        run: turbo run build --filter='./packages/*'
 
       - name: Unit Test
         run: |
@@ -109,7 +109,7 @@ jobs:
           PACKAGES_CHANGED=$(git diff origin/$BASE_BRANCH...HEAD --name-only | grep "^packages/" || echo "")
           if [ -n "$PACKAGES_CHANGED" ]; then
             echo "Changes detected in packages/ directory, running selective tests"
-            yarn turbo test:run --filter="./packages/*" --filter="[origin/$BASE_BRANCH...HEAD]" --continue
+            yarn turbo test:run --filter="./packages/*" --filter="[origin/$BASE_BRANCH...HEAD]" --no-deps --continue
           else
             echo "No changes in packages/ directory, skipping package tests"
           fi
