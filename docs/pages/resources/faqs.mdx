@@ -89,7 +89,7 @@ This can be called on the existing smart contract account by sending a user oper
 <Accordion title="Answer">
 This can happen when `UserOperation`s (UOs) become underpriced, frequently due to fee market movement between when gas and fees are estimations and when the UO is actually submitted.
 
-You may experience this when calling the [`waitForUserOperationTransaction`](/wallets/reference/aa-sdk/core/variables/waitForUserOperationTransaction) method. It may throw an error if it does not find the UO in a mined Transaction within its retry limits.
+You may experience this when calling the [`waitForUserOperationTransaction`](/wallets/reference/aa-sdk/core/functions/waitForUserOperationTransaction) method. It may throw an error if it does not find the UO in a mined Transaction within its retry limits.
 
 You can mitigate this by defining a more flexible retry period when constructing a [`Client`](/wallets/reference/aa-sdk/core/functions/createSmartAccountClient) (i.e. `txMaxRetries`, `txRetryIntervalMs`, `txRetryMultiplier` in `opts`). If your UO continues to be delayed beyond a limit you are willing to wait, you can resubmit it using [`dropAndReplaceUserOperation`](/wallets/reference/aa-sdk/core/functions/dropAndReplaceUserOperation).
 
@@ -266,7 +266,7 @@ Our gas and fee estimations are just that, estimations, but we are always workin
 ### `waitForUserOperationTransaction` timeout
 
 <Accordion title="Answer">
-[`waitForUserOperationTransaction`](/wallets/reference/aa-sdk/core/variables/waitForUserOperationTransaction) may throw this error if it does not find the mined User Operation within its retry limits.
+[`waitForUserOperationTransaction`](/wallets/reference/aa-sdk/core/functions/waitForUserOperationTransaction) may throw this error if it does not find the mined User Operation within its retry limits.
 
 You can mitigate this by defining a more flexible retry period when constructing a [`Client`](/wallets/reference/aa-sdk/core/functions/createSmartAccountClient) (i.e. `txMaxRetries`, `txRetryIntervalMs`, `txRetryMultiplier` in `opts`).
 

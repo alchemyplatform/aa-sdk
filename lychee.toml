@@ -9,10 +9,6 @@ exclude = [
     ".*g\\.alchemy\\.com.*", # Any path containing g.alchemy.com - RPC endpoints require API keys
 ]
 
-exclude_path = [
-    "docs/pages/reference/.*", # Exclude the entire reference directory from link checking
-]
-
 # Comma-separated list of accepted status codes for valid links.
 accept = [200, 403]
 
@@ -21,6 +17,9 @@ max_retries = 5
 
 # Minimum wait time in seconds between retries of failed requests.
 retry_wait_time = 5
+
+# Website timeout from connect to response finished.
+timeout = 60
 
 # User agent to send with each request.
 user_agent = "lychee/link-checker"

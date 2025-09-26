@@ -346,9 +346,9 @@ function generateSDKReference(): SDKReference {
 
       if (!srcDir) continue;
 
-      // Handle special cases for packages which have exports subdirectory
+      // Handle special case for wallet-client which has exports subdirectory
       let actualPackagePath = fullPackagePath;
-      if (packageDir.name === "wallet-client" || packageDir.name === "infra") {
+      if (packageDir.name === "wallet-client") {
         const exportsDir = srcDir.children.find(
           (child): child is DirectoryItem =>
             child.type === "directory" && child.name === "exports",

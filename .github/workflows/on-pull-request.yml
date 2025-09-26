@@ -93,8 +93,8 @@ jobs:
   check_broken_links:
     name: Check Broken Links
     runs-on: ubuntu-latest
-    needs: changes
-    if: ${{ needs.changes.outputs.docs == 'true' }}
+    needs: [changes, preview]
+    if: ${{ needs.changes.outputs.docs == 'true' && needs.preview.outputs.preview-url != '' }}
     steps:
       - name: "Checkout files"
         uses: actions/checkout@v3
@@ -119,8 +119,11 @@ jobs:
           sudo mv lychee /usr/local/bin/
           lychee --version
 
+      - name: Wait for preview deployment to stabilize
+        run: sleep 60
+
       - name: Check for broken links
-        run: yarn docs:broken-links
+        run: yarn docs:broken-links --base-url "${{ needs.preview.outputs.preview-url }}"
   
   lint:
     name: Lint
