@@ -16,7 +16,10 @@ export { getCallsStatus } from "../client/actions/getCallsStatus.js";
 export { grantPermissions } from "../client/actions/grantPermissions.js";
 export { listAccounts } from "../client/actions/listAccounts.js";
 export { prepareCalls } from "../client/actions/prepareCalls.js";
-export { requestAccount } from "../client/actions/requestAccount.js";
+export {
+  type RequestAccountParams,
+  requestAccount,
+} from "../client/actions/requestAccount.js";
 export { signSignatureRequest } from "../client/actions/signSignatureRequest.js";
 export { signPreparedCalls } from "../client/actions/signPreparedCalls.js";
 export { signMessage } from "../client/actions/signMessage.js";

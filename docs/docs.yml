@@ -2544,6 +2544,8 @@ navigation:
                     path: wallets/pages/reference/account-kit/wallet-client/src/exports/functions/waitForCallsStatus.mdx
               - section: Type Aliases
                 contents:
+                  - page: RequestAccountParams
+                    path: wallets/pages/reference/account-kit/wallet-client/src/exports/type-aliases/RequestAccountParams.mdx
                   - page: SmartWalletClient
                     path: wallets/pages/reference/account-kit/wallet-client/src/exports/type-aliases/SmartWalletClient.mdx
                   - page: SmartWalletClientParams
