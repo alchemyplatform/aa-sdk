@@ -2544,6 +2544,60 @@ navigation:
                     path: wallets/pages/reference/account-kit/wallet-client/src/exports/functions/waitForCallsStatus.mdx
               - section: Type Aliases
                 contents:
+                  - page: FormatSignParams
+                    path: wallets/pages/reference/account-kit/wallet-client/src/exports/type-aliases/FormatSignParams.mdx
+                  - page: FormatSignResult
+                    path: wallets/pages/reference/account-kit/wallet-client/src/exports/type-aliases/FormatSignResult.mdx
+                  - page: GetAccountParam
+                    path: wallets/pages/reference/account-kit/wallet-client/src/exports/type-aliases/GetAccountParam.mdx
+                  - page: GetCallsStatusParams
+                    path: wallets/pages/reference/account-kit/wallet-client/src/exports/type-aliases/GetCallsStatusParams.mdx
+                  - page: GetCallsStatusResult
+                    path: wallets/pages/reference/account-kit/wallet-client/src/exports/type-aliases/GetCallsStatusResult.mdx
+                  - page: GrantPermissionsParams
+                    path: wallets/pages/reference/account-kit/wallet-client/src/exports/type-aliases/GrantPermissionsParams.mdx
+                  - page: GrantPermissionsResult
+                    path: wallets/pages/reference/account-kit/wallet-client/src/exports/type-aliases/GrantPermissionsResult.mdx
+                  - page: ListAccountsParams
+                    path: wallets/pages/reference/account-kit/wallet-client/src/exports/type-aliases/ListAccountsParams.mdx
+                  - page: ListAccountsResult
+                    path: wallets/pages/reference/account-kit/wallet-client/src/exports/type-aliases/ListAccountsResult.mdx
+                  - page: PrepareCallsParams
+                    path: wallets/pages/reference/account-kit/wallet-client/src/exports/type-aliases/PrepareCallsParams.mdx
+                  - page: PrepareCallsResult
+                    path: wallets/pages/reference/account-kit/wallet-client/src/exports/type-aliases/PrepareCallsResult.mdx
+                  - page: PrepareSignParams
+                    path: wallets/pages/reference/account-kit/wallet-client/src/exports/type-aliases/PrepareSignParams.mdx
+                  - page: PrepareSignResult
+                    path: wallets/pages/reference/account-kit/wallet-client/src/exports/type-aliases/PrepareSignResult.mdx
+                  - page: RequestAccountParams
+                    path: wallets/pages/reference/account-kit/wallet-client/src/exports/type-aliases/RequestAccountParams.mdx
+                  - page: RequestAccountResult
+                    path: wallets/pages/reference/account-kit/wallet-client/src/exports/type-aliases/RequestAccountResult.mdx
+                  - page: SendCallsParams
+                    path: wallets/pages/reference/account-kit/wallet-client/src/exports/type-aliases/SendCallsParams.mdx
+                  - page: SendCallsResult
+                    path: wallets/pages/reference/account-kit/wallet-client/src/exports/type-aliases/SendCallsResult.mdx
+                  - page: SendPreparedCallsParams
+                    path: wallets/pages/reference/account-kit/wallet-client/src/exports/type-aliases/SendPreparedCallsParams.mdx
+                  - page: SendPreparedCallsResult
+                    path: wallets/pages/reference/account-kit/wallet-client/src/exports/type-aliases/SendPreparedCallsResult.mdx
+                  - page: SignMessageParams
+                    path: wallets/pages/reference/account-kit/wallet-client/src/exports/type-aliases/SignMessageParams.mdx
+                  - page: SignMessageResult
+                    path: wallets/pages/reference/account-kit/wallet-client/src/exports/type-aliases/SignMessageResult.mdx
+                  - page: SignPreparedCallsParams
+                    path: wallets/pages/reference/account-kit/wallet-client/src/exports/type-aliases/SignPreparedCallsParams.mdx
+                  - page: SignPreparedCallsResult
+                    path: wallets/pages/reference/account-kit/wallet-client/src/exports/type-aliases/SignPreparedCallsResult.mdx
+                  - page: SignSignatureRequestParams
+                    path: wallets/pages/reference/account-kit/wallet-client/src/exports/type-aliases/SignSignatureRequestParams.mdx
+                  - page: SignSignatureRequestResult
+                    path: wallets/pages/reference/account-kit/wallet-client/src/exports/type-aliases/SignSignatureRequestResult.mdx
+                  - page: SignTypedDataParams
+                    path: wallets/pages/reference/account-kit/wallet-client/src/exports/type-aliases/SignTypedDataParams.mdx
+                  - page: SignTypedDataResult
+                    path: wallets/pages/reference/account-kit/wallet-client/src/exports/type-aliases/SignTypedDataResult.mdx
                   - page: SmartWalletClient
                     path: wallets/pages/reference/account-kit/wallet-client/src/exports/type-aliases/SmartWalletClient.mdx
                   - page: SmartWalletClientParams
