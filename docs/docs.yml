@@ -1089,12 +1089,14 @@ navigation:
                     path: wallets/pages/reference/alchemy/wagmi-core/functions/handleOauthRedirect.mdx
                   - page: loginWithOauth
                     path: wallets/pages/reference/alchemy/wagmi-core/functions/loginWithOauth.mdx
+                  - page: prepareSwap
+                    path: wallets/pages/reference/alchemy/wagmi-core/functions/prepareSwap.mdx
                   - page: sendEmailOtp
                     path: wallets/pages/reference/alchemy/wagmi-core/functions/sendEmailOtp.mdx
                   - page: submitOtpCode
                     path: wallets/pages/reference/alchemy/wagmi-core/functions/submitOtpCode.mdx
-                  - page: swap
-                    path: wallets/pages/reference/alchemy/wagmi-core/functions/swap.mdx
+                  - page: submitSwap
+                    path: wallets/pages/reference/alchemy/wagmi-core/functions/submitSwap.mdx
 
       - section: Alchemy Wagmi Connector Web
         contents:
