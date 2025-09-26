@@ -49,6 +49,7 @@
   },
   "dependencies": {
     "@alchemy/common": "*",
+    "@alchemy/connectors-web": "*",
     "@alchemy/wagmi-core": "*"
   },
   "peerDependencies": {
