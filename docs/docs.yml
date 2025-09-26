@@ -189,8 +189,6 @@ navigation:
         contents:
           - page: Overview
             path: wallets/pages/transactions/overview.mdx
-          - page: Set up client
-            path: wallets/pages/concepts/smart-account-client.mdx
           - page: Send transactions
             path: wallets/pages/transactions/send-transactions/index.mdx
           - page: Using EIP-7702
@@ -209,6 +207,8 @@ navigation:
             path: wallets/pages/transactions/retry-transactions/index.mdx
           - page: Sponsor gas on Solana
             path: wallets/pages/transactions/solana/sponsor-gas-solana.mdx
+          - page: Configure client
+            path: wallets/pages/concepts/smart-account-client.mdx
       - section: Low-Level Infra
         contents:
           - page: Overview
