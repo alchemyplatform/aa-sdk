@@ -19,7 +19,6 @@ export type AlchemyProviderProps = {
  *
  * This component:
  * - Wraps WagmiProvider with the wagmi config from createAlchemyConfig
- * - Provides QueryClient for data fetching (required by wagmi)
  * - Will wrap additional providers in the future (Solana, UI, etc.)
  *
  * @param {AlchemyProviderProps} props - The props for the AlchemyProvider component

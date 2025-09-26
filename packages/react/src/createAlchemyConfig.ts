@@ -36,12 +36,6 @@ export type CreateAlchemyConfigOptions = {
    * Enable server-side rendering support (optional)
    */
   ssr?: boolean;
-
-  /**
-   * Advanced: Override any wagmi config parameters
-   * These will be shallow-merged with the auto-generated config
-   */
-  wagmiOverrides?: Partial<CreateConfigParameters>;
 };
 
 /**
@@ -92,52 +86,44 @@ export function createAlchemyConfig(
     jwt,
     url,
     chains,
-    // policyIds, // TODO: Will be used when alchemySmartWallet is completed and the default connector
+    // policyIds, // TODO: add when smart wallet becomes default
     ssr = false,
-    wagmiOverrides,
   } = options;
 
-  // Validate that at least one auth method is provided
-  if (!apiKey && !jwt && !url) {
-    throw new Error(
-      "createAlchemyConfig requires at least one of: apiKey, jwt, or url",
-    );
+  if (!chains?.length) {
+    throw new Error("createAlchemyConfig requires at least one EVM chain.");
   }
 
-  // Create transports for each chain using Alchemy transport
-  const transports: CreateConfigParameters["transports"] = {};
+  // If the caller didn't provide custom transports, we will build them.
+  if (!apiKey && !jwt && !url) {
+    throw new Error("createAlchemyConfig requires apiKey, jwt, or url.");
+  }
 
-  for (const chain of chains) {
-    transports[chain.id] = alchemyTransport({
+  // Build transports from chains when needed.
+  const transports: CreateConfigParameters["transports"] = (() => {
+    const baseInit = {
       ...(apiKey && { apiKey }),
       ...(jwt && { jwt }),
       ...(url && { url }),
-    });
-  }
+    };
+    const perChain: NonNullable<CreateConfigParameters["transports"]> = {};
+    for (const chain of chains) {
+      perChain[chain.id] = alchemyTransport(baseInit);
+    }
+    return perChain;
+  })();
 
-  // Create default connectors
-  // Note: Currently using alchemyAuth, will switch to alchemySmartWallet when it's ready
-  // The walletType parameter will be used in the future to configure the connector
+  // Note: Currently using alchemyAuth; swap to alchemySmartWallet when ready.
   const defaultConnectors = [
-    alchemyAuth({
-      apiKey,
-    }),
+    // Currently alchemyAuth only supports apiKey
+    ...(apiKey ? [alchemyAuth({ apiKey })] : []),
   ];
 
-  // Build the wagmi config with automatic Alchemy setup
   const wagmiConfig = createConfig({
-    chains: wagmiOverrides?.chains ?? chains,
-    transports: wagmiOverrides?.transports ?? transports,
-    connectors: wagmiOverrides?.connectors ?? defaultConnectors,
+    chains,
+    transports: transports!,
+    connectors: defaultConnectors,
     ssr,
-    ...(wagmiOverrides?.multiInjectedProviderDiscovery !== undefined && {
-      multiInjectedProviderDiscovery:
-        wagmiOverrides.multiInjectedProviderDiscovery,
-    }),
-    ...(wagmiOverrides?.storage && { storage: wagmiOverrides.storage }),
-    ...(wagmiOverrides?.syncConnectedChain !== undefined && {
-      syncConnectedChain: wagmiOverrides.syncConnectedChain,
-    }),
   });
 
   // Return structured config for future extensibility
