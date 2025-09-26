@@ -102,10 +102,14 @@ jobs:
         run: yarn build:libs
 
       - name: Unit Test
-        run: yarn test:ci
+        run: |
+          # Run tests for packages that changed and their dependents
+          BASE_BRANCH="${{ github.event.pull_request.base.ref }}"
+          yarn turbo test:run --filter="./packages/*" --filter="[origin/$BASE_BRANCH...HEAD]" --continue
         
       - name: Typecheck Test
-        run: yarn test:typecheck
+        run: |
+          yarn test:typecheck
     
   build_ios:
     name: Build iOS
