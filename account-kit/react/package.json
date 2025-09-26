@@ -1,6 +1,6 @@
 {
   "name": "@account-kit/react",
-  "version": "4.63.2",
+  "version": "4.65.0",
   "description": "React components and hooks for using Smart Wallets",
   "author": "Alchemy",
   "license": "MIT",
@@ -58,7 +58,6 @@
     "build:css": "postcss src/styles/index.css -o dist/styles.css",
     "build:esm": "tsc --project tsconfig.build.json --outDir ./dist/esm",
     "build:types": "tsc --project tsconfig.build.json --declarationDir ./dist/types --emitDeclarationOnly --declaration --declarationMap",
-    "fern:gen": "node ../../doc-gen/dist/esm/cli.js generate --in ./src/index.ts --out ../../docs/pages/reference/account-kit/react",
     "clean": "rm -rf ./dist",
     "test": "vitest --passWithNoTests",
     "test:run": "vitest run --passWithNoTests"
@@ -85,11 +84,11 @@
     "typescript-template": "*"
   },
   "dependencies": {
-    "@account-kit/core": "^4.63.2",
-    "@account-kit/infra": "^4.63.2",
-    "@account-kit/logging": "^4.63.2",
-    "@account-kit/signer": "^4.63.2",
-    "@account-kit/wallet-client": "^4.63.2",
+    "@account-kit/core": "^4.65.0",
+    "@account-kit/infra": "^4.65.0",
+    "@account-kit/logging": "^4.65.0",
+    "@account-kit/signer": "^4.65.0",
+    "@account-kit/wallet-client": "^4.65.0",
     "@solana/wallet-adapter-react": "^0.15.39",
     "@solana/wallet-adapter-wallets": "^0.19.37",
     "@solana/web3.js": "^1.98.0",

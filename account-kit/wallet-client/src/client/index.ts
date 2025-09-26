@@ -7,7 +7,7 @@ import {
   createClient,
   custom,
 } from "viem";
-import type { InnerWalletApiClient } from "../types.ts";
+import type { InnerWalletApiClientBase } from "../types.ts";
 import {
   smartWalletClientActions,
   type SmartWalletActions,
@@ -33,7 +33,7 @@ export type SmartWalletClientParams<
 
 export type SmartWalletClient<
   TAccount extends Address | undefined = Address | undefined,
-> = InnerWalletApiClient & SmartWalletActions<TAccount>;
+> = InnerWalletApiClientBase<SmartWalletActions<TAccount>>;
 
 /**
  * Creates a smart wallet client that can be used to interact with a smart account.

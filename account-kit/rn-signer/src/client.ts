@@ -301,7 +301,7 @@ export class RNSignerClient extends BaseSignerClient<
   /**
    * Exports the wallet and returns the decrypted private key or seed phrase.
    *
-   * @param {ExportWalletParams} params - Export parameters
+   * @param {ExportWalletParams} params - exportWallet parameters
    * @returns {Promise<string>} The decrypted private key or seed phrase
    * @throws {Error} If the user is not authenticated or export fails
    */

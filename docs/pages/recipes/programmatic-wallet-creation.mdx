@@ -1,0 +1,288 @@
+---
+title: How to programmatically create a wallet
+description: Generate a signer, initialize a Smart Wallet Client, sponsor gas with a policy, derive the counterfactual address and deploy by sending the first UserOperation.
+slug: wallets/recipes/programmatic-wallet-creation
+---
+
+This recipe shows how to programmatically create a smart wallet: you’ll generate a signer, spin up a Smart Wallet Client, read the counterfactual address before deployment and deploy the wallet by sending your first gas sponsored `UserOperation` (prepared → signed → sent).
+
+<Steps>
+  <Step title="Install required dependencies">
+    You'll need the following packages for this recipe:
+
+    - **@account-kit/signer**: Server wallet signer and access key generation
+    - **@account-kit/infra**: Alchemy transport & chain constants (e.g., `arbitrumSepolia`)
+    - **@account-kit/wallet-client**: Smart Wallet Client (prepare/sign/send flows)
+    - **dotenv**: Read .env for your API key & policy id
+    - **typescript + tsx + @types/node**: Run TypeScript files directly
+
+    ```bash
+    npm i @account-kit/signer @account-kit/infra @account-kit/wallet-client dotenv
+    npm i -D typescript tsx @types/node
+    ```
+
+  </Step>
+
+  <Step title="Environment variables">
+    Create a `.env` in your project root:
+
+    ```bash
+    # Get your app API key: https://dashboard.alchemy.com/apps
+    ALCHEMY_API_KEY=YOUR_API_KEY
+    # Get your gas sponsorship policy ID: https://dashboard.alchemy.com/services/gas-manager/configuration
+    ALCHEMY_POLICY_ID=YOUR_POLICY_ID
+    # Generate a secure access key for server wallet authentication - see step 3 below
+    ACCESS_KEY=your-secure-access-key-here
+    ```
+
+  </Step>
+
+  <Step title="Generate an access key">
+    Server wallets enable backend applications to programmatically control wallets using access keys, without requiring interactive authentication. This is perfect for automated systems, batch operations, or when you need to sign transactions from your backend.
+
+    **How server wallets work:**
+    - You generate a secure access key that never leaves your server
+    - Alchemy derives a public key from your access key for authentication
+    - The access key is used to sign transactions and messages on behalf of users
+    - No private keys are stored or transmitted to Alchemy's servers
+
+    ```ts
+    import { generateAccessKey } from "@account-kit/signer";
+
+    // Generate a secure access key (do this once and store securely)
+    const accessKey = generateAccessKey();
+    console.log("Access key:", accessKey);
+
+    // Add it to your .env file - you'll need it to control the server signer
+    ```
+
+    <Warning>
+      **Critical: Save your access key securely!**
+
+      This access key is required to control your server wallet and cannot be recovered if lost. Make sure to store it in a secure location.
+    </Warning>
+
+  </Step>
+
+  <Step title="Create a server signer">
+    ```ts
+    import { createServerSigner } from "@account-kit/signer";
+
+    const signer = await createServerSigner({
+      auth: {
+        accessKey: process.env.ACCESS_KEY!,
+      },
+      connection: {
+        apiKey: process.env.ALCHEMY_API_KEY!,
+      },
+    });
+
+    console.log("Signer address:", await signer.getAddress());
+    ```
+
+  </Step>
+
+  <Step title="Create the Smart Wallet Client">
+    ```ts
+    import { createSmartWalletClient } from "@account-kit/wallet-client";
+    import { alchemy, arbitrumSepolia } from "@account-kit/infra";
+
+    const transport = alchemy({ apiKey: process.env.ALCHEMY_API_KEY! });
+
+    const client = createSmartWalletClient({
+      transport,
+      chain: arbitrumSepolia,
+      signer,
+    });
+    ```
+
+  </Step>
+
+  <Step title="Get the counterfactual address">
+    The counterfactual address is the account address associated with the given signer but the account contract hasn't been deployed yet.
+
+    ```ts
+    const account = await client.requestAccount();
+    const address = account.address;
+    console.log("Counterfactual address:", address);
+    ```
+
+  </Step>
+
+  <Step title="Prepare → sign → send a sponsored call">
+    Use the **capabilities** pipeline with `paymasterService` to sponsor gas via your policy and deploy the account contract by sending a gas sponsored UserOperation.
+
+    ```ts
+    const prepared = await client.prepareCalls({
+      from: address,
+      calls: [
+        {
+          to: "0x0000000000000000000000000000000000000000",
+          data: "0x",
+          value: "0x0",
+        },
+      ], // minimal call to deploy the account contract
+      capabilities: {
+        paymasterService: { policyId: process.env.ALCHEMY_POLICY_ID! },
+      },
+    });
+
+    const signed = await client.signPreparedCalls(prepared);
+    const sent = await client.sendPreparedCalls(signed);
+
+    const txHash = await client.waitForCallsStatus({ id: sent.preparedCallIds[0] });
+    console.log("Prepared call IDs:", sent.preparedCallIds);
+    console.log("Tx hash:", txHash);
+    ```
+
+    <Note>
+      For non-sponsored path, remove the `paymasterService` capability in
+      `prepareCalls` and **fund the account** to pay gas. The rest of the flow is
+      unchanged.
+    </Note>
+
+    ### Full script (copy-paste)
+
+    ```ts provision.ts
+    import "dotenv/config";
+    import { createServerSigner } from "@account-kit/signer";
+    import { createSmartWalletClient } from "@account-kit/wallet-client";
+    import { alchemy, arbitrumSepolia } from "@account-kit/infra";
+
+    const ALCHEMY_API_KEY = process.env.ALCHEMY_API_KEY!;
+    const ALCHEMY_POLICY_ID = process.env.ALCHEMY_POLICY_ID!;
+    const ACCESS_KEY = process.env.ACCESS_KEY!;
+
+    if (!ALCHEMY_API_KEY || !ALCHEMY_POLICY_ID || !ACCESS_KEY) {
+      throw new Error("Missing ALCHEMY_API_KEY, ALCHEMY_POLICY_ID, or ACCESS_KEY in env");
+    }
+
+    async function main() {
+      // 1) Create server signer using access key
+      const signer = await createServerSigner({
+        auth: {
+          accessKey: ACCESS_KEY,
+        },
+        connection: {
+          apiKey: ALCHEMY_API_KEY,
+        },
+      });
+
+      // 2) Transport + Smart Wallet Client
+      const transport = alchemy({ apiKey: ALCHEMY_API_KEY });
+      const client = createSmartWalletClient({
+        transport,
+        chain: arbitrumSepolia,
+        signer,
+      });
+
+      // 3) Account & counterfactual address
+      const account = await client.requestAccount();
+      const address = account.address;
+      console.log("Counterfactual address:", address);
+
+      // 4) Prepare → sign → send (sponsored) to trigger deployment
+      const prepared = await client.prepareCalls({
+        from: address,
+        calls: [
+          {
+            to: "0x0000000000000000000000000000000000000000",
+            data: "0x",
+            value: "0x0",
+          },
+        ], // minimal call to deploy the account contract
+        capabilities: {
+          paymasterService: { policyId: ALCHEMY_POLICY_ID },
+        },
+      });
+
+      const signed = await client.signPreparedCalls(prepared);
+      const sent = await client.sendPreparedCalls(signed);
+
+      // 5) Wait for inclusion → tx hash
+      const txHash = await client.waitForCallsStatus({
+        id: sent.preparedCallIds[0],
+      });
+
+      console.log("Prepared call IDs:", sent.preparedCallIds);
+      console.log("Tx hash:", txHash);
+
+      return { address, preparedCallIds: sent.preparedCallIds, txHash };
+    }
+
+    main().then(
+      (res) => {
+        console.log("✅ Wallet provisioned:", res);
+        process.exit(0);
+      },
+      (err) => {
+        console.error("❌ Failed:", err);
+        process.exit(1);
+      },
+    );
+    ```
+
+  </Step>
+
+  <Step title="Run it">
+    ```bash
+    # one-time per project
+    npm i @account-kit/signer @account-kit/infra @account-kit/wallet-client dotenv
+    npm i -D typescript tsx @types/node
+
+    # then run
+    npx tsx provision.ts
+    ```
+
+    You should see:
+
+    - `Counterfactual address: 0x…`
+    - `Prepared call IDs: [...]`
+    - `Tx hash: 0x…` (open on an **Arbitrum Sepolia** explorer to see the deployment)
+
+    Example:
+
+    ```shell
+    Counterfactual address: 0x022fA5358476f0EB881138BD822E5150AFb36c5B
+    Prepared call IDs: [
+      '0x0000000000000000000000000000000000000000000000000000000000066eee7d4670e76c7186cf2fb9d448e3b8348e316bdb5b142c3ff3149aa703805c81cb'
+    ]
+    Tx hash: {
+      id: '0x0000000000000000000000000000000000000000000000000000000000066eee7d4670e76c7186cf2fb9d448e3b8348e316bdb5b142c3ff3149aa703805c81cb',
+      status: 'success',
+      atomic: true,
+      chainId: 421614,
+      receipts: [
+        {
+          status: 'success',
+          blockHash: '0x180071dc55dbcf7d31dd2fbe1c1a58e3cb5564d0b59c465c4f558236340cecd3',
+          blockNumber: 196845735n,
+          gasUsed: 208770n,
+          transactionHash: '0x2e625854abcb557bc2bc02e97d2f3deaae544a2aface000fbcf1c3573fee1526',
+          logs: [Array]
+        }
+      ],
+      statusCode: 200,
+      version: '2.0.0'
+    }
+    ✅ Wallet provisioned: {
+      address: '0x022fA5358476f0EB881138BD822E5150AFb36c5B',
+      preparedCallIds: [
+        '0x0000000000000000000000000000000000000000000000000000000000066eee7d4670e76c7186cf2fb9d448e3b8348e316bdb5b142c3ff3149aa703805c81cb'
+      ],
+      txHash: {
+        id: '0x0000000000000000000000000000000000000000000000000000000000066eee7d4670e76c7186cf2fb9d448e3b8348e316bdb5b142c3ff3149aa703805c81cb',
+        status: 'success',
+        atomic: true,
+        chainId: 421614,
+        receipts: [ [Object] ],
+        statusCode: 200,
+        version: '2.0.0'
+      }
+    }
+    ```
+
+  </Step>
+</Steps>
+
+And when opened in an Arbitrum Sepolia explorer, you should see the [deployment](https://sepolia.arbiscan.io/address/0x022fA5358476f0EB881138BD822E5150AFb36c5B#internaltx), congrats you have just learned how to programmatically create a smart wallet 🎉

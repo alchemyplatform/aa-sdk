@@ -119,6 +119,9 @@ jobs:
           sudo mv lychee /usr/local/bin/
           lychee --version
 
+      - name: Wait for preview deployment to stabilize
+        run: sleep 60
+
       - name: Check for broken links
         run: yarn docs:broken-links --base-url "${{ needs.preview.outputs.preview-url }}"
   

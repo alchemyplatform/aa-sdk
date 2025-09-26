@@ -183,7 +183,7 @@ single and batch UO execution, and signing of messages, typed data, and UOs.
 Smart Contract Accounts are rarely used on their own, and are typically passed in to [Smart Account Client](#TODO/concepts/smart-account-client) implementations.
 When using either the [React](/wallets/react/quickstart) or [Core](/wallets/core/overview) libraries, the connection of an account and a client are handled for you.
 
-It's also possible to use a custom account when using the [Infra](//wallets/reference/account-kit/infra) library.
+It's also possible to use a custom account when using the [Infra](/wallets/reference/account-kit/infra) library.
 Within `@aa-sdk/core`, a method [`toSmartContractAccount`](/wallets/reference/aa-sdk/core/functions/toSmartContractAccount) is provided so you can create an instance of your Smart Contract Account.
 
 <Accordion title="SmartContractAccount">
@@ -237,7 +237,7 @@ This type defines the parameters to the `SmartContractAccount` instantiation act
 
 ## `UserOperationEstimateGasResponse`
 
-An interface that defines the structure for the response received from the RPC method [`eth_estimateUserOperationGas`](https://docs.alchemy.com/reference/eth-estimateuseroperationgas). This response provides detailed information about the estimated gas usage for a `UserOperation`.
+An interface that defines the structure for the response received from the RPC method [`eth_estimateUserOperationGas`](https://alchemy.com/docs/reference/eth-estimateuseroperationgas). This response provides detailed information about the estimated gas usage for a `UserOperation`.
 
 <Accordion title="UserOperationEstimateGasResponse">
 
@@ -261,7 +261,7 @@ Partial structure for overriding default values in a `UserOperationStruct`, such
 
 ## `UserOperationReceipt`
 
-An interface that defines the structure for the response received from the RPC method [`eth_getUserOperationReceipt`](https://docs.alchemy.com/reference/eth-getuseroperationreceipt). It includes details like sender, nonce, gas cost, and success status of the `UserOperation`.
+An interface that defines the structure for the response received from the RPC method [`eth_getUserOperationReceipt`](https://alchemy.com/docs/reference/eth-getuseroperationreceipt). It includes details like sender, nonce, gas cost, and success status of the `UserOperation`.
 
 <Accordion title="UserOperationReceipt">
 
@@ -285,7 +285,7 @@ Interface for the request format required for a JSON-RPC request to `eth_sendUse
 
 ## `UserOperationResponse`
 
-An interface that defines the structure for the response received from the RPC method [`eth_getUserOperationByHash`](https://docs.alchemy.com/reference/eth-getuseroperationbyhash), detailing the result of executing a `UserOperation`. It includes the block number, block hash, transaction hash and more information associated with the UO.
+An interface that defines the structure for the response received from the RPC method [`eth_getUserOperationByHash`](https://alchemy.com/docs/reference/eth-getuseroperationbyhash), detailing the result of executing a `UserOperation`. It includes the block number, block hash, transaction hash and more information associated with the UO.
 
 <Accordion title="UserOperationResponse">
 

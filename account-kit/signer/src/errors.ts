@@ -33,3 +33,10 @@ export class MfaRequiredError extends BaseError {
     this.multiFactors = multiFactors;
   }
 }
+
+export class UnsupportedFeatureError extends BaseError {
+  override name = "UnsupportedFeatureError";
+  constructor(feature: string) {
+    super(`${feature} not supported by this signer`);
+  }
+}

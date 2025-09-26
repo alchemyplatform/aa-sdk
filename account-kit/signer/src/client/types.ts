@@ -64,6 +64,11 @@ export type CreateAccountParams =
       type: "passkey";
       username: string;
       creationOpts?: CredentialCreationOptionOverrides;
+    }
+  | {
+      type: "accessKey";
+      publicKey: string;
+      accountId?: string;
     };
 
 export type EmailType = "magicLink" | "otp";
@@ -81,6 +86,13 @@ export type EmailAuthParams = {
 export type SmsAuthParams = {
   phone: string;
   targetPublicKey: string;
+};
+
+export type AccessKeyAuthParamsPublicKeyOnly = {
+  accessKey: {
+    publicKey: string;
+    accountId?: string;
+  };
 };
 
 export type OauthParams = Extract<AuthParams, { type: "oauth" }> & {
@@ -173,7 +185,8 @@ export type SignerEndpoints = [
             challenge: string;
             attestation: Awaited<ReturnType<typeof getWebAuthnAttestation>>;
           };
-        };
+        }
+      | AccessKeyAuthParamsPublicKeyOnly;
     Response: SignupResponse;
   },
   {
@@ -202,6 +215,10 @@ export type SignerEndpoints = [
     Body: {
       email?: string;
       phone?: string;
+      accessKey?: {
+        publicKey: string;
+        accountId?: string;
+      };
     };
     Response: {
       orgId: string | null;
