@@ -1,178 +1,116 @@
 ---
-applyTo: "**/*.mdx"
+applyTo: "docs/**/*.mdx"
 ---
 
-# Alchemy Smart Wallets Documentation Reviewer
+# Smart Wallets Documentation Review Instructions
 
-You are an AI assistant reviewing documentation changes for Alchemy's Smart Wallets product. Apply systematic validation following the priority order below.
+## Project Overview
 
-## 🎯 Review Priority Order (CRITICAL)
+This repository contains Alchemy's Smart Wallets SDK (aa-sdk) documentation. The documentation is built using Fern and focuses on simplifying Account Abstraction concepts for developers by hiding blockchain complexity and emphasizing practical outcomes.
 
-1. **TERMINOLOGY ENFORCEMENT** (Highest Priority)
-2. **VOICE AND TONE COMPLIANCE** 
-3. **CODE FORMATTING STANDARDS**
-4. **CONTENT STRUCTURE VALIDATION**
+## Documentation Structure
 
-## 🚫 Terminology Enforcement (PRIORITY 1)
+- `/docs/`: Main documentation directory containing all `.mdx` files
+- `/docs/CONTRIBUTING.md`: Comprehensive style guide and standards
+- Documentation follows a developer-first approach with outcome-focused content
 
-**IMMEDIATE REJECTION** - Flag these prohibited terms and provide exact replacements:
+## Core Documentation Principles
 
-### Critical Replacements:
-| ❌ **NEVER USE** | ✅ **REPLACE WITH** | **Template Comment** |
-|------------------|---------------------|---------------------|
-| `"Account Abstraction"` or `"AA"` | Remove entirely | "Remove Account Abstraction terminology per [style guide](/docs/CONTRIBUTING.md#terminology-standards)" |
-| `"user operation"` or `"user ops"` | `"transactions"` | "Use 'transactions' instead of 'user operations' per our terminology standards" |
-| `"bundler"` | `"sending transactions"` | "Replace 'bundler' with 'sending transactions' to hide implementation details" |
-| `"Account Kit"` | `"Smart Wallets"` | "Use 'Smart Wallets' instead of 'Account Kit' per our branding guidelines" |
-| `"gas manager"` | `"sponsor gas"` | "Use 'sponsor gas' instead of 'gas manager' unless referring to Gas Manager API" |
-| `"Signer"` | `"authentication"` or `"owner"` | "Replace 'Signer' with 'authentication' or 'owner' for clarity" |
+### 1. Terminology Standards
 
-### Brand Reference Violations:
-- ❌ `"Alchemy Smart Wallets"` → ✅ `"Smart Wallets"`
-- ❌ `"our smart account"` → ✅ `"smart accounts"`
-- ❌ `"we recommend"` → ✅ `"recommended approach:"`
+**Always Use These Terms:**
+- `Smart Wallets` (capitalized, product reference)
+- `smart account` (lowercase, technical term)
+- `aa-sdk` (code references only, never in prose)
+- `gasless` (not "gas-less")
+- `onchain` (not "on-chain")
+- `transactions` (not "user operations")
+- `sponsor gas` (not "gas manager")
+- `pay gas with any token` (not "ERC20 paymaster")
 
-## 🗣️ Voice and Tone Validation (PRIORITY 2)
+**Never Use These Terms:**
+- "Account Abstraction" or "AA" → Avoid entirely
+- "ERC-4337" → Avoid entirely except in protocol-specific contexts
+- "user operation" or "user ops" → Use "transactions"
+- "bundler" → Use "sending transactions"
+- "entrypoint" → Avoid entirely
+- "smart contract account" → Use "wallet"
+- "Account Kit" → Use "Smart Wallets"
+- "paymaster" → Use context-specific replacements
+- "Signer" → Use "authentication" or "owner"
+- "modular account v2", "light account v1" → Use "smart account"
 
-**SYSTEMATIC CHECKS:**
+### 2. Voice and Tone Requirements
 
-### Second Person Voice (REQUIRED):
-```regex
-Pattern to flag: \b(we|our|us|I|my|one should)\b
-Replacement: "you" or restructure with direct commands
-```
+**Mandatory Voice Rules:**
+- Use second person ("you") throughout - never "we", "I", or "one"
+- Use active voice consistently
+- Write direct commands: "Install the SDK" not "You should install..."
+- Be confident and direct - avoid qualifiers like "perhaps", "might", "may wish to"
+- Never use company references like "Alchemy" or "our" in documentation
 
-**Examples:**
-- ❌ `"We recommend installing..."` → ✅ `"Install..."`
-- ❌ `"Our SDK provides..."` → ✅ `"The SDK provides..."`
-- ❌ `"You should configure..."` → ✅ `"Configure..."`
+### 3. Content Structure Standards
 
-### Active Voice Detection:
-```regex
-Pattern to flag: \b(is|are|was|were|been)\s+(created|configured|implemented|used)\b
-Fix: Convert to active voice with direct commands
-```
+**Headers and Titles:**
+- No AA-specific terms in titles or headers
+- Use developer-friendly, outcome-focused titles
+- Keep concise for sidebar navigation
+- Capitalize first word only for titles and sidebar names
 
-### Confidence Level Check:
-```regex
-Pattern to flag: \b(perhaps|might|maybe|possibly|you may wish|you might want)\b
-Fix: Remove qualifiers, use direct statements
-```
+**Code Standards:**
+- Apply `twoslash` to all TypeScript code examples
+- Include language specification in all code blocks
+- Use backticks for all code references, function names, and technical terms
+- Examples must be standalone, compilable, and working
+- Always include prerequisites and version requirements
 
-## 💻 Code Standards Validation (PRIORITY 3)
+### 4. Quality Assurance Requirements
 
-**AUTOMATED CHECKS:**
+**Before Publishing Any Documentation Changes:**
 
-### Technical Term Formatting:
-- **ALL** function names, variables, and technical terms MUST use backticks
-- Code blocks MUST specify language: `ts`, `jsx`, `bash`
-- Examples MUST include `twoslash` for TypeScript: ```ts twoslash
+**Terminology Validation:**
+- [ ] No prohibited terms used anywhere
+- [ ] All approved terms used correctly and consistently
+- [ ] Proper capitalization applied throughout
+- [ ] No AA-specific terms in headers or titles
 
-### Missing Backticks Detection:
-```regex
-Common patterns to flag (not exhaustive):
-- SDK method names without backticks
-- Configuration properties without backticks  
-- Package names in prose without backticks
-```
+**Voice and Style Validation:**
+- [ ] Second-person voice used throughout ("you" not "we")
+- [ ] Active voice used consistently
+- [ ] Direct, confident tone without unnecessary qualifiers
+- [ ] Outcome-focused titles and headers
 
-## 📋 Review Decision Tree
+**Technical Validation:**
+- [ ] Twoslash applied to all TypeScript code snippets
+- [ ] Language specified for all code blocks
+- [ ] All code references properly formatted with backticks
+- [ ] Examples are standalone, compilable, and working
+- [ ] Prerequisites clearly stated
 
-### 1. CRITICAL ISSUES (Request Changes):
-- ✅ Any prohibited terminology found
-- ✅ First-person voice ("we", "our", "I") 
-- ✅ Headers containing AA-specific terms
-- ✅ Missing backticks on technical terms
+**Format Validation:**
+- [ ] Proper markdown hierarchy maintained
+- [ ] All links are relative and functional
+- [ ] No broken or circular references
+- [ ] Consistent spacing and formatting throughout
 
-### 2. MAJOR ISSUES (Request Changes):
-- ✅ Passive voice in instructions
-- ✅ Broken or incorrect relative links
-- ✅ Code blocks without language specification
-- ✅ Examples missing prerequisites
+## Build and Validation
 
-### 3. MINOR ISSUES (Suggest Changes):
-- ✅ Inconsistent capitalization
-- ✅ Verbose explanations that could be more direct
-- ✅ Missing alt text on images
+Always run these commands after making documentation changes:
+- Validate documentation builds successfully
+- Check for broken links and references
+- Ensure code examples compile and execute correctly
 
-## 🤖 AI-Optimized Feedback Templates
+## Framework Support
 
-**Copy these exact templates for common issues:**
+When documenting features that support multiple frameworks:
+- Use tabs within one document rather than separate files
+- Standard tabs: React, React Native, Other JavaScript
+- Maintain consistency across all framework examples
 
-### Terminology Violation:
-```
-**TERMINOLOGY ISSUE**: Replace "[PROHIBITED_TERM]" with "[APPROVED_TERM]" per our style guide.
+## Link Strategy
 
-Reference: [Terminology Standards](/docs/CONTRIBUTING.md#terminology-standards)
+- Use relative links: `/wallets/...` not full URLs
+- Link to existing documentation instead of repeating content
+- Ensure no broken or circular references exist
 
-Specific fix: [EXACT_REPLACEMENT_TEXT]
-```
-
-### Voice Issue:
-```
-**VOICE ISSUE**: Convert to second person active voice.
-
-Current: "[CURRENT_TEXT]"
-Suggested: "[IMPROVED_TEXT]"
-
-Reference: [Voice Standards](/docs/CONTRIBUTING.md#voice-and-tone-standards)
-```
-
-### Code Formatting:
-```
-**FORMATTING ISSUE**: Technical terms need backticks.
-
-Fix: Wrap `[TERM]` in backticks for proper formatting.
-
-Reference: [Code Standards](/docs/CONTRIBUTING.md#code-and-technical-standards)
-```
-
-### Missing Language Specification:
-```
-**CODE BLOCK ISSUE**: Add language specification to code blocks.
-
-Change:
-\`\`\`
-[code]
-\`\`\`
-
-To:
-\`\`\`ts twoslash
-[code]
-\`\`\`
-```
-
-## ✅ Pre-Approval Checklist
-
-**Before approving ANY documentation, verify:**
-
-- [ ] **NO prohibited terms** anywhere in the document
-- [ ] **Second person voice** used throughout ("you" not "we/I")  
-- [ ] **Active voice** for all instructions
-- [ ] **Direct commands** without qualifiers
-- [ ] **Backticks** around all technical terms
-- [ ] **Language specified** in all code blocks
-- [ ] **Working examples** with prerequisites
-- [ ] **Relative links** (not full URLs)
-- [ ] **No broken links** or circular references
-
-## 🎯 Success Criteria
-
-**APPROVE when:**
-- Zero terminology violations detected
-- Consistent second-person active voice throughout
-- All technical terms properly formatted
-- Examples are standalone and functional
-- Headers focus on developer outcomes, not implementation
-
-**REQUEST CHANGES when:**
-- Any prohibited terminology found
-- Voice violations present
-- Missing technical formatting
-- Broken or non-functional examples
-
----
-
-**Reference**: All standards defined in [docs/CONTRIBUTING.md](/docs/CONTRIBUTING.md)
-
-**AI Assistant Note**: This document is structured for systematic validation. Process each section in priority order for consistent, thorough reviews.
+Remember: The goal is to make Account Abstraction invisible to developers while providing clear, actionable guidance for building with Smart Wallets.
