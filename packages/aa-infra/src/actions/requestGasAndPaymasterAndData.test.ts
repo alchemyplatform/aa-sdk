@@ -1,5 +1,5 @@
 import { local060Instance, local070Instance } from "~test/instances.js";
-import { createLightAccount } from "@account-kit/smart-contracts";
+import { toLightAccount } from "@aa-sdk/smart-accounts";
 import { requestGasAndPaymasterAndData } from "./requestGasAndPaymasterAndData.js";
 import type { AlchemyTransport } from "@alchemy/common";
 import { http, zeroAddress, type Client } from "viem";
@@ -16,7 +16,7 @@ describe("requestGasAndPaymasterAndData tests", async () => {
   it("should be able to call requestGasAndPaymasterAndData with v0.6 user operation", async () => {
     const client = local060Instance.getClient();
 
-    const smartAccount = await createLightAccount({
+    const smartAccount = await toLightAccount({
       chain: sepolia,
       transport: http(),
       version: "v1.1.0",
@@ -60,7 +60,7 @@ describe("requestGasAndPaymasterAndData tests", async () => {
   it("should be able to call requestGasAndPaymasterAndData with v0.7 user operation", async () => {
     const client = local070Instance.getClient();
 
-    const smartAccount = await createLightAccount({
+    const smartAccount = await toLightAccount({
       chain: sepolia,
       transport: http(),
       version: "v2.0.0",
