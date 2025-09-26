@@ -3,7 +3,6 @@ export function filterQueryOptions<type extends Record<string, unknown>>(
   options: type,
 ): type {
   // destructuring is super fast
-  // biome-ignore format: no formatting
   const {
     // import('@tanstack/query-core').QueryOptions
     _defaulted,

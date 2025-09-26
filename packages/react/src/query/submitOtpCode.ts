@@ -3,7 +3,7 @@ import {
   type SubmitOtpCodeParameters,
   type SubmitOtpCodeReturnType,
 } from "@alchemy/wagmi-core";
-import type { MutateOptions, MutationOptions } from "@tanstack/query-core";
+import type { MutateOptions, MutationOptions } from "@tanstack/react-query";
 import type { Config } from "wagmi";
 
 export type SubmitOtpCodeMutate = (

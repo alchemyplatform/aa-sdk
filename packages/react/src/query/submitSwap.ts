@@ -1,5 +1,5 @@
 import type { Config } from "wagmi";
-import type { MutateOptions, MutationOptions } from "@tanstack/query-core";
+import type { MutateOptions, MutationOptions } from "@tanstack/react-query";
 import {
   submitSwap,
   type SubmitSwapParameters,

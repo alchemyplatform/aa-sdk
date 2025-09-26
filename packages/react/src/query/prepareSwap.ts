@@ -1,5 +1,5 @@
 import type { Config } from "wagmi";
-import type { QueryOptions } from "@tanstack/query-core";
+import type { QueryOptions } from "@tanstack/react-query";
 import { filterQueryOptions } from "./utils.js";
 import {
   prepareSwap,
