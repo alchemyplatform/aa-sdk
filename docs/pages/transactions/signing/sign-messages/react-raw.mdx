@@ -1,0 +1,34 @@
+<Info>Required SDK version: ^v4.59.1</Info>
+
+Use the [`useSignMessage`](/wallets/reference/account-kit/react/hooks/useSignMessage) hook to sign raw hex messages with your Smart Wallet.
+
+<CodeBlocks>
+
+```tsx title="signRawMessage.tsx"
+import { useSignMessage, useSmartAccountClient } from "@account-kit/react";
+
+export default function SignRawMessage() {
+  const { client } = useSmartAccountClient({});
+  const { signMessageAsync } = useSignMessage({
+    client,
+  });
+
+  const handleSignRawMessage = async () => {
+    const signature = await signMessageAsync({
+      message: {
+        raw: "0x48656c6c6f2c20776f726c6421", // "Hello, world!" in hex
+      },
+    });
+
+    console.log("Raw signature:", signature);
+  };
+
+  return (
+    <div>
+      <button onClick={handleSignRawMessage}>Sign Raw Message</button>
+    </div>
+  );
+}
+```
+
+</CodeBlocks>
