@@ -23,10 +23,16 @@ export {
 } from "./actions/handleOauthRedirect.js";
 
 export {
-  swap,
-  type SwapParameters,
-  type SwapReturnType,
-} from "./actions/swap.js";
+  prepareSwap,
+  type PrepareSwapParameters,
+  type PrepareSwapReturnType,
+} from "./actions/prepareSwap.js";
+
+export {
+  submitSwap,
+  type SubmitSwapParameters,
+  type SubmitSwapReturnType,
+} from "./actions/submitSwap.js";
 
 export {
   createConfig,
