@@ -1,14 +1,18 @@
-import { getAccountAddress, getEntryPoint } from "@aa-sdk/core"; // TODO(v5): remove core dep
 import {
-  concatHex,
   createWalletClient,
   custom,
-  encodeFunctionData,
   hexToBigInt,
-  publicActions,
+  encodeFunctionData,
+  concatHex,
   type LocalAccount,
 } from "viem";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
+import {
+  entryPoint06Address,
+  entryPoint07Address,
+  entryPoint06Abi,
+  entryPoint07Abi,
+} from "viem/account-abstraction";
 import { local060Instance, local070Instance } from "~test/instances.js";
 import { LightAccountFactoryAbi_v1 } from "./abis/LightAccountFactoryAbi_v1.js";
 import { toLightAccount } from "./accounts/account.js";
@@ -18,6 +22,7 @@ import {
   predictMultiOwnerLightAccountAddress,
 } from "./predictAddress.js";
 import type { LightAccountVersion } from "./registry.js";
+import { getAccountAddressViaEntryPoint } from "../test-utils/getAccountAddressViaEntryPoint.js";
 
 describe("Light Account Counterfactual Address Tests", () => {
   const instanceV060 = local060Instance;
@@ -42,11 +47,6 @@ describe("Light Account Counterfactual Address Tests", () => {
         // Generate a random salt. The same generator function for private keys can be used, because it is also a 32 byte value.
         const salt = BigInt(generatePrivateKey());
 
-        const chain = instanceV060.chain;
-        const entryPoint = getEntryPoint(chain, {
-          version: "0.6.0", // EP version, not LA version
-        });
-
         const lightAccountV1 = await toLightAccount({
           client: localSigner,
           owner: localSigner.account,
@@ -54,11 +54,11 @@ describe("Light Account Counterfactual Address Tests", () => {
           version,
         });
 
-        // First, compute the address using the EntryPoint utility function:
-        const entryPointComputedAddress = await getAccountAddress({
-          client: instanceV060.getClient().extend(publicActions),
-          entryPoint,
-          // cannot use lightAccountV1.getInitCode, because it silently replaces salt with 0n for non-replay-safe-1271 account versions.
+        // Compute the address using the EntryPoint's getSenderAddress function
+        const entryPointComputedAddress = await getAccountAddressViaEntryPoint({
+          client: instanceV060.getClient(),
+          entryPointAddress: entryPoint06Address,
+          entryPointAbi: entryPoint06Abi,
           getAccountInitCode: async () => {
             return concatHex([
               (await lightAccountV1.getFactoryArgs()).factory!,
@@ -98,11 +98,6 @@ describe("Light Account Counterfactual Address Tests", () => {
       // Generate a random salt. The same generator function for private keys can be used, because it is also a 32 byte value.
       const salt = BigInt(generatePrivateKey());
 
-      const chain = instanceV070.chain;
-      const entryPoint = getEntryPoint(chain, {
-        version: "0.7.0", // EP version, not LA version
-      });
-
       const lightAccountV2 = await toLightAccount({
         client: localSigner,
         owner: localSigner.account,
@@ -110,11 +105,11 @@ describe("Light Account Counterfactual Address Tests", () => {
         version: "v2.0.0",
       });
 
-      // First, compute the address using the EntryPoint utility function:
-      const entryPointComputedAddress = await getAccountAddress({
-        client: instanceV070.getClient().extend(publicActions),
-        entryPoint,
-        // Can use the lightAccountV2.getInitCode, because it is replay-safe.
+      // Compute the address using the EntryPoint's getSenderAddress function
+      const entryPointComputedAddress = await getAccountAddressViaEntryPoint({
+        client: instanceV070.getClient(),
+        entryPointAddress: entryPoint07Address,
+        entryPointAbi: entryPoint07Abi,
         getAccountInitCode: async () => {
           return concatHex([
             (await lightAccountV2.getFactoryArgs()).factory!,
@@ -155,11 +150,6 @@ describe("Light Account Counterfactual Address Tests", () => {
       // Generate a random salt. The same generator function for private keys can be used, because it is also a 32 byte value.
       const salt = BigInt(generatePrivateKey());
 
-      const chain = instanceV070.chain;
-      const entryPoint = getEntryPoint(chain, {
-        version: "0.7.0", // EP version, not LA version
-      });
-
       const multiOwnerLightAccount = await toMultiOwnerLightAccount({
         client: localSigner,
         owners: [localSigner.account, ...otherOwners],
@@ -167,11 +157,11 @@ describe("Light Account Counterfactual Address Tests", () => {
         accountAddress: undefined,
       });
 
-      // First, compute the address using the EntryPoint utility function:
-      const entryPointComputedAddress = await getAccountAddress({
-        client: instanceV070.getClient().extend(publicActions),
-        entryPoint,
-        // Can use the lightAccountV2.getInitCode, because it is replay-safe.
+      // Compute the address using the EntryPoint's getSenderAddress function
+      const entryPointComputedAddress = await getAccountAddressViaEntryPoint({
+        client: instanceV070.getClient(),
+        entryPointAddress: entryPoint07Address,
+        entryPointAbi: entryPoint07Abi,
         getAccountInitCode: async () => {
           return concatHex([
             (await multiOwnerLightAccount.getFactoryArgs()).factory!,

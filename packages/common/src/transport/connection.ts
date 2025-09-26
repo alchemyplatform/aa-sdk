@@ -1,5 +1,4 @@
 import type { Never } from "../utils/types";
-import type { SplitTransportParams } from "./split";
 
 // TODO(v5): remove this file and use connectionSchema.ts instead once other packages are migrated over
 type AlchemyConnectionBaseConfig =
@@ -16,14 +15,5 @@ type AAOnlyChainConfig = {
 };
 
 export type AlchemyConnectionConfig =
-  | (AlchemyConnectionBaseConfig &
-      Never<SplitTransportParams> &
-      Never<AAOnlyChainConfig>)
-  | (AAOnlyChainConfig &
-      Never<AlchemyConnectionBaseConfig> &
-      Never<SplitTransportParams>)
-  // This is an escape hatch for cases where we need to split traffic but still maintain an alchemy transport
-  | (SplitTransportParams & {
-      restConnection: AlchemyConnectionConfig;
-    } & Never<AlchemyConnectionBaseConfig> &
-      Never<AAOnlyChainConfig>);
+  | (AlchemyConnectionBaseConfig & Never<AAOnlyChainConfig>)
+  | (AAOnlyChainConfig & Never<AlchemyConnectionBaseConfig>);

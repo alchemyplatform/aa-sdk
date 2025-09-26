@@ -1,4 +1,4 @@
-import { BaseError } from "@aa-sdk/core";
+import { BaseError } from "@alchemy/common";
 
 /**
  * This error is thrown when an error occurs during the OAuth login flow.
