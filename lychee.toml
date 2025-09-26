@@ -15,3 +15,12 @@ exclude_path = [
 
 # Comma-separated list of accepted status codes for valid links.
 accept = [200, 403]
+
+# Maximum number of allowed retries before a link is declared dead.
+max_retries = 5
+
+# Minimum wait time in seconds between retries of failed requests.
+retry_wait_time = 5
+
+# User agent to send with each request.
+user_agent = "lychee/link-checker"
