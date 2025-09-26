@@ -92,6 +92,7 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
 
     // Silent resume logic to try to restore auth session from storage
     async function tryResume(): Promise<boolean> {
+      console.log("tryResume"); // todo: remove this after testing
       if (authSessionInstance) {
         return true;
       }
