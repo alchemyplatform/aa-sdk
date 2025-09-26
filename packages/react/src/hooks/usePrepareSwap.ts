@@ -33,6 +33,7 @@ export type UsePrepareSwapReturnType = UseMutationReturnType<
   prepareSwapAsync: PrepareSwapMutateAsync;
 };
 
+// TODO(v5): We may rename this hook (and its action) before launch. Silvia is thinking about it.
 /**
  * React hook for preparing token swaps.
  *

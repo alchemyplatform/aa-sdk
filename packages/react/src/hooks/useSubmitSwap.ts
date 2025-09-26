@@ -29,6 +29,7 @@ export type UseSubmitSubmitSwapReturnType = UseMutationReturnType<
   submitSwapAsync: SubmitSwapMutateAsync;
 };
 
+// TODO(v5): We may rename this hook (and its action) before launch. Silvia is thinking about it.
 /**
  * React hook for submitting token swaps.
  *
