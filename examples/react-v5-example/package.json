@@ -13,7 +13,7 @@
     "@alchemy/common": "*",
     "@alchemy/connectors-web": "*",
     "@alchemy/react": "*",
-    "@tanstack/react-query": "^5.28.9",
+    "@tanstack/react-query": "^5.90.2",
     "next": "15.5.3",
     "react": "^19",
     "react-dom": "^19",

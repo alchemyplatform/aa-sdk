@@ -1,103 +1,95 @@
 "use client";
 
-import { useMutation } from "@tanstack/react-query";
-import type { UseMutationParameters, UseMutationReturnType } from "wagmi/query";
+import { useQuery, type UseQueryResult } from "@tanstack/react-query";
 import { useConfig } from "wagmi";
+import type { ConfigParameter, QueryParameter } from "../types";
 import {
-  type PrepareSwapParameters,
-  type PrepareSwapReturnType,
-} from "@alchemy/wagmi-core";
-import type { ConfigParameter } from "../types";
-import {
-  prepareSwapMutationOptions,
-  type PrepareSwapMutate,
-  type PrepareSwapMutateAsync,
+  prepareSwapQueryOptions,
+  type PrepareSwapOptions,
+  type PrepareSwapQueryKey,
 } from "@alchemy/wagmi-core/query";
+import type { PrepareSwapReturnType } from "@alchemy/wagmi-core";
 
-// TODO(jh): this should probably be a query to better align w/ wagmi?
-// since usePrepareTransactionRequest, useEstimateFeesPerGas, useEstimateGas are all queries.
-// it makes sense b/c it's fetching data and not mutating state in our db or on chain.
+export type UsePrepareSwapParameters = PrepareSwapOptions &
+  ConfigParameter &
+  QueryParameter<
+    PrepareSwapReturnType,
+    Error,
+    PrepareSwapReturnType,
+    PrepareSwapQueryKey
+  >;
 
-export type UsePrepareSwapParameters = ConfigParameter & {
-  mutation?:
-    | UseMutationParameters<PrepareSwapReturnType, Error, PrepareSwapParameters>
-    | undefined;
-};
-
-export type UsePrepareSwapReturnType = UseMutationReturnType<
+export type UsePrepareSwapReturnType = UseQueryResult<
   PrepareSwapReturnType,
-  Error,
-  PrepareSwapParameters
-> & {
-  prepareSwap: PrepareSwapMutate;
-  prepareSwapAsync: PrepareSwapMutateAsync;
-};
+  Error
+>;
 
 // TODO(v5): We may rename this hook (and its action) before launch. Silvia is thinking about it.
 /**
  * React hook for preparing token swaps.
  *
- * This hook wraps the `prepareSwap` action with React Query mutation functionality,
- * providing loading states, error handling, and mutation management for preparing token swaps.
+ * This hook wraps the `prepareSwap` action with React Query functionality,
+ * providing loading states, error handling, and caching for preparing token swaps.
  *
  * @param {UsePrepareSwapParameters} parameters - Configuration options for the hook
  * @param {Config} [parameters.config] - Optional wagmi config override
- * @param {UseMutationParameters} [parameters.mutation] - Optional React Query mutation configuration
- * @returns {UsePrepareSwapReturnType} TanStack Query mutation object with the following properties:
- * - `prepareSwap`: `(variables: PrepareSwapParameters, options?) => void` - Mutation function to prepare swap
- * - `prepareSwapAsync`: `(variables: PrepareSwapParameters, options?) => Promise<PrepareSwapReturnType>` - Async mutation function that returns a promise
- * - `data`: `PrepareSwapReturnType | undefined` - The last successfully resolved data from the prepare swap
- * - `error`: `Error | null` - The error object for the mutation, if an error was encountered
- * - `isError`: `boolean` - True if the mutation is in an error state
- * - `isIdle`: `boolean` - True if the mutation is in its initial idle state
- * - `isPending`: `boolean` - True if the mutation is currently executing
- * - `isSuccess`: `boolean` - True if the last mutation attempt was successful
- * - `failureCount`: `number` - The failure count for the mutation
- * - `failureReason`: `Error | null` - The failure reason for the mutation retry
- * - `isPaused`: `boolean` - True if the mutation has been paused
- * - `reset`: `() => void` - Function to reset the mutation to its initial state
- * - `status`: `'idle' | 'pending' | 'error' | 'success'` - Current status of the mutation
- * - `submittedAt`: `number` - Timestamp for when the mutation was submitted
- * - `variables`: `PrepareSwapParameters | undefined` - The variables object passed to the mutation
+ * @param {UseQueryParameters} [parameters.query] - Optional React Query configuration
+ * @returns {UsePrepareSwapReturnType} TanStack Query object with the following properties:
+ * - `data`: `PrepareSwapReturnType | undefined` - The query data, or undefined if still loading
+ * - `dataUpdatedAt`: `number` - The timestamp for when the query most recently returned data
+ * - `error`: `Error | null` - The error object for the query, if an error was encountered
+ * - `errorUpdateCount`: `number` - The sum of all errors
+ * - `errorUpdatedAt`: `number` - The timestamp for when the query most recently returned an error
+ * - `failureCount`: `number` - The failure count for the query
+ * - `failureReason`: `Error | null` - The failure reason for the query retry
+ * - `fetchStatus`: `'fetching' | 'paused' | 'idle'` - Current fetch status of the query
+ * - `isError`: `boolean` - True if the query attempt resulted in an error
+ * - `isFetched`: `boolean` - True if the query has been fetched
+ * - `isFetchedAfterMount`: `boolean` - True if the query has been fetched after the component mounted
+ * - `isFetching`: `boolean` - True if the query is currently fetching
+ * - `isInitialLoading`: `boolean` - True if the query is in its initial loading state
+ * - `isLoading`: `boolean` - True if the query is in a loading state
+ * - `isLoadingError`: `boolean` - True if the query failed while fetching for the first time
+ * - `isPending`: `boolean` - True if the query is currently pending (fetching or fresh data is not available)
+ * - `isPlaceholderData`: `boolean` - True if the data shown is placeholder data
+ * - `isRefetchError`: `boolean` - True if the query failed while refetching
+ * - `isRefetching`: `boolean` - True if the query is currently refetching
+ * - `isStale`: `boolean` - True if the data in the cache is invalidated or if the data is older than the given staleTime
+ * - `isSuccess`: `boolean` - True if the query was successful and data is available
+ * - `refetch`: `(options?) => Promise<UseQueryResult>` - Function to manually refetch the query
+ * - `status`: `'pending' | 'error' | 'success'` - Current status of the query
  *
  * @example
  * ```tsx twoslash
  * import { usePrepareSwap } from '@alchemy/react';
  *
  * function SwapForm() {
- *   const { prepareSwap, isPending, error } = usePrepareSwap();
+ *   const { data, isLoading, error } = usePrepareSwap({
+ *     // prepare swap parameters here
+ *   });
  *
- *   const handlePrepareSwap = () => {
- *     prepareSwap({
- *       // prepare swap parameters here
- *     });
- *   };
+ *   if (isLoading) return <div>Loading...</div>;
+ *   if (error) return <div>Error: {error.message}</div>;
  *
  *   return (
- *     <button onClick={handlePrepareSwap} disabled={isPending}>
- *       {isPending ? 'Preparing Swap...' : 'Prepare Swap'}
- *     </button>
+ *     <div>
+ *       {data && <div>Swap prepared successfully</div>}
+ *     </div>
  *   );
  * }
  * ```
  */
 export function usePrepareSwap(
-  parameters: UsePrepareSwapParameters = {},
+  parameters: UsePrepareSwapParameters,
 ): UsePrepareSwapReturnType {
-  const { mutation } = parameters;
+  const { connector, query } = parameters;
 
   const config = useConfig(parameters);
 
-  const mutationOptions = prepareSwapMutationOptions(config);
-
-  const { mutate, mutateAsync, ...result } = useMutation({
-    ...mutation,
-    ...mutationOptions,
+  const options = prepareSwapQueryOptions(config, {
+    ...parameters,
+    connector,
   });
 
-  return {
-    ...result,
-    prepareSwap: mutate as PrepareSwapMutate,
-    prepareSwapAsync: mutateAsync as PrepareSwapMutateAsync,
-  };
+  return useQuery({ ...query, ...options });
 }

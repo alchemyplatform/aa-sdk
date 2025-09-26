@@ -1,34 +1,38 @@
 import type { Config } from "wagmi";
-import type { MutateOptions, MutationOptions } from "@tanstack/query-core";
+import type { QueryOptions } from "@tanstack/query-core";
 import {
   prepareSwap,
   type PrepareSwapParameters,
   type PrepareSwapReturnType,
 } from "../actions/prepareSwap.js";
+import { filterQueryOptions } from "./utils.js";
 
-export type PrepareSwapMutate = (
-  variables: PrepareSwapParameters,
-  options?:
-    | MutateOptions<PrepareSwapReturnType, Error, PrepareSwapParameters>
-    | undefined,
-) => void;
+// TODO(jh): may want to use `UnionExactPartial<PrepareSwapParameters>` here. test it first.
+export type PrepareSwapOptions = PrepareSwapParameters;
 
-export type PrepareSwapMutateAsync = (
-  variables: PrepareSwapParameters,
-  options?:
-    | MutateOptions<PrepareSwapReturnType, Error, PrepareSwapParameters>
-    | undefined,
-) => Promise<PrepareSwapReturnType>;
+function prepareSwapQueryKey(options: PrepareSwapOptions) {
+  const { connector: _connector, ...rest } = options;
+  return ["prepareSwap", filterQueryOptions(rest)] as const;
+}
 
-export function prepareSwapMutationOptions(config: Config) {
+export type PrepareSwapQueryKey = ReturnType<typeof prepareSwapQueryKey>;
+
+export function prepareSwapQueryOptions(
+  config: Config,
+  options: PrepareSwapOptions,
+) {
   return {
-    mutationKey: ["prepareSwap"],
-    mutationFn: (variables) => {
-      return prepareSwap(config, variables);
+    async queryFn({ queryKey }) {
+      const { connector } = options;
+      const { ...params } = queryKey[1];
+
+      return prepareSwap(config, { connector, ...params });
     },
-  } as const satisfies MutationOptions<
+    queryKey: prepareSwapQueryKey(options),
+  } as const satisfies QueryOptions<
     PrepareSwapReturnType,
     Error,
-    PrepareSwapParameters
+    PrepareSwapReturnType,
+    PrepareSwapQueryKey
   >;
 }
