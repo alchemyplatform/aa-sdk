@@ -13,7 +13,7 @@ Email OTP (One-Time Password) authentication is a two-step process:
   <Tab title="React">
     ## Overview
 
-    You can implement Email OTP authentication in two ways:
+    Implement Email OTP authentication in two ways:
 
     - [Pre-built UI Components](#pre-built-ui-components) - Quick implementation with minimal code
     - [Custom UI](#custom-ui) - Complete control over the user experience
@@ -34,7 +34,7 @@ Email OTP (One-Time Password) authentication is a two-step process:
 
     ### Step 2: Configure Email OTP in UI Components
 
-    After adding the components, configure the Email OTP authentication in your application config:
+    After adding the components, configure Email OTP authentication in your application config:
 
     ```tsx twoslash
     import { AlchemyAccountsUIConfig, createConfig } from "@account-kit/react";
@@ -68,7 +68,7 @@ Email OTP (One-Time Password) authentication is a two-step process:
 
     ## Custom UI
 
-    If you need complete control over the user experience, you can implement your own custom UI for Email OTP authentication using Smart Wallets hooks.
+    If you need complete control over the user experience, implement your own custom UI for Email OTP authentication using Smart Wallets hooks.
 
     ### Step 1: Send the OTP
 
@@ -125,7 +125,7 @@ Email OTP (One-Time Password) authentication is a two-step process:
 
     ### Step 3: Verify the OTP
 
-    Once the user receives the code, they'll enter it in your application:
+    Once the user receives the code, they enter it in your application:
 
     ```tsx twoslash
     import { useAuthenticate } from "@account-kit/react";
@@ -189,7 +189,7 @@ Email OTP (One-Time Password) authentication is a two-step process:
 
     <Tip>
       This is the default mode for email authentication. Only follow these steps if
-      you had previously set the email mode to `Magic Link`.
+      you previously set the email mode to Magic Link.
     </Tip>
 
     In your Alchemy Accounts Dashboard:
@@ -549,4 +549,4 @@ Email OTP (One-Time Password) authentication is a two-step process:
 
 ### Add Authenticator App (TOTP) Verification (Optional)
 
-If you'd like to add a **second security step** to Email OTP, you can enable [Multi-Factor Authentication](/wallets/react/mfa/setup-mfa). This prompts users for a **6-digit TOTP code** from their authenticator app (e.g. Google Authenticator, Authy) after they verify their email.
+Add a **second security step** to Email OTP by enabling [Multi-Factor Authentication](/wallets/react/mfa/setup-mfa). This prompts users for a **6-digit TOTP code** from their authenticator app (e.g. Google Authenticator, Authy) after they verify their email.
