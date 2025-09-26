@@ -104,7 +104,8 @@ jobs:
       - name: Unit Test
         run: |
           # Run tests only for packages that changed since the base branch
-          yarn turbo test:ci --filter='[origin/main...HEAD]'
+          BASE_BRANCH="${{ github.event.pull_request.base.ref }}"
+          yarn turbo test:run --filter="[origin/$BASE_BRANCH...HEAD]" --continue
         
       - name: Typecheck Test
         run: |
