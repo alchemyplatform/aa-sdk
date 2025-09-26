@@ -29,7 +29,7 @@ export default function Home(): ReactElement {
     const authSession = await authClient.loginWithOauth({
       type: "oauth",
       authProviderId: "google",
-      mode: "redirect",
+      mode: "popup",
     });
     setAuthSession(authSession);
     console.log("do we ever get here?");
