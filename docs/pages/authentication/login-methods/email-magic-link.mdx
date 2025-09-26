@@ -10,8 +10,8 @@ Email magic link authentication is a two-step process:
 2. The user clicks the link in their email, which redirects them back to your application to complete authentication
 
 <Tip>
-  Email OTP has been shown to have up to a 3x higher conversion rate and a
-  10-second faster flow compared to magic links. Consider using [Email
+  Email OTP has up to a 3x higher conversion rate and a 10-second faster flow
+  compared to magic links. Use [Email
   OTP](/wallets/authentication/login-methods/email-otp) for better user
   experience.
 </Tip>
@@ -20,7 +20,7 @@ Email magic link authentication is a two-step process:
   <Tab title="React">
     ## Implementation Options
 
-    You can implement Email Magic Link authentication in two ways:
+    Implement Email Magic Link authentication in two ways:
 
     - [Pre-built UI Components](#pre-built-ui-components) - Quick implementation with minimal code
     - [Custom UI](#custom-ui) - Complete control over the user experience
@@ -41,7 +41,7 @@ Email magic link authentication is a two-step process:
 
     ### Step 2: Configure Email Magic Link in UI Components
 
-    After adding the components, configure the Email Magic Link authentication in your application config:
+    After adding the components, configure Email Magic Link authentication in your application config:
 
     ```tsx twoslash
     import { AlchemyAccountsUIConfig, createConfig } from "@account-kit/react";
@@ -75,7 +75,7 @@ Email magic link authentication is a two-step process:
 
     ## Custom UI
 
-    If you need complete control over the user experience, you can implement your own custom UI for Email Magic Link authentication using Smart Wallets hooks.
+    If you need complete control over the user experience, implement your own custom UI for Email Magic Link authentication using Smart Wallets hooks.
 
     ### Step 1: Send the Magic Link
 
@@ -110,7 +110,7 @@ Email magic link authentication is a two-step process:
 
     ### Step 2: Handle the Redirect
 
-    When the user clicks the magic link in their email, they'll be redirected back to your application. You need to extract the authentication bundle from the URL and complete the authentication:
+    When the user clicks the magic link in their email, they're redirected back to your application. Extract the authentication bundle from the URL and complete the authentication:
 
     ```tsx twoslash
     import { useEffect } from "react";
@@ -195,7 +195,7 @@ Email magic link authentication is a two-step process:
 
     ### Send an Email Magic Link to a User
 
-    To send an email magic link to a user, you can use the `authenticate()` function from the `useAuthenticate()` hook with the `type` set to `email` and the `emailMode` set to `magicLink`.
+    To send an email magic link to a user, use the `authenticate()` function from the `useAuthenticate()` hook with the `type` set to `email` and the `emailMode` set to `magicLink`.
 
     ```tsx twoslash sign-in-with-magic-link.tsx
     import { useAuthenticate } from "@account-kit/react-native";
@@ -256,7 +256,7 @@ Email magic link authentication is a two-step process:
 
     ### Authenticate User via Deep Link
 
-    When a user clicks on the magic link in their email, it should deep link to your app if this has been setup correctly.
+    When a user clicks the magic link in their email, it deep links to your app if configured correctly.
 
     A `bundle` parameter present in the deep link url will be used to authenticate the user and save the user's session.
 
@@ -315,7 +315,7 @@ Email magic link authentication is a two-step process:
     Email magic link authentication allows you to log in and sign up users using an email address. Your users will receive a link in their inbox which will redirect them to your site (configured in the dashboard) to complete login.
 
     <Tip>
-      We recommend using the OTP email flow instead, as it is more reliable across different browser environments. OTP flows have also been shown to have up to a 3x higher conversion rate and a 10-second faster flow compared to magic link.
+      Use the OTP email flow instead, as it's more reliable across different browser environments. OTP flows have up to a 3x higher conversion rate and a 10-second faster flow compared to magic links.
 
       For setting up the OTP flow, see [Email OTP Authentication](/wallets/authentication/login-methods/email-otp).
     </Tip>
@@ -381,4 +381,4 @@ Email magic link authentication is a two-step process:
 
 ### Add Authenticator App (TOTP) Verification (Optional)
 
-Consider enabling [Multi-Factor Authentication](/wallets/react/mfa/setup-mfa) to require users to enter a 6-digit TOTP code from their authenticator app after clicking the magic link. This extra layer of security protects user accounts if their email is compromised.
+Enable [Multi-Factor Authentication](/wallets/react/mfa/setup-mfa) to require users to enter a 6-digit TOTP code from their authenticator app after clicking the magic link. This extra layer of security protects user accounts if their email is compromised.
