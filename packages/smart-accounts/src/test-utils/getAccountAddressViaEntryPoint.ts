@@ -1,9 +1,8 @@
 import { getContract, type Address, type Hex, type Client } from "viem";
 
 /**
- * Test utility function that computes the counterfactual address using the EntryPoint's getSenderAddress function.
- * This is copied from @aa-sdk/core's getAccountAddress logic to maintain an independent source of truth
- * for validating our prediction functions without circular dependencies.
+ * Test utility functilln that computes the counterfactual address using the EntryPoint's getSenderAddress function.
+ * This is copied from v4's @aa-sdk/core's getAccountAddress logic.
  *
  * @param {object} params - The parameters object
  * @param {Client} params.client - The viem client for blockchain interaction
