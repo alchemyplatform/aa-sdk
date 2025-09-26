@@ -1,6 +1,5 @@
 import {
   AuthClient,
-  OauthCancelledError,
   type CreateTekStamperFn,
   type CreateWebAuthnStamperFn,
 } from "@alchemy/auth";
@@ -35,6 +34,8 @@ export type WebAuthClientParams = {
  * @param {string} params.apiKey - API key for authentication with Alchemy services
  * @param {string} [params.iframeElementId] - ID for the iframe element used by Turnkey stamper
  * @param {string} [params.iframeContainerId] - ID for the container element that holds the iframe
+ * @param {CreateTekStamperFn} [params.createTekStamper] - Optional custom TEK stamper factory
+ * @param {CreateWebAuthnStamperFn} [params.createWebAuthnStamper] - Optional custom WebAuthn stamper factory
  * @returns {AuthClient} A configured AuthClient instance ready for web-based authentication
  *
  * @example
@@ -100,15 +101,37 @@ export function createWebAuthClient({
     createWebAuthnStamper:
       createWebAuthnStamper ??
       (() => Promise.reject(new Error("Not implemented"))),
-    handleOauthFlow: async (authUrl: string, mode: "popup" | "redirect") => {
+    handleOauthFlow: async (
+      params:
+        | {
+            authUrl: string;
+            mode: "redirect";
+          }
+        | {
+            authUrl: Promise<string>;
+            mode: "popup";
+          },
+    ) => {
+      const { authUrl, mode } = params;
       switch (mode) {
         case "popup":
+          // Open popup immediately to avoid popup blockers
           const popup = window.open(
-            authUrl,
-            "_blank",
-            "popup,width=500,height=600",
+            "about:blank",
+            "oauth-popup",
+            "width=500,height=600",
           );
-          // const eventEmitter = this.eventEmitter;
+          if (!popup) {
+            throw new Error(
+              "Popup blocked by browser. Please allow popups for this site.",
+            );
+          }
+          // Wait for auth URL to be ready, then set url in popup
+          const finalAuthUrl = await (typeof authUrl === "string"
+            ? authUrl
+            : authUrl);
+          popup.location.href = finalAuthUrl;
+
           return new Promise((resolve, reject) => {
             const handleMessage = (event: MessageEvent) => {
               if (!event.data) {
@@ -161,14 +184,13 @@ export function createWebAuthClient({
                 default:
                   reject(new Error(`Unknown status: ${status}`));
               }
-            }; // handleMessage
+            };
 
             window.addEventListener("message", handleMessage);
 
             const checkCloseIntervalId = setInterval(() => {
               if (popup?.closed) {
                 cleanup();
-                reject(new OauthCancelledError());
               }
             }, CHECK_CLOSE_INTERVAL);
 

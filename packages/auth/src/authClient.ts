@@ -7,6 +7,7 @@ import type {
   CreateTekStamperFn,
   CreateWebAuthnStamperFn,
   HandleOauthFlowFn,
+  OAuthFlowResponse,
   TurnkeyTekStamper,
 } from "./types.js";
 import {
@@ -84,7 +85,7 @@ type PendingOtp = {
  *
  * @example
  * ```ts twoslash
- * const authClient = new AuthClient({
+ * const authClient = AuthClient.create({
  *   apiKey: "your-api-key",
  *   createTekStamper: () => createIframeTekStamper(),
  *   createWebAuthnStamper: () => createWebAuthnStamper(),
@@ -110,7 +111,9 @@ export class AuthClient {
    * Creates a new AuthClient instance
    *
    * @param {AuthClientParams} params - Configuration parameters for the auth client
-   * @param {string} params.apiKey - API key for authentication with Alchemy services
+   * @param {string} [params.apiKey] - API key for authentication with Alchemy services
+   * @param {string} [params.jwt] - JWT token for authentication with Alchemy services
+   * @param {string} [params.url] - Custom URL (optional - defaults to Alchemy's chain-agnostic URL)
    * @param {CreateTekStamperFn} params.createTekStamper - Function to create a TEK stamper
    * @param {CreateWebAuthnStamperFn} params.createWebAuthnStamper - Function to create a WebAuthn stamper
    * @param {HandleOauthFlowFn} params.handleOauthFlow - Function to handle OAuth authentication flow
@@ -245,32 +248,21 @@ export class AuthClient {
   public async loginWithOauth(
     params: LoginWithOauthParams,
   ): Promise<AuthSession> {
-    const { targetPublicKey } = await this.getTekStamper();
-    const oauthConfig = await this.signerHttpClient.request({
-      route: "signer/v1/prepare-oauth",
-      method: "POST",
-      body: { nonce: getOauthNonce(targetPublicKey) },
-    });
-    const authUrl = getOauthProviderUrl({
-      oauthParams:
-        params.mode === "redirect" ? { ...params, redirectUrl: "/" } : params, // TO DO: clean up redirect vs popup path
-      turnkeyPublicKey: targetPublicKey,
-      oauthCallbackUrl: "https://signer.alchemy.com/callback",
-      oauthConfig,
-    });
-    const response = await this.handleOauthFlow(authUrl, params.mode);
-    if (response.status === "SUCCESS") {
-      return this.completeAuthWithBundle({
-        bundle: response.bundle!,
-        orgId: response.orgId!,
-        idToken: response.idToken,
-        authType: "oauth",
-      });
-    } else if (response.status === "ACCOUNT_LINKING_CONFIRMATION_REQUIRED") {
-      // TODO: decide what to do here.
-      throw new Error("Account linking confirmation required");
-    } else {
-      throw new Error(`Unknown OAuth flow response: ${response.status}`);
+    switch (params.mode) {
+      case "redirect":
+        const authUrl = await this.buildAuthUrl(params);
+        const redirectResponse = await this.handleOauthFlow({
+          authUrl,
+          mode: params.mode,
+        });
+        return await this.processOAuthResponse(redirectResponse);
+      default: // popup
+        const authUrlPromise = this.buildAuthUrl(params);
+        const popupResponse = await this.handleOauthFlow({
+          authUrl: authUrlPromise,
+          mode: params.mode,
+        });
+        return await this.processOAuthResponse(popupResponse);
     }
   }
 
@@ -458,6 +450,40 @@ export class AuthClient {
     if (!result.success)
       throw new Error("Parsed state is not of type AuthSessionState");
     return parsedState;
+  }
+
+  private async buildAuthUrl(params: LoginWithOauthParams): Promise<string> {
+    const { targetPublicKey } = await this.getTekStamper();
+    const oauthConfig = await this.signerHttpClient.request({
+      route: "signer/v1/prepare-oauth",
+      method: "POST",
+      body: { nonce: getOauthNonce(targetPublicKey) },
+    });
+    return getOauthProviderUrl({
+      oauthParams:
+        params.mode === "redirect" ? { ...params, redirectUrl: "/" } : params, // TO DO: clean up redirect vs popup path
+      turnkeyPublicKey: targetPublicKey,
+      oauthCallbackUrl: "https://signer.alchemy.com/callback",
+      oauthConfig,
+    });
+  }
+
+  private async processOAuthResponse(
+    response: OAuthFlowResponse,
+  ): Promise<AuthSession> {
+    if (response.status === "SUCCESS") {
+      return this.completeAuthWithBundle({
+        bundle: response.bundle!,
+        orgId: response.orgId!,
+        idToken: response.idToken,
+        authType: "oauth",
+      });
+    } else if (response.status === "ACCOUNT_LINKING_CONFIRMATION_REQUIRED") {
+      // TODO: decide what to do here.
+      throw new Error("Account linking confirmation required");
+    } else {
+      throw new Error(`Unknown OAuth flow response: ${response.status}`);
+    }
   }
 }
 function notImplemented(..._: unknown[]): Promise<never> {
