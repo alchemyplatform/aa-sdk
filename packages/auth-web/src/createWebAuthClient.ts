@@ -34,6 +34,8 @@ export type WebAuthClientParams = {
  * @param {string} params.apiKey - API key for authentication with Alchemy services
  * @param {string} [params.iframeElementId] - ID for the iframe element used by Turnkey stamper
  * @param {string} [params.iframeContainerId] - ID for the container element that holds the iframe
+ * @param {CreateTekStamperFn} [params.createTekStamper] - Optional custom TEK stamper factory
+ * @param {CreateWebAuthnStamperFn} [params.createWebAuthnStamper] - Optional custom WebAuthn stamper factory
  * @returns {AuthClient} A configured AuthClient instance ready for web-based authentication
  *
  * @example
