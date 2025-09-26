@@ -1,36 +1,40 @@
 import { local060Instance, local070Instance } from "~test/instances.js";
-import { toLightAccount } from "@aa-sdk/smart-accounts";
+import { toLightAccount } from "@alchemy/smart-accounts";
 import { requestGasAndPaymasterAndData } from "./requestGasAndPaymasterAndData.js";
 import type { AlchemyTransport } from "@alchemy/common";
-import { http, zeroAddress, type Client } from "viem";
+import { createWalletClient, custom, zeroAddress, type Client } from "viem";
 import {
   entryPoint06Address,
   entryPoint07Address,
 } from "viem/account-abstraction";
-import { generatePrivateKey } from "viem/accounts";
-import { sepolia } from "viem/chains";
-import { LocalAccountSigner } from "@aa-sdk/core";
+import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 
-// todo(v5): migrate to using `@alchemy/smart-account` definitions of light account, rather than `@account-kit/smart-contracts`
 describe("requestGasAndPaymasterAndData tests", async () => {
   it("should be able to call requestGasAndPaymasterAndData with v0.6 user operation", async () => {
     const client = local060Instance.getClient();
+    const signer = privateKeyToAccount(generatePrivateKey());
 
     const smartAccount = await toLightAccount({
-      chain: sepolia,
-      transport: http(),
+      client: createWalletClient({
+        account: signer,
+        transport: custom(client.transport),
+        chain: client.chain,
+      }),
       version: "v1.1.0",
-      signer:
-        LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
+      owner: signer,
     });
 
+    const factoryArgs = await smartAccount.getFactoryArgs();
     const v06UserOperation = {
       sender: smartAccount.address,
       nonce: 0n,
-      initCode: await smartAccount.getInitCode(),
-      callData: await smartAccount.encodeBatchExecute([
+      initCode:
+        factoryArgs.factory && factoryArgs.factoryData
+          ? (`${factoryArgs.factory}${factoryArgs.factoryData.slice(2)}` as const)
+          : ("0x" as const),
+      callData: await smartAccount.encodeCalls([
         {
-          target: zeroAddress,
+          to: zeroAddress,
           data: "0x" as const,
         },
       ]),
@@ -42,7 +46,7 @@ describe("requestGasAndPaymasterAndData tests", async () => {
         {
           policyId: "test-policy-id",
           entryPoint: entryPoint06Address,
-          dummySignature: await smartAccount.getDummySignature(),
+          dummySignature: await smartAccount.getStubSignature(),
           userOperation: v06UserOperation,
         },
       ],
@@ -59,27 +63,31 @@ describe("requestGasAndPaymasterAndData tests", async () => {
 
   it("should be able to call requestGasAndPaymasterAndData with v0.7 user operation", async () => {
     const client = local070Instance.getClient();
+    const signer = privateKeyToAccount(generatePrivateKey());
 
     const smartAccount = await toLightAccount({
-      chain: sepolia,
-      transport: http(),
+      client: createWalletClient({
+        account: signer,
+        transport: custom(client.transport),
+        chain: client.chain,
+      }),
       version: "v2.0.0",
-      signer:
-        LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
+      owner: signer,
     });
 
+    const factoryArgs = await smartAccount.getFactoryArgs();
     const v07UserOperation = {
       sender: smartAccount.address,
       nonce: 0n,
-      factory: await smartAccount.getFactoryAddress(),
-      factoryData: await smartAccount.getFactoryData(),
-      callData: await smartAccount.encodeBatchExecute([
+      factory: factoryArgs.factory,
+      factoryData: factoryArgs.factoryData,
+      callData: await smartAccount.encodeCalls([
         {
-          target: zeroAddress,
+          to: zeroAddress,
           data: "0x" as const,
         },
       ]),
-      signature: await smartAccount.getDummySignature(),
+      signature: await smartAccount.getStubSignature(),
     };
 
     const result = await requestGasAndPaymasterAndData(
@@ -88,7 +96,7 @@ describe("requestGasAndPaymasterAndData tests", async () => {
         {
           policyId: "test-policy-id",
           entryPoint: entryPoint07Address,
-          dummySignature: await smartAccount.getDummySignature(),
+          dummySignature: await smartAccount.getStubSignature(),
           userOperation: v07UserOperation,
         },
       ],
