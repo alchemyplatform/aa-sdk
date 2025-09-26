@@ -77,7 +77,6 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
   // rather than triggering multiple concurrent tryResume() calls.
   // Returns true if the session was restored successfully, false if it was not.
   let resumePromise: Promise<boolean> | undefined;
-
   return createConnector<Provider, Properties>((config) => {
     function assertNotNullish<T>(
       value: T,
@@ -179,7 +178,6 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
         );
       }
     }
-
     return {
       id: "alchemyAuth",
       name: "Alchemy Auth",
@@ -188,7 +186,6 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
       async setup() {
         // Start session restoration early but don't await to avoid blocking setup
         resumePromise = tryResume();
-
         // Set up cross-tab storage event handling for session synchronization
         // This ensures that when a user logs out in one tab, all other tabs
         // automatically disconnect to prevent stale authentication states
