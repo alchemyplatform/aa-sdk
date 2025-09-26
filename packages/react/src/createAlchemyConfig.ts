@@ -25,7 +25,7 @@ export type CreateAlchemyConfigOptions = {
   /**
    * List of EVM chains to support
    */
-  chains: readonly [Chain, ...Chain[]];
+  chains: [Chain, ...Chain[]];
 
   /**
    * Policy IDs for gas sponsorship (optional)
