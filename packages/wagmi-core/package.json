@@ -51,6 +51,7 @@
     "@alchemy/common": "*",
     "@alchemy/connectors-web": "*",
     "@alchemy/auth": "*",
+    "@alchemy/wallet-apis": "*",
     "viem": "2.29.2"
   },
   "publishConfig": {
