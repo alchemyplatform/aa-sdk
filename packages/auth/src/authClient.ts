@@ -85,7 +85,7 @@ type PendingOtp = {
  *
  * @example
  * ```ts twoslash
- * const authClient = new AuthClient({
+ * const authClient = AuthClient.create({
  *   apiKey: "your-api-key",
  *   createTekStamper: () => createIframeTekStamper(),
  *   createWebAuthnStamper: () => createWebAuthnStamper(),
@@ -111,7 +111,9 @@ export class AuthClient {
    * Creates a new AuthClient instance
    *
    * @param {AuthClientParams} params - Configuration parameters for the auth client
-   * @param {string} params.apiKey - API key for authentication with Alchemy services
+   * @param {string} [params.apiKey] - API key for authentication with Alchemy services
+   * @param {string} [params.jwt] - JWT token for authentication with Alchemy services
+   * @param {string} [params.url] - Custom URL (optional - defaults to Alchemy's chain-agnostic URL)
    * @param {CreateTekStamperFn} params.createTekStamper - Function to create a TEK stamper
    * @param {CreateWebAuthnStamperFn} params.createWebAuthnStamper - Function to create a WebAuthn stamper
    * @param {HandleOauthFlowFn} params.handleOauthFlow - Function to handle OAuth authentication flow
