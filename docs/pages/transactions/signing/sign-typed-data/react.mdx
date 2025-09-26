@@ -1,0 +1,51 @@
+<Info>Required SDK version: ^v4.59.1</Info>
+
+Use the [`useSignTypedData`](/wallets/reference/account-kit/react/hooks/useSignTypedData) hook to sign typed data with your Smart Wallet.
+
+<CodeBlocks>
+
+```tsx title="signTypedData.tsx"
+import { useSignTypedData, useSmartAccountClient } from "@account-kit/react";
+
+export default function SignTypedData() {
+  const { client } = useSmartAccountClient({});
+  const { signTypedDataAsync } = useSignTypedData({
+    client,
+  });
+
+  const handleSignTypedData = async () => {
+    const typedData = {
+      domain: {
+        name: "MyDApp",
+        version: "1",
+        chainId: 1,
+        verifyingContract: "0x...",
+      },
+      types: {
+        Auth: [
+          { name: "user", type: "address" },
+          { name: "nonce", type: "uint256" },
+          { name: "timestamp", type: "uint256" },
+        ],
+      },
+      primaryType: "Auth",
+      message: {
+        user: "0x...", // wallet address
+        nonce: 12345,
+        timestamp: Date.now(),
+      },
+    } as const;
+
+    const signature = await signTypedDataAsync({ typedData });
+    console.log("Typed data signature:", signature);
+  };
+
+  return (
+    <div>
+      <button onClick={handleSignTypedData}>Sign Typed Data</button>
+    </div>
+  );
+}
+```
+
+</CodeBlocks>
