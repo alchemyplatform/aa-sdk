@@ -19,7 +19,6 @@ import {
   type PersistedAuthSession,
 } from "./store/authSessionStorage.js";
 
-// Options interface for the alchemyAuth connector
 export interface AlchemyAuthOptions
   extends Pick<
     WebAuthClientParams,
