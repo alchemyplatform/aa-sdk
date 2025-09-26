@@ -1,9 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { AuthClient } from "../src/authClient.js";
-import {
-  AuthSession,
-  DEFAULT_SESSION_EXPIRATION_MS,
-} from "../src/authSession.js";
+import { AuthSession } from "../src/authSession.js";
 import type {
   AuthSessionState,
   User,
@@ -261,24 +258,6 @@ describe("AuthClient", () => {
       await expect(
         authClient.restoreAuthSession(JSON.stringify(validState)),
       ).rejects.toThrow("Failed to inject credential bundle");
-    });
-
-    it("should preserve expiration date when restoring session", async () => {
-      const originalExpiration = Date.now() + DEFAULT_SESSION_EXPIRATION_MS;
-
-      const validState: AuthSessionState = {
-        type: "oauth",
-        bundle: "test-bundle",
-        expirationDateMs: originalExpiration,
-        user: mockUser,
-      };
-
-      const restoredSession = await authClient.restoreAuthSession(
-        JSON.stringify(validState),
-      );
-
-      expect(restoredSession).toBeInstanceOf(AuthSession);
-      expect(restoredSession?.getExpirationDateMs()).toBe(originalExpiration);
     });
   });
 });

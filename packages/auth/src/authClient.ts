@@ -389,14 +389,11 @@ export class AuthClient {
     }
     const { bundle } = parsedState;
     const { orgId, idToken } = user;
-    // Calculate remaining session duration to preserve original expiration time
-    const sessionDurationMs = Math.max(0, expirationDateMs - Date.now());
     return await this.completeAuthWithBundle({
       bundle,
       orgId,
       idToken,
       authType: type,
-      sessionDurationMs,
     });
   }
 
@@ -407,13 +404,11 @@ export class AuthClient {
     orgId,
     idToken,
     authType,
-    sessionDurationMs,
   }: {
     bundle: string;
     orgId: string;
     idToken?: string;
     authType: Exclude<AuthType, "passkey">;
-    sessionDurationMs?: number;
   }): Promise<AuthSession> {
     const { stamper } = await this.getTekStamper();
     const success = await stamper.injectCredentialBundle(bundle);
@@ -427,7 +422,6 @@ export class AuthClient {
       idToken,
       bundle,
       authType,
-      sessionDurationMs,
     });
     // Forget the reference to the TEK stamper, because in some implementations
     // it may become invalid if it is disconnected later. Future logins should

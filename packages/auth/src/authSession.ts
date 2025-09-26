@@ -30,11 +30,6 @@ import type { AlchemyRestClient } from "@alchemy/common";
 import type { SignerHttpSchema } from "@alchemy/aa-infra";
 
 /**
- * Default session expiration duration in milliseconds (15 minutes)
- */
-export const DEFAULT_SESSION_EXPIRATION_MS = 15 * 60 * 1000;
-
-/**
  * Parameters required to create an AuthSession instance
  */
 export type CreateAuthSessionParams = {
@@ -52,8 +47,6 @@ export type CreateAuthSessionParams = {
   authType: AuthType;
   /** Credential ID for passkey authentication */
   credentialId?: string;
-  /** Session duration in milliseconds - if not provided, defaults to 15 minutes */
-  sessionDurationMs?: number;
 };
 
 /**
@@ -99,7 +92,6 @@ export type SignMessageParams = {
  */
 export class AuthSession {
   private isDisconnected = false;
-  private expirationDateMs: number;
 
   private constructor(
     private readonly signerHttpClient: AlchemyRestClient<SignerHttpSchema>,
@@ -108,12 +100,7 @@ export class AuthSession {
     private readonly bundle?: string,
     private readonly authType?: AuthType,
     private readonly credentialId?: string,
-    sessionDurationMs?: number,
-  ) {
-    // Calculate expiration timestamp from duration (defaults to 15 minutes)
-    const durationMs = sessionDurationMs ?? DEFAULT_SESSION_EXPIRATION_MS;
-    this.expirationDateMs = Date.now() + durationMs;
-  }
+  ) {}
 
   /**
    * Creates a new AuthSession instance from the provided parameters.
@@ -132,8 +119,7 @@ export class AuthSession {
    *   orgId: "org123",
    *   idToken: "jwt-token",
    *   bundle: "credential-bundle",
-   *   authType: "oauth",
-   *   sessionDurationMs: 30 * 60 * 1000 // 30 minutes
+   *   authType: "oauth"
    * });
    * ```
    */
@@ -145,7 +131,6 @@ export class AuthSession {
     bundle,
     authType,
     credentialId,
-    sessionDurationMs,
   }: CreateAuthSessionParams): Promise<AuthSession> {
     const turnkey = new TurnkeyClient(
       { baseUrl: "https://api.turnkey.com" },
@@ -175,7 +160,6 @@ export class AuthSession {
       bundle,
       authType,
       credentialId,
-      sessionDurationMs,
     );
   }
 
@@ -195,22 +179,6 @@ export class AuthSession {
    */
   public getUser(): User {
     return this.user;
-  }
-
-  /**
-   * Gets the expiration timestamp for this authentication session.
-   *
-   * @returns {number} The session expiration timestamp in milliseconds
-   *
-   * @example
-   * ```ts twoslash
-   * const expirationMs = authSession.getExpirationDateMs();
-   * const isExpired = expirationMs < Date.now();
-   * ```
-   */
-  public getExpirationDateMs(): number {
-    this.throwIfDisconnected();
-    return this.expirationDateMs;
   }
 
   /**
@@ -458,8 +426,9 @@ export class AuthSession {
   public getSerializedState(): string {
     this.throwIfDisconnected();
 
-    // Use the stored expiration time from the instance
-    const expirationDateMs = this.expirationDateMs;
+    // Calculate expiration time (24 hours from now as default)
+    // TODO: update the expiration date to be user defined once expiration handling is implemented
+    const expirationDateMs = Date.now() + 24 * 60 * 60 * 1000;
 
     // Use stored authType or default to "otp" for backward compatibility
     const type = this.authType || "otp";
