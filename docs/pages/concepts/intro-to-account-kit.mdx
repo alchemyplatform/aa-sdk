@@ -41,11 +41,11 @@ Smart accounts provide flexibility, security, and additional functionality over 
 
 In Smart Wallets, this concept will manifest as a [Smart Contract Account](/wallets/resources/types#smartcontractaccount).
 
-## Authentication: web2 login and key management
+## Signer: web2 login and key management
 
 <div style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-start" }}>
   <div style={{ flex: "1", marginRight: "10px" }}>
-    **Authentication** is a service (e.g., Turnkey or Magic) or application (e.g., MetaMask) that manages a private key and signs transactions. The signature is only valid if the authentication method is an owner of the smart account.
+    **Signer** is a service (e.g., Turnkey or Magic) or application (e.g., MetaMask) that manages a private key and signs transactions. The signature is only valid if the signer is an owner of the smart account.
 
 </div>
   <div style={{ flex: "0 0 30%" }}>
@@ -56,17 +56,17 @@ In Smart Wallets, this concept will manifest as a [Smart Contract Account](/wall
     />
   </div>
 </div>
-[Using Smart Wallets](/wallets/react/getting-started), you can secure a user's smart account with email, social login, or passkeys, using non-custodial authentication infrastructure. Smart accounts support advanced use cases, such as multiple owners and ownership transfer, offering more utility than EOAs.
+[Using Smart Wallets](/wallets/react/getting-started), you can secure a user's smart account with email, social login, or passkeys, using non-custodial signer infrastructure. Smart accounts support advanced use cases, such as multiple owners and ownership transfer, offering more utility than EOAs.
 
 With this setup, users can sign-up, log in, and sign transactions using familiar web2 user experiences.
 
-In Smart Wallets, this concept will manifest as a [Smart Account authentication](/wallets/concepts/smart-account-signer).
+In Smart Wallets, this concept will manifest as a Smart Account Signer.
 
 ## Sending transactions
 
 <div style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-start" }}>
   <div style={{ flex: "1", marginRight: "10px" }}>
-With Smart Wallets, [sending transactions](/wallets/react/send-user-operations) is as simple as sending "normal" EOA transactions. The system handles the complexity of processing smart account transactions behind the scenes.
+With Smart Wallets, [sending transactions](/wallets/react/send-user-operations) is as simple as sending "normal" EOA transactions. The system handles the complexity of processing smart account transactions behind the scenes. Under the hood, you're actually sending [**User Operations (UOs)**](https://www.alchemy.com/overviews/user-operations) — a standardized pseudo-transaction object — to a **Bundler**.
 
 </div>
   <div style={{ flex: "0 0 30%" }}>
@@ -104,12 +104,12 @@ With gas sponsorship, your users won't need to worry about having assets in thei
 
 Smart Wallets makes it easy to build a web2 user experience from sign-up to transaction. It includes everything you need to bring users onchain:
 
-- Non-custodial **authentication** for web2 login
+- Non-custodial **signer** for web2 login
 - Secure and flexible **smart accounts** to store assets
 - **Gas sponsorship** to sponsor gas
 - Reliable and scalable **transaction processing** to send transactions
 
-Smart accounts might seem complex, but Smart Wallets abstracts away the intricacies, allowing you to focus on building great user experiences.
+Account abstraction might seem complex, but Smart Wallets abstracts away the intricacies, allowing you to focus on building great user experiences.
 
 **Now, get started with the [quickstart](/wallets/react/quickstart)!**
 
