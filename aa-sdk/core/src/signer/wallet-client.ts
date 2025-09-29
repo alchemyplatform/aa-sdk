@@ -145,7 +145,7 @@ export class WalletClientSigner implements SmartAccountSigner<WalletClient> {
   };
 
   /**
-   * Signs an EIP-7702 Authorization and then returns the authorization with the signature.
+   * Signs an EIP-7702 Authorization
    *
    * @example
    * ```ts twoslash
@@ -168,7 +168,7 @@ export class WalletClientSigner implements SmartAccountSigner<WalletClient> {
    * ```
    *
    * @param {AuthorizationRequest<number>} unsignedAuthorization the authorization to be signed
-   * @returns {Promise<SignedAuthorization<number>> | undefined} a promise that resolves to the authorization with the signature
+   * @returns {Promise<SignedAuthorization<number>>} a promise that resolves to the signed authorization
    */
   signAuthorization = async (
     unsignedAuthorization: AuthorizationRequest<number>,
