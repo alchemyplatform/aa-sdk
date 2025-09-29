@@ -185,6 +185,22 @@ export const createEip1193ProviderFromClient = <
                 "Cannot use 'from' address other than connected account.",
               );
             }
+
+            // Wallet server's `paymasterService` type is incompatible with
+            // Viem's. So we can accept a custom capability property name
+            // when using an Alchemy paymaster per-call policy id override,
+            // in order to remain compatible with Viem's `sendCalls` action.
+            if (
+              "alchemyPaymaster" in (capabilities ?? {}) &&
+              !("paymasterService" in (capabilities ?? {})) &&
+              capabilities?.alchemyPaymaster.policyId != null
+            ) {
+              capabilities.paymasterService = {
+                policyId: capabilities.alchemyPaymaster.policyId,
+              };
+              delete capabilities.alchemyPaymaster;
+            }
+
             const result = await client.sendCalls({
               calls: calls.map((c) => ({
                 to: c.to!,
