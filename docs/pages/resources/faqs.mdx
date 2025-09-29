@@ -89,7 +89,7 @@ This can be called on the existing smart contract account by sending a user oper
 <Accordion title="Answer">
 This can happen when `UserOperation`s (UOs) become underpriced, frequently due to fee market movement between when gas and fees are estimations and when the UO is actually submitted.
 
-You may experience this when calling the [`waitForUserOperationTransaction`](/wallets/reference/aa-sdk/core/functions/waitForUserOperationTransaction) method. It may throw an error if it does not find the UO in a mined Transaction within its retry limits.
+You may experience this when calling the [`waitForUserOperationTransaction`](/wallets/reference/aa-sdk/core/variables/waitForUserOperationTransaction) method. It may throw an error if it does not find the UO in a mined Transaction within its retry limits.
 
 You can mitigate this by defining a more flexible retry period when constructing a [`Client`](/wallets/reference/aa-sdk/core/functions/createSmartAccountClient) (i.e. `txMaxRetries`, `txRetryIntervalMs`, `txRetryMultiplier` in `opts`). If your UO continues to be delayed beyond a limit you are willing to wait, you can resubmit it using [`dropAndReplaceUserOperation`](/wallets/reference/aa-sdk/core/functions/dropAndReplaceUserOperation).
 
@@ -132,7 +132,7 @@ We recommend adding error handling when sending a UO to handle potential gas and
   Gas sponsorship is available on testnet for all tiers. For support on mainnet,
   you must be on a paying tier (i.e. Growth tier and above). Learn more about
   our different pricing tiers
-  [here](https://docs.alchemy.com/reference/gas-manager-coverage-api-pricing#fee-logic).
+  [here](https://alchemy.com/docs/reference/gas-manager-coverage-api-pricing#fee-logic).
 </Accordion>
 
 ### How is gas sponsored? Do I need to fund the Gas Manager?
@@ -148,7 +148,7 @@ We recommend adding error handling when sending a UO to handle potential gas and
 
 <Accordion title="Answer">
   You can find details of Gas Manager limits depending on your tier
-  [here](https://docs.alchemy.com/reference/gas-manager-coverage-api-pricing#fee-logic).
+  [here](https://alchemy.com/docs/reference/gas-manager-coverage-api-pricing#fee-logic).
 </Accordion>
 
 ### Do you support ERC-20 or stablecoin paymasters?
@@ -266,7 +266,7 @@ Our gas and fee estimations are just that, estimations, but we are always workin
 ### `waitForUserOperationTransaction` timeout
 
 <Accordion title="Answer">
-[`waitForUserOperationTransaction`](/wallets/reference/aa-sdk/core/functions/waitForUserOperationTransaction) may throw this error if it does not find the mined User Operation within its retry limits.
+[`waitForUserOperationTransaction`](/wallets/reference/aa-sdk/core/variables/waitForUserOperationTransaction) may throw this error if it does not find the mined User Operation within its retry limits.
 
 You can mitigate this by defining a more flexible retry period when constructing a [`Client`](/wallets/reference/aa-sdk/core/functions/createSmartAccountClient) (i.e. `txMaxRetries`, `txRetryIntervalMs`, `txRetryMultiplier` in `opts`).
 
@@ -313,7 +313,7 @@ Gas sponsorship requests will only succeed if both the Policy ID and the corresp
 **How can I protect my API Key?**
 We recommend moving your API key to the backend by routing to a proxy. You can see an [example](https://github.com/alchemyplatform/aa-sdk/blob/ef7303333830df53a9106ba37ce015675a276cd9/examples/ui-demo/src/app/config.tsx#L74) of setting up a transport to a backend rpcUrl in our demo app.
 
-For more information on how to secure your API key, refer to [this guide](https://docs.alchemy.com/docs/best-practices-for-key-security-and-management).
+For more information on how to secure your API key, refer to [this guide](https://alchemy.com/docs/best-practices-for-key-security-and-management).
 
 <Warning>
   If you have logic in your proxy that restricts certain paths, ensure that the

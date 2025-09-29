@@ -31,6 +31,7 @@ import {
   getDefaultTimeRangeModuleAddress,
   getDefaultWebauthnValidationModuleAddress,
   installValidationActions,
+  modularAccountAbi,
   NativeTokenLimitModule,
   PaymasterGuardModule,
   PermissionBuilder,
@@ -57,6 +58,7 @@ import {
   testActions,
   toHex,
   zeroAddress,
+  zeroHash,
   type ContractFunctionName,
   type TestActions,
 } from "viem";
@@ -1871,6 +1873,49 @@ describe("MA v2 Tests", async () => {
         ).resolves.toEqual(nonce);
       }
     }
+  });
+
+  it("correctly encodes self-call data", async () => {
+    const client = await givenConnectedProvider({ signer });
+    await setBalance(instance.getClient(), {
+      address: client.getAddress(),
+      value: parseEther("20"),
+    });
+
+    // Normally, a self-call would be encoded as uo: `0x{string}`.
+    // But, we also want to ensure that formatting this as a self-call, with `target` and `data` as arguments, works.
+
+    // We want to call a valid selector on the account contract itself, and `performCreate` is a valid selector.
+    // Argument content:
+    // - 60 push1
+    // - 20 immediate value for push1, used as length of return data
+    // - 3d returndatasize, pushes 00 to stack for offset of return data
+    // - f3 return, consumes the stack values and returns `0x00` (memory uninitialized) as contract code, which will immediately stop.
+
+    const result = await client.sendUserOperation({
+      uo: {
+        target: client.getAddress(),
+        data: encodeFunctionData({
+          abi: modularAccountAbi,
+          functionName: "performCreate",
+          args: [0n, "0x60203df3", false, zeroHash],
+        }),
+      },
+    });
+
+    const txnHash = await client
+      .waitForUserOperationTransaction(result)
+      .catch(async () => {
+        const dropAndReplaceResult = await client.dropAndReplaceUserOperation({
+          uoToDrop: result.request,
+        });
+        return await client.waitForUserOperationTransaction(
+          dropAndReplaceResult,
+        );
+      });
+
+    const txn = await client.getTransactionReceipt({ hash: txnHash });
+    expect(txn?.status).toEqual("success");
   });
 
   it("upgrade from a lightaccount", async () => {

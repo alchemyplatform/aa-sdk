@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.66.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.65.0...v4.66.0) (2025-09-29)
+
+### Bug Fixes
+
+- include policy id from client on request quote action ([#2103](https://github.com/alchemyplatform/aa-sdk/issues/2103)) ([a7c749d](https://github.com/alchemyplatform/aa-sdk/commit/a7c749d7271fee3124460fb2ca64df426405bfc8))
+
+### Features
+
+- replace doc-gen with typedoc ([#2092](https://github.com/alchemyplatform/aa-sdk/issues/2092)) ([6fd935d](https://github.com/alchemyplatform/aa-sdk/commit/6fd935db9677ed34eefabdeae741a881737c6d08))
+
+# [4.65.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.64.0...v4.65.0) (2025-09-23)
+
+### Features
+
+- add swapi decorator for sdk v4 ([#2091](https://github.com/alchemyplatform/aa-sdk/issues/2091)) ([19b08d3](https://github.com/alchemyplatform/aa-sdk/commit/19b08d3c713a14fe35acbde945ac1280a96b1b99))
+
+# [4.64.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.63.2...v4.64.0) (2025-09-19)
+
+**Note:** Version bump only for package @account-kit/wallet-client
+
 ## [4.63.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.63.1...v4.63.2) (2025-09-16)
 
 **Note:** Version bump only for package @account-kit/wallet-client

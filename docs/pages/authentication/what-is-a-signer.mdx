@@ -116,7 +116,7 @@ Custodial wallet providers have full control over the user’s private key and s
   created with the `AlchemyWebSigner` as an owner on the accounts.
 </Tip>
 
-The Smart Account Signer interface is used to define an owner for [Smart Contract Accounts](/wallets/concepts/smart-contract-account).
+The Smart Account Signer interface is used to define an owner for [Smart Contract Accounts](/wallets/resources/types#smartcontractaccount).
 The interface takes two forms:
 
 1. `SmartAccountSigner` -- This is the base interface for all signer. It defines methods for signing messages and typed data, as well as getting the address of the signer.
@@ -124,11 +124,11 @@ The interface takes two forms:
 
 Within Smart Wallets and `@aa-sdk/core`, we provide a number of implementations for `SmartAccountSigner` and `SmartAccountAuthenticator`:
 
-1. [`AlchemyWebSigner`](/wallets/reference/account-kit/signer/classes/AlchemyWebSigner/constructor) - This is an implementation of the `SmartAccountAuthenticator` that uses the our signer service to provision private keys securely
+1. [`AlchemyWebSigner`](/wallets/reference/account-kit/signer/classes/AlchemyWebSigner) - This is an implementation of the `SmartAccountAuthenticator` that uses the our signer service to provision private keys securely
    for end users. It allows you to authenticate your users with methods more familiar to them, such as email or social login.
-2. [`LocalAccountSigner`](/wallets/reference/aa-sdk/core/classes/LocalAccountSigner/constructor) - This signer is useful if you have a mnemonic or private key locally that you want to use as an
+2. [`LocalAccountSigner`](/wallets/reference/aa-sdk/core/classes/LocalAccountSigner) - This signer is useful if you have a mnemonic or private key locally that you want to use as an
    owner of a smart contract account. This is useful for testing and development purposes.
-3. [`WalletClientSigner`](/wallets/reference/aa-sdk/core/classes/WalletClientSigner/constructor) - This signer is useful if you want to use a [wallet client](https://viem.sh/docs/clients/wallet) as an owner.
+3. [`WalletClientSigner`](/wallets/reference/aa-sdk/core/classes/WalletClientSigner) - This signer is useful if you want to use a [wallet client](https://viem.sh/docs/clients/wallet) as an owner.
    Since a wallet client can wrap any [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193) compliant provider, this is useful if you want to use EOA extensions or 3rd party signer service SDKs.
 
 ---

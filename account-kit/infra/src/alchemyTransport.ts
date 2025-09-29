@@ -53,6 +53,7 @@ const chainAgnosticMethods = [
   "wallet_listAccounts",
   "wallet_createSession",
   "wallet_getCallsStatus",
+  "wallet_requestQuote_v0",
 ];
 
 export type AlchemyTransportConfig = (

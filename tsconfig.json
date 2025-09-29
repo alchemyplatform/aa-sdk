@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "module": "Node16",
+    "strict": true,
+    "composite": true,
+
+    // These options are necessary so that TypeDoc can resolve references across packages
+    "declaration": true,
+    "declarationMap": true
+  },
+  "files": [],
+  "references": [
+    { "path": "./aa-sdk/core" },
+    { "path": "./aa-sdk/ethers" },
+    { "path": "./account-kit/core" },
+    { "path": "./account-kit/infra" },
+    { "path": "./account-kit/react" },
+    { "path": "./account-kit/react-native" },
+    { "path": "./account-kit/rn-signer" },
+    { "path": "./account-kit/signer" },
+    { "path": "./account-kit/smart-contracts" },
+    { "path": "./account-kit/wallet-client" }
+  ]
+}

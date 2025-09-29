@@ -2,7 +2,7 @@
 title: How to stamp requests
 description: Overview for how to send stamped (or verified) requests required for using Wallet APIs directly.
 subtitle: Overview for how to send stamped (or verified) requests required for using Wallet APIs directly.
-url: https://docs.alchemy.com/reference/how-to-stamp-requests
+url: https://alchemy.com/docs/reference/how-to-stamp-requests
 slug: reference/how-to-stamp-requests
 ---
 
@@ -33,7 +33,7 @@ For any endpoint the requires a `stampedRequest` body for the verification logic
 
 2. Generate a private key bundle
 
-   1. Exchange the `targetPublicKey` for an encrypted `bundle` by calling [create wallet](/docs/reference/createaccount) (e.g., OAuth, email login)
+   1. Exchange the `targetPublicKey` for an encrypted `bundle` by calling [create wallet](/wallets/reference/account-kit/core/functions/createAccount) (e.g., OAuth, email login)
 
 3. Decrypt the bundle using Hybrid Public Key Encryption (HPKE).
 

@@ -3,6 +3,46 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.66.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.65.0...v4.66.0) (2025-09-29)
+
+### Bug Fixes
+
+- autogen infra sdk and fix remaining links ([#2121](https://github.com/alchemyplatform/aa-sdk/issues/2121)) ([701007b](https://github.com/alchemyplatform/aa-sdk/commit/701007bb095614ab909187389bed04c5e1d895f8))
+- include policy id from client on request quote action ([#2103](https://github.com/alchemyplatform/aa-sdk/issues/2103)) ([a7c749d](https://github.com/alchemyplatform/aa-sdk/commit/a7c749d7271fee3124460fb2ca64df426405bfc8))
+
+### Features
+
+- add info about rawcalls ([#2110](https://github.com/alchemyplatform/aa-sdk/issues/2110)) ([81ce22f](https://github.com/alchemyplatform/aa-sdk/commit/81ce22fd6568400b99f3b616fe73f24cad1b7c7c))
+- add recipe for programmatically creating a wallet ([#2088](https://github.com/alchemyplatform/aa-sdk/issues/2088)) ([a5ad4cd](https://github.com/alchemyplatform/aa-sdk/commit/a5ad4cdeca36b93280306d325320e96866a51594))
+- add signAuthorization method to WalletClientSigner ([#2128](https://github.com/alchemyplatform/aa-sdk/issues/2128)) ([fb8ea39](https://github.com/alchemyplatform/aa-sdk/commit/fb8ea3995b8a9fa04d9e4ecd4f154e6b68258633))
+- add SMS early access call out to demo app ([#2119](https://github.com/alchemyplatform/aa-sdk/issues/2119)) ([155206d](https://github.com/alchemyplatform/aa-sdk/commit/155206da63a48e1eec6372196bbc01319862aaba))
+- replace doc-gen with typedoc ([#2092](https://github.com/alchemyplatform/aa-sdk/issues/2092)) ([6fd935d](https://github.com/alchemyplatform/aa-sdk/commit/6fd935db9677ed34eefabdeae741a881737c6d08))
+
+# [4.65.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.64.0...v4.65.0) (2025-09-23)
+
+### Bug Fixes
+
+- commit output of docgen ([#2093](https://github.com/alchemyplatform/aa-sdk/issues/2093)) ([04ab085](https://github.com/alchemyplatform/aa-sdk/commit/04ab085e2393d8064c754a9ab3f4e837fb9490af))
+- support self-call encoding in mav2 with single call ([#2094](https://github.com/alchemyplatform/aa-sdk/issues/2094)) ([6d3151c](https://github.com/alchemyplatform/aa-sdk/commit/6d3151ccb5bd06b39da64babb1b2bda60300fc2f))
+
+### Features
+
+- add swapi decorator for sdk v4 ([#2091](https://github.com/alchemyplatform/aa-sdk/issues/2091)) ([19b08d3](https://github.com/alchemyplatform/aa-sdk/commit/19b08d3c713a14fe35acbde945ac1280a96b1b99))
+
+# [4.64.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.63.2...v4.64.0) (2025-09-19)
+
+### Bug Fixes
+
+- address race condition between preview env and link check ([#2082](https://github.com/alchemyplatform/aa-sdk/issues/2082)) ([72df7e6](https://github.com/alchemyplatform/aa-sdk/commit/72df7e628fbb7ce28ab66ddbab148171cbf00f84))
+- check links on preview ([#2067](https://github.com/alchemyplatform/aa-sdk/issues/2067)) ([dbb8960](https://github.com/alchemyplatform/aa-sdk/commit/dbb8960f60b1e589b997904cc7902c2e3af6e589))
+- fix broken link in guide ([#2083](https://github.com/alchemyplatform/aa-sdk/issues/2083)) ([415bfdf](https://github.com/alchemyplatform/aa-sdk/commit/415bfdf7cbc633ce1b136ee16b512b30c3af2553))
+- remove twoslash within codeblocks due to fern issue ([#2059](https://github.com/alchemyplatform/aa-sdk/issues/2059)) ([fd3b7a6](https://github.com/alchemyplatform/aa-sdk/commit/fd3b7a634e2ac229c614e2771b843ebe56650cef))
+
+### Features
+
+- add link to tx docs from quickstart ([#2073](https://github.com/alchemyplatform/aa-sdk/issues/2073)) ([8367b79](https://github.com/alchemyplatform/aa-sdk/commit/8367b799f896b3dbc7f316b5964b6f72f661e50d))
+- server signing ([#2043](https://github.com/alchemyplatform/aa-sdk/issues/2043)) ([8797f63](https://github.com/alchemyplatform/aa-sdk/commit/8797f6342a8934dbe57c5e029599d02d56ce8145))
+
 ## [4.63.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.63.1...v4.63.2) (2025-09-16)
 
 ### Bug Fixes

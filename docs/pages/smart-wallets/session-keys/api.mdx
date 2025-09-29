@@ -1,7 +1,7 @@
 ---
 title: Session Keys (API)
 subtitle: Learn how to use session keys using any RPC client
-url: https://docs.alchemy.com/reference/wallet-apis-session-keys/api
+url: https://alchemy.com/docs/reference/wallet-apis-session-keys/api
 slug: reference/wallet-apis-session-keys/api
 ---
 
@@ -55,15 +55,11 @@ before creating the session. If the account has already sent calls, it will
 already be delegated. If it hasn't sent any calls before creating the session
 key, you can delegate it by sending an empty call as the owner.
 
-[Follow the instructions here](/docs/reference/wallet-apis-7702-quickstart#using-the-json-rpc-apis-directly)
-to send your first call. Note that the `calls` in the request to `wallet_prepareCalls` can be an empty array
-if you do not want to send any calls.
-
 </Accordion>
 
 To create a session key using onchain policies:
 
-- Get the public address of a key you want to use as a session key. This can be any key pair that has the ability to sign (aka a [signer](/docs/wallets/signer/what-is-a-signer) that is either an local [signer](/docs/wallets/reference/aa-sdk/core/classes/LocalAccountSigner/constructor#localaccountsigner) like an EOA or signer generated with a signer provider).
+- Get the public address of a key you want to use as a session key. This can be any key pair that has the ability to sign (aka a [signer](/docs/wallets/signer/what-is-a-signer) that is either an local [signer](/wallets/reference/aa-sdk/core/classes/LocalAccountSigner) like an EOA or signer generated with a signer provider).
 - Create a session for that key, by passing it as the `publicKey` in a call to `wallet_createSession`. (Note that this must be the public key **address**, not the full public key.)
 
 Note that the expiry is in seconds and represents a UNIX timestamp (e.g. 1776657600 for April 20th, 2077).
