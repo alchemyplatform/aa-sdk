@@ -8,5 +8,5 @@ export const links = {
   dashboard: `https://dashboard.alchemy.com/accounts?utm_source=demo_alchemy_com&utm_medium=referral&utm_campaign=demo_to_dashboard`,
   passkey: "https://www.alchemy.com/docs/wallets/core/add-passkey",
   auth0: "https://www.alchemy.com/docs/wallets/signer/authentication/auth0",
-  sms: "https://www.alchemy.com/docs/wallets/authentication/login-methods/sms-login",
+  sms: "https://alchemyapi.typeform.com/to/GLXIYjKz",
 };
