@@ -24,7 +24,7 @@ describe("Wallet Client Signer Tests", () => {
     );
   });
 
-  it("should successfully a 7702 authorization", async () => {
+  it("should successfully sign a 7702 authorization", async () => {
     const signedAuthorization = await smartAccountSigner.signAuthorization({
       address: "0x69007702764179f14F51cdce752f4f775d74E139",
       chainId: 1,
