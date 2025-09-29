@@ -102,45 +102,7 @@ jobs:
         run: yarn build:libs
 
       - name: Unit Test
-        run: |
-          # Get list of affected packages (changed + dependents) using Turbo
-          BASE_BRANCH="${{ github.event.pull_request.base.ref }}"
-
-          # Use turbo dry-run to identify which packages need testing
-          echo "Analyzing affected packages..."
-
-          # Extract directories of packages that have test:run tasks
-          # 1. Find lines like "@alchemy/package-name#test:run"
-          # 2. Look ahead to find the Directory line
-          # 3. Extract the directory path and convert to vitest project name
-          AFFECTED_DIRS=$(yarn turbo run test:run --filter="./packages/*" --filter="[origin/$BASE_BRANCH...HEAD]" --dry-run 2>&1 | \
-            grep -E "^@alchemy/.*#test:run$" -A 10 | \
-            grep "Directory" | \
-            sed 's/.*Directory.*= *//' | \
-            sed 's/^packages\///' | \
-            sort -u)
-
-          if [ -n "$AFFECTED_DIRS" ]; then
-            echo "Affected packages that need testing:"
-            echo "$AFFECTED_DIRS"
-
-            # Convert to --project flags for vitest
-            # Vitest project names use "alchemy/" prefix (except for "alchemy" itself)
-            PROJECT_FLAGS=""
-            for dir in $AFFECTED_DIRS; do
-              if [ "$dir" = "alchemy" ]; then
-                PROJECT_FLAGS="$PROJECT_FLAGS --project=alchemy"
-              else
-                PROJECT_FLAGS="$PROJECT_FLAGS --project=alchemy/$dir"
-              fi
-            done
-
-            echo "Running tests with: yarn vitest run $PROJECT_FLAGS"
-            # Run tests for affected packages in a single vitest process
-            yarn vitest run $PROJECT_FLAGS
-          else
-            echo "No package changes detected, skipping tests"
-          fi
+        run: ./scripts/run-affected-tests.sh "${{ github.event.pull_request.base.ref }}"
         
       - name: Typecheck Test
         run: |
