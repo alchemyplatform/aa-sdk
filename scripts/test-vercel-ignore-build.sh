@@ -7,7 +7,11 @@ export VERCEL_GIT_REPO_OWNER="AlchemyPlatform"
 export VERCEL_GIT_REPO_SLUG="aa-sdk" 
 
 # Simulate the custom variables you'll add in Vercel dashboard
-export GITHUB_TOKEN="ghp_yourActualTokenHere"  # Use a real token for testing
+export GITHUB_TOKEN="YOUR_GITHUB_TOKEN_HERE"  # Replace with your actual GitHub token for testing
+if [ "$GITHUB_TOKEN" = "YOUR_GITHUB_TOKEN_HERE" ]; then
+  echo "Error: GITHUB_TOKEN is set to the placeholder value. Please replace it with your actual GitHub token." >&2
+  exit 1
+fi
 export SKIP_BUILD_FOR_BRANCH="moldy/v5-base"
 
 # Now run your actual script
