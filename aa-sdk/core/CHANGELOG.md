@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.66.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.65.0...v4.66.0) (2025-09-29)
+
+### Features
+
+- add signAuthorization method to WalletClientSigner ([#2128](https://github.com/alchemyplatform/aa-sdk/issues/2128)) ([fb8ea39](https://github.com/alchemyplatform/aa-sdk/commit/fb8ea3995b8a9fa04d9e4ecd4f154e6b68258633))
+- replace doc-gen with typedoc ([#2092](https://github.com/alchemyplatform/aa-sdk/issues/2092)) ([6fd935d](https://github.com/alchemyplatform/aa-sdk/commit/6fd935db9677ed34eefabdeae741a881737c6d08))
+
 # [4.65.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.64.0...v4.65.0) (2025-09-23)
 
 **Note:** Version bump only for package @aa-sdk/core

@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.66.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.65.0...v4.66.0) (2025-09-29)
+
+### Bug Fixes
+
+- autogen infra sdk and fix remaining links ([#2121](https://github.com/alchemyplatform/aa-sdk/issues/2121)) ([701007b](https://github.com/alchemyplatform/aa-sdk/commit/701007bb095614ab909187389bed04c5e1d895f8))
+- include policy id from client on request quote action ([#2103](https://github.com/alchemyplatform/aa-sdk/issues/2103)) ([a7c749d](https://github.com/alchemyplatform/aa-sdk/commit/a7c749d7271fee3124460fb2ca64df426405bfc8))
+
+### Features
+
+- add info about rawcalls ([#2110](https://github.com/alchemyplatform/aa-sdk/issues/2110)) ([81ce22f](https://github.com/alchemyplatform/aa-sdk/commit/81ce22fd6568400b99f3b616fe73f24cad1b7c7c))
+- add recipe for programmatically creating a wallet ([#2088](https://github.com/alchemyplatform/aa-sdk/issues/2088)) ([a5ad4cd](https://github.com/alchemyplatform/aa-sdk/commit/a5ad4cdeca36b93280306d325320e96866a51594))
+- add signAuthorization method to WalletClientSigner ([#2128](https://github.com/alchemyplatform/aa-sdk/issues/2128)) ([fb8ea39](https://github.com/alchemyplatform/aa-sdk/commit/fb8ea3995b8a9fa04d9e4ecd4f154e6b68258633))
+- add SMS early access call out to demo app ([#2119](https://github.com/alchemyplatform/aa-sdk/issues/2119)) ([155206d](https://github.com/alchemyplatform/aa-sdk/commit/155206da63a48e1eec6372196bbc01319862aaba))
+- replace doc-gen with typedoc ([#2092](https://github.com/alchemyplatform/aa-sdk/issues/2092)) ([6fd935d](https://github.com/alchemyplatform/aa-sdk/commit/6fd935db9677ed34eefabdeae741a881737c6d08))
+
 # [4.65.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.64.0...v4.65.0) (2025-09-23)
 
 ### Bug Fixes
