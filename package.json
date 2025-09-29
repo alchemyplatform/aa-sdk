@@ -8,11 +8,8 @@
   "packageManager": "yarn@1.22.22",
   "workspaces": {
     "packages": [
-      "aa-sdk/*",
-      "account-kit/*",
       "templates/*",
       "examples/*",
-      "account-kit/rn-signer/example",
       "doc-gen",
       "docs",
       ".vitest",
