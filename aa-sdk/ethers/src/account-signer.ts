@@ -18,6 +18,8 @@ import {
 import { isHex, toBytes, type Transport } from "viem";
 import { EthersProviderAdapter } from "./provider-adapter.js";
 
+// dummy comment added
+console.log("dummy comment added");
 const hexlifyOptional = (value: any): `0x${string}` | undefined => {
   if (value == null) {
     return undefined;
