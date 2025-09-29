@@ -1,5 +1,5 @@
 ---
-title: Quickstart
+title: Setup
 description: Set up authentication in the Dashboard so users can sign in
 slug: wallets/authentication/quickstart
 ---
@@ -10,11 +10,11 @@ Set up authentication in the Dashboard so users can sign in and start using thei
 
 ## Prerequisites
 
-- App created in the Dashboard
+- App created in the Dashboard ([Create an Alchemy API Key](https://www.alchemy.com/docs/create-an-api-key))
 
 ## 1. Enable login methods
 
-In the Dashboard, open the authentication settings and enable the login methods you want to support. See the [login methods](/wallets/authentication/login-methods/social-login) section for more details.
+In the Dashboard, open the wallet authentication settings (Wallet > Smart Wallets > Configuration > Edit) and enable the login methods you want to support. See the [login methods](/wallets/authentication/login-methods/social-login) section for more details.
 
 <img
   src="/images/wallets/dashboard-enable-social-auth.png"
@@ -24,15 +24,16 @@ In the Dashboard, open the authentication settings and enable the login methods 
 
 ### Custom clients
 
-Optional: If you bring your own OAuth 2.0 client ID and secret instead of using the default managed clients,
+Optional: If you bring your own OAuth 2.0 client ID and secret instead of using Alchemy's managed and provided clients,
 make sure that you allow the signer callback URL in the OAuth provider's settings (usually labeled "Authorized redirect URIs"). Use this callback URL: `https://signer.alchemy.com/callback`.
 
-<Info>
+<Warning>
   Do not add your app's redirect URI here. You will allow your app's redirect
   URI in a later step.
-</Info>
+</Warning>
 
 For example, this is how you'd add the alchemy callback url for Google OAuth
+on the Google Clients page
 
 <img
   src="/images/wallets/google-alchemy-callback-whitelist.png"
@@ -78,10 +79,10 @@ Choose between two modes: `popup` or `redirect`. These modes control your applic
 
 If you use `redirect`, you must allow your redirect URI in the Dashboard.
 
-<Info>
+<Warning>
   If you redirect to a webpage that then redirects to a React Native in-app deep
   link, allow the deep link, not the webpage.
-</Info>
+</Warning>
 
 <img
   src="/images/wallets/dashboard-redirect-whitelist.png"
@@ -89,7 +90,9 @@ If you use `redirect`, you must allow your redirect URI in the Dashboard.
   style={{ width: "100%" }}
 />
 
-## 3. Next Steps
+## Next Steps
 
-You should be fully set up to enable users to log in now, common next steps are building out the UI for this authentication flow
-and starting to sign and send transactions for users.
+You should be fully set up to enable users to log in now, common next steps are:
+
+1. Building out the UI for this authentication flow ([Building a React UI](https://www.alchemy.com/docs/wallets/react/quickstart))
+2. Starting to sign and send transactions for users. ([Signing and sending transactions](https://www.alchemy.com/docs/wallets/transactions/send-transactions))
