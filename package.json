@@ -47,7 +47,7 @@
     "test:typecheck": "TYPECHECK=true vitest --typecheck --typecheck.only run",
     "lint:write": "eslint . --fix && yarn fern:gen && prettier --log-level warn --write --ignore-unknown .",
     "lint:check": "eslint . && prettier --check .",
-    "prepare": "husky install && yarn turbo prepare",
+    "prepare": "husky install",
     "docs:dev": "./docs/scripts/docs-dev.sh",
     "version": "yarn build:libs"
   },
