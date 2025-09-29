@@ -15,45 +15,21 @@ fi
 if [ -n "$VERCEL_GIT_PULL_REQUEST_ID" ] && [ -n "$GITHUB_TOKEN" ]; then
   echo "Checking PR #$VERCEL_GIT_PULL_REQUEST_ID"
 
-  # Debug: Show the API URL we're calling
-  API_URL="https://api.github.com/repos/$VERCEL_GIT_REPO_OWNER/$VERCEL_GIT_REPO_SLUG/pulls/$VERCEL_GIT_PULL_REQUEST_ID"
-  echo "API URL: $API_URL"
-
-  # Debug: Check if token exists (show first 4 chars)
-  if [ -n "$GITHUB_TOKEN" ]; then
-    echo "GitHub token: ${GITHUB_TOKEN:0:4}..."
-  else
-    echo "⚠️ No GitHub token found"
-  fi
-
   # Get PR info from GitHub API (using grep/sed instead of jq since it's not available in Vercel)
+  API_URL="https://api.github.com/repos/$VERCEL_GIT_REPO_OWNER/$VERCEL_GIT_REPO_SLUG/pulls/$VERCEL_GIT_PULL_REQUEST_ID"
   PR_RESPONSE=$(curl -s -H "Authorization: token $GITHUB_TOKEN" "$API_URL")
 
-  # Debug: Check if we got a response
+  # Check if we got a valid response
   if [ -z "$PR_RESPONSE" ]; then
     echo "⚠️ No response from GitHub API"
-  else
-    # Check for API errors
-    if echo "$PR_RESPONSE" | grep -q '"message"'; then
-      ERROR_MSG=$(echo "$PR_RESPONSE" | grep -o '"message":"[^"]*"' | sed 's/"message":"\([^"]*\)"/\1/')
-      echo "⚠️ GitHub API error: $ERROR_MSG"
-    fi
-
-    # Debug: Look for base.ref in response (show more context)
-    echo "Looking for base.ref pattern..."
-    echo "$PR_RESPONSE" | grep -o '"base":[^}]*' | head -c 500
-    echo ""
-
-    # Also try to find just the ref field near base
-    echo "Searching for 'base' context..."
-    echo "$PR_RESPONSE" | grep -C 2 '"base"' | head -n 10
+  elif echo "$PR_RESPONSE" | grep -q '"message"'; then
+    ERROR_MSG=$(echo "$PR_RESPONSE" | grep -o '"message":"[^"]*"' | sed 's/"message":"\([^"]*\)"/\1/')
+    echo "⚠️ GitHub API error: $ERROR_MSG"
   fi
 
-  # Extract base.ref from JSON using sed (looking for pattern: "base":{"ref":"branch-name")
-  PR_BASE=$(echo "$PR_RESPONSE" | grep -o '"base":{[^}]*"ref":"[^"]*"' | sed 's/.*"ref":"\([^"]*\)".*/\1/')
-
-  # Debug: Show what we extracted
-  echo "Extracted PR_BASE: '$PR_BASE'"
+  # Extract base.ref from JSON (handles multiline JSON format)
+  # Look for "base": { ... "ref": "branch-name" ... } across multiple lines
+  PR_BASE=$(echo "$PR_RESPONSE" | grep -A 5 '"base"' | grep '"ref"' | head -1 | sed 's/.*"ref"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/')
 
   # If we got a valid base branch
   if [ -n "$PR_BASE" ] && [ "$PR_BASE" != "null" ]; then
