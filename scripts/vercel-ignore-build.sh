@@ -15,10 +15,12 @@ fi
 if [ -n "$VERCEL_GIT_PULL_REQUEST_ID" ] && [ -n "$GITHUB_TOKEN" ]; then
   echo "Checking PR #$VERCEL_GIT_PULL_REQUEST_ID"
   
-  # Get PR info from GitHub API
-  PR_BASE=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
-    "https://api.github.com/repos/$VERCEL_GIT_REPO_OWNER/$VERCEL_GIT_REPO_SLUG/pulls/$VERCEL_GIT_PULL_REQUEST_ID" \
-    | jq -r '.base.ref')
+  # Get PR info from GitHub API (using grep/sed instead of jq since it's not available in Vercel)
+  PR_RESPONSE=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+    "https://api.github.com/repos/$VERCEL_GIT_REPO_OWNER/$VERCEL_GIT_REPO_SLUG/pulls/$VERCEL_GIT_PULL_REQUEST_ID")
+
+  # Extract base.ref from JSON using sed (looking for pattern: "base":{"ref":"branch-name")
+  PR_BASE=$(echo "$PR_RESPONSE" | grep -o '"base":{[^}]*"ref":"[^"]*"' | sed 's/.*"ref":"\([^"]*\)".*/\1/')
   
   # If we got a valid base branch
   if [ -n "$PR_BASE" ] && [ "$PR_BASE" != "null" ]; then
