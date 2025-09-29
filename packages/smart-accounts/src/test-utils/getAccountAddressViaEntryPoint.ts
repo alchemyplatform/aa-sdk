@@ -1,7 +1,7 @@
 import { getContract, type Address, type Hex, type Client } from "viem";
 
 /**
- * Test utility functilln that computes the counterfactual address using the EntryPoint's getSenderAddress function.
+ * Test utility function that computes the counterfactual address using the EntryPoint's getSenderAddress function.
  * This is copied from v4's @aa-sdk/core's getAccountAddress logic.
  *
  * @param {object} params - The parameters object
