@@ -121,15 +121,17 @@ export function createWebAuthClient({
             "oauth-popup",
             "width=500,height=600",
           );
+          setPopupLoadingPage(popup);
+
+          // Wait for auth URL to be ready, then set url in popup
+          const finalAuthUrl = await authUrl;
+
           if (!popup) {
             throw new Error(
               "Popup blocked by browser. Please allow popups for this site.",
             );
           }
-          // Wait for auth URL to be ready, then set url in popup
-          const finalAuthUrl = await (typeof authUrl === "string"
-            ? authUrl
-            : authUrl);
+
           popup.location.href = finalAuthUrl;
 
           return new Promise((resolve, reject) => {
@@ -142,13 +144,12 @@ export function createWebAuthClient({
                 alchemyBundle: bundle,
                 alchemyOrgId: orgId,
                 alchemyIdToken: idToken,
-                alchemyIsSignup: isSignup,
+                // alchemyIsSignup: isSignup, TO DO: use when implementing the option to add passkey after a new signup with oauth
                 alchemyError,
                 alchemyOtpId: otpId,
                 alchemyEmail: email,
                 alchemyAuthProvider: providerName,
               } = event.data;
-              console.log({ isSignup }); // TO DO: remove, added this to get lint to stop complaining
               if (alchemyError) {
                 cleanup();
                 popup?.close();
@@ -214,4 +215,27 @@ export function createWebAuthClient({
       }
     },
   });
+}
+
+function setPopupLoadingPage(popup: Window | null): void {
+  const doc = popup?.document;
+  if (!doc) {
+    throw new Error("Popup closed");
+  }
+  if (doc.body) {
+    // body already exists → just replace contents
+    doc.body.textContent = "Loading sign-in...";
+    doc.body.style.cssText =
+      "font:12px system-ui; margin:0; padding:0; display:flex; align-items:center; justify-content:center; height:100vh;";
+  } else {
+    // no body yet → create one and append
+    const body = doc.createElement("body");
+    const p = doc.createElement("p");
+    p.textContent = "Loading sign-in...";
+    p.style.cssText = "font:12px system-ui; margin:0;";
+    body.style.cssText =
+      "margin:0; padding:0; display:flex; align-items:center; justify-content:center; height:100vh;";
+    body.appendChild(p);
+    doc.appendChild(body);
+  }
 }
