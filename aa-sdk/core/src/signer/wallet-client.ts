@@ -5,14 +5,15 @@ import {
   type TypedData,
   type TypedDataDefinition,
   type WalletClient,
+  type SignedAuthorization,
 } from "viem";
 import type { Account } from "viem/accounts";
 import type { SignTypedDataParameters } from "viem/actions";
 import { InvalidSignerTypeError } from "../errors/signer.js";
-import type { SmartAccountSigner } from "./types";
+import type { SmartAccountSigner, AuthorizationRequest } from "./types";
 
 /**
- * Represents a wallet client signer for smart accounts, providing methods to get the address, sign messages, and sign typed data.
+ * Represents a wallet client signer for smart accounts, providing methods to get the address, sign messages, sign typed data, and sign 7702 authorizations.
  */
 export class WalletClientSigner implements SmartAccountSigner<WalletClient> {
   signerType: string;
@@ -141,5 +142,38 @@ export class WalletClientSigner implements SmartAccountSigner<WalletClient> {
     } as SignTypedDataParameters<TTypedData, string, Account | undefined>;
 
     return this.inner.signTypedData<TTypedData, string>(params);
+  };
+
+  /**
+   * Signs an EIP-7702 Authorization and then returns the authorization with the signature.
+   *
+   * @example
+   * ```ts twoslash
+   * import { WalletClientSigner } from "@aa-sdk/core";
+   * import { createWalletClient, custom } from 'viem';
+   * import { mainnet } from 'viem/chains';
+   *
+   * const client = createWalletClient({
+   *   chain: mainnet,
+   *   transport: custom(window.ethereum!)
+   * });
+   *
+   * const signer = new WalletClientSigner(client, 'wallet');
+   *
+   * const authorization = await signer.signAuthorization({
+   *  contractAddress: "0x1234123412341234123412341234123412341234",
+   *  chainId: 1,
+   *  nonce: 0,
+   * });
+   * ```
+   *
+   * @param {AuthorizationRequest<number>} unsignedAuthorization the authorization to be signed
+   * @returns {Promise<SignedAuthorization<number>> | undefined} a promise that resolves to the authorization with the signature
+   */
+  signAuthorization = async (
+    unsignedAuthorization: AuthorizationRequest<number>,
+  ): Promise<SignedAuthorization<number>> => {
+    const account = this.inner.account ?? (await this.getAddress());
+    return this.inner.signAuthorization({ ...unsignedAuthorization, account });
   };
 }
