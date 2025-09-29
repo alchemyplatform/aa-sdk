@@ -1,15 +1,15 @@
-import { getAccountAddress, getEntryPoint } from "@aa-sdk/core"; // TODO(v5): remove core dep
 import {
   custom,
-  publicActions,
   createWalletClient,
-  concatHex,
   encodeFunctionData,
+  concatHex,
 } from "viem";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import {
   createWebAuthnCredential,
   toWebAuthnAccount,
+  entryPoint07Address,
+  entryPoint07Abi,
 } from "viem/account-abstraction";
 import { parsePublicKey } from "webauthn-p256";
 import { local070Instance } from "~test/instances.js";
@@ -17,8 +17,9 @@ import { SoftWebauthnDevice } from "~test/webauthn.js";
 import { toModularAccountV2 } from "./accounts/account.js";
 import { predictModularAccountV2Address } from "./predictAddress.js";
 import { accountFactoryAbi } from "./abis/accountFactoryAbi.js";
-import { DefaultAddress } from "./utils/account.js";
 import { webAuthnFactoryAbi } from "./abis/webAuthnFactoryAbi.js";
+import { DefaultAddress } from "./utils/account.js";
+import { getAccountAddressViaEntryPoint } from "../test-utils/getAccountAddressViaEntryPoint.js";
 
 describe("MAv2 Counterfactual Address Tests", () => {
   const instanceV070 = local070Instance;
@@ -38,10 +39,6 @@ describe("MAv2 Counterfactual Address Tests", () => {
       // Generate a random salt. The same generator function for private keys can be used, because it is also a 32 byte value.
       const salt = BigInt(generatePrivateKey());
 
-      const entryPoint = getEntryPoint(chain, {
-        version: "0.7.0",
-      });
-
       const modularAccountV2 = await toModularAccountV2({
         client: localSigner,
         owner: localSigner.account,
@@ -49,10 +46,11 @@ describe("MAv2 Counterfactual Address Tests", () => {
         mode: "default",
       });
 
-      // First, compute the address using the EntryPoint utility function:
-      const entryPointComputedAddress = await getAccountAddress({
-        client: instanceV070.getClient().extend(publicActions),
-        entryPoint,
+      // Compute the address using the EntryPoint's getSenderAddress function
+      const entryPointComputedAddress = await getAccountAddressViaEntryPoint({
+        client: instanceV070.getClient(),
+        entryPointAddress: entryPoint07Address,
+        entryPointAbi: entryPoint07Abi,
         getAccountInitCode: async () => {
           return concatHex([
             (await modularAccountV2.getFactoryArgs()).factory!,
@@ -99,10 +97,6 @@ describe("MAv2 Counterfactual Address Tests", () => {
 
       const entityId = 0;
 
-      const entryPoint = getEntryPoint(chain, {
-        version: "0.7.0",
-      });
-
       const modularAccountV2 = await toModularAccountV2({
         client: createWalletClient({
           transport: custom(instanceV070.getClient()),
@@ -111,6 +105,24 @@ describe("MAv2 Counterfactual Address Tests", () => {
         owner: webauthnAccount,
         salt,
       });
+
+      // Compute the address using the EntryPoint's getSenderAddress function
+      const { x, y } = parsePublicKey(credential.publicKey);
+      const entryPointComputedAddress = await getAccountAddressViaEntryPoint({
+        client: instanceV070.getClient(),
+        entryPointAddress: entryPoint07Address,
+        entryPointAbi: entryPoint07Abi,
+        getAccountInitCode: async () => {
+          const { factory } = await modularAccountV2.getFactoryArgs();
+          const factoryData = encodeFunctionData({
+            abi: webAuthnFactoryAbi,
+            functionName: "createWebAuthnAccount",
+            args: [x, y, salt, entityId],
+          });
+          return concatHex([factory!, factoryData]);
+        },
+      });
+
       const locallyComputedAddress = predictModularAccountV2Address({
         type: "WebAuthn",
         factoryAddress: DefaultAddress.MAV2_FACTORY_WEBAUTHN,
@@ -118,23 +130,6 @@ describe("MAv2 Counterfactual Address Tests", () => {
         ownerPublicKey: credential.publicKey,
         salt,
         entityId,
-      });
-
-      // First, compute the address using the EntryPoint utility function:
-      const { x, y } = parsePublicKey(credential.publicKey);
-      const getAccountInitCode = async () => {
-        const { factory } = await modularAccountV2.getFactoryArgs();
-        const factoryData = encodeFunctionData({
-          abi: webAuthnFactoryAbi,
-          functionName: "createWebAuthnAccount",
-          args: [x, y, salt, entityId],
-        });
-        return concatHex([factory!, factoryData]);
-      };
-      const entryPointComputedAddress = await getAccountAddress({
-        client: instanceV070.getClient().extend(publicActions),
-        entryPoint,
-        getAccountInitCode,
       });
 
       expect(entryPointComputedAddress).toEqual(locallyComputedAddress);

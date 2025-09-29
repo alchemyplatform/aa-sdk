@@ -6,8 +6,6 @@ export { AlchemyRestClient } from "./rest/restClient.js";
 // transport
 export type * from "./transport/alchemy.js";
 export { alchemyTransport, isAlchemyTransport } from "./transport/alchemy.js";
-export type * from "./transport/split.js";
-export { split } from "./transport/split.js";
 
 // chain registry utilities
 export {
