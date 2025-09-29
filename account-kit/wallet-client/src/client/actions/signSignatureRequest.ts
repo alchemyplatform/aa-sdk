@@ -83,18 +83,25 @@ export async function signSignatureRequest(
       if (!signer.signAuthorization) {
         throw new Error("Signer does not implement signAuthorization");
       }
-      const { r, s, v, yParity } = await signer.signAuthorization({
+      const {
+        r,
+        s,
+        v,
+        yParity: _yParity,
+      } = await signer.signAuthorization({
         ...params.data,
         chainId: hexToNumber(params.data.chainId),
         nonce: hexToNumber(params.data.nonce),
       });
+      const yParity =
+        _yParity != null ? Number(_yParity) : vToYParity(Number(v));
 
       return {
         type: "secp256k1",
         data: serializeSignature({
           r,
           s,
-          yParity: yParity ?? vToYParity(Number(v)),
+          yParity,
         }),
       };
     }
