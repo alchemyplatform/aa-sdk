@@ -8,6 +8,7 @@ import { GoogleIcon } from "../icons/google";
 import { DiscordLogo } from "../icons/discord";
 import { LockIcon } from "../icons/lock";
 import { MailIcon } from "../icons/mail";
+import { PhoneIcon } from "../icons/phone";
 import { SocialIcon } from "../icons/social";
 import { TwitterIcon } from "../icons/twitter";
 import { WalletIcon } from "../icons/wallet";
@@ -160,6 +161,34 @@ export const Authentication = ({ className }: { className?: string }) => {
             setActive={setEmailAuth}
           />
           <AuthMethod
+            icon={<PhoneIcon />}
+            name="SMS"
+            active={false}
+            nameClassName="opacity-100"
+            unavailable={
+              <ExternalLink
+                href={links.sms || "#"}
+                onClick={() => {
+                  Metrics.trackEvent({
+                    name: "clicked_sms_early_access",
+                  });
+                }}
+                className="flex items-center gap-2"
+              >
+                <div className="ml-auto px-2 py-0.5 bg-demo-surface-secondary rounded-full flex gap-1">
+                  <span className="text-sm text-brand font-semibold">
+                    Early access
+                  </span>
+                </div>
+                <ExternalLinkIcon
+                  height={16}
+                  width={16}
+                  className="stroke-secondary"
+                />
+              </ExternalLink>
+            }
+          />
+          <AuthMethod
             icon={<SocialIcon />}
             name="Social"
             iconClassName="mt-[2px] self-start"
@@ -286,17 +315,19 @@ const AuthMethod = ({
   className,
   callout,
   iconClassName,
+  nameClassName,
 }: {
   icon: React.ReactNode;
   name: string;
   details?: React.ReactNode;
   active?: boolean;
   disabled?: boolean;
-  unavailable?: boolean;
+  unavailable?: React.ReactNode | boolean;
   setActive?: (active: boolean) => void;
   className?: string;
   callout?: React.ReactNode;
   iconClassName?: string;
+  nameClassName?: string;
 }) => {
   return (
     <div
@@ -310,7 +341,11 @@ const AuthMethod = ({
         <div className="ml-2 flex-1 flex flex-col gap-3">
           <div className="flex flex-1 min-w-full flex-row justify-between items-center">
             <label
-              className={cn("font-medium text-sm", unavailable && "opacity-50")}
+              className={cn(
+                "font-medium text-sm",
+                unavailable && "opacity-50",
+                nameClassName,
+              )}
               htmlFor={`${name}-auth-method`}
             >
               {name}
@@ -329,9 +364,15 @@ const AuthMethod = ({
         </div>
 
         {unavailable && (
-          <div className="ml-auto border px-2 py-1 rounded-sm bg-purple-50 border-purple-50">
-            <p className="text-xs font-semibold text-purple-500">Soon</p>
-          </div>
+          <>
+            {typeof unavailable === "boolean" ? (
+              <div className="ml-auto border px-2 py-1 rounded-sm bg-purple-50 border-purple-50">
+                <p className="text-xs font-semibold text-purple-500">Soon</p>
+              </div>
+            ) : (
+              unavailable
+            )}
+          </>
         )}
       </div>
       {callout}
