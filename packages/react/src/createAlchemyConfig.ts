@@ -113,7 +113,7 @@ export function createAlchemyConfig(
     return perChain;
   })();
 
-  // Note: Currently using alchemyAuth; swap to alchemySmartWallet when ready.
+  // TODO(v5): Currently using alchemyAuth; swap to alchemySmartWallet when ready.
   const defaultConnectors = [
     // Currently alchemyAuth only supports apiKey
     ...(apiKey ? [alchemyAuth({ apiKey })] : []),
@@ -121,7 +121,7 @@ export function createAlchemyConfig(
 
   const wagmiConfig = createConfig({
     chains,
-    transports: transports!,
+    transports,
     connectors: defaultConnectors,
     ssr,
   });

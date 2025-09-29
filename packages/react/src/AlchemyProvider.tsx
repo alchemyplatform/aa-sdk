@@ -48,7 +48,7 @@ export type AlchemyProviderProps = {
 export function AlchemyProvider({ config, children }: AlchemyProviderProps) {
   return (
     <WagmiProvider config={config.wagmi}>
-      {children as any}
+      {children}
       {/* Future: Additional providers will be added here */}
       {/* e.g., <AlchemySolanaProvider config={config.solana}> */}
       {/* e.g., <AlchemyUIProvider config={config.ui}> */}
