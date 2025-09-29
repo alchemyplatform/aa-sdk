@@ -43,8 +43,9 @@
     "typescript-template": "*"
   },
   "dependencies": {
-    "@alchemy/common": "*",
     "@alchemy/aa-infra": "*",
+    "@alchemy/common": "*",
+    "@turnkey/http": "^3.13.0",
     "viem": "2.29.2"
   },
   "publishConfig": {
