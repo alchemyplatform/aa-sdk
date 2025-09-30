@@ -91,7 +91,12 @@ export async function signSignatureRequest(
       };
     }
     case "eip7702Auth": {
-      const { r, s, v, yParity } = await actions.signAuthorization({
+      const {
+        r,
+        s,
+        v,
+        yParity: _yParity,
+      } = await actions.signAuthorization({
         ...{
           ...params.data,
           chainId: hexToNumber(params.data.chainId),
@@ -99,13 +104,17 @@ export async function signSignatureRequest(
         },
         account: signerClient.account,
       });
+      // yParity *should* already be a number, but some 3rd
+      // party signers may mistakenly return it as a bigint.
+      const yParity =
+        _yParity != null ? Number(_yParity) : vToYParity(Number(v));
 
       return {
         type: "secp256k1",
         data: serializeSignature({
           r,
           s,
-          yParity: yParity ?? vToYParity(Number(v)),
+          yParity,
         }),
       };
     }

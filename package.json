@@ -8,11 +8,8 @@
   "packageManager": "yarn@1.22.22",
   "workspaces": {
     "packages": [
-      "aa-sdk/*",
-      "account-kit/*",
       "templates/*",
       "examples/*",
-      "account-kit/rn-signer/example",
       "doc-gen",
       "docs",
       ".vitest",
@@ -34,7 +31,7 @@
     "postgenerate": "yarn lint:write",
     "preinstall": "yarn config set ignore-engines true",
     "postinstall": "git submodule update --init --recursive && patch-package && turbo run build --filter='./templates/*' --filter='halp'",
-    "build": "yarn build:libs --filter='!@account-kit/react-native-signer' --filter='!@account-kit/react-native-signer-example'",
+    "build": "yarn build:libs",
     "postbuild": "yarn lint:write",
     "build:libs": "turbo run build --filter='./templates/*' --filter='./packages/*'",
     "build:demo": "turbo run build --filter=ui-demo --filter='./templates/*'",
@@ -50,7 +47,7 @@
     "test:typecheck": "TYPECHECK=true vitest --typecheck --typecheck.only run",
     "lint:write": "eslint . --fix && yarn fern:gen && prettier --log-level warn --write --ignore-unknown .",
     "lint:check": "eslint . && prettier --check .",
-    "prepare": "husky install && yarn turbo prepare",
+    "prepare": "husky install",
     "docs:dev": "./docs/scripts/docs-dev.sh",
     "version": "yarn build:libs"
   },
