@@ -19,48 +19,48 @@ if [ "$VERCEL_GIT_COMMIT_REF" == "main" ]; then
   exit 1
 fi
 
-# Only check PRs if we have the required variables
-if [ -n "$VERCEL_GIT_PULL_REQUEST_ID" ] && [ -n "$GITHUB_TOKEN" ]; then
-  echo "➜ Checking PR #$VERCEL_GIT_PULL_REQUEST_ID"
+# Check GitHub API for PR information
+SKIP_BRANCH="${SKIP_BUILD_FOR_BRANCH:-}"
+if [ -n "$SKIP_BRANCH" ] && [ -n "$GITHUB_TOKEN" ]; then
 
-  # Get PR info from GitHub API (using grep/sed instead of jq since it's not available in Vercel)
-  API_URL="https://api.github.com/repos/$VERCEL_GIT_REPO_OWNER/$VERCEL_GIT_REPO_SLUG/pulls/$VERCEL_GIT_PULL_REQUEST_ID"
-  PR_RESPONSE=$(curl -s -H "Authorization: token $GITHUB_TOKEN" "$API_URL")
+  # Method 1: If we have a PR ID, use it
+  if [ -n "$VERCEL_GIT_PULL_REQUEST_ID" ]; then
+    echo "➜ Checking PR #$VERCEL_GIT_PULL_REQUEST_ID base branch..."
 
-  # Check if we got a valid response
-  if [ -z "$PR_RESPONSE" ]; then
-    echo "⚠️ No response from GitHub API"
-  elif echo "$PR_RESPONSE" | grep -q '"message"'; then
-    ERROR_MSG=$(echo "$PR_RESPONSE" | grep -o '"message":"[^"]*"' | sed 's/"message":"\([^"]*\)"/\1/')
-    echo "⚠️ GitHub API error: $ERROR_MSG"
-  fi
+    API_URL="https://api.github.com/repos/$VERCEL_GIT_REPO_OWNER/$VERCEL_GIT_REPO_SLUG/pulls/$VERCEL_GIT_PULL_REQUEST_ID"
+    PR_RESPONSE=$(curl -s -H "Authorization: token $GITHUB_TOKEN" "$API_URL")
 
-  # Extract base.ref from JSON (handles multiline JSON format)
-  # Look for "base": { ... "ref": "branch-name" ... } across multiple lines
-  PR_BASE=$(echo "$PR_RESPONSE" | grep -A 5 '"base"' | grep '"ref"' | head -1 | sed 's/.*"ref"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/')
-
-  # If we got a valid base branch
-  if [ -n "$PR_BASE" ] && [ "$PR_BASE" != "null" ]; then
-    echo "➜ PR base branch: $PR_BASE"
-
-    # Check if we should skip this branch
-    SKIP_BRANCH="${SKIP_BUILD_FOR_BRANCH:-}"
-    if [ -n "$SKIP_BRANCH" ] && [ "$PR_BASE" == "$SKIP_BRANCH" ]; then
-      echo "🛑 Skipping build - PR targets $PR_BASE (matches SKIP_BUILD_FOR_BRANCH)"
-      exit 0  # Skip build
-    else
-      echo "➜ PR targets $PR_BASE, not skipping (SKIP_BUILD_FOR_BRANCH=${SKIP_BRANCH:-"not set"})"
-    fi
+  # Method 2: No PR ID yet - find PR by branch name
   else
-    echo "⚠️ Could not get PR base branch"
+    echo "➜ Looking for PR with head branch: $VERCEL_GIT_COMMIT_REF..."
+
+    # Search for open PRs from this branch
+    API_URL="https://api.github.com/repos/$VERCEL_GIT_REPO_OWNER/$VERCEL_GIT_REPO_SLUG/pulls?state=open&head=$VERCEL_GIT_REPO_OWNER:$VERCEL_GIT_COMMIT_REF"
+    SEARCH_RESPONSE=$(curl -s -H "Authorization: token $GITHUB_TOKEN" "$API_URL")
+
+    # Extract first PR from array response
+    PR_RESPONSE=$(echo "$SEARCH_RESPONSE" | grep -A 100 '"base"' | head -110)
   fi
-else
-  if [ -z "$VERCEL_GIT_PULL_REQUEST_ID" ]; then
-    echo "➜ Not a PR (VERCEL_GIT_PULL_REQUEST_ID not set)"
+
+  # Extract base.ref from the PR response
+  if [ -n "$PR_RESPONSE" ]; then
+    PR_BASE=$(echo "$PR_RESPONSE" | grep -A 5 '"base"' | grep '"ref"' | head -1 | sed 's/.*"ref"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/')
+
+    if [ -n "$PR_BASE" ]; then
+      echo "➜ PR base branch: $PR_BASE"
+
+      if [ "$PR_BASE" = "$SKIP_BRANCH" ]; then
+        echo "🛑 Skipping build - PR targets $SKIP_BRANCH"
+        exit 0  # Skip build
+      else
+        echo "➜ PR targets $PR_BASE, not skipping"
+      fi
+    else
+      echo "➜ No PR found or could not determine base branch"
+    fi
   fi
-  if [ -z "$GITHUB_TOKEN" ]; then
-    echo "⚠️ GITHUB_TOKEN not set, cannot check PR base branch"
-  fi
+elif [ -z "$GITHUB_TOKEN" ]; then
+  echo "⚠️ GITHUB_TOKEN not set, cannot check PR base branch"
 fi
 
 echo "✅ Proceeding with build"
