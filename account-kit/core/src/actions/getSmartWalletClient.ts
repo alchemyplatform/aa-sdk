@@ -2,7 +2,7 @@ import {
   createSmartWalletClient,
   type SmartWalletClient,
 } from "@account-kit/wallet-client";
-import type { Address } from "viem";
+import { type Address } from "viem";
 import { getAlchemyTransport } from "./getAlchemyTransport.js";
 import { getConnection } from "./getConnection.js";
 import { getSigner } from "./getSigner.js";
@@ -64,13 +64,18 @@ export function getSmartWalletClient(
     return undefined;
   }
 
+  const isAccountClientLoading = Array.from(
+    Object.values(
+      config.store.getState().smartAccountClients[connection.chain.id] || {},
+    ),
+  ).some((it) => it.isLoadingClient);
+
+  const account = isAccountClientLoading ? undefined : params?.account;
+
   const smartWalletClient =
     config.store.getState().smartWalletClients[connection.chain.id];
 
-  if (
-    smartWalletClient &&
-    smartWalletClient.account?.address === params?.account
-  ) {
+  if (smartWalletClient && smartWalletClient.account?.address === account) {
     return smartWalletClient;
   }
 
@@ -78,7 +83,7 @@ export function getSmartWalletClient(
     transport,
     chain: connection.chain,
     signer,
-    account: params?.account,
+    account,
     ...(Array.isArray(connection.policyId)
       ? { policyIds: connection.policyId }
       : connection.policyId
