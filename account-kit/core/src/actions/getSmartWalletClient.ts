@@ -64,13 +64,25 @@ export function getSmartWalletClient(
     return undefined;
   }
 
+  const isAccountClientLoading = Array.from(
+    Object.values(
+      config.store.getState().smartAccountClients[connection.chain.id] || {},
+    ),
+  ).some((it) => it.isLoadingClient);
+
+  // Hooks that use `useSmartWalletClient` internally are passed a SmartAccountClient
+  // as a param. While the client is loading, it's expected that its account address
+  // will be undefined. However, it's possible that consuming apps may use the
+  // `useSmartWalletClient` hook directly and specify the account address while
+  // the SmartAccountClient is still loading. To prevent this from resulting in an
+  // infinite render loop, we can wait until the SmartAccountClient is done loading
+  // before using the account address from params.
+  const account = isAccountClientLoading ? undefined : params?.account;
+
   const smartWalletClient =
     config.store.getState().smartWalletClients[connection.chain.id];
 
-  if (
-    smartWalletClient &&
-    smartWalletClient.account?.address === params?.account
-  ) {
+  if (smartWalletClient && smartWalletClient.account?.address === account) {
     return smartWalletClient;
   }
 
@@ -78,7 +90,7 @@ export function getSmartWalletClient(
     transport,
     chain: connection.chain,
     signer,
-    account: params?.account,
+    account,
     ...(Array.isArray(connection.policyId)
       ? { policyIds: connection.policyId }
       : connection.policyId
