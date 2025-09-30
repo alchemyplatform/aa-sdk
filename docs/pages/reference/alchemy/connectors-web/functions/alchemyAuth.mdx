@@ -5,16 +5,39 @@ description: Overview of the alchemyAuth method
 slug: wallets/reference/alchemy/connectors-web/functions/alchemyAuth
 ---
 
-Creates the Alchemy Auth connector for Wagmi.
+Creates a Wagmi connector for Alchemy Auth, enabling email-based authentication
+with embedded wallet capabilities. This connector provides a seamless authentication
+experience using email OTP or OAuth, with automatic session management and persistence.
 
-This function returns a connector factory via Wagmi's `createConnector`.
+The connector supports:
 
-Reference: Creating Connectors (Wagmi)
+- Email OTP authentication
+- OAuth authentication flows
+- Automatic session persistence and restoration
+- Cross-tab synchronization
+- Multi-chain support
 
 ## Import
 
 ```ts
 import { alchemyAuth } from "@alchemy/connectors-web";
+```
+
+## Usage
+
+Basic usage with API key:
+
+```ts
+import { alchemyAuth } from "@alchemy/connectors-web";
+import { createConfig } from "wagmi";
+
+const config = createConfig({
+  connectors: [
+    alchemyAuth({
+      apiKey: "your-api-key",
+    }),
+  ],
+});
 ```
 
 ## Parameters
@@ -23,7 +46,7 @@ import { alchemyAuth } from "@alchemy/connectors-web";
 
 `AlchemyAuthOptions`
 
-- Configuration for the connector
+- Configuration options for the connector
 
 ### options.apiKey
 
@@ -45,17 +68,17 @@ import { alchemyAuth } from "@alchemy/connectors-web";
 
 ### options.createTekStamper
 
-`CreateTekStamperFn`
+`Function`
 
 - Optional custom TEK stamper factory for React Native
 
 ### options.createWebAuthnStamper
 
-`CreateWebAuthnStamperFn`
+`Function`
 
 - Optional custom WebAuthn stamper factory for passkey authentication
 
 ## Returns
 
 `CreateConnectorFn`
-A Wagmi connector factory compatible with `createConfig`.
+A Wagmi connector factory compatible with `createConfig`
