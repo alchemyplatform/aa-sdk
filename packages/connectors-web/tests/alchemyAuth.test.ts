@@ -137,9 +137,7 @@ describe("alchemyAuth connector", () => {
       const result = await connectorInstance.connect();
 
       expect(result.accounts).toHaveLength(1);
-      expect(result.accounts[0]).toBe(
-        TEST_ADDRESS,
-      );
+      expect(result.accounts[0]).toBe(TEST_ADDRESS);
       expect(result.chainId).toBe(sepolia.id);
     });
 
@@ -532,10 +530,11 @@ describe("alchemyAuth connector", () => {
       const connectorInstance = config.connectors[0] as AlchemyAuthConnector;
       connectorInstance.setAuthSession(mockAuthSession);
 
-      const newAddress = "0x9876543210987654321098765432109876543210" as Address;
+      const newAddress =
+        "0x9876543210987654321098765432109876543210" as Address;
 
       await expect(
-        connectorInstance.onAccountsChanged([newAddress])
+        connectorInstance.onAccountsChanged([newAddress]),
       ).resolves.not.toThrow();
     });
 
@@ -556,7 +555,7 @@ describe("alchemyAuth connector", () => {
       // Directly call onChainChanged - the implementation should emit "change" event
       // We can't easily test the event emission directly, but we can verify the method doesn't throw
       await expect(
-        connectorInstance.onChainChanged(`0x${mainnet.id.toString(16)}`)
+        connectorInstance.onChainChanged(`0x${mainnet.id.toString(16)}`),
       ).resolves.not.toThrow();
     });
 
@@ -703,7 +702,6 @@ describe("alchemyAuth connector", () => {
         connectorInstance.switchChain!({ chainId: mainnet.id }),
       ).resolves.toBeDefined();
     });
-
   });
 
   describe("Session Restoration Edge Cases", () => {
