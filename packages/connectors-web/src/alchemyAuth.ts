@@ -52,7 +52,7 @@ alchemyAuth.type = "alchemy-auth" as const;
  *
  * @example
  * Basic usage with API key:
- * ```ts
+ * ```ts twoslash
  * import { alchemyAuth } from "@alchemy/connectors-web";
  * import { createConfig } from "wagmi";
  *
