@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.66.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.66.0...v4.66.1) (2025-09-29)
+
+### Bug Fixes
+
+- ensure yParity is a number ([#2132](https://github.com/alchemyplatform/aa-sdk/issues/2132)) ([fbb27f8](https://github.com/alchemyplatform/aa-sdk/commit/fbb27f8e613bed6f82facf01b63e8eebc76d54a3))
+
 # [4.66.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.65.0...v4.66.0) (2025-09-29)
 
 ### Bug Fixes
