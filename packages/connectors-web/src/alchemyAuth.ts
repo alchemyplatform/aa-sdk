@@ -67,7 +67,7 @@ alchemyAuth.type = "alchemy-auth" as const;
  *
  * @example
  * With custom iframe configuration:
- * ```ts
+ * ```ts twoslash
  * import { alchemyAuth } from "@alchemy/connectors-web";
  *
  * const connector = alchemyAuth({
