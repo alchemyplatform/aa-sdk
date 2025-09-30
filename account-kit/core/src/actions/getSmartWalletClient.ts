@@ -2,7 +2,7 @@ import {
   createSmartWalletClient,
   type SmartWalletClient,
 } from "@account-kit/wallet-client";
-import { type Address } from "viem";
+import type { Address } from "viem";
 import { getAlchemyTransport } from "./getAlchemyTransport.js";
 import { getConnection } from "./getConnection.js";
 import { getSigner } from "./getSigner.js";
