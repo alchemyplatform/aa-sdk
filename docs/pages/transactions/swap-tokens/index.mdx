@@ -3,11 +3,13 @@ title: Swaps (Alpha)
 slug: wallets/transactions/swap-tokens
 ---
 
-Swap any token across networks. Integrate in minutes. Built natively into Smart Wallets.
+Swaps let you convert any token to any other token across blockchain networks. They're built natively into Smart Wallets and you can integrate in minutes.
 
-- 1-click Swap + Action (ex: send, deposit, borrow, pay)
-- Gasless swaps
-- [Coming soon] Cross-chain swaps
+Smart Wallets also allow you to add actions after the swap completes. For example, you can deposit your newly swapped tokens into a DeFi protocol.
+
+Swaps work just like any other Smart Wallet transaction, so you can sponsor gas to do gasless swaps, or pay for gas in an ERC-20 token.
+
+Cross-chain swaps are coming soon!
 
 <Tip>
     Swaps are in early access. The service is production ready, however there may be changes in the future to simplify the endpoint. We will let you know if/when that happens.
@@ -21,37 +23,40 @@ Swap any token across networks. Integrate in minutes. Built natively into Smart 
 ## **Flow**
 
 1. Request a swap quote
-2. Sign the prepared calls (swap + post swap action)
-3. Send prepared calls (swap + post swap action)
-4. Poll for confirmation
+2. Sign the prepared swap calls (including any post swap action)
+3. Send prepared calls
+4. Wait for blockchain confirmation
 
 ## **Swap options**
 
-```tsx
+When requesting a swap quote, you can specify either an amount in, or a minimum amount out.
+
+````ts
 // Mode 1: Swap exact input amount
 {
   fromAmount: "0x2710";
 } // Swap exactly 0.01 USDC (10000 in hex, 6 decimals)
 
+```ts
 // Mode 2: Get minimum output amount
 {
   minimumToAmount: "0x5AF3107A4000";
-} // Get at least 0.0001 ETH (18 decimals). We calculate how much USDC you need to spend to get at least your desired ETH amount!
-```
+} // Get at least 0.0001 ETH (18 decimals). We calculate how much USDC you need to spend to get at least your desired ETH amount.
+````
 
 ## Prerequisites
 
 Before you begin, ensure you have:
 
 - An [Alchemy API Key](https://dashboard.alchemy.com/apps)
-- A [Gas Manager](https://dashboard.alchemy.com/gas-manager/policy/create) policy
+- If you're sponsoring gas, then a [Gas Manager](https://dashboard.alchemy.com/gas-manager/policy/create) policy
 - A small amount of USDC for testing (~$1 worth is enough!)
-  - **Important**: You'll need to send these tokens to your smart wallet address in Step 3 of the Implementation!
+  - **Important**: You'll need to send these tokens to your smart wallet address to be able to swap!
 - A signer to own the account and sign messages
 
 <Info>
-  Note that Swaps are currently only supported via direct APIs. React and other
-  JS options are coming (very) soon!
+  Note that Swaps are currently only supported via the Javascript client or
+  direct APIs. React is coming (very) soon!
 </Info>
 
 <Tabs>
