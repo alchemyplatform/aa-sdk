@@ -36,14 +36,16 @@ if [ -n "$SKIP_BRANCH" ] && [ -n "$GITHUB_TOKEN" ]; then
 
     # Search for open PRs from this branch
     API_URL="https://api.github.com/repos/$VERCEL_GIT_REPO_OWNER/$VERCEL_GIT_REPO_SLUG/pulls?state=open&head=$VERCEL_GIT_REPO_OWNER:$VERCEL_GIT_COMMIT_REF"
-    SEARCH_RESPONSE=$(curl -s -H "Authorization: token $GITHUB_TOKEN" "$API_URL")
+    PR_RESPONSE=$(curl -s -H "Authorization: token $GITHUB_TOKEN" "$API_URL")
 
-    # Extract first PR from array response
-    PR_RESPONSE=$(echo "$SEARCH_RESPONSE" | grep -A 100 '"base"' | head -110)
+    # The response is an array, but we'll just look for the first base.ref in it
+    # This works because we're searching for a specific branch which should have only one PR
   fi
 
   # Extract base.ref from the PR response
   if [ -n "$PR_RESPONSE" ]; then
+    # Look for the first occurrence of "base": { ... "ref": "branch" ... }
+    # This works for both single PR responses and array responses
     PR_BASE=$(echo "$PR_RESPONSE" | grep -A 5 '"base"' | grep '"ref"' | head -1 | sed 's/.*"ref"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/')
 
     if [ -n "$PR_BASE" ]; then
