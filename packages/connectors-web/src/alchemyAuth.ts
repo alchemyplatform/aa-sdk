@@ -457,12 +457,20 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
         // In a full implementation, we might need to update internal state
         if (accounts.length === 0) {
           await this.disconnect();
+        } else {
+          config.emitter.emit("change", {
+            accounts: accounts as readonly Address[],
+          });
         }
       },
 
-      onChainChanged(chainId) {
+      async onChainChanged(chainId) {
         // Update the current chain ID when chain changes
         currentChainId = parseInt(chainId, 16);
+        config.emitter.emit("change", {
+          chainId: currentChainId,
+          accounts: await this.getAccounts(),
+        });
       },
 
       async onConnect(connectInfo) {
