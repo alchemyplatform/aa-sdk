@@ -1,5 +1,6 @@
 import {
   AuthClient,
+  OauthCancelledError,
   type CreateTekStamperFn,
   type CreateWebAuthnStamperFn,
 } from "@alchemy/auth";
@@ -184,6 +185,7 @@ export function createWebAuthClient({
             const checkCloseIntervalId = setInterval(() => {
               if (popup?.closed) {
                 cleanup();
+                reject(new OauthCancelledError());
               }
             }, CHECK_CLOSE_INTERVAL);
 
