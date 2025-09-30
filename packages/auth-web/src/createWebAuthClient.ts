@@ -102,17 +102,9 @@ export function createWebAuthClient({
       createWebAuthnStamper ??
       (() => Promise.reject(new Error("Not implemented"))),
     handleOauthFlow: async (
-      params:
-        | {
-            authUrl: string;
-            mode: "redirect";
-          }
-        | {
-            authUrl: Promise<string>;
-            mode: "popup";
-          },
+      authUrl: Promise<string> | string,
+      mode: "redirect" | "popup",
     ) => {
-      const { authUrl, mode } = params;
       switch (mode) {
         case "popup":
           // Open popup immediately to avoid popup blockers
@@ -203,6 +195,9 @@ export function createWebAuthClient({
 
         case "redirect":
           // No OAuth callback detected, so initiate the redirect
+          if (typeof authUrl !== "string") {
+            throw new Error("authUrl must be a string in redirect mode");
+          }
           window.location.href = authUrl;
           return new Promise((_, reject) =>
             setTimeout(

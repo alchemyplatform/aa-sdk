@@ -248,22 +248,12 @@ export class AuthClient {
   public async loginWithOauth(
     params: LoginWithOauthParams,
   ): Promise<AuthSession> {
-    switch (params.mode) {
-      case "redirect":
-        const authUrl = await this.buildAuthUrl(params);
-        const redirectResponse = await this.handleOauthFlow({
-          authUrl,
-          mode: params.mode,
-        });
-        return await this.processOAuthResponse(redirectResponse);
-      default: // popup
-        const authUrlPromise = this.buildAuthUrl(params);
-        const popupResponse = await this.handleOauthFlow({
-          authUrl: authUrlPromise,
-          mode: params.mode,
-        });
-        return await this.processOAuthResponse(popupResponse);
-    }
+    const authUrlPromise = this.buildAuthUrl(params);
+    const response = await this.handleOauthFlow(
+      params.mode === "popup" ? authUrlPromise : await authUrlPromise,
+      params.mode,
+    );
+    return await this.processOAuthResponse(response);
   }
 
   /**
