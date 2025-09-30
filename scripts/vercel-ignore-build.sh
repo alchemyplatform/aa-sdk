@@ -14,12 +14,23 @@ fi
 # Only check PRs if we have the required variables
 if [ -n "$VERCEL_GIT_PULL_REQUEST_ID" ] && [ -n "$GITHUB_TOKEN" ]; then
   echo "Checking PR #$VERCEL_GIT_PULL_REQUEST_ID"
-  
-  # Get PR info from GitHub API
-  PR_BASE=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
-    "https://api.github.com/repos/$VERCEL_GIT_REPO_OWNER/$VERCEL_GIT_REPO_SLUG/pulls/$VERCEL_GIT_PULL_REQUEST_ID" \
-    | jq -r '.base.ref')
-  
+
+  # Get PR info from GitHub API (using grep/sed instead of jq since it's not available in Vercel)
+  API_URL="https://api.github.com/repos/$VERCEL_GIT_REPO_OWNER/$VERCEL_GIT_REPO_SLUG/pulls/$VERCEL_GIT_PULL_REQUEST_ID"
+  PR_RESPONSE=$(curl -s -H "Authorization: token $GITHUB_TOKEN" "$API_URL")
+
+  # Check if we got a valid response
+  if [ -z "$PR_RESPONSE" ]; then
+    echo "⚠️ No response from GitHub API"
+  elif echo "$PR_RESPONSE" | grep -q '"message"'; then
+    ERROR_MSG=$(echo "$PR_RESPONSE" | grep -o '"message":"[^"]*"' | sed 's/"message":"\([^"]*\)"/\1/')
+    echo "⚠️ GitHub API error: $ERROR_MSG"
+  fi
+
+  # Extract base.ref from JSON (handles multiline JSON format)
+  # Look for "base": { ... "ref": "branch-name" ... } across multiple lines
+  PR_BASE=$(echo "$PR_RESPONSE" | grep -A 5 '"base"' | grep '"ref"' | head -1 | sed 's/.*"ref"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/')
+
   # If we got a valid base branch
   if [ -n "$PR_BASE" ] && [ "$PR_BASE" != "null" ]; then
     echo "PR base branch: $PR_BASE"
