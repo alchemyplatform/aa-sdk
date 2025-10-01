@@ -1,4 +1,5 @@
 import {
+  BaseError,
   createBundlerClient,
   getEntryPoint,
   InvalidDeferredActionNonce,
@@ -236,8 +237,29 @@ export async function createMAv2Base<
       }),
     );
 
-  const isAccountDeployed: () => Promise<boolean> = async () =>
-    !!(await client.getCode({ address: accountAddress }));
+  const isAccountDeployed: () => Promise<boolean> = async () => {
+    const code = await client.getCode({ address: accountAddress });
+    const is7702Delegated = code?.startsWith("0xef0100");
+
+    if (!is7702Delegated) {
+      return !!code;
+    }
+
+    if (!config.getImplementationAddress) {
+      // Edge case where account is already delegated to a 3rd party
+      // implementation, but the MAv2 client is initialized using its
+      // address without specifying 7702 mode.
+      throw new BaseError(
+        "Account is an already-delegated 7702 account, but client is missing implementation address. Be sure to initialize the client in 7702 mode.",
+      );
+    }
+
+    const expectedCode = concatHex([
+      "0xef0100",
+      await config.getImplementationAddress(),
+    ]);
+    return code === expectedCode;
+  };
 
   const getNonce = async (nonceKey: bigint = 0n): Promise<bigint> => {
     if (nonce) {
