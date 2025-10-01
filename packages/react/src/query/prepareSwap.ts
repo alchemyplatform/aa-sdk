@@ -24,7 +24,7 @@ export function prepareSwapQueryOptions(
   return {
     async queryFn({ queryKey }) {
       const { connector } = options;
-      const { ...params } = queryKey[1];
+      const params = queryKey[1];
 
       return prepareSwap(config, { connector, ...params });
     },

@@ -14,7 +14,7 @@ import {
   type SubmitSwapMutateAsync,
 } from "../query/submitSwap.js";
 
-export type UseSubmitSubmitSwapParameters = ConfigParameter & {
+export type UseSubmitSwapParameters = ConfigParameter & {
   mutation?:
     | UseMutationParameters<SubmitSwapReturnType, Error, SubmitSwapParameters>
     | undefined;
@@ -78,7 +78,7 @@ export type UseSubmitSubmitSwapReturnType = UseMutationReturnType<
  * ```
  */
 export function useSubmitSwap(
-  parameters: UseSubmitSubmitSwapParameters = {},
+  parameters: UseSubmitSwapParameters = {},
 ): UseSubmitSubmitSwapReturnType {
   const { mutation } = parameters;
 

@@ -25,8 +25,6 @@ export type UsePrepareSwapReturnType = UseQueryResult<
 >;
 
 // TODO(v5): We may rename this hook (and its action) before launch. Silvia is thinking about it.
-// TODO(jh): reconsider if we actually want to to be a query vs. a mutation. query makes more sense
-// to align w/ how wagmi hooks work, but mutation feels easier to use in practice.
 /**
  * React hook for preparing token swaps.
  *
