@@ -35,6 +35,8 @@ export type WebAuthClientParams = {
  * @param {string} params.apiKey - API key for authentication with Alchemy services
  * @param {string} [params.iframeElementId] - ID for the iframe element used by Turnkey stamper
  * @param {string} [params.iframeContainerId] - ID for the container element that holds the iframe
+ * @param {CreateTekStamperFn} [params.createTekStamper] - Optional custom TEK stamper factory
+ * @param {CreateWebAuthnStamperFn} [params.createWebAuthnStamper] - Optional custom WebAuthn stamper factory
  * @returns {AuthClient} A configured AuthClient instance ready for web-based authentication
  *
  * @example
@@ -100,15 +102,31 @@ export function createWebAuthClient({
     createWebAuthnStamper:
       createWebAuthnStamper ??
       (() => Promise.reject(new Error("Not implemented"))),
-    handleOauthFlow: async (authUrl: string, mode: "popup" | "redirect") => {
+    handleOauthFlow: async (
+      authUrl: Promise<string> | string,
+      mode: "redirect" | "popup",
+    ) => {
       switch (mode) {
         case "popup":
+          // Open popup immediately to avoid popup blockers
           const popup = window.open(
-            authUrl,
-            "_blank",
-            "popup,width=500,height=600",
+            "about:blank",
+            "oauth-popup",
+            "width=500,height=600",
           );
-          // const eventEmitter = this.eventEmitter;
+          setPopupLoadingPage(popup);
+
+          // Wait for auth URL to be ready, then set url in popup
+          const finalAuthUrl = await authUrl;
+
+          if (!popup) {
+            throw new Error(
+              "Popup blocked by browser. Please allow popups for this site.",
+            );
+          }
+
+          popup.location.href = finalAuthUrl;
+
           return new Promise((resolve, reject) => {
             const handleMessage = (event: MessageEvent) => {
               if (!event.data) {
@@ -119,13 +137,12 @@ export function createWebAuthClient({
                 alchemyBundle: bundle,
                 alchemyOrgId: orgId,
                 alchemyIdToken: idToken,
-                alchemyIsSignup: isSignup,
+                // alchemyIsSignup: isSignup, TO DO: use when implementing the option to add passkey after a new signup with oauth
                 alchemyError,
                 alchemyOtpId: otpId,
                 alchemyEmail: email,
                 alchemyAuthProvider: providerName,
               } = event.data;
-              console.log({ isSignup }); // TO DO: remove, added this to get lint to stop complaining
               if (alchemyError) {
                 cleanup();
                 popup?.close();
@@ -161,7 +178,7 @@ export function createWebAuthClient({
                 default:
                   reject(new Error(`Unknown status: ${status}`));
               }
-            }; // handleMessage
+            };
 
             window.addEventListener("message", handleMessage);
 
@@ -180,6 +197,9 @@ export function createWebAuthClient({
 
         case "redirect":
           // No OAuth callback detected, so initiate the redirect
+          if (typeof authUrl !== "string") {
+            throw new Error("authUrl must be a string in redirect mode");
+          }
           window.location.href = authUrl;
           return new Promise((_, reject) =>
             setTimeout(
@@ -192,4 +212,27 @@ export function createWebAuthClient({
       }
     },
   });
+}
+
+function setPopupLoadingPage(popup: Window | null): void {
+  const doc = popup?.document;
+  if (!doc) {
+    throw new Error("Popup closed");
+  }
+  if (doc.body) {
+    // body already exists → just replace contents
+    doc.body.textContent = "Loading sign-in...";
+    doc.body.style.cssText =
+      "font:12px system-ui; margin:0; padding:0; display:flex; align-items:center; justify-content:center; height:100vh;";
+  } else {
+    // no body yet → create one and append
+    const body = doc.createElement("body");
+    const p = doc.createElement("p");
+    p.textContent = "Loading sign-in...";
+    p.style.cssText = "font:12px system-ui; margin:0;";
+    body.style.cssText =
+      "margin:0; padding:0; display:flex; align-items:center; justify-content:center; height:100vh;";
+    body.appendChild(p);
+    doc.appendChild(body);
+  }
 }
