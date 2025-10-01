@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.66.3](https://github.com/alchemyplatform/aa-sdk/compare/v4.66.2...v4.66.3) (2025-10-01)
+
+### Bug Fixes
+
+- **rn-signer:** switch back to session stamper after using passkey ([#2147](https://github.com/alchemyplatform/aa-sdk/issues/2147)) ([42e0ebf](https://github.com/alchemyplatform/aa-sdk/commit/42e0ebf1604d1aee7a14666bd54108d7d40acd62))
+
 ## [4.66.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.66.1...v4.66.2) (2025-09-30)
 
 **Note:** Version bump only for package @account-kit/react-native-signer
