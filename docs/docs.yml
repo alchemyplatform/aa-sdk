@@ -1273,8 +1273,6 @@ navigation:
                     path: wallets/pages/reference/alchemy/common/functions/lowerAddress.mdx
                   - page: raise
                     path: wallets/pages/reference/alchemy/common/functions/raise.mdx
-                  - page: split
-                    path: wallets/pages/reference/alchemy/common/functions/split.mdx
                   - page: validateAlchemyConnectionConfig
                     path: wallets/pages/reference/alchemy/common/functions/validateAlchemyConnectionConfig.mdx
               - section: Classes

@@ -23,6 +23,11 @@ import "./style.css";
 
 globalThis.Buffer = Buffer;
 
+// Storage viewer variables
+const STORAGE_KEY = "alchemyAuth.authSession";
+// Wagmi prefixes all storage keys with "wagmi." to namespace localStorage entries
+const WAGMI_STORAGE_PREFIX = "wagmi.";
+
 // DOM helper functions
 function updateStatus(elementId: string, message: string) {
   const element = document.getElementById(elementId);
@@ -230,6 +235,8 @@ async function handleDisconnect() {
     await disconnect(config);
 
     updateStatus("disconnect-status", "Successfully disconnected!");
+
+    setTimeout(updateSessionStatus, 100);
   } catch (error) {
     console.error("Disconnect error details:", error);
     updateStatus(
@@ -338,6 +345,7 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
 
     <div id="session-controls">
       <h2>Session Controls</h2>
+      <div id="session-status"></div>
       <button id="disconnect-btn" type="button" class="disconnect-btn">
         Disconnect
       </button>
@@ -345,6 +353,15 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
         Clear Storage
       </button>
       <div id="disconnect-status"></div>
+    </div>
+
+    <div id="persistence-testing">
+      <h2>Local Storage Viewer</h2>
+      <div class="test-actions">
+        <button id="view-storage" type="button">View Storage</button>
+      </div>
+      <div id="storage-display"></div>
+      <div id="storage-status"></div>
     </div>
   </div>
 `;
@@ -427,6 +444,8 @@ function setupAccountWatcher(element: HTMLDivElement) {
           await handleSwitchChain(chainId);
         });
       });
+
+      updateSessionStatus();
     },
   });
 }
@@ -487,6 +506,113 @@ function setupSessionControls() {
 
   const clearStorageButton = document.getElementById("clear-storage-btn");
   clearStorageButton?.addEventListener("click", handleClearStorage);
+
+  updateSessionStatus();
+}
+
+// Storage viewer functions
+function getStorageContents() {
+  try {
+    // Use the correct wagmi storage key format
+    const stored = localStorage.getItem(
+      `${WAGMI_STORAGE_PREFIX}${STORAGE_KEY}`,
+    );
+    return stored ? JSON.parse(stored) : null;
+  } catch (error) {
+    console.warn("Error reading storage:", error);
+    return null;
+  }
+}
+
+// Session status functions
+function updateSessionStatus() {
+  const storage = getStorageContents();
+  if (storage) {
+    try {
+      const data = typeof storage === "string" ? JSON.parse(storage) : storage;
+
+      // Check for expiration in the main data or nested authSessionState
+      let expirationDateMs = data.expirationDateMs;
+      if (!expirationDateMs && data.authSessionState) {
+        const sessionState =
+          typeof data.authSessionState === "string"
+            ? JSON.parse(data.authSessionState)
+            : data.authSessionState;
+        expirationDateMs = sessionState.expirationDateMs;
+      }
+
+      if (expirationDateMs) {
+        const expirationDate = new Date(expirationDateMs);
+        const isExpired = expirationDateMs < Date.now();
+        const timeUntilExpiry = Math.abs(expirationDateMs - Date.now());
+        const minutesUntilExpiry = Math.round(timeUntilExpiry / (1000 * 60));
+
+        const statusIcon = isExpired ? "🔴" : "🟢";
+        const statusText = isExpired ? "EXPIRED" : "ACTIVE";
+        const timeText = isExpired
+          ? `Expired ${minutesUntilExpiry} minutes ago`
+          : `Expires in ${minutesUntilExpiry} minutes`;
+
+        updateStatus(
+          "session-status",
+          `${statusIcon} Session: ${statusText} | ${timeText} | Expires: ${expirationDate.toLocaleString()}`,
+        );
+      } else {
+        updateStatus("session-status", "ℹ️ No active session");
+      }
+    } catch (error) {
+      updateStatus("session-status", "⚠️ Error reading session status");
+    }
+  } else {
+    updateStatus("session-status", "ℹ️ No stored session");
+  }
+}
+
+function updateStorageDisplay() {
+  const storageElement = document.getElementById("storage-display");
+  if (storageElement) {
+    const storage = getStorageContents();
+    if (storage) {
+      try {
+        // Ensure we have an object, not a string
+        const data =
+          typeof storage === "string" ? JSON.parse(storage) : storage;
+
+        // Handle double-serialized authSessionState for better display
+        const displayData = { ...data };
+        if (
+          displayData.authSessionState &&
+          typeof displayData.authSessionState === "string"
+        ) {
+          displayData.authSessionState = JSON.parse(
+            displayData.authSessionState,
+          );
+        }
+
+        const formattedJson = JSON.stringify(displayData, null, 2);
+        storageElement.innerHTML = `<pre>${formattedJson}</pre>`;
+      } catch (error) {
+        storageElement.innerHTML = `<pre>Error formatting storage: ${error}</pre>`;
+      }
+    } else {
+      storageElement.innerHTML = "<em>No stored session data</em>";
+    }
+  }
+}
+
+function handleViewStorage() {
+  updateStorageDisplay();
+  updateSessionStatus();
+  updateStatus("storage-status", "Storage contents updated");
+}
+
+function setupStorageViewer() {
+  const viewStorageBtn = document.getElementById("view-storage");
+
+  viewStorageBtn?.addEventListener("click", handleViewStorage);
+
+  // Initial display update
+  updateStorageDisplay();
 }
 
 function setupApp(element: HTMLDivElement) {
@@ -496,12 +622,17 @@ function setupApp(element: HTMLDivElement) {
   setupOauthAuth();
   setupWalletActions();
   setupSessionControls();
+  setupStorageViewer();
 
   // Handle OAuth redirect on page load
   handleOauthRedirectOnLoad();
 
-  // Attempt to reconnect on app start
-  reconnect(config).catch(() => {
-    // Ignore reconnection errors on startup
-  });
+  // Attempt graceful reconnection on page load
+  setTimeout(async () => {
+    try {
+      await reconnect(config);
+    } catch (error) {
+      // Silent fail - no existing session to reconnect
+    }
+  }, 100);
 }

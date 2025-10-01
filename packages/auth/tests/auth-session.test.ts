@@ -1,5 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { AuthSession } from "../src/authSession.js";
+import {
+  AuthSession,
+  DEFAULT_SESSION_EXPIRATION_MS,
+} from "../src/authSession.js";
 import type { User, TurnkeyStamper } from "../src/types.js";
 import type { AlchemyRestClient } from "@alchemy/common";
 import type { SignerHttpSchema } from "@alchemy/aa-infra";
@@ -82,9 +85,9 @@ describe("AuthSession", () => {
         expirationDateMs: expect.any(Number),
       });
 
-      // Verify expiration is ~24 hours from now
+      // Verify expiration is ~15 minutes from now
       const now = Date.now();
-      const expectedExpiration = now + 24 * 60 * 60 * 1000;
+      const expectedExpiration = now + DEFAULT_SESSION_EXPIRATION_MS;
       expect(parsedState.expirationDateMs).toBeGreaterThan(now);
       expect(parsedState.expirationDateMs).toBeLessThanOrEqual(
         expectedExpiration + 1000,
@@ -160,6 +163,28 @@ describe("AuthSession", () => {
       expect(() => authSession.getSerializedState()).toThrow(
         "Bundle is required for non-passkey authentication types",
       );
+    });
+  });
+
+  describe("default expiration", () => {
+    it("should use DEFAULT_SESSION_EXPIRATION_MS constant for default expiration", async () => {
+      const now = Date.now();
+      const authSession = await AuthSession.create({
+        signerHttpClient: mockSignerHttpClient,
+        stamper: mockTurnkeyStamper,
+        orgId: mockUser.orgId,
+        idToken: mockUser.idToken,
+        bundle: "test-bundle",
+        authType: "otp",
+        // No expirationDateMs provided - should use default
+      });
+
+      const actualExpiration = authSession.getExpirationDateMs();
+      const expectedExpiration = now + DEFAULT_SESSION_EXPIRATION_MS;
+
+      expect(DEFAULT_SESSION_EXPIRATION_MS).toBe(15 * 60 * 1000);
+      expect(actualExpiration).toBeGreaterThan(now);
+      expect(actualExpiration).toBeLessThanOrEqual(expectedExpiration + 1000); // 1s tolerance
     });
   });
 });
