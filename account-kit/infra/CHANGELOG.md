@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.66.3](https://github.com/alchemyplatform/aa-sdk/compare/v4.66.2...v4.66.3) (2025-10-01)
+
+**Note:** Version bump only for package @account-kit/infra
+
+## [4.66.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.66.1...v4.66.2) (2025-09-30)
+
+### Bug Fixes
+
+- prevent useSmartWalletClient infinite render loop if address is specified while client loading ([#2146](https://github.com/alchemyplatform/aa-sdk/issues/2146)) ([6015e46](https://github.com/alchemyplatform/aa-sdk/commit/6015e4623617bc59a2795711de9b33a20b141de2))
+
 ## [4.66.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.66.0...v4.66.1) (2025-09-29)
 
 **Note:** Version bump only for package @account-kit/infra
