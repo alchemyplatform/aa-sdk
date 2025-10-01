@@ -5,7 +5,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 ## Setup your Environment
 
 1. Ensure you have the right node version corresponding to the `/aa-sdk/.nvmrc` file.
-2. Go to Alchemy's Dashboard, and set up an [account config](https://dashboard.alchemy.com/accounts/config/create).
+2. Go to Alchemy's Dashboard, and enable [smart wallets](https://dashboard.alchemy.com/apps/latest/services/smart-wallets/overview) on your app.
    1. For local development set the configuration with a redirect url to http://localhost:3000.
 
 ## Install Dependencies
