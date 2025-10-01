@@ -238,7 +238,9 @@ export async function createMAv2Base<
     );
 
   const isAccountDeployed: () => Promise<boolean> = async () => {
-    const code = await client.getCode({ address: accountAddress });
+    const code = (
+      await client.getCode({ address: accountAddress })
+    )?.toLowerCase();
     const is7702Delegated = code?.startsWith("0xef0100");
 
     if (!is7702Delegated) {
@@ -257,7 +259,7 @@ export async function createMAv2Base<
     const expectedCode = concatHex([
       "0xef0100",
       await config.getImplementationAddress(),
-    ]);
+    ]).toLowerCase();
     return code === expectedCode;
   };
 
