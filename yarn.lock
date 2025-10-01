@@ -3081,8 +3081,6 @@
   resolved "https://registry.yarnpkg.com/@floating-ui/utils/-/utils-0.2.9.tgz#50dea3616bc8191fb8e112283b49eaff03e78429"
   integrity sha512-MDWhGtE+eHw5JW7lq4qhc5yRLS11ERl1c7Z6Xd0a58DozHES6EnNNwUWbMiG4J9Cgj053Bhk8zvlhFYKVhULwg==
 
-<<<<<<< HEAD
-=======
 "@fractalwagmi/popup-connection@^1.0.18":
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/@fractalwagmi/popup-connection/-/popup-connection-1.1.1.tgz#2dfff4f3bb89d17947adae597f355faf46c194a9"
@@ -3097,7 +3095,6 @@
     "@solana/wallet-adapter-base" "^0.9.17"
     bs58 "^5.0.0"
 
->>>>>>> moldy/v5-base
 "@gemini-wallet/core@0.2.0":
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/@gemini-wallet/core/-/core-0.2.0.tgz#6d7c82614d811f7f23b4018808684a39e0dd111f"
@@ -3779,8 +3776,6 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
-<<<<<<< HEAD
-=======
 "@keystonehq/alias-sampling@^0.1.1":
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/@keystonehq/alias-sampling/-/alias-sampling-0.1.2.tgz#63af931ffe6500aef4c0d87775a5b279189abf8d"
@@ -3876,7 +3871,6 @@
   resolved "https://registry.yarnpkg.com/@ledgerhq/logs/-/logs-6.13.0.tgz#0b083af64b6b85db0630c7b940a0ed74ff6262b6"
   integrity sha512-4+qRW2Pc8V+btL0QEmdB2X+uyx0kOWMWE1/LWsq5sZy3Q5tpi4eItJS6mB0XL3wGW59RQ+8bchNQQ1OW/va8Og==
 
->>>>>>> moldy/v5-base
 "@lerna/create@8.2.2":
   version "8.2.2"
   resolved "https://registry.yarnpkg.com/@lerna/create/-/create-8.2.2.tgz#4c62f57eb74d335f908132dcc01828e53e6515bd"
@@ -4750,8 +4744,6 @@
   dependencies:
     "@noble/hashes" "1.7.2"
 
-<<<<<<< HEAD
-=======
 "@noble/curves@1.9.0":
   version "1.9.0"
   resolved "https://registry.yarnpkg.com/@noble/curves/-/curves-1.9.0.tgz#13e0ca8be4a0ce66c113693a94514e5599f40cfc"
@@ -4759,7 +4751,6 @@
   dependencies:
     "@noble/hashes" "1.8.0"
 
->>>>>>> moldy/v5-base
 "@noble/curves@1.9.1", "@noble/curves@^1.0.0", "@noble/curves@^1.3.0", "@noble/curves@^1.4.0", "@noble/curves@^1.4.2", "@noble/curves@^1.6.0", "@noble/curves@^1.8.1", "@noble/curves@^1.9.1", "@noble/curves@~1.9.0":
   version "1.9.1"
   resolved "https://registry.yarnpkg.com/@noble/curves/-/curves-1.9.1.tgz#9654a0bc6c13420ae252ddcf975eaf0f58f0a35c"
@@ -6394,8 +6385,6 @@
     dayjs "1.11.13"
     viem ">=2.29.0"
 
-<<<<<<< HEAD
-=======
 "@reown/appkit-controllers@1.7.2":
   version "1.7.2"
   resolved "https://registry.yarnpkg.com/@reown/appkit-controllers/-/appkit-controllers-1.7.2.tgz#d3e5a22716d4273147d7309f4e0d4fbc8dddc64b"
@@ -6407,7 +6396,6 @@
     valtio "1.13.2"
     viem ">=2.23.11"
 
->>>>>>> moldy/v5-base
 "@reown/appkit-controllers@1.7.3":
   version "1.7.3"
   resolved "https://registry.yarnpkg.com/@reown/appkit-controllers/-/appkit-controllers-1.7.3.tgz#9137763b7bb3a95baf41741863d1da92d4e3bd95"
@@ -6442,8 +6430,6 @@
     lit "3.3.0"
     valtio "1.13.2"
 
-<<<<<<< HEAD
-=======
 "@reown/appkit-polyfills@1.7.2":
   version "1.7.2"
   resolved "https://registry.yarnpkg.com/@reown/appkit-polyfills/-/appkit-polyfills-1.7.2.tgz#8be1bc5b6cb1b87785c844524aecba443724104b"
@@ -6451,7 +6437,6 @@
   dependencies:
     buffer "6.0.3"
 
->>>>>>> moldy/v5-base
 "@reown/appkit-polyfills@1.7.3":
   version "1.7.3"
   resolved "https://registry.yarnpkg.com/@reown/appkit-polyfills/-/appkit-polyfills-1.7.3.tgz#21895ed9521edd81898b10de16505708b05463f2"
@@ -6466,8 +6451,6 @@
   dependencies:
     buffer "6.0.3"
 
-<<<<<<< HEAD
-=======
 "@reown/appkit-scaffold-ui@1.7.2":
   version "1.7.2"
   resolved "https://registry.yarnpkg.com/@reown/appkit-scaffold-ui/-/appkit-scaffold-ui-1.7.2.tgz#485758b89f141a2a5ec458583f71c4215141b627"
@@ -6480,7 +6463,6 @@
     "@reown/appkit-wallet" "1.7.2"
     lit "3.1.0"
 
->>>>>>> moldy/v5-base
 "@reown/appkit-scaffold-ui@1.7.3":
   version "1.7.3"
   resolved "https://registry.yarnpkg.com/@reown/appkit-scaffold-ui/-/appkit-scaffold-ui-1.7.3.tgz#ea966de3ab3f992c6a8ffa408eb53906a87986f6"
@@ -6505,8 +6487,6 @@
     "@reown/appkit-wallet" "1.7.8"
     lit "3.3.0"
 
-<<<<<<< HEAD
-=======
 "@reown/appkit-ui@1.7.2":
   version "1.7.2"
   resolved "https://registry.yarnpkg.com/@reown/appkit-ui/-/appkit-ui-1.7.2.tgz#80e3bfaa6735298184d11f66860a996caa82a948"
@@ -6518,7 +6498,6 @@
     lit "3.1.0"
     qrcode "1.5.3"
 
->>>>>>> moldy/v5-base
 "@reown/appkit-ui@1.7.3":
   version "1.7.3"
   resolved "https://registry.yarnpkg.com/@reown/appkit-ui/-/appkit-ui-1.7.3.tgz#a51e7397922b4ace20e991e38989065f951c3d22"
@@ -6541,8 +6520,6 @@
     lit "3.3.0"
     qrcode "1.5.3"
 
-<<<<<<< HEAD
-=======
 "@reown/appkit-utils@1.7.2":
   version "1.7.2"
   resolved "https://registry.yarnpkg.com/@reown/appkit-utils/-/appkit-utils-1.7.2.tgz#d3255d2ee876ce05d0c13cd082627beb72620e3d"
@@ -6557,7 +6534,6 @@
     valtio "1.13.2"
     viem ">=2.23.11"
 
->>>>>>> moldy/v5-base
 "@reown/appkit-utils@1.7.3":
   version "1.7.3"
   resolved "https://registry.yarnpkg.com/@reown/appkit-utils/-/appkit-utils-1.7.3.tgz#65fbd8748cae8946e069907c3f893dc6cc97452a"
@@ -6586,8 +6562,6 @@
     valtio "1.13.2"
     viem ">=2.29.0"
 
-<<<<<<< HEAD
-=======
 "@reown/appkit-wallet@1.7.2":
   version "1.7.2"
   resolved "https://registry.yarnpkg.com/@reown/appkit-wallet/-/appkit-wallet-1.7.2.tgz#02fce896c78ed83ea575256306396a42c58ec646"
@@ -6598,7 +6572,6 @@
     "@walletconnect/logger" "2.1.2"
     zod "3.22.4"
 
->>>>>>> moldy/v5-base
 "@reown/appkit-wallet@1.7.3":
   version "1.7.3"
   resolved "https://registry.yarnpkg.com/@reown/appkit-wallet/-/appkit-wallet-1.7.3.tgz#77730d4457302eca7c20d696926c670197d42551"
@@ -6619,8 +6592,6 @@
     "@walletconnect/logger" "2.1.2"
     zod "3.22.4"
 
-<<<<<<< HEAD
-=======
 "@reown/appkit@1.7.2":
   version "1.7.2"
   resolved "https://registry.yarnpkg.com/@reown/appkit/-/appkit-1.7.2.tgz#71b253fc4bee5579bc720cbcb63c8f037a9ba4c8"
@@ -6639,7 +6610,6 @@
     valtio "1.13.2"
     viem ">=2.23.11"
 
->>>>>>> moldy/v5-base
 "@reown/appkit@1.7.3":
   version "1.7.3"
   resolved "https://registry.yarnpkg.com/@reown/appkit/-/appkit-1.7.3.tgz#3d50f098ef305cf8ab59141e66ef47c316bb5f3a"
@@ -6662,28 +6632,6 @@
   version "1.7.8"
   resolved "https://registry.yarnpkg.com/@reown/appkit/-/appkit-1.7.8.tgz#6174bca032a4a2bf4fcfc78969e09210dff85214"
   integrity sha512-51kTleozhA618T1UvMghkhKfaPcc9JlKwLJ5uV+riHyvSoWPKPRIa5A6M1Wano5puNyW0s3fwywhyqTHSilkaA==
-<<<<<<< HEAD
-  dependencies:
-    "@reown/appkit-common" "1.7.8"
-    "@reown/appkit-controllers" "1.7.8"
-    "@reown/appkit-pay" "1.7.8"
-    "@reown/appkit-polyfills" "1.7.8"
-    "@reown/appkit-scaffold-ui" "1.7.8"
-    "@reown/appkit-ui" "1.7.8"
-    "@reown/appkit-utils" "1.7.8"
-    "@reown/appkit-wallet" "1.7.8"
-    "@walletconnect/types" "2.21.0"
-    "@walletconnect/universal-provider" "2.21.0"
-    bs58 "6.0.0"
-    valtio "1.13.2"
-    viem ">=2.29.0"
-
-"@rollup/pluginutils@^5.0.2":
-  version "5.1.4"
-  resolved "https://registry.yarnpkg.com/@rollup/pluginutils/-/pluginutils-5.1.4.tgz#bb94f1f9eaaac944da237767cdfee6c5b2262d4a"
-  integrity sha512-USm05zrsFxYLPdWWq+K3STlWiT/3ELn3RcV5hJMghpeAIhxfsUIg6mt12CBJBInWMV4VneoV7SfGv8xIwo2qNQ==
-=======
->>>>>>> moldy/v5-base
   dependencies:
     "@reown/appkit-common" "1.7.8"
     "@reown/appkit-controllers" "1.7.8"
@@ -10876,8 +10824,6 @@
     "@walletconnect/types" "2.21.1"
     "@walletconnect/utils" "2.21.1"
     events "3.3.0"
-<<<<<<< HEAD
-=======
 
 "@walletconnect/solana-adapter@^0.0.8":
   version "0.0.8"
@@ -10888,7 +10834,6 @@
     "@walletconnect/universal-provider" "2.19.0"
     "@walletconnect/utils" "2.19.0"
     bs58 "6.0.0"
->>>>>>> moldy/v5-base
 
 "@walletconnect/time@1.0.2", "@walletconnect/time@^1.0.2":
   version "1.0.2"
@@ -15428,7 +15373,7 @@ eventemitter3@5.0.1, eventemitter3@^5.0.1:
   resolved "https://registry.yarnpkg.com/eventemitter3/-/eventemitter3-5.0.1.tgz#53f5ffd0a492ac800721bb42c66b841de96423c4"
   integrity sha512-GWkBvjiSZK87ELrYOSESUYeVIc9mvLLf/nXalMOS5dYrgZq9o5OVkbZAVM06CVxYsCwH9BDZFPlQTlPA1j4ahA==
 
-eventemitter3@^4.0.0, eventemitter3@^4.0.4:
+eventemitter3@^4.0.0, eventemitter3@^4.0.4, eventemitter3@^4.0.7:
   version "4.0.7"
   resolved "https://registry.yarnpkg.com/eventemitter3/-/eventemitter3-4.0.7.tgz#2de9b68f6528d5644ef5c59526a1b4a07306169f"
   integrity sha512-8guHBZCwKnFhYdHr2ysuRWErTwhoN2X8XELRlrRwpmfeY2jjuUN4taQMsULKUVo1K4DvZl+0pgfyoysHxvmvEw==
@@ -16728,15 +16673,9 @@ hoist-non-react-statics@^3.3.0:
     react-is "^16.7.0"
 
 hono@^4.9.6:
-<<<<<<< HEAD
-  version "4.9.8"
-  resolved "https://registry.yarnpkg.com/hono/-/hono-4.9.8.tgz#1710981135ec775fe26fab5ea6535b403e92bcc3"
-  integrity sha512-JW8Bb4RFWD9iOKxg5PbUarBYGM99IcxFl2FPBo2gSJO11jjUDqlP1Bmfyqt8Z/dGhIQ63PMA9LdcLefXyIasyg==
-=======
   version "4.9.9"
   resolved "https://registry.yarnpkg.com/hono/-/hono-4.9.9.tgz#a32ee02a5a9c4be8e7f4d48e4e181e738a1d65d7"
   integrity sha512-Hxw4wT6zjJGZJdkJzAx9PyBdf7ZpxaTSA0NfxqjLghwMrLBX8p33hJBzoETRakF3UJu6OdNQBZAlNSkGqKFukw==
->>>>>>> moldy/v5-base
 
 hosted-git-info@^2.1.4:
   version "2.8.9"
@@ -16880,8 +16819,6 @@ iconv-lite@0.6.3, iconv-lite@^0.6.2:
   dependencies:
     safer-buffer ">= 2.1.2 < 3.0.0"
 
-<<<<<<< HEAD
-=======
 iconv-lite@^0.4.24:
   version "0.4.24"
   resolved "https://registry.yarnpkg.com/iconv-lite/-/iconv-lite-0.4.24.tgz#2022b4b25fbddc21d2f524974a474aafe733908b"
@@ -16889,7 +16826,6 @@ iconv-lite@^0.4.24:
   dependencies:
     safer-buffer ">= 2.1.2 < 3"
 
->>>>>>> moldy/v5-base
 idb-keyval@6.2.1:
   version "6.2.1"
   resolved "https://registry.yarnpkg.com/idb-keyval/-/idb-keyval-6.2.1.tgz#94516d625346d16f56f3b33855da11bfded2db33"
@@ -22053,14 +21989,6 @@ qrcode@1.5.3:
     pngjs "^5.0.0"
     yargs "^15.3.1"
 
-<<<<<<< HEAD
-qs@6.13.0:
-  version "6.13.0"
-  resolved "https://registry.yarnpkg.com/qs/-/qs-6.13.0.tgz#6ca3bd58439f7e245655798997787b0d88a51906"
-  integrity sha512-+38qI9SOr8tfZ4QmJNplMUxqjbe7LKvvZgWdExBOmd+egZTtjLB67Gu0HRX3u/XOq7UU2Nx6nsjvS16Z9uwfpg==
-  dependencies:
-    side-channel "^1.0.6"
-=======
 qrcode@^1.5.4:
   version "1.5.4"
   resolved "https://registry.yarnpkg.com/qrcode/-/qrcode-1.5.4.tgz#5cb81d86eb57c675febb08cf007fff963405da88"
@@ -22069,7 +21997,6 @@ qrcode@^1.5.4:
     dijkstrajs "^1.0.1"
     pngjs "^5.0.0"
     yargs "^15.3.1"
->>>>>>> moldy/v5-base
 
 qs@^6.12.3:
   version "6.14.0"
@@ -25440,11 +25367,7 @@ vfile@^6.0.0, vfile@^6.0.3:
     "@types/unist" "^3.0.0"
     vfile-message "^4.0.0"
 
-<<<<<<< HEAD
-viem@2.23.2, viem@2.29.2, viem@2.x, viem@>=2.23.11, viem@>=2.29.0, viem@^2.1.1, viem@^2.21.40, viem@^2.27.2, viem@^2.31.7, viem@latest:
-=======
 viem@2.23.2, viem@2.29.2, viem@2.x, viem@>=2.23.11, viem@>=2.29.0, viem@^2.1.1, viem@^2.21.35, viem@^2.21.40, viem@^2.27.2, viem@^2.29.2, viem@^2.31.7, viem@latest:
->>>>>>> moldy/v5-base
   version "2.29.2"
   resolved "https://registry.yarnpkg.com/viem/-/viem-2.29.2.tgz#e3033f68d6baf95c412593b213865e91634ac35e"
   integrity sha512-cukRxab90jvQ+TDD84sU3qB3UmejYqgCw4cX8SfWzvh7JPfZXI3kAMUaT5OSR2As1Mgvx1EJawccwPjGqkSSwA==
