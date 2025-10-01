@@ -19,6 +19,10 @@ import {
   type PersistedAuthSession,
 } from "./store/authSessionStorage.js";
 
+/**
+ * Configuration options for the Alchemy Auth connector.
+ * Extends Alchemy Auth client parameters with connector-specific options.
+ */
 export interface AlchemyAuthOptions
   extends Pick<
     WebAuthClientParams,
@@ -35,27 +39,95 @@ export interface AlchemyAuthOptions
 alchemyAuth.type = "alchemy-auth" as const;
 
 /**
- * Creates the Alchemy Auth connector for Wagmi.
+ * Creates a Wagmi connector for Alchemy Auth, enabling email-based authentication
+ * with embedded wallet capabilities. This connector provides a seamless authentication
+ * experience using email OTP or OAuth, with automatic session management and persistence.
  *
- * This function returns a connector factory via Wagmi's `createConnector`.
+ * The connector supports:
+ * - Email OTP authentication
+ * - OAuth authentication flows
+ * - Automatic session persistence and restoration
+ * - Cross-tab synchronization
+ * - Multi-chain support
  *
- * Reference: Creating Connectors (Wagmi)
+ * @example
+ * Basic usage with API key:
+ * ```ts twoslash
+ * import { alchemyAuth } from "@alchemy/connectors-web";
+ * import { createConfig } from "wagmi";
  *
- * @see https://wagmi.sh/dev/creating-connectors
+ * const config = createConfig({
+ *   connectors: [
+ *     alchemyAuth({
+ *       apiKey: "your-api-key"
+ *     })
+ *   ]
+ * });
+ * ```
  *
- * @param {AlchemyAuthOptions} options - Configuration for the connector
+ * @example
+ * With custom iframe configuration:
+ * ```ts twoslash
+ * import { alchemyAuth } from "@alchemy/connectors-web";
+ *
+ * const connector = alchemyAuth({
+ *   apiKey: "your-api-key",
+ *   iframeElementId: "turnkey-iframe",
+ *   iframeContainerId: "turnkey-container"
+ * });
+ * ```
+ *
+ * @example
+ * With custom stamper factories:
+ * ```ts twoslash
+ * import { alchemyAuth } from "@alchemy/connectors-web";
+ *
+ * const connector = alchemyAuth({
+ *   apiKey: "your-api-key",
+ *   createWebAuthnStamper: (config) => customWebAuthnStamper(config),
+ *   createTekStamper: (config) => customTekStamper(config)
+ * });
+ * ```
+ *
+ * @param {AlchemyAuthOptions} options - Configuration options for the connector
  * @param {string} [options.apiKey] - API key for authentication with Alchemy services
  * @param {string} [options.iframeElementId] - Optional ID for the iframe element used by Turnkey stamper
  * @param {string} [options.iframeContainerId] - Optional ID for the container element that holds the iframe
- * @param {CreateTekStamperFn} [options.createTekStamper] - Optional custom TEK stamper factory for React Native
- * @param {CreateWebAuthnStamperFn} [options.createWebAuthnStamper] - Optional custom WebAuthn stamper factory for passkey authentication
- * @returns {CreateConnectorFn} A Wagmi connector factory compatible with `createConfig`.
+ * @param {Function} [options.createTekStamper] - Optional custom TEK stamper factory for React Native
+ * @param {Function} [options.createWebAuthnStamper] - Optional custom WebAuthn stamper factory for passkey authentication
+ * @returns {CreateConnectorFn} A Wagmi connector factory compatible with `createConfig`
+ *
+ * @see {@link https://wagmi.sh/dev/creating-connectors | Wagmi Creating Connectors Guide}
  */
 export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
   type Provider = EIP1193Provider;
+
+  /**
+   * Custom properties added to the connector for Alchemy Auth functionality.
+   * These methods extend the standard Wagmi connector interface.
+   */
   type Properties = {
+    /**
+     * Gets the underlying Alchemy Auth client instance.
+     *
+     * @returns {AuthClient} The auth client used by this connector
+     */
     getAuthClient(): AuthClient;
+
+    /**
+     * Gets the current authentication session.
+     *
+     * @returns {Promise<AuthSession>} Promise resolving to the current auth session
+     * @throws {Error} If no auth session is available
+     */
     getAuthSession(): Promise<AuthSession>;
+
+    /**
+     * Sets the authentication session after successful authentication.
+     * This method should be called after completing email OTP or OAuth flows.
+     *
+     * @param {AuthSession} authSession - The authenticated session to set
+     */
     setAuthSession(authSession: AuthSession): void;
   };
 
@@ -76,6 +148,7 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
   // rather than triggering multiple concurrent tryResume() calls.
   // Returns true if the session was restored successfully, false if it was not.
   let resumePromise: Promise<boolean> | undefined;
+
   return createConnector<Provider, Properties>((config) => {
     function assertNotNullish<T>(
       value: T,
@@ -384,12 +457,20 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
         // In a full implementation, we might need to update internal state
         if (accounts.length === 0) {
           await this.disconnect();
+        } else {
+          config.emitter.emit("change", {
+            accounts: accounts as readonly Address[],
+          });
         }
       },
 
-      onChainChanged(chainId) {
+      async onChainChanged(chainId) {
         // Update the current chain ID when chain changes
         currentChainId = parseInt(chainId, 16);
+        config.emitter.emit("change", {
+          chainId: currentChainId,
+          accounts: await this.getAccounts(),
+        });
       },
 
       async onConnect(connectInfo) {

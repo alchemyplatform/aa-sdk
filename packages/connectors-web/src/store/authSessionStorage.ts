@@ -1,7 +1,11 @@
 import type { Storage } from "@wagmi/core";
 import { z } from "zod";
 
-// Persistence types - treat auth session state as opaque blob
+/**
+ * Persisted authentication session data stored in Wagmi storage.
+ * The auth session state is treated as an opaque serialized blob,
+ * with its contents managed by the auth package.
+ */
 export type PersistedAuthSession = {
   /** Version for migration handling */
   version: 1;
@@ -27,7 +31,13 @@ function isPersistedAuthSession(obj: unknown): obj is PersistedAuthSession {
   return result.success;
 }
 
-// Type-safe storage helpers
+/**
+ * Retrieves the persisted auth session from Wagmi storage.
+ * Validates the stored data structure and automatically cleans up invalid data.
+ *
+ * @param {Storage | null | undefined} storage - Wagmi storage instance
+ * @returns {Promise<PersistedAuthSession | null>} The persisted session if valid, otherwise null
+ */
 export async function getStoredAuthSession(
   storage: Storage | null | undefined,
 ): Promise<PersistedAuthSession | null> {
@@ -62,6 +72,14 @@ export async function getStoredAuthSession(
   }
 }
 
+/**
+ * Persists an auth session to Wagmi storage.
+ * Validates the session data structure before storing.
+ *
+ * @param {Storage | null | undefined} storage - Wagmi storage instance
+ * @param {PersistedAuthSession} session - The session data to persist
+ * @returns {Promise<boolean>} True if successfully stored, false otherwise
+ */
 export async function setStoredAuthSession(
   storage: Storage | null | undefined,
   session: PersistedAuthSession,
@@ -85,6 +103,13 @@ export async function setStoredAuthSession(
   }
 }
 
+/**
+ * Clears the persisted auth session from Wagmi storage.
+ * Called during logout or when session restoration fails.
+ *
+ * @param {Storage | null | undefined} storage - Wagmi storage instance
+ * @returns {Promise<void>}
+ */
 export async function clearStoredAuthSession(
   storage: Storage | null | undefined,
 ): Promise<void> {
