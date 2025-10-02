@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.66.4](https://github.com/alchemyplatform/aa-sdk/compare/v4.66.3...v4.66.4) (2025-10-01)
+
+**Note:** Version bump only for package @account-kit/core
+
 ## [4.66.3](https://github.com/alchemyplatform/aa-sdk/compare/v4.66.2...v4.66.3) (2025-10-01)
 
 **Note:** Version bump only for package @account-kit/core
