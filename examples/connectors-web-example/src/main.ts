@@ -19,7 +19,6 @@ import {
   sendCalls,
 } from "@wagmi/core";
 import { config } from "./wagmi.js";
-import { testSmartWalletWithConnectorClient } from "./send-calls.js";
 import "./style.css";
 import { zeroAddress } from "viem";
 
