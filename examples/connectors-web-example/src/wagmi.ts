@@ -11,7 +11,11 @@ const transport = alchemyTransport({ apiKey });
 export const config: Config = createConfig({
   chains: [arbitrumSepolia, mainnet, sepolia],
   connectors: [
-    alchemySmartWallet({ ownerConnector: alchemyAuth({ apiKey }), apiKey }),
+    alchemySmartWallet({
+      ownerConnector: alchemyAuth({ apiKey }),
+      apiKey,
+      policyId: import.meta.env.VITE_PAYMASTER_POLICY_ID,
+    }),
     injected(),
     baseAccount(),
     walletConnect({ projectId: import.meta.env.VITE_WC_PROJECT_ID }),
