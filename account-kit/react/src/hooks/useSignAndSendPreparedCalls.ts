@@ -55,7 +55,7 @@ export type UseSignAndSendPreparedCallsResult = {
  * It handles both the signing and sending of prepared calls in a single operation, and does not support EOA wallets.
  *
  * @param {UseSignAndSendPreparedCallsParams} params - Configuration parameters for the hook
- * @param {GetSmartWalletClientResult<Address>} [params.client] - Smart wallet client instance
+ * @param {UseSmartAccountClientResult["client"]} [params.client] - Smart account client instance
  *
  * @returns {UseSignAndSendPreparedCallsResult} An object containing:
  * - `signAndSendPreparedCalls`: Function to sign and send prepared calls synchronously (returns void)

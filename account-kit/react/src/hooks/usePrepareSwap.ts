@@ -54,7 +54,7 @@ export type UsePrepareSwapResult = {
  * This hook provides functionality to request swap quotes for token swaps.
  *
  * @param {UsePrepareSwapParams} params - Configuration parameters for the hook
- * @param {GetSmartWalletClientResult<Address>} [params.client] - Smart wallet client instance
+ * @param {UseSmartAccountClientResult["client"]} [params.client] - Smart account client instance
  *
  * @returns {UsePrepareSwapResult} An object containing:
  * - `prepareSwap`: Function to request quote and prepare the swap synchronously
