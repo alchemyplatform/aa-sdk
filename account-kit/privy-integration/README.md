@@ -1,0 +1,353 @@
+# @account-kit/privy-integration
+
+Add gas sponsorship and smart wallet features to your Privy app in under 5 minutes.
+
+## What This Package Does
+
+If you're already using [Privy](https://privy.io) for authentication, this package lets you upgrade your users' wallets with:
+
+- **🔄 EIP-7702 Delegation** - Upgrade EOAs to smart accounts without migration
+- **⛽ Gas Sponsorship** - Pay gas fees for your users via Alchemy Gas Manager
+- **💱 Token Swaps** - Execute swaps through Alchemy's swap infrastructure
+- **🚀 Batched Transactions** - Send multiple operations in a single transaction
+
+All while keeping Privy as your authentication provider. No need to change your auth flow or migrate user accounts.
+
+## Why Use This?
+
+**Already using Privy?** Add smart account features without changing your existing setup:
+
+- Drop-in React hooks that replace Privy's transaction hooks
+- Automatic EIP-7702 delegation to upgrade wallets on-the-fly
+- Route transactions through Alchemy's infrastructure for sponsorship and reliability
+
+## Installation
+
+```bash
+npm install @account-kit/privy-integration
+# or
+yarn add @account-kit/privy-integration
+# or
+pnpm add @account-kit/privy-integration
+```
+
+## Quick Start
+
+### 1. Wrap Your App with Both Providers
+
+```tsx
+import { PrivyProvider } from "@privy-io/react-auth";
+import { AlchemyProvider } from "@account-kit/privy-integration";
+
+function App() {
+  return (
+    <AlchemyProvider
+      apiKey="your-alchemy-api-key"
+      policyId="your-gas-policy-id" // optional, for gas sponsorship
+    >
+      <PrivyProvider
+        appId="your-privy-app-id"
+        config={
+          {
+            /* your privy config */
+          }
+        }
+      >
+        <YourApp />
+      </PrivyProvider>
+    </AlchemyProvider>
+  );
+}
+```
+
+### 2. Send Gasless Transactions
+
+```tsx
+import { useAlchemySendTransaction } from "@account-kit/privy-integration";
+
+function SendButton() {
+  const { sendTransaction, isLoading, error, data } =
+    useAlchemySendTransaction();
+
+  const handleSend = async () => {
+    try {
+      const result = await sendTransaction({
+        to: "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
+        data: "0x...",
+        value: "1000000000000000000", // 1 ETH
+      });
+
+      console.log("Transaction hash:", result.txnHash);
+    } catch (err) {
+      console.error("Transaction failed:", err);
+    }
+  };
+
+  return (
+    <button onClick={handleSend} disabled={isLoading}>
+      {isLoading ? "Sending..." : "Send Transaction"}
+    </button>
+  );
+}
+```
+
+### 3. Execute Token Swaps
+
+```tsx
+import {
+  useAlchemyPrepareSwap,
+  useAlchemySubmitSwap,
+} from "@account-kit/privy-integration";
+
+function SwapButton() {
+  const { prepareSwap } = useAlchemyPrepareSwap();
+  const { submitSwap, isLoading } = useAlchemySubmitSwap();
+
+  const handleSwap = async () => {
+    try {
+      // Step 1: Get quote and prepare swap
+      const { preparedCalls, quote } = await prepareSwap({
+        fromToken: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", // USDC
+        toToken: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE", // ETH
+        minimumToAmount: "0x0de0b6b3a7640000", // 1 ETH minimum
+      });
+
+      console.log("Quote expiry:", new Date(parseInt(quote.expiry) * 1000));
+
+      // Step 2: Execute swap
+      const result = await submitSwap(preparedCalls);
+      console.log("Swap confirmed:", result.txnHash);
+    } catch (err) {
+      console.error("Swap failed:", err);
+    }
+  };
+
+  return (
+    <button onClick={handleSwap} disabled={isLoading}>
+      {isLoading ? "Swapping..." : "Swap Tokens"}
+    </button>
+  );
+}
+```
+
+## Configuration
+
+### AlchemyProvider Props
+
+| Prop               | Type                 | Required      | Description                                            |
+| ------------------ | -------------------- | ------------- | ------------------------------------------------------ |
+| `apiKey`           | `string`             | Conditional\* | Your Alchemy API key for @account-kit/infra transport  |
+| `jwt`              | `string`             | Conditional\* | JWT token for authentication (alternative to `apiKey`) |
+| `url`              | `string`             | Conditional\* | Custom RPC URL (alternative to `apiKey` or `jwt`)      |
+| `policyId`         | `string \| string[]` | No            | Gas Manager policy ID(s) for sponsorship               |
+| `defaultSponsored` | `boolean`            | No            | Default: `true`. Enable/disable sponsorship by default |
+
+\* At least one of `apiKey`, `jwt`, or `url` is required.
+
+### Transaction Options
+
+Control sponsorship per transaction:
+
+```tsx
+// Sponsored transaction (uses Gas Manager policy)
+await sendTransaction({ to: "0x...", data: "0x..." }, { sponsored: true });
+
+// User-paid transaction
+await sendTransaction({ to: "0x...", data: "0x..." }, { sponsored: false });
+```
+
+## API Reference
+
+### Hooks
+
+#### `useAlchemySendTransaction()`
+
+Send transactions with optional gas sponsorship.
+
+**Returns:**
+
+- `sendTransaction(input, options?)` - Send a transaction
+- `isLoading` - Loading state
+- `error` - Error object if failed
+- `data` - Transaction result with `txnHash`
+- `reset()` - Reset hook state
+
+#### `useAlchemyPrepareSwap()`
+
+Request swap quotes and prepare swap calls.
+
+**Returns:**
+
+- `prepareSwap(request)` - Get quote and prepare swap
+- `isLoading` - Loading state
+- `error` - Error object if failed
+- `data` - Prepared swap with `quote` and `preparedCalls`
+- `reset()` - Reset hook state
+
+#### `useAlchemySubmitSwap()`
+
+Sign and submit prepared swap calls.
+
+**Returns:**
+
+- `submitSwap(preparedCalls)` - Execute prepared swap
+- `isLoading` - Loading state
+- `error` - Error object if failed
+- `data` - Swap result with `txnHash`
+- `reset()` - Reset hook state
+
+#### `useAlchemyClient()`
+
+Get the underlying smart wallet client (advanced use cases).
+
+**Returns:**
+
+- `client()` - Async function that returns `SmartWalletClient`
+
+## How It Works
+
+### EIP-7702 Delegation
+
+This package uses [EIP-7702](https://eips.ethereum.org/EIPS/eip-7702) to upgrade your users' Privy wallets into smart accounts **without requiring them to deploy new contracts or migrate funds**.
+
+When a user sends their first transaction:
+
+1. Their EOA signs an EIP-7702 authorization
+2. The authorization delegates to Alchemy's smart account implementation
+3. The transaction is executed with smart account features (batching, sponsorship, etc.)
+4. Gas is optionally sponsored by your Gas Manager policy
+
+### Smart Wallet Client
+
+Under the hood, this package:
+
+1. Connects to your user's Privy embedded wallet
+2. Wraps it with `WalletClientSigner` from `@aa-sdk/core`
+3. Creates a `SmartWalletClient` with EIP-7702 support
+4. Routes transactions through Alchemy infrastructure
+5. Automatically handles sponsorship via Gas Manager policies
+
+## Get Your API Keys
+
+### Alchemy API Key
+
+1. Go to [Alchemy Dashboard](https://dashboard.alchemy.com/)
+2. Create or select an app
+3. Copy your API key
+
+### Gas Manager Policy ID (Optional)
+
+1. Go to [Gas Manager](https://dashboard.alchemy.com/gas-manager)
+2. Create a new policy with your desired rules
+3. Copy the policy ID
+
+### Privy App ID
+
+1. Go to [Privy Dashboard](https://dashboard.privy.io/)
+2. Create or select an app
+3. Copy your app ID
+
+## Migration from Privy Transactions
+
+If you're currently using Privy's `useSendTransaction` hook:
+
+### Before
+
+```tsx
+import { useSendTransaction } from "@privy-io/react-auth";
+
+const { sendTransaction } = useSendTransaction({
+  onSuccess: (txHash) => console.log(txHash),
+});
+```
+
+### After
+
+```tsx
+import { useAlchemySendTransaction } from "@account-kit/privy-integration";
+
+const { sendTransaction, data } = useAlchemySendTransaction();
+
+// Now with gas sponsorship!
+```
+
+The API is nearly identical, making migration seamless.
+
+## Advanced Usage
+
+### Access the Smart Wallet Client
+
+For advanced use cases, access the underlying client:
+
+```tsx
+import { useAlchemyClient } from "@account-kit/privy-integration";
+
+function AdvancedComponent() {
+  const { client: getClient } = useAlchemyClient();
+
+  const doAdvancedOperation = async () => {
+    const client = await getClient();
+
+    // Use any SmartWalletClient method
+    const address = await client.getAddress();
+
+    // Batch multiple calls
+    await client.sendCalls({
+      from: address,
+      calls: [
+        { to: "0x...", data: "0x..." },
+        { to: "0x...", data: "0x..." },
+      ],
+      capabilities: {
+        eip7702Auth: true,
+        paymasterService: { policyId: "your-policy-id" },
+      },
+    });
+  };
+
+  return <button onClick={doAdvancedOperation}>Advanced Op</button>;
+}
+```
+
+## Troubleshooting
+
+### "AlchemyProvider requires at least one of: apiKey, jwt, or url"
+
+Ensure you've passed at least one transport configuration option to `<AlchemyProvider>`.
+
+### Swaps failing with "Received raw calls"
+
+The swap API should return prepared calls by default. This error means the API returned raw calls. Ensure you're not setting `returnRawCalls: true` in the request.
+
+### Cache issues after logout
+
+The client cache automatically clears on logout and wallet changes. If you need manual control:
+
+```tsx
+import { resetClientCache } from "@account-kit/privy-integration";
+
+// Manually reset (rarely needed)
+resetClientCache();
+```
+
+## Examples
+
+Check out the [`examples/`](../../examples/) directory for complete applications:
+
+- **Privy Integration Demo** - Advanced patterns and use cases
+
+## Resources
+
+- [Alchemy Smart Wallet Documentation](https://www.alchemy.com/docs/wallets/)
+- [EIP-7702 Specification](https://eips.ethereum.org/EIPS/eip-7702)
+- [Gas Manager Dashboard](https://dashboard.alchemy.com/services/gas-manager/overview)
+
+## Support
+
+- [Discord](https://discord.gg/alchemy)
+- [GitHub Issues](https://github.com/alchemyplatform/aa-sdk/issues)
+- [Alchemy Support](https://www.alchemy.com/support)
+
+## License
+
+MIT
