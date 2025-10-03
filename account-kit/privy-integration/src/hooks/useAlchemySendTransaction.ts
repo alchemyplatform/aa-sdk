@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 import { useWallets } from "@privy-io/react-auth";
-import { type Address, toHex } from "viem";
+import { type Address, type Hex, isHex } from "viem";
 import { useAlchemyClient } from "./useAlchemyClient.js";
 import { useAlchemyConfig } from "../Provider.js";
 import type {
@@ -9,6 +9,27 @@ import type {
   SendTransactionResult,
   UseSendTransactionResult,
 } from "../types";
+
+/**
+ * Normalize value to hex format
+ * Accepts bigint, number, decimal string, or hex string
+ *
+ * @param {string | number | bigint} value - Value to normalize
+ * @returns {Hex} Hex string representation of the value
+ */
+function normalizeValue(value: string | number | bigint): Hex {
+  if (typeof value === "bigint") {
+    return `0x${value.toString(16)}`;
+  }
+  if (typeof value === "number") {
+    return `0x${BigInt(value).toString(16)}`;
+  }
+  if (isHex(value)) {
+    return value;
+  }
+  // Assume decimal string
+  return `0x${BigInt(value).toString(16)}`;
+}
 
 /**
  * Hook to send transactions with optional gas sponsorship via Alchemy
@@ -75,7 +96,7 @@ export function useAlchemySendTransaction(): UseSendTransactionResult {
         const formattedCall = {
           to: input.to,
           data: input.data,
-          value: input.value ? toHex(input.value) : undefined,
+          value: input.value ? normalizeValue(input.value) : undefined,
         };
 
         // Build capabilities based on sponsorship

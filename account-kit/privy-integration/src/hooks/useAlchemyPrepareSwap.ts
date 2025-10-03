@@ -29,7 +29,7 @@ import type {
  *       minimumToAmount: '0x...',
  *     });
  *     console.log('Quote:', result.quote);
- *     console.log('Expiry:', new Date(result.quote.expiry * 1000));
+ *     console.log('Expiry:', new Date(parseInt(result.quote.expiry, 16) * 1000));
  *
  *     // Pass result.preparedCalls to submitSwap
  *   } catch (err) {
@@ -97,11 +97,11 @@ export function useAlchemyPrepareSwap(): UsePrepareSwapResult {
           capabilities,
         });
 
-        // Extract quote and calls
-        const { quote, ...calls } = response;
+        // Extract quote and prepared calls from response
+        const { quote, ...preparedCalls } = response;
 
         // Validate that we got prepared calls, not raw calls
-        if (calls.rawCalls) {
+        if (preparedCalls.rawCalls) {
           throw new Error(
             "Received raw calls instead of prepared calls. Ensure returnRawCalls is not set to true.",
           );
@@ -109,7 +109,7 @@ export function useAlchemyPrepareSwap(): UsePrepareSwapResult {
 
         const result: PrepareSwapResult = {
           quote,
-          preparedCalls: { quote, ...calls },
+          preparedCalls,
         };
 
         setData(result);

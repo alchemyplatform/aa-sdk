@@ -92,7 +92,7 @@ export interface PrepareSwapRequest {
   /** Token address to swap to (use "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE" for native token) */
   toToken: Address;
 
-  /** Minimum amount to receive (in wei/smallest unit) */
+  /** Minimum amount to receive in hex format (e.g., "0xde0b6b3a7640000" for 1 ETH in wei) */
   minimumToAmount: Hex;
 }
 
@@ -100,13 +100,13 @@ export interface PrepareSwapRequest {
  * Swap quote information from Alchemy's swap API
  */
 export interface SwapQuote {
-  /** Amount being swapped from */
+  /** Amount being swapped from (hex string) */
   fromAmount: Hex;
 
-  /** Minimum amount to receive */
+  /** Minimum amount to receive (hex string) */
   minimumToAmount: Hex;
 
-  /** Quote expiration timestamp (hex string) */
+  /** Quote expiration timestamp as hex string (convert with parseInt(expiry, 16)) */
   expiry: Hex;
 
   /** Additional quote details */

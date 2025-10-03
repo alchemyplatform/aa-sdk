@@ -104,10 +104,26 @@ export function useAlchemyClient() {
     const embedded = getEmbeddedWallet();
     // Handle CAIP-2 format like "eip155:1"
     const chainIdStr = embedded.chainId?.toString();
-    const numericChainId = chainIdStr?.includes(":")
+
+    if (!chainIdStr) {
+      throw new Error(
+        "Embedded wallet chainId is not set. Please ensure the wallet is connected to a network.",
+      );
+    }
+
+    const numericChainId = chainIdStr.includes(":")
       ? chainIdStr.split(":")[1]
       : chainIdStr;
-    return getChain(Number(numericChainId));
+
+    const parsedChainId = Number(numericChainId);
+
+    if (isNaN(parsedChainId)) {
+      throw new Error(
+        `Failed to parse chainId from embedded wallet. Received: ${chainIdStr}`,
+      );
+    }
+
+    return getChain(parsedChainId);
   }, [getEmbeddedWallet]);
 
   const getClient = useCallback(async (): Promise<SmartWalletClient> => {
