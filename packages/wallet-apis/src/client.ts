@@ -9,7 +9,6 @@ import { smartWalletActions } from "./decorators/smartWalletActions.js";
 import { type AlchemyTransport } from "@alchemy/common";
 import type { SignerClient, SmartWalletClient } from "./types.js";
 import { createInternalState } from "./internal.js";
-import { createEip1193ProviderFromClient } from "./provider.js";
 
 export type CreateSmartWalletClientParams<
   TAccount extends Address | undefined = Address | undefined,
@@ -69,8 +68,5 @@ export const createSmartWalletClient = <
       policyIds: _policyIds,
       internal: createInternalState(),
     }))
-    .extend(smartWalletActions<TAccount>(signerClient))
-    .extend((_client) => ({
-      getProvider: () => createEip1193ProviderFromClient<TAccount>(_client),
-    }));
+    .extend(smartWalletActions<TAccount>(signerClient));
 };
