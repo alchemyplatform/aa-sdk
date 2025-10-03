@@ -29,10 +29,10 @@ export {
 } from "./actions/prepareSwap.js";
 
 export {
-  submitSwap,
-  type SubmitSwapParameters,
-  type SubmitSwapReturnType,
-} from "./actions/submitSwap.js";
+  sendPreparedCalls,
+  type SendPreparedCallsParameters,
+  type SendPreparedCallsReturnType,
+} from "./actions/sendPreparedCalls.js";
 
 export {
   createConfig,

@@ -1,6 +1,5 @@
 import { getConnectorClient, type Config } from "@wagmi/core";
 import {
-  hexToNumber,
   toHex,
   type Address,
   type Capabilities,
@@ -8,13 +7,12 @@ import {
   type Prettify,
 } from "viem";
 import { swapActions } from "@alchemy/wallet-apis/experimental";
-import {
-  assertSmartWalletClient,
-  type PrepareCallsResult,
-} from "@alchemy/wallet-apis";
+import { assertSmartWalletClient } from "@alchemy/wallet-apis";
 import type { ConnectorParameter } from "@wagmi/core/internal";
-import { assertNever } from "@alchemy/common";
-import type { UserOperation } from "viem/account-abstraction";
+import {
+  transformPreparedCalls,
+  type TransformedPreparedCalls,
+} from "../utils/transforms.js";
 
 export type PrepareSwapParameters = Prettify<
   {
@@ -82,6 +80,9 @@ export async function prepareSwap(
       ...call,
       value: call.value != null ? toHex(call.value) : undefined,
     })),
+    // TODO(jh): probably need to transform capabilites here too from
+    // viem-type to wallet client type (i.e. hex to bigint, chain id to number,
+    // alchemyPaymasterService to paymasterService).
   });
   if (rest.rawCalls) {
     // This should be impossible since we are not using the `returnRawCalls` option,
@@ -101,72 +102,3 @@ export async function prepareSwap(
     ...transformPreparedCalls(preparedCalls),
   };
 }
-
-// TODO(jh): extract to shared file
-const transformUserOperationCall = (
-  uoCall: Extract<
-    PrepareCallsResult,
-    { type: "user-operation-v070" } | { type: "user-operation-v060" }
-  >,
-): {
-  type: "user-operation-v070" | "user-operation-v060";
-  chainId: number;
-  data: UserOperation;
-  signatureRequest: Extract<
-    PrepareCallsResult,
-    { type: "user-operation-v070" } | { type: "user-operation-v060" }
-  >["signatureRequest"];
-  feePayment: Omit<
-    Extract<
-      PrepareCallsResult,
-      { type: "user-operation-v070" } | { type: "user-operation-v060" }
-    >["feePayment"],
-    "maxAmount"
-  > & { maxAmount: bigint };
-} => {
-  return {
-    type: uoCall.type,
-    chainId: hexToNumber(uoCall.chainId),
-    signatureRequest: uoCall.signatureRequest,
-    feePayment: {
-      ...uoCall.feePayment,
-      maxAmount: BigInt(uoCall.feePayment.maxAmount),
-    },
-    // TODO(jh): transform the UO to match viem's type!
-    data: uoCall.data as any,
-  };
-};
-
-const transformPreparedCalls = (preparedCalls: PrepareCallsResult) => {
-  const transformCall = (
-    calls: Exclude<PrepareCallsResult, { type: "array" }>,
-  ) => {
-    switch (calls.type) {
-      case "user-operation-v060":
-      case "user-operation-v070": {
-        return transformUserOperationCall(calls);
-      }
-      case "paymaster-permit": {
-        return {
-          ...calls,
-          modifiedRequest: {
-            ...calls.modifiedRequest,
-            // TODO(jh): transform these calls!
-            calls: calls.modifiedRequest.calls,
-            // TODO(jh): transform the capabilities?
-            capabilities: calls.modifiedRequest.capabilities,
-            chainId: hexToNumber(calls.modifiedRequest.chainId),
-          },
-        };
-      }
-      default: {
-        return assertNever(calls, "Unexpected prepared calls type");
-      }
-    }
-  };
-  return preparedCalls.type === "array"
-    ? { type: "array", data: preparedCalls.data.map(transformCall) } // TODO(jh): what's wrong w/ this type?
-    : transformCall(preparedCalls);
-};
-
-type TransformedPreparedCalls = ReturnType<typeof transformPreparedCalls>;
