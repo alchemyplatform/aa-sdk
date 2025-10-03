@@ -7,6 +7,7 @@ import {
   type EIP1193RequestFn,
   type EIP1193Events,
   ProviderRpcError,
+  type Capabilities,
 } from "viem";
 import {
   AccountNotFoundError,
@@ -185,6 +186,7 @@ export const createEip1193ProviderFromClient = <
                 "Cannot use 'from' address other than connected account.",
               );
             }
+
             const result = await client.sendCalls({
               calls: calls.map((c) => ({
                 to: c.to!,
@@ -192,7 +194,7 @@ export const createEip1193ProviderFromClient = <
                 value: c.value,
               })),
               from: client.account.address,
-              capabilities,
+              capabilities: transformCapabilities(capabilities),
             } as PrepareCallsParams<TAccount>);
             return {
               id: result.preparedCallIds[0],
@@ -248,4 +250,27 @@ export const createEip1193ProviderFromClient = <
     removeListener: eventEmitter.removeListener.bind(eventEmitter),
     request,
   };
+};
+
+// Wallet server's `paymasterService` type is incompatible with
+// Viem's. So we can accept a custom capability property name
+// when using an Alchemy paymaster per-call policy id override,
+// in order to remain compatible with Viem's `sendCalls` action.
+const transformCapabilities = (
+  capabilities: Capabilities | undefined,
+): PrepareCallsParams["capabilities"] => {
+  if (
+    "alchemyPaymaster" in (capabilities ?? {}) &&
+    !("paymasterService" in (capabilities ?? {})) &&
+    capabilities?.alchemyPaymaster.policyId != null
+  ) {
+    const { alchemyPaymaster, ...rest } = capabilities;
+    return {
+      ...rest,
+      paymasterService: {
+        policyId: capabilities.alchemyPaymaster.policyId,
+      },
+    };
+  }
+  return capabilities;
 };
