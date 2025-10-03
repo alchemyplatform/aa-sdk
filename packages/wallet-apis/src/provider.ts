@@ -21,7 +21,7 @@ import type { WalletServerViemRpcSchema } from "@alchemy/wallet-api-types/rpc";
 import EventEmitter from "events"; // TODO(v5): do we need to polyfill this for browser?
 import { getCapabilities } from "viem/actions";
 import {
-  createSmartWalletClient,
+  createSmartWalletClientAndRequestAccount,
   type CreateSmartWalletClientParams,
 } from "./client.js";
 import type { CreationOptions } from "@alchemy/wallet-api-types";
@@ -44,30 +44,20 @@ export const createEip1193Provider = (
   clientParams: CreateSmartWalletClientParams<undefined>,
   accountOptions: CreationOptions | { accountAddress: Address } = {},
 ) => {
-  const unauthedClient = createSmartWalletClient(clientParams);
-
   let client: SmartWalletClient<Address> | undefined;
 
   // TODO(v5): implement any other supported events: https://eips.ethereum.org/EIPS/eip-1193#events
   const eventEmitter = new EventEmitter();
 
   const request = (async ({ method, params }) => {
-    if (!client) {
-      const account = await unauthedClient.requestAccount(
-        "accountAddress" in accountOptions
-          ? {
-              accountAddress: accountOptions.accountAddress,
-            }
-          : {
-              creationHint: accountOptions,
-            },
+    client ??= await (async () => {
+      const _client = await createSmartWalletClientAndRequestAccount(
+        clientParams,
+        accountOptions,
       );
-      client = createSmartWalletClient({
-        ...clientParams,
-        account: account.address,
-      });
-      eventEmitter.emit("connect", { chainId: toHex(client.chain.id) });
-    }
+      eventEmitter.emit("connect", { chainId: toHex(_client.chain.id) });
+      return _client;
+    })();
     try {
       switch (method) {
         case "eth_chainId": {
