@@ -153,7 +153,6 @@ describe.sequential("Provider E2E Tests", async () => {
     const signer7702 = privateKeyToAccount(
       "0x985fe592f94f96d2813ac3519b94a8ddd10cd25cf02d7b6b252588ce6b312dab",
     );
-    console.log("SIGNER ADDRESS: ", signer7702.address);
 
     const provider7702 = createEip1193Provider(
       {
