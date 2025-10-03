@@ -106,11 +106,21 @@ function SwapButton() {
   const handleSwap = async () => {
     try {
       // Step 1: Get quote and prepare swap
+      // Two modes available:
+
+      // Option A: Specify exact amount to swap FROM
       const { preparedCalls, quote } = await prepareSwap({
-        fromToken: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", // USDC
-        toToken: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE", // ETH
-        minimumToAmount: "0x0de0b6b3a7640000", // 1 ETH minimum
+        fromToken: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE", // ETH
+        toToken: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", // USDC
+        fromAmount: "0xde0b6b3a7640000", // Swap exactly 1 ETH
       });
+
+      // Option B: Specify minimum amount to receive TO
+      /* const { preparedCalls, quote } = await prepareSwap({
+        fromToken: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE", // ETH
+        toToken: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", // USDC
+        minimumToAmount: "0x5f5e100", // Receive at least 100 USDC (6 decimals)
+      }); */
 
       console.log("Quote expiry:", new Date(parseInt(quote.expiry) * 1000));
 

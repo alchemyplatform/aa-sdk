@@ -81,6 +81,10 @@ export interface UseSendTransactionResult {
 
 /**
  * Request parameters for preparing a swap
+ *
+ * Note: Provide either `fromAmount` OR `minimumToAmount`, not both.
+ * - Use `fromAmount` to specify exact amount to swap FROM
+ * - Use `minimumToAmount` to specify minimum amount to receive TO
  */
 export interface PrepareSwapRequest {
   /** Address initiating the swap */
@@ -92,8 +96,11 @@ export interface PrepareSwapRequest {
   /** Token address to swap to (use "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE" for native token) */
   toToken: Address;
 
-  /** Minimum amount to receive in hex format (e.g., "0xde0b6b3a7640000" for 1 ETH in wei) */
-  minimumToAmount: Hex;
+  /** Exact amount to swap from in hex format (e.g., "0xde0b6b3a7640000" for 1 ETH in wei). Mutually exclusive with minimumToAmount. */
+  fromAmount?: Hex;
+
+  /** Minimum amount to receive in hex format (e.g., "0xde0b6b3a7640000" for 1 ETH in wei). Mutually exclusive with fromAmount. */
+  minimumToAmount?: Hex;
 }
 
 /**

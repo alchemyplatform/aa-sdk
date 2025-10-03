@@ -4,6 +4,7 @@ import { usePrivy } from "@privy-io/react-auth";
 import { AccountInfo } from "@/components/AccountInfo";
 import { SendTransaction } from "@/components/SendTransaction";
 import { TokenSwap } from "@/components/TokenSwap";
+import { NetworkSwitcher } from "@/components/NetworkSwitcher";
 
 export default function Home() {
   const { ready, authenticated, login } = usePrivy();
@@ -50,6 +51,7 @@ export default function Home() {
         {/* Left column - Account info */}
         <div>
           <AccountInfo />
+          <NetworkSwitcher />
         </div>
 
         {/* Right column - Transaction examples */}

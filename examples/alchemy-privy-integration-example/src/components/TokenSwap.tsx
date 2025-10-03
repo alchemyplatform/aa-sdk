@@ -1,24 +1,42 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   useAlchemyPrepareSwap,
   useAlchemySubmitSwap,
   type PrepareSwapResult,
 } from "@account-kit/privy-integration";
 import { isAddress, formatEther, type Address, type Hex } from "viem";
+import { useWallets } from "@privy-io/react-auth";
+import { base } from "viem/chains";
 
 const ETH_ADDRESS = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE";
-const USDC_ADDRESS_BASE_SEPOLIA = "0x036CbD53842c5426634e7929541eC2318f3dCF7e";
-const WETH_ADDRESS_BASE_SEPOLIA = "0x4200000000000000000000000000000000000006";
+const USDC_ADDRESS_BASE = "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913";
+const WETH_ADDRESS_BASE = "0x4200000000000000000000000000000000000006";
 
 export function TokenSwap() {
+  const { wallets } = useWallets();
   const prepareSwap = useAlchemyPrepareSwap();
   const submitSwap = useAlchemySubmitSwap();
 
+  const [currentChain, setCurrentChain] = useState<number | null>(null);
+
+  // Sync with wallet's current chain
+  useEffect(() => {
+    const wallet = wallets.find((w) => w.walletClientType === "privy");
+    if (!wallet) return;
+
+    const chainIdStr = wallet.chainId?.toString();
+    const chainId = chainIdStr?.includes(":")
+      ? Number(chainIdStr.split(":")[1])
+      : Number(chainIdStr);
+
+    setCurrentChain(chainId);
+  }, [wallets]);
+
   const [fromToken, setFromToken] = useState(ETH_ADDRESS);
-  const [toToken, setToToken] = useState(USDC_ADDRESS_BASE_SEPOLIA);
-  const [minimumToAmount, setMinimumToAmount] = useState("0.000001");
+  const [toToken, setToToken] = useState(USDC_ADDRESS_BASE);
+  const [swapAmount, setSwapAmount] = useState("0.001");
   const [validationError, setValidationError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [preparedSwap, setPreparedSwap] = useState<PrepareSwapResult | null>(
@@ -41,17 +59,17 @@ export function TokenSwap() {
       return;
     }
 
-    if (!minimumToAmount || parseFloat(minimumToAmount) <= 0) {
-      setValidationError("Minimum amount must be greater than 0");
+    if (!swapAmount || parseFloat(swapAmount) <= 0) {
+      setValidationError("Swap amount must be greater than 0");
       return;
     }
 
     try {
-      const amountWei = BigInt(parseFloat(minimumToAmount) * 10 ** 18);
+      const amountWei = BigInt(parseFloat(swapAmount) * 10 ** 18);
       const result = await prepareSwap.prepareSwap({
         fromToken: fromToken as Address,
         toToken: toToken as Address,
-        minimumToAmount: `0x${amountWei.toString(16)}` as Hex,
+        fromAmount: `0x${amountWei.toString(16)}` as Hex,
       });
 
       setPreparedSwap(result);
@@ -74,7 +92,7 @@ export function TokenSwap() {
 
       // Reset form
       setPreparedSwap(null);
-      setMinimumToAmount("0.000001");
+      setSwapAmount("0.001");
       prepareSwap.reset();
       submitSwap.reset();
     } catch (err) {
@@ -90,10 +108,29 @@ export function TokenSwap() {
     submitSwap.reset();
   };
 
+  const isOnBaseMainnet = currentChain === base.id;
+  const isDisabled = !isOnBaseMainnet;
+
   return (
     <div className="card">
       <h2>Token Swap</h2>
       <p>Swap tokens with gas sponsorship</p>
+
+      {!isOnBaseMainnet && (
+        <div
+          className="error"
+          style={{
+            marginTop: "1rem",
+            padding: "0.75rem",
+            backgroundColor: "#fff3cd",
+            color: "#856404",
+            borderRadius: "4px",
+            fontSize: "0.875rem",
+          }}
+        >
+          ⚠️ Swaps only work on Base mainnet. Please switch networks above.
+        </div>
+      )}
 
       {!preparedSwap ? (
         <form onSubmit={handlePrepare}>
@@ -106,12 +143,12 @@ export function TokenSwap() {
               onChange={(e) => setFromToken(e.target.value)}
               placeholder="0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE"
               className="mono"
-              disabled={prepareSwap.isLoading}
+              disabled={prepareSwap.isLoading || isDisabled}
             />
             <div className="helper-text">
               ETH: {ETH_ADDRESS}
               <br />
-              WETH (Base Sepolia): {WETH_ADDRESS_BASE_SEPOLIA}
+              WETH (Base): {WETH_ADDRESS_BASE}
             </div>
           </div>
 
@@ -124,27 +161,25 @@ export function TokenSwap() {
               onChange={(e) => setToToken(e.target.value)}
               placeholder="0x..."
               className="mono"
-              disabled={prepareSwap.isLoading}
+              disabled={prepareSwap.isLoading || isDisabled}
             />
-            <div className="helper-text">
-              USDC (Base Sepolia): {USDC_ADDRESS_BASE_SEPOLIA}
-            </div>
+            <div className="helper-text">USDC (Base): {USDC_ADDRESS_BASE}</div>
           </div>
 
           <div className="form-group">
-            <label htmlFor="minimumToAmount">Minimum Amount to Receive</label>
+            <label htmlFor="swapAmount">Amount to Swap</label>
             <input
-              id="minimumToAmount"
+              id="swapAmount"
               type="number"
-              value={minimumToAmount}
-              onChange={(e) => setMinimumToAmount(e.target.value)}
-              placeholder="0.000001"
-              step="0.000001"
+              value={swapAmount}
+              onChange={(e) => setSwapAmount(e.target.value)}
+              placeholder="0.001"
+              step="any"
               min="0"
-              disabled={prepareSwap.isLoading}
+              disabled={prepareSwap.isLoading || isDisabled}
             />
             <div className="helper-text">
-              Enter the minimum amount you want to receive
+              Enter the exact amount you want to swap from the source token
             </div>
           </div>
 
@@ -156,7 +191,7 @@ export function TokenSwap() {
           <button
             type="submit"
             className="button"
-            disabled={prepareSwap.isLoading}
+            disabled={prepareSwap.isLoading || isDisabled}
           >
             {prepareSwap.isLoading ? (
               <>

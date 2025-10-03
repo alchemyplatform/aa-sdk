@@ -14,28 +14,35 @@ import type {
  * Hook to request swap quotes and prepare swap calls
  * Part of the two-step swap process: prepare → submit
  *
+ * Supports two modes:
+ * 1. Specify exact amount to swap FROM (`fromAmount`)
+ * 2. Specify minimum amount to receive TO (`minimumToAmount`)
+ *
  * @returns {UsePrepareSwapResult} Hook result with prepareSwap function and state
  *
- * @example
+ * @example Swap exact amount FROM
  * ```tsx
- * const { prepareSwap, isLoading, error, data } = useAlchemyPrepareSwap();
+ * const { prepareSwap } = useAlchemyPrepareSwap();
  *
- * const handlePrepare = async () => {
- *   try {
- *     const result = await prepareSwap({
- *       from: '0x...',
- *       fromToken: '0x...',
- *       toToken: '0x...',
- *       minimumToAmount: '0x...',
- *     });
- *     console.log('Quote:', result.quote);
- *     console.log('Expiry:', new Date(parseInt(result.quote.expiry, 16) * 1000));
+ * // Swap exactly 1 ETH for USDC
+ * const result = await prepareSwap({
+ *   fromToken: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
+ *   toToken: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
+ *   fromAmount: '0xde0b6b3a7640000', // 1 ETH in hex
+ * });
+ * ```
  *
- *     // Pass result.preparedCalls to submitSwap
- *   } catch (err) {
- *     console.error('Failed to prepare swap:', err);
- *   }
- * };
+ * @example Swap for minimum amount TO
+ * ```tsx
+ * const { prepareSwap } = useAlchemyPrepareSwap();
+ *
+ * // Swap ETH to get at least 100 USDC
+ * const result = await prepareSwap({
+ *   fromToken: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
+ *   toToken: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
+ *   minimumToAmount: '0x5f5e100', // 100 USDC (6 decimals) in hex
+ * });
+ * console.log('Quote expiry:', new Date(parseInt(result.quote.expiry, 16) * 1000));
  * ```
  */
 export function useAlchemyPrepareSwap(): UsePrepareSwapResult {
@@ -63,6 +70,17 @@ export function useAlchemyPrepareSwap(): UsePrepareSwapResult {
       setError(null);
 
       try {
+        // Validate that only one of fromAmount or minimumToAmount is provided
+        if (request.fromAmount && request.minimumToAmount) {
+          throw new Error(
+            "Cannot provide both fromAmount and minimumToAmount. Please specify only one.",
+          );
+        }
+
+        if (!request.fromAmount && !request.minimumToAmount) {
+          throw new Error("Must provide either fromAmount or minimumToAmount.");
+        }
+
         const client = await getClient();
         const embeddedWallet = getEmbeddedWallet();
 
@@ -89,13 +107,19 @@ export function useAlchemyPrepareSwap(): UsePrepareSwapResult {
         }
 
         // Request the swap quote with gas sponsorship capabilities
-        const response = await swapClient.requestQuoteV0({
+        // Build request with either fromAmount (exact amount to swap) OR minimumToAmount (minimum to receive)
+        const baseRequest = {
           from: request.from || (embeddedWallet.address as Address),
           fromToken: request.fromToken,
           toToken: request.toToken,
-          minimumToAmount: request.minimumToAmount,
           capabilities,
-        });
+        };
+
+        const quoteRequest = request.fromAmount
+          ? { ...baseRequest, fromAmount: request.fromAmount }
+          : { ...baseRequest, minimumToAmount: request.minimumToAmount! };
+
+        const response = await swapClient.requestQuoteV0(quoteRequest);
 
         // Extract quote and prepared calls from response
         const { quote, ...preparedCalls } = response;
