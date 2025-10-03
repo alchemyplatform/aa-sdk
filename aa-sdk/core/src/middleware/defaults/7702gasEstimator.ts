@@ -4,6 +4,11 @@ import type { UserOperationStruct } from "../../types.js";
 import type { ClientMiddlewareFn } from "../types";
 import { defaultGasEstimator } from "./gasEstimator.js";
 
+/** Symbol to mark the default 7702 gas estimator function. */
+export const DEFAULT_7702_GAS_ESTIMATOR_MIDDLEWARE_SYMBOL = Symbol(
+  "isDefault7702GasEstimator",
+);
+
 /**
  * A middleware function to estimate the gas usage of a user operation when using an EIP-7702 delegated account. Has an optional custom gas estimator.
  * This function is only compatible with accounts using EntryPoint v0.7.0, and the account must have an implementation address defined in `getImplementationAddress()`.
@@ -38,10 +43,10 @@ import { defaultGasEstimator } from "./gasEstimator.js";
  * @param {ClientMiddlewareFn} gasEstimator Optional custom gas estimator function
  * @returns {ClientMiddlewareFn} A function that takes user operation struct and parameters, estimates gas usage, and returns the user operation with gas limits.
  */
-export const default7702GasEstimator: (
+export function default7702GasEstimator(
   gasEstimator?: ClientMiddlewareFn,
-) => ClientMiddlewareFn =
-  (gasEstimator?: ClientMiddlewareFn) => async (struct, params) => {
+): ClientMiddlewareFn {
+  const fn: ClientMiddlewareFn = async (struct, params) => {
     const gasEstimator_ = gasEstimator ?? defaultGasEstimator(params.client);
 
     const account = params.account ?? params.client.account;
@@ -81,3 +86,8 @@ export const default7702GasEstimator: (
 
     return gasEstimator_(struct, params);
   };
+
+  (fn as any)[DEFAULT_7702_GAS_ESTIMATOR_MIDDLEWARE_SYMBOL] = true;
+
+  return fn;
+}
