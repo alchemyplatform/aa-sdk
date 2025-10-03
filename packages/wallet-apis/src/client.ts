@@ -9,7 +9,7 @@ import { smartWalletActions } from "./decorators/smartWalletActions.js";
 import { type AlchemyTransport } from "@alchemy/common";
 import type { SignerClient, SmartWalletClient } from "./types.js";
 import { createInternalState } from "./internal.js";
-import { CreationOptions } from "@alchemy/wallet-api-types";
+import type { CreationOptions } from "@alchemy/wallet-api-types";
 
 export type CreateSmartWalletClientParams<
   TAccount extends Address | undefined = Address | undefined,
