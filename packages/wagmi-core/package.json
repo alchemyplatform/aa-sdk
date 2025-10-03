@@ -41,8 +41,7 @@
   },
   "peerDependencies": {
     "@wagmi/core": "^2",
-    "viem": "^2",
-    "wagmi": "^2"
+    "viem": "^2"
   },
   "devDependencies": {
     "@alchemy/wallet-api-types": "^0.1.0-alpha.16",

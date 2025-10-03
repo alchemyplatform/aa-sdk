@@ -1093,10 +1093,10 @@ navigation:
                     path: wallets/pages/reference/alchemy/wagmi-core/functions/prepareSwap.mdx
                   - page: sendEmailOtp
                     path: wallets/pages/reference/alchemy/wagmi-core/functions/sendEmailOtp.mdx
+                  - page: sendPreparedCalls
+                    path: wallets/pages/reference/alchemy/wagmi-core/functions/sendPreparedCalls.mdx
                   - page: submitOtpCode
                     path: wallets/pages/reference/alchemy/wagmi-core/functions/submitOtpCode.mdx
-                  - page: submitSwap
-                    path: wallets/pages/reference/alchemy/wagmi-core/functions/submitSwap.mdx
 
       - section: Alchemy Wagmi Connector Web
         contents:
