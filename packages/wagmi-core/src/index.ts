@@ -27,3 +27,8 @@ export {
   type AlchemyConfig,
   type AlchemyCreateConfigParameters,
 } from "./createConfig.js";
+
+export {
+  ALCHEMY_AUTH_CONNECTOR_TYPE,
+  ALCHEMY_SMART_WALLET_CONNECTOR_TYPE,
+} from "./utils/resolveAuthConnector.js";

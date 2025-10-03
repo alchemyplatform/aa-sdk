@@ -51,6 +51,8 @@
     "@alchemy/common": "*",
     "@alchemy/auth": "*",
     "@alchemy/auth-web": "*",
+    "@alchemy/wagmi-core": "*",
+    "@alchemy/wallet-apis": "*",
     "viem": "2.29.2"
   },
   "publishConfig": {

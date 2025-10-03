@@ -12,7 +12,6 @@ import {
 import { alchemyTransport, type AlchemyTransport } from "@alchemy/common";
 import { privateKeyToAccount } from "viem/accounts";
 import { arbitrumSepolia } from "viem/chains";
-import { createSmartWalletClient } from "./client.js";
 import {
   getAddresses,
   getCallsStatus,
@@ -24,6 +23,7 @@ import {
   signTypedData,
   waitForCallsStatus,
 } from "viem/actions";
+import { createEip1193Provider } from "./provider.js";
 
 describe.sequential("Provider E2E Tests", async () => {
   let clientFromProvider: Client<Transport, Chain, Account>;
@@ -53,7 +53,7 @@ describe.sequential("Provider E2E Tests", async () => {
       "0xd7b061ef04d29cf68b3c89356678eccec9988de8d5ed892c19461c4a9d65925d",
     );
 
-    const _client = createSmartWalletClient({
+    const provider = createEip1193Provider({
       transport,
       chain: arbitrumSepolia,
       signer,
@@ -61,15 +61,6 @@ describe.sequential("Provider E2E Tests", async () => {
       // a funded test wallet) since these tests are using a real wallet
       // server instance instead of Anvil.
       policyId: process.env.TEST_PAYMASTER_POLICY_ID!,
-    });
-
-    const provider = _client.getProvider();
-
-    await new Promise((resolve) => {
-      provider.on("connect", (data) => {
-        console.log("Connected with chainId:", data.chainId);
-        resolve(data);
-      });
     });
 
     [account] = await provider.request({
@@ -162,32 +153,26 @@ describe.sequential("Provider E2E Tests", async () => {
     const signer7702 = privateKeyToAccount(
       "0x985fe592f94f96d2813ac3519b94a8ddd10cd25cf02d7b6b252588ce6b312dab",
     );
-    const account = signer7702.address;
 
-    const _client = createSmartWalletClient({
-      transport,
-      chain: arbitrumSepolia,
-      signer: signer7702,
-      policyId: process.env.TEST_PAYMASTER_POLICY_ID!,
-      account,
-    });
-
-    const provider7702 = _client.getProvider();
-
-    await new Promise((resolve) => {
-      provider7702.on("connect", (data) => {
-        console.log("Connected with chainId:", data.chainId);
-        resolve(data);
-      });
-    });
+    const provider7702 = createEip1193Provider(
+      {
+        transport,
+        chain: arbitrumSepolia,
+        signer: signer7702,
+        policyId: process.env.TEST_PAYMASTER_POLICY_ID!,
+      },
+      {
+        accountType: "7702",
+      },
+    );
 
     const [resolvedAccount] = await provider7702.request({
       method: "eth_accounts",
     });
-    expect(resolvedAccount).toBe(account);
+    expect(resolvedAccount).toBe(signer7702.address);
 
     const clientFromProvider7702 = createClient({
-      account,
+      account: signer7702.address,
       transport: custom(provider7702),
       chain: arbitrumSepolia,
     });

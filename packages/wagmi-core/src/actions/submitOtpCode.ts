@@ -1,5 +1,5 @@
-import { connect, type Config } from "@wagmi/core";
-import { resolveAlchemyAuthConnector } from "@alchemy/connectors-web";
+import { type Config } from "@wagmi/core";
+import { resolveAlchemyAuthConnector } from "../utils/resolveAuthConnector.js";
 
 export type SubmitOtpCodeParameters = {
   otpCode: string;
@@ -19,12 +19,12 @@ export async function submitOtpCode(
   config: Config,
   parameters: SubmitOtpCodeParameters,
 ): Promise<SubmitOtpCodeReturnType> {
-  const connector = resolveAlchemyAuthConnector(config);
+  const { connector, connectAlchemyAuth } = resolveAlchemyAuthConnector(config);
   const authClient = connector.getAuthClient();
   const authSession = await authClient.submitOtpCode({
     otpCode: parameters.otpCode,
   });
 
   connector.setAuthSession(authSession);
-  await connect(config, { connector });
+  await connectAlchemyAuth();
 }

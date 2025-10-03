@@ -1,8 +1,5 @@
-import { connect, type Config } from "@wagmi/core";
-import {
-  resolveAlchemyAuthConnector,
-  type AlchemyAuthConnector,
-} from "@alchemy/connectors-web";
+import { type Config } from "@wagmi/core";
+import { resolveAlchemyAuthConnector } from "../utils/resolveAuthConnector.js";
 
 export type LoginWithOauthParameters = {
   /** OAuth provider type (e.g., "google", "facebook", "apple") */
@@ -29,7 +26,7 @@ export async function loginWithOauth(
   config: Config,
   parameters: LoginWithOauthParameters,
 ): Promise<LoginWithOauthReturnType> {
-  const connector: AlchemyAuthConnector = resolveAlchemyAuthConnector(config);
+  const { connector, connectAlchemyAuth } = resolveAlchemyAuthConnector(config);
   const authClient = connector.getAuthClient();
 
   const authSession = await authClient.loginWithOauth({
@@ -39,5 +36,5 @@ export async function loginWithOauth(
   });
 
   connector.setAuthSession(authSession);
-  await connect(config, { connector });
+  await connectAlchemyAuth();
 }

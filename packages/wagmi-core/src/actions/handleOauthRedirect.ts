@@ -1,8 +1,5 @@
-import { connect, type Config } from "@wagmi/core";
-import {
-  resolveAlchemyAuthConnector,
-  type AlchemyAuthConnector,
-} from "@alchemy/connectors-web";
+import { type Config } from "@wagmi/core";
+import { resolveAlchemyAuthConnector } from "../utils/resolveAuthConnector.js";
 
 export type HandleOauthRedirectParameters = void;
 
@@ -19,7 +16,7 @@ export type HandleOauthRedirectReturnType = void;
 export async function handleOauthRedirect(
   config: Config,
 ): Promise<HandleOauthRedirectReturnType> {
-  const connector: AlchemyAuthConnector = resolveAlchemyAuthConnector(config);
+  const { connector, connectAlchemyAuth } = resolveAlchemyAuthConnector(config);
   const authClient = connector.getAuthClient();
 
   const authSession = await authClient.handleOauthRedirect();
@@ -29,5 +26,5 @@ export async function handleOauthRedirect(
   }
 
   connector.setAuthSession(authSession);
-  await connect(config, { connector });
+  await connectAlchemyAuth();
 }
