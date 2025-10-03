@@ -9,8 +9,6 @@ export type SendPreparedCallsParameters = Prettify<
 >;
 
 export type SendPreparedCallsReturnType = Prettify<{
-  // TODO(jh): confirm w/ txn engine pod that we're good to go with single id here (as viem's `sendCalls` does).
-  /** Prepared call id. Can be used to track calls status. */
   id: Hex;
 }>;
 
