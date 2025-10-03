@@ -1,7 +1,6 @@
 import { alchemyTransport } from "@alchemy/common";
 import {
-  createSmartWalletClient,
-  type SmartWalletClient,
+  createEip1193Provider,
   type SmartWalletClientEip1193Provider,
 } from "@alchemy/wallet-apis";
 import { ALCHEMY_SMART_WALLET_CONNECTOR_TYPE } from "@alchemy/wagmi-core";
@@ -9,10 +8,13 @@ import { Emitter } from "@wagmi/core/internal";
 import {
   createWalletClient,
   custom,
+  type Account,
   type Address,
   type Chain,
   type EIP1193Provider,
   type ProviderConnectInfo,
+  type Transport,
+  type WalletClient,
 } from "viem";
 import { createConnector, type CreateConnectorFn } from "wagmi";
 
@@ -98,72 +100,88 @@ export function alchemySmartWallet(
       },
     };
 
-    let smartWalletClientPromise: Promise<SmartWalletClient> | undefined;
+    let providerPromise: Promise<SmartWalletClientEip1193Provider> | undefined;
     let currentChainId: number | undefined;
     let currentInnerAccount: Address | undefined;
 
     const resetState = (): void => {
-      smartWalletClientPromise = undefined;
+      providerPromise = undefined;
       currentChainId = undefined;
       currentInnerAccount = undefined;
     };
 
-    const createClient = async (): Promise<SmartWalletClient> => {
-      const chainId = await innerConnector.getChainId();
+    const getSignerClient = async (
+      chain: Chain,
+    ): Promise<WalletClient<Transport, Chain, Account>> => {
+      // Try to get a wallet client from the inner connector, otherwise create
+      // one from its provider.
+      if (innerConnector.getClient) {
+        const client = await innerConnector.getClient({
+          chainId: currentChainId,
+        });
+        if ("signMessage" in client) {
+          // Assume that a client which has `signMessage` is a wallet client.
+          return client as WalletClient<Transport, Chain, Account>;
+        }
+      }
       const innerAccounts = await innerConnector.getAccounts();
       if (innerAccounts.length === 0) {
         throw new Error("No accounts found in base connector");
       }
-      // TODO: do we always take the first account?
       const signerAddress = innerAccounts[0];
-      const chain = getChainFromConfig(config, chainId);
       const provider = (await innerConnector.getProvider()) as EIP1193Provider;
       const signer = createWalletClient({
         account: signerAddress,
         chain,
         transport: custom(provider),
       });
-      const smartWalletClient = createSmartWalletClient({
-        signer,
-        transport: alchemyTransport({
-          apiKey: options.apiKey,
-          jwt: options.jwt,
-          url: options.url ?? "https://api.g.alchemy.com/v2",
-        }),
-        chain,
-        policyId: options.policyId,
-        policyIds: options.policyIds,
-      });
-      // TODO: Calling `client.getProvider()` has the side effect of
-      // initializing `client.account` some time after the provider is created.
-      // We should change that so it's explicit and awaitable. Until then,
-      // replicate the logic by hand.
-      const account = await smartWalletClient.requestAccount();
-      smartWalletClient.account = {
-        type: "json-rpc",
-        address: account.address,
-      };
-      return smartWalletClient;
+      return signer;
     };
 
+    const createProvider =
+      async (): Promise<SmartWalletClientEip1193Provider> => {
+        const chainId = await innerConnector.getChainId();
+        const chain = getChainFromConfig(config, chainId);
+        const signer = await getSignerClient(chain);
+
+        return createEip1193Provider({
+          signer,
+          transport: alchemyTransport({
+            apiKey: options.apiKey,
+            jwt: options.jwt,
+            url: options.url ?? "https://api.g.alchemy.com/v2",
+          }),
+          chain,
+          policyId: options.policyId,
+          policyIds: options.policyIds,
+        });
+      };
+
     const initializeSmartWalletClient = async (): Promise<void> => {
-      smartWalletClientPromise = createClient();
-      const smartWalletClient = await smartWalletClientPromise;
-      currentChainId = smartWalletClient.chain.id;
-      currentInnerAccount = (await innerConnector.getAccounts())[0];
+      providerPromise = createProvider();
+      const provider = await providerPromise;
+      const innerAccounts = await innerConnector.getAccounts();
+      if (innerAccounts.length === 0) {
+        throw new Error("No accounts found in owner connector");
+      }
+      const chainId = await provider.request({ method: "eth_chainId" });
+      currentChainId = +chainId;
+      currentInnerAccount = innerAccounts[0];
     };
 
     // A trivial function, but gives a name to indicate how the promise is used.
-    const getSmartWalletClientIfConnected = async (): Promise<
-      SmartWalletClient | undefined
+    const getProviderIfConnected = async (): Promise<
+      SmartWalletClientEip1193Provider | undefined
     > => {
-      return smartWalletClientPromise;
+      return providerPromise;
     };
 
     const getAccounts = async (): Promise<Address[]> => {
-      const smartWalletClient = await getSmartWalletClientIfConnected();
-      const address = smartWalletClient?.account?.address;
-      return address ? [address] : [];
+      const provider = await getProviderIfConnected();
+      if (!provider) {
+        return [];
+      }
+      return provider.request({ method: "eth_accounts" });
     };
 
     // TODO: to be robust, we should have handling for additional updates
@@ -283,8 +301,8 @@ export function alchemySmartWallet(
       },
 
       async getProvider(): Promise<Provider> {
-        const smartWalletClient = await getSmartWalletClientIfConnected();
-        return smartWalletClient?.getProvider() ?? loggedOutProvider;
+        const provider = await getProviderIfConnected();
+        return provider ?? loggedOutProvider;
       },
 
       async isAuthorized(): Promise<boolean> {

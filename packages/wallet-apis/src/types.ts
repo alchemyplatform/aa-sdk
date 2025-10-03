@@ -43,9 +43,7 @@ export type SmartWalletClientEip1193Provider = Prettify<
 
 export type SmartWalletClient<
   TAccount extends Address | undefined = Address | undefined,
-> = BaseWalletClient<SmartWalletActions<TAccount>> & {
-  getProvider: () => SmartWalletClientEip1193Provider;
-};
+> = BaseWalletClient<SmartWalletActions<TAccount>>;
 
 export type OptionalChainId<T> = T extends { chainId: Hex }
   ? Omit<T, "chainId"> & { chainId?: Hex | undefined }

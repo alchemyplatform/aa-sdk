@@ -1188,8 +1188,12 @@ navigation:
             contents:
               - section: Functions
                 contents:
+                  - page: createEip1193Provider
+                    path: wallets/pages/reference/alchemy/wallet-apis/functions/createEip1193Provider.mdx
                   - page: createSmartWalletClient
                     path: wallets/pages/reference/alchemy/wallet-apis/functions/createSmartWalletClient.mdx
+                  - page: createSmartWalletClientAndRequestAccount
+                    path: wallets/pages/reference/alchemy/wallet-apis/functions/createSmartWalletClientAndRequestAccount.mdx
                   - page: formatSign
                     path: wallets/pages/reference/alchemy/wallet-apis/functions/formatSign.mdx
                   - page: grantPermissions
