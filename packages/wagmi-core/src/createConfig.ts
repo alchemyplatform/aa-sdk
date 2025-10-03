@@ -2,7 +2,7 @@ import {
   createConfig as wagmiCreateConfig,
   type CreateConfigParameters,
   type Config,
-} from "wagmi";
+} from "@wagmi/core";
 
 /**
  * The Alchemy-flavored Wagmi `Config`.

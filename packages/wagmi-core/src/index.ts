@@ -23,6 +23,18 @@ export {
 } from "./actions/handleOauthRedirect.js";
 
 export {
+  prepareSwap,
+  type PrepareSwapParameters,
+  type PrepareSwapReturnType,
+} from "./actions/prepareSwap.js";
+
+export {
+  sendPreparedCalls,
+  type SendPreparedCallsParameters,
+  type SendPreparedCallsReturnType,
+} from "./actions/sendPreparedCalls.js";
+
+export {
   createConfig,
   type AlchemyConfig,
   type AlchemyCreateConfigParameters,

@@ -31,3 +31,10 @@ export { smartWalletActions } from "./decorators/smartWalletActions.js";
 // Client.
 export type * from "./client.js";
 export { createSmartWalletClient } from "./client.js";
+
+// Utils.
+export type * from "./utils/assertions.js";
+export {
+  isSmartWalletClient,
+  assertSmartWalletClient,
+} from "./utils/assertions.js";
