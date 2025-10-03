@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { usePrivy } from "@privy-io/react-auth";
 import { AccountInfo } from "@/components/AccountInfo";
 import { SendTransaction } from "@/components/SendTransaction";
@@ -8,6 +9,11 @@ import { NetworkSwitcher } from "@/components/NetworkSwitcher";
 
 export default function Home() {
   const { ready, authenticated, login } = usePrivy();
+  const [balanceRefreshTrigger, setBalanceRefreshTrigger] = useState(0);
+
+  const refreshBalances = () => {
+    setBalanceRefreshTrigger((prev) => prev + 1);
+  };
 
   // Show loading state while Privy initializes
   if (!ready) {
@@ -50,14 +56,14 @@ export default function Home() {
       <div className="grid grid-cols-2">
         {/* Left column - Account info */}
         <div>
-          <AccountInfo />
-          <NetworkSwitcher />
+          <AccountInfo refreshTrigger={balanceRefreshTrigger} />
+          <NetworkSwitcher onNetworkChange={refreshBalances} />
         </div>
 
         {/* Right column - Transaction examples */}
         <div>
-          <SendTransaction />
-          <TokenSwap />
+          <SendTransaction onSuccess={refreshBalances} />
+          <TokenSwap onSuccess={refreshBalances} />
         </div>
       </div>
     </main>

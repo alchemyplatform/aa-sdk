@@ -4,7 +4,11 @@ import { useWallets } from "@privy-io/react-auth";
 import { useEffect, useState } from "react";
 import { base, baseSepolia } from "viem/chains";
 
-export function NetworkSwitcher() {
+export function NetworkSwitcher({
+  onNetworkChange,
+}: {
+  onNetworkChange?: () => void;
+}) {
   const { wallets } = useWallets();
   const [currentChain, setCurrentChain] = useState<number | null>(null);
   const [isSwitching, setIsSwitching] = useState(false);
@@ -38,6 +42,11 @@ export function NetworkSwitcher() {
     try {
       await wallet.switchChain(chainId);
       setCurrentChain(chainId);
+
+      // Trigger balance refresh after chain switch
+      if (onNetworkChange) {
+        onNetworkChange();
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to switch chain");
     } finally {

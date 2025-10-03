@@ -13,7 +13,7 @@ import { base } from "viem/chains";
 const ETH_ADDRESS = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE";
 const USDC_ADDRESS_BASE = "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913";
 
-export function TokenSwap() {
+export function TokenSwap({ onSuccess }: { onSuccess?: () => void }) {
   const { wallets } = useWallets();
   const prepareSwap = useAlchemyPrepareSwap();
   const submitSwap = useAlchemySubmitSwap();
@@ -33,15 +33,34 @@ export function TokenSwap() {
     setCurrentChain(chainId);
   }, [wallets]);
 
-  // Hard-coded to USDC → ETH for simplicity
-  const fromToken = USDC_ADDRESS_BASE;
-  const toToken = ETH_ADDRESS;
+  // Allow flipping between USDC → ETH and ETH → USDC
+  const [fromToken, setFromToken] = useState(USDC_ADDRESS_BASE);
+  const [toToken, setToToken] = useState(ETH_ADDRESS);
   const [swapAmount, setSwapAmount] = useState("1");
+
+  const isSwappingFromUsdc = fromToken === USDC_ADDRESS_BASE;
+  const fromDecimals = isSwappingFromUsdc ? 6 : 18;
+  const fromSymbol = isSwappingFromUsdc ? "USDC" : "ETH";
+  const toSymbol = isSwappingFromUsdc ? "ETH" : "USDC";
   const [validationError, setValidationError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [preparedSwap, setPreparedSwap] = useState<PrepareSwapResult | null>(
     null,
   );
+
+  const flipSwapDirection = () => {
+    // Swap the from and to tokens
+    const tempFrom = fromToken;
+    setFromToken(toToken);
+    setToToken(tempFrom);
+    // Reset swap amount to default
+    setSwapAmount(toToken === USDC_ADDRESS_BASE ? "1" : "0.001");
+    // Clear any previous quote
+    setPreparedSwap(null);
+    setValidationError("");
+    setSuccessMessage("");
+    prepareSwap.reset();
+  };
 
   const handlePrepare = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -55,8 +74,10 @@ export function TokenSwap() {
     }
 
     try {
-      // USDC uses 6 decimals
-      const amountInSmallestUnit = BigInt(parseFloat(swapAmount) * 10 ** 6);
+      // Use correct decimals based on source token
+      const amountInSmallestUnit = BigInt(
+        parseFloat(swapAmount) * 10 ** fromDecimals,
+      );
 
       const result = await prepareSwap.prepareSwap({
         from: wallets[0].address as Address,
@@ -85,9 +106,14 @@ export function TokenSwap() {
 
       // Reset form
       setPreparedSwap(null);
-      setSwapAmount("1");
+      setSwapAmount(isSwappingFromUsdc ? "1" : "0.001");
       prepareSwap.reset();
       submitSwap.reset();
+
+      // Trigger balance refresh
+      if (onSuccess) {
+        onSuccess();
+      }
     } catch (err) {
       setValidationError(err instanceof Error ? err.message : "Swap failed");
     }
@@ -128,7 +154,29 @@ export function TokenSwap() {
       {!preparedSwap ? (
         <form onSubmit={handlePrepare}>
           <div className="form-group">
-            <label>Swap Direction</label>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: "0.5rem",
+              }}
+            >
+              <label>Swap Direction</label>
+              <button
+                type="button"
+                onClick={flipSwapDirection}
+                className="button button-secondary"
+                style={{
+                  width: "auto",
+                  padding: "0.25rem 0.75rem",
+                  fontSize: "0.875rem",
+                }}
+                disabled={prepareSwap.isLoading || isDisabled}
+              >
+                ⇄ Flip
+              </button>
+            </div>
             <div
               style={{
                 padding: "0.75rem",
@@ -137,15 +185,16 @@ export function TokenSwap() {
                 fontSize: "0.875rem",
               }}
             >
-              <strong>USDC</strong> → <strong>ETH</strong>
+              <strong>{fromSymbol}</strong> → <strong>{toSymbol}</strong>
               <div className="helper-text" style={{ marginTop: "0.5rem" }}>
-                Swapping USDC (6 decimals) for ETH (18 decimals) on Base
+                Swapping {fromSymbol} ({fromDecimals} decimals) for {toSymbol}{" "}
+                on Base
               </div>
             </div>
           </div>
 
           <div className="form-group">
-            <label htmlFor="swapAmount">Amount to Swap (USDC)</label>
+            <label htmlFor="swapAmount">Amount to Swap ({fromSymbol})</label>
             <input
               id="swapAmount"
               type="number"
@@ -157,7 +206,8 @@ export function TokenSwap() {
               disabled={prepareSwap.isLoading || isDisabled}
             />
             <div className="helper-text">
-              Enter USDC amount (e.g., 1 = 1 USDC, 0.5 = 0.5 USDC)
+              Enter {fromSymbol} amount (e.g.,{" "}
+              {isSwappingFromUsdc ? "1 = 1 USDC" : "0.001 = 0.001 ETH"})
             </div>
           </div>
 
@@ -187,13 +237,17 @@ export function TokenSwap() {
             <div className="info-row">
               <span className="info-label">Swapping:</span>
               <span className="info-value">
-                {formatUnits(BigInt(preparedSwap.quote.fromAmount), 6)} USDC
+                {isSwappingFromUsdc
+                  ? `${formatUnits(BigInt(preparedSwap.quote.fromAmount), 6)} USDC`
+                  : `${formatEther(BigInt(preparedSwap.quote.fromAmount))} ETH`}
               </span>
             </div>
             <div className="info-row">
               <span className="info-label">You&apos;ll Receive (min):</span>
               <span className="info-value">
-                {formatEther(BigInt(preparedSwap.quote.minimumToAmount))} ETH
+                {isSwappingFromUsdc
+                  ? `${formatEther(BigInt(preparedSwap.quote.minimumToAmount))} ETH`
+                  : `${formatUnits(BigInt(preparedSwap.quote.minimumToAmount), 6)} USDC`}
               </span>
             </div>
             <div className="info-row">

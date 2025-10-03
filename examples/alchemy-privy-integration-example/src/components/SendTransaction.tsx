@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useAlchemySendTransaction } from "@account-kit/privy-integration";
 import { parseEther, isAddress, type Address } from "viem";
 
-export function SendTransaction() {
+export function SendTransaction({ onSuccess }: { onSuccess?: () => void }) {
   const { sendTransaction, isLoading, error } = useAlchemySendTransaction();
 
   const [recipient, setRecipient] = useState("");
@@ -43,6 +43,11 @@ export function SendTransaction() {
       setSuccessMessage(`Transaction sent! Hash: ${result.txnHash}`);
       setRecipient("");
       setAmount("0.001");
+
+      // Trigger balance refresh
+      if (onSuccess) {
+        onSuccess();
+      }
     } catch (err) {
       setValidationError(
         err instanceof Error ? err.message : "Transaction failed",
