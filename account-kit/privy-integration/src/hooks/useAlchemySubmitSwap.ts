@@ -22,10 +22,9 @@ import type {
  *   try {
  *     // Step 1: Prepare the swap
  *     const { preparedCalls } = await prepareSwap({
- *       from: '0x...',
  *       fromToken: '0x...',
  *       toToken: '0x...',
- *       minimumToAmount: '0x...',
+ *       fromAmount: '0x...',
  *     });
  *
  *     // Step 2: Submit the swap
@@ -57,11 +56,7 @@ export function useAlchemySubmitSwap(): UseSubmitSwapResult {
 
         // Sign the prepared calls
         // Note: Gas sponsorship must be configured during the prepare step
-        // Type assertion is needed because our PreparedSwapCalls interface
-        // is intentionally flexible to accommodate the SDK's response structure
-        const signedCalls = await swapClient.signPreparedCalls(
-          preparedCalls as Parameters<typeof swapClient.signPreparedCalls>[0],
-        );
+        const signedCalls = await swapClient.signPreparedCalls(preparedCalls);
 
         // Send the signed calls
         const { preparedCallIds } =

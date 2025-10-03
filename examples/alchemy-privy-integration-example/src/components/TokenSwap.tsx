@@ -6,13 +6,12 @@ import {
   useAlchemySubmitSwap,
   type PrepareSwapResult,
 } from "@account-kit/privy-integration";
-import { isAddress, formatEther, type Address, type Hex } from "viem";
+import { formatEther, formatUnits, type Address, type Hex } from "viem";
 import { useWallets } from "@privy-io/react-auth";
 import { base } from "viem/chains";
 
 const ETH_ADDRESS = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE";
 const USDC_ADDRESS_BASE = "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913";
-const WETH_ADDRESS_BASE = "0x4200000000000000000000000000000000000006";
 
 export function TokenSwap() {
   const { wallets } = useWallets();
@@ -34,9 +33,10 @@ export function TokenSwap() {
     setCurrentChain(chainId);
   }, [wallets]);
 
-  const [fromToken, setFromToken] = useState(ETH_ADDRESS);
-  const [toToken, setToToken] = useState(USDC_ADDRESS_BASE);
-  const [swapAmount, setSwapAmount] = useState("0.001");
+  // Hard-coded to USDC → ETH for simplicity
+  const fromToken = USDC_ADDRESS_BASE;
+  const toToken = ETH_ADDRESS;
+  const [swapAmount, setSwapAmount] = useState("1");
   const [validationError, setValidationError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [preparedSwap, setPreparedSwap] = useState<PrepareSwapResult | null>(
@@ -49,27 +49,20 @@ export function TokenSwap() {
     setSuccessMessage("");
 
     // Validation
-    if (!fromToken || !isAddress(fromToken)) {
-      setValidationError("Invalid from token address");
-      return;
-    }
-
-    if (!toToken || !isAddress(toToken)) {
-      setValidationError("Invalid to token address");
-      return;
-    }
-
     if (!swapAmount || parseFloat(swapAmount) <= 0) {
       setValidationError("Swap amount must be greater than 0");
       return;
     }
 
     try {
-      const amountWei = BigInt(parseFloat(swapAmount) * 10 ** 18);
+      // USDC uses 6 decimals
+      const amountInSmallestUnit = BigInt(parseFloat(swapAmount) * 10 ** 6);
+
       const result = await prepareSwap.prepareSwap({
+        from: wallets[0].address as Address,
         fromToken: fromToken as Address,
         toToken: toToken as Address,
-        fromAmount: `0x${amountWei.toString(16)}` as Hex,
+        fromAmount: `0x${amountInSmallestUnit.toString(16)}` as Hex,
       });
 
       setPreparedSwap(result);
@@ -92,7 +85,7 @@ export function TokenSwap() {
 
       // Reset form
       setPreparedSwap(null);
-      setSwapAmount("0.001");
+      setSwapAmount("1");
       prepareSwap.reset();
       submitSwap.reset();
     } catch (err) {
@@ -135,51 +128,36 @@ export function TokenSwap() {
       {!preparedSwap ? (
         <form onSubmit={handlePrepare}>
           <div className="form-group">
-            <label htmlFor="fromToken">From Token</label>
-            <input
-              id="fromToken"
-              type="text"
-              value={fromToken}
-              onChange={(e) => setFromToken(e.target.value)}
-              placeholder="0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE"
-              className="mono"
-              disabled={prepareSwap.isLoading || isDisabled}
-            />
-            <div className="helper-text">
-              ETH: {ETH_ADDRESS}
-              <br />
-              WETH (Base): {WETH_ADDRESS_BASE}
+            <label>Swap Direction</label>
+            <div
+              style={{
+                padding: "0.75rem",
+                backgroundColor: "#f5f5f5",
+                borderRadius: "4px",
+                fontSize: "0.875rem",
+              }}
+            >
+              <strong>USDC</strong> → <strong>ETH</strong>
+              <div className="helper-text" style={{ marginTop: "0.5rem" }}>
+                Swapping USDC (6 decimals) for ETH (18 decimals) on Base
+              </div>
             </div>
           </div>
 
           <div className="form-group">
-            <label htmlFor="toToken">To Token</label>
-            <input
-              id="toToken"
-              type="text"
-              value={toToken}
-              onChange={(e) => setToToken(e.target.value)}
-              placeholder="0x..."
-              className="mono"
-              disabled={prepareSwap.isLoading || isDisabled}
-            />
-            <div className="helper-text">USDC (Base): {USDC_ADDRESS_BASE}</div>
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="swapAmount">Amount to Swap</label>
+            <label htmlFor="swapAmount">Amount to Swap (USDC)</label>
             <input
               id="swapAmount"
               type="number"
               value={swapAmount}
               onChange={(e) => setSwapAmount(e.target.value)}
-              placeholder="0.001"
+              placeholder="1.0"
               step="any"
               min="0"
               disabled={prepareSwap.isLoading || isDisabled}
             />
             <div className="helper-text">
-              Enter the exact amount you want to swap from the source token
+              Enter USDC amount (e.g., 1 = 1 USDC, 0.5 = 0.5 USDC)
             </div>
           </div>
 
@@ -207,19 +185,19 @@ export function TokenSwap() {
         <div>
           <div className="quote-details">
             <div className="info-row">
-              <span className="info-label">From Amount:</span>
+              <span className="info-label">Swapping:</span>
               <span className="info-value">
-                {formatEther(BigInt(preparedSwap.quote.fromAmount))} tokens
+                {formatUnits(BigInt(preparedSwap.quote.fromAmount), 6)} USDC
               </span>
             </div>
             <div className="info-row">
-              <span className="info-label">Minimum You&apos;ll Receive:</span>
+              <span className="info-label">You&apos;ll Receive (min):</span>
               <span className="info-value">
-                {formatEther(BigInt(preparedSwap.quote.minimumToAmount))} tokens
+                {formatEther(BigInt(preparedSwap.quote.minimumToAmount))} ETH
               </span>
             </div>
             <div className="info-row">
-              <span className="info-label">Expires:</span>
+              <span className="info-label">Quote Expires:</span>
               <span className="info-value">
                 {new Date(
                   parseInt(preparedSwap.quote.expiry, 16) * 1000,

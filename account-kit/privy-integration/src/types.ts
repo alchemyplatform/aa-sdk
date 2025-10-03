@@ -1,4 +1,5 @@
 import type { Address, Hash, Hex } from "viem";
+import type { swapActions } from "@account-kit/wallet-client/experimental";
 
 /**
  * Configuration for the Alchemy provider
@@ -81,74 +82,48 @@ export interface UseSendTransactionResult {
 
 /**
  * Request parameters for preparing a swap
+ * Derived directly from the SDK to ensure type safety
  *
  * Note: Provide either `fromAmount` OR `minimumToAmount`, not both.
  * - Use `fromAmount` to specify exact amount to swap FROM
  * - Use `minimumToAmount` to specify minimum amount to receive TO
  */
-export interface PrepareSwapRequest {
-  /** Address initiating the swap */
-  from?: Address;
-
-  /** Token address to swap from (use "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE" for native token) */
-  fromToken: Address;
-
-  /** Token address to swap to (use "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE" for native token) */
-  toToken: Address;
-
-  /** Exact amount to swap from in hex format (e.g., "0xde0b6b3a7640000" for 1 ETH in wei). Mutually exclusive with minimumToAmount. */
-  fromAmount?: Hex;
-
-  /** Minimum amount to receive in hex format (e.g., "0xde0b6b3a7640000" for 1 ETH in wei). Mutually exclusive with fromAmount. */
-  minimumToAmount?: Hex;
-}
+export type PrepareSwapRequest = Parameters<
+  ReturnType<typeof swapActions>["requestQuoteV0"]
+>[0];
 
 /**
- * Swap quote information from Alchemy's swap API
+ * Response from requestQuoteV0
+ * Derived directly from the SDK to ensure type safety
  */
-export interface SwapQuote {
-  /** Amount being swapped from (hex string) */
-  fromAmount: Hex;
+export type RequestQuoteV0Result = Awaited<
+  ReturnType<ReturnType<typeof swapActions>["requestQuoteV0"]>
+>;
 
-  /** Minimum amount to receive (hex string) */
-  minimumToAmount: Hex;
-
-  /** Quote expiration timestamp as hex string (convert with parseInt(expiry, 16)) */
-  expiry: Hex;
-
-  /** Additional quote details */
-  [key: string]: unknown;
-}
+/**
+ * Swap quote information extracted from prepared swap calls
+ * Derived directly from the SDK response
+ */
+export type SwapQuote = NonNullable<RequestQuoteV0Result["quote"]>;
 
 /**
  * Prepared swap calls ready for signing
- * This matches the structure returned by requestQuoteV0
+ * Excludes the rawCalls variant since we validate against it
  */
-export interface PreparedSwapCalls {
-  /** Swap quote details */
-  quote?: SwapQuote;
-
-  /** Chain ID */
-  chainId?: Hex;
-
-  /** Call type */
-  type?: string;
-
-  /** Not raw calls */
-  rawCalls?: false;
-
-  /** Additional call data */
-  [key: string]: unknown;
-}
+export type PreparedSwapCalls = Extract<
+  RequestQuoteV0Result,
+  { rawCalls?: false | undefined }
+>;
 
 /**
  * Result of preparing a swap
+ * Separates quote from prepared calls for cleaner API
  */
 export interface PrepareSwapResult {
   /** Swap quote information */
   quote: SwapQuote;
 
-  /** Prepared calls ready for signing */
+  /** Prepared calls ready for signing (full response from requestQuoteV0) */
   preparedCalls: PreparedSwapCalls;
 }
 
@@ -173,15 +148,8 @@ export interface UsePrepareSwapResult {
 }
 
 /**
- * Signed swap calls ready for submission
- */
-export interface SignedSwapCalls {
-  /** Signed call data */
-  [key: string]: unknown;
-}
-
-/**
  * Result of submitting a swap
+ * Simplified wrapper that extracts the transaction hash
  */
 export interface SubmitSwapResult {
   /** Transaction hash of the swap */

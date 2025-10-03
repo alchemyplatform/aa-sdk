@@ -3,10 +3,10 @@ import { useWallets } from "@privy-io/react-auth";
 import { type Address } from "viem";
 import { swapActions } from "@account-kit/wallet-client/experimental";
 import { useAlchemyClient } from "./useAlchemyClient.js";
-import { useAlchemyConfig } from "../Provider.js";
 import type {
   PrepareSwapRequest,
   PrepareSwapResult,
+  PreparedSwapCalls,
   UsePrepareSwapResult,
 } from "../types";
 
@@ -48,7 +48,6 @@ import type {
 export function useAlchemyPrepareSwap(): UsePrepareSwapResult {
   const { wallets } = useWallets();
   const { client: getClient } = useAlchemyClient();
-  const config = useAlchemyConfig();
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
@@ -70,56 +69,18 @@ export function useAlchemyPrepareSwap(): UsePrepareSwapResult {
       setError(null);
 
       try {
-        // Validate that only one of fromAmount or minimumToAmount is provided
-        if (request.fromAmount && request.minimumToAmount) {
-          throw new Error(
-            "Cannot provide both fromAmount and minimumToAmount. Please specify only one.",
-          );
-        }
-
-        if (!request.fromAmount && !request.minimumToAmount) {
-          throw new Error("Must provide either fromAmount or minimumToAmount.");
-        }
-
         const client = await getClient();
         const embeddedWallet = getEmbeddedWallet();
 
         // Extend client with swap actions
         const swapClient = client.extend(swapActions);
 
-        // Determine if swap should be sponsored
-        const hasPolicyId = !!config.policyId;
-        const defaultSponsored = config.defaultSponsored ?? true;
-        const shouldSponsor = hasPolicyId && defaultSponsored;
-
-        // Build capabilities for gas sponsorship
-        const policyId = Array.isArray(config.policyId)
-          ? config.policyId[0]
-          : config.policyId;
-
-        const capabilities: {
-          eip7702Auth: true;
-          paymasterService?: { policyId: string };
-        } = { eip7702Auth: true };
-
-        if (shouldSponsor && policyId) {
-          capabilities.paymasterService = { policyId };
-        }
-
-        // Request the swap quote with gas sponsorship capabilities
-        // Build request with either fromAmount (exact amount to swap) OR minimumToAmount (minimum to receive)
-        const baseRequest = {
+        // Request the swap quote
+        // Note: Gas sponsorship capabilities are configured on the client itself
+        const response = await swapClient.requestQuoteV0({
+          ...request,
           from: request.from || (embeddedWallet.address as Address),
-          fromToken: request.fromToken,
-          toToken: request.toToken,
-          capabilities,
-        };
-
-        const quoteRequest = request.fromAmount
-          ? { ...baseRequest, fromAmount: request.fromAmount }
-          : { ...baseRequest, minimumToAmount: request.minimumToAmount! };
-
-        const response = await swapClient.requestQuoteV0(quoteRequest);
+        });
 
         // Extract quote and prepared calls from response
         const { quote, ...preparedCalls } = response;
@@ -133,7 +94,9 @@ export function useAlchemyPrepareSwap(): UsePrepareSwapResult {
 
         const result: PrepareSwapResult = {
           quote,
-          preparedCalls,
+          // Pass the full response as preparedCalls
+          // Type assertion is safe because we validated rawCalls is not true above
+          preparedCalls: response as PreparedSwapCalls,
         };
 
         setData(result);
@@ -147,7 +110,7 @@ export function useAlchemyPrepareSwap(): UsePrepareSwapResult {
         setIsLoading(false);
       }
     },
-    [getClient, getEmbeddedWallet, config],
+    [getClient, getEmbeddedWallet],
   );
 
   const reset = useCallback(() => {
