@@ -1,0 +1,20 @@
+{
+  "name": "aa-sdk-getting-started",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/index.js",
+    "dev": "ts-node src/index.ts"
+  },
+  "dependencies": {
+    "@alchemy/aa-core": "workspace:*",
+    "@alchemy/aa-ethers": "workspace:*",
+    "ethers": "^6.10.0",
+    "dotenv": "^16.4.0"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.0"
+  }
+}
