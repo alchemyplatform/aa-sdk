@@ -1,0 +1,222 @@
+You will need to fill in values wrapped in curly braces like `{SIGNER_ADDRESS}`.
+
+<Steps>
+
+<Step title="Request an account">
+
+```bash
+curl -X POST https://api.g.alchemy.com/v2/{apiKey} \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "id": 1,
+    "method": "wallet_requestAccount",
+    "params": [
+      {
+        "signerAddress": "{SIGNER_ADDRESS}"
+      }
+    ]
+  }'
+```
+
+This returns:
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "accountAddress": "ACCOUNT_ADDRESS",
+    "id": "ACCOUNT_ID"
+  }
+}
+```
+
+For other potential responses, [check out the API reference!](/docs/wallets/api-reference/smart-wallets/wallet-api-endpoints/wallet-api-endpoints/wallet-request-account)
+
+</Step>
+
+<Step title="Request a cross-chain swap quote">
+
+<Info>
+  **Important**: Cross-chain swaps do not support `postCalls`. You cannot batch
+  additional actions after a cross-chain swap.
+</Info>
+
+Request a cross-chain swap quote by specifying both the source chain (`chainId`) and destination chain (`toChainId`). In addition, just like in [single-chain swaps](/wallets/transactions/swap-tokens) you can specify either a `minimumToAmount` or a `fromAmount`.
+
+<Info>
+  If you're using an EOA or just want the raw array of calls returned, pass the
+  optional parameter `"returnRawCalls": true`, this will return a `calls` array.
+</Info>
+
+```bash
+curl -X POST https://api.g.alchemy.com/v2/{API_KEY} \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "id": 1,
+    "method": "wallet_requestQuote_v0",
+    "params": [
+      {
+        "from": "{ACCOUNT_ADDRESS_FROM_STEP_1}",
+        "chainId": "{SOURCE_CHAIN_ID}",
+        "toChainId": "{DESTINATION_CHAIN_ID}",
+        "fromToken": "{FROM_TOKEN}",
+        "toToken": "{TO_TOKEN}",
+        "fromAmount": "{FROM_AMOUNT_HEXADECIMAL}",
+        "capabilities": {
+          "paymasterService": {
+            "policyId": "{PAYMASTER_POLICY_ID}"
+          }
+        }
+      }
+    ]
+  }'
+```
+
+This returns:
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 0,
+  "result": {
+    "rawCalls": false,
+    "chainId": "...",
+    "callId": "0x...",
+    "quote": {
+      "expiry": "EXPIRY",
+      "minimumToAmount": "MINIMUM_TO_AMOUNT",
+      "fromAmount": "FROM_AMOUNT"
+    },
+    "type": "user-operation-v070",
+    "data": "USER_OPERATION_DATA",
+    "signatureRequest": {
+      "type": "personal_sign",
+      "data": {
+        "raw": "..."
+      },
+      "rawPayload": "..."
+    },
+    "feePayment": {
+      "sponsored": true,
+      "tokenAddress": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "maxAmount": "..."
+    }
+  }
+}
+```
+
+Note the `callId` in the response! You'll use this to track the cross-chain swap status. Also note the `signatureRequest` - this is what you need to sign, and the returned `data` field is what you'll need to send the transaction.
+
+</Step>
+
+<Step title="Sign the signature request">
+
+To sign the signature request, sign the `raw` field (note, this is not a string! You need to pass it to your signer as raw bytes, generally like so: `{ raw: "0x..." }`) with your signer of choice.
+
+This should use the `personal_sign` RPC method, as noted by the `type` in the `signatureRequest`.
+
+Alternatively, you can sign the raw payload with a simple `eth_sign` but this RPC method is not favored due to security concerns.
+
+</Step>
+
+<Step title="Send the prepared call">
+
+Pass the `callId` from Step 2 to `sendPreparedCalls`. This makes the response return the same `callId` with additional cross-chain status tracking information:
+
+```bash
+curl -X POST https://api.g.alchemy.com/v2/{apiKey} \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "method": "wallet_sendPreparedCalls",
+    "params": [
+      {
+        "callId": "{CALL_ID_FROM_STEP_2}",
+        "type": "user-operation-v070",
+        "data": "{DATA_FROM_STEP_2}",
+        "chainId": "{SOURCE_CHAIN_ID}",
+        "signature": {
+          "type": "secp256k1",
+          "data": "{SIGNATURE_FROM_STEP_3}"
+        }
+      }
+    ],
+    "id": 1
+  }'
+```
+
+This returns:
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": "1",
+  "result": {
+    "preparedCallIds": ["PREPARED_CALL_ID"]
+  }
+}
+```
+
+The response returns the same `callId` you passed in, which you'll use to track the cross-chain swap status in the next step.
+
+For other potential responses, [check out the API reference!](/docs/wallets/api-reference/smart-wallets/wallet-api-endpoints/wallet-api-endpoints/wallet-send-prepared-calls)
+
+</Step>
+
+<Step title="Track the cross-chain swap">
+
+Use the `wallet_getCallsStatus` endpoint to check the status of your cross-chain swap. Cross-chain swaps may take longer than single-chain swaps due to cross-chain messaging.
+
+```bash
+curl -X POST https://api.g.alchemy.com/v2/{apiKey} \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "method": "wallet_getCallsStatus",
+    "params": [
+      [
+        "{CALL_ID_FROM_STEP_2_OR_STEP_4}"
+      ]
+    ],
+    "id": 1
+  }'
+```
+
+This returns:
+
+```json
+{
+  "id": "1",
+  "jsonrpc": "2.0",
+  "result": {
+    "id": "CALL_ID",
+    "chainId": "SOURCE_CHAIN_ID",
+    "atomic": true,
+    "status": 200,
+    "receipts": [...]
+  }
+}
+```
+
+Cross-chain swaps have additional status codes to reflect the cross-chain nature of the transaction:
+
+| Code | Title                   |
+| ---- | ----------------------- |
+| 100  | Pending                 |
+| 120  | Cross-Chain In Progress |
+| 200  | Confirmed               |
+| 400  | Offchain Failure        |
+| 410  | Cross-chain Refund      |
+| 500  | Onchain Failure         |
+| 600  | Partial Onchain Failure |
+
+To get your transaction hash, you can access `result.receipts[0].transactionHash`.
+
+For more details, check out [the API reference!](/docs/wallets/api-reference/smart-wallets/wallet-api-endpoints/wallet-api-endpoints/wallet-get-calls-status)
+
+</Step>
+
+</Steps>
