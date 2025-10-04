@@ -10,7 +10,6 @@ import type {
   UserOperationOverrides,
   UserOperationRequest,
 } from "@aa-sdk/core";
-import { DEFAULT_7702_GAS_ESTIMATOR_MIDDLEWARE_SYMBOL } from "@aa-sdk/core";
 import {
   bypassPaymasterAndData,
   ChainNotFoundError,
@@ -189,17 +188,6 @@ export function alchemyGasAndPaymasterAndDataMiddleware(
     gasEstimatorOverride,
     feeEstimatorOverride,
   } = params;
-
-  // Check if the gas estimator override is the default 7702 gas estimator
-  const isDefault7702GasEstimator =
-    gasEstimatorOverride &&
-    (gasEstimatorOverride as any)[DEFAULT_7702_GAS_ESTIMATOR_MIDDLEWARE_SYMBOL];
-
-  // Treat default7702GasEstimator as if there's no override for Alchemy gas manager purposes
-  const effectiveGasEstimatorOverride = isDefault7702GasEstimator
-    ? undefined
-    : gasEstimatorOverride;
-
   return {
     dummyPaymasterAndData: async (uo, args) => {
       if (
@@ -207,7 +195,7 @@ export function alchemyGasAndPaymasterAndDataMiddleware(
         bypassPaymasterAndData(args.overrides) ||
         // When using alchemy_requestGasAndPaymasterAndData, there is generally no reason to generate dummy
         // data. However, if the gas/feeEstimator is overriden, then this option should be enabled.
-        !(effectiveGasEstimatorOverride || feeEstimatorOverride)
+        !(gasEstimatorOverride || feeEstimatorOverride)
       ) {
         return noopMiddleware(uo, args);
       }
@@ -226,8 +214,8 @@ export function alchemyGasAndPaymasterAndDataMiddleware(
           : noopMiddleware(uo, args);
     },
     gasEstimator: (uo, args) => {
-      return effectiveGasEstimatorOverride
-        ? effectiveGasEstimatorOverride(uo, args)
+      return gasEstimatorOverride
+        ? gasEstimatorOverride(uo, args)
         : bypassPaymasterAndData(args.overrides)
           ? defaultGasEstimator(args.client)(uo, args)
           : noopMiddleware(uo, args);

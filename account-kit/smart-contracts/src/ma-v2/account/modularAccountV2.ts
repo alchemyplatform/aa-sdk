@@ -215,6 +215,7 @@ export async function createModularAccountV2<
           throw new EntityIdOverrideError();
         }
 
+        // Note: If this ever gets updated, look at `initUserOperation` in `aa-sdk/core` too.
         const implementation: Address =
           "0x69007702764179f14F51cdce752f4f775d74E139";
 
@@ -289,6 +290,7 @@ export async function createModularAccountV2<
     });
   }
 
+  // TODO(jh): maybe just pass 7702 here, esp if we don't export this?
   return await createMAv2Base({
     source: "ModularAccountV2", // TO DO: remove need to pass in source?
     transport,

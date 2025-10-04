@@ -1,6 +1,5 @@
 import {
   createSmartAccountClient,
-  default7702GasEstimator,
   default7702UserOpSigner,
   webauthnGasEstimator,
   type SmartAccountClient,
@@ -165,7 +164,6 @@ export async function createModularAccountV2Client(
     switch (config.mode) {
       case "7702":
         return {
-          gasEstimator: default7702GasEstimator(config.gasEstimator),
           signUserOperation: default7702UserOpSigner(config.signUserOperation),
         };
       case "webauthn":
