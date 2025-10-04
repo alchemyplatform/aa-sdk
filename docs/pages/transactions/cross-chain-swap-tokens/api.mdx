@@ -5,7 +5,7 @@ You will need to fill in values wrapped in curly braces like `{SIGNER_ADDRESS}`.
 <Step title="Request an account">
 
 ```bash
-curl -X POST https://api.g.alchemy.com/v2/{apiKey} \
+curl -X POST https://api.g.alchemy.com/v2/{API_KEY} \
   -H "Content-Type: application/json" \
   -d '{
     "jsonrpc": "2.0",
@@ -127,7 +127,7 @@ Alternatively, you can sign the raw payload with a simple `eth_sign` but this RP
 Pass the `callId` from Step 2 to `sendPreparedCalls`. This makes the response return the same `callId` with additional cross-chain status tracking information:
 
 ```bash
-curl -X POST https://api.g.alchemy.com/v2/{apiKey} \
+curl -X POST https://api.g.alchemy.com/v2/{API_KEY} \
   -H "Content-Type: application/json" \
   -d '{
     "jsonrpc": "2.0",
@@ -171,7 +171,7 @@ For other potential responses, [check out the API reference!](/docs/wallets/api-
 Use the `wallet_getCallsStatus` endpoint to check the status of your cross-chain swap. Cross-chain swaps may take longer than single-chain swaps due to cross-chain messaging.
 
 ```bash
-curl -X POST https://api.g.alchemy.com/v2/{apiKey} \
+curl -X POST https://api.g.alchemy.com/v2/{API_KEY} \
   -H "Content-Type: application/json" \
   -d '{
     "jsonrpc": "2.0",
