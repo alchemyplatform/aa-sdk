@@ -1,4 +1,4 @@
-import { default7702GasEstimator, default7702UserOpSigner } from "@aa-sdk/core";
+import { default7702UserOpSigner } from "@aa-sdk/core";
 import {
   createAlchemySmartAccountClient,
   type AlchemySmartAccountClient,
@@ -238,9 +238,6 @@ export function getSmartAccountClient(
             policyToken: connection.policyToken,
             ...(is7702
               ? {
-                  gasEstimator: default7702GasEstimator(
-                    clientParams.gasEstimator,
-                  ),
                   signUserOperation: default7702UserOpSigner(
                     clientParams.signUserOperation,
                   ),

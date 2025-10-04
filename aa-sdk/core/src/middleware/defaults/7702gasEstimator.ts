@@ -8,6 +8,8 @@ import { defaultGasEstimator } from "./gasEstimator.js";
  * A middleware function to estimate the gas usage of a user operation when using an EIP-7702 delegated account. Has an optional custom gas estimator.
  * This function is only compatible with accounts using EntryPoint v0.7.0, and the account must have an implementation address defined in `getImplementationAddress()`.
  *
+ * @deprecated The EIP-7702 auth is now set in initUserOperation instead. This middleware is no longer necessary.
+ *
  * @example
  * ```ts twoslash
  * import {
