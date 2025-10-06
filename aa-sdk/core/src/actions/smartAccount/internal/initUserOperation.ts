@@ -1,7 +1,8 @@
 import { type Chain, type Transport, concatHex, toHex, zeroHash } from "viem";
-import type {
-  GetEntryPointFromAccount,
-  SmartContractAccount,
+import {
+  isSmartAccountWithSigner,
+  type GetEntryPointFromAccount,
+  type SmartContractAccount,
 } from "../../../account/smartContractAccount.js";
 import type { BaseSmartAccountClient } from "../../../client/smartAccountClient.js";
 import { AccountNotFoundError } from "../../../errors/account.js";
@@ -90,18 +91,13 @@ export async function _initUserOperation<
           signature,
         } as Deferrable<UserOperationStruct<TEntryPointVersion>>);
 
-  // Options we have here to detect 7702:
-  // - Check for expected implementation address.
-  // - Check that factory address is "0x" (i.e. not using a factory).
-  // - Check that signer address matches account address (i.e. self-signed).
-  // The last one is the most robust, but we don't have great typing on the signer,
-  // i.e. `(await (account as any).getSigner()?.getAddress()) === account.address`.
-  // The first one is ok for now, but not future-proof if we add new implementations.
-  if (
+  const is7702 =
     account.source === "ModularAccountV2" &&
-    (await account.getImplementationAddress()) ===
-      "0x69007702764179f14F51cdce752f4f775d74E139"
-  ) {
+    isSmartAccountWithSigner(account) &&
+    (await account.getSigner().getAddress()).toLowerCase() ===
+      account.address.toLowerCase();
+
+  if (is7702) {
     if (entryPoint.version !== "0.7.0") {
       throw new Error("7702 is only compatible with EntryPoint v0.7.0");
     }
@@ -113,7 +109,8 @@ export async function _initUserOperation<
     ]);
 
     const isAlreadyDelegated =
-      code.toLowerCase() === concatHex(["0xef0100", implementationAddress]);
+      code.toLowerCase() ===
+      concatHex(["0xef0100", implementationAddress]).toLowerCase();
 
     if (!isAlreadyDelegated) {
       (struct as UserOperationStruct<"0.7.0">).eip7702Auth = {

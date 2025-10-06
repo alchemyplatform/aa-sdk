@@ -10,33 +10,6 @@ import { defaultGasEstimator } from "./gasEstimator.js";
  *
  * @deprecated The EIP-7702 auth is now set in initUserOperation instead. This middleware is no longer necessary.
  *
- * @example
- * ```ts twoslash
- * import {
- *   default7702GasEstimator,
- *   default7702UserOpSigner,
- *   createSmartAccountClient,
- *   type SmartAccountClient,
- * } from "@aa-sdk/core";
- * import {
- *   createModularAccountV2,
- *   type CreateModularAccountV2ClientParams,
- * } from "@account-kit/smart-contracts";
- *
- * async function createSMA7702AccountClient(
- *   config: CreateModularAccountV2ClientParams
- * ): Promise<SmartAccountClient> {
- *   const sma7702Account = await createModularAccountV2({ ...config, mode: "7702" });
- *
- *   return createSmartAccountClient({
- *     account: sma7702Account,
- *     gasEstimator: default7702GasEstimator(config.gasEstimator),
- *     signUserOperation: default7702UserOpSigner(config.signUserOperation),
- *     ...config,
- *   });
- * }
- * ```
- *
  * @param {ClientMiddlewareFn} gasEstimator Optional custom gas estimator function
  * @returns {ClientMiddlewareFn} A function that takes user operation struct and parameters, estimates gas usage, and returns the user operation with gas limits.
  */

@@ -215,7 +215,6 @@ export async function createModularAccountV2<
           throw new EntityIdOverrideError();
         }
 
-        // Note: If this ever gets updated, look at `initUserOperation` in `aa-sdk/core` too.
         const implementation: Address =
           "0x69007702764179f14F51cdce752f4f775d74E139";
 
