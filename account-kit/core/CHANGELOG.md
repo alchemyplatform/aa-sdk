@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.67.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.66.4...v4.67.0) (2025-10-06)
+
+### Bug Fixes
+
+- reduce rpc calls when using 7702 ([#2155](https://github.com/alchemyplatform/aa-sdk/issues/2155)) ([280ee4b](https://github.com/alchemyplatform/aa-sdk/commit/280ee4bc5f71a3f57492424df526f4313ad5afb1))
+
 ## [4.66.4](https://github.com/alchemyplatform/aa-sdk/compare/v4.66.3...v4.66.4) (2025-10-01)
 
 **Note:** Version bump only for package @account-kit/core
