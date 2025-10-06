@@ -1,7 +1,5 @@
 import {
   createSmartAccountClient,
-  default7702GasEstimator,
-  default7702UserOpSigner,
   webauthnGasEstimator,
   type SmartAccountClient,
   type SmartAccountClientConfig,
@@ -163,18 +161,16 @@ export async function createModularAccountV2Client(
 
   const middlewareToAppend = await (async () => {
     switch (config.mode) {
-      case "7702":
-        return {
-          gasEstimator: default7702GasEstimator(config.gasEstimator),
-          signUserOperation: default7702UserOpSigner(config.signUserOperation),
-        };
       case "webauthn":
         return {
           gasEstimator: webauthnGasEstimator(config.gasEstimator),
         };
+      case "7702":
       case "default":
-      default:
+      case undefined:
         return {};
+      default:
+        return assertNeverConfigMode(config);
     }
   })();
 
@@ -193,4 +189,8 @@ export async function createModularAccountV2Client(
     account,
     ...middlewareToAppend,
   });
+}
+
+function assertNeverConfigMode(_: never): never {
+  throw new Error("Unexpected mode");
 }
