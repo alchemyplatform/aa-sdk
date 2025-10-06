@@ -49,7 +49,6 @@
   },
   "dependencies": {
     "@alchemy/common": "*",
-    "@alchemy/connectors-web": "*",
     "@alchemy/auth": "*",
     "viem": "2.29.2"
   },

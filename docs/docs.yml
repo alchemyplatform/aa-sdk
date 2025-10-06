@@ -1103,8 +1103,8 @@ navigation:
                 contents:
                   - page: alchemyAuth
                     path: wallets/pages/reference/alchemy/connectors-web/functions/alchemyAuth.mdx
-                  - page: resolveAlchemyAuthConnector
-                    path: wallets/pages/reference/alchemy/connectors-web/functions/resolveAlchemyAuthConnector.mdx
+                  - page: alchemySmartWallet
+                    path: wallets/pages/reference/alchemy/connectors-web/functions/alchemySmartWallet.mdx
 
       - section: Alchemy Web Signer
         contents:
@@ -1136,8 +1136,6 @@ navigation:
                         path: wallets/pages/reference/alchemy/signer/classes/AuthClient/sendEmailOtp.mdx
                       - page: submitOtpCode
                         path: wallets/pages/reference/alchemy/signer/classes/AuthClient/submitOtpCode.mdx
-                  - page: OauthCancelledError
-                    path: wallets/pages/reference/alchemy/signer/classes/OauthCancelledError/constructor.mdx
 
       - section: aa-sdk/ethers
         contents:
@@ -1188,8 +1186,12 @@ navigation:
             contents:
               - section: Functions
                 contents:
+                  - page: createEip1193Provider
+                    path: wallets/pages/reference/alchemy/wallet-apis/functions/createEip1193Provider.mdx
                   - page: createSmartWalletClient
                     path: wallets/pages/reference/alchemy/wallet-apis/functions/createSmartWalletClient.mdx
+                  - page: createSmartWalletClientAndRequestAccount
+                    path: wallets/pages/reference/alchemy/wallet-apis/functions/createSmartWalletClientAndRequestAccount.mdx
                   - page: formatSign
                     path: wallets/pages/reference/alchemy/wallet-apis/functions/formatSign.mdx
                   - page: grantPermissions
