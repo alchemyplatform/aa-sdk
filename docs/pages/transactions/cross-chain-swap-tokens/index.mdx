@@ -71,7 +71,7 @@ Before you begin, ensure you have:
 
 ## What chains are supported for cross-chain swaps?
 
-Cross-chain swaps support multiple chain pairs. Supported chains include: Ethereum, Arbitrum, Base, Berachain, BSC/BNB, Ink, Monad, Optimism, Polygon, Unichain and World Chain mainnets. Specific supported pairs may vary.
+Chains supported (for now) are: Arbitrum, Arbitrum Nova, Base, Berachain, Boba Network, BSC/BNB, Celo, Ethereum, Hyperliquid, Ink, Optimism, Plasma, Polygon, Shape, Soneium, Story, Unichain, World Chain, and Zora mainnets.
 
 ## Can I batch additional calls after a cross-chain swap?
 
@@ -94,4 +94,11 @@ The expiry is an informational indicator of when you can expect to be able to pr
 
 ## What are the different status codes for cross-chain swaps?
 
-Cross-chain swaps may have additional status codes beyond standard transaction statuses to reflect the cross-chain nature of the transaction. Check the status tracking documentation for details.
+Cross-chain swaps may have additional status codes beyond standard transaction statuses to reflect the cross-chain nature of the transaction. These are:
+
+- 120: Cross-chain in progress
+- 410: Cross-chain refund
+
+## When is a CallId returned from `wallet_requestQuote_v0`?
+
+Any time you’re requesting a cross-chain quote via `wallet_requestQuote_v0` , a `callId` is returned. This `callId` includes important data for cross-chain tracking. You can use this just like any other `callId` in `wallet_getCallsStatus`!
