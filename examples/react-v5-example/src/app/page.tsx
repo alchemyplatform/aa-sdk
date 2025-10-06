@@ -10,7 +10,9 @@ import {
   useVerifyMessage,
   useVerifyTypedData,
 } from "wagmi";
+import { useSendCalls } from "wagmi/experimental"; // TODO(jh): why is this still experimental? do we have old wagmi version?
 import { useSendEmailOtp, useSubmitOtpCode } from "@alchemy/react";
+import { zeroAddress } from "viem";
 
 export default function Home() {
   const account = useAccount();
@@ -26,9 +28,9 @@ export default function Home() {
         <>
           <ChainControls />
           <SigningDemo />
+          <SendCallsDemo />
         </>
       )}
-      {/* TODO(v5): add `useSendCalls` once smart wallet connector is ready */}
     </div>
   );
 }
@@ -204,6 +206,37 @@ const SigningDemo = () => {
       </div>
       {isMessageVerified && <p>Message signature verified!</p>}
       {isTypedDataVerified && <p>Typed data signature verified!</p>}
+    </div>
+  );
+};
+
+const SendCallsDemo = () => {
+  const {
+    sendCalls,
+    data: sendCallsResult,
+    error: sendCallsError,
+  } = useSendCalls();
+
+  return (
+    <div className="flex flex-col gap-2 items-center">
+      <button
+        onClick={() => {
+          sendCalls({
+            calls: [{ to: zeroAddress, data: "0x" }],
+          });
+        }}
+        className="cursor-pointer rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 text-sm"
+      >
+        Send Calls
+      </button>
+      {sendCallsResult && (
+        <p className="break-all max-w-xl">Calls sent: {sendCallsResult.id}</p>
+      )}
+      {sendCallsError && (
+        <p className="break-all max-w-xl">
+          Error sending calls: {JSON.stringify(sendCallsError)}
+        </p>
+      )}
     </div>
   );
 };

@@ -1136,8 +1136,6 @@ navigation:
                         path: wallets/pages/reference/alchemy/signer/classes/AuthClient/sendEmailOtp.mdx
                       - page: submitOtpCode
                         path: wallets/pages/reference/alchemy/signer/classes/AuthClient/submitOtpCode.mdx
-                  - page: OauthCancelledError
-                    path: wallets/pages/reference/alchemy/signer/classes/OauthCancelledError/constructor.mdx
 
       - section: aa-sdk/ethers
         contents:
