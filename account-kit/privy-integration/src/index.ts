@@ -19,7 +19,6 @@ export type {
   UseSendTransactionResult,
   PrepareSwapRequest,
   PrepareSwapResult,
-  PreparedSwapCalls,
   UsePrepareSwapResult,
   SubmitSwapResult,
   UseSubmitSwapResult,

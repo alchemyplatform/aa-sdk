@@ -40,7 +40,9 @@ export function SendTransaction({ onSuccess }: { onSuccess?: () => void }) {
         data: "0x",
       });
 
-      setSuccessMessage(`Transaction sent! Hash: ${result.txnHash}`);
+      setSuccessMessage(
+        `Transaction sent! View on BaseScan: https://basescan.org/tx/${result.txnHash}`,
+      );
       setRecipient("");
       setAmount("0.001");
 

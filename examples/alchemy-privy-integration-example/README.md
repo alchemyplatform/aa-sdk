@@ -15,7 +15,9 @@ This example demonstrates how to integrate Alchemy's gas sponsorship and smart w
 This example demonstrates three key integrations:
 
 ### 1. Send Transaction Component
+
 Shows how to use `useAlchemySendTransaction()` to send ETH with gas sponsorship:
+
 ```tsx
 const { sendTransaction, isLoading } = useAlchemySendTransaction();
 
@@ -26,19 +28,22 @@ await sendTransaction({
 });
 ```
 
-### 2. Token Swap Component  
+### 2. Token Swap Component
+
 Shows the two-step swap flow using `useAlchemyPrepareSwap()` and `useAlchemySubmitSwap()`:
+
 ```tsx
 // Step 1: Get quote
 const { prepareSwap } = useAlchemyPrepareSwap();
-const result = await prepareSwap({ fromToken, toToken, minimumToAmount });
+const preparedSwap = await prepareSwap({ fromToken, toToken, minimumToAmount });
 
 // Step 2: Execute swap
 const { submitSwap } = useAlchemySubmitSwap();
-await submitSwap(result.preparedCalls);
+await submitSwap(preparedSwap);
 ```
 
 ### 3. Account Info Component
+
 Shows how to fetch and display user wallet information using Privy hooks and viem.
 
 ## Getting Started

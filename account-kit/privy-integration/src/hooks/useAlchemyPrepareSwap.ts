@@ -1,18 +1,18 @@
 import { useCallback, useState } from "react";
-import { useWallets } from "@privy-io/react-auth";
 import { type Address } from "viem";
 import { swapActions } from "@account-kit/wallet-client/experimental";
 import { useAlchemyClient } from "./useAlchemyClient.js";
+import { useEmbeddedWallet } from "./internal/useEmbeddedWallet.js";
 import type {
   PrepareSwapRequest,
   PrepareSwapResult,
-  PreparedSwapCalls,
   UsePrepareSwapResult,
 } from "../types";
 
 /**
  * Hook to request swap quotes and prepare swap calls
  * Part of the two-step swap process: prepare → submit
+ * Use with `useAlchemySubmitSwap()` to execute the prepared swap
  *
  * Supports two modes:
  * 1. Specify exact amount to swap FROM (`fromAmount`)
@@ -20,16 +20,20 @@ import type {
  *
  * @returns {UsePrepareSwapResult} Hook result with prepareSwap function and state
  *
- * @example Swap exact amount FROM
+ * @example Complete swap flow
  * ```tsx
  * const { prepareSwap } = useAlchemyPrepareSwap();
+ * const { submitSwap } = useAlchemySubmitSwap();
  *
- * // Swap exactly 1 ETH for USDC
- * const result = await prepareSwap({
+ * // Step 1: Prepare the swap (get quote)
+ * const preparedSwap = await prepareSwap({
  *   fromToken: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
  *   toToken: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
  *   fromAmount: '0xde0b6b3a7640000', // 1 ETH in hex
  * });
+ *
+ * // Step 2: Execute the swap
+ * const result = await submitSwap(preparedSwap);
  * ```
  *
  * @example Swap for minimum amount TO
@@ -46,22 +50,12 @@ import type {
  * ```
  */
 export function useAlchemyPrepareSwap(): UsePrepareSwapResult {
-  const { wallets } = useWallets();
-  const { client: getClient } = useAlchemyClient();
+  const { getClient } = useAlchemyClient();
+  const getEmbeddedWallet = useEmbeddedWallet();
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
   const [data, setData] = useState<PrepareSwapResult | null>(null);
-
-  const getEmbeddedWallet = useCallback(() => {
-    const embedded = wallets.find((w) => w.walletClientType === "privy");
-    if (!embedded) {
-      throw new Error(
-        "Privy embedded wallet not found. Please ensure the user is authenticated.",
-      );
-    }
-    return embedded;
-  }, [wallets]);
 
   const prepareSwap = useCallback(
     async (request: PrepareSwapRequest): Promise<PrepareSwapResult> => {
@@ -82,25 +76,15 @@ export function useAlchemyPrepareSwap(): UsePrepareSwapResult {
           from: request.from || (embeddedWallet.address as Address),
         });
 
-        // Extract quote and prepared calls from response
-        const { quote, ...preparedCalls } = response;
-
         // Validate that we got prepared calls, not raw calls
-        if (preparedCalls.rawCalls) {
+        if (response.rawCalls) {
           throw new Error(
             "Received raw calls instead of prepared calls. Ensure returnRawCalls is not set to true.",
           );
         }
 
-        const result: PrepareSwapResult = {
-          quote,
-          // Pass the full response as preparedCalls
-          // Type assertion is safe because we validated rawCalls is not true above
-          preparedCalls: response as PreparedSwapCalls,
-        };
-
-        setData(result);
-        return result;
+        setData(response);
+        return response;
       } catch (err) {
         const errorObj =
           err instanceof Error ? err : new Error("Failed to prepare swap");

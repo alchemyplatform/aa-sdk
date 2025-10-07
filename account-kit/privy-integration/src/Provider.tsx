@@ -13,7 +13,7 @@ const AlchemyContext = createContext<AlchemyProviderConfig | null>(null);
  * @param {string} [props.jwt] - JWT token for authentication
  * @param {string} [props.url] - Custom RPC URL
  * @param {string | string[]} [props.policyId] - Gas Manager policy ID(s). If array is provided, the first policy will be used for all transactions.
- * @param {boolean} [props.defaultSponsored] - Enable sponsorship by default (default: true)
+ * @param {boolean} [props.disableSponsorship] - Set to true to disable sponsorship by default (default: false)
  * @returns {JSX.Element} Provider component
  *
  * @example

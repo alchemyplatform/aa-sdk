@@ -1,8 +1,8 @@
 import { useCallback, useState } from "react";
-import { useWallets } from "@privy-io/react-auth";
 import { type Address, type Hex, isHex } from "viem";
 import { useAlchemyClient } from "./useAlchemyClient.js";
 import { useAlchemyConfig } from "../Provider.js";
+import { useEmbeddedWallet } from "./internal/useEmbeddedWallet.js";
 import type {
   UnsignedTransactionRequest,
   SendTransactionOptions,
@@ -56,23 +56,13 @@ function normalizeValue(value: string | number | bigint): Hex {
  * ```
  */
 export function useAlchemySendTransaction(): UseSendTransactionResult {
-  const { wallets } = useWallets();
-  const { client: getClient } = useAlchemyClient();
+  const { getClient } = useAlchemyClient();
   const config = useAlchemyConfig();
+  const getEmbeddedWallet = useEmbeddedWallet();
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
   const [data, setData] = useState<SendTransactionResult | null>(null);
-
-  const getEmbeddedWallet = useCallback(() => {
-    const embedded = wallets.find((w) => w.walletClientType === "privy");
-    if (!embedded) {
-      throw new Error(
-        "Privy embedded wallet not found. Please ensure the user is authenticated.",
-      );
-    }
-    return embedded;
-  }, [wallets]);
 
   const sendTransaction = useCallback(
     async (
@@ -88,9 +78,11 @@ export function useAlchemySendTransaction(): UseSendTransactionResult {
 
         // Determine if transaction should be sponsored
         const hasPolicyId = !!config.policyId;
-        const defaultSponsored = config.defaultSponsored ?? true;
+        const enableSponsorship = !config.disableSponsorship;
         const shouldSponsor =
-          options?.sponsored ?? (hasPolicyId && defaultSponsored);
+          options?.disableSponsorship !== undefined
+            ? !options.disableSponsorship
+            : hasPolicyId && enableSponsorship;
 
         // Format the transaction call
         const formattedCall = {
@@ -120,6 +112,12 @@ export function useAlchemySendTransaction(): UseSendTransactionResult {
           capabilities,
         });
 
+        if (!result.preparedCallIds || result.preparedCallIds.length === 0) {
+          throw new Error(
+            "No prepared call IDs returned from transaction submission",
+          );
+        }
+
         // Wait for the transaction to be confirmed
         const txStatus = await client.waitForCallsStatus({
           id: result.preparedCallIds[0],
@@ -143,7 +141,7 @@ export function useAlchemySendTransaction(): UseSendTransactionResult {
         setIsLoading(false);
       }
     },
-    [getClient, getEmbeddedWallet, config.policyId, config.defaultSponsored],
+    [getClient, getEmbeddedWallet, config.policyId, config.disableSponsorship],
   );
 
   const reset = useCallback(() => {

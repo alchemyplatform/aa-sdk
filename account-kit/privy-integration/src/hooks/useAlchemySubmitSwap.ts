@@ -2,7 +2,7 @@ import { useCallback, useState } from "react";
 import { swapActions } from "@account-kit/wallet-client/experimental";
 import { useAlchemyClient } from "./useAlchemyClient.js";
 import type {
-  PreparedSwapCalls,
+  PrepareSwapResult,
   SubmitSwapResult,
   UseSubmitSwapResult,
 } from "../types.js";
@@ -21,14 +21,14 @@ import type {
  * const handleSwap = async () => {
  *   try {
  *     // Step 1: Prepare the swap
- *     const { preparedCalls } = await prepareSwap({
+ *     const preparedSwap = await prepareSwap({
  *       fromToken: '0x...',
  *       toToken: '0x...',
  *       fromAmount: '0x...',
  *     });
  *
  *     // Step 2: Submit the swap
- *     const result = await submitSwap(preparedCalls);
+ *     const result = await submitSwap(preparedSwap);
  *     console.log('Swap confirmed:', result.txnHash);
  *   } catch (err) {
  *     console.error('Swap failed:', err);
@@ -37,14 +37,14 @@ import type {
  * ```
  */
 export function useAlchemySubmitSwap(): UseSubmitSwapResult {
-  const { client: getClient } = useAlchemyClient();
+  const { getClient } = useAlchemyClient();
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
   const [data, setData] = useState<SubmitSwapResult | null>(null);
 
   const submitSwap = useCallback(
-    async (preparedCalls: PreparedSwapCalls): Promise<SubmitSwapResult> => {
+    async (preparedSwap: PrepareSwapResult): Promise<SubmitSwapResult> => {
       setIsLoading(true);
       setError(null);
 
@@ -55,8 +55,7 @@ export function useAlchemySubmitSwap(): UseSubmitSwapResult {
         const swapClient = client.extend(swapActions);
 
         // Sign the prepared calls
-        // Note: Gas sponsorship must be configured during the prepare step
-        const signedCalls = await swapClient.signPreparedCalls(preparedCalls);
+        const signedCalls = await swapClient.signPreparedCalls(preparedSwap);
 
         // Send the signed calls
         const { preparedCallIds } =

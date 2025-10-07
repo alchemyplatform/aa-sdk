@@ -1,17 +1,16 @@
 import { useCallback, useEffect, useRef } from "react";
-import { WalletClientSigner, type AuthorizationRequest } from "@aa-sdk/core";
+import {
+  WalletClientSigner,
+  type AuthorizationRequest,
+  ConnectionConfigSchema,
+} from "@aa-sdk/core";
 import {
   createWalletClient,
   custom,
   type Address,
   type Authorization,
 } from "viem";
-import {
-  useWallets,
-  useSign7702Authorization,
-  usePrivy,
-  type ConnectedWallet as PrivyWallet,
-} from "@privy-io/react-auth";
+import { useSign7702Authorization, usePrivy } from "@privy-io/react-auth";
 import {
   createSmartWalletClient,
   type SmartWalletClient,
@@ -19,6 +18,7 @@ import {
 import { alchemy } from "@account-kit/infra";
 import { useAlchemyConfig } from "../Provider.js";
 import { getChain } from "../util/getChain.js";
+import { useEmbeddedWallet } from "./internal/useEmbeddedWallet.js";
 
 /**
  * Module-level cache for the SmartWalletClient
@@ -46,7 +46,7 @@ export function resetClientCache(): void {
  * The client is cached at the module level and shared across all hook instances
  * Automatically clears cache on logout for proper cleanup
  *
- * @returns {{ client: () => Promise<SmartWalletClient> }} Object containing the smart wallet client getter
+ * @returns {{ getClient: () => Promise<SmartWalletClient> }} Object containing the smart wallet client getter
  *
  * @example
  * ```tsx
@@ -56,9 +56,9 @@ export function resetClientCache(): void {
  */
 export function useAlchemyClient() {
   const { authenticated, user } = usePrivy();
-  const { wallets } = useWallets();
   const { signAuthorization } = useSign7702Authorization();
   const config = useAlchemyConfig();
+  const getEmbeddedWallet = useEmbeddedWallet();
 
   // Track previous authenticated state to detect logout
   const prevAuthenticatedRef = useRef(authenticated);
@@ -89,16 +89,6 @@ export function useAlchemyClient() {
     prevAuthenticatedRef.current = authenticated;
     prevWalletAddressRef.current = currentWalletAddress;
   }, [authenticated, user?.wallet?.address]);
-
-  const getEmbeddedWallet = useCallback((): PrivyWallet => {
-    const embedded = wallets.find((w) => w.walletClientType === "privy");
-    if (!embedded) {
-      throw new Error(
-        "Privy embedded wallet not found. Please ensure the user is authenticated.",
-      );
-    }
-    return embedded;
-  }, [wallets]);
 
   const getEmbeddedWalletChain = useCallback(() => {
     const embedded = getEmbeddedWallet();
@@ -136,7 +126,7 @@ export function useAlchemyClient() {
       chainId: chain.id,
       apiKey: config.apiKey,
       jwt: config.jwt,
-      url: config.url,
+      rpcUrl: config.rpcUrl,
       policyId: config.policyId,
     });
 
@@ -176,32 +166,24 @@ export function useAlchemyClient() {
       },
     };
 
-    // Determine transport configuration
-    const transportConfig = config.url
-      ? { rpcUrl: config.url }
-      : config.jwt
-        ? { jwt: config.jwt }
-        : config.apiKey
-          ? { apiKey: config.apiKey }
-          : undefined;
-
-    if (!transportConfig) {
-      throw new Error(
-        "AlchemyProvider requires at least one of: apiKey, jwt, or url",
-      );
-    }
-
-    // Determine policy ID (use first if array)
-    const policyId = Array.isArray(config.policyId)
-      ? config.policyId[0]
-      : config.policyId;
+    // Determine transport configuration using schema validation
+    // This properly handles combinations like rpcUrl + jwt together
+    const transportConfig = ConnectionConfigSchema.parse({
+      rpcUrl: config.rpcUrl,
+      apiKey: config.apiKey,
+      jwt: config.jwt,
+    });
 
     // Create and cache the smart wallet client at module level
     cachedClient = createSmartWalletClient({
       chain,
       transport: alchemy(transportConfig),
       signer,
-      policyId,
+      policyIds: config.policyId
+        ? Array.isArray(config.policyId)
+          ? config.policyId
+          : [config.policyId]
+        : undefined,
     });
 
     // Store the cache key
@@ -214,9 +196,9 @@ export function useAlchemyClient() {
     signAuthorization,
     config.apiKey,
     config.jwt,
-    config.url,
+    config.rpcUrl,
     config.policyId,
   ]);
 
-  return { client: getClient };
+  return { getClient };
 }

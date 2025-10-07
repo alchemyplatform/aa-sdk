@@ -109,23 +109,26 @@ function SwapButton() {
       // Two modes available:
 
       // Option A: Specify exact amount to swap FROM
-      const { preparedCalls, quote } = await prepareSwap({
+      const preparedSwap = await prepareSwap({
         fromToken: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE", // ETH
         toToken: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", // USDC
         fromAmount: "0xde0b6b3a7640000", // Swap exactly 1 ETH
       });
 
       // Option B: Specify minimum amount to receive TO
-      /* const { preparedCalls, quote } = await prepareSwap({
+      /* const preparedSwap = await prepareSwap({
         fromToken: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE", // ETH
         toToken: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", // USDC
         minimumToAmount: "0x5f5e100", // Receive at least 100 USDC (6 decimals)
       }); */
 
-      console.log("Quote expiry:", new Date(parseInt(quote.expiry) * 1000));
+      console.log(
+        "Quote expiry:",
+        new Date(parseInt(preparedSwap.quote.expiry) * 1000),
+      );
 
       // Step 2: Execute swap
-      const result = await submitSwap(preparedCalls);
+      const result = await submitSwap(preparedSwap);
       console.log("Swap confirmed:", result.txnHash);
     } catch (err) {
       console.error("Swap failed:", err);
@@ -144,26 +147,34 @@ function SwapButton() {
 
 ### AlchemyProvider Props
 
-| Prop               | Type                 | Required      | Description                                            |
-| ------------------ | -------------------- | ------------- | ------------------------------------------------------ |
-| `apiKey`           | `string`             | Conditional\* | Your Alchemy API key for @account-kit/infra transport  |
-| `jwt`              | `string`             | Conditional\* | JWT token for authentication (alternative to `apiKey`) |
-| `url`              | `string`             | Conditional\* | Custom RPC URL (alternative to `apiKey` or `jwt`)      |
-| `policyId`         | `string \| string[]` | No            | Gas Manager policy ID(s) for sponsorship               |
-| `defaultSponsored` | `boolean`            | No            | Default: `true`. Enable/disable sponsorship by default |
+| Prop                 | Type                 | Required      | Description                                                                                          |
+| -------------------- | -------------------- | ------------- | ---------------------------------------------------------------------------------------------------- |
+| `apiKey`             | `string`             | Conditional\* | Your Alchemy API key for @account-kit/infra transport                                                |
+| `jwt`                | `string`             | Conditional\* | JWT token for authentication (alternative to `apiKey`)                                               |
+| `rpcUrl`             | `string`             | Conditional\* | Custom RPC URL (can be used alone or with `jwt`)                                                     |
+| `policyId`           | `string \| string[]` | No            | Gas Manager policy ID(s) for sponsorship. If array is provided, backend uses first applicable policy |
+| `disableSponsorship` | `boolean`            | No            | Set to `true` to disable gas sponsorship by default (default: `false`)                               |
 
-\* At least one of `apiKey`, `jwt`, or `url` is required.
+\* **Required configuration (pick one):**
+
+- `apiKey` alone
+- `jwt` alone
+- `rpcUrl` alone
+- `rpcUrl` + `jwt` together
 
 ### Transaction Options
 
 Control sponsorship per transaction:
 
 ```tsx
-// Sponsored transaction (uses Gas Manager policy)
-await sendTransaction({ to: "0x...", data: "0x..." }, { sponsored: true });
+// Sponsored transaction (default if policyId is set and disableSponsorship is not true)
+await sendTransaction({ to: "0x...", data: "0x..." });
 
-// User-paid transaction
-await sendTransaction({ to: "0x...", data: "0x..." }, { sponsored: false });
+// Disable sponsorship for this specific transaction
+await sendTransaction(
+  { to: "0x...", data: "0x..." },
+  { disableSponsorship: true },
+);
 ```
 
 ## API Reference
@@ -188,10 +199,10 @@ Request swap quotes and prepare swap calls.
 
 **Returns:**
 
-- `prepareSwap(request)` - Get quote and prepare swap
+- `prepareSwap(request)` - Get quote and prepare swap (returns full response with `quote` and call data)
 - `isLoading` - Loading state
 - `error` - Error object if failed
-- `data` - Prepared swap with `quote` and `preparedCalls`
+- `data` - Prepared swap result
 - `reset()` - Reset hook state
 
 #### `useAlchemySubmitSwap()`
@@ -200,7 +211,7 @@ Sign and submit prepared swap calls.
 
 **Returns:**
 
-- `submitSwap(preparedCalls)` - Execute prepared swap
+- `submitSwap(preparedSwap)` - Execute prepared swap (accepts result from `prepareSwap`)
 - `isLoading` - Loading state
 - `error` - Error object if failed
 - `data` - Swap result with `txnHash`
@@ -212,7 +223,7 @@ Get the underlying smart wallet client (advanced use cases).
 
 **Returns:**
 
-- `client()` - Async function that returns `SmartWalletClient`
+- `getClient()` - Async function that returns `SmartWalletClient`
 
 ## How It Works
 
@@ -293,7 +304,7 @@ For advanced use cases, access the underlying client:
 import { useAlchemyClient } from "@account-kit/privy-integration";
 
 function AdvancedComponent() {
-  const { client: getClient } = useAlchemyClient();
+  const { getClient } = useAlchemyClient();
 
   const doAdvancedOperation = async () => {
     const client = await getClient();
@@ -321,9 +332,16 @@ function AdvancedComponent() {
 
 ## Troubleshooting
 
-### "AlchemyProvider requires at least one of: apiKey, jwt, or url"
+### TypeScript error: "Type ... is not assignable to type 'AlchemyProviderConfig'"
 
-Ensure you've passed at least one transport configuration option to `<AlchemyProvider>`.
+The provider requires exactly one valid transport configuration. Valid combinations:
+
+- `apiKey` only
+- `jwt` only
+- `rpcUrl` only
+- `rpcUrl` + `jwt` together
+
+Invalid combinations like `apiKey` + `jwt` will now show TypeScript errors.
 
 ### Swaps failing with "Received raw calls"
 

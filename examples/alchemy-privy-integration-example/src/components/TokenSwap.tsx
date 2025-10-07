@@ -101,8 +101,10 @@ export function TokenSwap({ onSuccess }: { onSuccess?: () => void }) {
     setSuccessMessage("");
 
     try {
-      const result = await submitSwap.submitSwap(preparedSwap.preparedCalls);
-      setSuccessMessage(`Swap successful! Transaction: ${result.txnHash}`);
+      const result = await submitSwap.submitSwap(preparedSwap);
+      setSuccessMessage(
+        `Swap successful! View on BaseScan: https://basescan.org/tx/${result.txnHash}`,
+      );
 
       // Reset form
       setPreparedSwap(null);

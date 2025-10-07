@@ -1,28 +1,22 @@
 import type { Address, Hash, Hex } from "viem";
 import type { swapActions } from "@account-kit/wallet-client/experimental";
+import { ConnectionConfigSchema } from "@aa-sdk/core";
+import type { z } from "zod";
 
 /**
  * Configuration for the Alchemy provider
+ * Uses ConnectionConfigSchema to ensure valid transport configuration
  */
-export interface AlchemyProviderConfig {
-  /** Alchemy API key for @account-kit/infra transport */
-  apiKey?: string;
-
-  /** JWT token for authentication */
-  jwt?: string;
-
-  /** Custom RPC URL */
-  url?: string;
-
+export type AlchemyProviderConfig = z.infer<typeof ConnectionConfigSchema> & {
   /** Policy ID(s) for gas sponsorship */
   policyId?: string | string[];
 
   /**
-   * Default: true → try to sponsor via Alchemy Gas Manager
-   * Set to false to disable sponsorship by default
+   * Set to true to disable gas sponsorship by default
+   * Default: false (sponsorship enabled when policyId is provided)
    */
-  defaultSponsored?: boolean;
-}
+  disableSponsorship?: boolean;
+};
 
 /**
  * Unsigned transaction request
@@ -43,10 +37,10 @@ export interface UnsignedTransactionRequest {
  */
 export interface SendTransactionOptions {
   /**
-   * Whether to sponsor the transaction
-   * Default: true if policy ID exists and defaultSponsored is not set to false
+   * Set to true to disable sponsorship for this specific transaction
+   * Default: false (follows provider's disableSponsorship setting)
    */
-  sponsored?: boolean;
+  disableSponsorship?: boolean;
 }
 
 /**
@@ -107,25 +101,13 @@ export type RequestQuoteV0Result = Awaited<
 export type SwapQuote = NonNullable<RequestQuoteV0Result["quote"]>;
 
 /**
- * Prepared swap calls ready for signing
- * Excludes the rawCalls variant since we validate against it
+ * Result of preparing a swap (full response from requestQuoteV0)
+ * Contains quote and prepared calls ready for signing
  */
-export type PreparedSwapCalls = Extract<
+export type PrepareSwapResult = Extract<
   RequestQuoteV0Result,
   { rawCalls?: false | undefined }
 >;
-
-/**
- * Result of preparing a swap
- * Separates quote from prepared calls for cleaner API
- */
-export interface PrepareSwapResult {
-  /** Swap quote information */
-  quote: SwapQuote;
-
-  /** Prepared calls ready for signing (full response from requestQuoteV0) */
-  preparedCalls: PreparedSwapCalls;
-}
 
 /**
  * Hook result for preparing swaps
@@ -173,5 +155,5 @@ export interface UseSubmitSwapResult {
   reset(): void;
 
   /** Sign and submit prepared swap calls */
-  submitSwap(preparedCalls: PreparedSwapCalls): Promise<SubmitSwapResult>;
+  submitSwap(preparedSwap: PrepareSwapResult): Promise<SubmitSwapResult>;
 }
