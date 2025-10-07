@@ -85,7 +85,28 @@ export type CreateWebAuthnStamperFn = (
 ) => Promise<TurnkeyStamper>;
 
 export type CreateWebAuthnStamperParams = {
-  credentialId: string | undefined;
+  credentialId?: string;
+  rpId?: string;
+};
+
+export type CredentialCreationOptionOverrides = {
+  publicKey?: Partial<CredentialCreationOptions["publicKey"]>;
+} & Pick<CredentialCreationOptions, "signal">;
+
+export type GetWebAuthnAttestationParams = {
+  options?: CredentialCreationOptionOverrides;
+  username?: string;
+};
+
+export type WebAuthnAttestationResult = {
+  challenge: ArrayBuffer;
+  authenticatorUserId: ArrayBuffer;
+  attestation: {
+    credentialId: string;
+    clientDataJSON: string;
+    attestationObject: string;
+    transports?: string[];
+  };
 };
 
 export type HandleOauthFlowFn = (

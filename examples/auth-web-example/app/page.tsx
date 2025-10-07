@@ -45,6 +45,15 @@ export default function Home(): ReactElement {
     setAuthSession(authSession);
   }, [otpCode]);
 
+  const handleAddPasskey = useCallback(async () => {
+    await authSession?.addPasskey();
+  }, [authSession]);
+
+  const loginWithPasskey = useCallback(async () => {
+    const authSession = await authClient.loginWithPasskey({ email });
+    setAuthSession(authSession);
+  }, []);
+
   const handleDisconnect = useCallback(async () => {
     authSession?.disconnect();
     setEmail("");
@@ -87,6 +96,9 @@ export default function Home(): ReactElement {
             className="btn btn-secondary w-full"
           >
             Sign in with Google
+          </button>
+          <button onClick={loginWithPasskey} className="btn btn-accent w-full">
+            Sign in with Passkey
           </button>
         </div>
       </div>
@@ -136,6 +148,12 @@ export default function Home(): ReactElement {
             className="btn btn-error w-full max-w-xs"
           >
             Sign out
+          </button>
+          <button
+            onClick={handleAddPasskey}
+            className="btn btn-warning w-full max-w-xs"
+          >
+            Add Passkey
           </button>
           <button
             onClick={handleSign}

@@ -1,9 +1,11 @@
 import { AlchemyRestClient } from "@alchemy/common";
+import { getWebAuthnAttestation, TurnkeyClient } from "@turnkey/http";
 import type { SignerHttpSchema } from "@alchemy/aa-infra";
 import { AuthSession } from "./authSession.js";
 import type {
   AuthSessionState,
   AuthType,
+  CredentialCreationOptionOverrides,
   CreateTekStamperFn,
   CreateWebAuthnStamperFn,
   HandleOauthFlowFn,
@@ -11,6 +13,8 @@ import type {
   TurnkeyTekStamper,
 } from "./types.js";
 import {
+  base64UrlEncode,
+  generateRandomBuffer,
   getOauthNonce,
   getOauthProviderUrl,
   extractOAuthCallbackParams,
@@ -32,6 +36,7 @@ export type AuthClientParams = {
   jwt?: string;
   /** Custom URL (optional - defaults to Alchemy's chain-agnostic URL, but can be used to override it) */
   url?: string;
+  rpId?: string;
   /** Function to create a TEK (Traffic Encryption Key) stamper */
   createTekStamper: CreateTekStamperFn;
   /** Function to create a WebAuthn stamper for passkey authentication */
@@ -78,6 +83,13 @@ export type LoginWithOauthParams = {
   sessionExpirationMs?: number;
 };
 
+export type LoginWithPasskeyParams = {
+  email?: string;
+  username?: string;
+  creationOpts?: CredentialCreationOptionOverrides;
+  credentialId?: string;
+};
+
 type TekStamperAndPublicKey = {
   stamper: TurnkeyTekStamper;
   targetPublicKey: string;
@@ -86,6 +98,12 @@ type TekStamperAndPublicKey = {
 type PendingOtp = {
   otpId: string;
   orgId: string;
+};
+
+export type GetWebAuthnAttestationResult = {
+  attestation: Awaited<ReturnType<typeof getWebAuthnAttestation>>;
+  challenge: ArrayBuffer | string;
+  authenticatorUserId: BufferSource;
 };
 
 /**
@@ -114,6 +132,7 @@ export class AuthClient {
     private readonly createTekStamper: CreateTekStamperFn,
     private readonly createWebAuthnStamper: CreateWebAuthnStamperFn,
     private readonly handleOauthFlow: HandleOauthFlowFn,
+    private readonly rpId: string | undefined,
   ) {}
 
   /**
@@ -123,6 +142,7 @@ export class AuthClient {
    * @param {string} [params.apiKey] - API key for authentication with Alchemy services
    * @param {string} [params.jwt] - JWT token for authentication with Alchemy services
    * @param {string} [params.url] - Custom URL (optional - defaults to Alchemy's chain-agnostic URL)
+   * @param {string} [params.rpId] - Relying Party ID for WebAuthn operations
    * @param {CreateTekStamperFn} params.createTekStamper - Function to create a TEK stamper
    * @param {CreateWebAuthnStamperFn} params.createWebAuthnStamper - Function to create a WebAuthn stamper
    * @param {HandleOauthFlowFn} params.handleOauthFlow - Function to handle OAuth authentication flow
@@ -138,6 +158,7 @@ export class AuthClient {
       params.createTekStamper,
       params.createWebAuthnStamper,
       params.handleOauthFlow,
+      params.rpId,
     );
   }
 
@@ -145,6 +166,9 @@ export class AuthClient {
 
   private pendingOtp: PendingOtp | null = null;
   private pendingExpirationDateMs: number | null = null;
+
+  private static ROOT_ORG_ID_DEFAULT: string =
+    "24c1acf5-810f-41e0-a503-d5d13fa8e830";
 
   /**
    * Sends an OTP (One-Time Password) to the specified email address for authentication.
@@ -323,7 +347,7 @@ export class AuthClient {
    * Can be used for both new passkey creation (when credentialId is undefined) and
    * authentication with existing passkeys (when credentialId is provided).
    *
-   * @param {string} [credentialId] - Optional credential ID for authenticating with existing passkey
+   * @param {LoginWithPasskeyParams} params - Parameters for passkey authentication
    * @returns {Promise<AuthSession>} Promise that resolves to an auth session instance
    *
    * @example
@@ -335,13 +359,79 @@ export class AuthClient {
    * const authSession = await authClient.loginWithPasskey("existing-credential-id");
    * ```
    */
-  public async loginWithPasskey(credentialId?: string): Promise<AuthSession> {
+  public async loginWithPasskey(
+    params: LoginWithPasskeyParams,
+  ): Promise<AuthSession> {
     // TODO: figure out what the current passkey code is doing.
     // For new passkey authentication, credentialId would be undefined initially
+    const { email, username, credentialId } = params; // TO DO: where do we use creationOpts?
+
+    if (!credentialId) {
+      // NEW PASSKEY SIGNUP
+      const attestation = await this.getWebAuthnAttestationInternal({
+        username: email || username || "anonymous",
+      });
+
+      // create Turnkey org
+      const result = await this.signerHttpClient.request({
+        route: "signer/v1/signup",
+        method: "POST",
+        body: {
+          passkey: {
+            challenge: base64UrlEncode(attestation.challenge),
+            attestation: attestation.attestation,
+          } as any, // TO DO: remove use of as any!!
+          email: params?.email,
+        },
+      });
+
+      // Create stamper for this credential
+      const stamper = await this.createWebAuthnStamper({
+        credentialId: attestation.attestation.credentialId,
+        rpId: this.rpId,
+      });
+
+      return AuthSession.create({
+        signerHttpClient: this.signerHttpClient,
+        stamper,
+        orgId: result.orgId,
+        authType: "passkey",
+        credentialId: attestation.attestation.credentialId,
+        idToken: undefined, // TO DO: do we need this OR make it so that I do not have to explicitly pass it in
+      });
+    }
+
+    // EXITSING PASSKEY LOGIN
     const stamper = await this.createWebAuthnStamper({
-      credentialId,
+      credentialId, // TO DO: do we need to save credentialId? I think so!!
+      rpId: this.rpId,
     });
-    return notImplemented(stamper);
+
+    const turnkeyClient = new TurnkeyClient(
+      { baseUrl: "https://api.turnkey.com" },
+      stamper,
+    ); // TO DO: should this be a private member of every instance of AuthClient?
+
+    // Use root org to lookup user's actual org
+    const stampedRequest = await turnkeyClient.stampGetWhoami({
+      organizationId: AuthClient.ROOT_ORG_ID_DEFAULT, // TO DO: should this be a static member of the class?
+    });
+    // Stamper signs the whoami request
+    // This proves user controls the private key for this credential
+    const whoamiResponse = await this.signerHttpClient.request({
+      route: "signer/v1/whoami",
+      method: "POST",
+      body: { stampedRequest },
+    });
+
+    return AuthSession.create({
+      signerHttpClient: this.signerHttpClient,
+      stamper,
+      orgId: whoamiResponse.orgId,
+      authType: "passkey",
+      credentialId: params.credentialId,
+      idToken: undefined, // TO DO: read above
+    });
   }
 
   /**
@@ -385,7 +475,7 @@ export class AuthClient {
       if (!credentialId) {
         throw new Error("Credential ID is required for passkey authentication");
       }
-      return await this.loginWithPasskey(credentialId);
+      return await this.loginWithPasskey({ credentialId });
     }
     const { bundle } = parsedState;
     const { orgId, idToken } = user;
@@ -399,6 +489,60 @@ export class AuthClient {
   }
 
   // TODO: ... and many more.
+
+  private async getWebAuthnAttestationInternal(
+    userDetails: { username: string },
+    options?: CredentialCreationOptionOverrides,
+  ): Promise<GetWebAuthnAttestationResult> {
+    const challenge = generateRandomBuffer();
+    const authenticatorUserId = generateRandomBuffer();
+
+    const attestation = await getWebAuthnAttestation({
+      publicKey: {
+        ...options?.publicKey,
+        authenticatorSelection: {
+          residentKey: "preferred",
+          requireResidentKey: false,
+          userVerification: "preferred",
+          ...options?.publicKey?.authenticatorSelection,
+        },
+        challenge,
+        rp: {
+          id: window.location.hostname,
+          name: window.location.hostname,
+          ...options?.publicKey?.rp,
+        },
+        pubKeyCredParams: [
+          {
+            type: "public-key",
+            alg: -7,
+          },
+          {
+            type: "public-key",
+            alg: -257,
+          },
+        ],
+        user: {
+          id: authenticatorUserId,
+          name: userDetails.username,
+          displayName: userDetails.username,
+          ...options?.publicKey?.user,
+        },
+      },
+      signal: options?.signal,
+    });
+
+    // TO DO: separate web and mobile logic
+    // on iOS sometimes this is returned as empty or null, so handling that here
+    if (attestation.transports == null || attestation.transports.length === 0) {
+      attestation.transports = [
+        "AUTHENTICATOR_TRANSPORT_INTERNAL",
+        "AUTHENTICATOR_TRANSPORT_HYBRID",
+      ];
+    }
+
+    return { challenge, authenticatorUserId, attestation };
+  }
 
   private async completeAuthWithBundle({
     bundle,
@@ -498,7 +642,4 @@ export class AuthClient {
       throw new Error(`Unknown OAuth flow response: ${response.status}`);
     }
   }
-}
-function notImplemented(..._: unknown[]): Promise<never> {
-  throw new Error("Not implemented");
 }
