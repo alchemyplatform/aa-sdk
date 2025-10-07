@@ -1,4 +1,4 @@
-import { TurnkeyClient } from "@turnkey/http";
+import { getWebAuthnAttestation, TurnkeyClient } from "@turnkey/http";
 import {
   hashMessage,
   hashTypedData,
@@ -15,6 +15,7 @@ import type {
   AuthMethods,
   AuthSessionState,
   AuthType,
+  CredentialCreationOptionOverrides,
   OauthProviderInfo,
   PasskeyInfo,
   TurnkeyStamper,
@@ -29,6 +30,13 @@ import {
 import type { AlchemyRestClient } from "@alchemy/common";
 import type { SignerHttpSchema } from "@alchemy/aa-infra";
 import EventEmitter from "eventemitter3";
+import type { GetWebAuthnAttestationResult } from "./authClient.js";
+import { base64UrlEncode, generateRandomBuffer } from "./utils.js";
+
+/**
+ * Default session expiration duration in milliseconds (15 minutes)
+ */
+export const DEFAULT_SESSION_EXPIRATION_MS = 15 * 60 * 1000;
 
 /**
  * Parameters required to create an AuthSession instance
@@ -112,11 +120,11 @@ export class AuthSession {
     private readonly expirationDateMs: number,
     private readonly bundle: string | undefined,
     private readonly authType: AuthType | undefined,
-    private readonly credentialId: string | undefined,
+    private readonly credentialId: string | undefined
   ) {
     this.expirationTimeoutId = setTimeout(
       () => this.disconnect(),
-      this.expirationDateMs - Date.now(),
+      this.expirationDateMs - Date.now()
     );
   }
 
@@ -154,7 +162,7 @@ export class AuthSession {
   }: CreateAuthSessionParams): Promise<AuthSession> {
     const turnkey = new TurnkeyClient(
       { baseUrl: "https://api.turnkey.com" },
-      stamper,
+      stamper
     );
     const stampedRequest = await turnkey.stampGetWhoami({
       organizationId: orgId,
@@ -180,7 +188,7 @@ export class AuthSession {
       expirationDateMs,
       bundle,
       authType,
-      credentialId,
+      credentialId
     );
   }
 
@@ -337,7 +345,7 @@ export class AuthSession {
    * ```
    */
   public async signAuthorization(
-    params: Authorization<number, false>,
+    params: Authorization<number, false>
   ): Promise<Authorization<number, true>> {
     const { chainId, nonce, address } = params;
     const hashedAuth = hashAuthorization({ address, chainId, nonce });
@@ -386,7 +394,7 @@ export class AuthSession {
    * @returns {Promise<OauthProviderInfo>} A promise that resolves to the added provider info
    */
   public async addOauthProvider(
-    params: AddOauthProviderParams,
+    params: AddOauthProviderParams
   ): Promise<OauthProviderInfo> {
     this.throwIfDisconnected();
     return notImplemented(params);
@@ -410,10 +418,50 @@ export class AuthSession {
    * @returns {Promise<PasskeyInfo>} A promise that resolves to the created passkey info
    */
   public async addPasskey(
-    params: CredentialCreationOptions,
+    params?: CredentialCreationOptions
   ): Promise<PasskeyInfo> {
     this.throwIfDisconnected();
-    return notImplemented(params);
+
+    console.log(`do we need ${params}?`);
+
+    const { attestation, challenge } =
+      await this.getWebAuthnAttestationInternal({
+        username: this.user.email || "TO DO: anonymous",
+      });
+
+    const createdAt: number = Date.now();
+
+    // 2. Call Turnkey directly to add authenticator to existing org
+    const { activity } = await this.turnkey.createAuthenticators({
+      // TO DO: should we pass the turnkey client we create in AuthClient to the constructor for AuthSession?
+      type: "ACTIVITY_TYPE_CREATE_AUTHENTICATORS_V2",
+      timestampMs: createdAt.toString(),
+      organizationId: this.user.orgId,
+      parameters: {
+        userId: this.user.userId,
+        authenticators: [
+          {
+            attestation,
+            authenticatorName: `passkey-${createdAt}`,
+            challenge: base64UrlEncode(challenge),
+          },
+        ],
+      },
+    });
+
+    // 3. Poll for completion
+    const { authenticatorIds } = await this.pollActivityCompletion(
+      activity,
+      this.user.orgId,
+      "createAuthenticatorsResult"
+    );
+
+    return {
+      // we are adding one new passkey
+      authenticatorId: authenticatorIds[0],
+      name: `passkey-${createdAt}`,
+      createdAt,
+    };
   }
 
   /**
@@ -424,7 +472,15 @@ export class AuthSession {
    */
   public async removePasskey(authenticatorId: string): Promise<void> {
     this.throwIfDisconnected();
-    return notImplemented(authenticatorId);
+    await this.turnkey.deleteAuthenticators({
+      type: "ACTIVITY_TYPE_DELETE_AUTHENTICATORS",
+      timestampMs: Date.now().toString(),
+      organizationId: this.user.orgId,
+      parameters: {
+        userId: this.user.userId,
+        authenticatorIds: [authenticatorId],
+      },
+    });
   }
 
   /**
@@ -484,7 +540,7 @@ export class AuthSession {
     } else {
       if (!this.bundle) {
         throw new Error(
-          "Bundle is required for non-passkey authentication types",
+          "Bundle is required for non-passkey authentication types"
         );
       }
       const state: AuthSessionState = {
@@ -495,6 +551,111 @@ export class AuthSession {
       };
       return JSON.stringify(state);
     }
+  }
+
+  // eslint-disable-next-line eslint-rules/require-jsdoc-on-reexported-functions
+  protected pollActivityCompletion = async <
+    T extends keyof Awaited<
+      ReturnType<(typeof this.turnkey)["getActivity"]>
+    >["activity"]["result"],
+  >(
+    activity: Awaited<
+      ReturnType<(typeof this.turnkey)["getActivity"]>
+    >["activity"],
+    organizationId: string,
+    resultKey: T
+  ): Promise<
+    NonNullable<
+      Awaited<
+        ReturnType<(typeof this.turnkey)["getActivity"]>
+      >["activity"]["result"][T]
+    >
+  > => {
+    if (activity.status === "ACTIVITY_STATUS_COMPLETED") {
+      return activity.result[resultKey]!;
+    }
+
+    const {
+      activity: { status, id, result },
+    } = await this.turnkey.getActivity({
+      activityId: activity.id,
+      organizationId,
+    });
+
+    if (status === "ACTIVITY_STATUS_COMPLETED") {
+      return result[resultKey]!;
+    }
+
+    if (
+      status === "ACTIVITY_STATUS_FAILED" ||
+      status === "ACTIVITY_STATUS_REJECTED" ||
+      status === "ACTIVITY_STATUS_CONSENSUS_NEEDED"
+    ) {
+      throw new Error(
+        `Failed to get activity with with id ${id} (status: ${status})`
+      );
+    }
+
+    // TODO: add ability to configure this + add exponential backoff
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
+    return this.pollActivityCompletion(activity, organizationId, resultKey);
+  };
+  // #endregion
+
+  // TO DO: where should we place this so that the same implementation doesn't exist in AuthSession and AuthClient?
+  private async getWebAuthnAttestationInternal(
+    userDetails: { username: string },
+    options?: CredentialCreationOptionOverrides
+  ): Promise<GetWebAuthnAttestationResult> {
+    const challenge = generateRandomBuffer();
+    const authenticatorUserId = generateRandomBuffer();
+
+    const attestation = await getWebAuthnAttestation({
+      publicKey: {
+        ...options?.publicKey,
+        authenticatorSelection: {
+          residentKey: "preferred",
+          requireResidentKey: false,
+          userVerification: "preferred",
+          ...options?.publicKey?.authenticatorSelection,
+        },
+        challenge,
+        rp: {
+          id: window.location.hostname,
+          name: window.location.hostname,
+          ...options?.publicKey?.rp,
+        },
+        pubKeyCredParams: [
+          {
+            type: "public-key",
+            alg: -7,
+          },
+          {
+            type: "public-key",
+            alg: -257,
+          },
+        ],
+        user: {
+          id: authenticatorUserId,
+          name: userDetails.username,
+          displayName: userDetails.username,
+          ...options?.publicKey?.user,
+        },
+      },
+      signal: options?.signal,
+    });
+
+    // TO DO: separate web and mobile logic
+    // on iOS sometimes this is returned as empty or null, so handling that here
+    if (attestation.transports == null || attestation.transports.length === 0) {
+      attestation.transports = [
+        "AUTHENTICATOR_TRANSPORT_INTERNAL",
+        "AUTHENTICATOR_TRANSPORT_HYBRID",
+      ];
+    }
+
+    return { challenge, authenticatorUserId, attestation };
   }
 
   private throwIfDisconnected(): void {
@@ -523,7 +684,7 @@ export class AuthSession {
    */
   public on<E extends AuthSessionEventType>(
     eventType: E,
-    listener: AuthSessionEvents[E],
+    listener: AuthSessionEvents[E]
   ): () => void {
     this.emitter.on(eventType, listener);
 
