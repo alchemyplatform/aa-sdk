@@ -35,27 +35,29 @@ pnpm add @account-kit/privy-integration
 
 ### 1. Wrap Your App with Both Providers
 
+**Important:** `AlchemyProvider` must be nested **inside** `PrivyProvider` to access authentication state.
+
 ```tsx
 import { PrivyProvider } from "@privy-io/react-auth";
 import { AlchemyProvider } from "@account-kit/privy-integration";
 
 function App() {
   return (
-    <AlchemyProvider
-      apiKey="your-alchemy-api-key"
-      policyId="your-gas-policy-id" // optional, for gas sponsorship
-    >
-      <PrivyProvider
-        appId="your-privy-app-id"
-        config={
-          {
-            /* your privy config */
-          }
+    <PrivyProvider
+      appId="your-privy-app-id"
+      config={
+        {
+          /* your privy config */
         }
+      }
+    >
+      <AlchemyProvider
+        apiKey="your-alchemy-api-key"
+        policyId="your-gas-policy-id" // optional, for gas sponsorship
       >
         <YourApp />
-      </PrivyProvider>
-    </AlchemyProvider>
+      </AlchemyProvider>
+    </PrivyProvider>
   );
 }
 ```
@@ -347,22 +349,11 @@ Invalid combinations like `apiKey` + `jwt` will now show TypeScript errors.
 
 The swap API should return prepared calls by default. This error means the API returned raw calls. Ensure you're not setting `returnRawCalls: true` in the request.
 
-### Cache issues after logout
-
-The client cache automatically clears on logout and wallet changes. If you need manual control:
-
-```tsx
-import { resetClientCache } from "@account-kit/privy-integration";
-
-// Manually reset (rarely needed)
-resetClientCache();
-```
-
 ## Examples
 
 Check out the [`examples/`](../../examples/) directory for complete applications:
 
-- **Privy Integration Demo** - Advanced patterns and use cases
+- **Privy Integration Demo** - Demos sponsored transactions and sponsored swaps
 
 ## Resources
 

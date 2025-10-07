@@ -2,10 +2,7 @@
 export { AlchemyProvider, useAlchemyConfig } from "./Provider.js";
 
 // Hooks
-export {
-  useAlchemyClient,
-  resetClientCache,
-} from "./hooks/useAlchemyClient.js";
+export { useAlchemyClient } from "./hooks/useAlchemyClient.js";
 export { useAlchemySendTransaction } from "./hooks/useAlchemySendTransaction.js";
 export { useAlchemyPrepareSwap } from "./hooks/useAlchemyPrepareSwap.js";
 export { useAlchemySubmitSwap } from "./hooks/useAlchemySubmitSwap.js";

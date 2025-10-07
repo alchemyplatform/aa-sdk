@@ -23,22 +23,22 @@ export function Providers({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <AlchemyProvider apiKey={alchemyApiKey} policyId={policyId}>
-      <PrivyProvider
-        appId={privyAppId}
-        clientId={clientId}
-        config={{
-          defaultChain: baseSepolia,
-          embeddedWallets: {
-            ethereum: {
-              createOnLogin: "all-users",
-            },
-            showWalletUIs: false,
+    <PrivyProvider
+      appId={privyAppId}
+      clientId={clientId}
+      config={{
+        defaultChain: baseSepolia,
+        embeddedWallets: {
+          ethereum: {
+            createOnLogin: "all-users",
           },
-        }}
-      >
+          showWalletUIs: false,
+        },
+      }}
+    >
+      <AlchemyProvider apiKey={alchemyApiKey} policyId={policyId}>
         {children as any}
-      </PrivyProvider>
-    </AlchemyProvider>
+      </AlchemyProvider>
+    </PrivyProvider>
   );
 }

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback } from "react";
 import {
   WalletClientSigner,
   type AuthorizationRequest,
@@ -10,85 +10,34 @@ import {
   type Address,
   type Authorization,
 } from "viem";
-import { useSign7702Authorization, usePrivy } from "@privy-io/react-auth";
+import { useSign7702Authorization } from "@privy-io/react-auth";
 import {
   createSmartWalletClient,
   type SmartWalletClient,
 } from "@account-kit/wallet-client";
 import { alchemy } from "@account-kit/infra";
-import { useAlchemyConfig } from "../Provider.js";
+import { useAlchemyConfig, useClientCache } from "../Provider.js";
 import { getChain } from "../util/getChain.js";
 import { useEmbeddedWallet } from "./internal/useEmbeddedWallet.js";
 
 /**
- * Module-level cache for the SmartWalletClient
- * This ensures a single client instance is shared across all components
- */
-let cachedClient: SmartWalletClient | null = null;
-
-/**
- * Cache key to detect if configuration has changed
- */
-let cacheKey: string | null = null;
-
-/**
- * Reset the cached client (useful for testing or logout scenarios)
- *
- * @internal
- */
-export function resetClientCache(): void {
-  cachedClient = null;
-  cacheKey = null;
-}
-
-/**
  * Hook to get and memoize a SmartWalletClient instance
- * The client is cached at the module level and shared across all hook instances
- * Automatically clears cache on logout for proper cleanup
+ * The client is cached in the AlchemyProvider context (React tree scoped)
+ * Automatically clears cache on logout via the provider
  *
  * @returns {{ getClient: () => Promise<SmartWalletClient> }} Object containing the smart wallet client getter
  *
  * @example
  * ```tsx
- * const { client } = useAlchemyClient();
- * const smartWalletClient = await client();
+ * const { getClient } = useAlchemyClient();
+ * const smartWalletClient = await getClient();
  * ```
  */
 export function useAlchemyClient() {
-  const { authenticated, user } = usePrivy();
   const { signAuthorization } = useSign7702Authorization();
   const config = useAlchemyConfig();
+  const cache = useClientCache();
   const getEmbeddedWallet = useEmbeddedWallet();
-
-  // Track previous authenticated state to detect logout
-  const prevAuthenticatedRef = useRef(authenticated);
-  const prevWalletAddressRef = useRef(user?.wallet?.address);
-
-  // Automatically reset cache when user logs out or switches wallets
-  useEffect(() => {
-    const wasAuthenticated = prevAuthenticatedRef.current;
-    const prevWalletAddress = prevWalletAddressRef.current;
-    const currentWalletAddress = user?.wallet?.address;
-
-    // Reset cache on logout
-    if (wasAuthenticated && !authenticated) {
-      resetClientCache();
-    }
-
-    // Reset cache on wallet address change (account switching)
-    if (
-      authenticated &&
-      prevWalletAddress &&
-      currentWalletAddress &&
-      prevWalletAddress !== currentWalletAddress
-    ) {
-      resetClientCache();
-    }
-
-    // Update refs for next render
-    prevAuthenticatedRef.current = authenticated;
-    prevWalletAddressRef.current = currentWalletAddress;
-  }, [authenticated, user?.wallet?.address]);
 
   const getEmbeddedWalletChain = useCallback(() => {
     const embedded = getEmbeddedWallet();
@@ -131,8 +80,8 @@ export function useAlchemyClient() {
     });
 
     // Return cached client if configuration hasn't changed
-    if (cachedClient && cacheKey === currentCacheKey) {
-      return cachedClient;
+    if (cache.client && cache.cacheKey === currentCacheKey) {
+      return cache.client;
     }
 
     // Configuration changed or no cache exists, create new client
@@ -174,8 +123,8 @@ export function useAlchemyClient() {
       jwt: config.jwt,
     });
 
-    // Create and cache the smart wallet client at module level
-    cachedClient = createSmartWalletClient({
+    // Create and cache the smart wallet client in provider context
+    cache.client = createSmartWalletClient({
       chain,
       transport: alchemy(transportConfig),
       signer,
@@ -187,9 +136,9 @@ export function useAlchemyClient() {
     });
 
     // Store the cache key
-    cacheKey = currentCacheKey;
+    cache.cacheKey = currentCacheKey;
 
-    return cachedClient;
+    return cache.client;
   }, [
     getEmbeddedWallet,
     getEmbeddedWalletChain,
@@ -198,6 +147,7 @@ export function useAlchemyClient() {
     config.jwt,
     config.rpcUrl,
     config.policyId,
+    cache,
   ]);
 
   return { getClient };
