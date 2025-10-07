@@ -29,8 +29,19 @@ export type * from "./decorators/smartWalletActions.js";
 export { smartWalletActions } from "./decorators/smartWalletActions.js";
 
 // Client.
+export type {
+  BaseWalletClient,
+  SignerClient,
+  SmartWalletClient,
+  SmartWalletClientEip1193Provider,
+} from "./types.js";
 export type * from "./client.js";
-export { createSmartWalletClient } from "./client.js";
+export type * from "./provider.js";
+export {
+  createSmartWalletClient,
+  createSmartWalletClientAndRequestAccount,
+} from "./client.js";
+export { createEip1193Provider } from "./provider.js";
 
 // Utils.
 export type * from "./utils/assertions.js";

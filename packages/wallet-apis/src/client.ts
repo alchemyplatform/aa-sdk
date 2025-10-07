@@ -5,17 +5,11 @@ import {
   type LocalAccount,
   createWalletClient,
 } from "viem";
-import {
-  smartWalletActions,
-  type SmartWalletActions,
-} from "./decorators/smartWalletActions.js";
+import { smartWalletActions } from "./decorators/smartWalletActions.js";
 import { type AlchemyTransport } from "@alchemy/common";
-import type { BaseWalletClient, SignerClient } from "./types.js";
+import type { SignerClient, SmartWalletClient } from "./types.js";
 import { createInternalState } from "./internal.js";
-import {
-  createEip1193ProviderFromClient,
-  type SmartWalletClientEip1193Provider,
-} from "./provider.js";
+import type { CreationOptions } from "@alchemy/wallet-api-types";
 
 export type CreateSmartWalletClientParams<
   TAccount extends Address | undefined = Address | undefined,
@@ -51,9 +45,7 @@ export const createSmartWalletClient = <
   signer,
   policyId,
   policyIds,
-}: CreateSmartWalletClientParams<TAccount>): BaseWalletClient<
-  SmartWalletActions<TAccount>
-> & { getProvider: () => SmartWalletClientEip1193Provider } => {
+}: CreateSmartWalletClientParams<TAccount>): SmartWalletClient<TAccount> => {
   const _policyIds = [...(policyId ? [policyId] : []), ...(policyIds ?? [])];
 
   // If the signer is a `LocalAccount` wrap it inside of a client now so
@@ -78,8 +70,35 @@ export const createSmartWalletClient = <
       policyIds: _policyIds,
       internal: createInternalState(),
     }))
-    .extend(smartWalletActions<TAccount>(signerClient))
-    .extend((_client) => ({
-      getProvider: () => createEip1193ProviderFromClient<TAccount>(_client),
-    }));
+    .extend(smartWalletActions<TAccount>(signerClient));
+};
+
+/**
+ * Creates a smart wallet client and requests an account in a single operation.
+ * This is a convenience function that combines client creation with account initialization.
+ *
+ * @param {CreateSmartWalletClientParams<undefined>} clientParams - Parameters for creating the smart wallet client (without an account).
+ * @param {CreationOptions | { accountAddress: Address }} accountOptions - Options for requesting the account. Can either be creation options for a new account or an object with an existing account address.
+ * @returns {Promise<SmartWalletClient<Address>>} A promise that resolves to a smart wallet client with an initialized account.
+ */
+export const createSmartWalletClientAndRequestAccount = async (
+  clientParams: CreateSmartWalletClientParams<undefined>,
+  accountOptions: CreationOptions | { accountAddress: Address } = {},
+): Promise<SmartWalletClient<Address>> => {
+  const clientWithoutAccount = createSmartWalletClient(clientParams);
+
+  const account = await clientWithoutAccount.requestAccount(
+    "accountAddress" in accountOptions
+      ? {
+          accountAddress: accountOptions.accountAddress,
+        }
+      : {
+          creationHint: accountOptions,
+        },
+  );
+
+  return createSmartWalletClient({
+    ...clientParams,
+    account: account.address,
+  });
 };

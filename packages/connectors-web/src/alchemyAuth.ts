@@ -18,6 +18,7 @@ import {
   getAuthStorageKey,
   type PersistedAuthSession,
 } from "./store/authSessionStorage.js";
+import { ALCHEMY_AUTH_CONNECTOR_TYPE } from "@alchemy/wagmi-core";
 
 /**
  * Configuration options for the Alchemy Auth connector.
@@ -36,7 +37,7 @@ export interface AlchemyAuthOptions
   apiKey?: string;
 }
 
-alchemyAuth.type = "alchemy-auth" as const;
+alchemyAuth.type = ALCHEMY_AUTH_CONNECTOR_TYPE;
 
 /**
  * Creates a Wagmi connector for Alchemy Auth, enabling email-based authentication

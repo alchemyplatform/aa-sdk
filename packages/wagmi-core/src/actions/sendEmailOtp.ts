@@ -1,5 +1,5 @@
-import { resolveAlchemyAuthConnector } from "@alchemy/connectors-web";
-import type { Config } from "@wagmi/core";
+import { type Config } from "@wagmi/core";
+import { resolveAlchemyAuthConnector } from "../utils/resolveAuthConnector.js";
 
 export type SendEmailOtpParameters = {
   email: string;
@@ -19,7 +19,7 @@ export async function sendEmailOtp(
   config: Config,
   parameters: SendEmailOtpParameters,
 ): Promise<SendEmailOtpReturnType> {
-  const connector = resolveAlchemyAuthConnector(config);
+  const { connector } = resolveAlchemyAuthConnector(config);
 
   const authClient = connector.getAuthClient();
 

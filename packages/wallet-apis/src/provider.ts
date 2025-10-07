@@ -3,10 +3,8 @@ import {
   type TypedDataDefinition,
   type Address,
   type WalletRpcSchema,
-  type Prettify,
-  type EIP1193RequestFn,
-  type EIP1193Events,
   ProviderRpcError,
+  type Capabilities,
 } from "viem";
 import {
   AccountNotFoundError,
@@ -16,12 +14,19 @@ import {
   createEip1193HandlerFactory,
   type ExtractRpcMethod,
 } from "@alchemy/common";
-import type { BaseWalletClient } from "./types.js";
+import type {
+  SmartWalletClientEip1193Provider,
+  SmartWalletClient,
+} from "./types.js";
 import type { PrepareCallsParams } from "./actions/prepareCalls.js";
-import type { SmartWalletActions } from "./decorators/smartWalletActions.js";
 import type { WalletServerViemRpcSchema } from "@alchemy/wallet-api-types/rpc";
 import EventEmitter from "events"; // TODO(v5): do we need to polyfill this for browser?
 import { getCapabilities } from "viem/actions";
+import {
+  createSmartWalletClientAndRequestAccount,
+  type CreateSmartWalletClientParams,
+} from "./client.js";
+import type { CreationOptions } from "@alchemy/wallet-api-types";
 
 export type SmartWalletClient1193Methods = [
   ExtractRpcMethod<WalletRpcSchema, "eth_chainId">,
@@ -35,38 +40,40 @@ export type SmartWalletClient1193Methods = [
   ...WalletServerViemRpcSchema,
 ];
 
-export type SmartWalletClientEip1193Provider = Prettify<
-  EIP1193Events & {
-    request: EIP1193RequestFn<SmartWalletClient1193Methods>;
-  }
->;
-
 const handler = createEip1193HandlerFactory<SmartWalletClient1193Methods>();
 
-export const createEip1193ProviderFromClient = <
-  TAccount extends Address | undefined = Address | undefined,
->(
-  client: BaseWalletClient<SmartWalletActions<TAccount>>,
-) => {
+/**
+ * Creates a  EIP-1193 provider backed by Alchemy's Wallet API, using a wrapped
+ * wallet client to sign requests.
+ *
+ * @param {CreateSmartWalletClientParams<undefined>} clientParams Parameters for creating the provider.
+ * @param {CreationOptions | { accountAddress: Address }} accountOptions Options for the created smart wallet account.
+ * @returns {SmartWalletClientEip1193Provider} The created provider.
+ */
+export const createEip1193Provider = (
+  clientParams: CreateSmartWalletClientParams<undefined>,
+  accountOptions: CreationOptions | { accountAddress: Address } = {},
+): SmartWalletClientEip1193Provider => {
+  let clientPromise: Promise<SmartWalletClient<Address>> | undefined;
+
   // TODO(v5): implement any other supported events: https://eips.ethereum.org/EIPS/eip-1193#events
   const eventEmitter = new EventEmitter();
 
-  // TODO(v5): revisit if we actually want to auto-connect the provider like this.
-  (async () => {
-    const account = await client.requestAccount();
-    client.account = {
-      type: "json-rpc",
-      address: account.address,
-    };
-    eventEmitter.emit("connect", { chainId: toHex(client.chain.id) });
-  })();
-
   const request = (async ({ method, params }) => {
+    clientPromise ??= (async () => {
+      const _client = await createSmartWalletClientAndRequestAccount(
+        clientParams,
+        accountOptions,
+      );
+      eventEmitter.emit("connect", { chainId: toHex(_client.chain.id) });
+      return _client;
+    })();
+    const client = await clientPromise;
     try {
       switch (method) {
         case "eth_chainId": {
           return await handler<"eth_chainId">(async () => {
-            if (client.chain.id == null) {
+            if (client?.chain.id == null) {
               throw new ChainNotFoundError();
             }
             return toHex(client.chain.id);
@@ -75,7 +82,7 @@ export const createEip1193ProviderFromClient = <
 
         case "eth_accounts": {
           return await handler<"eth_accounts">(async () => {
-            if (!client.account) {
+            if (!client?.account) {
               throw new AccountNotFoundError();
             }
             return [client.account.address];
@@ -84,7 +91,7 @@ export const createEip1193ProviderFromClient = <
 
         case "personal_sign": {
           return await handler<"personal_sign">(async ([data, address]) => {
-            if (!client.account) {
+            if (!client?.account) {
               throw new AccountNotFoundError();
             }
             if (
@@ -106,7 +113,7 @@ export const createEip1193ProviderFromClient = <
         case "eth_signTypedData_v4": {
           return await handler<"eth_signTypedData_v4">(
             async ([address, tdJson]) => {
-              if (!client.account) {
+              if (!client?.account) {
                 throw new AccountNotFoundError();
               }
               if (
@@ -128,7 +135,7 @@ export const createEip1193ProviderFromClient = <
         case "wallet_sendTransaction":
         case "eth_sendTransaction": {
           return await handler<"eth_sendTransaction">(async ([tx]) => {
-            if (!client.account) {
+            if (!client?.account) {
               throw new AccountNotFoundError();
             }
             if (!client.chain) {
@@ -145,9 +152,8 @@ export const createEip1193ProviderFromClient = <
             }
             const result = await client.sendCalls({
               calls: [{ to, data, value }],
-              from: client.account.address,
               // TODO(v5): do we need to support any overrides here?
-            } as PrepareCallsParams<TAccount>);
+            });
             const callStatusResult = await client.waitForCallsStatus({
               id: result.preparedCallIds[0],
             });
@@ -165,7 +171,7 @@ export const createEip1193ProviderFromClient = <
               throw new InvalidRequestError("Params are required.");
             }
             const [{ calls, capabilities, chainId, from }] = _params;
-            if (!client.account) {
+            if (!client?.account) {
               throw new AccountNotFoundError();
             }
             if (!client.chain) {
@@ -185,15 +191,15 @@ export const createEip1193ProviderFromClient = <
                 "Cannot use 'from' address other than connected account.",
               );
             }
+
             const result = await client.sendCalls({
               calls: calls.map((c) => ({
                 to: c.to!,
                 data: c.data,
                 value: c.value,
               })),
-              from: client.account.address,
-              capabilities,
-            } as PrepareCallsParams<TAccount>);
+              capabilities: transformCapabilities(capabilities),
+            });
             return {
               id: result.preparedCallIds[0],
             };
@@ -202,6 +208,9 @@ export const createEip1193ProviderFromClient = <
 
         case "wallet_getCapabilities": {
           return await handler<"wallet_getCapabilities">(async () => {
+            if (!client?.account) {
+              throw new AccountNotFoundError();
+            }
             return await getCapabilities(client);
           })(params);
         }
@@ -248,4 +257,27 @@ export const createEip1193ProviderFromClient = <
     removeListener: eventEmitter.removeListener.bind(eventEmitter),
     request,
   };
+};
+
+// Wallet server's `paymasterService` type is incompatible with
+// Viem's. So we can accept a custom capability property name
+// when using an Alchemy paymaster per-call policy id override,
+// in order to remain compatible with Viem's `sendCalls` action.
+const transformCapabilities = (
+  capabilities: Capabilities | undefined,
+): PrepareCallsParams["capabilities"] => {
+  if (
+    "alchemyPaymaster" in (capabilities ?? {}) &&
+    !("paymasterService" in (capabilities ?? {})) &&
+    capabilities?.alchemyPaymaster.policyId != null
+  ) {
+    const { alchemyPaymaster, ...rest } = capabilities;
+    return {
+      ...rest,
+      paymasterService: {
+        policyId: capabilities.alchemyPaymaster.policyId,
+      },
+    };
+  }
+  return capabilities;
 };

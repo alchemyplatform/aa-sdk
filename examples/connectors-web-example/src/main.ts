@@ -16,10 +16,11 @@ import {
   switchChain,
   signTypedData,
   verifyTypedData,
+  sendCalls,
 } from "@wagmi/core";
 import { config } from "./wagmi.js";
-import { testSmartWalletWithConnectorClient } from "./test-smart-wallet.js";
 import "./style.css";
+import { zeroAddress } from "viem";
 
 globalThis.Buffer = Buffer;
 
@@ -65,6 +66,7 @@ async function handleSendOtp() {
     updateStatus("auth-status", "OTP sent! Check your email.");
     focusElement("otp-input");
   } catch (error) {
+    console.error(error);
     updateStatus("auth-status", `Error: ${(error as Error).message}`);
   }
 }
@@ -81,6 +83,7 @@ async function handleSubmitOtp() {
     await submitOtpCode(config, { otpCode });
     updateStatus("auth-status", "Authentication successful!");
   } catch (error) {
+    console.error(error);
     updateStatus("auth-status", `Error: ${(error as Error).message}`);
   }
 }
@@ -93,6 +96,7 @@ async function handleOauthLogin(provider: string) {
     await loginWithOauth(config, { provider, mode });
     updateStatus("oauth-status", `${provider} authentication successful!`);
   } catch (error) {
+    console.error(error);
     updateStatus("oauth-status", `Error: ${(error as Error).message}`);
   }
 }
@@ -179,7 +183,7 @@ async function handleSignTypedData() {
   }
 }
 
-async function handleTestSmartWallet() {
+async function handleSendCalls() {
   const account = getAccount(config);
   if (account.status !== "connected") {
     alert("Not connected");
@@ -191,8 +195,11 @@ async function handleTestSmartWallet() {
       "smart-wallet-status",
       "Sending call (see console for more info)...",
     );
-    const result = await testSmartWalletWithConnectorClient();
-    updateStatus("smart-wallet-status", `Result: ${result}`);
+    const result = await sendCalls(config, {
+      calls: [{ to: zeroAddress, data: "0x" }],
+      // Paymaster capability should already be set up in the connector.
+    });
+    updateStatus("smart-wallet-status", `Result: ${result.id}`);
   } catch (error) {
     console.error("Call failed:", error);
     updateStatus("smart-wallet-status", `Error: ${(error as Error).message}`);
@@ -222,6 +229,7 @@ function handleOauthRedirectOnLoad() {
         );
       })
       .catch((error: Error) => {
+        console.error(error);
         updateStatus("oauth-status", `OAuth redirect error: ${error.message}`);
       });
   }
@@ -338,7 +346,7 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
       <button id="sign-typed-data" type="button">Sign Typed Data</button>
 
       <div>
-        <button id="test-smart-wallet" type="button">Send call via Smart Wallet Client</button>
+        <button id="send-calls" type="button">Send calls</button>
         <div id="smart-wallet-status"></div>
       </div>
     </div>
@@ -487,8 +495,8 @@ function setupWalletActions() {
   const signTypedDataButton = document.getElementById("sign-typed-data");
   signTypedDataButton?.addEventListener("click", handleSignTypedData);
 
-  const testSmartWalletButton = document.getElementById("test-smart-wallet");
-  testSmartWalletButton?.addEventListener("click", handleTestSmartWallet);
+  const sendCallsButton = document.getElementById("send-calls");
+  sendCallsButton?.addEventListener("click", handleSendCalls);
 
   const chainButtons =
     document.querySelectorAll<HTMLButtonElement>(".chain-btn");
