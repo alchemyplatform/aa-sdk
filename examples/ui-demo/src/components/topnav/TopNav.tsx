@@ -5,8 +5,11 @@ import { GithubLogo } from "../icons/github";
 import { Wordmark } from "../icons/wordmark";
 import ExternalLink from "../shared/ExternalLink";
 import Image from "next/image";
+import { useFundingModal } from "@account-kit/react";
 
 export function TopNav() {
+  const { openFundingModal } = useFundingModal();
+
   const onDashboardClick = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();
     e.preventDefault();
@@ -32,6 +35,14 @@ export function TopNav() {
           />
         </div>
         <div className="flex gap-1 md:gap-8 items-center h-8">
+          {process.env.NEXT_PUBLIC_USE_LOCAL_FUNDING === "true" && (
+            <button
+              onClick={() => openFundingModal()}
+              className="hidden md:flex p-2 font-semibold hover:bg-gray-100 transition-colors rounded-lg text-blue-600"
+            >
+              Test Funding
+            </button>
+          )}
           <ExternalLink
             href={links.quickstartGuide}
             onClick={() => Metrics.trackEvent({ name: "quickstart_clicked" })}

@@ -187,8 +187,38 @@ export const useWalletFunding = (): UseWalletFundingResult => {
       countryCode: string;
     }): Promise<GetConfigResponse | null> => {
       try {
+        // Check if we should use local funding server
+        const useLocalFunding =
+          typeof window !== "undefined" &&
+          process.env.NEXT_PUBLIC_USE_LOCAL_FUNDING === "true";
+        const localFundingUrl =
+          process.env.NEXT_PUBLIC_LOCAL_FUNDING_URL || "http://localhost:4001";
+
+        if (useLocalFunding) {
+          const response = await fetch(localFundingUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              jsonrpc: "2.0",
+              method: "wallet_v0fundingGetConfig",
+              params: [{ countryCode }],
+              id: Date.now(),
+            }),
+          });
+
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+          }
+
+          const result = await response.json();
+          if (result.error) {
+            throw new Error(result.error.message || "RPC Error");
+          }
+
+          return result.result;
+        }
+
         if (!walletClient) {
-          console.log("No wallet client available, using mock data");
           return MOCK_CONFIG;
         }
 
@@ -198,7 +228,7 @@ export const useWalletFunding = (): UseWalletFundingResult => {
         });
         return response as GetConfigResponse;
       } catch (error) {
-        console.error("Failed to get config, using mock data:", error);
+        console.log("[Funding] Config fetch failed, using mock:", error);
         return MOCK_CONFIG;
       }
     },
@@ -240,15 +270,86 @@ export const useWalletFunding = (): UseWalletFundingResult => {
           };
         }
 
+        // Check if we should use local funding server
+        const useLocalFunding =
+          typeof window !== "undefined" &&
+          process.env.NEXT_PUBLIC_USE_LOCAL_FUNDING === "true";
+        const localFundingUrl =
+          process.env.NEXT_PUBLIC_LOCAL_FUNDING_URL || "http://localhost:4001";
+
+        if (useLocalFunding) {
+          const address =
+            walletAddress ||
+            walletClient?.account?.address ||
+            "0x0000000000000000000000000000000000000000";
+
+          const response = await fetch(localFundingUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              jsonrpc: "2.0",
+              method: "wallet_v0fundingGetQuotes",
+              params: [
+                {
+                  countryCode,
+                  source: {
+                    amount,
+                    currency: fiat,
+                  },
+                  destination: {
+                    token,
+                    chain: "ethereum",
+                    walletAddress: address,
+                  },
+                  paymentMethod,
+                  lock: true,
+                },
+              ],
+              id: Date.now(),
+            }),
+          });
+
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+          }
+
+          const result = await response.json();
+          if (result.error) {
+            throw new Error(result.error.message || "RPC Error");
+          }
+
+          if (result.result?.quotes) {
+            console.log(
+              "[Funding] Quotes from server:",
+              JSON.stringify(result.result.quotes, null, 2),
+            );
+            setQuotesCache(result.result.quotes);
+          }
+
+          return result.result;
+        }
+
         if (!walletClient) {
-          throw new Error("No wallet client available");
+          // Return mock quotes even when no client is available
+          const mockQuotes = MOCK_QUOTES.map((quote) => ({
+            ...quote,
+            destinationAmount: (
+              parseFloat(amount || "50") / parseFloat(quote.exchangeRate)
+            ).toFixed(2),
+            paymentMethod,
+          }));
+          setQuotesCache(mockQuotes);
+          return {
+            requestId: "mock-request",
+            quotes: mockQuotes,
+          };
         }
 
         // Use wallet address or default to connected account
-        const address = walletAddress || walletClient.account?.address;
-        if (!address) {
-          throw new Error("No wallet address available");
-        }
+        const address =
+          walletAddress ||
+          walletClient.account?.address ||
+          "0x0000000000000000000000000000000000000000";
 
         const response = await (walletClient as any).request({
           method: "wallet_v0fundingGetQuotes",
@@ -271,13 +372,15 @@ export const useWalletFunding = (): UseWalletFundingResult => {
         });
 
         if (response.quotes) {
+          console.log(
+            "[Funding] Quotes from server:",
+            JSON.stringify(response.quotes, null, 2),
+          );
           setQuotesCache(response.quotes);
         }
 
         return response;
       } catch (error) {
-        console.error("Failed to get quotes, using mock data:", error);
-
         // Return mock quotes with calculated amounts
         const mockQuotes = MOCK_QUOTES.map((quote) => ({
           ...quote,
@@ -316,6 +419,42 @@ export const useWalletFunding = (): UseWalletFundingResult => {
           };
         }
 
+        // Check if we should use local funding server
+        const useLocalFunding =
+          typeof window !== "undefined" &&
+          process.env.NEXT_PUBLIC_USE_LOCAL_FUNDING === "true";
+        const localFundingUrl =
+          process.env.NEXT_PUBLIC_LOCAL_FUNDING_URL || "http://localhost:4001";
+
+        if (useLocalFunding) {
+          const response = await fetch(localFundingUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              jsonrpc: "2.0",
+              method: "wallet_v0fundingCreateSession",
+              params: [
+                {
+                  quoteId,
+                  idempotencyKey: generateIdempotencyKey(),
+                },
+              ],
+              id: Date.now(),
+            }),
+          });
+
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+          }
+
+          const result = await response.json();
+          if (result.error) {
+            throw new Error(result.error.message || "RPC Error");
+          }
+
+          return result.result;
+        }
+
         if (!walletClient) {
           throw new Error("No wallet client available");
         }
@@ -332,8 +471,6 @@ export const useWalletFunding = (): UseWalletFundingResult => {
 
         return response;
       } catch (error: any) {
-        console.error("Failed to create session:", error);
-
         // Handle quote expired error
         if (error.message?.includes("QUOTE_EXPIRED")) {
           throw new Error("Quote expired. Please refresh and try again.");

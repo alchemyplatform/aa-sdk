@@ -100,20 +100,26 @@ const solanaConnection = new Connection(
   },
 );
 
-export const alchemyConfig = () => {
-  return createConfig(
+export const alchemyConfig = () =>
+  createConfig(
     {
-      transport: alchemy({ rpcUrl: "/api/rpc" }),
+      transport: alchemy({
+        rpcUrl: "/api/rpc",
+      }),
       chain: arbitrumSepolia,
       chains: [
         {
           chain: arbitrumSepolia,
-          transport: alchemy({ rpcUrl: "/api/rpc" }),
+          transport: alchemy({
+            rpcUrl: "/api/rpc",
+          }),
           policyId: process.env.NEXT_PUBLIC_PAYMASTER_POLICY_ID,
         },
         {
           chain: baseSepolia,
-          transport: alchemy({ rpcUrl: "/api/rpc-base-sepolia" }),
+          transport: alchemy({
+            rpcUrl: "/api/rpc-base-sepolia",
+          }),
           policyId: process.env.NEXT_PUBLIC_PAYMASTER_POLICY_ID,
         },
       ],
@@ -153,4 +159,3 @@ export const alchemyConfig = () => {
       uiMode: "embedded",
     },
   );
-};

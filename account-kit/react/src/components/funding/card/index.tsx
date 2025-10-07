@@ -26,7 +26,6 @@ export const FundingCard = ({ showClose = false }: FundingCardProps) => {
   const [showProviders, setShowProviders] = useState(false);
   const [quoteLockSeconds, setQuoteLockSeconds] = useState<number>(90);
   const [fiatCurrency, setFiatCurrency] = useState<string>("USD");
-  // TODO: Use these for input validation
   const [minAmount, setMinAmount] = useState<string>("10");
   const [maxAmount, setMaxAmount] = useState<string>("10000");
 
@@ -152,7 +151,7 @@ export const FundingCard = ({ showClose = false }: FundingCardProps) => {
           alert("Quote expired. Please try again with the refreshed quote.");
         }
       } else {
-        // For demo purposes when no app ID is configured
+        // For demo purposes when API fails
         alert(
           `Demo: You would be redirected to ${selectedQuote.providerId} to complete purchasing ${amount} USD worth of ${token}.`,
         );
@@ -173,8 +172,9 @@ export const FundingCard = ({ showClose = false }: FundingCardProps) => {
   ]);
 
   // Format numbers with commas
-  const formatNumber = (num: string) => {
-    const parts = num.split(".");
+  const formatNumber = (num: string | number) => {
+    const numStr = String(num);
+    const parts = numStr.split(".");
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     return parts.join(".");
   };
