@@ -1,4 +1,5 @@
 import { useCallback, useState } from "react";
+import { clientHeaderTrack } from "@aa-sdk/core";
 import { swapActions } from "@account-kit/wallet-client/experimental";
 import { useAlchemyClient } from "./useAlchemyClient.js";
 import type {
@@ -49,7 +50,10 @@ export function useAlchemySubmitSwap(): UseSubmitSwapResult {
       setError(null);
 
       try {
-        const client = await getClient();
+        const client = clientHeaderTrack(
+          await getClient(),
+          "privyIntegration_useAlchemySubmitSwap",
+        );
 
         // Extend client with swap actions
         const swapClient = client.extend(swapActions);
