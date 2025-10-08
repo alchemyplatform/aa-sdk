@@ -144,17 +144,24 @@ export function alchemySmartWallet(
         const chain = getChainFromConfig(config, chainId);
         const signer = await getSignerClient(chain);
 
-        return createEip1193Provider({
-          signer,
-          transport: alchemyTransport({
-            apiKey: options.apiKey,
-            jwt: options.jwt,
-            url: options.url ?? "https://api.g.alchemy.com/v2",
-          }),
-          chain,
-          policyId: options.policyId,
-          policyIds: options.policyIds,
-        });
+        return createEip1193Provider(
+          {
+            signer,
+            transport: alchemyTransport({
+              apiKey: options.apiKey,
+              jwt: options.jwt,
+              url: options.url ?? "https://api.g.alchemy.com/v2",
+            }),
+            chain,
+            policyId: options.policyId,
+            policyIds: options.policyIds,
+          },
+          // TODO(v5): support other account params
+          // https://app.asana.com/1/1129441638109975/project/1210112085973163/task/1211568982181252
+          {
+            accountType: "7702",
+          },
+        );
       };
 
     const initializeSmartWalletClient = async (): Promise<void> => {
