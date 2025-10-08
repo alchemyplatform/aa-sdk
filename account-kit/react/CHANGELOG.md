@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.67.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.66.4...v4.67.0) (2025-10-06)
+
+### Features
+
+- add swap react hooks to SDKv4 ([#2148](https://github.com/alchemyplatform/aa-sdk/issues/2148)) ([427f725](https://github.com/alchemyplatform/aa-sdk/commit/427f725b55ed192f39777bdc6d3590355677e6b0))
+
 ## [4.66.4](https://github.com/alchemyplatform/aa-sdk/compare/v4.66.3...v4.66.4) (2025-10-01)
 
 **Note:** Version bump only for package @account-kit/react
