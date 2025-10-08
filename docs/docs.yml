@@ -270,11 +270,6 @@ navigation:
               - page: Third Party Paymasters
                 path: wallets/pages/low-level-infra/third-party-infrastructure/paymasters.mdx
 
-      - section: Funding
-        contents:
-          - page: Early Access
-            path: wallets/pages/funding/signup.mdx
-
       - section: API Reference
         contents:
           - section: Smart Wallets
