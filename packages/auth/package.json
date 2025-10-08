@@ -46,6 +46,7 @@
     "@alchemy/aa-infra": "*",
     "@alchemy/common": "*",
     "@turnkey/http": "^3.13.0",
+    "eventemitter3": "^5.0.1",
     "viem": "2.29.2"
   },
   "publishConfig": {

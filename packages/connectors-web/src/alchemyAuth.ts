@@ -150,6 +150,8 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
   // Returns true if the session was restored successfully, false if it was not.
   let resumePromise: Promise<boolean> | undefined;
 
+  let stopListeningForDisconnects: (() => void) | undefined;
+
   return createConnector<Provider, Properties>((config) => {
     function assertNotNullish<T>(
       value: T,
@@ -178,21 +180,31 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
         const client = getAuthClient();
         // Pass the auth session state directly to restoreAuthSession
         // The auth package will handle validation including expiration checks
-        authSessionInstance = await client.restoreAuthSession(
+        const authSession = await client.restoreAuthSession(
           persisted.authSessionState,
         );
-
-        if (authSessionInstance) {
+        if (authSession) {
+          setAuthSession(authSession);
           currentChainId = persisted.chainId;
           return true;
         }
       } catch (error) {
         // Error during restore - continue to cleanup
+        console.warn("Error during auth session restore:", error);
       }
 
       // Session was expired, invalid, or error occurred - clean up
       await clearStoredAuthSession(config.storage);
       return false;
+    }
+
+    async function getAccounts(): Promise<readonly Address[]> {
+      if (!authSessionInstance) {
+        return [];
+      }
+
+      const address = authSessionInstance.getAddress();
+      return [address];
     }
 
     // Helper to persist current auth session state
@@ -251,6 +263,58 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
         );
       }
     }
+
+    async function disconnect(): Promise<void> {
+      stopListeningForDisconnects?.();
+      try {
+        // Clean up instances
+        if (authSessionInstance) {
+          authSessionInstance.disconnect();
+        }
+      } catch (error) {
+        // Log disconnect errors but don't throw to avoid breaking flow
+        config.emitter.emit("error", { error: error as Error });
+      } finally {
+        // Always clean up state and storage, even if disconnect fails
+        authSessionInstance = undefined;
+        authClientInstance = undefined;
+        currentChainId = undefined;
+        clients = {};
+        resumePromise = undefined;
+        stopListeningForDisconnects = undefined;
+
+        // Remove storage event listener to prevent memory leaks
+        if (typeof window !== "undefined" && storageEventListener) {
+          window.removeEventListener("storage", storageEventListener);
+          storageEventListener = undefined;
+        }
+
+        // Clear persisted storage
+        await clearStoredAuthSession(config.storage);
+      }
+      config.emitter.emit("disconnect");
+    }
+
+    function setAuthSession(authSession: AuthSession): void {
+      authSessionInstance = authSession;
+      // Clear the resume promise since we now have a fresh session
+      resumePromise = undefined;
+
+      // Listen for disconnect events and disconnect ourselves when they
+      // occur, clearing the previous listener if necessary.
+      stopListeningForDisconnects?.();
+      stopListeningForDisconnects = authSessionInstance.on(
+        "disconnect",
+        disconnect,
+      );
+
+      // Persist session state immediately
+      void persistAuthSession().catch((error) => {
+        console.warn("Failed to persist auth session:", error);
+        // Don't throw - persistence failure shouldn't break auth flow
+      });
+    }
+
     return {
       id: "alchemyAuth",
       name: "Alchemy Auth",
@@ -270,7 +334,7 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
               // Our auth session was cleared in another tab - disconnect this tab too
               // This prevents scenarios where Tab A logs out but Tab B stays "connected"
               // with a stale session that would fail on actual usage
-              void this.disconnect();
+              disconnect();
             }
           };
 
@@ -324,43 +388,9 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
         };
       },
 
-      async disconnect() {
-        try {
-          // Clean up instances
-          if (authSessionInstance) {
-            await authSessionInstance.disconnect();
-          }
-        } catch (error) {
-          // Log disconnect errors but don't throw to avoid breaking flow
-          config.emitter.emit("error", { error: error as Error });
-        } finally {
-          // Always clean up state and storage, even if disconnect fails
-          authSessionInstance = undefined;
-          authClientInstance = undefined;
-          currentChainId = undefined;
-          clients = {};
-          resumePromise = undefined;
+      disconnect,
 
-          // Remove storage event listener to prevent memory leaks
-          if (typeof window !== "undefined" && storageEventListener) {
-            window.removeEventListener("storage", storageEventListener);
-            storageEventListener = undefined;
-          }
-
-          // Clear persisted storage
-          await clearStoredAuthSession(config.storage);
-        }
-        config.emitter.emit("disconnect");
-      },
-
-      async getAccounts(): Promise<readonly Address[]> {
-        if (!authSessionInstance) {
-          return [];
-        }
-
-        const address = authSessionInstance.getAddress();
-        return [address];
-      },
+      getAccounts,
 
       async getChainId() {
         // Return the currently connected chain, or fall back to first configured chain
@@ -457,7 +487,7 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
         // Handle account changes - for now just emit the accounts
         // In a full implementation, we might need to update internal state
         if (accounts.length === 0) {
-          await this.disconnect();
+          await disconnect();
         } else {
           config.emitter.emit("change", {
             accounts: accounts as readonly Address[],
@@ -482,7 +512,7 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
 
       async onDisconnect(error) {
         // Handle disconnection
-        await this.disconnect();
+        await disconnect();
         if (error) {
           config.emitter.emit("error", { error });
         }
@@ -496,17 +526,7 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
         return authSessionInstance!;
       },
 
-      setAuthSession(authSession: AuthSession) {
-        authSessionInstance = authSession;
-        // Clear the resume promise since we now have a fresh session
-        resumePromise = undefined;
-
-        // Persist session state immediately
-        void persistAuthSession().catch((error) => {
-          console.warn("Failed to persist auth session:", error);
-          // Don't throw - persistence failure shouldn't break auth flow
-        });
-      },
+      setAuthSession,
     };
   });
 }

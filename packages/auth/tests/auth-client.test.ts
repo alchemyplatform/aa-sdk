@@ -1,9 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { AuthClient } from "../src/authClient.js";
 import {
-  AuthSession,
+  AuthClient,
   DEFAULT_SESSION_EXPIRATION_MS,
-} from "../src/authSession.js";
+} from "../src/authClient.js";
+import { AuthSession } from "../src/authSession.js";
 import type {
   AuthSessionState,
   User,
@@ -185,6 +185,7 @@ describe("AuthClient", () => {
     });
 
     it("should load valid passkey session state", async () => {
+      const expirationDateMs = Date.now() + 60 * 60 * 1000; // 1 hour from now
       // Mock the loginWithPasskey method to avoid the "not implemented" error
       const mockLoginWithPasskey = vi.spyOn(authClient, "loginWithPasskey");
       const mockAuthSession = await AuthSession.create({
@@ -194,13 +195,14 @@ describe("AuthClient", () => {
         idToken: mockUser.idToken,
         authType: "passkey",
         credentialId: "test-passkey-credential",
+        expirationDateMs,
       });
       mockLoginWithPasskey.mockResolvedValue(mockAuthSession);
 
       const validPasskeyState: AuthSessionState = {
         type: "passkey",
         user: mockUser,
-        expirationDateMs: Date.now() + 60 * 60 * 1000, // 1 hour from now
+        expirationDateMs,
         credentialId: "test-passkey-credential",
       };
 
