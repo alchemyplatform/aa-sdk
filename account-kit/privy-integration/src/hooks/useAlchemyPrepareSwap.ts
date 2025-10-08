@@ -1,6 +1,5 @@
 import { useCallback, useState } from "react";
 import { type Address } from "viem";
-import { clientHeaderTrack } from "@aa-sdk/core";
 import { swapActions } from "@account-kit/wallet-client/experimental";
 import { useAlchemyClient } from "./useAlchemyClient.js";
 import { useEmbeddedWallet } from "./internal/useEmbeddedWallet.js";
@@ -64,10 +63,7 @@ export function useAlchemyPrepareSwap(): UsePrepareSwapResult {
       setError(null);
 
       try {
-        const client = clientHeaderTrack(
-          await getClient(),
-          "privyIntegration_useAlchemyPrepareSwap",
-        );
+        const client = await getClient();
         const embeddedWallet = getEmbeddedWallet();
 
         // Extend client with swap actions

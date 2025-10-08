@@ -1,6 +1,5 @@
 import { useCallback, useState } from "react";
 import { type Address, type Hex, isHex } from "viem";
-import { clientHeaderTrack } from "@aa-sdk/core";
 import { useAlchemyClient } from "./useAlchemyClient.js";
 import { useAlchemyConfig } from "../Provider.js";
 import { useEmbeddedWallet } from "./internal/useEmbeddedWallet.js";
@@ -74,10 +73,7 @@ export function useAlchemySendTransaction(): UseSendTransactionResult {
       setError(null);
 
       try {
-        const client = clientHeaderTrack(
-          await getClient(),
-          "privyIntegration_useAlchemySendTransaction",
-        );
+        const client = await getClient();
         const embeddedWallet = getEmbeddedWallet();
 
         // Determine if transaction should be sponsored

@@ -123,10 +123,16 @@ export function useAlchemyClient() {
       jwt: config.jwt,
     });
 
+    const transport = alchemy(transportConfig);
+
+    transport.updateHeaders({
+      "X-Alchemy-Client-Breadcrumb": "privyIntegrationSdk",
+    });
+
     // Create and cache the smart wallet client in provider context
     cache.client = createSmartWalletClient({
       chain,
-      transport: alchemy(transportConfig),
+      transport,
       signer,
       policyIds: config.policyId
         ? Array.isArray(config.policyId)
