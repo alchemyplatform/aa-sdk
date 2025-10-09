@@ -199,9 +199,9 @@ navigation:
             path: wallets/pages/transactions/sponsor-gas/index.mdx
           - page: Pay gas with any token
             path: wallets/pages/transactions/pay-gas-with-any-token/index.mdx
-          - page: "[NEW] Swap tokens"
+          - page: "[NEW] Same-chain swaps"
             path: wallets/pages/transactions/swap-tokens/index.mdx
-          - page: "[NEW] Cross-Chain Swaps"
+          - page: "[NEW] Cross-chain swaps"
             path: wallets/pages/transactions/cross-chain-swap-tokens/index.mdx
           - page: Send parallel transactions
             path: wallets/pages/transactions/send-parallel-transactions/index.mdx
