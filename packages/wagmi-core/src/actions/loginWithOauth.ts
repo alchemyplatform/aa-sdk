@@ -8,6 +8,8 @@ export type LoginWithOauthParameters = {
   redirectUrl?: string;
   /** Whether to use popup (default) or redirect flow */
   mode?: "popup" | "redirect";
+  /** The length of the session in milliseconds. Defaults to 15 minutes. */
+  sessionExpirationMs?: number;
 };
 
 export type LoginWithOauthReturnType = void;
@@ -20,6 +22,7 @@ export type LoginWithOauthReturnType = void;
  * @param {string} parameters.provider - The OAuth provider to use
  * @param {string} [parameters.redirectUrl] - Optional redirect URL after OAuth completion
  * @param {"popup" | "redirect"} [parameters.mode] - Authentication flow mode (defaults to "popup")
+ * @param {number | undefined} [parameters.sessionExpirationMs] - The length of the session in milliseconds (defaults to 15 minutes)
  * @returns {Promise<LoginWithOauthReturnType>} Promise that resolves when authentication completes and connection is established
  */
 export async function loginWithOauth(
@@ -33,6 +36,7 @@ export async function loginWithOauth(
     type: "oauth",
     authProviderId: parameters.provider,
     mode: parameters.mode ?? "popup",
+    sessionExpirationMs: parameters.sessionExpirationMs,
   });
 
   connector.setAuthSession(authSession);

@@ -1,11 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import {
-  AuthSession,
-  DEFAULT_SESSION_EXPIRATION_MS,
-} from "../src/authSession.js";
+import { AuthSession } from "../src/authSession.js";
 import type { User, TurnkeyStamper } from "../src/types.js";
 import type { AlchemyRestClient } from "@alchemy/common";
 import type { SignerHttpSchema } from "@alchemy/aa-infra";
+import { DEFAULT_SESSION_EXPIRATION_MS } from "../src/authClient.js";
 
 // Mock Turnkey client
 vi.mock("@turnkey/http", () => ({
@@ -61,6 +59,7 @@ describe("AuthSession", () => {
 
   describe("getSerializedState", () => {
     it("should serialize OAuth session state correctly", async () => {
+      const expirationDateMs = Date.now() + DEFAULT_SESSION_EXPIRATION_MS;
       const authSession = await AuthSession.create({
         signerHttpClient: mockSignerHttpClient,
         stamper: mockTurnkeyStamper,
@@ -68,6 +67,7 @@ describe("AuthSession", () => {
         idToken: mockUser.idToken,
         bundle: "test-oauth-bundle",
         authType: "oauth",
+        expirationDateMs,
       });
 
       const serializedState = authSession.getSerializedState();
@@ -82,19 +82,12 @@ describe("AuthSession", () => {
           address: mockUser.address,
           idToken: mockUser.idToken,
         }),
-        expirationDateMs: expect.any(Number),
+        expirationDateMs,
       });
-
-      // Verify expiration is ~15 minutes from now
-      const now = Date.now();
-      const expectedExpiration = now + DEFAULT_SESSION_EXPIRATION_MS;
-      expect(parsedState.expirationDateMs).toBeGreaterThan(now);
-      expect(parsedState.expirationDateMs).toBeLessThanOrEqual(
-        expectedExpiration + 1000,
-      ); // 1s tolerance
     });
 
     it("should serialize OTP session state correctly", async () => {
+      const expirationDateMs = Date.now() + DEFAULT_SESSION_EXPIRATION_MS;
       const authSession = await AuthSession.create({
         signerHttpClient: mockSignerHttpClient,
         stamper: mockTurnkeyStamper,
@@ -102,6 +95,7 @@ describe("AuthSession", () => {
         idToken: mockUser.idToken,
         bundle: "test-otp-bundle",
         authType: "otp",
+        expirationDateMs,
       });
 
       const serializedState = authSession.getSerializedState();
@@ -116,11 +110,12 @@ describe("AuthSession", () => {
           address: mockUser.address,
           idToken: mockUser.idToken,
         }),
-        expirationDateMs: expect.any(Number),
+        expirationDateMs,
       });
     });
 
     it("should serialize passkey session state correctly", async () => {
+      const expirationDateMs = Date.now() + DEFAULT_SESSION_EXPIRATION_MS;
       const authSession = await AuthSession.create({
         signerHttpClient: mockSignerHttpClient,
         stamper: mockTurnkeyStamper,
@@ -128,6 +123,7 @@ describe("AuthSession", () => {
         idToken: mockUser.idToken,
         authType: "passkey",
         credentialId: "test-passkey-credential-id",
+        expirationDateMs,
       });
 
       const serializedState = authSession.getSerializedState();
@@ -142,7 +138,7 @@ describe("AuthSession", () => {
           idToken: mockUser.idToken,
           credentialId: "test-passkey-credential-id",
         }),
-        expirationDateMs: expect.any(Number),
+        expirationDateMs,
         credentialId: "test-passkey-credential-id",
       });
 
@@ -151,6 +147,7 @@ describe("AuthSession", () => {
     });
 
     it("should throw error when trying to serialize non-passkey auth without bundle", async () => {
+      const expirationDateMs = Date.now() + DEFAULT_SESSION_EXPIRATION_MS;
       const authSession = await AuthSession.create({
         signerHttpClient: mockSignerHttpClient,
         stamper: mockTurnkeyStamper,
@@ -158,33 +155,58 @@ describe("AuthSession", () => {
         idToken: mockUser.idToken,
         authType: "oauth",
         // No bundle provided
+        expirationDateMs,
       });
 
       expect(() => authSession.getSerializedState()).toThrow(
         "Bundle is required for non-passkey authentication types",
       );
     });
-  });
 
-  describe("default expiration", () => {
-    it("should use DEFAULT_SESSION_EXPIRATION_MS constant for default expiration", async () => {
-      const now = Date.now();
+    it("should disconnect when the session expires", async () => {
+      vi.useFakeTimers();
+      try {
+        const expirationDateMs = Date.now() + 10;
+        const authSession = await AuthSession.create({
+          signerHttpClient: mockSignerHttpClient,
+          stamper: mockTurnkeyStamper,
+          orgId: mockUser.orgId,
+          idToken: mockUser.idToken,
+          bundle: "test-oauth-bundle",
+          authType: "oauth",
+          expirationDateMs,
+        });
+        let disconnectEventEmitted = false;
+        authSession.on("disconnect", () => (disconnectEventEmitted = true));
+        expect(authSession.isConnected()).toBe(true);
+        vi.advanceTimersByTime(9);
+        expect(authSession.isConnected()).toBe(true);
+        expect(disconnectEventEmitted).toBe(false);
+        vi.advanceTimersByTime(2);
+        expect(authSession.isConnected()).toBe(false);
+        expect(disconnectEventEmitted).toBe(true);
+      } finally {
+        vi.useRealTimers();
+      }
+    });
+
+    it("should emit disconnect event when explicitly disconnected", async () => {
+      const expirationDateMs = Date.now() + 10;
       const authSession = await AuthSession.create({
         signerHttpClient: mockSignerHttpClient,
         stamper: mockTurnkeyStamper,
         orgId: mockUser.orgId,
         idToken: mockUser.idToken,
-        bundle: "test-bundle",
-        authType: "otp",
-        // No expirationDateMs provided - should use default
+        bundle: "test-oauth-bundle",
+        authType: "oauth",
+        expirationDateMs,
       });
-
-      const actualExpiration = authSession.getExpirationDateMs();
-      const expectedExpiration = now + DEFAULT_SESSION_EXPIRATION_MS;
-
-      expect(DEFAULT_SESSION_EXPIRATION_MS).toBe(15 * 60 * 1000);
-      expect(actualExpiration).toBeGreaterThan(now);
-      expect(actualExpiration).toBeLessThanOrEqual(expectedExpiration + 1000); // 1s tolerance
+      let disconnectEventEmitted = false;
+      authSession.on("disconnect", () => (disconnectEventEmitted = true));
+      expect(authSession.isConnected()).toBe(true);
+      authSession.disconnect();
+      expect(authSession.isConnected()).toBe(false);
+      expect(disconnectEventEmitted).toBe(true);
     });
   });
 });

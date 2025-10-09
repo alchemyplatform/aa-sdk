@@ -28,11 +28,7 @@ import {
 } from "./provider.js";
 import type { AlchemyRestClient } from "@alchemy/common";
 import type { SignerHttpSchema } from "@alchemy/aa-infra";
-
-/**
- * Default session expiration duration in milliseconds (15 minutes)
- */
-export const DEFAULT_SESSION_EXPIRATION_MS = 15 * 60 * 1000;
+import EventEmitter from "eventemitter3";
 
 /**
  * Parameters required to create an AuthSession instance
@@ -52,8 +48,8 @@ export type CreateAuthSessionParams = {
   authType: AuthType;
   /** Credential ID for passkey authentication */
   credentialId?: string;
-  /** Session duration in milliseconds - if not provided, defaults to 15 minutes */
-  sessionDurationMs?: number;
+  /** Timestamp in milliseconds at which this session expires */
+  expirationDateMs: number;
 };
 
 /**
@@ -73,6 +69,12 @@ export type SignMessageParams = {
   /** The message to sign */
   message: SignableMessage;
 };
+
+export type AuthSessionEvents = {
+  disconnect(): void;
+};
+
+export type AuthSessionEventType = keyof AuthSessionEvents;
 
 /**
  * AuthSession represents an authenticated user session with Turnkey integration.
@@ -98,21 +100,24 @@ export type SignMessageParams = {
  * ```
  */
 export class AuthSession {
+  private readonly emitter = new EventEmitter<AuthSessionEvents>();
+  // Type is any because it differs by environment and doesn't matter.
+  private readonly expirationTimeoutId: any;
   private isDisconnected = false;
-  private expirationDateMs: number;
 
   private constructor(
     private readonly signerHttpClient: AlchemyRestClient<SignerHttpSchema>,
     private readonly turnkey: TurnkeyClient,
     private readonly user: User,
-    private readonly bundle?: string,
-    private readonly authType?: AuthType,
-    private readonly credentialId?: string,
-    sessionDurationMs?: number,
+    private readonly expirationDateMs: number,
+    private readonly bundle: string | undefined,
+    private readonly authType: AuthType | undefined,
+    private readonly credentialId: string | undefined,
   ) {
-    // Calculate expiration timestamp from duration (defaults to 15 minutes)
-    const durationMs = sessionDurationMs ?? DEFAULT_SESSION_EXPIRATION_MS;
-    this.expirationDateMs = Date.now() + durationMs;
+    this.expirationTimeoutId = setTimeout(
+      () => this.disconnect(),
+      this.expirationDateMs - Date.now(),
+    );
   }
 
   /**
@@ -145,7 +150,7 @@ export class AuthSession {
     bundle,
     authType,
     credentialId,
-    sessionDurationMs,
+    expirationDateMs,
   }: CreateAuthSessionParams): Promise<AuthSession> {
     const turnkey = new TurnkeyClient(
       { baseUrl: "https://api.turnkey.com" },
@@ -172,10 +177,10 @@ export class AuthSession {
       signerHttpClient,
       turnkey,
       user,
+      expirationDateMs,
       bundle,
       authType,
       credentialId,
-      sessionDurationMs,
     );
   }
 
@@ -195,6 +200,10 @@ export class AuthSession {
    */
   public getUser(): User {
     return this.user;
+  }
+
+  public isConnected(): boolean {
+    return !this.isDisconnected;
   }
 
   /**
@@ -423,12 +432,12 @@ export class AuthSession {
    *
    * This method marks the session as disconnected and clears any stored
    * credentials in the Turnkey stamper.
-   *
-   * @returns {Promise<void>} A promise that resolves when the session is disconnected
    */
-  public async disconnect(): Promise<void> {
+  public disconnect(): void {
     this.isDisconnected = true;
+    clearTimeout(this.expirationTimeoutId);
     (this.turnkey.stamper as TurnkeyStamper).clear?.();
+    this.emitter.emit("disconnect");
   }
 
   /**
@@ -502,6 +511,25 @@ export class AuthSession {
   public getProvider(): AlchemyAuthEip1193Provider {
     this.throwIfDisconnected();
     return create1193Provider(this);
+  }
+
+  /**
+   * Attach a listener to an event emitted by the auth session. Returns a
+   * cancellation function to remove the listener.
+   *
+   * @param {AuthSessionEventType} eventType The type of event to listen to.
+   * @param {AuthSessionEvents[AuthSessionEventType]} listener The function to run when the event is emitted.
+   * @returns {() => void} A function to remove the listener.
+   */
+  public on<E extends AuthSessionEventType>(
+    eventType: E,
+    listener: AuthSessionEvents[E],
+  ): () => void {
+    this.emitter.on(eventType, listener);
+
+    return () => {
+      this.emitter.removeListener(eventType, listener);
+    };
   }
 }
 

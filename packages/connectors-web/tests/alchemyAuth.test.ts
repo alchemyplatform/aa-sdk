@@ -5,6 +5,7 @@ import { sepolia, mainnet } from "viem/chains";
 import { http, type Address } from "viem";
 import type { AuthClient, AuthSession } from "@alchemy/auth";
 import type { Connector } from "wagmi";
+import EventEmitter from "eventemitter3";
 
 // Type helper to get the connector instance type with custom properties
 type AlchemyAuthConnector = Connector & {
@@ -30,6 +31,7 @@ describe("alchemyAuth connector", () => {
     mockProvider = {
       request: vi.fn(),
     };
+    const emitter = new EventEmitter();
     mockAuthSession = {
       getAddress: vi.fn().mockReturnValue(TEST_ADDRESS),
       getProvider: vi.fn().mockReturnValue(mockProvider),
@@ -45,7 +47,13 @@ describe("alchemyAuth connector", () => {
           user: { address: TEST_ADDRESS },
         }),
       ),
-      disconnect: vi.fn().mockResolvedValue(undefined),
+      disconnect: vi.fn(() => emitter.emit("disconnect")),
+      on: (event: any, listener: any) => {
+        emitter.on(event, listener);
+        return () => {
+          emitter.removeListener(event, listener);
+        };
+      },
     } as any;
     mockAuthClient = {
       restoreAuthSession: vi.fn().mockResolvedValue(mockAuthSession),

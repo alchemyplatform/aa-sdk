@@ -2,7 +2,10 @@ import { type Config } from "@wagmi/core";
 import { resolveAlchemyAuthConnector } from "../utils/resolveAuthConnector.js";
 
 export type SendEmailOtpParameters = {
+  /** The user's email address to receive the OTP */
   email: string;
+  /** The length of the session in milliseconds. Defaults to 15 minutes. */
+  sessionExpirationMs?: number;
 };
 
 export type SendEmailOtpReturnType = void;
@@ -13,6 +16,7 @@ export type SendEmailOtpReturnType = void;
  * @param {Config} config - The shared Wagmi/Alchemy config
  * @param {SendEmailOtpParameters} parameters - Parameters for the OTP request
  * @param {string} parameters.email - The user's email address to receive the OTP
+ * @param {number | undefined} [parameters.sessionExpirationMs] - The length of the session in milliseconds (defaults to 15 minutes)
  * @returns {Promise<SendEmailOtpReturnType>} Promise that resolves when the OTP has been sent
  */
 export async function sendEmailOtp(
@@ -22,6 +26,8 @@ export async function sendEmailOtp(
   const { connector } = resolveAlchemyAuthConnector(config);
 
   const authClient = connector.getAuthClient();
-  // TODO(v5): this fails if the account doesn't exist yet. do we want to handle creating accounts here?
-  await authClient.sendEmailOtp({ email: parameters.email });
+  await authClient.sendEmailOtp({
+    email: parameters.email,
+    sessionExpirationMs: parameters.sessionExpirationMs,
+  });
 }
