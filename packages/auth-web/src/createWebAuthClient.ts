@@ -101,7 +101,26 @@ export function createWebAuthClient({
 
     createWebAuthnStamper:
       createWebAuthnStamper ??
-      (() => Promise.reject(new Error("Not implemented"))),
+      (async (params) => {
+        const { WebauthnStamper } = await import("@turnkey/webauthn-stamper");
+
+        const stamper = new WebauthnStamper({
+          rpId: window.location.hostname, //TO DO: pass in rpId as a param
+        });
+
+        // If credentialId is provided, configure allowed credentials for this specific passkey
+        if (params.credentialId) {
+          stamper.allowCredentials = [
+            {
+              id: Buffer.from(params.credentialId, "base64"),
+              type: "public-key",
+              transports: ["internal", "hybrid"],
+            },
+          ];
+        }
+
+        return stamper;
+      }),
     handleOauthFlow: async (
       authUrl: Promise<string> | string,
       mode: "redirect" | "popup",

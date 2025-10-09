@@ -32,6 +32,7 @@ export default function Home(): ReactElement {
       mode: "popup",
     });
     setAuthSession(authSession);
+    console.log({ authSession });
     console.log("do we ever get here?");
   }, []);
 
@@ -49,10 +50,11 @@ export default function Home(): ReactElement {
     await authSession?.addPasskey();
   }, [authSession]);
 
-  const loginWithPasskey = useCallback(async () => {
-    const authSession = await authClient.loginWithPasskey({ email });
+  const handleLoginWithPasskey = useCallback(async () => {
+    const authSession = await authClient.loginWithPasskey({ username: email });
     setAuthSession(authSession);
-  }, []);
+    console.log({ authSession });
+  }, [email]);
 
   const handleDisconnect = useCallback(async () => {
     authSession?.disconnect();
@@ -97,7 +99,10 @@ export default function Home(): ReactElement {
           >
             Sign in with Google
           </button>
-          <button onClick={loginWithPasskey} className="btn btn-accent w-full">
+          <button
+            onClick={handleLoginWithPasskey}
+            className="btn btn-accent w-full"
+          >
             Sign in with Passkey
           </button>
         </div>
@@ -130,11 +135,12 @@ export default function Home(): ReactElement {
   }
 
   function renderLoggedIn() {
+    console.log({ authSession });
     return (
       <div className="flex flex-col items-center justify-center h-screen bg-base-200">
         <div className="flex flex-col gap-4 p-8 rounded-lg shadow-lg bg-base-100 items-center">
           <div className="alert alert-success w-full max-w-md flex flex-col items-center text-center">
-            <p>Logged in as {authSession!.user.email}</p>
+            <p>Logged in as {authSession ? authSession!.user.email : ""}</p>
             <p>Your address: {authSession!.user.address}</p>
           </div>
           {signature && (
