@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.68.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.67.0...v4.68.0) (2025-10-09)
+
+### Bug Fixes
+
+- github action out of space issue ([#2166](https://github.com/alchemyplatform/aa-sdk/issues/2166)) ([0c1b48a](https://github.com/alchemyplatform/aa-sdk/commit/0c1b48a9572df3a0244976669fd82eb0da8515ba))
+
+### Features
+
+- adds an sdk to seamlessly integrate privy with Alchemy's infra ([#2154](https://github.com/alchemyplatform/aa-sdk/issues/2154)) ([46019a4](https://github.com/alchemyplatform/aa-sdk/commit/46019a442750ceb0de7cc06c8f2a9abf0145f6e7))
+- cross-chain API docs ([#2156](https://github.com/alchemyplatform/aa-sdk/issues/2156)) ([881c34d](https://github.com/alchemyplatform/aa-sdk/commit/881c34dc8627029ff87120b1fef2a766e1469e91))
+
 # [4.67.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.66.4...v4.67.0) (2025-10-06)
 
 ### Bug Fixes
