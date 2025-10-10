@@ -234,6 +234,25 @@ export type SignerHttpSchema = [
       otpId?: string;
     };
   },
+  {
+    Route: "signer/v1/add-oauth-provider";
+    Method: "POST";
+    Body: StampedRequestBody;
+    Response: {
+      oauthProviders: {
+        providerId: string;
+        issuer: string;
+        providerName?: string;
+        userDisplayName?: string;
+      }[];
+    };
+  },
+  {
+    Route: "signer/v1/remove-oauth-provider";
+    Method: "POST";
+    Body: StampedRequestBody;
+    Response: Record<string, never>; // Empty response object
+  },
 ];
 
 export type StampedRequestBody = {
