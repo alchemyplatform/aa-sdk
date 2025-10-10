@@ -295,6 +295,14 @@ describe("AuthClient", () => {
           mockAttestation as any,
         );
 
+        // Mock stampGetWhoami for AuthSession.create
+        const mockStampGetWhoami = vi
+          .spyOn(TurnkeyClient.prototype, "stampGetWhoami")
+          .mockResolvedValue({
+            body: "whoami-request",
+            stamp: { stampHeaderName: "X-Stamp", stampHeaderValue: "value" },
+          } as any);
+
         // Mock the signup endpoint
         vi.mocked(mockSignerHttpClient.request).mockImplementation(
           async (params) => {
@@ -311,6 +319,8 @@ describe("AuthClient", () => {
         const authSession = await authClient.loginWithPasskey({
           username: "newuser@example.com",
         });
+
+        mockStampGetWhoami.mockRestore();
 
         expect(authSession).toBeInstanceOf(AuthSession);
         expect(mockCreateWebAuthnStamper).toHaveBeenCalledWith({
@@ -337,20 +347,18 @@ describe("AuthClient", () => {
       it("should login with existing passkey credential", async () => {
         const credentialId = "existing-passkey-credential-id";
 
-        // Mock TurnkeyClient methods - need to mock both the instance method and ensure stamper is called
-        const mockStampGetWhoami = vi.fn().mockResolvedValue({
+        // Mock stampGetWhoami to return what the code expects
+        const stampedRequestData = {
           body: "whoami-request-body",
           stamp: {
             stampHeaderName: "X-Stamp-Webauthn",
             stampHeaderValue: "webauthn-stamp-value",
           },
-        });
+        };
 
-        // Mock the TurnkeyClient constructor to return an object with our mocked method
-        vi.spyOn(
-          TurnkeyClient.prototype,
-          "stampGetWhoami" as any,
-        ).mockImplementation(mockStampGetWhoami);
+        const mockStampGetWhoami = vi
+          .spyOn(TurnkeyClient.prototype, "stampGetWhoami")
+          .mockResolvedValue(stampedRequestData as any);
 
         vi.mocked(mockSignerHttpClient.request).mockImplementation(
           async (params) => {
@@ -384,15 +392,11 @@ describe("AuthClient", () => {
           route: "signer/v1/whoami",
           method: "POST",
           body: {
-            stampedRequest: {
-              body: "whoami-request-body",
-              stamp: {
-                stampHeaderName: "X-Stamp-Webauthn",
-                stampHeaderValue: "webauthn-stamp-value",
-              },
-            },
+            stampedRequest: stampedRequestData,
           },
         });
+
+        mockStampGetWhoami.mockRestore();
       });
     });
   });
