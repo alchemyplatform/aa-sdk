@@ -10,9 +10,9 @@ import { swapActions } from "@alchemy/wallet-apis/experimental";
 import { assertSmartWalletClient } from "@alchemy/wallet-apis";
 import type { ConnectorParameter } from "@wagmi/core/internal";
 import {
-  transformPreparedCalls,
-  type TransformedPreparedCalls,
-} from "../utils/transforms.js";
+  viemEncodePreparedCalls,
+  type ViemEncodedPreparedCalls,
+} from "../utils/viemEncode.js";
 
 export type PrepareSwapParameters = Prettify<
   {
@@ -27,7 +27,7 @@ export type PrepareSwapParameters = Prettify<
 >;
 
 export type PrepareSwapReturnType = Prettify<
-  TransformedPreparedCalls & {
+  ViemEncodedPreparedCalls & {
     quote: {
       fromAmount: bigint;
       minimumToAmount: bigint;
@@ -82,7 +82,7 @@ export async function prepareSwap(
     })),
     // TODO(jh): probably need to transform capabilites here too from
     // viem-type to wallet client type (i.e. hex to bigint, chain id to number,
-    // alchemyPaymasterService to paymasterService).
+    // alchemyPaymasterService to paymasterService). also maybe paymasterPermitSignature?
   });
   if (rest.rawCalls) {
     // This should be impossible since we are not using the `returnRawCalls` option,
@@ -99,6 +99,6 @@ export async function prepareSwap(
       minimumToAmount: BigInt(quote.minimumToAmount),
       expiry: new Date(quote.expiry),
     },
-    ...transformPreparedCalls(preparedCalls),
+    ...viemEncodePreparedCalls(preparedCalls),
   };
 }

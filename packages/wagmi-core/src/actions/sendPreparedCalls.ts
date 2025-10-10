@@ -2,10 +2,10 @@ import { getConnectorClient, type Config } from "@wagmi/core";
 import { type Hex, type Prettify } from "viem";
 import { assertSmartWalletClient } from "@alchemy/wallet-apis";
 import type { ConnectorParameter } from "@wagmi/core/internal";
-import type { TransformedPreparedCalls } from "../utils/transforms";
+import type { ViemEncodedPreparedCalls } from "../utils/viemEncode.js";
 
 export type SendPreparedCallsParameters = Prettify<
-  TransformedPreparedCalls & ConnectorParameter
+  ViemEncodedPreparedCalls & ConnectorParameter
 >;
 
 export type SendPreparedCallsReturnType = Prettify<{

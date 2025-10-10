@@ -1,6 +1,6 @@
 import type { Config } from "wagmi";
 import type { QueryOptions } from "@tanstack/react-query";
-import { filterQueryOptions } from "./utils.js";
+import { queryOptionsToKey } from "./utils.js";
 import {
   prepareSwap,
   type PrepareSwapParameters,
@@ -12,7 +12,7 @@ export type PrepareSwapOptions = PrepareSwapParameters;
 
 function prepareSwapQueryKey(options: PrepareSwapOptions) {
   const { connector: _connector, ...rest } = options;
-  return ["prepareSwap", filterQueryOptions(rest)] as const;
+  return ["prepareSwap", queryOptionsToKey(rest)] as const;
 }
 
 export type PrepareSwapQueryKey = ReturnType<typeof prepareSwapQueryKey>;

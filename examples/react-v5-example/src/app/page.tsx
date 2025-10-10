@@ -11,8 +11,14 @@ import {
   useVerifyTypedData,
 } from "wagmi";
 import { useSendCalls } from "wagmi/experimental"; // TODO(jh): why is this still experimental? do we have old wagmi version?
-import { useSendEmailOtp, useSubmitOtpCode } from "@alchemy/react";
-import { zeroAddress } from "viem";
+import {
+  usePrepareSwap,
+  useSendEmailOtp,
+  useSendPreparedCalls,
+  useSubmitOtpCode,
+} from "@alchemy/react";
+import { zeroAddress, Address, Capabilities, Hex } from "viem";
+import { useState } from "react";
 
 export default function Home() {
   const account = useAccount();
@@ -29,6 +35,7 @@ export default function Home() {
           <ChainControls />
           <SigningDemo />
           <SendCallsDemo />
+          <SwapDemoWrapper />
         </>
       )}
     </div>
@@ -235,6 +242,90 @@ const SendCallsDemo = () => {
       {sendCallsError && (
         <p className="break-all max-w-xl">
           Error sending calls: {JSON.stringify(sendCallsError)}
+        </p>
+      )}
+    </div>
+  );
+};
+
+const SwapDemoWrapper = () => {
+  const [fromAmount, setFromAmount] = useState<bigint | undefined>(undefined);
+
+  return fromAmount ? (
+    <SwapDemo
+      fromAmount={fromAmount}
+      // TODO(jh): use real token addresses from peter (also need to use the correct chain)
+      fromToken={zeroAddress}
+      toToken={zeroAddress}
+    />
+  ) : (
+    <button
+      onClick={() => {
+        const amount = prompt("Enter from amount (in wei):");
+        if (!amount) {
+          return;
+        }
+        setFromAmount(BigInt(amount));
+      }}
+      className="cursor-pointer rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 text-sm"
+    >
+      Swap
+    </button>
+  );
+};
+
+const SwapDemo = ({
+  fromToken,
+  toToken,
+  fromAmount,
+}: {
+  fromToken: Address;
+  toToken: Address;
+  fromAmount: bigint;
+}) => {
+  const {
+    data: preparedSwap,
+    error: prepareSwapError,
+    isFetching,
+  } = usePrepareSwap({
+    fromToken,
+    toToken,
+    fromAmount,
+    //chainId: undefined, // TODO(jh): test w/ different chain than the active chain
+    // capabilities: [], // TODO(jh): test overriding capabilities
+  });
+
+  console.log({ preparedSwap, prepareSwapError });
+
+  const {
+    sendPreparedCalls,
+    data: submitSwapResult,
+    error: submitSwapError,
+    isPending,
+  } = useSendPreparedCalls();
+
+  return (
+    <div className="flex flex-col gap-2 items-center">
+      {preparedSwap && "Swap prepared! (see console)"}
+      {prepareSwapError && `Error preparing swap (see console)`}
+      <button
+        disabled={!preparedSwap || isFetching || isPending}
+        onClick={() => {
+          if (!preparedSwap) {
+            return;
+          }
+          sendPreparedCalls(preparedSwap);
+        }}
+        className="cursor-pointer rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 text-sm"
+      >
+        Send Calls
+      </button>
+      {submitSwapResult && (
+        <p className="break-all max-w-xl">Calls sent: {submitSwapResult.id}</p>
+      )}
+      {submitSwapError && (
+        <p className="break-all max-w-xl">
+          Error sending calls: {JSON.stringify(submitSwapError)}
         </p>
       )}
     </div>
