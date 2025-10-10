@@ -10,14 +10,15 @@ import {
   useVerifyMessage,
   useVerifyTypedData,
 } from "wagmi";
-import { useSendCalls } from "wagmi/experimental"; // TODO(jh): why is this still experimental? do we have old wagmi version?
+import { useSendCalls } from "wagmi/experimental"; // TODO(v5): why is this still experimental? do we have old wagmi version?
 import {
+  usePrepareCalls,
   usePrepareSwap,
   useSendEmailOtp,
   useSendPreparedCalls,
   useSubmitOtpCode,
 } from "@alchemy/react";
-import { zeroAddress, Address, Capabilities, Hex } from "viem";
+import { zeroAddress, Address } from "viem";
 import { useState } from "react";
 
 export default function Home() {
@@ -36,6 +37,7 @@ export default function Home() {
           <SigningDemo />
           <SendCallsDemo />
           <SwapDemoWrapper />
+          <PrepareAndSendCallsDemoWrapper />
         </>
       )}
     </div>
@@ -291,8 +293,6 @@ const SwapDemo = ({
     fromToken,
     toToken,
     fromAmount,
-    //chainId: undefined, // TODO(jh): test w/ different chain than the active chain
-    // capabilities: [], // TODO(jh): test overriding capabilities
   });
 
   console.log({ preparedSwap, prepareSwapError });
@@ -326,6 +326,67 @@ const SwapDemo = ({
       {submitSwapError && (
         <p className="break-all max-w-xl">
           Error sending calls: {JSON.stringify(submitSwapError)}
+        </p>
+      )}
+    </div>
+  );
+};
+
+const PrepareAndSendCallsDemoWrapper = () => {
+  const [isEnabled, setIsEnabled] = useState<boolean>(false);
+
+  return isEnabled ? (
+    <PrepareAndSendCallsDemo />
+  ) : (
+    <button
+      onClick={() => setIsEnabled(true)}
+      className="cursor-pointer rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 text-sm"
+    >
+      Prepare calls
+    </button>
+  );
+};
+
+const PrepareAndSendCallsDemo = () => {
+  const {
+    data: preparedCalls,
+    error: prepareCallsError,
+    isFetching,
+  } = usePrepareCalls({
+    calls: [{ to: zeroAddress, data: "0x" }],
+  });
+
+  console.log({ preparedCalls, prepareCallsError });
+
+  const {
+    sendPreparedCalls,
+    data: sendCallsResult,
+    error: sendCallsError,
+    isPending,
+  } = useSendPreparedCalls();
+
+  return (
+    <div className="flex flex-col gap-2 items-center">
+      {preparedCalls && "Calls prepared! (see console)"}
+      {prepareCallsError && `Error preparing calls (see console)`}
+      <button
+        disabled={!preparedCalls || isFetching || isPending}
+        onClick={() => {
+          if (!preparedCalls) {
+            return;
+          }
+          sendPreparedCalls(preparedCalls);
+        }}
+        className="cursor-pointer rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 text-sm"
+      >
+        Send Calls
+      </button>
+      {sendCallsResult && (
+        <p className="break-all max-w-xl">Calls sent: {sendCallsResult.id}</p>
+      )}
+      {sendCallsError && (
+        <p className="break-all max-w-xl">
+          Error sending calls: {JSON.stringify(sendCallsError)}
         </p>
       )}
     </div>
