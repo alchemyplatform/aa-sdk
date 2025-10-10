@@ -8,6 +8,8 @@ import {
   base as vbase,
   baseGoerli as vbaseg,
   baseSepolia as vbases,
+  bsc as vbsc,
+  bscTestnet as vbsct,
   fraxtal as vfrax,
   goerli as vgo,
   mainnet as vmain,
@@ -172,6 +174,26 @@ export const baseSepolia: Chain = {
     ...vbases.rpcUrls,
     alchemy: {
       http: ["https://base-sepolia.g.alchemy.com/v2"],
+    },
+  },
+};
+
+export const bsc: Chain = {
+  ...vbsc,
+  rpcUrls: {
+    ...vbsc.rpcUrls,
+    alchemy: {
+      http: ["https://bnb-mainnet.g.alchemy.com/v2"],
+    },
+  },
+};
+
+export const bscTestnet: Chain = {
+  ...vbsct,
+  rpcUrls: {
+    ...vbsct.rpcUrls,
+    alchemy: {
+      http: ["https://bnb-testnet.g.alchemy.com/v2"],
     },
   },
 };
