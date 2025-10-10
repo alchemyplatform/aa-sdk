@@ -26,19 +26,32 @@ import type {
 export const viemDecodePreparedCalls = (
   encodedCalls: ViemEncodedPreparedCalls,
 ): PrepareCallsResult => {
-  return encodedCalls.type === "array"
-    ? {
-        type: "array",
-        data: encodedCalls.data.map(viemDecodePreparedCall) as (
-          | PreparedCall_UserOpV060
-          | PreparedCall_UserOpV070
-          | PreparedCall_Authorization
-        )[],
-      }
-    : (viemDecodePreparedCall(encodedCalls) as
-        | PreparedCall_UserOpV060
-        | PreparedCall_UserOpV070
-        | PreparedCall_Permit);
+  if (encodedCalls.type === "array") {
+    return {
+      type: "array",
+      data: encodedCalls.data.map((call) => {
+        switch (call.type) {
+          case "user-operation-v060":
+          case "user-operation-v070":
+            return viemDecodeUserOperationCall(call);
+          case "authorization":
+            return viemDecodeAuthorization(call);
+          default:
+            return assertNever(call, "Unexpected encoded call type in array");
+        }
+      }),
+    };
+  }
+
+  switch (encodedCalls.type) {
+    case "user-operation-v060":
+    case "user-operation-v070":
+      return viemDecodeUserOperationCall(encodedCalls);
+    case "paymaster-permit":
+      return viemDecodePaymasterPermitCall(encodedCalls);
+    default:
+      return assertNever(encodedCalls, "Unexpected encoded call type");
+  }
 };
 
 export const viemDecodePreparedCall = (

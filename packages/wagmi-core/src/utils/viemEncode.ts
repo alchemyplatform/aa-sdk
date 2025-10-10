@@ -28,26 +28,35 @@ export type ViemEncodedPreparedCalls =
       data: (ViemEncodedUserOperationCall | ViemEncodedAuthorizationCall)[];
     };
 
-// TODO(jh): prob also need opposite for `sendPreparedCalls`, so maybe
-// name them 'encode' and 'decode'? probably should also write tests
-// to encode -> decode and be sure we get back the original input.
 export const viemEncodePreparedCalls = (
   preparedCalls: PrepareCallsResult,
 ): ViemEncodedPreparedCalls => {
-  // TODO(jh): you could probably clean up this logic a bit to avoid casting.
-  // there are certain types of calls that can only exist in arrays, and
-  // other types that can only exist at the top level.
-  return preparedCalls.type === "array"
-    ? {
-        type: "array",
-        data: preparedCalls.data.map(viemEncodePreparedCall) as (
-          | ReturnType<typeof viemEncodeUserOperationCall>
-          | ReturnType<typeof viemEncodeAuthorization>
-        )[],
-      }
-    : (viemEncodePreparedCall(preparedCalls) as
-        | ReturnType<typeof viemEncodeUserOperationCall>
-        | ReturnType<typeof viemEncodePaymasterPermitCall>);
+  if (preparedCalls.type === "array") {
+    return {
+      type: "array",
+      data: preparedCalls.data.map((call) => {
+        switch (call.type) {
+          case "user-operation-v060":
+          case "user-operation-v070":
+            return viemEncodeUserOperationCall(call);
+          case "authorization":
+            return viemEncodeAuthorization(call);
+          default:
+            return assertNever(call, "Unexpected prepared call type in array");
+        }
+      }),
+    };
+  }
+
+  switch (preparedCalls.type) {
+    case "user-operation-v060":
+    case "user-operation-v070":
+      return viemEncodeUserOperationCall(preparedCalls);
+    case "paymaster-permit":
+      return viemEncodePaymasterPermitCall(preparedCalls);
+    default:
+      return assertNever(preparedCalls, "Unexpected prepared call type");
+  }
 };
 
 export const viemEncodePreparedCall = (
@@ -109,7 +118,7 @@ const viemEncodeUserOperationCall = (
     feePayment: {
       sponsored: call.feePayment.sponsored,
       tokenAddress: call.feePayment.tokenAddress,
-      maxAmount: BigInt(call.feePayment.maxAmount),
+      maxAmount: hexToBigInt(call.feePayment.maxAmount),
     },
   };
 };
@@ -204,7 +213,7 @@ const viemEncodePaymasterPermitCall = (
       calls: call.modifiedRequest.calls.map((it) => ({
         to: it.to,
         data: it.data,
-        value: it.value != null ? BigInt(it.value) : undefined,
+        value: it.value != null ? hexToBigInt(it.value) : undefined,
       })),
       capabilities: viemEncodeCapabilities(call.modifiedRequest.capabilities),
       chainId: hexToNumber(call.modifiedRequest.chainId),
@@ -231,7 +240,7 @@ const viemEncodeSignature = (
     return { type, data: { ...data, yParity: Number(data.yParity) } };
   }
   if ("v" in data) {
-    return { type, data: { ...data, v: BigInt(data.v) } };
+    return { type, data: { ...data, v: hexToBigInt(data.v) } };
   }
   return assertNever(data, "Signature object must include 'v' or 'yParity'");
 };
