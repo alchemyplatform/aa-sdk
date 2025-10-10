@@ -1,5 +1,5 @@
 import { AlchemyRestClient } from "@alchemy/common";
-import { getWebAuthnAttestation, TurnkeyClient } from "@turnkey/http";
+import { TurnkeyClient } from "@turnkey/http";
 import type { SignerHttpSchema } from "@alchemy/aa-infra";
 import { AuthSession } from "./authSession.js";
 import type {
@@ -15,9 +15,9 @@ import type {
 import {
   DEFAULT_SESSION_EXPIRATION_MS,
   base64UrlEncode,
-  generateRandomBuffer,
   getOauthNonce,
   getOauthProviderUrl,
+  getWebAuthnAttestationInternal,
   extractOAuthCallbackParams,
   AuthSessionStateSchema,
 } from "./utils.js";
@@ -95,12 +95,6 @@ type TekStamperAndPublicKey = {
 type PendingOtp = {
   otpId: string;
   orgId: string;
-};
-
-export type GetWebAuthnAttestationResult = {
-  attestation: Awaited<ReturnType<typeof getWebAuthnAttestation>>;
-  challenge: ArrayBuffer | string;
-  authenticatorUserId: BufferSource;
 };
 
 /**
@@ -372,11 +366,11 @@ export class AuthClient {
   ): Promise<AuthSession> {
     // For new passkey authentication, credentialId would be undefined initially
     const { email, username, creationOpts, credentialId, sessionExpirationMs } =
-      params; // TO DO: where do we use creationOpts?
+      params;
 
     if (!credentialId) {
       // NEW PASSKEY SIGNUP
-      const attestation = await this.getWebAuthnAttestationInternal(
+      const attestation = await getWebAuthnAttestationInternal(
         {
           username: email || username || "anonymous",
         },
@@ -417,7 +411,7 @@ export class AuthClient {
       });
     }
 
-    // EXITSING PASSKEY LOGIN
+    // EXISTING PASSKEY LOGIN
     const stamper = await this.createWebAuthnStamper({
       credentialId,
       rpId: this.rpId,
@@ -511,60 +505,6 @@ export class AuthClient {
   }
 
   // TODO: ... and many more.
-
-  private async getWebAuthnAttestationInternal(
-    userDetails: { username: string },
-    options?: CredentialCreationOptionOverrides,
-  ): Promise<GetWebAuthnAttestationResult> {
-    const challenge = generateRandomBuffer();
-    const authenticatorUserId = generateRandomBuffer();
-
-    const attestation = await getWebAuthnAttestation({
-      publicKey: {
-        ...options?.publicKey,
-        authenticatorSelection: {
-          residentKey: "preferred",
-          requireResidentKey: false,
-          userVerification: "preferred",
-          ...options?.publicKey?.authenticatorSelection,
-        },
-        challenge,
-        rp: {
-          id: window.location.hostname,
-          name: window.location.hostname,
-          ...options?.publicKey?.rp,
-        },
-        pubKeyCredParams: [
-          {
-            type: "public-key",
-            alg: -7,
-          },
-          {
-            type: "public-key",
-            alg: -257,
-          },
-        ],
-        user: {
-          id: authenticatorUserId,
-          name: userDetails.username,
-          displayName: userDetails.username,
-          ...options?.publicKey?.user,
-        },
-      },
-      signal: options?.signal,
-    });
-
-    // TO DO: separate web and mobile logic
-    // on iOS sometimes this is returned as empty or null, so handling that here
-    if (attestation.transports == null || attestation.transports.length === 0) {
-      attestation.transports = [
-        "AUTHENTICATOR_TRANSPORT_INTERNAL",
-        "AUTHENTICATOR_TRANSPORT_HYBRID",
-      ];
-    }
-
-    return { challenge, authenticatorUserId, attestation };
-  }
 
   private async completeAuthWithBundle({
     bundle,
