@@ -24,7 +24,7 @@ describe("AuthSession", () => {
 
     mockTurnkeyClient = new TurnkeyClient(
       { baseUrl: "https://api.turnkey.com" },
-      mockTurnkeyStamper
+      mockTurnkeyStamper,
     );
 
     mockUser = {
@@ -48,7 +48,7 @@ describe("AuthSession", () => {
           return mockUser;
         }
         throw new Error(`Unexpected route: ${params.route}`);
-      }
+      },
     );
   });
 
@@ -154,7 +154,7 @@ describe("AuthSession", () => {
       });
 
       expect(() => authSession.getSerializedState()).toThrow(
-        "Bundle is required for non-passkey authentication types"
+        "Bundle is required for non-passkey authentication types",
       );
     });
 

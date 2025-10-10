@@ -9,6 +9,11 @@ import type {
 } from "./types";
 import { z } from "zod";
 
+/**
+ * Default session expiration duration in milliseconds (15 minutes)
+ */
+export const DEFAULT_SESSION_EXPIRATION_MS = 15 * 60 * 1000;
+
 export const UserSchema = z.object({
   email: z.string().optional(),
   orgId: z.string(),

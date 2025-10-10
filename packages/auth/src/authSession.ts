@@ -34,11 +34,6 @@ import type { GetWebAuthnAttestationResult } from "./authClient.js";
 import { base64UrlEncode, generateRandomBuffer } from "./utils.js";
 
 /**
- * Default session expiration duration in milliseconds (15 minutes)
- */
-export const DEFAULT_SESSION_EXPIRATION_MS = 15 * 60 * 1000;
-
-/**
  * Parameters required to create an AuthSession instance
  */
 export type CreateAuthSessionParams = {
@@ -127,11 +122,11 @@ export class AuthSession {
     private readonly expirationDateMs: number,
     private readonly bundle: string | undefined,
     private readonly authType: AuthType | undefined,
-    private readonly credentialId: string | undefined
+    private readonly credentialId: string | undefined,
   ) {
     this.expirationTimeoutId = setTimeout(
       () => this.disconnect(),
-      this.expirationDateMs - Date.now()
+      this.expirationDateMs - Date.now(),
     );
   }
 
@@ -198,7 +193,7 @@ export class AuthSession {
       expirationDateMs,
       bundle,
       authType,
-      credentialId
+      credentialId,
     );
   }
 
@@ -355,7 +350,7 @@ export class AuthSession {
    * ```
    */
   public async signAuthorization(
-    params: Authorization<number, false>
+    params: Authorization<number, false>,
   ): Promise<Authorization<number, true>> {
     const { chainId, nonce, address } = params;
     const hashedAuth = hashAuthorization({ address, chainId, nonce });
@@ -404,7 +399,7 @@ export class AuthSession {
    * @returns {Promise<OauthProviderInfo>} A promise that resolves to the added provider info
    */
   public async addOauthProvider(
-    params: AddOauthProviderParams
+    params: AddOauthProviderParams,
   ): Promise<OauthProviderInfo> {
     this.throwIfDisconnected();
     return notImplemented(params);
@@ -428,7 +423,7 @@ export class AuthSession {
    * @returns {Promise<PasskeyInfo>} A promise that resolves to the created passkey info
    */
   public async addPasskey(
-    params?: CredentialCreationOptionOverrides
+    params?: CredentialCreationOptionOverrides,
   ): Promise<PasskeyInfo> {
     this.throwIfDisconnected();
 
@@ -437,7 +432,7 @@ export class AuthSession {
         {
           username: this.user.email || "TO DO: anonymous",
         },
-        params
+        params,
       );
 
     const createdAt: number = Date.now();
@@ -464,7 +459,7 @@ export class AuthSession {
     const { authenticatorIds } = await this.pollActivityCompletion(
       activity,
       this.user.orgId,
-      "createAuthenticatorsResult"
+      "createAuthenticatorsResult",
     );
 
     return {
@@ -500,7 +495,6 @@ export class AuthSession {
    * This method marks the session as disconnected and clears any stored
    * credentials in the Turnkey client's stamper.
    *
-   * @returns {Promise<void>} A promise that resolves when the session is disconnected
    */
   public disconnect(): void {
     this.isDisconnected = true;
@@ -553,7 +547,7 @@ export class AuthSession {
     } else {
       if (!this.bundle) {
         throw new Error(
-          "Bundle is required for non-passkey authentication types"
+          "Bundle is required for non-passkey authentication types",
         );
       }
       const state: AuthSessionState = {
@@ -576,7 +570,7 @@ export class AuthSession {
       ReturnType<(typeof this.turnkey)["getActivity"]>
     >["activity"],
     organizationId: string,
-    resultKey: T
+    resultKey: T,
   ): Promise<
     NonNullable<
       Awaited<
@@ -605,7 +599,7 @@ export class AuthSession {
       status === "ACTIVITY_STATUS_CONSENSUS_NEEDED"
     ) {
       throw new Error(
-        `Failed to get activity with with id ${id} (status: ${status})`
+        `Failed to get activity with with id ${id} (status: ${status})`,
       );
     }
 
@@ -619,7 +613,7 @@ export class AuthSession {
   // TO DO: where should we place this so that the same implementation doesn't exist in AuthSession and AuthClient?
   private async getWebAuthnAttestationInternal(
     userDetails: { username: string },
-    options?: CredentialCreationOptionOverrides
+    options?: CredentialCreationOptionOverrides,
   ): Promise<GetWebAuthnAttestationResult> {
     const challenge = generateRandomBuffer();
     const authenticatorUserId = generateRandomBuffer();
@@ -697,7 +691,7 @@ export class AuthSession {
    */
   public on<E extends AuthSessionEventType>(
     eventType: E,
-    listener: AuthSessionEvents[E]
+    listener: AuthSessionEvents[E],
   ): () => void {
     this.emitter.on(eventType, listener);
 
