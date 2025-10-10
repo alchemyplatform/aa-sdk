@@ -25,14 +25,12 @@ export default function Home(): ReactElement {
   }, []);
 
   const handleOauthLogin = useCallback(async () => {
-    console.log("Logging in with OAuth...");
     const authSession = await authClient.loginWithOauth({
       type: "oauth",
       authProviderId: "google",
       mode: "popup",
     });
     setAuthSession(authSession);
-    console.log("do we ever get here?");
   }, []);
 
   const handleSendEmailOtp = useCallback(async () => {
@@ -44,6 +42,15 @@ export default function Home(): ReactElement {
     const authSession = await authClient.submitOtpCode({ otpCode });
     setAuthSession(authSession);
   }, [otpCode]);
+
+  const handleAddPasskey = useCallback(async () => {
+    await authSession?.addPasskey();
+  }, [authSession]);
+
+  const handleLoginWithPasskey = useCallback(async () => {
+    const authSession = await authClient.loginWithPasskey({ username: email });
+    setAuthSession(authSession);
+  }, [email]);
 
   const handleDisconnect = useCallback(async () => {
     authSession?.disconnect();
@@ -87,6 +94,12 @@ export default function Home(): ReactElement {
             className="btn btn-secondary w-full"
           >
             Sign in with Google
+          </button>
+          <button
+            onClick={handleLoginWithPasskey}
+            className="btn btn-accent w-full"
+          >
+            Sign in with Passkey
           </button>
         </div>
       </div>
@@ -136,6 +149,12 @@ export default function Home(): ReactElement {
             className="btn btn-error w-full max-w-xs"
           >
             Sign out
+          </button>
+          <button
+            onClick={handleAddPasskey}
+            className="btn btn-warning w-full max-w-xs"
+          >
+            Add Passkey
           </button>
           <button
             onClick={handleSign}
