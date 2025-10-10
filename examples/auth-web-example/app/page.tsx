@@ -25,15 +25,12 @@ export default function Home(): ReactElement {
   }, []);
 
   const handleOauthLogin = useCallback(async () => {
-    console.log("Logging in with OAuth...");
     const authSession = await authClient.loginWithOauth({
       type: "oauth",
       authProviderId: "google",
       mode: "popup",
     });
     setAuthSession(authSession);
-    console.log({ authSession });
-    console.log("do we ever get here?");
   }, []);
 
   const handleSendEmailOtp = useCallback(async () => {
@@ -53,7 +50,6 @@ export default function Home(): ReactElement {
   const handleLoginWithPasskey = useCallback(async () => {
     const authSession = await authClient.loginWithPasskey({ username: email });
     setAuthSession(authSession);
-    console.log({ authSession });
   }, [email]);
 
   const handleDisconnect = useCallback(async () => {
@@ -135,12 +131,11 @@ export default function Home(): ReactElement {
   }
 
   function renderLoggedIn() {
-    console.log({ authSession });
     return (
       <div className="flex flex-col items-center justify-center h-screen bg-base-200">
         <div className="flex flex-col gap-4 p-8 rounded-lg shadow-lg bg-base-100 items-center">
           <div className="alert alert-success w-full max-w-md flex flex-col items-center text-center">
-            <p>Logged in as {authSession ? authSession!.user.email : ""}</p>
+            <p>Logged in as {authSession!.user.email}</p>
             <p>Your address: {authSession!.user.address}</p>
           </div>
           {signature && (
