@@ -347,9 +347,10 @@ describe("AuthClient", () => {
         });
 
         // Mock the TurnkeyClient constructor to return an object with our mocked method
-        vi.spyOn(TurnkeyClient.prototype, "stampGetWhoami" as any).mockImplementation(
-          mockStampGetWhoami,
-        );
+        vi.spyOn(
+          TurnkeyClient.prototype,
+          "stampGetWhoami" as any,
+        ).mockImplementation(mockStampGetWhoami);
 
         vi.mocked(mockSignerHttpClient.request).mockImplementation(
           async (params) => {
