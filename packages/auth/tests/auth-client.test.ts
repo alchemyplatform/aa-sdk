@@ -337,10 +337,19 @@ describe("AuthClient", () => {
       it("should login with existing passkey credential", async () => {
         const credentialId = "existing-passkey-credential-id";
 
-        // Need to mock TurnkeyClient.stampGetWhoami
-        vi.spyOn(TurnkeyClient.prototype, "stampGetWhoami").mockResolvedValue({
-          stampedRequest: "stamped-request-data",
-        } as any);
+        // Mock TurnkeyClient methods - need to mock both the instance method and ensure stamper is called
+        const mockStampGetWhoami = vi.fn().mockResolvedValue({
+          body: "whoami-request-body",
+          stamp: {
+            stampHeaderName: "X-Stamp-Webauthn",
+            stampHeaderValue: "webauthn-stamp-value",
+          },
+        });
+
+        // Mock the TurnkeyClient constructor to return an object with our mocked method
+        vi.spyOn(TurnkeyClient.prototype, "stampGetWhoami" as any).mockImplementation(
+          mockStampGetWhoami,
+        );
 
         vi.mocked(mockSignerHttpClient.request).mockImplementation(
           async (params) => {
@@ -364,11 +373,24 @@ describe("AuthClient", () => {
           rpId: undefined,
         });
 
-        // Verify whoami was called
+        // Verify stampGetWhoami was called with root org
+        expect(mockStampGetWhoami).toHaveBeenCalledWith({
+          organizationId: "24c1acf5-810f-41e0-a503-d5d13fa8e830", // ROOT_ORG_ID_DEFAULT
+        });
+
+        // Verify whoami was called with stamped request
         expect(mockSignerHttpClient.request).toHaveBeenCalledWith({
           route: "signer/v1/whoami",
           method: "POST",
-          body: { stampedRequest: "stamped-request-data" },
+          body: {
+            stampedRequest: {
+              body: "whoami-request-body",
+              stamp: {
+                stampHeaderName: "X-Stamp-Webauthn",
+                stampHeaderValue: "webauthn-stamp-value",
+              },
+            },
+          },
         });
       });
     });
