@@ -437,7 +437,6 @@ export class AuthSession {
 
     // 2. Call Turnkey directly to add authenticator to existing org
     const { activity } = await this.turnkey.createAuthenticators({
-      // TO DO: should we pass the turnkey client we create in AuthClient to the constructor for AuthSession?
       type: "ACTIVITY_TYPE_CREATE_AUTHENTICATORS_V2",
       timestampMs: createdAt.toString(),
       organizationId: this.user.orgId,
