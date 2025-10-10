@@ -13,6 +13,7 @@ import type {
   TurnkeyTekStamper,
 } from "./types.js";
 import {
+  DEFAULT_SESSION_EXPIRATION_MS,
   base64UrlEncode,
   generateRandomBuffer,
   getOauthNonce,
@@ -20,11 +21,6 @@ import {
   extractOAuthCallbackParams,
   AuthSessionStateSchema,
 } from "./utils.js";
-
-/**
- * Default session expiration duration in milliseconds (15 minutes)
- */
-export const DEFAULT_SESSION_EXPIRATION_MS = 15 * 60 * 1000;
 
 /**
  * Configuration parameters for creating an AuthClient instance
@@ -88,6 +84,7 @@ export type LoginWithPasskeyParams = {
   username?: string;
   creationOpts?: CredentialCreationOptionOverrides;
   credentialId?: string;
+  sessionExpirationMs?: number;
 };
 
 type TekStamperAndPublicKey = {
@@ -374,7 +371,8 @@ export class AuthClient {
     params: LoginWithPasskeyParams,
   ): Promise<AuthSession> {
     // For new passkey authentication, credentialId would be undefined initially
-    const { email, username, creationOpts, credentialId } = params; // TO DO: where do we use creationOpts?
+    const { email, username, creationOpts, credentialId, sessionExpirationMs } =
+      params; // TO DO: where do we use creationOpts?
 
     if (!credentialId) {
       // NEW PASSKEY SIGNUP
@@ -414,6 +412,8 @@ export class AuthClient {
         authType: "passkey",
         credentialId: attestation.attestation.credentialId,
         idToken: undefined,
+        expirationDateMs:
+          Date.now() + (sessionExpirationMs ?? DEFAULT_SESSION_EXPIRATION_MS),
       });
     }
 
@@ -447,6 +447,8 @@ export class AuthClient {
       authType: "passkey",
       credentialId: params.credentialId,
       idToken: undefined,
+      expirationDateMs:
+        Date.now() + (sessionExpirationMs ?? DEFAULT_SESSION_EXPIRATION_MS),
     });
   }
 
