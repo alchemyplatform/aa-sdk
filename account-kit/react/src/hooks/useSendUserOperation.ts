@@ -6,14 +6,17 @@ import type {
   SendUserOperationParameters,
   SendUserOperationResult,
 } from "@aa-sdk/core";
-import { WaitForUserOperationError } from "@aa-sdk/core";
+import {
+  SmartAccountClientOptsSchema,
+  WaitForUserOperationError,
+} from "@aa-sdk/core";
 import type { SupportedAccounts } from "@account-kit/core";
 import {
   useMutation,
   type UseMutateAsyncFunction,
   type UseMutateFunction,
 } from "@tanstack/react-query";
-import { slice, toHex, type Hex } from "viem";
+import { BaseError, toHex, type Hex } from "viem";
 import { useAccount as wagmi_useAccount } from "wagmi";
 import { ClientUndefinedHookError } from "../errors.js";
 import { useSendCalls } from "./useSendCalls.js";
@@ -21,6 +24,7 @@ import { ReactLogger } from "../metrics.js";
 import type { BaseHookMutationArgs } from "../types.js";
 import { useAlchemyAccountContext } from "./useAlchemyAccountContext.js";
 import { type UseSmartAccountClientResult } from "./useSmartAccountClient.js";
+import { useSmartWalletClient } from "./useSmartWalletClient.js";
 
 export type SendUserOperationWithEOA<
   TEntryPointVersion extends EntryPointVersion,
@@ -141,6 +145,10 @@ export function useSendUserOperation<
     client: _client,
   });
 
+  const smartWalletClient = useSmartWalletClient({
+    account: _client?.account.address,
+  });
+
   const {
     queryClient,
     config: {
@@ -173,33 +181,67 @@ export function useSendUserOperation<
         });
 
         if (isConnected) {
+          // Send as a normal transaction if connected to an EOA.
           return {
             hash: ids[0],
           };
         }
 
-        const uoHash = slice(ids[0], 32);
-        if (!waitForTxn) {
-          return {
-            hash: uoHash,
-            request: request!,
-          };
+        if (!request) {
+          // This should never be true. We should always have a `request` unless the txn was sent via an EOA.
+          throw new BaseError(
+            "Expected request from sendCallsAsync to be defined",
+          );
         }
 
-        if (!_client) {
+        if (!_client || !smartWalletClient) {
           throw new ClientUndefinedHookError("useSendUserOperation");
         }
 
-        // TODO: this should really use useCallsStatusHook instead (once it exists)
-        const txnHash = await _client
-          .waitForUserOperationTransaction({ hash: uoHash, tag: waitForTxnTag })
+        const hash: Hex = _client.account
+          .getEntryPoint()
+          .getUserOperationHash(request);
+
+        if (!waitForTxn) {
+          return {
+            hash,
+            request,
+          };
+        }
+
+        const retryParams = SmartAccountClientOptsSchema.strip().parse(_client);
+
+        const callResult = await smartWalletClient
+          .waitForCallsStatus({
+            id: ids[0],
+            // Retry options are for bad responses, not pending.
+            retryCount: retryParams.txMaxRetries,
+            retryDelay: ({ count }) =>
+              retryParams.txRetryIntervalMs *
+              retryParams.txRetryMultiplier ** (count - 1),
+            // Polling interval & timeout are for pending responses.
+            pollingInterval: retryParams.txRetryIntervalMs,
+            // This action doesn't support exponential polling intervals,
+            // so it's probably safest to just poll for the expected
+            // total duration for backwards compatibility.
+            timeout:
+              retryParams.txRetryIntervalMs *
+              (retryParams.txRetryMultiplier === 1
+                ? retryParams.txMaxRetries
+                : (retryParams.txRetryMultiplier ** retryParams.txMaxRetries -
+                    1) /
+                  (retryParams.txRetryMultiplier - 1)),
+            status: ({ statusCode }) =>
+              statusCode === 200 ||
+              (waitForTxnTag === "pending" && statusCode === 110),
+          })
           .catch((e) => {
-            throw new WaitForUserOperationError(request!, e);
+            throw new WaitForUserOperationError(request, e);
           });
 
         return {
-          hash: txnHash,
-          request: request!,
+          hash: callResult.receipts![0].transactionHash!,
+          request,
         };
       },
       ...mutationArgs,
