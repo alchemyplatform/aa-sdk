@@ -51,6 +51,9 @@ export {
   teaSepolia,
   bobaSepolia,
   bobaMainnet,
+  edgeTestnet,
+  apeChain,
+  apeChainCurtis,
 } from "../chains.js";
 export type * from "../client/decorators/smartAccount.js";
 export { alchemyActions } from "../client/decorators/smartAccount.js";
