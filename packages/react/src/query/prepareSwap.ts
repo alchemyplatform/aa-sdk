@@ -7,7 +7,7 @@ import {
   type PrepareSwapReturnType,
 } from "@alchemy/wagmi-core";
 
-// TODO(jh): may want to use `UnionExactPartial<PrepareSwapParameters>` here. test it first.
+// TODO(jh): may want to use `UnionExactPartial<PrepareSwapParameters>` here w/ a custom `enabled` override. test it first.
 export type PrepareSwapOptions = PrepareSwapParameters;
 
 function prepareSwapQueryKey(options: PrepareSwapOptions) {

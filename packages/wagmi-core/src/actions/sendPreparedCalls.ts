@@ -3,6 +3,7 @@ import { type Hex, type Prettify } from "viem";
 import { assertSmartWalletClient } from "@alchemy/wallet-apis";
 import type { ConnectorParameter } from "@wagmi/core/internal";
 import type { ViemEncodedPreparedCalls } from "../utils/viemEncode.js";
+import { viemDecodePreparedCalls } from "../utils/viemDecode.js";
 
 export type SendPreparedCallsParameters = Prettify<
   ViemEncodedPreparedCalls & ConnectorParameter
@@ -43,8 +44,9 @@ export async function sendPreparedCalls(
     "'sendPreparedCalls' action must be used with an Alchemy smart wallet",
   );
 
-  // @ts-ignore TODO(jh): we now need to reverse all of the transformations that we did in `prepareSwap`...
-  const signed = await client.signPreparedCalls(params);
+  const apiParams = viemDecodePreparedCalls(params);
+
+  const signed = await client.signPreparedCalls(apiParams);
 
   const { preparedCallIds } = await client.sendPreparedCalls(signed);
 

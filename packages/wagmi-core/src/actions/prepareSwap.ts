@@ -13,6 +13,7 @@ import {
   viemEncodePreparedCalls,
   type ViemEncodedPreparedCalls,
 } from "../utils/viemEncode.js";
+import { viemDecodeCapabilities } from "../utils/viemDecode.js";
 
 export type PrepareSwapParameters = Prettify<
   {
@@ -80,9 +81,7 @@ export async function prepareSwap(
       ...call,
       value: call.value != null ? toHex(call.value) : undefined,
     })),
-    // TODO(jh): probably need to transform capabilites here too from
-    // viem-type to wallet client type (i.e. hex to bigint, chain id to number,
-    // alchemyPaymasterService to paymasterService). also maybe paymasterPermitSignature?
+    capabilities: viemDecodeCapabilities(params.capabilities),
   });
   if (rest.rawCalls) {
     // This should be impossible since we are not using the `returnRawCalls` option,

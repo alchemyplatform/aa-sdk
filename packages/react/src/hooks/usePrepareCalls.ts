@@ -3,38 +3,38 @@
 import { useQuery, type UseQueryResult } from "@tanstack/react-query";
 import { useConfig } from "wagmi";
 import type { ConfigParameter, QueryParameter } from "../types";
-import type { PrepareSwapReturnType } from "@alchemy/wagmi-core";
+import type { PrepareCallsReturnType } from "@alchemy/wagmi-core";
 import {
-  prepareSwapQueryOptions,
-  type PrepareSwapOptions,
-  type PrepareSwapQueryKey,
-} from "../query/prepareSwap.js";
+  prepareCallsQueryOptions,
+  type PrepareCallsOptions,
+  type PrepareCallsQueryKey,
+} from "../query/prepareCalls.js";
 
-export type UsePrepareSwapParameters = PrepareSwapOptions &
+export type UsePrepareCallsParameters = PrepareCallsOptions &
   ConfigParameter &
   QueryParameter<
-    PrepareSwapReturnType,
+    PrepareCallsReturnType,
     Error,
-    PrepareSwapReturnType,
-    PrepareSwapQueryKey
+    PrepareCallsReturnType,
+    PrepareCallsQueryKey
   >;
 
-export type UsePrepareSwapReturnType = UseQueryResult<
-  PrepareSwapReturnType,
+export type UsePrepareCallsReturnType = UseQueryResult<
+  PrepareCallsReturnType,
   Error
 >;
 
 /**
- * React hook for preparing token swaps.
+ * React hook for preparing calls for execution.
  *
- * This hook wraps the `prepareSwap` action with React Query functionality,
- * providing loading states, error handling, and caching for preparing token swaps.
+ * This hook wraps the `prepareCalls` action with React Query functionality,
+ * providing loading states, error handling, and caching for preparing calls.
  *
- * @param {UsePrepareSwapParameters} parameters - Configuration options for the hook
+ * @param {UsePrepareCallsParameters} parameters - Configuration options for the hook
  * @param {Config} [parameters.config] - Optional wagmi config override
  * @param {UseQueryParameters} [parameters.query] - Optional React Query configuration
- * @returns {UsePrepareSwapReturnType} TanStack Query object with the following properties:
- * - `data`: `PrepareSwapReturnType | undefined` - The query data, or undefined if still loading
+ * @returns {UsePrepareCallsReturnType} TanStack Query object with the following properties:
+ * - `data`: `PrepareCallsReturnType | undefined` - The query data, or undefined if still loading
  * - `dataUpdatedAt`: `number` - The timestamp for when the query most recently returned data
  * - `error`: `Error | null` - The error object for the query, if an error was encountered
  * - `errorUpdateCount`: `number` - The sum of all errors
@@ -60,11 +60,13 @@ export type UsePrepareSwapReturnType = UseQueryResult<
  *
  * @example
  * ```tsx twoslash
- * import { usePrepareSwap } from '@alchemy/react';
+ * import { usePrepareCalls } from '@alchemy/react';
  *
- * function SwapForm() {
- *   const { data, isLoading, error } = usePrepareSwap({
- *     // prepare swap parameters here
+ * function CallsForm() {
+ *   const { data, isLoading, error } = usePrepareCalls({
+ *     calls: [
+ *       { to: '0x...', data: '0x...' }
+ *     ]
  *   });
  *
  *   if (isLoading) return <div>Loading...</div>;
@@ -72,20 +74,20 @@ export type UsePrepareSwapReturnType = UseQueryResult<
  *
  *   return (
  *     <div>
- *       {data && <div>Swap prepared successfully</div>}
+ *       {data && <div>Calls prepared successfully</div>}
  *     </div>
  *   );
  * }
  * ```
  */
-export function usePrepareSwap(
-  parameters: UsePrepareSwapParameters,
-): UsePrepareSwapReturnType {
+export function usePrepareCalls(
+  parameters: UsePrepareCallsParameters,
+): UsePrepareCallsReturnType {
   const { connector, query } = parameters;
 
   const config = useConfig(parameters);
 
-  const options = prepareSwapQueryOptions(config, {
+  const options = prepareCallsQueryOptions(config, {
     ...parameters,
     connector,
   });

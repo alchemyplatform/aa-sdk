@@ -260,6 +260,9 @@ export const createEip1193Provider = (
   };
 };
 
+// TODO(jh): would be nice to just use `viemDecodeCapabilities` here.
+// should that live in the wallet-apis pkg instead of wagmi-core?
+
 // Wallet server's `paymasterService` type is incompatible with
 // Viem's. So we can accept a custom capability property name
 // when using an Alchemy paymaster per-call policy id override,

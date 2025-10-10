@@ -215,7 +215,7 @@ const viemDecodeSignature = (
   return assertNever(data, "Signature object must include 'v' or 'yParity'");
 };
 
-const viemDecodeCapabilities = (
+export const viemDecodeCapabilities = (
   capabilities: Capabilities | undefined,
 ): WalletApiCapabilities => {
   const { alchemyPaymaster, ...rest } = capabilities ?? {};
