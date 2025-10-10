@@ -1,4 +1,4 @@
-import { getWebAuthnAttestation, TurnkeyClient } from "@turnkey/http";
+import { TurnkeyClient } from "@turnkey/http";
 import {
   hashMessage,
   hashTypedData,
@@ -30,8 +30,7 @@ import {
 import type { AlchemyRestClient } from "@alchemy/common";
 import type { SignerHttpSchema } from "@alchemy/aa-infra";
 import EventEmitter from "eventemitter3";
-import type { GetWebAuthnAttestationResult } from "./authClient.js";
-import { base64UrlEncode, generateRandomBuffer } from "./utils.js";
+import { base64UrlEncode, getWebAuthnAttestationInternal } from "./utils.js";
 
 /**
  * Parameters required to create an AuthSession instance
@@ -427,13 +426,12 @@ export class AuthSession {
   ): Promise<PasskeyInfo> {
     this.throwIfDisconnected();
 
-    const { attestation, challenge } =
-      await this.getWebAuthnAttestationInternal(
-        {
-          username: this.user.email || "TO DO: anonymous",
-        },
-        params,
-      );
+    const { attestation, challenge } = await getWebAuthnAttestationInternal(
+      {
+        username: this.user.email || "TO DO: anonymous",
+      },
+      params,
+    );
 
     const createdAt: number = Date.now();
 
@@ -609,61 +607,6 @@ export class AuthSession {
     return this.pollActivityCompletion(activity, organizationId, resultKey);
   };
   // #endregion
-
-  // TO DO: where should we place this so that the same implementation doesn't exist in AuthSession and AuthClient?
-  private async getWebAuthnAttestationInternal(
-    userDetails: { username: string },
-    options?: CredentialCreationOptionOverrides,
-  ): Promise<GetWebAuthnAttestationResult> {
-    const challenge = generateRandomBuffer();
-    const authenticatorUserId = generateRandomBuffer();
-
-    const attestation = await getWebAuthnAttestation({
-      publicKey: {
-        ...options?.publicKey,
-        authenticatorSelection: {
-          residentKey: "preferred",
-          requireResidentKey: false,
-          userVerification: "preferred",
-          ...options?.publicKey?.authenticatorSelection,
-        },
-        challenge,
-        rp: {
-          id: window.location.hostname,
-          name: window.location.hostname,
-          ...options?.publicKey?.rp,
-        },
-        pubKeyCredParams: [
-          {
-            type: "public-key",
-            alg: -7,
-          },
-          {
-            type: "public-key",
-            alg: -257,
-          },
-        ],
-        user: {
-          id: authenticatorUserId,
-          name: userDetails.username,
-          displayName: userDetails.username,
-          ...options?.publicKey?.user,
-        },
-      },
-      signal: options?.signal,
-    });
-
-    // TO DO: separate web and mobile logic
-    // on iOS sometimes this is returned as empty or null, so handling that here
-    if (attestation.transports == null || attestation.transports.length === 0) {
-      attestation.transports = [
-        "AUTHENTICATOR_TRANSPORT_INTERNAL",
-        "AUTHENTICATOR_TRANSPORT_HYBRID",
-      ];
-    }
-
-    return { challenge, authenticatorUserId, attestation };
-  }
 
   private throwIfDisconnected(): void {
     if (this.isDisconnected) {
