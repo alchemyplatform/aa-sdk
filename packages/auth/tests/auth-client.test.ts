@@ -12,6 +12,10 @@ import { DEFAULT_SESSION_EXPIRATION_MS } from "../src/utils.js";
 import type { SignerHttpSchema } from "@alchemy/aa-infra";
 import type { AlchemyRestClient } from "@alchemy/common";
 import { TurnkeyClient } from "@turnkey/http";
+import * as utils from "../src/utils.js";
+
+// Mock getWebAuthnAttestationInternal
+vi.spyOn(utils, "getWebAuthnAttestationInternal");
 
 describe("AuthClient", () => {
   let authClient: AuthClient;
@@ -72,14 +76,14 @@ describe("AuthClient", () => {
           return mockUser;
         }
         throw new Error(`Unexpected route: ${params.route}`);
-      },
+      }
     );
 
     authClient = new (AuthClient as any)(
       mockSignerHttpClient,
       mockCreateTekStamper,
       mockCreateWebAuthnStamper,
-      mockHandleOauthFlow,
+      mockHandleOauthFlow
     );
   });
 
@@ -93,7 +97,7 @@ describe("AuthClient", () => {
       };
 
       const authSession = await authClient.restoreAuthSession(
-        JSON.stringify(validOAuthState),
+        JSON.stringify(validOAuthState)
       );
 
       expect(authSession).toBeInstanceOf(AuthSession);
@@ -102,13 +106,13 @@ describe("AuthClient", () => {
           orgId: mockUser.orgId,
           userId: mockUser.userId,
           address: mockUser.address,
-        }),
+        })
       );
 
       // Verify the TEK stamper was created and bundle was injected
       expect(mockCreateTekStamper).toHaveBeenCalled();
       expect(mockTekStamper.injectCredentialBundle).toHaveBeenCalledWith(
-        "test-oauth-bundle",
+        "test-oauth-bundle"
       );
     });
 
@@ -121,7 +125,7 @@ describe("AuthClient", () => {
       };
 
       const authSession = await authClient.restoreAuthSession(
-        JSON.stringify(validOtpState),
+        JSON.stringify(validOtpState)
       );
 
       expect(authSession).toBeInstanceOf(AuthSession);
@@ -130,13 +134,13 @@ describe("AuthClient", () => {
           orgId: mockUser.orgId,
           userId: mockUser.userId,
           address: mockUser.address,
-        }),
+        })
       );
 
       // Verify the TEK stamper was created and bundle was injected
       expect(mockCreateTekStamper).toHaveBeenCalled();
       expect(mockTekStamper.injectCredentialBundle).toHaveBeenCalledWith(
-        "test-otp-bundle",
+        "test-otp-bundle"
       );
     });
 
@@ -149,7 +153,7 @@ describe("AuthClient", () => {
       };
 
       const authSession = await authClient.restoreAuthSession(
-        JSON.stringify(validEmailState),
+        JSON.stringify(validEmailState)
       );
 
       expect(authSession).toBeInstanceOf(AuthSession);
@@ -158,13 +162,13 @@ describe("AuthClient", () => {
           orgId: mockUser.orgId,
           userId: mockUser.userId,
           address: mockUser.address,
-        }),
+        })
       );
 
       // Verify the TEK stamper was created and bundle was injected
       expect(mockCreateTekStamper).toHaveBeenCalled();
       expect(mockTekStamper.injectCredentialBundle).toHaveBeenCalledWith(
-        "test-email-bundle",
+        "test-email-bundle"
       );
     });
 
@@ -174,7 +178,7 @@ describe("AuthClient", () => {
       const mockLoginWithPasskey = vi.spyOn(authClient, "loginWithPasskey");
       const mockTurnkeyClient = new TurnkeyClient(
         { baseUrl: "https://api.turnkey.com" },
-        mockWebAuthnStamper,
+        mockWebAuthnStamper
       );
       const mockAuthSession = await AuthSession.create({
         signerHttpClient: mockSignerHttpClient,
@@ -195,7 +199,7 @@ describe("AuthClient", () => {
       };
 
       const authSession = await authClient.restoreAuthSession(
-        JSON.stringify(validPasskeyState),
+        JSON.stringify(validPasskeyState)
       );
 
       expect(authSession).toBeInstanceOf(AuthSession);
@@ -215,7 +219,7 @@ describe("AuthClient", () => {
       };
 
       await expect(
-        authClient.restoreAuthSession(JSON.stringify(invalidPasskeyState)),
+        authClient.restoreAuthSession(JSON.stringify(invalidPasskeyState))
       ).rejects.toThrow("Credential ID is required for passkey authentication");
     });
 
@@ -228,7 +232,7 @@ describe("AuthClient", () => {
       };
 
       const authSession = await authClient.restoreAuthSession(
-        JSON.stringify(expiredState),
+        JSON.stringify(expiredState)
       );
 
       expect(authSession).toBeUndefined();
@@ -249,7 +253,7 @@ describe("AuthClient", () => {
       };
 
       await expect(
-        authClient.restoreAuthSession(JSON.stringify(validState)),
+        authClient.restoreAuthSession(JSON.stringify(validState))
       ).rejects.toThrow("Failed to inject credential bundle");
     });
 
@@ -264,11 +268,109 @@ describe("AuthClient", () => {
       };
 
       const restoredSession = await authClient.restoreAuthSession(
-        JSON.stringify(validState),
+        JSON.stringify(validState)
       );
 
       expect(restoredSession).toBeInstanceOf(AuthSession);
       expect(restoredSession?.getExpirationDateMs()).toBe(originalExpiration);
+    });
+  });
+
+  describe("loginWithPasskey", () => {
+    describe("new passkey signup", () => {
+      it("should create a new passkey account and return auth session", async () => {
+        const mockAttestation = {
+          challenge: new ArrayBuffer(32),
+          authenticatorUserId: new ArrayBuffer(16),
+          attestation: {
+            credentialId: "new-passkey-credential-id",
+            clientDataJson: "client-data",
+            attestationObject: "attestation-object",
+            transports: ["AUTHENTICATOR_TRANSPORT_INTERNAL" as const],
+          },
+        };
+
+        // Mock getWebAuthnAttestationInternal
+        vi.mocked(utils.getWebAuthnAttestationInternal).mockResolvedValue(
+          mockAttestation as any
+        );
+
+        // Mock the signup endpoint
+        vi.mocked(mockSignerHttpClient.request).mockImplementation(
+          async (params) => {
+            if (params.route === "signer/v1/signup") {
+              return { orgId: "new-org-id" };
+            }
+            if (params.route === "signer/v1/whoami") {
+              return mockUser;
+            }
+            throw new Error(`Unexpected route: ${params.route}`);
+          }
+        );
+
+        const authSession = await authClient.loginWithPasskey({
+          username: "newuser@example.com",
+        });
+
+        expect(authSession).toBeInstanceOf(AuthSession);
+        expect(mockCreateWebAuthnStamper).toHaveBeenCalledWith({
+          credentialId: "new-passkey-credential-id",
+          rpId: undefined,
+        });
+
+        // Verify signup was called with passkey data
+        expect(mockSignerHttpClient.request).toHaveBeenCalledWith({
+          route: "signer/v1/signup",
+          method: "POST",
+          body: {
+            passkey: {
+              challenge: expect.any(String),
+              attestation: mockAttestation.attestation,
+            },
+            email: undefined,
+          },
+        });
+      });
+    });
+
+    describe("existing passkey login", () => {
+      it("should login with existing passkey credential", async () => {
+        const credentialId = "existing-passkey-credential-id";
+
+        // Need to mock TurnkeyClient.stampGetWhoami
+        vi.spyOn(TurnkeyClient.prototype, "stampGetWhoami").mockResolvedValue({
+          stampedRequest: "stamped-request-data",
+        } as any);
+
+        vi.mocked(mockSignerHttpClient.request).mockImplementation(
+          async (params) => {
+            if (params.route === "signer/v1/whoami") {
+              return {
+                ...mockUser,
+                orgId: "existing-user-org-id",
+              };
+            }
+            throw new Error(`Unexpected route: ${params.route}`);
+          }
+        );
+
+        const authSession = await authClient.loginWithPasskey({
+          credentialId,
+        });
+
+        expect(authSession).toBeInstanceOf(AuthSession);
+        expect(mockCreateWebAuthnStamper).toHaveBeenCalledWith({
+          credentialId: "existing-passkey-credential-id",
+          rpId: undefined,
+        });
+
+        // Verify whoami was called
+        expect(mockSignerHttpClient.request).toHaveBeenCalledWith({
+          route: "signer/v1/whoami",
+          method: "POST",
+          body: { stampedRequest: "stamped-request-data" },
+        });
+      });
     });
   });
 });
