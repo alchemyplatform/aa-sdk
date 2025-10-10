@@ -44,8 +44,8 @@ export const DEFAULT_SESSION_EXPIRATION_MS = 15 * 60 * 1000;
 export type CreateAuthSessionParams = {
   /** HTTP client for Signer API */
   signerHttpClient: AlchemyRestClient<SignerHttpSchema>;
-  /** Turnkey stamper instance for signing operations */
-  stamper: TurnkeyStamper;
+  /** Turnkey client */
+  turnkey: TurnkeyClient;
   /** Organization ID */
   orgId: string;
   /** ID token from authentication flow */
@@ -95,9 +95,16 @@ export type AuthSessionEventType = keyof AuthSessionEvents;
  *
  * @example
  * ```ts twoslash
+ * import { TurnkeyClient } from "@turnkey/http";
+ *
+ * const turnkeyClient = new TurnkeyClient(
+ *   { baseUrl: "https://api.turnkey.com" },
+ *   stamper
+ * );
+ *
  * const authSession = await AuthSession.create({
- *   apiKey: "your-api-key",
- *   stamper: turnkeyStamper,
+ *   signerHttpClient: alchemySignerHttpClient,
+ *   turnkey: turnkeyClient,
  *   orgId: "org123",
  *   idToken: "token",
  *   authType: "oauth"
@@ -131,7 +138,7 @@ export class AuthSession {
   /**
    * Creates a new AuthSession instance from the provided parameters.
    *
-   * This factory method initializes a Turnkey client, performs a whoami request
+   * This factory method uses the provided Turnkey client to perform a whoami request
    * to get user information, and returns a configured AuthSession.
    *
    * @param {CreateAuthSessionParams} params - Configuration parameters for the auth session
@@ -139,9 +146,16 @@ export class AuthSession {
    *
    * @example
    * ```ts twoslash
+   * import { TurnkeyClient } from "@turnkey/http";
+   *
+   * const turnkeyClient = new TurnkeyClient(
+   *   { baseUrl: "https://api.turnkey.com" },
+   *   stamper
+   * );
+   *
    * const authSession = await AuthSession.create({
-   *   apiKey: "your-api-key",
-   *   stamper: turnkeyStamper,
+   *   signerHttpClient: alchemySignerHttpClient,
+   *   turnkey: turnkeyClient,
    *   orgId: "org123",
    *   idToken: "jwt-token",
    *   bundle: "credential-bundle",
@@ -152,7 +166,7 @@ export class AuthSession {
    */
   public static async create({
     signerHttpClient,
-    stamper,
+    turnkey,
     orgId,
     idToken,
     bundle,
@@ -160,10 +174,6 @@ export class AuthSession {
     credentialId,
     expirationDateMs,
   }: CreateAuthSessionParams): Promise<AuthSession> {
-    const turnkey = new TurnkeyClient(
-      { baseUrl: "https://api.turnkey.com" },
-      stamper
-    );
     const stampedRequest = await turnkey.stampGetWhoami({
       organizationId: orgId,
     });
@@ -231,7 +241,7 @@ export class AuthSession {
   }
 
   /**
-   * Signs a raw payload using the Turnkey stamper.
+   * Signs a raw payload using the Turnkey client.
    *
    * This method handles both Ethereum and Solana signing modes with appropriate
    * hash functions and encoding parameters.
@@ -414,20 +424,21 @@ export class AuthSession {
   /**
    * Adds a new passkey (WebAuthn credential) to this user's authentication methods.
    *
-   * @param {CredentialCreationOptions} params - The credential creation options for WebAuthn
+   * @param {CredentialCreationOptionOverrides} params - The credential creation option overrides for WebAuthn
    * @returns {Promise<PasskeyInfo>} A promise that resolves to the created passkey info
    */
   public async addPasskey(
-    params?: CredentialCreationOptions
+    params?: CredentialCreationOptionOverrides
   ): Promise<PasskeyInfo> {
     this.throwIfDisconnected();
 
-    console.log(`do we need ${params}?`);
-
     const { attestation, challenge } =
-      await this.getWebAuthnAttestationInternal({
-        username: this.user.email || "TO DO: anonymous",
-      });
+      await this.getWebAuthnAttestationInternal(
+        {
+          username: this.user.email || "TO DO: anonymous",
+        },
+        params
+      );
 
     const createdAt: number = Date.now();
 
@@ -487,7 +498,9 @@ export class AuthSession {
    * Disconnects and invalidates this authentication session.
    *
    * This method marks the session as disconnected and clears any stored
-   * credentials in the Turnkey stamper.
+   * credentials in the Turnkey client's stamper.
+   *
+   * @returns {Promise<void>} A promise that resolves when the session is disconnected
    */
   public disconnect(): void {
     this.isDisconnected = true;
@@ -554,7 +567,7 @@ export class AuthSession {
   }
 
   // eslint-disable-next-line eslint-rules/require-jsdoc-on-reexported-functions
-  protected pollActivityCompletion = async <
+  private pollActivityCompletion = async <
     T extends keyof Awaited<
       ReturnType<(typeof this.turnkey)["getActivity"]>
     >["activity"]["result"],

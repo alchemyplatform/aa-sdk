@@ -110,6 +110,9 @@ export type GetWebAuthnAttestationResult = {
  * AuthClient handles authentication flows including email OTP, OAuth, and passkey authentication.
  * This is a simplified authentication client that provides methods for different authentication types.
  *
+ * The client creates Turnkey clients internally for each authentication flow, using the provided
+ * stamper factories (createTekStamper for email/OAuth, createWebAuthnStamper for passkeys).
+ *
  * @example
  * ```ts twoslash
  * const authClient = AuthClient.create({
@@ -122,8 +125,11 @@ export type GetWebAuthnAttestationResult = {
  * // Send email OTP
  * await authClient.sendEmailOtp({ email: "user@example.com" });
  *
- * // Submit OTP code
+ * // Submit OTP code - creates TurnkeyClient with TEK stamper
  * const authSession = await authClient.submitOtpCode({ otpCode: "123456" });
+ *
+ * // Login with passkey - creates TurnkeyClient with WebAuthn stamper
+ * const passkeySession = await authClient.loginWithPasskey({ username: "user@example.com" });
  * ```
  */
 export class AuthClient {
@@ -347,30 +353,37 @@ export class AuthClient {
    * Can be used for both new passkey creation (when credentialId is undefined) and
    * authentication with existing passkeys (when credentialId is provided).
    *
+   * Internally, this method creates a TurnkeyClient with a WebAuthn stamper and uses it to
+   * create an AuthSession for the authenticated user.
+   *
    * @param {LoginWithPasskeyParams} params - Parameters for passkey authentication
    * @returns {Promise<AuthSession>} Promise that resolves to an auth session instance
    *
    * @example
    * ```ts twoslash
    * // New passkey authentication
-   * const authSession = await authClient.loginWithPasskey();
+   * const authSession = await authClient.loginWithPasskey({ username: "user@example.com" });
    *
    * // Authenticate with existing passkey
-   * const authSession = await authClient.loginWithPasskey("existing-credential-id");
+   * const authSession = await authClient.loginWithPasskey({
+   *   credentialId: "existing-credential-id"
+   * });
    * ```
    */
   public async loginWithPasskey(
     params: LoginWithPasskeyParams,
   ): Promise<AuthSession> {
-    // TODO: figure out what the current passkey code is doing.
     // For new passkey authentication, credentialId would be undefined initially
-    const { email, username, credentialId } = params; // TO DO: where do we use creationOpts?
+    const { email, username, creationOpts, credentialId } = params; // TO DO: where do we use creationOpts?
 
     if (!credentialId) {
       // NEW PASSKEY SIGNUP
-      const attestation = await this.getWebAuthnAttestationInternal({
-        username: email || username || "anonymous",
-      });
+      const attestation = await this.getWebAuthnAttestationInternal(
+        {
+          username: email || username || "anonymous",
+        },
+        creationOpts,
+      );
 
       // create Turnkey org
       const result = await this.signerHttpClient.request({
@@ -393,28 +406,31 @@ export class AuthClient {
 
       return AuthSession.create({
         signerHttpClient: this.signerHttpClient,
-        stamper,
+        turnkey: new TurnkeyClient(
+          { baseUrl: "https://api.turnkey.com" },
+          stamper,
+        ),
         orgId: result.orgId,
         authType: "passkey",
         credentialId: attestation.attestation.credentialId,
-        idToken: undefined, // TO DO: do we need this OR make it so that I do not have to explicitly pass it in
+        idToken: undefined,
       });
     }
 
     // EXITSING PASSKEY LOGIN
     const stamper = await this.createWebAuthnStamper({
-      credentialId, // TO DO: do we need to save credentialId? I think so!!
+      credentialId,
       rpId: this.rpId,
     });
 
     const turnkeyClient = new TurnkeyClient(
       { baseUrl: "https://api.turnkey.com" },
       stamper,
-    ); // TO DO: should this be a private member of every instance of AuthClient?
+    );
 
     // Use root org to lookup user's actual org
     const stampedRequest = await turnkeyClient.stampGetWhoami({
-      organizationId: AuthClient.ROOT_ORG_ID_DEFAULT, // TO DO: should this be a static member of the class?
+      organizationId: AuthClient.ROOT_ORG_ID_DEFAULT,
     });
     // Stamper signs the whoami request
     // This proves user controls the private key for this credential
@@ -426,11 +442,11 @@ export class AuthClient {
 
     return AuthSession.create({
       signerHttpClient: this.signerHttpClient,
-      stamper,
+      turnkey: turnkeyClient,
       orgId: whoamiResponse.orgId,
       authType: "passkey",
       credentialId: params.credentialId,
-      idToken: undefined, // TO DO: read above
+      idToken: undefined,
     });
   }
 
@@ -440,6 +456,10 @@ export class AuthClient {
    * This method takes a JSON string representation of a serialized AuthSessionState (typically obtained
    * from AuthSession.getSerializedState()) and attempts to restore the authentication session.
    * The method will validate the session expiration and handle different authentication types appropriately.
+   *
+   * For each auth type, it creates a new TurnkeyClient with the appropriate stamper:
+   * - Email/OAuth/OTP: Uses TEK stamper and injects the credential bundle
+   * - Passkey: Uses WebAuthn stamper with the stored credentialId
    *
    * @param {string} state - The serialized authentication session state as a JSON string
    * @returns {Promise<AuthSession | undefined>} A promise that resolves to an AuthSession instance if the session is valid and not expired, undefined if expired
@@ -564,7 +584,10 @@ export class AuthClient {
     }
     const authSession = await AuthSession.create({
       signerHttpClient: this.signerHttpClient,
-      stamper,
+      turnkey: new TurnkeyClient(
+        { baseUrl: "https://api.turnkey.com" },
+        stamper,
+      ),
       orgId,
       idToken,
       bundle,

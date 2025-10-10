@@ -11,6 +11,9 @@ This method uses WebAuthn standards to authenticate users with biometric or hard
 Can be used for both new passkey creation (when credentialId is undefined) and
 authentication with existing passkeys (when credentialId is provided).
 
+Internally, this method creates a TurnkeyClient with a WebAuthn stamper and uses it to
+create an AuthSession for the authenticated user.
+
 ## Import
 
 ```ts
@@ -21,10 +24,14 @@ import { AuthClient } from "@alchemy/auth";
 
 ```ts twoslash
 // New passkey authentication
-const authSession = await authClient.loginWithPasskey();
+const authSession = await authClient.loginWithPasskey({
+  username: "user@example.com",
+});
 
 // Authenticate with existing passkey
-const authSession = await authClient.loginWithPasskey("existing-credential-id");
+const authSession = await authClient.loginWithPasskey({
+  credentialId: "existing-credential-id",
+});
 ```
 
 ## Parameters

@@ -15,17 +15,7 @@ import type {
 } from "../src/types.js";
 import type { SignerHttpSchema } from "@alchemy/aa-infra";
 import type { AlchemyRestClient } from "@alchemy/common";
-
-// Mock Turnkey client
-vi.mock("@turnkey/http", () => ({
-  TurnkeyClient: vi.fn().mockImplementation(() => ({
-    stampGetWhoami: vi.fn().mockResolvedValue({
-      organizationId: "test-org-id",
-      userId: "test-user-id",
-    }),
-    stamper: {},
-  })),
-}));
+import { TurnkeyClient } from "@turnkey/http";
 
 describe("AuthClient", () => {
   let authClient: AuthClient;
@@ -188,9 +178,13 @@ describe("AuthClient", () => {
       const expirationDateMs = Date.now() + 60 * 60 * 1000; // 1 hour from now
       // Mock the loginWithPasskey method to avoid the "not implemented" error
       const mockLoginWithPasskey = vi.spyOn(authClient, "loginWithPasskey");
+      const mockTurnkeyClient = new TurnkeyClient(
+        { baseUrl: "https://api.turnkey.com" },
+        mockWebAuthnStamper,
+      );
       const mockAuthSession = await AuthSession.create({
         signerHttpClient: mockSignerHttpClient,
-        stamper: mockWebAuthnStamper,
+        turnkey: mockTurnkeyClient,
         orgId: mockUser.orgId,
         idToken: mockUser.idToken,
         authType: "passkey",
@@ -211,9 +205,9 @@ describe("AuthClient", () => {
       );
 
       expect(authSession).toBeInstanceOf(AuthSession);
-      expect(mockLoginWithPasskey).toHaveBeenCalledWith(
-        "test-passkey-credential",
-      );
+      expect(mockLoginWithPasskey).toHaveBeenCalledWith({
+        credentialId: "test-passkey-credential",
+      });
 
       mockLoginWithPasskey.mockRestore();
     });

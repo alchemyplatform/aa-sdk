@@ -3,21 +3,11 @@ import { AuthSession } from "../src/authSession.js";
 import type { User, TurnkeyStamper } from "../src/types.js";
 import type { AlchemyRestClient } from "@alchemy/common";
 import type { SignerHttpSchema } from "@alchemy/aa-infra";
-import { DEFAULT_SESSION_EXPIRATION_MS } from "../src/authClient.js";
-
-// Mock Turnkey client
-vi.mock("@turnkey/http", () => ({
-  TurnkeyClient: vi.fn().mockImplementation(() => ({
-    stampGetWhoami: vi.fn().mockResolvedValue({
-      organizationId: "test-org-id",
-      userId: "test-user-id",
-    }),
-    stamper: {},
-  })),
-}));
+import { TurnkeyClient } from "@turnkey/http";
 
 describe("AuthSession", () => {
   let mockTurnkeyStamper: TurnkeyStamper;
+  let mockTurnkeyClient: TurnkeyClient;
   let mockUser: User;
   let mockSignerHttpClient: AlchemyRestClient<SignerHttpSchema>;
 
@@ -31,6 +21,11 @@ describe("AuthSession", () => {
       }),
       clear: vi.fn(),
     };
+
+    mockTurnkeyClient = new TurnkeyClient(
+      { baseUrl: "https://api.turnkey.com" },
+      mockTurnkeyStamper
+    );
 
     mockUser = {
       email: "test@example.com",
@@ -53,7 +48,7 @@ describe("AuthSession", () => {
           return mockUser;
         }
         throw new Error(`Unexpected route: ${params.route}`);
-      },
+      }
     );
   });
 
@@ -62,7 +57,7 @@ describe("AuthSession", () => {
       const expirationDateMs = Date.now() + DEFAULT_SESSION_EXPIRATION_MS;
       const authSession = await AuthSession.create({
         signerHttpClient: mockSignerHttpClient,
-        stamper: mockTurnkeyStamper,
+        turnkey: mockTurnkeyClient,
         orgId: mockUser.orgId,
         idToken: mockUser.idToken,
         bundle: "test-oauth-bundle",
@@ -90,7 +85,7 @@ describe("AuthSession", () => {
       const expirationDateMs = Date.now() + DEFAULT_SESSION_EXPIRATION_MS;
       const authSession = await AuthSession.create({
         signerHttpClient: mockSignerHttpClient,
-        stamper: mockTurnkeyStamper,
+        turnkey: mockTurnkeyClient,
         orgId: mockUser.orgId,
         idToken: mockUser.idToken,
         bundle: "test-otp-bundle",
@@ -118,7 +113,7 @@ describe("AuthSession", () => {
       const expirationDateMs = Date.now() + DEFAULT_SESSION_EXPIRATION_MS;
       const authSession = await AuthSession.create({
         signerHttpClient: mockSignerHttpClient,
-        stamper: mockTurnkeyStamper,
+        turnkey: mockTurnkeyClient,
         orgId: mockUser.orgId,
         idToken: mockUser.idToken,
         authType: "passkey",
@@ -150,7 +145,7 @@ describe("AuthSession", () => {
       const expirationDateMs = Date.now() + DEFAULT_SESSION_EXPIRATION_MS;
       const authSession = await AuthSession.create({
         signerHttpClient: mockSignerHttpClient,
-        stamper: mockTurnkeyStamper,
+        turnkey: mockTurnkeyClient,
         orgId: mockUser.orgId,
         idToken: mockUser.idToken,
         authType: "oauth",
@@ -159,7 +154,7 @@ describe("AuthSession", () => {
       });
 
       expect(() => authSession.getSerializedState()).toThrow(
-        "Bundle is required for non-passkey authentication types",
+        "Bundle is required for non-passkey authentication types"
       );
     });
 
@@ -194,7 +189,7 @@ describe("AuthSession", () => {
       const expirationDateMs = Date.now() + 10;
       const authSession = await AuthSession.create({
         signerHttpClient: mockSignerHttpClient,
-        stamper: mockTurnkeyStamper,
+        turnkey: mockTurnkeyClient,
         orgId: mockUser.orgId,
         idToken: mockUser.idToken,
         bundle: "test-oauth-bundle",
