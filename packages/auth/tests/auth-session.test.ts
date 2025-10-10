@@ -1,13 +1,12 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { AuthSession } from "../src/authSession.js";
-import type { User, TurnkeyStamper } from "../src/types.js";
+import type { User } from "../src/types.js";
 import { DEFAULT_SESSION_EXPIRATION_MS } from "../src/utils.js";
 import type { AlchemyRestClient } from "@alchemy/common";
 import type { SignerHttpSchema } from "@alchemy/aa-infra";
 import { TurnkeyClient } from "@turnkey/http";
 
 describe("AuthSession", () => {
-  let mockTurnkeyStamper: TurnkeyStamper;
   let mockTurnkeyClient: TurnkeyClient;
   let mockUser: User;
   let mockSignerHttpClient: AlchemyRestClient<SignerHttpSchema>;
@@ -15,17 +14,14 @@ describe("AuthSession", () => {
   beforeEach(async () => {
     vi.clearAllMocks();
 
-    mockTurnkeyStamper = {
-      stamp: vi.fn().mockResolvedValue({
-        stampHeaderName: "X-Stamp",
-        stampHeaderValue: "mock-stamp",
-      }),
-      clear: vi.fn(),
-    };
-
     mockTurnkeyClient = new TurnkeyClient(
       { baseUrl: "https://api.turnkey.com" },
-      mockTurnkeyStamper
+      {
+        stamp: vi.fn().mockResolvedValue({
+          stampHeaderName: "X-Stamp",
+          stampHeaderValue: "mock-stamp",
+        }),
+      }
     );
 
     mockUser = {

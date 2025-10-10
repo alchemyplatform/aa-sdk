@@ -4,8 +4,6 @@ import { AuthSession } from "../src/authSession.js";
 import type {
   AuthSessionState,
   User,
-  TurnkeyTekStamper,
-  TurnkeyStamper,
   CreateTekStamperFn,
   CreateWebAuthnStamperFn,
   HandleOauthFlowFn,
@@ -20,8 +18,8 @@ describe("AuthClient", () => {
   let mockCreateTekStamper: CreateTekStamperFn;
   let mockCreateWebAuthnStamper: CreateWebAuthnStamperFn;
   let mockHandleOauthFlow: HandleOauthFlowFn;
-  let mockTekStamper: TurnkeyTekStamper;
-  let mockWebAuthnStamper: TurnkeyStamper;
+  let mockTekStamper: Awaited<ReturnType<CreateTekStamperFn>>;
+  let mockWebAuthnStamper: Awaited<ReturnType<CreateWebAuthnStamperFn>>;
   let mockUser: User;
   let mockSignerHttpClient: AlchemyRestClient<SignerHttpSchema>;
 
@@ -44,7 +42,6 @@ describe("AuthClient", () => {
         stampHeaderName: "X-Stamp",
         stampHeaderValue: "mock-stamp",
       }),
-      clear: vi.fn(),
       init: vi.fn().mockResolvedValue("mock-public-key"),
       injectCredentialBundle: vi.fn().mockResolvedValue(true),
     };
@@ -54,7 +51,6 @@ describe("AuthClient", () => {
         stampHeaderName: "X-Stamp",
         stampHeaderValue: "mock-webauthn-stamp",
       }),
-      clear: vi.fn(),
     };
 
     mockCreateTekStamper = vi.fn().mockResolvedValue(mockTekStamper);
