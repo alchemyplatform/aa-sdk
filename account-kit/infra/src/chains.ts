@@ -21,6 +21,8 @@ import {
   arbitrumNova as vabn,
   zora as vzora,
   zoraSepolia as vzoras,
+  apeChain as vac,
+  curtis as vacc,
 } from "viem/chains";
 
 export type AlchemyChainConfig = {
@@ -759,4 +761,48 @@ export const bobaMainnet: Chain = defineChain({
     },
   },
   testnet: false,
+});
+
+export const apeChain: Chain = {
+  ...vac,
+  rpcUrls: {
+    ...vac.rpcUrls,
+    alchemy: {
+      http: ["https://apechain-mainnet.g.alchemy.com/v2"],
+    },
+  },
+};
+
+export const apeChainCurtis: Chain = {
+  ...vacc,
+  rpcUrls: {
+    ...vacc.rpcUrls,
+    alchemy: {
+      http: ["https://apechain-curtis.g.alchemy.com/v2"],
+    },
+  },
+};
+
+export const edgeTestnet: Chain = defineChain({
+  id: 33431,
+  name: "Edge Testnet",
+  nativeCurrency: { name: "eth", symbol: "eth", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://edge-testnet.g.alchemy.com/v2"],
+    },
+    public: {
+      http: ["https://edge-testnet.g.alchemy.com/v2"],
+    },
+    alchemy: {
+      http: ["https://edge-testnet.g.alchemy.com/v2"],
+    },
+  },
+  blockExplorers: {
+    default: {
+      name: "Block Explorer",
+      url: "https://edge-testnet.explorer.alchemy.com/",
+    },
+  },
+  testnet: true,
 });
