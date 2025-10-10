@@ -218,7 +218,7 @@ const viemDecodeSignature = (
 const viemDecodeCapabilities = (
   capabilities: Capabilities | undefined,
 ): WalletApiCapabilities => {
-  const { alchemyPaymasterService, ...rest } = capabilities ?? {};
+  const { alchemyPaymaster, ...rest } = capabilities ?? {};
   return {
     ...rest,
     ...(rest?.gasParamsOverride && {
@@ -234,78 +234,71 @@ const viemDecodeCapabilities = (
         nonceKey: toHex(rest.nonceOverride.nonceKey),
       },
     }),
-    ...(alchemyPaymasterService && {
+    ...(alchemyPaymaster && {
       paymasterService: {
-        ...("policyId" in alchemyPaymasterService && {
-          policyId: alchemyPaymasterService.policyId,
+        ...("policyId" in alchemyPaymaster && {
+          policyId: alchemyPaymaster.policyId,
         }),
-        ...("policyIds" in alchemyPaymasterService && {
-          policyIds: alchemyPaymasterService.policyIds,
+        ...("policyIds" in alchemyPaymaster && {
+          policyIds: alchemyPaymaster.policyIds,
         }),
-        ...(alchemyPaymasterService.onlyEstimation && {
-          onlyEstimation: alchemyPaymasterService.onlyEstimation,
+        ...(alchemyPaymaster.onlyEstimation && {
+          onlyEstimation: alchemyPaymaster.onlyEstimation,
         }),
-        ...(alchemyPaymasterService.erc20 && {
+        ...(alchemyPaymaster.erc20 && {
           erc20: {
-            ...alchemyPaymasterService.erc20,
+            ...alchemyPaymaster.erc20,
             maxTokenAmount:
-              alchemyPaymasterService.erc20.maxTokenAmount != null
-                ? toHex(alchemyPaymasterService.erc20.maxTokenAmount)
+              alchemyPaymaster.erc20.maxTokenAmount != null
+                ? toHex(alchemyPaymaster.erc20.maxTokenAmount)
                 : undefined,
-            ...("preOpSettings" in alchemyPaymasterService.erc20 && {
+            ...("preOpSettings" in alchemyPaymaster.erc20 && {
               preOpSettings: {
-                ...alchemyPaymasterService.erc20.preOpSettings,
-                ...("autoPermit" in
-                  alchemyPaymasterService.erc20.preOpSettings && {
+                ...alchemyPaymaster.erc20.preOpSettings,
+                ...("autoPermit" in alchemyPaymaster.erc20.preOpSettings && {
                   autoPermit: {
                     below: toHex(
-                      alchemyPaymasterService.erc20.preOpSettings.autoPermit
-                        .below,
+                      alchemyPaymaster.erc20.preOpSettings.autoPermit.below,
                     ),
                     amount: toHex(
-                      alchemyPaymasterService.erc20.preOpSettings.autoPermit
-                        .amount,
+                      alchemyPaymaster.erc20.preOpSettings.autoPermit.amount,
                     ),
                     durationSeconds:
-                      alchemyPaymasterService.erc20.preOpSettings.autoPermit
+                      alchemyPaymaster.erc20.preOpSettings.autoPermit
                         .durationSeconds != null
                         ? toHex(
-                            alchemyPaymasterService.erc20.preOpSettings
-                              .autoPermit.durationSeconds,
+                            alchemyPaymaster.erc20.preOpSettings.autoPermit
+                              .durationSeconds,
                           )
                         : undefined,
                   },
                 }),
-                ...("permitDetails" in
-                  alchemyPaymasterService.erc20.preOpSettings && {
+                ...("permitDetails" in alchemyPaymaster.erc20.preOpSettings && {
                   permitDetails: {
                     deadline: toHex(
-                      alchemyPaymasterService.erc20.preOpSettings.permitDetails
+                      alchemyPaymaster.erc20.preOpSettings.permitDetails
                         .deadline,
                     ),
                     value: toHex(
-                      alchemyPaymasterService.erc20.preOpSettings.permitDetails
-                        .value,
+                      alchemyPaymaster.erc20.preOpSettings.permitDetails.value,
                     ),
                   },
                 }),
               },
             }),
-            ...("postOpSettings" in alchemyPaymasterService.erc20 && {
+            ...("postOpSettings" in alchemyPaymaster.erc20 && {
               postOpSettings: {
-                ...(alchemyPaymasterService.erc20.postOpSettings
-                  .autoApprove && {
+                ...(alchemyPaymaster.erc20.postOpSettings.autoApprove && {
                   autoApprove: {
                     below: toHex(
-                      alchemyPaymasterService.erc20.postOpSettings.autoApprove
-                        .below,
+                      alchemyPaymaster.erc20.postOpSettings.autoApprove.below,
                     ),
                     amount:
-                      alchemyPaymasterService.erc20.postOpSettings.autoApprove
+                      alchemyPaymaster.erc20.postOpSettings.autoApprove
                         .amount != null
                         ? toHex(
-                            alchemyPaymasterService.erc20.postOpSettings
-                              .autoApprove.amount,
+                            alchemyPaymaster.erc20.postOpSettings.autoApprove
+                              .amount,
                           )
                         : undefined,
                   },

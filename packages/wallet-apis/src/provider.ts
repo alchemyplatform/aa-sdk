@@ -5,6 +5,7 @@ import {
   type WalletRpcSchema,
   ProviderRpcError,
   type Capabilities,
+  type Hex,
 } from "viem";
 import {
   AccountNotFoundError,
@@ -266,18 +267,57 @@ export const createEip1193Provider = (
 const transformCapabilities = (
   capabilities: Capabilities | undefined,
 ): PrepareCallsParams["capabilities"] => {
+  if (!capabilities) return undefined;
+
+  // First, handle the alchemyPaymaster -> paymasterService rename
+  let transformedCapabilities = capabilities;
   if (
-    "alchemyPaymaster" in (capabilities ?? {}) &&
-    !("paymasterService" in (capabilities ?? {})) &&
-    capabilities?.alchemyPaymaster.policyId != null
+    "alchemyPaymaster" in capabilities &&
+    !("paymasterService" in capabilities) &&
+    capabilities.alchemyPaymaster?.policyId != null
   ) {
     const { alchemyPaymaster, ...rest } = capabilities;
-    return {
+    transformedCapabilities = {
       ...rest,
-      paymasterService: {
-        policyId: capabilities.alchemyPaymaster.policyId,
-      },
+      paymasterService: alchemyPaymaster,
     };
   }
-  return capabilities;
+
+  // Then recursively transform all numbers/bigints to hex (except multiplier)
+  return transformCapabilityNumbers(
+    transformedCapabilities,
+  ) as PrepareCallsParams["capabilities"];
+};
+
+const transformCapabilityNumbers = (
+  value: object | number | Hex | string | bigint,
+  key?: string,
+): object | number | Hex | string | bigint => {
+  // Don't transform 'multiplier' fields - they should remain numbers
+  if (key === "multiplier" && typeof value === "number") {
+    return value;
+  }
+
+  // Transform numbers and bigints to hex
+  if (typeof value === "number" || typeof value === "bigint") {
+    return toHex(value);
+  }
+
+  // Recursively transform arrays
+  if (Array.isArray(value)) {
+    return value.map((item) => transformCapabilityNumbers(item));
+  }
+
+  // Recursively transform objects
+  if (value && typeof value === "object") {
+    return Object.fromEntries(
+      Object.entries(value).map(([k, v]) => [
+        k,
+        transformCapabilityNumbers(v, k),
+      ]),
+    );
+  }
+
+  // Return primitives as-is
+  return value;
 };

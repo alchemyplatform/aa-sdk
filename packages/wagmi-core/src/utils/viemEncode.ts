@@ -267,7 +267,7 @@ const viemEncodeCapabilities = (
       },
     }),
     ...(paymasterService && {
-      alchemyPaymasterService: {
+      alchemyPaymaster: {
         ...("policyId" in paymasterService && {
           policyId: paymasterService.policyId,
         }),

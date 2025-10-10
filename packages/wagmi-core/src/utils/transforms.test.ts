@@ -162,7 +162,7 @@ describe("transforms", () => {
             },
           ],
           "capabilities": {
-            "alchemyPaymasterService": {
+            "alchemyPaymaster": {
               "erc20": {
                 "maxTokenAmount": 1000000000n,
                 "postOpSettings": {
