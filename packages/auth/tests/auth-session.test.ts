@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { AuthSession } from "../src/authSession.js";
 import type { User, TurnkeyStamper } from "../src/types.js";
+import { DEFAULT_SESSION_EXPIRATION_MS } from "../src/utils.js";
 import type { AlchemyRestClient } from "@alchemy/common";
 import type { SignerHttpSchema } from "@alchemy/aa-infra";
 import { TurnkeyClient } from "@turnkey/http";
@@ -24,7 +25,7 @@ describe("AuthSession", () => {
 
     mockTurnkeyClient = new TurnkeyClient(
       { baseUrl: "https://api.turnkey.com" },
-      mockTurnkeyStamper,
+      mockTurnkeyStamper
     );
 
     mockUser = {
@@ -48,7 +49,7 @@ describe("AuthSession", () => {
           return mockUser;
         }
         throw new Error(`Unexpected route: ${params.route}`);
-      },
+      }
     );
   });
 
@@ -154,7 +155,7 @@ describe("AuthSession", () => {
       });
 
       expect(() => authSession.getSerializedState()).toThrow(
-        "Bundle is required for non-passkey authentication types",
+        "Bundle is required for non-passkey authentication types"
       );
     });
 
@@ -164,7 +165,7 @@ describe("AuthSession", () => {
         const expirationDateMs = Date.now() + 10;
         const authSession = await AuthSession.create({
           signerHttpClient: mockSignerHttpClient,
-          stamper: mockTurnkeyStamper,
+          turnkey: mockTurnkeyClient,
           orgId: mockUser.orgId,
           idToken: mockUser.idToken,
           bundle: "test-oauth-bundle",

@@ -1,8 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import {
-  AuthClient,
-  DEFAULT_SESSION_EXPIRATION_MS,
-} from "../src/authClient.js";
+import { AuthClient } from "../src/authClient.js";
 import { AuthSession } from "../src/authSession.js";
 import type {
   AuthSessionState,
@@ -13,6 +10,7 @@ import type {
   CreateWebAuthnStamperFn,
   HandleOauthFlowFn,
 } from "../src/types.js";
+import { DEFAULT_SESSION_EXPIRATION_MS } from "../src/utils.js";
 import type { SignerHttpSchema } from "@alchemy/aa-infra";
 import type { AlchemyRestClient } from "@alchemy/common";
 import { TurnkeyClient } from "@turnkey/http";
@@ -78,14 +76,14 @@ describe("AuthClient", () => {
           return mockUser;
         }
         throw new Error(`Unexpected route: ${params.route}`);
-      },
+      }
     );
 
     authClient = new (AuthClient as any)(
       mockSignerHttpClient,
       mockCreateTekStamper,
       mockCreateWebAuthnStamper,
-      mockHandleOauthFlow,
+      mockHandleOauthFlow
     );
   });
 
@@ -99,7 +97,7 @@ describe("AuthClient", () => {
       };
 
       const authSession = await authClient.restoreAuthSession(
-        JSON.stringify(validOAuthState),
+        JSON.stringify(validOAuthState)
       );
 
       expect(authSession).toBeInstanceOf(AuthSession);
@@ -108,13 +106,13 @@ describe("AuthClient", () => {
           orgId: mockUser.orgId,
           userId: mockUser.userId,
           address: mockUser.address,
-        }),
+        })
       );
 
       // Verify the TEK stamper was created and bundle was injected
       expect(mockCreateTekStamper).toHaveBeenCalled();
       expect(mockTekStamper.injectCredentialBundle).toHaveBeenCalledWith(
-        "test-oauth-bundle",
+        "test-oauth-bundle"
       );
     });
 
@@ -127,7 +125,7 @@ describe("AuthClient", () => {
       };
 
       const authSession = await authClient.restoreAuthSession(
-        JSON.stringify(validOtpState),
+        JSON.stringify(validOtpState)
       );
 
       expect(authSession).toBeInstanceOf(AuthSession);
@@ -136,13 +134,13 @@ describe("AuthClient", () => {
           orgId: mockUser.orgId,
           userId: mockUser.userId,
           address: mockUser.address,
-        }),
+        })
       );
 
       // Verify the TEK stamper was created and bundle was injected
       expect(mockCreateTekStamper).toHaveBeenCalled();
       expect(mockTekStamper.injectCredentialBundle).toHaveBeenCalledWith(
-        "test-otp-bundle",
+        "test-otp-bundle"
       );
     });
 
@@ -155,7 +153,7 @@ describe("AuthClient", () => {
       };
 
       const authSession = await authClient.restoreAuthSession(
-        JSON.stringify(validEmailState),
+        JSON.stringify(validEmailState)
       );
 
       expect(authSession).toBeInstanceOf(AuthSession);
@@ -164,13 +162,13 @@ describe("AuthClient", () => {
           orgId: mockUser.orgId,
           userId: mockUser.userId,
           address: mockUser.address,
-        }),
+        })
       );
 
       // Verify the TEK stamper was created and bundle was injected
       expect(mockCreateTekStamper).toHaveBeenCalled();
       expect(mockTekStamper.injectCredentialBundle).toHaveBeenCalledWith(
-        "test-email-bundle",
+        "test-email-bundle"
       );
     });
 
@@ -180,7 +178,7 @@ describe("AuthClient", () => {
       const mockLoginWithPasskey = vi.spyOn(authClient, "loginWithPasskey");
       const mockTurnkeyClient = new TurnkeyClient(
         { baseUrl: "https://api.turnkey.com" },
-        mockWebAuthnStamper,
+        mockWebAuthnStamper
       );
       const mockAuthSession = await AuthSession.create({
         signerHttpClient: mockSignerHttpClient,
@@ -201,7 +199,7 @@ describe("AuthClient", () => {
       };
 
       const authSession = await authClient.restoreAuthSession(
-        JSON.stringify(validPasskeyState),
+        JSON.stringify(validPasskeyState)
       );
 
       expect(authSession).toBeInstanceOf(AuthSession);
@@ -221,7 +219,7 @@ describe("AuthClient", () => {
       };
 
       await expect(
-        authClient.restoreAuthSession(JSON.stringify(invalidPasskeyState)),
+        authClient.restoreAuthSession(JSON.stringify(invalidPasskeyState))
       ).rejects.toThrow("Credential ID is required for passkey authentication");
     });
 
@@ -234,7 +232,7 @@ describe("AuthClient", () => {
       };
 
       const authSession = await authClient.restoreAuthSession(
-        JSON.stringify(expiredState),
+        JSON.stringify(expiredState)
       );
 
       expect(authSession).toBeUndefined();
@@ -255,7 +253,7 @@ describe("AuthClient", () => {
       };
 
       await expect(
-        authClient.restoreAuthSession(JSON.stringify(validState)),
+        authClient.restoreAuthSession(JSON.stringify(validState))
       ).rejects.toThrow("Failed to inject credential bundle");
     });
 
@@ -270,7 +268,7 @@ describe("AuthClient", () => {
       };
 
       const restoredSession = await authClient.restoreAuthSession(
-        JSON.stringify(validState),
+        JSON.stringify(validState)
       );
 
       expect(restoredSession).toBeInstanceOf(AuthSession);
