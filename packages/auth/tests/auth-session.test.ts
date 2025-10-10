@@ -21,7 +21,7 @@ describe("AuthSession", () => {
           stampHeaderName: "X-Stamp",
           stampHeaderValue: "mock-stamp",
         }),
-      }
+      },
     );
 
     mockUser = {
@@ -45,7 +45,7 @@ describe("AuthSession", () => {
           return mockUser;
         }
         throw new Error(`Unexpected route: ${params.route}`);
-      }
+      },
     );
   });
 
@@ -151,7 +151,7 @@ describe("AuthSession", () => {
       });
 
       expect(() => authSession.getSerializedState()).toThrow(
-        "Bundle is required for non-passkey authentication types"
+        "Bundle is required for non-passkey authentication types",
       );
     });
 
