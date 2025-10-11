@@ -27,7 +27,7 @@ export function prepareCallsQueryOptions(
 
       return prepareCalls(config, {
         connector,
-        ...(params as PrepareCallsParameters),
+        ...params,
       });
     },
     queryKey: prepareCallsQueryKey(options),

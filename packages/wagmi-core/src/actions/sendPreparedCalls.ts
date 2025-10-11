@@ -33,7 +33,7 @@ export type SendPreparedCallsReturnType = Prettify<{
  *
  * @param {Config} config - The Wagmi config
  * @param {SendPreparedCallsParameters} parameters - Prepared calls result and optional connector
- * @returns {Promise<SubmitSwapReturnType>} Promise that resolves with prepared call IDs for tracking execution status
+ * @returns {Promise<SendPreparedCallsReturnType>} Promise that resolves with prepared call IDs for tracking execution status
  * @throws {Error} Throws if the wallet is not an Alchemy smart wallet
  */
 export async function sendPreparedCalls(
