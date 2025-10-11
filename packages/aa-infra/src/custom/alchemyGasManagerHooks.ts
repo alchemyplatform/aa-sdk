@@ -8,19 +8,12 @@ import type {
   PaymasterActions,
   SmartAccount,
 } from "viem/account-abstraction";
-import { type AlchemyTransport } from "@alchemy/common";
-import { requestGasAndPaymasterAndData } from "../actions/requestGasAndPaymasterAndData.js";
 import type { RequestGasAndPaymasterAndDataResponse } from "../actions/types.js";
-import {
-  alchemyEstimateFeesPerGas,
-  type PriorityFeeClient,
-} from "./alchemyEstimateFeesPerGas.js";
+import { requestGasAndPaymasterAndData } from "../actions/requestGasAndPaymasterAndData.js";
 
-// Type for ERC-20 token context
-export type PolicyToken = {
-  address: Address;
-  maxTokenAmount?: bigint;
-};
+import { alchemyEstimateFeesPerGas } from "./alchemyEstimateFeesPerGas.js";
+
+// Note: PolicyToken type is now integrated into AlchemyGasManagerConfig
 
 // Simple cache for storing the latest user operation result
 // Since viem calls hooks sequentially for a single user operation,
@@ -69,62 +62,6 @@ function createUserOpCacheKey(
   });
 }
 
-// Convert response to stub return type
-function toStubReturn(
-  response: RequestGasAndPaymasterAndDataResponse,
-): GetPaymasterStubDataReturnType {
-  if ("paymasterAndData" in response) {
-    // For EP v0.6
-    return {
-      paymasterAndData: response.paymasterAndData,
-      isFinal: true,
-    };
-  } else {
-    // For EP v0.7
-    return {
-      paymaster: response.paymaster,
-      paymasterData: response.paymasterData,
-      paymasterVerificationGasLimit: response.paymasterVerificationGasLimit,
-      paymasterPostOpGasLimit: response.paymasterPostOpGasLimit,
-      isFinal: true,
-    };
-  }
-}
-
-/**
- * Context for Alchemy Gas Manager calls
- */
-interface AlchemyGasManagerContext {
-  policyId: string | string[];
-  erc20Context?: {
-    tokenAddress: Address;
-    maxTokenAmount?: bigint;
-  };
-}
-
-/**
- * Creates the context object for Alchemy Gas Manager calls
- *
- * @param {string | string[]} policyId - The policy ID(s) for gas sponsorship
- * @param {PolicyToken} [policyToken] - Optional ERC-20 token configuration
- * @returns {AlchemyGasManagerContext} The context object for Gas Manager calls
- */
-function createGasManagerContext(
-  policyId: string | string[],
-  policyToken?: PolicyToken,
-): AlchemyGasManagerContext {
-  const context: AlchemyGasManagerContext = { policyId };
-
-  if (policyToken !== undefined) {
-    context.erc20Context = {
-      tokenAddress: policyToken.address,
-      maxTokenAmount: policyToken.maxTokenAmount,
-    };
-  }
-
-  return context;
-}
-
 export type AlchemyGasManagerHooks = {
   paymaster: {
     getPaymasterStubData: PaymasterActions["getPaymasterStubData"];
@@ -132,144 +69,227 @@ export type AlchemyGasManagerHooks = {
   };
   userOperation: {
     estimateFeesPerGas: NonNullable<
-      NonNullable<BundlerClientConfig["userOperation"]>["estimateFeesPerGas"]
+      NonNullable<
+        BundlerClientConfig<Transport, Chain, SmartAccount>["userOperation"]
+      >["estimateFeesPerGas"]
     >;
   };
 };
 
+export type AlchemyGasManagerConfig = {
+  client: Client;
+  address?: Address;
+  maxTokenAmount?: bigint;
+};
+
 /**
- * Adapts Alchemy's Gas Manager to viem's paymaster interface using the optimized
- * `alchemy_requestGasAndPaymasterAndData` flow that combines gas estimation and
- * paymaster sponsorship in a single RPC call.
- *
- * This implementation caches the result from the first call to avoid duplicate RPC calls
- * when viem calls both estimateFeesPerGas and paymaster functions.
- *
- * Note: ERC-20 permits are not supported in these viem-native hooks. Permits require
- * building and signing the permit message before sending the user operation, which is
- * handled by middleware but not by these lower-level hooks. Use alchemyGasManagerMiddleware()
- * for permit support.
+ * Creates hooks for integrating Alchemy's Gas Manager with viem's bundler client.
  *
  * @param {string | string[]} policyId - The policy ID(s) for Alchemy's gas manager
- * @param {PolicyToken} [policyToken] - Optional ERC-20 token configuration for paying gas with tokens
- * @returns {{ paymaster: Function, userOperation: { estimateFeesPerGas: Function } }} Hooks for createBundlerClient
+ * @param {AlchemyGasManagerConfig} config - Configuration including client and optional ERC-20 token settings
+ * @returns {AlchemyGasManagerHooks} Hooks for createBundlerClient
  *
  * @example
+ * Basic usage:
  * ```ts
+ * import { createClient, http, custom } from "viem";
  * import { createBundlerClient } from "viem/account-abstraction";
- * import { alchemyGasManagerHooks } from "@alchemy/smart-accounts";
+ * import { alchemyGasManagerHooks } from "@alchemy/aa-infra";
+ * import { sepolia } from "viem/chains";
+ *
+ * const client = createClient({
+ *   chain: sepolia,
+ *   transport: http("https://eth-sepolia.g.alchemy.com/v2/your-api-key"),
+ * });
  *
  * const bundler = createBundlerClient({
- *   transport: http("https://eth-sepolia.g.alchemy.com/v2/your-api-key"),
  *   chain: sepolia,
+ *   transport: custom(client),
+ *   account, // Your smart account
+ *   ...alchemyGasManagerHooks("your-policy-id", { client }),
+ * });
+ * ```
+ *
+ * @example
+ * With ERC-20 token payment:
+ * ```ts
+ * const bundler = createBundlerClient({
+ *   chain: sepolia,
+ *   transport: custom(client),
  *   account,
- *   ...alchemyGasManagerHooks("your-policy-id"),
+ *   ...alchemyGasManagerHooks("your-policy-id", {
+ *     client,
+ *     address: "0xUSDC_ADDRESS", // ERC-20 token address
+ *     maxTokenAmount: 10_000_000n // Max tokens to spend
+ *   }),
  * });
  * ```
  */
 export function alchemyGasManagerHooks(
   policyId: string | string[],
-  policyToken?: PolicyToken,
-  // TODO(v5): specify the return type as Promise<AlchemyGasManagerHooks>
-) {
-  const context = createGasManagerContext(policyId, policyToken);
-  const cache = new UserOpCache();
+  config: AlchemyGasManagerConfig,
+): AlchemyGasManagerHooks {
+  const { client, address, maxTokenAmount } = config;
 
-  return {
-    paymaster: (client: Client<Transport, Chain, SmartAccount>) => ({
-      async getPaymasterStubData(
-        parameters: GetPaymasterStubDataParameters,
-      ): Promise<GetPaymasterStubDataReturnType> {
-        const userOpCacheKey = createUserOpCacheKey(parameters);
+  // Helper to create gas manager context
+  const createContext = () => {
+    const context: any = {};
 
-        // Always make the RPC call (no cache check here)
-        const { entryPointAddress, ...userOpFields } = parameters;
+    context.policyId = policyId;
 
-        // Get dummy signature from the account
-        if (!client.account) {
-          throw new Error(
-            "No account found on client. Client must have an account to use gas manager hooks.",
-          );
-        }
-        const dummySignature =
-          await client.account.getStubSignature(userOpFields);
+    // Add ERC-20 context if token address is provided
+    if (address) {
+      context.erc20Context = {
+        tokenAddress: address,
+        maxTokenAmount: maxTokenAmount
+          ? toHex(maxTokenAmount)
+          : undefined,
+      };
+    }
 
-        const request = {
-          policyId: context.policyId,
-          entryPoint: entryPointAddress,
-          userOperation: userOpFields,
-          dummySignature,
-          overrides: {},
-          ...(context.erc20Context
-            ? { erc20Context: context.erc20Context }
-            : {}),
-        };
+    return context;
+  };
 
-        const response = await requestGasAndPaymasterAndData(
-          client as Client<AlchemyTransport, Chain>,
-          [request],
+  // Create the hooks with client
+  const createHooks = (client: Client): AlchemyGasManagerHooks => {
+    const cache = new UserOpCache();
+
+    // Helper function to fetch and cache paymaster data
+    async function fetchAndCachePaymasterData(
+      parameters: GetPaymasterDataParameters,
+      cacheKey: string,
+    ) {
+      const { entryPointAddress, account, ...userOpFields } = parameters as any;
+
+      // Get dummy signature from the account passed in parameters
+      if (!account) {
+        throw new Error(
+          "No account found in parameters. Account must be provided to use gas manager hooks.",
         );
+      }
+      if (!account.getStubSignature) {
+        throw new Error(
+          "Account must have getStubSignature method to use gas manager hooks.",
+        );
+      }
+      const dummySignature = await account.getStubSignature(userOpFields);
 
-        // Cache the result for getPaymasterData
-        cache.set(userOpCacheKey, response);
+      const context = createContext();
+      const request = {
+        ...context,
+        entryPoint: entryPointAddress,
+        userOperation: userOpFields,
+        dummySignature,
+        overrides: {},
+      };
 
-        return toStubReturn(response);
-      },
+      // Use the requestGasAndPaymasterAndData action
+      const response = await requestGasAndPaymasterAndData(client as any, [
+        request,
+      ]);
 
-      async getPaymasterData(
-        parameters: GetPaymasterDataParameters,
-      ): Promise<GetPaymasterDataReturnType> {
-        const userOpCacheKey = createUserOpCacheKey(parameters);
+      // Cache the result
+      cache.set(cacheKey, response);
 
-        // Always get from cache - should be populated by getPaymasterStubData
-        const cachedResult = cache.get(userOpCacheKey);
-        if (!cachedResult) {
-          throw new Error(
-            "No cached result found. getPaymasterStubData must be called before getPaymasterData.",
+      return response;
+    }
+
+    return {
+      paymaster: {
+        async getPaymasterStubData(
+          parameters: GetPaymasterStubDataParameters,
+        ): Promise<GetPaymasterStubDataReturnType> {
+          const userOpCacheKey = createUserOpCacheKey(parameters);
+
+          // Reuse the existing helper function
+          const response = await fetchAndCachePaymasterData(
+            parameters,
+            userOpCacheKey,
           );
-        }
 
-        // Don't delete yet - estimateFeesPerGas might need the gas values
-        // Convert response to data return type
-        if ("paymasterAndData" in cachedResult) {
-          // For EP v0.6
-          return { paymasterAndData: cachedResult.paymasterAndData };
-        } else {
-          // For EP v0.7
-          return {
-            paymaster: cachedResult.paymaster,
-            paymasterData: cachedResult.paymasterData,
-            paymasterVerificationGasLimit:
-              cachedResult.paymasterVerificationGasLimit,
-            paymasterPostOpGasLimit: cachedResult.paymasterPostOpGasLimit,
-          };
-        }
+          // Return stub data - Alchemy Gas Manager provides complete data, so isFinal is true for both EP versions
+          if ("paymasterAndData" in response) {
+            // For EP v0.6
+            return {
+              paymasterAndData: response.paymasterAndData,
+              isFinal: true,
+            };
+          } else {
+            // For EP v0.7
+            return {
+              paymaster: response.paymaster,
+              paymasterData: response.paymasterData || "0x",
+              paymasterVerificationGasLimit:
+                response.paymasterVerificationGasLimit,
+              paymasterPostOpGasLimit: response.paymasterPostOpGasLimit,
+              isFinal: true, // Alchemy Gas Manager provides complete data
+            };
+          }
+        },
+
+        async getPaymasterData(
+          parameters: GetPaymasterDataParameters,
+        ): Promise<GetPaymasterDataReturnType> {
+          const userOpCacheKey = createUserOpCacheKey(parameters);
+
+          // Check if we have a cached result
+          let response = cache.get(userOpCacheKey);
+
+          if (!response) {
+            // No cached result, fetch and cache the paymaster data
+            response = await fetchAndCachePaymasterData(
+              parameters,
+              userOpCacheKey,
+            );
+          }
+
+          // Convert response to data return type
+          if ("paymasterAndData" in response) {
+            // For EP v0.6
+            return { paymasterAndData: response.paymasterAndData };
+          } else {
+            // For EP v0.7
+            return {
+              paymaster: response.paymaster,
+              paymasterData: response.paymasterData,
+              paymasterVerificationGasLimit:
+                response.paymasterVerificationGasLimit,
+              paymasterPostOpGasLimit: response.paymasterPostOpGasLimit,
+            };
+          }
+        },
       },
-    }),
 
-    userOperation: {
-      // Custom fee estimator that uses the cached gas values or Alchemy's fee estimation
-      async estimateFeesPerGas(params: { bundlerClient: PriorityFeeClient }) {
-        // Check if we have cached gas values from the RPC response
-        const cachedResult = cache.getCurrent();
-        if (cachedResult?.maxFeePerGas && cachedResult?.maxPriorityFeePerGas) {
-          // Use cached values and clear the cache after
-          const gasEstimates = {
-            maxFeePerGas: cachedResult.maxFeePerGas,
-            maxPriorityFeePerGas: cachedResult.maxPriorityFeePerGas,
-          };
+      userOperation: {
+        // Custom fee estimator that uses the cached gas values or Alchemy's fee estimation
+        async estimateFeesPerGas(params: { bundlerClient: Client }) {
+          // Check if we have cached gas values from the RPC response
+          const cachedResult = cache.getCurrent();
+          if (
+            cachedResult?.maxFeePerGas &&
+            cachedResult?.maxPriorityFeePerGas
+          ) {
+            // Use cached values and clear the cache after
+            const gasEstimates = {
+              maxFeePerGas: cachedResult.maxFeePerGas,
+              maxPriorityFeePerGas: cachedResult.maxPriorityFeePerGas,
+            };
 
-          // Clear cache now that we've used all the data
-          cache.clear();
+            // Clear cache now that we've used all the data
+            cache.clear();
 
-          return gasEstimates;
-        }
+            return gasEstimates;
+          }
 
-        // Otherwise use Alchemy's fee estimation
-        return alchemyEstimateFeesPerGas({
-          bundlerClient: params.bundlerClient,
-        });
+          // Otherwise use Alchemy's fee estimation
+          return alchemyEstimateFeesPerGas({
+            bundlerClient: params.bundlerClient,
+          });
+        },
       },
-    },
-  } as const;
+    };
+  };
+
+  // Client is required for gas manager hooks to work
+  return createHooks(client);
 }
