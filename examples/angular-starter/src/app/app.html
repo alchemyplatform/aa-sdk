@@ -1,0 +1,39 @@
+<div class="app-container">
+  <header class="app-header">
+    <h1>{{ title }}</h1>
+    <p>{{ accountStatus() }}</p>
+  </header>
+
+  <main class="app-main">
+    <router-outlet></router-outlet>
+  </main>
+</div>
+
+<style>
+  .app-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .app-header {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-bottom: 1px solid #e9ecef;
+  }
+
+  .app-header h1 {
+    margin: 0 0 0.5rem 0;
+    color: #212529;
+  }
+
+  .app-header p {
+    margin: 0;
+    color: #6c757d;
+  }
+
+  .app-main {
+    flex: 1;
+    padding: 2rem;
+  }
+</style>
