@@ -257,12 +257,7 @@ const SwapDemoWrapper = () => {
   const [fromAmount, setFromAmount] = useState<bigint | undefined>(undefined);
 
   return fromAmount ? (
-    <SwapDemo
-      fromAmount={fromAmount}
-      // TODO(jh): use real token addresses from peter (also need to use the correct chain)
-      fromToken={USDC_ARB}
-      toToken={DAI_ARB}
-    />
+    <SwapDemo fromAmount={fromAmount} fromToken={USDC_ARB} toToken={DAI_ARB} />
   ) : (
     <button
       onClick={() => {
