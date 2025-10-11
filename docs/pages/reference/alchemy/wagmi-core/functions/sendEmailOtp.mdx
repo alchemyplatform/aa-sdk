@@ -33,6 +33,12 @@ import { sendEmailOtp } from "@alchemy/wagmi-core";
 
 - The user's email address to receive the OTP
 
+### parameters.sessionExpirationMs
+
+`number | undefined`
+
+- The length of the session in milliseconds (defaults to 15 minutes)
+
 ## Returns
 
 `Promise<SendEmailOtpReturnType>`

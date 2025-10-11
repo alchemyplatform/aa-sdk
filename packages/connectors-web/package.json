@@ -40,17 +40,18 @@
     "test:run": "vitest run"
   },
   "peerDependencies": {
-    "wagmi": "^2",
     "@wagmi/core": "^2",
-    "viem": "^2"
+    "viem": "^2",
+    "wagmi": "^2"
   },
   "devDependencies": {
+    "eventemitter3": "^5.0.1",
     "typescript-template": "*"
   },
   "dependencies": {
-    "@alchemy/common": "*",
     "@alchemy/auth": "*",
     "@alchemy/auth-web": "*",
+    "@alchemy/common": "*",
     "@alchemy/wagmi-core": "*",
     "@alchemy/wallet-apis": "*",
     "viem": "2.29.2"

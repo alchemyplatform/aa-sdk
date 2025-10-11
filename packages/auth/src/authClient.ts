@@ -18,6 +18,11 @@ import {
 } from "./utils.js";
 
 /**
+ * Default session expiration duration in milliseconds (15 minutes)
+ */
+export const DEFAULT_SESSION_EXPIRATION_MS = 15 * 60 * 1000;
+
+/**
  * Configuration parameters for creating an AuthClient instance
  */
 export type AuthClientParams = {
@@ -41,6 +46,8 @@ export type AuthClientParams = {
 export type SendEmailOtpParams = {
   /** Email address to send the OTP to */
   email: string;
+  /** Length of the session in milliseconds. Defaults to 15 minutes. */
+  sessionExpirationMs?: number;
 };
 
 /**
@@ -67,6 +74,8 @@ export type LoginWithOauthParams = {
   otherParameters?: Record<string, string>;
   /** OAuth flow mode - popup or redirect */
   mode: "popup" | "redirect";
+  /** Length of the session in milliseconds. Defaults to 15 minutes. */
+  sessionExpirationMs?: number;
 };
 
 type TekStamperAndPublicKey = {
@@ -134,8 +143,8 @@ export class AuthClient {
 
   private tekStamperPromise: Promise<TekStamperAndPublicKey> | null = null;
 
-  // TODO: do we care about persisting this across reloads?
   private pendingOtp: PendingOtp | null = null;
+  private pendingExpirationDateMs: number | null = null;
 
   /**
    * Sends an OTP (One-Time Password) to the specified email address for authentication.
@@ -151,39 +160,35 @@ export class AuthClient {
    * // User will receive an OTP code via email
    * ```
    */
-  public async sendEmailOtp({ email }: SendEmailOtpParams): Promise<void> {
+  public async sendEmailOtp({
+    email,
+    sessionExpirationMs = DEFAULT_SESSION_EXPIRATION_MS,
+  }: SendEmailOtpParams): Promise<void> {
     const { targetPublicKey } = await this.getTekStamper();
     const { orgId: existingOrgId } = await this.signerHttpClient.request({
       route: "signer/v1/lookup",
       method: "POST",
-      body: {
-        email,
-      },
+      body: { email },
     });
+    const expirationDateMs = Date.now() + sessionExpirationMs;
+    const expirationSeconds = Math.floor(sessionExpirationMs / 1000);
     const { orgId, otpId } = await (() => {
       if (!existingOrgId) {
         return this.signerHttpClient.request({
           route: "signer/v1/signup",
           method: "POST",
-          body: {
-            email,
-            emailMode: "otp",
-            targetPublicKey,
-          },
+          body: { email, emailMode: "otp", targetPublicKey, expirationSeconds },
         });
       } else {
         return this.signerHttpClient.request({
           route: "signer/v1/auth",
           method: "POST",
-          body: {
-            email,
-            emailMode: "otp",
-            targetPublicKey,
-          },
+          body: { email, emailMode: "otp", targetPublicKey, expirationSeconds },
         });
       }
     })();
     this.pendingOtp = { otpId: otpId!, orgId: orgId };
+    this.pendingExpirationDateMs = expirationDateMs;
   }
 
   /**
@@ -216,11 +221,18 @@ export class AuthClient {
       method: "POST",
       body: { otpId, otpCode, orgId, targetPublicKey },
     });
+    let expirationDateMs = this.pendingExpirationDateMs;
+    if (expirationDateMs == null) {
+      console.warn("No expiration date in state for OTP code submission");
+      expirationDateMs = Date.now() + DEFAULT_SESSION_EXPIRATION_MS;
+    }
     this.pendingOtp = null;
+    this.pendingExpirationDateMs = null;
     return this.completeAuthWithBundle({
       bundle: credentialBundle!,
       orgId,
       authType: "otp",
+      expirationDateMs,
     });
   }
 
@@ -281,18 +293,24 @@ export class AuthClient {
    */
   // TO DO: move this to the web auth session client.
   public async handleOauthRedirect(): Promise<AuthSession | null> {
-    // // First, check if we're currently on a page with OAuth callback parameters
+    // First, check if we're currently on a page with OAuth callback parameters
     const callbackParams = extractOAuthCallbackParams();
     if (callbackParams) {
       // We're on the OAuth callback - return the extracted parameters
       if (callbackParams.status === "ERROR") {
         throw new Error(callbackParams.error);
       }
+      // TODO: this does not correctly set the expiration date if a nondefault
+      // value was chosen. To do so, we would need to store the requested
+      // expiration date in page storage to persist it across reloads. It might
+      // be better to have the backend return it instead.
+      const expirationDateMs = Date.now() + DEFAULT_SESSION_EXPIRATION_MS;
       return this.completeAuthWithBundle({
         bundle: callbackParams.bundle!,
         orgId: callbackParams.orgId!,
         idToken: callbackParams.idToken,
         authType: "oauth",
+        expirationDateMs,
       });
     }
     return null;
@@ -371,14 +389,12 @@ export class AuthClient {
     }
     const { bundle } = parsedState;
     const { orgId, idToken } = user;
-    // Calculate remaining session duration to preserve original expiration time
-    const sessionDurationMs = Math.max(0, expirationDateMs - Date.now());
     return await this.completeAuthWithBundle({
       bundle,
       orgId,
       idToken,
       authType: type,
-      sessionDurationMs,
+      expirationDateMs,
     });
   }
 
@@ -389,13 +405,13 @@ export class AuthClient {
     orgId,
     idToken,
     authType,
-    sessionDurationMs,
+    expirationDateMs,
   }: {
     bundle: string;
     orgId: string;
     idToken?: string;
     authType: Exclude<AuthType, "passkey">;
-    sessionDurationMs?: number;
+    expirationDateMs: number;
   }): Promise<AuthSession> {
     const { stamper } = await this.getTekStamper();
     const success = await stamper.injectCredentialBundle(bundle);
@@ -409,7 +425,7 @@ export class AuthClient {
       idToken,
       bundle,
       authType,
-      sessionDurationMs,
+      expirationDateMs,
     });
     // Forget the reference to the TEK stamper, because in some implementations
     // it may become invalid if it is disconnected later. Future logins should
@@ -462,11 +478,18 @@ export class AuthClient {
     response: OAuthFlowResponse,
   ): Promise<AuthSession> {
     if (response.status === "SUCCESS") {
+      let expirationDateMs = this.pendingExpirationDateMs;
+      if (expirationDateMs == null) {
+        console.warn("No expiration date in state for OAuth response");
+        expirationDateMs = Date.now() + DEFAULT_SESSION_EXPIRATION_MS;
+      }
+      this.pendingExpirationDateMs = null;
       return this.completeAuthWithBundle({
         bundle: response.bundle!,
         orgId: response.orgId!,
         idToken: response.idToken,
         authType: "oauth",
+        expirationDateMs,
       });
     } else if (response.status === "ACCOUNT_LINKING_CONFIRMATION_REQUIRED") {
       // TODO: decide what to do here.

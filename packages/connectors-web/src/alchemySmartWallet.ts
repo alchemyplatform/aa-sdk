@@ -160,6 +160,8 @@ export function alchemySmartWallet(
             policyId: options.policyId,
             policyIds: options.policyIds,
           },
+          // TODO(v5): support other account params
+          // https://app.asana.com/1/1129441638109975/project/1210112085973163/task/1211568982181252
           {
             accountType: "7702",
           },
