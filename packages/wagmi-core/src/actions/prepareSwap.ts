@@ -1,5 +1,6 @@
 import { getConnectorClient, type Config } from "@wagmi/core";
 import {
+  hexToNumber,
   toHex,
   type Address,
   type Capabilities,
@@ -7,13 +8,13 @@ import {
   type Prettify,
 } from "viem";
 import { swapActions } from "@alchemy/wallet-apis/experimental";
-import { assertSmartWalletClient } from "@alchemy/wallet-apis";
-import type { ConnectorParameter } from "@wagmi/core/internal";
 import {
+  assertSmartWalletClient,
   viemEncodePreparedCalls,
   type ViemEncodedPreparedCalls,
-} from "../utils/viemEncode.js";
-import { viemDecodeCapabilities } from "../utils/viemDecode.js";
+  viemDecodeCapabilities,
+} from "@alchemy/wallet-apis/internal";
+import type { ConnectorParameter } from "@wagmi/core/internal";
 
 export type PrepareSwapParameters = Prettify<
   {
@@ -96,7 +97,7 @@ export async function prepareSwap(
     quote: {
       fromAmount: BigInt(quote.fromAmount),
       minimumToAmount: BigInt(quote.minimumToAmount),
-      expiry: new Date(quote.expiry),
+      expiry: new Date(hexToNumber(quote.expiry) * 1000),
     },
     ...viemEncodePreparedCalls(preparedCalls),
   };

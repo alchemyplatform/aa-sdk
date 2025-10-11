@@ -92,5 +92,8 @@ export function usePrepareCalls(
     connector,
   });
 
-  return useQuery({ ...query, ...options });
+  return useQuery({
+    ...query,
+    ...options,
+  });
 }

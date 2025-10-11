@@ -6,13 +6,15 @@ import {
   type Hex,
   type Prettify,
 } from "viem";
-import { assertSmartWalletClient } from "@alchemy/wallet-apis";
-import type { ConnectorParameter } from "@wagmi/core/internal";
 import {
+  assertSmartWalletClient,
   viemEncodePreparedCalls,
   type ViemEncodedPreparedCalls,
-} from "../utils/viemEncode.js";
-import { viemDecodeCapabilities } from "../utils/viemDecode.js";
+  viemDecodeCapabilities,
+} from "@alchemy/wallet-apis/internal";
+import type { ConnectorParameter } from "@wagmi/core/internal";
+import { getAction } from "viem/utils";
+import { prepareCalls as prepareCallsClientAction } from "@alchemy/wallet-apis";
 
 export type PrepareCallsParameters = Prettify<
   {
@@ -50,7 +52,13 @@ export async function prepareCalls(
     "'prepareCalls' action must be used with an Alchemy smart wallet",
   );
 
-  const preparedCalls = await client.prepareCalls({
+  const prepareCallsAction = getAction(
+    client,
+    prepareCallsClientAction,
+    "prepareCalls",
+  );
+
+  const preparedCalls = await prepareCallsAction({
     from: client.account.address,
     chainId: chainId ? toHex(chainId) : undefined,
     calls: params.calls.map((call) => ({

@@ -4,8 +4,6 @@ import {
   type Address,
   type WalletRpcSchema,
   ProviderRpcError,
-  type Capabilities,
-  type Hex,
 } from "viem";
 import {
   AccountNotFoundError,
@@ -19,7 +17,6 @@ import type {
   SmartWalletClientEip1193Provider,
   SmartWalletClient,
 } from "./types.js";
-import type { PrepareCallsParams } from "./actions/prepareCalls.js";
 import type { WalletServerViemRpcSchema } from "@alchemy/wallet-api-types/rpc";
 import EventEmitter from "events"; // TODO(v5): do we need to polyfill this for browser?
 import { getCapabilities } from "viem/actions";
@@ -28,6 +25,7 @@ import {
   type CreateSmartWalletClientParams,
 } from "./client.js";
 import type { CreationOptions } from "@alchemy/wallet-api-types";
+import { viemDecodeCapabilities } from "./utils/viemDecode.js";
 
 export type SmartWalletClient1193Methods = [
   ExtractRpcMethod<WalletRpcSchema, "eth_chainId">,
@@ -199,7 +197,7 @@ export const createEip1193Provider = (
                 data: c.data,
                 value: c.value,
               })),
-              capabilities: transformCapabilities(capabilities),
+              capabilities: viemDecodeCapabilities(capabilities),
             });
             return {
               id: result.preparedCallIds[0],
@@ -258,69 +256,4 @@ export const createEip1193Provider = (
     removeListener: eventEmitter.removeListener.bind(eventEmitter),
     request,
   };
-};
-
-// TODO(jh): would be nice to just use `viemDecodeCapabilities` here.
-// should that live in the wallet-apis pkg instead of wagmi-core?
-
-// Wallet server's `paymasterService` type is incompatible with
-// Viem's. So we can accept a custom capability property name
-// when using an Alchemy paymaster per-call policy id override,
-// in order to remain compatible with Viem's `sendCalls` action.
-const transformCapabilities = (
-  capabilities: Capabilities | undefined,
-): PrepareCallsParams["capabilities"] => {
-  if (!capabilities) return undefined;
-
-  // First, handle the alchemyPaymaster -> paymasterService rename
-  let transformedCapabilities = capabilities;
-  if (
-    "alchemyPaymaster" in capabilities &&
-    !("paymasterService" in capabilities) &&
-    capabilities.alchemyPaymaster?.policyId != null
-  ) {
-    const { alchemyPaymaster, ...rest } = capabilities;
-    transformedCapabilities = {
-      ...rest,
-      paymasterService: alchemyPaymaster,
-    };
-  }
-
-  // Then recursively transform all numbers/bigints to hex (except multiplier)
-  return transformCapabilityNumbers(
-    transformedCapabilities,
-  ) as PrepareCallsParams["capabilities"];
-};
-
-const transformCapabilityNumbers = (
-  value: object | number | Hex | string | bigint,
-  key?: string,
-): object | number | Hex | string | bigint => {
-  // Don't transform 'multiplier' fields - they should remain numbers
-  if (key === "multiplier" && typeof value === "number") {
-    return value;
-  }
-
-  // Transform numbers and bigints to hex
-  if (typeof value === "number" || typeof value === "bigint") {
-    return toHex(value);
-  }
-
-  // Recursively transform arrays
-  if (Array.isArray(value)) {
-    return value.map((item) => transformCapabilityNumbers(item));
-  }
-
-  // Recursively transform objects
-  if (value && typeof value === "object") {
-    return Object.fromEntries(
-      Object.entries(value).map(([k, v]) => [
-        k,
-        transformCapabilityNumbers(v, k),
-      ]),
-    );
-  }
-
-  // Return primitives as-is
-  return value;
 };

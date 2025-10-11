@@ -250,6 +250,9 @@ const SendCallsDemo = () => {
   );
 };
 
+const USDC_ARB = "0xaf88d065e77c8cc2239327c5edb3a432268e5831" as const;
+const DAI_ARB = "0xda10009cbd5d07dd0cecc66161fc93d7c9000da1" as const;
+
 const SwapDemoWrapper = () => {
   const [fromAmount, setFromAmount] = useState<bigint | undefined>(undefined);
 
@@ -257,13 +260,13 @@ const SwapDemoWrapper = () => {
     <SwapDemo
       fromAmount={fromAmount}
       // TODO(jh): use real token addresses from peter (also need to use the correct chain)
-      fromToken={zeroAddress}
-      toToken={zeroAddress}
+      fromToken={USDC_ARB}
+      toToken={DAI_ARB}
     />
   ) : (
     <button
       onClick={() => {
-        const amount = prompt("Enter from amount (in wei):");
+        const amount = prompt("Enter from amount (in base units):");
         if (!amount) {
           return;
         }
@@ -271,7 +274,7 @@ const SwapDemoWrapper = () => {
       }}
       className="cursor-pointer rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 text-sm"
     >
-      Swap
+      Prepare Swap
     </button>
   );
 };
@@ -318,7 +321,7 @@ const SwapDemo = ({
         }}
         className="cursor-pointer rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 text-sm"
       >
-        Send Calls
+        Execute swap
       </button>
       {submitSwapResult && (
         <p className="break-all max-w-xl">Calls sent: {submitSwapResult.id}</p>

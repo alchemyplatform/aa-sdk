@@ -1,9 +1,16 @@
 import { getConnectorClient, type Config } from "@wagmi/core";
 import { type Hex, type Prettify } from "viem";
-import { assertSmartWalletClient } from "@alchemy/wallet-apis";
+import {
+  assertSmartWalletClient,
+  viemDecodePreparedCalls,
+  type ViemEncodedPreparedCalls,
+} from "@alchemy/wallet-apis/internal";
 import type { ConnectorParameter } from "@wagmi/core/internal";
-import type { ViemEncodedPreparedCalls } from "../utils/viemEncode.js";
-import { viemDecodePreparedCalls } from "../utils/viemDecode.js";
+import { getAction } from "viem/utils";
+import {
+  sendPreparedCalls as sendPreparedCallsClientAction,
+  signPreparedCalls as signPreparedCallsClientAction,
+} from "@alchemy/wallet-apis";
 
 export type SendPreparedCallsParameters = Prettify<
   ViemEncodedPreparedCalls & ConnectorParameter
@@ -46,9 +53,21 @@ export async function sendPreparedCalls(
 
   const apiParams = viemDecodePreparedCalls(params);
 
-  const signed = await client.signPreparedCalls(apiParams);
+  const signPreparedCallsAction = getAction(
+    client,
+    signPreparedCallsClientAction,
+    "signPreparedCalls",
+  );
 
-  const { preparedCallIds } = await client.sendPreparedCalls(signed);
+  const signed = await signPreparedCallsAction(apiParams);
+
+  const sendPreparedCallsAction = getAction(
+    client,
+    sendPreparedCallsClientAction,
+    "sendPreparedCalls",
+  );
+
+  const { preparedCallIds } = await sendPreparedCallsAction(signed);
 
   return {
     id: preparedCallIds[0],

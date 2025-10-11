@@ -1,12 +1,12 @@
 import { alchemyTransport, BaseError } from "@alchemy/common";
 import {
   createEip1193Provider,
+  createSmartWalletClient,
   type SmartWalletClientEip1193Provider,
 } from "@alchemy/wallet-apis";
 import { ALCHEMY_SMART_WALLET_CONNECTOR_TYPE } from "@alchemy/wagmi-core";
 import { Emitter } from "@wagmi/core/internal";
 import {
-  createClient,
   createWalletClient,
   custom,
   type Account,
@@ -102,6 +102,11 @@ export function alchemySmartWallet(
       },
     };
 
+    const transport = alchemyTransport({
+      apiKey: options.apiKey,
+      jwt: options.jwt,
+      url: options.url ?? "https://api.g.alchemy.com/v2",
+    });
     let providerPromise: Promise<SmartWalletClientEip1193Provider> | undefined;
     let currentChainId: number | undefined;
     let currentInnerAccount: Address | undefined;
@@ -110,6 +115,7 @@ export function alchemySmartWallet(
       providerPromise = undefined;
       currentChainId = undefined;
       currentInnerAccount = undefined;
+      clients = {};
     };
 
     const getSignerClient = async (
@@ -146,17 +152,18 @@ export function alchemySmartWallet(
         const chain = getChainFromConfig(config, chainId);
         const signer = await getSignerClient(chain);
 
-        return createEip1193Provider({
-          signer,
-          transport: alchemyTransport({
-            apiKey: options.apiKey,
-            jwt: options.jwt,
-            url: options.url ?? "https://api.g.alchemy.com/v2",
-          }),
-          chain,
-          policyId: options.policyId,
-          policyIds: options.policyIds,
-        });
+        return createEip1193Provider(
+          {
+            signer,
+            transport,
+            chain,
+            policyId: options.policyId,
+            policyIds: options.policyIds,
+          },
+          {
+            accountType: "7702",
+          },
+        );
       };
 
     const initializeSmartWalletClient = async (): Promise<void> => {
@@ -313,7 +320,8 @@ export function alchemySmartWallet(
       // We need to implement this so that we can check if the client is an alchemy smart
       // wallet client, otherwise wagmi will init clients w/ the name "Connector Client",
       // then we have no way to check in wagmi actions if it's an alchemy smart wallet
-      // client or not.
+      // client or not. It's also necessary to call certain client actions that are
+      // not implemented on the provider (i.e. `prepareCalls` & `signPreparedCalls`).
       async getClient() {
         if (!currentChainId) {
           throw new BaseError("No chain ID set");
@@ -324,16 +332,14 @@ export function alchemySmartWallet(
         }
 
         const [account] = await getAccounts();
-        // This casting feels weird, but it's what wagmi does too: https://github.com/wevm/wagmi/blob/3e6efa82b9dbc3c4ee69ce339fe8ef85fa26b090/packages/core/src/actions/getConnectorClient.ts#L143-L144
-        const provider = (await this.getProvider()) as {
-          request(...args: any): Promise<any>;
-        };
         const chain = getChainFromConfig(config, currentChainId);
-        const client = createClient({
+        const client = createSmartWalletClient({
           account,
           chain,
-          name: "alchemySmartWalletClient",
-          transport: (opts) => custom(provider)({ ...opts, retryCount: 0 }),
+          transport,
+          signer: await getSignerClient(chain),
+          policyId: options.policyId,
+          policyIds: options.policyIds,
         });
         clients[currentChainId] = client;
         return client;

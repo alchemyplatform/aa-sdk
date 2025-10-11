@@ -7,7 +7,6 @@ import {
   type PrepareCallsReturnType,
 } from "@alchemy/wagmi-core";
 
-// TODO(jh): may want to use `UnionExactPartial<PrepareCallsParameters>` here w/ a custom `enabled` override. test it first.
 export type PrepareCallsOptions = PrepareCallsParameters;
 
 function prepareCallsQueryKey(options: PrepareCallsOptions) {
@@ -26,7 +25,10 @@ export function prepareCallsQueryOptions(
       const { connector } = options;
       const params = queryKey[1];
 
-      return prepareCalls(config, { connector, ...params });
+      return prepareCalls(config, {
+        connector,
+        ...(params as PrepareCallsParameters),
+      });
     },
     queryKey: prepareCallsQueryKey(options),
   } as const satisfies QueryOptions<
