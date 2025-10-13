@@ -4,7 +4,7 @@ description: Bring your own signer to Alchemy Smart Wallets via EIP-7702
 slug: wallets/third-party/signers/custom-integration
 ---
 
-If you have an existing custom signer or another third-party embedded wallet provider, you can upgrade your embedded EOAs to our smart wallets by connecting your existing signer.
+If you have an existing custom signer or another third-party embedded wallet provider, you can upgrade your embedded EOAs to smart wallets by connecting your existing signer.
 This will allow you to use EIP-7702 to get features like gas sponsorship, batching, and more.
 
 <Warning>
@@ -12,7 +12,7 @@ This will allow you to use EIP-7702 to get features like gas sponsorship, batchi
   EIP-7702 authorizations in order to delegate to a smart account.
 </Warning>
 
-To bring your own signer, you'll create a `SmartAccountSigner` that implements `signAuthorization`. See the details for the interface requirements [here](/wallets/resources/types#smartaccountsigner).
+To bring your own signer, you create a `SmartAccountSigner` that implements `signAuthorization`. See the details for the interface requirements [here](/wallets/resources/types#smartaccountsigner).
 
 <Tabs>
   <Tab title="JavaScript">

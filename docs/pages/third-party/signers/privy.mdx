@@ -34,14 +34,14 @@ Use Privy as your authentication provider while seamlessly upgrading EOAs to Sma
       - Go to the [Alchemy Dashboard](https://dashboard.alchemy.com/)
       - Create or select an app and copy the API key
     - Gas sponsorship Policy ID (Gas Manager):
-      - Go to [Gas Manager](https://dashboard.alchemy.com/gas-manager)
+      - Go to [Gas Manager](https://dashboard.alchemy.com/services/gas-manager/configuration)
       - Create a policy and copy its Policy ID
     - Privy App ID:
       - Go to the [Privy Dashboard](https://dashboard.privy.io/)
       - Create or select an app and copy the App ID
 
     <Warning>
-      Both the Smart Wallets configuration and the Gas Manager policy must be
+      Both the Smart Wallets configuration and the gas sponsorship policy must be
       linked to the application behind your Alchemy API key for sponsorship to work.
     </Warning>
 
@@ -113,7 +113,7 @@ Use Privy as your authentication provider while seamlessly upgrading EOAs to Sma
       const handleSwap = async () => {
         const prepared = await prepareSwap({
           fromToken: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
-          toToken: "0xA0b8...6eB48",
+          toToken: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", // USDC on Ethereum mainnet
           fromAmount: "0xde0b6b3a7640000",
         });
         await submitSwap(prepared);
