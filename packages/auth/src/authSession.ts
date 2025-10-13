@@ -401,7 +401,24 @@ export class AuthSession {
     params: AddOauthProviderParams,
   ): Promise<OauthProviderInfo> {
     this.throwIfDisconnected();
-    return notImplemented(params);
+    const { providerName, oidcToken } = params;
+    const stampedRequest = await this.turnkey.stampCreateOauthProviders({
+      type: "ACTIVITY_TYPE_CREATE_OAUTH_PROVIDERS",
+      timestampMs: Date.now().toString(),
+      organizationId: this.user.orgId,
+      parameters: {
+        userId: this.user.userId,
+        oauthProviders: [{ providerName, oidcToken }],
+      },
+    });
+    const response = await this.signerHttpClient.request({
+      route: "signer/v1/add-oauth-provider",
+      method: "POST",
+      body: {
+        stampedRequest,
+      },
+    });
+    return response.oauthProviders[0];
   }
 
   /**
@@ -412,7 +429,22 @@ export class AuthSession {
    */
   public async removeOauthProvider(providerId: string): Promise<void> {
     this.throwIfDisconnected();
-    return notImplemented(providerId);
+    const stampedRequest = await this.turnkey.stampDeleteOauthProviders({
+      type: "ACTIVITY_TYPE_DELETE_OAUTH_PROVIDERS",
+      timestampMs: Date.now().toString(),
+      organizationId: this.user.orgId,
+      parameters: {
+        userId: this.user.userId,
+        providerIds: [providerId],
+      },
+    });
+    await this.signerHttpClient.request({
+      route: "signer/v1/remove-oauth-provider",
+      method: "POST",
+      body: {
+        stampedRequest,
+      },
+    });
   }
 
   /**

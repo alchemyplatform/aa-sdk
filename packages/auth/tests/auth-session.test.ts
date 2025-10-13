@@ -315,4 +315,138 @@ describe("AuthSession", () => {
       });
     });
   });
+
+  describe("addOauthProvider", () => {
+    it("should add an OAuth provider to the user's account", async () => {
+      const expirationDateMs = Date.now() + DEFAULT_SESSION_EXPIRATION_MS;
+
+      // Mock the turnkey client methods
+      const mockStampCreateOauthProviders = vi.fn().mockResolvedValue({
+        stampedRequest: "stamped-create-oauth-request",
+      });
+
+      const mockTurnkeyClientWithMethods = {
+        ...mockTurnkeyClient,
+        stampCreateOauthProviders: mockStampCreateOauthProviders,
+      };
+
+      // Mock the signer HTTP client response
+      const mockOauthProviderInfo = {
+        providerId: "test-provider-id",
+        issuer: "https://accounts.google.com",
+        providerName: "google",
+        userDisplayName: "test@example.com",
+      };
+
+      vi.mocked(mockSignerHttpClient.request).mockImplementation(
+        async (params) => {
+          if (params.route === "signer/v1/whoami") {
+            return mockUser;
+          }
+          if (params.route === "signer/v1/add-oauth-provider") {
+            return { oauthProviders: [mockOauthProviderInfo] };
+          }
+          throw new Error(`Unexpected route: ${params.route}`);
+        },
+      );
+
+      const authSession = await AuthSession.create({
+        signerHttpClient: mockSignerHttpClient,
+        turnkey: mockTurnkeyClientWithMethods as any,
+        orgId: mockUser.orgId,
+        idToken: mockUser.idToken,
+        bundle: "test-bundle",
+        authType: "oauth",
+        expirationDateMs,
+      });
+
+      const providerInfo = await authSession.addOauthProvider({
+        providerName: "google",
+        oidcToken: "test-oidc-token",
+      });
+
+      expect(providerInfo).toEqual(mockOauthProviderInfo);
+
+      expect(mockStampCreateOauthProviders).toHaveBeenCalledWith({
+        type: "ACTIVITY_TYPE_CREATE_OAUTH_PROVIDERS",
+        timestampMs: expect.any(String),
+        organizationId: mockUser.orgId,
+        parameters: {
+          userId: mockUser.userId,
+          oauthProviders: [
+            {
+              providerName: "google",
+              oidcToken: "test-oidc-token",
+            },
+          ],
+        },
+      });
+
+      expect(mockSignerHttpClient.request).toHaveBeenCalledWith({
+        route: "signer/v1/add-oauth-provider",
+        method: "POST",
+        body: {
+          stampedRequest: "stamped-create-oauth-request",
+        },
+      });
+    });
+  });
+
+  describe("removeOauthProvider", () => {
+    it("should remove an OAuth provider from the user's account", async () => {
+      const expirationDateMs = Date.now() + DEFAULT_SESSION_EXPIRATION_MS;
+
+      // Mock the turnkey client methods
+      const mockStampDeleteOauthProviders = vi.fn().mockResolvedValue({
+        stampedRequest: "stamped-delete-oauth-request",
+      });
+
+      const mockTurnkeyClientWithMethods = {
+        ...mockTurnkeyClient,
+        stampDeleteOauthProviders: mockStampDeleteOauthProviders,
+      };
+
+      vi.mocked(mockSignerHttpClient.request).mockImplementation(
+        async (params) => {
+          if (params.route === "signer/v1/whoami") {
+            return mockUser;
+          }
+          if (params.route === "signer/v1/remove-oauth-provider") {
+            return {};
+          }
+          throw new Error(`Unexpected route: ${params.route}`);
+        },
+      );
+
+      const authSession = await AuthSession.create({
+        signerHttpClient: mockSignerHttpClient,
+        turnkey: mockTurnkeyClientWithMethods as any,
+        orgId: mockUser.orgId,
+        idToken: mockUser.idToken,
+        bundle: "test-bundle",
+        authType: "oauth",
+        expirationDateMs,
+      });
+
+      await authSession.removeOauthProvider("test-provider-id");
+
+      expect(mockStampDeleteOauthProviders).toHaveBeenCalledWith({
+        type: "ACTIVITY_TYPE_DELETE_OAUTH_PROVIDERS",
+        timestampMs: expect.any(String),
+        organizationId: mockUser.orgId,
+        parameters: {
+          userId: mockUser.userId,
+          providerIds: ["test-provider-id"],
+        },
+      });
+
+      expect(mockSignerHttpClient.request).toHaveBeenCalledWith({
+        route: "signer/v1/remove-oauth-provider",
+        method: "POST",
+        body: {
+          stampedRequest: "stamped-delete-oauth-request",
+        },
+      });
+    });
+  });
 });
