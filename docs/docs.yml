@@ -1089,8 +1089,12 @@ navigation:
                     path: wallets/pages/reference/alchemy/wagmi-core/functions/handleOauthRedirect.mdx
                   - page: loginWithOauth
                     path: wallets/pages/reference/alchemy/wagmi-core/functions/loginWithOauth.mdx
+                  - page: lookupUserByPhone
+                    path: wallets/pages/reference/alchemy/wagmi-core/functions/lookupUserByPhone.mdx
                   - page: sendEmailOtp
                     path: wallets/pages/reference/alchemy/wagmi-core/functions/sendEmailOtp.mdx
+                  - page: sendSmsOtp
+                    path: wallets/pages/reference/alchemy/wagmi-core/functions/sendSmsOtp.mdx
                   - page: submitOtpCode
                     path: wallets/pages/reference/alchemy/wagmi-core/functions/submitOtpCode.mdx
 

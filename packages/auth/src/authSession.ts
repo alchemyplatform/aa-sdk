@@ -1,4 +1,5 @@
 import { TurnkeyClient } from "@turnkey/http";
+import { jwtDecode } from "jwt-decode";
 import {
   hashMessage,
   hashTypedData,
@@ -108,7 +109,7 @@ export class AuthSession {
   private constructor(
     private readonly signerHttpClient: AlchemyRestClient<SignerHttpSchema>,
     private readonly turnkey: TurnkeyClient,
-    private readonly user: User,
+    private user: User,
     private readonly expirationDateMs: number,
     private readonly bundle: string | undefined,
     private readonly authType: AuthType | undefined,
@@ -375,6 +376,145 @@ export class AuthSession {
   public async setEmail(email: string): Promise<void> {
     this.throwIfDisconnected();
     return notImplemented(email);
+  }
+
+  /**
+   * Initiates an OTP verification process for adding/changing a phone number.
+   * Call this first, then use setPhoneNumber() with the received code.
+   *
+   * The OTP will be sent via SMS to the provided phone number.
+   *
+   * @param {string} phoneNumber - Phone number with country code (e.g., "+12025551234")
+   * @returns {Promise<{ otpId: string }>} OTP ID to use with setPhoneNumber
+   * @throws {Error} If the OTP request fails
+   *
+   * @example
+   * ```ts
+   * const { otpId } = await authSession.sendPhoneVerificationCode("+12025551234");
+   * // User receives SMS with code
+   * const code = prompt("Enter code from SMS:");
+   * await authSession.setPhoneNumber({ otpId, verificationCode: code });
+   * ```
+   */
+  public async sendPhoneVerificationCode(
+    phoneNumber: string,
+  ): Promise<{ otpId: string }> {
+    this.throwIfDisconnected();
+
+    const { otpId } = await this.signerHttpClient.request({
+      route: "signer/v1/init-otp",
+      method: "POST",
+      body: {
+        contact: phoneNumber,
+        otpType: "OTP_TYPE_SMS",
+      },
+    });
+
+    return { otpId };
+  }
+
+  /**
+   * Sets phone number for authenticated user after verification.
+   * Must call sendPhoneVerificationCode() first to get the OTP.
+   *
+   * @param {object} params - Parameters for setting phone number
+   * @param {string} params.otpId - OTP ID from sendPhoneVerificationCode
+   * @param {string} params.verificationCode - The OTP code received via SMS
+   * @returns {Promise<void>} Promise that resolves when phone is set
+   * @throws {Error} If verification fails or user is not authenticated
+   *
+   * @example
+   * ```ts
+   * const { otpId } = await authSession.sendPhoneVerificationCode("+12025551234");
+   * const code = "123456"; // Code from SMS
+   * await authSession.setPhoneNumber({ otpId, verificationCode: code });
+   * ```
+   */
+  public async setPhoneNumber(params: {
+    otpId: string;
+    verificationCode: string;
+  }): Promise<void> {
+    this.throwIfDisconnected();
+
+    // Step 1: Verify the OTP to get a signed verification token
+    const { verificationToken } = await this.signerHttpClient.request({
+      route: "signer/v1/verify-otp",
+      method: "POST",
+      body: {
+        otpId: params.otpId,
+        otpCode: params.verificationCode,
+      },
+    });
+
+    // Step 2: Decode token to extract phone number
+    const { contact: phoneNumber } = jwtDecode<{ contact: string }>(
+      verificationToken,
+    );
+
+    // Step 3: Create Turnkey stamped request to update phone
+    const stampedRequest = await this.turnkey.stampUpdateUserPhoneNumber({
+      type: "ACTIVITY_TYPE_UPDATE_USER_PHONE_NUMBER",
+      timestampMs: Date.now().toString(),
+      organizationId: this.user.orgId,
+      parameters: {
+        userId: this.user.userId,
+        userPhoneNumber: phoneNumber,
+        verificationToken,
+      },
+    });
+
+    // Step 4: Submit to backend
+    await this.signerHttpClient.request({
+      route: "signer/v1/update-phone-auth",
+      method: "POST",
+      body: { stampedRequest },
+    });
+
+    // Step 5: Update local user object
+    this.user = {
+      ...this.user,
+      phone: phoneNumber,
+    };
+  }
+
+  /**
+   * Removes phone number from authenticated user account.
+   *
+   * @returns {Promise<void>} Promise that resolves when phone is removed
+   * @throws {Error} If user is not authenticated or removal fails
+   *
+   * @example
+   * ```ts
+   * await authSession.removePhoneNumber();
+   * console.log("Phone number removed");
+   * ```
+   */
+  public async removePhoneNumber(): Promise<void> {
+    this.throwIfDisconnected();
+
+    // Create Turnkey stamped request with empty phone number
+    const stampedRequest = await this.turnkey.stampUpdateUserPhoneNumber({
+      type: "ACTIVITY_TYPE_UPDATE_USER_PHONE_NUMBER",
+      timestampMs: Date.now().toString(),
+      organizationId: this.user.orgId,
+      parameters: {
+        userId: this.user.userId,
+        userPhoneNumber: "", // Empty string removes the phone
+      },
+    });
+
+    // Submit to backend
+    await this.signerHttpClient.request({
+      route: "signer/v1/update-phone-auth",
+      method: "POST",
+      body: { stampedRequest },
+    });
+
+    // Update local user object (undefined removes the phone)
+    this.user = {
+      ...this.user,
+      phone: undefined,
+    };
   }
 
   /**

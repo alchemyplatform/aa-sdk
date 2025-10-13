@@ -11,11 +11,18 @@ import {
   useVerifyTypedData,
 } from "wagmi";
 import { useSendCalls } from "wagmi/experimental"; // TODO(jh): why is this still experimental? do we have old wagmi version?
-import { useSendEmailOtp, useSubmitOtpCode } from "@alchemy/react";
+import {
+  useSendEmailOtp,
+  useSendSmsOtp,
+  useLookupUserByPhone,
+  useSubmitOtpCode,
+} from "@alchemy/react";
 import { zeroAddress } from "viem";
+import { useState } from "react";
 
 export default function Home() {
   const account = useAccount();
+  const [authMode, setAuthMode] = useState<"email" | "sms">("email");
 
   return (
     <div className="flex flex-col items-center justify-items-center min-h-screen p-12 gap-6">
@@ -23,7 +30,31 @@ export default function Home() {
         {account.isConnected ? "Connected" : "Not connected"}
       </p>
       {!account.isConnected ? (
-        <EmailAuthDemo />
+        <div className="flex flex-col gap-4 items-center">
+          <div className="flex gap-3">
+            <button
+              onClick={() => setAuthMode("email")}
+              className={`cursor-pointer rounded px-4 py-2 font-bold text-white text-sm ${
+                authMode === "email"
+                  ? "bg-blue-700"
+                  : "bg-blue-500 hover:bg-blue-600"
+              }`}
+            >
+              Email
+            </button>
+            <button
+              onClick={() => setAuthMode("sms")}
+              className={`cursor-pointer rounded px-4 py-2 font-bold text-white text-sm ${
+                authMode === "sms"
+                  ? "bg-blue-700"
+                  : "bg-blue-500 hover:bg-blue-600"
+              }`}
+            >
+              SMS
+            </button>
+          </div>
+          {authMode === "email" ? <EmailAuthDemo /> : <SmsAuthDemo />}
+        </div>
       ) : (
         <>
           <ChainControls />
@@ -99,6 +130,62 @@ const EmailAuthDemo = () => {
           Enter OTP
         </button>
       )}
+    </div>
+  );
+};
+
+const SmsAuthDemo = () => {
+  const { sendSmsOtpAsync, isSuccess: sentSmsOtp } = useSendSmsOtp();
+  const { lookupUserByPhoneAsync } = useLookupUserByPhone();
+  const { submitOtpCodeAsync } = useSubmitOtpCode();
+
+  return (
+    <div className="flex flex-col gap-3 items-center">
+      <div className="flex gap-3">
+        <button
+          className="cursor-pointer rounded bg-green-500 px-4 py-2 font-bold text-white hover:bg-green-700"
+          onClick={async () => {
+            const phoneNumber = prompt(
+              "Enter your phone number (E.164 format, e.g., +12025551234):",
+            );
+            if (!phoneNumber) {
+              return;
+            }
+            // Optional: lookup if phone is registered
+            try {
+              const result = await lookupUserByPhoneAsync({ phoneNumber });
+              if (result) {
+                console.log(`Phone registered with org: ${result.orgId}`);
+              } else {
+                console.log("Phone not registered - will create new account");
+              }
+            } catch (error) {
+              console.error("Lookup failed:", error);
+            }
+            // Send OTP
+            await sendSmsOtpAsync({ phoneNumber });
+          }}
+        >
+          {sentSmsOtp ? "Resend" : "Send"} SMS OTP
+        </button>
+        {sentSmsOtp && (
+          <button
+            className="cursor-pointer rounded bg-green-500 px-4 py-2 font-bold text-white hover:bg-green-700"
+            onClick={async () => {
+              const otpCode = prompt("Enter the OTP code:");
+              if (!otpCode) {
+                return;
+              }
+              await submitOtpCodeAsync({ otpCode });
+            }}
+          >
+            Enter OTP
+          </button>
+        )}
+      </div>
+      <p className="text-xs text-gray-500 max-w-md text-center">
+        Phone number must include country code (e.g., +12025551234)
+      </p>
     </div>
   );
 };

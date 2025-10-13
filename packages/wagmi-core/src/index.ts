@@ -5,6 +5,18 @@ export {
 } from "./actions/sendEmailOtp.js";
 
 export {
+  sendSmsOtp,
+  type SendSmsOtpParameters,
+  type SendSmsOtpReturnType,
+} from "./actions/sendSmsOtp.js";
+
+export {
+  lookupUserByPhone,
+  type LookupUserByPhoneParameters,
+  type LookupUserByPhoneReturnType,
+} from "./actions/lookupUserByPhone.js";
+
+export {
   submitOtpCode,
   type SubmitOtpCodeParameters,
   type SubmitOtpCodeReturnType,
