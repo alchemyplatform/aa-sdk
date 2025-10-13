@@ -82,7 +82,7 @@
     "typescript": "^5.8.3",
     "viem": "2.29.2",
     "vitest": "^2.1.9",
-    "wagmi": "2.12.7",
+    "wagmi": "2.16.9",
     "webauthn-p256": "^0.0.10"
   },
   "commitlint": {
