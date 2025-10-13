@@ -294,7 +294,6 @@ const SendCallsDemo = () => {
     error: callsStatusError,
   } = useWaitForCallsStatus({
     id: sendCallsResult?.id,
-    status: ({ statusCode }) => statusCode === 200,
     query: {
       enabled: !!sendCallsResult,
     },
