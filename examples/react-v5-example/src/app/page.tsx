@@ -2,20 +2,35 @@
 
 import {
   useAccount,
+  useAccountEffect,
   useChainId,
+  useConnectorClient,
   useDisconnect,
+  useSendTransaction,
   useSignMessage,
   useSignTypedData,
   useSwitchChain,
   useVerifyMessage,
   useVerifyTypedData,
+  useWalletClient,
+  useCapabilities,
+  useSendCalls,
+  useWaitForCallsStatus,
 } from "wagmi";
-import { useSendCalls } from "wagmi/experimental"; // TODO(jh): why is this still experimental? do we have old wagmi version?
 import { useSendEmailOtp, useSubmitOtpCode } from "@alchemy/react";
 import { zeroAddress } from "viem";
 
 export default function Home() {
   const account = useAccount();
+
+  useAccountEffect({
+    onConnect(data) {
+      console.log("Account connected:", data);
+    },
+    onDisconnect() {
+      console.log("Account disconnected");
+    },
+  });
 
   return (
     <div className="flex flex-col items-center justify-items-center min-h-screen p-12 gap-6">
@@ -27,8 +42,12 @@ export default function Home() {
       ) : (
         <>
           <ChainControls />
+          <ConnectorClientDemo />
+          <WalletClientDemo />
           <SigningDemo />
           <SendCallsDemo />
+          <SendTransactionDemo />
+          <CapabilitiesDemo />
         </>
       )}
     </div>
@@ -63,6 +82,57 @@ const ChainControls = () => {
           Disconnect
         </button>
       </div>
+    </div>
+  );
+};
+
+const CapabilitiesDemo = () => {
+  const { data: capabilities } = useCapabilities();
+
+  return (
+    <div className="flex flex-col gap-2 items-center">
+      <p className="font-semibold">Wallet Capabilities</p>
+      {capabilities && (
+        <pre className="text-xs bg-gray-100 p-3 rounded max-w-2xl overflow-auto">
+          {JSON.stringify(capabilities, null, 2)}
+        </pre>
+      )}
+    </div>
+  );
+};
+
+const ConnectorClientDemo = () => {
+  const { data: connectorClient } = useConnectorClient();
+
+  return (
+    <div className="flex flex-col gap-2 items-center">
+      <p className="font-semibold">Connector Client</p>
+      {connectorClient && (
+        <div className="text-xs bg-gray-100 p-3 rounded max-w-2xl">
+          <p>Name: {connectorClient.name}</p>
+          <p>Type: {connectorClient.type}</p>
+          <p>Chain ID: {connectorClient.chain.id}</p>
+          <p>Account: {connectorClient.account.address}</p>
+        </div>
+      )}
+    </div>
+  );
+};
+
+const WalletClientDemo = () => {
+  const { data: walletClient } = useWalletClient();
+
+  return (
+    <div className="flex flex-col gap-2 items-center">
+      <p className="font-semibold">Wallet Client</p>
+      {walletClient && (
+        <div className="text-xs bg-gray-100 p-3 rounded max-w-2xl">
+          <p>Name: {walletClient.name}</p>
+          <p>Type: {walletClient.type}</p>
+          <p>Chain ID: {walletClient.chain.id}</p>
+          <p>Account: {walletClient.account.address}</p>
+        </div>
+      )}
     </div>
   );
 };
@@ -213,28 +283,91 @@ const SigningDemo = () => {
 const SendCallsDemo = () => {
   const {
     sendCalls,
+    isPending,
     data: sendCallsResult,
     error: sendCallsError,
   } = useSendCalls();
 
+  const {
+    data: callsStatus,
+    isLoading: isWaitingForCalls,
+    error: callsStatusError,
+  } = useWaitForCallsStatus({
+    id: sendCallsResult?.id,
+    status: ({ statusCode }) => statusCode === 200,
+    query: {
+      enabled: !!sendCallsResult,
+    },
+  });
+
   return (
     <div className="flex flex-col gap-2 items-center">
       <button
+        disabled={isPending}
         onClick={() => {
           sendCalls({
             calls: [{ to: zeroAddress, data: "0x" }],
           });
         }}
-        className="cursor-pointer rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 text-sm"
+        className="enabled:cursor-pointer disabled:cursor-not-allowed rounded bg-blue-500 px-4 py-2 font-bold text-white enabled:hover:bg-blue-700 text-sm disabled:opacity-50"
       >
         Send Calls
       </button>
       {sendCallsResult && (
         <p className="break-all max-w-xl">Calls sent: {sendCallsResult.id}</p>
       )}
+      {isWaitingForCalls && <p>Waiting for calls to confirm...</p>}
+      {callsStatus && (
+        <div className="text-xs bg-green-100 p-3 rounded max-w-2xl">
+          <p className="font-semibold">Calls Status</p>
+          <p>Status: {callsStatus.status}</p>
+          <p>Status Code: {callsStatus.statusCode}</p>
+        </div>
+      )}
       {sendCallsError && (
         <p className="break-all max-w-xl">
           Error sending calls: {JSON.stringify(sendCallsError)}
+        </p>
+      )}
+      {callsStatusError && (
+        <p className="break-all max-w-xl">
+          Error getting calls status: {JSON.stringify(callsStatusError)}
+        </p>
+      )}
+    </div>
+  );
+};
+
+const SendTransactionDemo = () => {
+  const {
+    sendTransaction,
+    isPending,
+    data: sendTransactionResult,
+    error: sendTransactionError,
+  } = useSendTransaction();
+
+  return (
+    <div className="flex flex-col gap-2 items-center">
+      <button
+        disabled={isPending}
+        onClick={() => {
+          sendTransaction({
+            to: zeroAddress,
+            data: "0x",
+          });
+        }}
+        className="enabled:cursor-pointer disabled:cursor-not-allowed rounded bg-blue-500 px-4 py-2 font-bold text-white enabled:hover:bg-blue-700 text-sm disabled:opacity-50"
+      >
+        Send Transaction
+      </button>
+      {sendTransactionResult && (
+        <p className="break-all max-w-xl">
+          Transaction sent: {sendTransactionResult}
+        </p>
+      )}
+      {sendTransactionError && (
+        <p className="break-all max-w-xl">
+          Error sending transaction: {JSON.stringify(sendTransactionError)}
         </p>
       )}
     </div>
