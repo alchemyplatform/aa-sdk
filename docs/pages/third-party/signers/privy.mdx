@@ -8,14 +8,9 @@ Use Privy as your authentication provider while seamlessly upgrading EOAs to Sma
 
 <Tabs>
   <Tab title="React">
-    ## Overview
+    ## Setup
 
-    Use Privy as your auth provider while upgrading EOAs to Smart Wallets via EIP-7702. The `@account-kit/privy-integration` package adds:
-
-    - **EIP-7702 Delegation** to upgrade EOAs without migration
-    - **Gas Sponsorship** via Gas Manager policies
-    - **Token Swaps** using Alchemy's swap infra
-    - **Batched Transactions** with a single call
+    Follow these steps to integrate Privy with Smart Wallets.
 
     ### Installation
 
@@ -147,7 +142,6 @@ Use Privy as your authentication provider while seamlessly upgrading EOAs to Sma
     ### Notes
 
     - EIP-7702 is used to delegate your EOA to a smart account at send time.
-    - For keys: get Alchemy API key, Gas Manager policy (optional), and Privy App ID.
     - The hooks API mirrors Privy's `useSendTransaction` for easy migration.
 
   </Tab>
