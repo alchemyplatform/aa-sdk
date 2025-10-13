@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.70.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.69.0...v4.70.0) (2025-10-13)
+
+### Bug Fixes
+
+- use wallet apis to wait for call status in useSendUserOperation ([#2162](https://github.com/alchemyplatform/aa-sdk/issues/2162)) ([958378d](https://github.com/alchemyplatform/aa-sdk/commit/958378de001ecda7cb50b2aaacd8fc0e9e75d423))
+
 # [4.69.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.68.0...v4.69.0) (2025-10-13)
 
 ### Features
