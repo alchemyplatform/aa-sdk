@@ -33,11 +33,12 @@ function normalizeValue(value: string | number | bigint): Hex {
 
 /**
  * Hook to send transactions with optional gas sponsorship via Alchemy
+ * Supports both single transactions and batch transactions
  * Drop-in alternative to Privy's useSendTransaction hook
  *
  * @returns {UseSendTransactionResult} Hook result with sendTransaction function and state
  *
- * @example
+ * @example Single transaction
  * ```tsx
  * const { sendTransaction, isLoading, error, data } = useAlchemySendTransaction();
  *
@@ -54,6 +55,16 @@ function normalizeValue(value: string | number | bigint): Hex {
  *   }
  * };
  * ```
+ *
+ * @example Batch transactions
+ * ```tsx
+ * const { sendTransaction } = useAlchemySendTransaction();
+ *
+ * const result = await sendTransaction([
+ *   { to: '0x...', data: '0x...', value: '1000000000000000000' },
+ *   { to: '0x...', data: '0x...' },
+ * ]);
+ * ```
  */
 export function useAlchemySendTransaction(): UseSendTransactionResult {
   const { getClient } = useAlchemyClient();
@@ -66,7 +77,7 @@ export function useAlchemySendTransaction(): UseSendTransactionResult {
 
   const sendTransaction = useCallback(
     async (
-      input: UnsignedTransactionRequest,
+      input: UnsignedTransactionRequest | UnsignedTransactionRequest[],
       options?: SendTransactionOptions,
     ): Promise<SendTransactionResult> => {
       setIsLoading(true);
@@ -84,12 +95,13 @@ export function useAlchemySendTransaction(): UseSendTransactionResult {
             ? !options.disableSponsorship
             : hasPolicyId && enableSponsorship;
 
-        // Format the transaction call
-        const formattedCall = {
-          to: input.to,
-          data: input.data,
-          value: input.value ? normalizeValue(input.value) : undefined,
-        };
+        // Format the transaction call(s)
+        const inputs = Array.isArray(input) ? input : [input];
+        const formattedCalls = inputs.map((txn) => ({
+          to: txn.to,
+          data: txn.data,
+          value: txn.value ? normalizeValue(txn.value) : undefined,
+        }));
 
         // Build capabilities based on sponsorship
         const policyId = Array.isArray(config.policyId)
@@ -105,10 +117,10 @@ export function useAlchemySendTransaction(): UseSendTransactionResult {
           capabilities.paymasterService = { policyId };
         }
 
-        // Send the transaction
+        // Send the transaction(s)
         const result = await client.sendCalls({
           from: embeddedWallet.address as Address,
-          calls: [formattedCall],
+          calls: formattedCalls,
           capabilities,
         });
 
