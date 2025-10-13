@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.70.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.69.0...v4.70.0) (2025-10-13)
+
+### Features
+
+- update types package and test cross-chain quote request ([#2165](https://github.com/alchemyplatform/aa-sdk/issues/2165)) ([6d01c49](https://github.com/alchemyplatform/aa-sdk/commit/6d01c4930ba754ac0980a11991348f621ab138d0))
+
 # [4.69.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.68.0...v4.69.0) (2025-10-13)
 
 ### Features
