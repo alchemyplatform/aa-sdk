@@ -12,7 +12,7 @@ methods:
   - name: wallet_requestAccount
     description: This method is used to get the smart account address and relevant info for a given signer. If an account does not already exist for a given signer, this method will create one before returning the counterfactual address.
     params:
-      - name: requestAccountRequest
+      - name: params[0]
         required: true
         schema:
           anyOf:
@@ -204,7 +204,7 @@ methods:
   - name: wallet_prepareCalls
     description: This method is used to prepare a user operation for submission. It will return a built user operation and a signature request which needs to be signed by the user before submitting to wallet_sendPreparedCalls
     params:
-      - name: prepareCallsRequest
+      - name: params[0]
         required: true
         schema:
           type: "object"
@@ -1907,7 +1907,7 @@ methods:
   - name: wallet_sendPreparedCalls
     description: This method is used after signing the signatureRequest returned from prepareCalls to submit a user operation
     params:
-      - name: sendPreparedCallsRequest
+      - name: params[0]
         required: true
         schema:
           allOf:
@@ -2825,7 +2825,7 @@ methods:
   - name: wallet_createSession
     description: This method is used to create a session for a given address with specified permissions.
     params:
-      - name: createSessionRequest
+      - name: params[0]
         required: true
         schema:
           type: "object"
@@ -3157,7 +3157,7 @@ methods:
   - name: wallet_formatSign
     description: This method is used to format ECDSA signatures
     params:
-      - name: formatSignRequest
+      - name: params[0]
         required: true
         schema:
           type: "object"
@@ -3537,7 +3537,7 @@ methods:
   - name: wallet_listAccounts
     description: This method is used to list all smart accounts for a given signer.
     params:
-      - name: listAccountsRequest
+      - name: params[0]
         required: true
         schema:
           type: "object"
@@ -3611,7 +3611,7 @@ methods:
   - name: wallet_prepareSign
     description: This method is used to translate raw data into a signature request
     params:
-      - name: prepareSignRequest
+      - name: params[0]
         required: true
         schema:
           type: "object"

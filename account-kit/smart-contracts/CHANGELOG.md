@@ -3,6 +3,34 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.68.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.67.0...v4.68.0) (2025-10-09)
+
+**Note:** Version bump only for package @account-kit/smart-contracts
+
+# [4.67.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.66.4...v4.67.0) (2025-10-06)
+
+### Bug Fixes
+
+- reduce rpc calls when using 7702 ([#2155](https://github.com/alchemyplatform/aa-sdk/issues/2155)) ([280ee4b](https://github.com/alchemyplatform/aa-sdk/commit/280ee4bc5f71a3f57492424df526f4313ad5afb1))
+
+## [4.66.4](https://github.com/alchemyplatform/aa-sdk/compare/v4.66.3...v4.66.4) (2025-10-01)
+
+### Bug Fixes
+
+- detect if 7702 account is delgated to unexpected addr ([#2149](https://github.com/alchemyplatform/aa-sdk/issues/2149)) ([16e1a5e](https://github.com/alchemyplatform/aa-sdk/commit/16e1a5e9611a91954d1f60415c45d4b23995e984))
+
+## [4.66.3](https://github.com/alchemyplatform/aa-sdk/compare/v4.66.2...v4.66.3) (2025-10-01)
+
+**Note:** Version bump only for package @account-kit/smart-contracts
+
+## [4.66.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.66.1...v4.66.2) (2025-09-30)
+
+**Note:** Version bump only for package @account-kit/smart-contracts
+
+## [4.66.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.66.0...v4.66.1) (2025-09-29)
+
+**Note:** Version bump only for package @account-kit/smart-contracts
+
 # [4.66.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.65.0...v4.66.0) (2025-09-29)
 
 ### Features

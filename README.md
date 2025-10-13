@@ -13,6 +13,7 @@ Account Kit packages are all prefixed with `@account-kit` are broken down into t
 1. [`@account-kit/infra`](https://github.com/alchemyplatform/aa-sdk/tree/main/account-kit/infra)
 1. [`@account-kit/signer`](https://github.com/alchemyplatform/aa-sdk/tree/main/account-kit/signer)
 1. [`@account-kit/smart-contracts`](https://github.com/alchemyplatform/aa-sdk/tree/main/account-kit/smart-contracts)
+1. [`@account-kit/privy-integration`](https://github.com/alchemyplatform/aa-sdk/tree/main/account-kit/privy-integration)
 
 ## @aa-sdk/\*
 

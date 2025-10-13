@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.68.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.67.0...v4.68.0) (2025-10-09)
+
+**Note:** Version bump only for package @account-kit/signer
+
+# [4.67.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.66.4...v4.67.0) (2025-10-06)
+
+**Note:** Version bump only for package @account-kit/signer
+
+## [4.66.4](https://github.com/alchemyplatform/aa-sdk/compare/v4.66.3...v4.66.4) (2025-10-01)
+
+**Note:** Version bump only for package @account-kit/signer
+
+## [4.66.3](https://github.com/alchemyplatform/aa-sdk/compare/v4.66.2...v4.66.3) (2025-10-01)
+
+**Note:** Version bump only for package @account-kit/signer
+
+## [4.66.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.66.1...v4.66.2) (2025-09-30)
+
+**Note:** Version bump only for package @account-kit/signer
+
+## [4.66.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.66.0...v4.66.1) (2025-09-29)
+
+**Note:** Version bump only for package @account-kit/signer
+
 # [4.66.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.65.0...v4.66.0) (2025-09-29)
 
 ### Features

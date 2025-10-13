@@ -3,6 +3,53 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.68.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.67.0...v4.68.0) (2025-10-09)
+
+### Bug Fixes
+
+- github action out of space issue ([#2166](https://github.com/alchemyplatform/aa-sdk/issues/2166)) ([0c1b48a](https://github.com/alchemyplatform/aa-sdk/commit/0c1b48a9572df3a0244976669fd82eb0da8515ba))
+
+### Features
+
+- adds an sdk to seamlessly integrate privy with Alchemy's infra ([#2154](https://github.com/alchemyplatform/aa-sdk/issues/2154)) ([46019a4](https://github.com/alchemyplatform/aa-sdk/commit/46019a442750ceb0de7cc06c8f2a9abf0145f6e7))
+- cross-chain API docs ([#2156](https://github.com/alchemyplatform/aa-sdk/issues/2156)) ([881c34d](https://github.com/alchemyplatform/aa-sdk/commit/881c34dc8627029ff87120b1fef2a766e1469e91))
+
+# [4.67.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.66.4...v4.67.0) (2025-10-06)
+
+### Bug Fixes
+
+- reduce rpc calls when using 7702 ([#2155](https://github.com/alchemyplatform/aa-sdk/issues/2155)) ([280ee4b](https://github.com/alchemyplatform/aa-sdk/commit/280ee4bc5f71a3f57492424df526f4313ad5afb1))
+
+### Features
+
+- add swap react hooks to SDKv4 ([#2148](https://github.com/alchemyplatform/aa-sdk/issues/2148)) ([427f725](https://github.com/alchemyplatform/aa-sdk/commit/427f725b55ed192f39777bdc6d3590355677e6b0))
+- remove early access swaps from docs ([#2151](https://github.com/alchemyplatform/aa-sdk/issues/2151)) ([a9e3fcd](https://github.com/alchemyplatform/aa-sdk/commit/a9e3fcd8ff44c0e021a77ef6c34058afe82cee96))
+
+## [4.66.4](https://github.com/alchemyplatform/aa-sdk/compare/v4.66.3...v4.66.4) (2025-10-01)
+
+### Bug Fixes
+
+- detect if 7702 account is delgated to unexpected addr ([#2149](https://github.com/alchemyplatform/aa-sdk/issues/2149)) ([16e1a5e](https://github.com/alchemyplatform/aa-sdk/commit/16e1a5e9611a91954d1f60415c45d4b23995e984))
+
+## [4.66.3](https://github.com/alchemyplatform/aa-sdk/compare/v4.66.2...v4.66.3) (2025-10-01)
+
+### Bug Fixes
+
+- **rn-signer:** switch back to session stamper after using passkey ([#2147](https://github.com/alchemyplatform/aa-sdk/issues/2147)) ([42e0ebf](https://github.com/alchemyplatform/aa-sdk/commit/42e0ebf1604d1aee7a14666bd54108d7d40acd62))
+
+## [4.66.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.66.1...v4.66.2) (2025-09-30)
+
+### Bug Fixes
+
+- prevent useSmartWalletClient infinite render loop if address is specified while client loading ([#2146](https://github.com/alchemyplatform/aa-sdk/issues/2146)) ([6015e46](https://github.com/alchemyplatform/aa-sdk/commit/6015e4623617bc59a2795711de9b33a20b141de2))
+- remove jq from vercel script ([#2135](https://github.com/alchemyplatform/aa-sdk/issues/2135)) ([779a681](https://github.com/alchemyplatform/aa-sdk/commit/779a681729a7d9a016579e6da9edf808ec310cb0))
+
+## [4.66.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.66.0...v4.66.1) (2025-09-29)
+
+### Bug Fixes
+
+- ensure yParity is a number ([#2132](https://github.com/alchemyplatform/aa-sdk/issues/2132)) ([fbb27f8](https://github.com/alchemyplatform/aa-sdk/commit/fbb27f8e613bed6f82facf01b63e8eebc76d54a3))
+
 # [4.66.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.65.0...v4.66.0) (2025-09-29)
 
 ### Bug Fixes

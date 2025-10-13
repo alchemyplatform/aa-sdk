@@ -1,0 +1,108 @@
+<Info>Required SDK version: ^v4.65.0 (TODO: UPDATE)</Info>
+
+<Info>
+  **Important**: Cross-chain swaps do not support `postCalls`. You cannot batch
+  additional actions after a cross-chain swap completes.
+</Info>
+
+You'll need the following env variables:
+
+- `ALCHEMY_API_KEY`: An [Alchemy API Key](https://dashboard.alchemy.com/apps)
+- `ALCHEMY_POLICY_ID`: A [Gas Manager](https://dashboard.alchemy.com/gas-manager/policy/create) policy ID
+- `PRIVATE_KEY`: A private key for a signer
+
+<CodeBlocks>
+
+```ts title="requestCrossChainQuote.ts"
+import { swapActions } from "@account-kit/wallet-client/experimental";
+import { client } from "./client";
+
+const account = await client.requestAccount();
+
+// Add the swap actions to the client
+const swapClient = client.extend(swapActions);
+
+// Request the cross-chain swap quote
+// Note: toChainId specifies the destination chain for the swap
+const { quote, callId, ...calls } = await swapClient.requestQuoteV0({
+  from: account.address,
+  toChainId: "0x...", // Destination chain ID
+  fromToken: "0x...",
+  toToken: "0x...",
+  minimumToAmount: "0x...",
+});
+
+// Display the swap quote, including the minimum amount to receive and the expiry
+console.log(quote);
+console.log(`Cross-chain swap callId: ${callId}`);
+
+// Assert that the calls are not raw calls.
+// This will always be the case when requestQuoteV0 is used without the `returnRawCalls` option,
+// the assertion is just needed for Typescript to recognize the result type.
+if (calls.rawCalls) {
+  throw new Error("Expected user operation calls");
+}
+
+// Sign the quote, getting back prepared and signed calls
+// The callId is automatically included in the signed calls
+const signedCalls = await swapClient.signPreparedCalls(calls);
+
+// Send the prepared calls
+// The callId is passed through automatically
+const { preparedCallIds } = await swapClient.sendPreparedCalls(signedCalls);
+
+// Wait for the call to resolve
+// Cross-chain swaps may take longer due to cross-chain messaging
+const callStatusResult = await swapClient.waitForCallsStatus({
+  id: preparedCallIds[0]!,
+});
+
+// Filter through success or failure cases
+// Cross-chain swaps have additional status codes:
+// - 120: Cross-Chain In Progress
+// - 410: Cross-chain Refund
+if (
+  callStatusResult.status !== "success" ||
+  !callStatusResult.receipts ||
+  !callStatusResult.receipts[0]
+) {
+  throw new Error(
+    `Cross-chain swap failed with status ${callStatusResult.status}, full receipt:\n ${JSON.stringify(callStatusResult, null, 2)}`,
+  );
+}
+
+console.log("Cross-chain swap confirmed!");
+console.log(
+  `Transaction hash: ${callStatusResult.receipts[0].transactionHash}`,
+);
+```
+
+```ts title="client.ts"
+import "dotenv/config";
+import type { Hex } from "viem";
+import { LocalAccountSigner } from "@aa-sdk/core";
+import { alchemy, sepolia } from "@account-kit/infra";
+import { createSmartWalletClient } from "@account-kit/wallet-client";
+
+const clientParams = {
+  transport: alchemy({
+    apiKey: process.env.ALCHEMY_API_KEY!,
+  }),
+  chain: sepolia,
+  signer: LocalAccountSigner.privateKeyToAccountSigner(
+    process.env.PRIVATE_KEY! as Hex,
+  ),
+  policyId: process.env.ALCHEMY_POLICY_ID!, // Optional: If you're using a gas manager policy
+};
+
+const clientWithoutAccount = createSmartWalletClient(clientParams);
+
+const account = await clientWithoutAccount.requestAccount();
+
+export const client = createSmartWalletClient({
+  ...clientParams,
+  account: account.address,
+});
+```
+
+</CodeBlocks>

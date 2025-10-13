@@ -3,6 +3,34 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.68.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.67.0...v4.68.0) (2025-10-09)
+
+**Note:** Version bump only for package @account-kit/react
+
+# [4.67.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.66.4...v4.67.0) (2025-10-06)
+
+### Features
+
+- add swap react hooks to SDKv4 ([#2148](https://github.com/alchemyplatform/aa-sdk/issues/2148)) ([427f725](https://github.com/alchemyplatform/aa-sdk/commit/427f725b55ed192f39777bdc6d3590355677e6b0))
+
+## [4.66.4](https://github.com/alchemyplatform/aa-sdk/compare/v4.66.3...v4.66.4) (2025-10-01)
+
+**Note:** Version bump only for package @account-kit/react
+
+## [4.66.3](https://github.com/alchemyplatform/aa-sdk/compare/v4.66.2...v4.66.3) (2025-10-01)
+
+**Note:** Version bump only for package @account-kit/react
+
+## [4.66.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.66.1...v4.66.2) (2025-09-30)
+
+### Bug Fixes
+
+- prevent useSmartWalletClient infinite render loop if address is specified while client loading ([#2146](https://github.com/alchemyplatform/aa-sdk/issues/2146)) ([6015e46](https://github.com/alchemyplatform/aa-sdk/commit/6015e4623617bc59a2795711de9b33a20b141de2))
+
+## [4.66.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.66.0...v4.66.1) (2025-09-29)
+
+**Note:** Version bump only for package @account-kit/react
+
 # [4.66.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.65.0...v4.66.0) (2025-09-29)
 
 ### Features
