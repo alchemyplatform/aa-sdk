@@ -43,7 +43,7 @@ import {
   getAlchemyPaymasterAddress,
 } from "../gas-manager.js";
 import type { PermitMessage, PermitDomain } from "../gas-manager.js";
-import type { MiddlewareClient } from "../../../../aa-sdk/core/dist/types/middleware/actions.js";
+import type { MiddlewareClient } from "@aa-sdk/core";
 import { InvalidSignedPermit } from "../errors/invalidSignedPermit.js";
 
 type Context = {
