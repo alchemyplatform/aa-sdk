@@ -67,9 +67,9 @@ export interface UseSendTransactionResult {
   /** Reset the hook state */
   reset(): void;
 
-  /** Send a transaction */
+  /** Send a single transaction or batch of transactions */
   sendTransaction(
-    input: UnsignedTransactionRequest,
+    input: UnsignedTransactionRequest | UnsignedTransactionRequest[],
     options?: SendTransactionOptions,
   ): Promise<SendTransactionResult>;
 }
