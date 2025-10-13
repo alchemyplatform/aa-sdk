@@ -9,7 +9,7 @@ If you're already using [Privy](https://privy.io) for authentication, this packa
 - **🔄 EIP-7702 Delegation** - Upgrade EOAs to smart accounts without migration
 - **⛽ Gas Sponsorship** - Pay gas fees for your users via Alchemy Gas Manager
 - **💱 Token Swaps** - Execute swaps through Alchemy's swap infrastructure
-- **🚀 Batched Transactions** - Send multiple operations in a single transaction
+- **🚀 Batched Transactions** - Send multiple operations in a single transaction using `sendTransaction([...])`
 
 All while keeping Privy as your authentication provider. No need to change your auth flow or migrate user accounts.
 
@@ -73,6 +73,7 @@ function SendButton() {
 
   const handleSend = async () => {
     try {
+      // Single transaction
       const result = await sendTransaction({
         to: "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
         data: "0x...",
@@ -85,10 +86,30 @@ function SendButton() {
     }
   };
 
+  const handleBatch = async () => {
+    try {
+      // Batch transactions
+      const result = await sendTransaction([
+        { to: "0x...", data: "0x...", value: "1000000000000000000" },
+        { to: "0x...", data: "0x..." },
+        { to: "0x...", data: "0x..." },
+      ]);
+
+      console.log("Batch transaction hash:", result.txnHash);
+    } catch (err) {
+      console.error("Batch transaction failed:", err);
+    }
+  };
+
   return (
-    <button onClick={handleSend} disabled={isLoading}>
-      {isLoading ? "Sending..." : "Send Transaction"}
-    </button>
+    <>
+      <button onClick={handleSend} disabled={isLoading}>
+        {isLoading ? "Sending..." : "Send Transaction"}
+      </button>
+      <button onClick={handleBatch} disabled={isLoading}>
+        {isLoading ? "Sending..." : "Send Batch"}
+      </button>
+    </>
   );
 }
 ```
@@ -185,11 +206,13 @@ await sendTransaction(
 
 #### `useAlchemySendTransaction()`
 
-Send transactions with optional gas sponsorship.
+Send single or batch transactions with optional gas sponsorship.
 
 **Returns:**
 
-- `sendTransaction(input, options?)` - Send a transaction
+- `sendTransaction(input, options?)` - Send a single transaction or batch of transactions
+  - `input` - Single `UnsignedTransactionRequest` or array of them
+  - `options` - Optional `SendTransactionOptions`
 - `isLoading` - Loading state
 - `error` - Error object if failed
 - `data` - Transaction result with `txnHash`
@@ -300,7 +323,7 @@ The API is nearly identical, making migration seamless.
 
 ### Access the Smart Wallet Client
 
-For advanced use cases, access the underlying client:
+For advanced use cases, access the underlying client directly:
 
 ```tsx
 import { useAlchemyClient } from "@account-kit/privy-integration";
@@ -314,7 +337,7 @@ function AdvancedComponent() {
     // Use any SmartWalletClient method
     const address = await client.getAddress();
 
-    // Batch multiple calls
+    // Direct access to sendCalls with full control
     await client.sendCalls({
       from: address,
       calls: [
@@ -326,6 +349,8 @@ function AdvancedComponent() {
         paymasterService: { policyId: "your-policy-id" },
       },
     });
+
+    // Note: For most cases, use useAlchemySendTransaction instead
   };
 
   return <button onClick={doAdvancedOperation}>Advanced Op</button>;
