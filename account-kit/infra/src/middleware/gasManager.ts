@@ -122,10 +122,10 @@ export function alchemyGasManagerMiddleware(
           args.context,
         );
       }
+    }
 
-      if (webhookData !== undefined) {
-        context.webhookData = webhookData;
-      }
+    if (webhookData !== undefined) {
+      context.webhookData = webhookData;
     }
 
     return context;
