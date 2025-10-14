@@ -33,7 +33,7 @@ export type SendPreparedCallsReturnType = Prettify<{
  *
  * @param {Config} config - The Wagmi config
  * @param {SendPreparedCallsParameters} parameters - Prepared calls result and optional connector
- * @returns {Promise<SendPreparedCallsReturnType>} Promise that resolves with prepared call IDs for tracking execution status
+ * @returns {Promise<SendPreparedCallsReturnType>} Promise that resolves to an object containing the call ID for tracking execution status
  * @throws {Error} Throws if the wallet is not an Alchemy smart wallet
  */
 export async function sendPreparedCalls(
@@ -67,9 +67,14 @@ export async function sendPreparedCalls(
     "sendPreparedCalls",
   );
 
-  const { preparedCallIds } = await sendPreparedCallsAction(signed);
+  const {
+    // This will only ever contain a single call ID. An upgrade is being planned to
+    // wallets apis so that `wallet_sendPreparedCalls` only returns a single ID
+    // instead of an array, to align w/ a recent change to EIP-5792.
+    preparedCallIds: [id],
+  } = await sendPreparedCallsAction(signed);
 
   return {
-    id: preparedCallIds[0],
+    id,
   };
 }

@@ -12,12 +12,12 @@ export const mergeClientCapabilities = (
   client: InnerWalletApiClient,
   capabilities: Capabilities | undefined,
 ): Capabilities | undefined => {
-  return client.policyIds?.length
+  return client.policyIds?.length && !capabilities?.paymasterService
     ? {
         ...capabilities,
         paymasterService: {
-          policyIds: client.policyIds,
           ...capabilities?.paymasterService,
+          policyIds: client.policyIds,
         },
       }
     : capabilities;

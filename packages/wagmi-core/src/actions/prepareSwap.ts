@@ -42,7 +42,7 @@ export type PrepareSwapReturnType = Prettify<
  * Prepare a token swap by requesting a quote and returning the quote and prepared calls.
  *
  * This function requests a swap quote from the wallet APIs and returns the prepared calls
- * along with quote information. The returned prepared calls can be used with `submitSwap`
+ * along with quote information. The returned prepared calls can be used with `sendPreparedCalls`
  * to execute the actual swap transaction.
  *
  * @param {Config} config - The Wagmi config

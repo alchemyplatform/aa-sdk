@@ -1,4 +1,6 @@
-// Adapted wagmi: https://github.com/wevm/wagmi/blob/9651e18c3d140e37e16dcc80aabc29624344b7c5/packages/core/src/query/utils.ts#L50
+// This entire function is pulled from Wagmi, other than the addition of `bigIntToStringRecursive`.
+// We cannot import it directly from Wagmi because it is not exported.
+// See source here: https://github.com/wevm/wagmi/blob/9651e18c3d140e37e16dcc80aabc29624344b7c5/packages/core/src/query/utils.ts#L50
 export function queryOptionsToKey<type extends Record<string, unknown>>(
   options: type,
 ): type {
