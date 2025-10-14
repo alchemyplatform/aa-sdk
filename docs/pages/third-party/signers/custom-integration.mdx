@@ -1,0 +1,185 @@
+---
+title: Custom Integration
+description: Bring your own signer to Alchemy Smart Wallets via EIP-7702
+slug: wallets/third-party/signers/custom-integration
+---
+
+If you have an existing custom signer or another third-party embedded wallet provider, you can upgrade your embedded EOAs to smart wallets by connecting your existing signer.
+This will allow you to use EIP-7702 to get features like gas sponsorship, batching, and more.
+
+<Warning>
+  **Requirement:** Your signer or embedded wallet provider must support signing
+  EIP-7702 authorizations in order to delegate to a smart account.
+</Warning>
+
+To bring your own signer, you create a `SmartAccountSigner` that implements `signAuthorization`. See the details for the interface requirements [here](/wallets/resources/types#smartaccountsigner).
+
+<Tabs>
+  <Tab title="JavaScript">
+    For example, you can upgrade an existing embedded EOA by extending a viem `WalletClient` to use your provider's EIP-7702 authorization signing.
+
+    The bulk of the logic happens in a function that returns a client. Your embedded wallet is wrapped in a `WalletClientSigner` that supports `signAuthorization`, then passed to `createSmartWalletClient` to construct a client for sending transactions.
+
+    Steps:
+
+    1. Wrap your embedded wallet with `WalletClientSigner` that implements `signAuthorization`.
+    2. Create a `SmartWalletClient` with your signer and Alchemy API key (optionally a gas `policyId`).
+    3. Send calls with `eip7702Auth: true` (and optional `paymasterService.policyId`).
+
+    <CodeBlocks>
+
+```ts twoslash title="create-smart-embedded-wallet-client.ts"
+import {
+  type Address,
+  type Authorization,
+  createWalletClient,
+  custom,
+  type EIP1193Provider,
+} from "viem";
+import { type AuthorizationRequest, WalletClientSigner } from "@aa-sdk/core";
+import { baseSepolia, alchemy } from "@account-kit/infra";
+import {
+  createSmartWalletClient,
+  type SmartWalletClient,
+} from "@account-kit/wallet-client";
+
+export type EmbeddedWallet = {
+  address: string;
+  getEthereumProvider: () => Promise<EIP1193Provider>;
+};
+
+export type SignAuthorizationFn = (
+  req: AuthorizationRequest<number> & { contractAddress?: string },
+) => Promise<{ r: string; s: string; yParity: number }>;
+
+export type CreateSmartWalletParams = {
+  embeddedWallet: EmbeddedWallet;
+  signAuthorization: SignAuthorizationFn;
+  apiKey: string;
+  policyId?: string;
+};
+
+/**
+ * Creates an Alchemy Smart Wallet client for a generic embedded wallet using EIP-7702.
+ */
+export async function createSmartEmbeddedWalletClient({
+  embeddedWallet,
+  signAuthorization,
+  apiKey,
+  policyId,
+}: CreateSmartWalletParams): Promise<SmartWalletClient> {
+  if (!apiKey) {
+    throw new Error("Missing Alchemy API key");
+  }
+  const provider = await embeddedWallet.getEthereumProvider();
+
+  const baseSigner = new WalletClientSigner(
+    createWalletClient({
+      account: embeddedWallet.address as Address,
+      chain: baseSepolia,
+      transport: custom(provider),
+    }),
+    "custom",
+  );
+
+  const signer = {
+    ...baseSigner,
+    async signAuthorization(
+      unsignedAuth: AuthorizationRequest<number>,
+    ): Promise<Authorization<number, true>> {
+      const { address, ...rest } = unsignedAuth;
+      const signature = await signAuthorization({
+        ...rest,
+        contractAddress: (address ?? rest.contractAddress) as `0x${string}`,
+      });
+
+      return {
+        ...unsignedAuth,
+        ...signature,
+      } as Authorization<number, true>;
+    },
+  };
+
+  return createSmartWalletClient({
+    chain: baseSepolia,
+    transport: alchemy({ apiKey }),
+    signer,
+    policyId,
+  });
+}
+```
+
+    </CodeBlocks>
+
+    When using the `SmartWalletClient` you must set the `eip7702Auth` capability to `true`:
+
+    <CodeBlocks>
+
+```ts twoslash title="send-with-eip7702.ts"
+import type { Address, EIP1193Provider } from "viem";
+import {
+  createSmartEmbeddedWalletClient,
+  type SignAuthorizationFn,
+} from "./getClient";
+
+async function main() {
+  const embeddedWallet =
+    /* your embedded wallet instance */ null as unknown as {
+      address: string;
+      getEthereumProvider: () => Promise<EIP1193Provider>;
+    };
+  const signAuthorization: SignAuthorizationFn =
+    /* your EIP-7702 sign function */ async () => {
+      return { r: "0x", s: "0x", yParity: 1 };
+    };
+
+  const client = await createSmartEmbeddedWalletClient({
+    embeddedWallet,
+    signAuthorization,
+    apiKey: "YOUR_ALCHEMY_API_KEY",
+    policyId: "YOUR_GAS_POLICY_ID", // Optional: for gas sponsorship
+  });
+
+  // Send transaction with EIP-7702 and optional gas sponsorship
+  const result = await client.sendCalls({
+    from: embeddedWallet.address as Address,
+    calls: [
+      {
+        to: "0x0000000000000000000000000000000000000000",
+        value: "0x0",
+        data: "0x",
+      },
+    ],
+    capabilities: {
+      eip7702Auth: true,
+      paymasterService: {
+        policyId: "YOUR_GAS_POLICY_ID",
+      },
+    },
+  });
+
+  if (!result.preparedCallIds?.length) {
+    throw new Error("No prepared call IDs returned");
+  }
+
+  // Wait for transaction confirmation
+  const txStatus = await client.waitForCallsStatus({
+    id: result.preparedCallIds[0],
+    timeout: 60_000,
+  });
+
+  const txnHash = txStatus.receipts?.[0]?.transactionHash;
+  if (!txnHash) {
+    throw new Error("Transaction hash not found in receipt");
+  }
+
+  console.log("Transaction confirmed:", txnHash);
+}
+
+main();
+```
+
+    </CodeBlocks>
+
+  </Tab>
+</Tabs>
