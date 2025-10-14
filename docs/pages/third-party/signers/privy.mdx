@@ -4,10 +4,15 @@ description: Use Privy with Alchemy Smart Wallets for EIP-7702, sponsorship, swa
 slug: wallets/third-party/signers/privy
 ---
 
-Use Privy as your authentication provider while seamlessly upgrading EOAs to Smart Wallets using EIP-7702, with optional gas sponsorship, batching, and token swaps powered by Alchemy.
+Upgrade existing Privy wallets to Smart Wallets to enable gasless transactions, batching, token swaps, and more in under 10 minutes. Keep Privy for authentication, no wallet migration needed. Add our battle-tested transaction infrastructure using EIP-7702 to upgrade EOAs to Smart Wallets:
+
+- [#1 gas abstraction infrastructure](https://www.bundlebear.com/erc4337-bundlers/all) on the market
+- [370M+](https://www.bundlebear.com/erc4337-paymasters/all) sponsored transactions
+- 99.9% SLAs
+- Trusted by Worldcoin, JP Morgan, Gensyn, and more
 
 <Tip>
-  Don't have a wallet set up yet? Start with the
+  Don't have social login or a wallet set up yet? Start with the
   <a href="/wallets/quickstart">Smart Wallet Quickstart</a> to create one in
   minutes.
 </Tip>
@@ -34,8 +39,7 @@ Use Privy as your authentication provider while seamlessly upgrading EOAs to Sma
       - Go to the [Alchemy Dashboard](https://dashboard.alchemy.com/)
       - Create or select an app and copy the API key
     - Gas sponsorship Policy ID (Gas Manager):
-      - Go to [Gas Manager](https://dashboard.alchemy.com/services/gas-manager/configuration)
-      - Create a policy and copy its Policy ID
+      - Create a gas sponsorship policy in the [dashboard](https://dashboard.alchemy.com/services/gas-manager/configuration) and copy its Policy ID
     - Privy App ID:
       - Go to the [Privy Dashboard](https://dashboard.privy.io/)
       - Create or select an app and copy the App ID
@@ -45,7 +49,7 @@ Use Privy as your authentication provider while seamlessly upgrading EOAs to Sma
       linked to the application behind your Alchemy API key for sponsorship to work.
     </Warning>
 
-    ### 1. Wrap Providers (PrivyProvider → AlchemyProvider)
+    ### 1. Add AlchemyProvider
 
     ```tsx
     import { PrivyProvider } from "@privy-io/react-auth";
