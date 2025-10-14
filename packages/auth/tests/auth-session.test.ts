@@ -321,9 +321,9 @@ describe("AuthSession", () => {
       const expirationDateMs = Date.now() + DEFAULT_SESSION_EXPIRATION_MS;
 
       // Mock the turnkey client methods
-      const mockStampCreateOauthProviders = vi.fn().mockResolvedValue({
-        stampedRequest: "stamped-create-oauth-request",
-      });
+      const mockStampCreateOauthProviders = vi
+        .fn()
+        .mockResolvedValue("stamped-create-oauth-request");
 
       const mockTurnkeyClientWithMethods = {
         ...mockTurnkeyClient,
@@ -397,9 +397,9 @@ describe("AuthSession", () => {
       const expirationDateMs = Date.now() + DEFAULT_SESSION_EXPIRATION_MS;
 
       // Mock the turnkey client methods
-      const mockStampDeleteOauthProviders = vi.fn().mockResolvedValue({
-        stampedRequest: "stamped-delete-oauth-request",
-      });
+      const mockStampDeleteOauthProviders = vi
+        .fn()
+        .mockResolvedValue("stamped-delete-oauth-request");
 
       const mockTurnkeyClientWithMethods = {
         ...mockTurnkeyClient,
