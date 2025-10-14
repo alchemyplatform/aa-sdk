@@ -4,7 +4,6 @@ import {
   type Address,
   type WalletRpcSchema,
   ProviderRpcError,
-  type Capabilities,
 } from "viem";
 import {
   AccountNotFoundError,
@@ -18,7 +17,6 @@ import type {
   SmartWalletClientEip1193Provider,
   SmartWalletClient,
 } from "./types.js";
-import type { PrepareCallsParams } from "./actions/prepareCalls.js";
 import type { WalletServerViemRpcSchema } from "@alchemy/wallet-api-types/rpc";
 import EventEmitter from "events"; // TODO(v5): do we need to polyfill this for browser?
 import { getCapabilities } from "viem/actions";
@@ -27,6 +25,7 @@ import {
   type CreateSmartWalletClientParams,
 } from "./client.js";
 import type { CreationOptions } from "@alchemy/wallet-api-types";
+import { viemDecodeCapabilities } from "./utils/viemDecode.js";
 
 export type SmartWalletClient1193Methods = [
   ExtractRpcMethod<WalletRpcSchema, "eth_chainId">,
@@ -198,7 +197,7 @@ export const createEip1193Provider = (
                 data: c.data,
                 value: c.value,
               })),
-              capabilities: transformCapabilities(capabilities),
+              capabilities: viemDecodeCapabilities(capabilities),
             });
             return {
               id: result.preparedCallIds[0],
@@ -257,27 +256,4 @@ export const createEip1193Provider = (
     removeListener: eventEmitter.removeListener.bind(eventEmitter),
     request,
   };
-};
-
-// Wallet server's `paymasterService` type is incompatible with
-// Viem's. So we can accept a custom capability property name
-// when using an Alchemy paymaster per-call policy id override,
-// in order to remain compatible with Viem's `sendCalls` action.
-const transformCapabilities = (
-  capabilities: Capabilities | undefined,
-): PrepareCallsParams["capabilities"] => {
-  if (
-    "alchemyPaymaster" in (capabilities ?? {}) &&
-    !("paymasterService" in (capabilities ?? {})) &&
-    capabilities?.alchemyPaymaster.policyId != null
-  ) {
-    const { alchemyPaymaster, ...rest } = capabilities;
-    return {
-      ...rest,
-      paymasterService: {
-        policyId: capabilities.alchemyPaymaster.policyId,
-      },
-    };
-  }
-  return capabilities;
 };

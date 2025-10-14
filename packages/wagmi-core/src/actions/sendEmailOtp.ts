@@ -26,6 +26,7 @@ export async function sendEmailOtp(
   const { connector } = resolveAlchemyAuthConnector(config);
 
   const authClient = connector.getAuthClient();
+
   await authClient.sendEmailOtp({
     email: parameters.email,
     sessionExpirationMs: parameters.sessionExpirationMs,

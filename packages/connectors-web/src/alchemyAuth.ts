@@ -434,6 +434,7 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
           account,
           transport,
           chain,
+          name: "alchemyAuthClient",
         });
 
         clients[chainId] = client;

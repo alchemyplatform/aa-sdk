@@ -1,5 +1,5 @@
 import { createConfig } from "wagmi";
-import { arbitrumSepolia, sepolia } from "wagmi/chains";
+import { arbitrum, arbitrumSepolia, sepolia } from "wagmi/chains";
 import { alchemyAuth, alchemySmartWallet } from "@alchemy/connectors-web";
 import { alchemyTransport, raise } from "@alchemy/common";
 
@@ -11,6 +11,10 @@ const policyId =
   process.env.NEXT_PUBLIC_PAYMASTER_POLICY_ID ??
   raise("NEXT_PUBLIC_PAYMASTER_POLICY_ID is not set");
 
+const transport = alchemyTransport({
+  apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY,
+});
+
 export const config = createConfig({
   connectors: [
     alchemySmartWallet({
@@ -21,14 +25,11 @@ export const config = createConfig({
       policyId,
     }),
   ],
-  chains: [arbitrumSepolia, sepolia],
+  chains: [arbitrumSepolia, sepolia, arbitrum],
   transports: {
-    [arbitrumSepolia.id]: alchemyTransport({
-      apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY,
-    }),
-    [sepolia.id]: alchemyTransport({
-      apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY,
-    }),
+    [arbitrumSepolia.id]: transport,
+    [sepolia.id]: transport,
+    [arbitrum.id]: transport,
   },
   ssr: true,
 });

@@ -1,6 +1,7 @@
-import { alchemyTransport } from "@alchemy/common";
+import { alchemyTransport, BaseError } from "@alchemy/common";
 import {
   createEip1193Provider,
+  createSmartWalletClient,
   type SmartWalletClientEip1193Provider,
 } from "@alchemy/wallet-apis";
 import { ALCHEMY_SMART_WALLET_CONNECTOR_TYPE } from "@alchemy/wagmi-core";
@@ -15,6 +16,7 @@ import {
   type ProviderConnectInfo,
   type Transport,
   type WalletClient,
+  type Client,
 } from "viem";
 import { createConnector, type CreateConnectorFn } from "wagmi";
 
@@ -100,6 +102,11 @@ export function alchemySmartWallet(
       },
     };
 
+    const transport = alchemyTransport({
+      apiKey: options.apiKey,
+      jwt: options.jwt,
+      url: options.url ?? "https://api.g.alchemy.com/v2",
+    });
     let providerPromise: Promise<SmartWalletClientEip1193Provider> | undefined;
     let currentChainId: number | undefined;
     let currentInnerAccount: Address | undefined;
@@ -108,6 +115,7 @@ export function alchemySmartWallet(
       providerPromise = undefined;
       currentChainId = undefined;
       currentInnerAccount = undefined;
+      clients = {};
     };
 
     const getSignerClient = async (
@@ -126,7 +134,7 @@ export function alchemySmartWallet(
       }
       const innerAccounts = await innerConnector.getAccounts();
       if (innerAccounts.length === 0) {
-        throw new Error("No accounts found in base connector");
+        throw new BaseError("No accounts found in base connector");
       }
       const signerAddress = innerAccounts[0];
       const provider = (await innerConnector.getProvider()) as EIP1193Provider;
@@ -147,11 +155,7 @@ export function alchemySmartWallet(
         return createEip1193Provider(
           {
             signer,
-            transport: alchemyTransport({
-              apiKey: options.apiKey,
-              jwt: options.jwt,
-              url: options.url ?? "https://api.g.alchemy.com/v2",
-            }),
+            transport,
             chain,
             policyId: options.policyId,
             policyIds: options.policyIds,
@@ -169,7 +173,7 @@ export function alchemySmartWallet(
       const provider = await providerPromise;
       const innerAccounts = await innerConnector.getAccounts();
       if (innerAccounts.length === 0) {
-        throw new Error("No accounts found in owner connector");
+        throw new BaseError("No accounts found in owner connector");
       }
       const chainId = await provider.request({ method: "eth_chainId" });
       currentChainId = +chainId;
@@ -281,6 +285,9 @@ export function alchemySmartWallet(
       outerHandleChange(event as any as ChangeEvent);
     });
 
+    // Cache clients by chainId to avoid recreating them unnecessarily.
+    let clients: Record<number, Client> = {};
+
     return {
       id: `alchemySmartWallet:${innerConnector.id}`,
       name: "Alchemy Smart Wallet",
@@ -310,6 +317,34 @@ export function alchemySmartWallet(
       async getProvider(): Promise<Provider> {
         const provider = await getProviderIfConnected();
         return provider ?? loggedOutProvider;
+      },
+
+      // We need to implement this so that we can check if the client is an alchemy smart
+      // wallet client, otherwise wagmi will init clients w/ the name "Connector Client",
+      // then we have no way to check in wagmi actions if it's an alchemy smart wallet
+      // client or not. It's also necessary to call certain client actions that are
+      // not implemented on the provider (i.e. `prepareCalls` & `signPreparedCalls`).
+      async getClient() {
+        if (!currentChainId) {
+          throw new BaseError("No chain ID set");
+        }
+
+        if (clients[currentChainId]) {
+          return clients[currentChainId];
+        }
+
+        const [account] = await getAccounts();
+        const chain = getChainFromConfig(config, currentChainId);
+        const client = createSmartWalletClient({
+          account,
+          chain,
+          transport,
+          signer: await getSignerClient(chain),
+          policyId: options.policyId,
+          policyIds: options.policyIds,
+        });
+        clients[currentChainId] = client;
+        return client;
       },
 
       async isAuthorized(): Promise<boolean> {
@@ -348,11 +383,11 @@ function getChainFromConfig(
   chainId: number,
 ): Chain {
   if (chains.length === 0) {
-    throw new Error("Config must contain at least one chain");
+    throw new BaseError("Config must contain at least one chain");
   }
   const chain = chains.find((chain) => chain.id === chainId);
   if (!chain) {
-    throw new Error(`Chain with id ${chainId} not found in config`);
+    throw new BaseError(`Chain with id ${chainId} not found in config`);
   }
   return chain;
 }

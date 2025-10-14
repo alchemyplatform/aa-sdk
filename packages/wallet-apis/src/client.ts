@@ -64,6 +64,7 @@ export const createSmartWalletClient = <
     account,
     transport,
     chain,
+    name: "alchemySmartWalletClient",
   })
     .extend(() => ({
       policyIds: _policyIds,
