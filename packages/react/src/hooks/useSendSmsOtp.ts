@@ -46,7 +46,7 @@ export type UseSendSmsOtpReturnType = UseMutationReturnType<
  * This hook wraps the `sendSmsOtp` action with React Query mutation functionality,
  * providing loading states, error handling, and mutation management for the SMS OTP flow.
  *
- * Phone number must include country code (e.g., "+12025551234").
+ * Phone number must include country code (e.g., "+15551234567").
  *
  * @param {UseSendSmsOtpParameters} parameters - Configuration options for the hook
  * @param {Config} [parameters.config] - Optional wagmi config override
@@ -76,7 +76,7 @@ export type UseSendSmsOtpReturnType = UseMutationReturnType<
  *   const { sendSmsOtp, isPending, error } = useSendSmsOtp();
  *
  *   const handleSendOtp = () => {
- *     sendSmsOtp({ phoneNumber: '+12025551234' });
+ *     sendSmsOtp({ phoneNumber: '+15551234567' });
  *   };
  *
  *   return (

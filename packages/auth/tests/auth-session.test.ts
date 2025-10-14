@@ -238,7 +238,7 @@ describe("AuthSession", () => {
 
     describe("sendPhoneVerificationCode", () => {
       it("should send verification code to phone number", async () => {
-        const phoneNumber = "+12025551234";
+        const phoneNumber = "+15551234567";
 
         vi.mocked(mockSignerHttpClient.request).mockResolvedValue({
           otpId: "test-otp-id",
@@ -258,14 +258,14 @@ describe("AuthSession", () => {
         authSession.disconnect();
 
         await expect(
-          authSession.sendPhoneVerificationCode("+12025551234"),
+          authSession.sendPhoneVerificationCode("+15551234567"),
         ).rejects.toThrow("Auth session has been disconnected");
       });
     });
 
     describe("setPhoneNumber", () => {
       it("should set phone number with valid verification", async () => {
-        const phoneNumber = "+12025551234";
+        const phoneNumber = "+15551234567";
         const otpId = "test-otp-id";
         const verificationCode = "123456";
         const verificationToken = `header.${btoa(JSON.stringify({ contact: phoneNumber }))}.signature`;
@@ -330,7 +330,7 @@ describe("AuthSession", () => {
     describe("removePhoneNumber", () => {
       it("should remove phone number from user", async () => {
         // Set initial phone number
-        (authSession as any).user = { ...mockUser, phone: "+12025551234" };
+        (authSession as any).user = { ...mockUser, phone: "+15551234567" };
 
         vi.mocked(mockSignerHttpClient.request).mockImplementation(
           async (params) => {

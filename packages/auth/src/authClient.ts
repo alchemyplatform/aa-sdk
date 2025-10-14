@@ -54,7 +54,7 @@ export type SendEmailOtpParams = {
  * Parameters for sending an SMS OTP (One-Time Password)
  */
 export type SendSmsOtpParams = {
-  /** Phone number with country code (e.g., "+12025551234") */
+  /** Phone number with country code (e.g., "+15551234567") */
   phoneNumber: string;
   /** Length of the session in milliseconds. Defaults to 15 minutes. */
   sessionExpirationMs?: number;
@@ -205,7 +205,7 @@ export class AuthClient {
    * Sends an OTP (One-Time Password) to the specified phone number via SMS.
    * The OTP will be sent to the user's phone and can be submitted using submitOtpCode().
    *
-   * Phone number must include country code (e.g., "+12025551234").
+   * Phone number must include country code (e.g., "+15551234567").
    *
    * @param {SendSmsOtpParams} params - Parameters for sending the SMS OTP
    * @param {string} params.phoneNumber - Phone number with country code to send the OTP to
@@ -214,7 +214,7 @@ export class AuthClient {
    *
    * @example
    * ```ts twoslash
-   * await authClient.sendSmsOtp({ phoneNumber: "+12025551234" });
+   * await authClient.sendSmsOtp({ phoneNumber: "+15551234567" });
    * // User will receive an OTP code via SMS
    * ```
    */
@@ -264,7 +264,7 @@ export class AuthClient {
    *
    * @example
    * ```ts twoslash
-   * const user = await authClient.lookupUserByPhone("+12025551234");
+   * const user = await authClient.lookupUserByPhone("+15551234567");
    * if (user) {
    *   console.log("User exists with orgId:", user.orgId);
    * } else {
@@ -301,7 +301,7 @@ export class AuthClient {
    * // First send OTP via email
    * await authClient.sendEmailOtp({ email: "user@example.com" });
    * // OR send OTP via SMS
-   * await authClient.sendSmsOtp({ phoneNumber: "+12025551234" });
+   * await authClient.sendSmsOtp({ phoneNumber: "+15551234567" });
    *
    * // Then submit the code received
    * const authSession = await authClient.submitOtpCode({ otpCode: "123456" });

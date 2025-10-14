@@ -370,7 +370,7 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
       <h2>SMS Authentication</h2>
 
       <form id="phone-form">
-        <input type="tel" id="phone-input" placeholder="+12025551234" required autocomplete="off" data-1p-ignore />
+        <input type="tel" id="phone-input" placeholder="+15551234567" required autocomplete="off" data-1p-ignore />
         <button id="lookup-phone" type="button">Lookup</button>
         <button id="send-sms-otp" type="submit">Send SMS OTP</button>
       </form>

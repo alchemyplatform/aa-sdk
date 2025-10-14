@@ -8,7 +8,7 @@ slug: wallets/reference/alchemy/signer/classes/AuthClient/sendSmsOtp
 Sends an OTP (One-Time Password) to the specified phone number via SMS.
 The OTP will be sent to the user's phone and can be submitted using submitOtpCode().
 
-Phone number must include country code (e.g., "+12025551234").
+Phone number must include country code (e.g., "+15551234567").
 
 ## Import
 
@@ -19,7 +19,7 @@ import { AuthClient } from "@alchemy/auth";
 ## Usage
 
 ```ts twoslash
-await authClient.sendSmsOtp({ phoneNumber: "+12025551234" });
+await authClient.sendSmsOtp({ phoneNumber: "+15551234567" });
 // User will receive an OTP code via SMS
 ```
 

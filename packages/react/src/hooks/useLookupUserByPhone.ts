@@ -86,7 +86,7 @@ export type UseLookupUserByPhoneReturnType = UseMutationReturnType<
  *   const { lookupUserByPhone, data, isPending } = useLookupUserByPhone();
  *
  *   const handleLookup = () => {
- *     lookupUserByPhone({ phoneNumber: '+12025551234' });
+ *     lookupUserByPhone({ phoneNumber: '+15551234567' });
  *   };
  *
  *   return (

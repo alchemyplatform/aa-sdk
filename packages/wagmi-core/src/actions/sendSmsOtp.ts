@@ -2,7 +2,7 @@ import { type Config } from "@wagmi/core";
 import { resolveAlchemyAuthConnector } from "../utils/resolveAuthConnector.js";
 
 export type SendSmsOtpParameters = {
-  /** The user's phone number with country code (e.g., "+12025551234") */
+  /** The user's phone number with country code (e.g., "+15551234567") */
   phoneNumber: string;
   /** The length of the session in milliseconds. Defaults to 15 minutes. */
   sessionExpirationMs?: number;
@@ -13,7 +13,7 @@ export type SendSmsOtpReturnType = void;
 /**
  * Phase 1 of 2 of SMS OTP auth — request an OTP to be sent to the provided phone number.
  *
- * Phone number must include country code (e.g., "+12025551234").
+ * Phone number must include country code (e.g., "+15551234567").
  *
  * @param {Config} config - The shared Wagmi/Alchemy config
  * @param {SendSmsOtpParameters} parameters - Parameters for the OTP request

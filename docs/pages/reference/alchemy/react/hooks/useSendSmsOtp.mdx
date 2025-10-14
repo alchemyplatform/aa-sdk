@@ -10,7 +10,7 @@ React hook for phase 1 of SMS OTP authentication - sends an OTP code to the user
 This hook wraps the `sendSmsOtp` action with React Query mutation functionality,
 providing loading states, error handling, and mutation management for the SMS OTP flow.
 
-Phone number must include country code (e.g., "+12025551234").
+Phone number must include country code (e.g., "+15551234567").
 
 ## Import
 
@@ -27,7 +27,7 @@ function LoginForm() {
   const { sendSmsOtp, isPending, error } = useSendSmsOtp();
 
   const handleSendOtp = () => {
-    sendSmsOtp({ phoneNumber: "+12025551234" });
+    sendSmsOtp({ phoneNumber: "+15551234567" });
   };
 
   return (

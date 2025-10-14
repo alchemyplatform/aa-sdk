@@ -384,13 +384,13 @@ export class AuthSession {
    *
    * The OTP will be sent via SMS to the provided phone number.
    *
-   * @param {string} phoneNumber - Phone number with country code (e.g., "+12025551234")
+   * @param {string} phoneNumber - Phone number with country code (e.g., "+15551234567")
    * @returns {Promise<{ otpId: string }>} OTP ID to use with setPhoneNumber
    * @throws {Error} If the OTP request fails
    *
    * @example
    * ```ts
-   * const { otpId } = await authSession.sendPhoneVerificationCode("+12025551234");
+   * const { otpId } = await authSession.sendPhoneVerificationCode("+15551234567");
    * // User receives SMS with code
    * const code = prompt("Enter code from SMS:");
    * await authSession.setPhoneNumber({ otpId, verificationCode: code });
@@ -425,7 +425,7 @@ export class AuthSession {
    *
    * @example
    * ```ts
-   * const { otpId } = await authSession.sendPhoneVerificationCode("+12025551234");
+   * const { otpId } = await authSession.sendPhoneVerificationCode("+15551234567");
    * const code = "123456"; // Code from SMS
    * await authSession.setPhoneNumber({ otpId, verificationCode: code });
    * ```

@@ -216,7 +216,7 @@ const SmsAuthDemo = () => {
           className="cursor-pointer rounded bg-green-500 px-4 py-2 font-bold text-white hover:bg-green-700"
           onClick={async () => {
             const phoneNumber = prompt(
-              "Enter your phone number (E.164 format, e.g., +12025551234):",
+              "Enter your phone number (E.164 format, e.g., +15551234567):",
             );
             if (!phoneNumber) {
               return;
@@ -254,7 +254,7 @@ const SmsAuthDemo = () => {
         )}
       </div>
       <p className="text-xs text-gray-500 max-w-md text-center">
-        Phone number must include country code (e.g., +12025551234)
+        Phone number must include country code (e.g., +15551234567)
       </p>
     </div>
   );

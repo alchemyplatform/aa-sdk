@@ -413,7 +413,7 @@ describe("AuthClient", () => {
 
   describe("sendSmsOtp", () => {
     it("should send SMS OTP to new phone (signup flow)", async () => {
-      const phoneNumber = "+12025551234";
+      const phoneNumber = "+15551234567";
       const targetPublicKey = "mock-public-key";
 
       vi.mocked(mockSignerHttpClient.request).mockImplementation(
@@ -444,7 +444,7 @@ describe("AuthClient", () => {
     });
 
     it("should send SMS OTP to existing phone (auth flow)", async () => {
-      const phoneNumber = "+12025551234";
+      const phoneNumber = "+15551234567";
       const targetPublicKey = "mock-public-key";
 
       vi.mocked(mockSignerHttpClient.request).mockImplementation(
@@ -475,7 +475,7 @@ describe("AuthClient", () => {
     });
 
     it("should use custom session expiration for SMS", async () => {
-      const phoneNumber = "+12025551234";
+      const phoneNumber = "+15551234567";
       const customExpiration = 30 * 60 * 1000; // 30 minutes
 
       vi.mocked(mockSignerHttpClient.request).mockImplementation(
@@ -501,7 +501,7 @@ describe("AuthClient", () => {
 
   describe("lookupUserByPhone", () => {
     it("should return orgId for registered phone", async () => {
-      const phoneNumber = "+12025551234";
+      const phoneNumber = "+15551234567";
 
       vi.mocked(mockSignerHttpClient.request).mockImplementation(
         async (params) => {

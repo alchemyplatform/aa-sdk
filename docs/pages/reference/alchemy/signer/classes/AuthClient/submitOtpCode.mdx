@@ -20,7 +20,7 @@ import { AuthClient } from "@alchemy/auth";
 // First send OTP via email
 await authClient.sendEmailOtp({ email: "user@example.com" });
 // OR send OTP via SMS
-await authClient.sendSmsOtp({ phoneNumber: "+12025551234" });
+await authClient.sendSmsOtp({ phoneNumber: "+15551234567" });
 
 // Then submit the code received
 const authSession = await authClient.submitOtpCode({ otpCode: "123456" });
