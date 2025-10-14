@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.70.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.70.0...v4.70.1) (2025-10-14)
+
+### Bug Fixes
+
+- bump axios version ([#2183](https://github.com/alchemyplatform/aa-sdk/issues/2183)) ([d0b05cf](https://github.com/alchemyplatform/aa-sdk/commit/d0b05cf4d7c7ec378abceaeb1afee466d6ef4f8f))
+
 # [4.70.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.69.0...v4.70.0) (2025-10-13)
 
 ### Bug Fixes

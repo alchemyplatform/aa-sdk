@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.70.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.70.0...v4.70.1) (2025-10-14)
+
+**Note:** Version bump only for package @account-kit/react
+
 # [4.70.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.69.0...v4.70.0) (2025-10-13)
 
 ### Bug Fixes
