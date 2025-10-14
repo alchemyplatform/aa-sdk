@@ -91,6 +91,7 @@ export type CreateWebAuthnStamperParams = {
 
 export type CredentialCreationOptionOverrides = {
   publicKey?: Partial<CredentialCreationOptions["publicKey"]>;
+  username?: string;
 } & Pick<CredentialCreationOptions, "signal">;
 
 export type GetWebAuthnAttestationParams = {

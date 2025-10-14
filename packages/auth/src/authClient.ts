@@ -385,7 +385,7 @@ export class AuthClient {
           passkey: {
             challenge: base64UrlEncode(attestation.challenge),
             attestation: attestation.attestation,
-          } as any, // TO DO: remove use of as any!!
+          },
           email: params?.email,
         },
       });
@@ -483,7 +483,7 @@ export class AuthClient {
     const parsedState: AuthSessionState = this.deserializeState(state);
 
     const { type, expirationDateMs, user } = parsedState;
-    if (expirationDateMs < Date.now()) {
+    if (expirationDateMs != null && expirationDateMs < Date.now()) {
       return undefined;
     }
     if (type === "passkey") {

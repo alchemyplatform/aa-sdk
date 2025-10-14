@@ -460,7 +460,7 @@ export class AuthSession {
 
     const { attestation, challenge } = await getWebAuthnAttestationInternal(
       {
-        username: this.user.email || "TO DO: anonymous",
+        username: params?.username || this.user.email || "Passkey",
       },
       params,
     );
@@ -589,7 +589,6 @@ export class AuthSession {
     }
   }
 
-  // eslint-disable-next-line eslint-rules/require-jsdoc-on-reexported-functions
   private pollActivityCompletion = async <
     T extends keyof Awaited<
       ReturnType<(typeof this.turnkey)["getActivity"]>
