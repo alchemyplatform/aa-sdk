@@ -219,7 +219,15 @@ export type SignerHttpSchema = [
     Route: "signer/v1/signup";
     Method: "POST";
     Body: {
-      passkey?: PublicKeyCredential;
+      passkey?: {
+        challenge: string;
+        attestation: {
+          credentialId: string;
+          clientDataJson: string;
+          attestationObject: string;
+          transports: string[];
+        };
+      };
       email?: string;
       emailMode?: "magicLink" | "otp";
       phone?: string;
