@@ -4,6 +4,32 @@ description:
 slug: wallets/recipes/sample-apps/social-payments-and-defi
 ---
 
-ChainMoney is a complete social payments and defi app you can [download from Github](https://github.com/alchemyplatform/chain-money-demo). It shows how to:
+Below you will find two versions of a demo social payments and defi application called **ChainMoney**.
 
-https://chain-money-demo-theta.vercel.app/
+Both versions of this application allow you to signup with email, send money to people by username, and earn yield on your balance.
+
+![ChainMoney](/images/wallets/chain-money.png)
+
+The first version below uses smart wallet react hooks and built-in auth components while the second uses Wallet APIs to do everything on the backend.
+
+Both will have a live URL you can demo it, as well as a github URL to check out the code and try it yourself!
+
+## ChainMoney using AccountKit
+
+This version of the ChainMoney demo app uses our [react hooks](/docs/wallets/reference/account-kit/react) and built-in auth components.
+
+You can try our hosted demo below or head over to the github repository to see how it works in greater detail.
+
+- **Hosted Demo**: https://chain-money-account-kit.vercel.app/
+- **Github**: https://github.com/alchemyplatform/chain-money-account-kit
+
+## ChainMoney using Wallet APIs
+
+This version of the ChainMoney demo app uses our [wallet APIs](/docs/wallets/api-reference/smart-wallets/wallet-api-endpoints/wallet-api-endpoints/wallet-request-account) on the backend.
+
+As opposed to the above example, this application uses [supabase auth](https://supabase.com/docs/guides/auth) though you can choose to replace this with any auth system of your choice!
+
+In addition, this implementation requires the developer to mantain their own security model through the management of a private key (or alternatively, several private keys) that [controls access to user accounts](https://github.com/alchemyplatform/chain-money-wallet-apis/blob/4b563fbbaebc6558aa65afbd588fb3e6699e6c2b/lib/wallet-service.ts#L123-L134).
+
+- **Hosted Demo**: https://chain-money-demo-theta.vercel.app/
+- **Github**: https://github.com/alchemyplatform/chain-money-wallet-apis

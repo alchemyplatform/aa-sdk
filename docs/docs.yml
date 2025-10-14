@@ -93,7 +93,7 @@ navigation:
                 contents:
                   - page: Social Payments and Defi
                     slug: recipes/sample-apps/social-payments-and-defi
-                    path: pages/recipes/sample-apps/social-payments-and-defi.mdx
+                    path: wallets/pages/recipes/sample-apps/social-payments-and-defi.mdx
           - page: Supported Chains
             path: wallets/pages/overview/supported-chains.mdx
 
