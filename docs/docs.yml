@@ -89,6 +89,11 @@ navigation:
                 path: wallets/pages/recipes/multi-chain-setup.mdx
               - link: Multi-chain Balances
                 href: https://www.alchemy.com/docs/how-to-get-crosschain-token-balances
+              - section: Sample apps
+                contents:
+                  - page: Social Payments and Defi
+                    slug: recipes/sample-apps/social-payments-and-defi
+                    path: wallets/pages/recipes/sample-apps/social-payments-and-defi.mdx
           - page: Supported Chains
             path: wallets/pages/overview/supported-chains.mdx
 
@@ -180,8 +185,12 @@ navigation:
                 path: wallets/pages/smart-contracts/modular-account-v2/managing-ownership.mdx
               - page: Export private key
                 path: wallets/pages/signer/export-private-key.mdx
-          - page: Third party signers
-            path: wallets/pages/third-party/signers.mdx
+          - section: Third party signers
+            contents:
+              - page: Privy
+                path: wallets/pages/third-party/signers/privy.mdx
+              - page: Custom integration
+                path: wallets/pages/third-party/signers/custom-integration.mdx
           - page: What is a signer?
             path: wallets/pages/authentication/what-is-a-signer.mdx
 
