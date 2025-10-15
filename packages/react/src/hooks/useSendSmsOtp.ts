@@ -1,29 +1,18 @@
 "use client";
 
-import type { MutateOptions } from "@tanstack/query-core";
 import { useMutation } from "@tanstack/react-query";
 import type { UseMutationParameters, UseMutationReturnType } from "wagmi/query";
 import { useConfig } from "wagmi";
 import {
-  sendSmsOtp,
   type SendSmsOtpParameters,
   type SendSmsOtpReturnType,
 } from "@alchemy/wagmi-core";
 import type { ConfigParameter } from "../types";
-
-type SendSmsOtpMutate = (
-  variables: SendSmsOtpParameters,
-  options?:
-    | MutateOptions<SendSmsOtpReturnType, Error, SendSmsOtpParameters>
-    | undefined,
-) => void;
-
-type SendSmsOtpMutateAsync = (
-  variables: SendSmsOtpParameters,
-  options?:
-    | MutateOptions<SendSmsOtpReturnType, Error, SendSmsOtpParameters>
-    | undefined,
-) => Promise<SendSmsOtpReturnType>;
+import {
+  sendSmsOtpMutationOptions,
+  type SendSmsOtpMutate,
+  type SendSmsOtpMutateAsync,
+} from "../query/sendSmsOtp.js";
 
 export type UseSendSmsOtpParameters = ConfigParameter & {
   mutation?:
@@ -94,12 +83,11 @@ export function useSendSmsOtp(
 
   const config = useConfig(parameters);
 
+  const mutationOptions = sendSmsOtpMutationOptions(config);
+
   const { mutate, mutateAsync, ...result } = useMutation({
     ...mutation,
-    mutationKey: ["sendSmsOtp"],
-    mutationFn: (variables) => {
-      return sendSmsOtp(config, variables);
-    },
+    ...mutationOptions,
   });
 
   return {
