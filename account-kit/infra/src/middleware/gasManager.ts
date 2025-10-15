@@ -46,13 +46,14 @@ import type { PermitMessage, PermitDomain } from "../gas-manager.js";
 import type { MiddlewareClient } from "@aa-sdk/core";
 import { InvalidSignedPermit } from "../errors/invalidSignedPermit.js";
 
-type Context = {
+export type PaymasterContext = {
   policyId: string | string[];
   erc20Context?: {
     tokenAddress: Address;
     maxTokenAmount?: bigint;
     permit?: Hex;
   };
+  webhookData?: string;
 };
 
 export type PolicyToken = {
@@ -85,18 +86,20 @@ export type PolicyToken = {
  *
  * @param {string | string[]} policyId - The policyId (or list of policyIds) for Alchemy's gas manager
  * @param {PolicyToken | undefined} policyToken - The policy token configuration
+ * @param {string | undefined} webhookData - The webhook data to include in the request
  * @returns {Pick<ClientMiddlewareConfig, "dummyPaymasterAndData" | "paymasterAndData">} Partial client middleware configuration containing `dummyPaymasterAndData` and `paymasterAndData`
  */
 export function alchemyGasManagerMiddleware(
   policyId: string | string[],
   policyToken?: PolicyToken,
+  webhookData?: string,
 ): Required<
   Pick<ClientMiddlewareConfig, "dummyPaymasterAndData" | "paymasterAndData">
 > {
   const buildContext = async (
     args: Parameters<ClientMiddlewareFn>[1],
-  ): Promise<Context> => {
-    const context: Context = { policyId };
+  ): Promise<PaymasterContext> => {
+    const context: PaymasterContext = { policyId };
 
     const { account, client } = args;
     if (!client.chain) {
@@ -121,6 +124,10 @@ export function alchemyGasManagerMiddleware(
       }
     }
 
+    if (webhookData !== undefined) {
+      context.webhookData = webhookData;
+    }
+
     return context;
   };
   return {
@@ -141,6 +148,7 @@ export function alchemyGasManagerMiddleware(
 interface AlchemyGasAndPaymasterAndDataMiddlewareParams {
   policyId: string | string[];
   policyToken?: PolicyToken;
+  webhookData?: string;
   transport: AlchemyTransport;
   gasEstimatorOverride?: ClientMiddlewareFn;
   feeEstimatorOverride?: ClientMiddlewareFn;
@@ -185,6 +193,7 @@ export function alchemyGasAndPaymasterAndDataMiddleware(
     policyId,
     policyToken,
     transport,
+    webhookData,
     gasEstimatorOverride,
     feeEstimatorOverride,
   } = params;
@@ -204,6 +213,7 @@ export function alchemyGasAndPaymasterAndDataMiddleware(
       return alchemyGasManagerMiddleware(
         policyId,
         policyToken,
+        webhookData,
       ).dummyPaymasterAndData(uo, args);
     },
     feeEstimator: (uo, args) => {
@@ -316,6 +326,7 @@ export function alchemyGasAndPaymasterAndDataMiddleware(
             userOperation: userOp,
             dummySignature: await account.getDummySignature(),
             overrides,
+            webhookData,
             ...(erc20Context
               ? {
                   erc20Context,
