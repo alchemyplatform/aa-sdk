@@ -18,12 +18,15 @@ import {
   useWaitForCallsStatus,
 } from "wagmi";
 import {
+  usePrepareCalls,
+  usePrepareSwap,
   useSendEmailOtp,
   useSendSmsOtp,
   useLookupUserByPhone,
+  useSendPreparedCalls,
   useSubmitOtpCode,
 } from "@alchemy/react";
-import { zeroAddress } from "viem";
+import { zeroAddress, Address } from "viem";
 import { useState } from "react";
 
 export default function Home() {
@@ -78,6 +81,8 @@ export default function Home() {
           <SigningDemo />
           <SendCallsDemo />
           <SendTransactionDemo />
+          <SwapDemoWrapper />
+          <PrepareAndSendCallsDemoWrapper />
           <CapabilitiesDemo />
         </>
       )}
@@ -454,6 +459,147 @@ const SendTransactionDemo = () => {
       {sendTransactionError && (
         <p className="break-all max-w-xl">
           Error sending transaction: {JSON.stringify(sendTransactionError)}
+        </p>
+      )}
+    </div>
+  );
+};
+
+const USDC_ARB = "0xaf88d065e77c8cc2239327c5edb3a432268e5831" as const;
+const DAI_ARB = "0xda10009cbd5d07dd0cecc66161fc93d7c9000da1" as const;
+
+const SwapDemoWrapper = () => {
+  const [fromAmount, setFromAmount] = useState<bigint | undefined>(undefined);
+
+  return fromAmount ? (
+    <SwapDemo fromAmount={fromAmount} fromToken={USDC_ARB} toToken={DAI_ARB} />
+  ) : (
+    <button
+      onClick={() => {
+        const amount = prompt("Enter from amount (in base units):");
+        if (!amount) {
+          return;
+        }
+        setFromAmount(BigInt(amount));
+      }}
+      className="cursor-pointer rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 text-sm"
+    >
+      Prepare Swap
+    </button>
+  );
+};
+
+const SwapDemo = ({
+  fromToken,
+  toToken,
+  fromAmount,
+}: {
+  fromToken: Address;
+  toToken: Address;
+  fromAmount: bigint;
+}) => {
+  const {
+    data: preparedSwap,
+    error: prepareSwapError,
+    isFetching,
+  } = usePrepareSwap({
+    fromToken,
+    toToken,
+    fromAmount,
+  });
+
+  console.log({ preparedSwap, prepareSwapError });
+
+  const {
+    sendPreparedCalls,
+    data: submitSwapResult,
+    error: submitSwapError,
+    isPending,
+  } = useSendPreparedCalls();
+
+  return (
+    <div className="flex flex-col gap-2 items-center">
+      {preparedSwap && "Swap prepared! (see console)"}
+      {prepareSwapError && `Error preparing swap (see console)`}
+      <button
+        disabled={!preparedSwap || isFetching || isPending}
+        onClick={() => {
+          if (!preparedSwap) {
+            return;
+          }
+          sendPreparedCalls(preparedSwap);
+        }}
+        className="cursor-pointer rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 text-sm"
+      >
+        Execute swap
+      </button>
+      {submitSwapResult && (
+        <p className="break-all max-w-xl">Calls sent: {submitSwapResult.id}</p>
+      )}
+      {submitSwapError && (
+        <p className="break-all max-w-xl">
+          Error sending calls: {JSON.stringify(submitSwapError)}
+        </p>
+      )}
+    </div>
+  );
+};
+
+const PrepareAndSendCallsDemoWrapper = () => {
+  const [isEnabled, setIsEnabled] = useState<boolean>(false);
+
+  return isEnabled ? (
+    <PrepareAndSendCallsDemo />
+  ) : (
+    <button
+      onClick={() => setIsEnabled(true)}
+      className="cursor-pointer rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 text-sm"
+    >
+      Prepare calls
+    </button>
+  );
+};
+
+const PrepareAndSendCallsDemo = () => {
+  const {
+    data: preparedCalls,
+    error: prepareCallsError,
+    isFetching,
+  } = usePrepareCalls({
+    calls: [{ to: zeroAddress, data: "0x" }],
+  });
+
+  console.log({ preparedCalls, prepareCallsError });
+
+  const {
+    sendPreparedCalls,
+    data: sendCallsResult,
+    error: sendCallsError,
+    isPending,
+  } = useSendPreparedCalls();
+
+  return (
+    <div className="flex flex-col gap-2 items-center">
+      {preparedCalls && "Calls prepared! (see console)"}
+      {prepareCallsError && `Error preparing calls (see console)`}
+      <button
+        disabled={!preparedCalls || isFetching || isPending}
+        onClick={() => {
+          if (!preparedCalls) {
+            return;
+          }
+          sendPreparedCalls(preparedCalls);
+        }}
+        className="cursor-pointer rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 text-sm"
+      >
+        Send Calls
+      </button>
+      {sendCallsResult && (
+        <p className="break-all max-w-xl">Calls sent: {sendCallsResult.id}</p>
+      )}
+      {sendCallsError && (
+        <p className="break-all max-w-xl">
+          Error sending calls: {JSON.stringify(sendCallsError)}
         </p>
       )}
     </div>

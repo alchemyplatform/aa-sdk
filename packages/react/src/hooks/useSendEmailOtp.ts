@@ -1,29 +1,18 @@
 "use client";
 
-import type { MutateOptions } from "@tanstack/query-core";
 import { useMutation } from "@tanstack/react-query";
 import type { UseMutationParameters, UseMutationReturnType } from "wagmi/query";
 import { useConfig } from "wagmi";
 import {
-  sendEmailOtp,
   type SendEmailOtpParameters,
   type SendEmailOtpReturnType,
 } from "@alchemy/wagmi-core";
 import type { ConfigParameter } from "../types";
-
-type SendEmailOtpMutate = (
-  variables: SendEmailOtpParameters,
-  options?:
-    | MutateOptions<SendEmailOtpReturnType, Error, SendEmailOtpParameters>
-    | undefined,
-) => void;
-
-type SendEmailOtpMutateAsync = (
-  variables: SendEmailOtpParameters,
-  options?:
-    | MutateOptions<SendEmailOtpReturnType, Error, SendEmailOtpParameters>
-    | undefined,
-) => Promise<SendEmailOtpReturnType>;
+import {
+  sendEmailOtpMutationOptions,
+  type SendEmailOtpMutate,
+  type SendEmailOtpMutateAsync,
+} from "../query/sendEmailOtp.js";
 
 export type UseSendEmailOtpParameters = ConfigParameter & {
   mutation?:
@@ -96,12 +85,11 @@ export function useSendEmailOtp(
 
   const config = useConfig(parameters);
 
+  const mutationOptions = sendEmailOtpMutationOptions(config);
+
   const { mutate, mutateAsync, ...result } = useMutation({
     ...mutation,
-    mutationKey: ["sendEmailOtp"],
-    mutationFn: (variables) => {
-      return sendEmailOtp(config, variables);
-    },
+    ...mutationOptions,
   });
 
   return {

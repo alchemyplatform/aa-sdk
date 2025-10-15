@@ -1,29 +1,18 @@
 "use client";
 
-import type { MutateOptions } from "@tanstack/query-core";
 import { useMutation } from "@tanstack/react-query";
 import type { UseMutationParameters, UseMutationReturnType } from "wagmi/query";
 import { useConfig } from "wagmi";
 import {
-  submitOtpCode,
   type SubmitOtpCodeParameters,
   type SubmitOtpCodeReturnType,
 } from "@alchemy/wagmi-core";
 import type { ConfigParameter } from "../types";
-
-type SubmitOtpCodeMutate = (
-  variables: SubmitOtpCodeParameters,
-  options?:
-    | MutateOptions<SubmitOtpCodeReturnType, Error, SubmitOtpCodeParameters>
-    | undefined,
-) => void;
-
-type SubmitOtpCodeMutateAsync = (
-  variables: SubmitOtpCodeParameters,
-  options?:
-    | MutateOptions<SubmitOtpCodeReturnType, Error, SubmitOtpCodeParameters>
-    | undefined,
-) => Promise<SubmitOtpCodeReturnType>;
+import {
+  submitOtpCodeMutationOptions,
+  type SubmitOtpCodeMutate,
+  type SubmitOtpCodeMutateAsync,
+} from "../query/submitOtpCode.js";
 
 export type UseSubmitOtpCodeParameters = ConfigParameter & {
   mutation?:
@@ -106,12 +95,11 @@ export function useSubmitOtpCode(
 
   const config = useConfig(parameters);
 
+  const mutationOptions = submitOtpCodeMutationOptions(config);
+
   const { mutate, mutateAsync, ...result } = useMutation({
     ...mutation,
-    mutationKey: ["submitOtpCode"],
-    mutationFn: (variables) => {
-      return submitOtpCode(config, variables);
-    },
+    ...mutationOptions,
   });
 
   return {

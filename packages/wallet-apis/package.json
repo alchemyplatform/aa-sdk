@@ -23,9 +23,19 @@
   ],
   "exports": {
     ".": {
-      "types": "./dist/types/index.d.ts",
-      "import": "./dist/esm/index.js",
-      "default": "./dist/esm/index.js"
+      "types": "./dist/types/exports/index.d.ts",
+      "import": "./dist/esm/exports/index.js",
+      "default": "./dist/esm/exports/index.js"
+    },
+    "./experimental": {
+      "types": "./dist/types/exports/experimental.d.ts",
+      "import": "./dist/esm/exports/experimental.js",
+      "default": "./dist/esm/exports/experimental.js"
+    },
+    "./internal": {
+      "types": "./dist/types/exports/internal.d.ts",
+      "import": "./dist/esm/exports/internal.js",
+      "default": "./dist/esm/exports/internal.js"
     },
     "./package.json": "./package.json"
   },

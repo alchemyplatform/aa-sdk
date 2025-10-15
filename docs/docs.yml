@@ -1091,8 +1091,14 @@ navigation:
                     path: wallets/pages/reference/alchemy/wagmi-core/functions/loginWithOauth.mdx
                   - page: lookupUserByPhone
                     path: wallets/pages/reference/alchemy/wagmi-core/functions/lookupUserByPhone.mdx
+                  - page: prepareCalls
+                    path: wallets/pages/reference/alchemy/wagmi-core/functions/prepareCalls.mdx
+                  - page: prepareSwap
+                    path: wallets/pages/reference/alchemy/wagmi-core/functions/prepareSwap.mdx
                   - page: sendEmailOtp
                     path: wallets/pages/reference/alchemy/wagmi-core/functions/sendEmailOtp.mdx
+                  - page: sendPreparedCalls
+                    path: wallets/pages/reference/alchemy/wagmi-core/functions/sendPreparedCalls.mdx
                   - page: sendSmsOtp
                     path: wallets/pages/reference/alchemy/wagmi-core/functions/sendSmsOtp.mdx
                   - page: submitOtpCode
@@ -1190,6 +1196,8 @@ navigation:
             contents:
               - section: Functions
                 contents:
+                  - page: assertSmartWalletClient
+                    path: wallets/pages/reference/alchemy/wallet-apis/functions/assertSmartWalletClient.mdx
                   - page: createEip1193Provider
                     path: wallets/pages/reference/alchemy/wallet-apis/functions/createEip1193Provider.mdx
                   - page: createSmartWalletClient
@@ -1200,6 +1208,8 @@ navigation:
                     path: wallets/pages/reference/alchemy/wallet-apis/functions/formatSign.mdx
                   - page: grantPermissions
                     path: wallets/pages/reference/alchemy/wallet-apis/functions/grantPermissions.mdx
+                  - page: isSmartWalletClient
+                    path: wallets/pages/reference/alchemy/wallet-apis/functions/isSmartWalletClient.mdx
                   - page: listAccounts
                     path: wallets/pages/reference/alchemy/wallet-apis/functions/listAccounts.mdx
                   - page: prepareCalls
