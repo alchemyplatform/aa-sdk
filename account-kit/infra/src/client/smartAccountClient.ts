@@ -50,7 +50,6 @@ export type AlchemySmartAccountClientConfig<
   useSimulation?: boolean;
   policyId?: string | string[];
   policyToken?: PolicyToken;
-  webhookData?: string;
 } & Pick<
   SmartAccountClientConfig<AlchemyTransport, chain, account, context>,
   | "customMiddleware"
@@ -170,7 +169,6 @@ export function createAlchemySmartAccountClient(
           transport: config.transport,
           gasEstimatorOverride: config.gasEstimator,
           feeEstimatorOverride: config.feeEstimator,
-          webhookData: config.webhookData,
         })
       : {}),
     userOperationSimulator: config.useSimulation
