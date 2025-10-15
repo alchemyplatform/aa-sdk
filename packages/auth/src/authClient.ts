@@ -232,6 +232,7 @@ export class AuthClient {
     });
 
     const expirationDateMs = Date.now() + sessionExpirationMs;
+    const expirationSeconds = Math.floor(sessionExpirationMs / 1000);
 
     // Signup or login based on whether user exists
     const { orgId, otpId } = await (() => {
@@ -240,14 +241,14 @@ export class AuthClient {
         return this.signerHttpClient.request({
           route: "signer/v1/signup",
           method: "POST",
-          body: { phone: phoneNumber, targetPublicKey },
+          body: { phone: phoneNumber, targetPublicKey, expirationSeconds },
         });
       } else {
         // Existing user - login
         return this.signerHttpClient.request({
           route: "signer/v1/auth",
           method: "POST",
-          body: { phone: phoneNumber, targetPublicKey },
+          body: { phone: phoneNumber, targetPublicKey, expirationSeconds },
         });
       }
     })();

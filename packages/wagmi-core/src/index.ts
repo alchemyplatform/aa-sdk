@@ -11,12 +11,6 @@ export {
 } from "./actions/sendSmsOtp.js";
 
 export {
-  lookupUserByPhone,
-  type LookupUserByPhoneParameters,
-  type LookupUserByPhoneReturnType,
-} from "./actions/lookupUserByPhone.js";
-
-export {
   submitOtpCode,
   type SubmitOtpCodeParameters,
   type SubmitOtpCodeReturnType,

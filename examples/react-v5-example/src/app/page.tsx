@@ -22,7 +22,6 @@ import {
   usePrepareSwap,
   useSendEmailOtp,
   useSendSmsOtp,
-  useLookupUserByPhone,
   useSendPreparedCalls,
   useSubmitOtpCode,
 } from "@alchemy/react";
@@ -31,7 +30,6 @@ import { useState } from "react";
 
 export default function Home() {
   const account = useAccount();
-  const [authMode, setAuthMode] = useState<"email" | "sms">("email");
 
   useAccountEffect({
     onConnect(data) {
@@ -48,31 +46,7 @@ export default function Home() {
         {account.isConnected ? "Connected" : "Not connected"}
       </p>
       {!account.isConnected ? (
-        <div className="flex flex-col gap-4 items-center">
-          <div className="flex gap-3">
-            <button
-              onClick={() => setAuthMode("email")}
-              className={`cursor-pointer rounded px-4 py-2 font-bold text-white text-sm ${
-                authMode === "email"
-                  ? "bg-blue-700"
-                  : "bg-blue-500 hover:bg-blue-600"
-              }`}
-            >
-              Email
-            </button>
-            <button
-              onClick={() => setAuthMode("sms")}
-              className={`cursor-pointer rounded px-4 py-2 font-bold text-white text-sm ${
-                authMode === "sms"
-                  ? "bg-blue-700"
-                  : "bg-blue-500 hover:bg-blue-600"
-              }`}
-            >
-              SMS
-            </button>
-          </div>
-          {authMode === "email" ? <EmailAuthDemo /> : <SmsAuthDemo />}
-        </div>
+        <AuthenticationDemo />
       ) : (
         <>
           <ChainControls />
@@ -89,6 +63,36 @@ export default function Home() {
     </div>
   );
 }
+
+const AuthenticationDemo = () => {
+  const [authMode, setAuthMode] = useState<"email" | "sms">("email");
+
+  return (
+    <div className="flex flex-col gap-4 items-center">
+      <div className="flex gap-3">
+        <button
+          onClick={() => setAuthMode("email")}
+          className={`cursor-pointer rounded px-4 py-2 font-bold text-white text-sm ${
+            authMode === "email"
+              ? "bg-blue-700"
+              : "bg-blue-500 hover:bg-blue-600"
+          }`}
+        >
+          Email
+        </button>
+        <button
+          onClick={() => setAuthMode("sms")}
+          className={`cursor-pointer rounded px-4 py-2 font-bold text-white text-sm ${
+            authMode === "sms" ? "bg-blue-700" : "bg-blue-500 hover:bg-blue-600"
+          }`}
+        >
+          SMS
+        </button>
+      </div>
+      {authMode === "email" ? <EmailAuthDemo /> : <SmsAuthDemo />}
+    </div>
+  );
+};
 
 const ChainControls = () => {
   const account = useAccount();
@@ -174,19 +178,19 @@ const WalletClientDemo = () => {
 };
 
 const EmailAuthDemo = () => {
-  const { sendEmailOtpAsync, isSuccess: sentEmailOtp } = useSendEmailOtp();
-  const { submitOtpCodeAsync } = useSubmitOtpCode();
+  const { sendEmailOtp, isSuccess: sentEmailOtp } = useSendEmailOtp();
+  const { submitOtpCode } = useSubmitOtpCode();
 
   return (
     <div className="flex gap-3">
       <button
         className="cursor-pointer rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
-        onClick={async () => {
+        onClick={() => {
           const email = prompt("Enter your email:");
           if (!email) {
             return;
           }
-          await sendEmailOtpAsync({ email });
+          sendEmailOtp({ email });
         }}
       >
         {sentEmailOtp ? "Resend" : "Send"} OTP
@@ -194,12 +198,12 @@ const EmailAuthDemo = () => {
       {sentEmailOtp && (
         <button
           className="cursor-pointer rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
-          onClick={async () => {
+          onClick={() => {
             const otpCode = prompt("Enter the OTP code:");
             if (!otpCode) {
               return;
             }
-            await submitOtpCodeAsync({ otpCode });
+            submitOtpCode({ otpCode });
           }}
         >
           Enter OTP
@@ -210,35 +214,22 @@ const EmailAuthDemo = () => {
 };
 
 const SmsAuthDemo = () => {
-  const { sendSmsOtpAsync, isSuccess: sentSmsOtp } = useSendSmsOtp();
-  const { lookupUserByPhoneAsync } = useLookupUserByPhone();
-  const { submitOtpCodeAsync } = useSubmitOtpCode();
+  const { sendSmsOtp, isSuccess: sentSmsOtp } = useSendSmsOtp();
+  const { submitOtpCode } = useSubmitOtpCode();
 
   return (
     <div className="flex flex-col gap-3 items-center">
       <div className="flex gap-3">
         <button
           className="cursor-pointer rounded bg-green-500 px-4 py-2 font-bold text-white hover:bg-green-700"
-          onClick={async () => {
+          onClick={() => {
             const phoneNumber = prompt(
               "Enter your phone number (E.164 format, e.g., +15551234567):",
             );
             if (!phoneNumber) {
               return;
             }
-            // Optional: lookup if phone is registered
-            try {
-              const result = await lookupUserByPhoneAsync({ phoneNumber });
-              if (result) {
-                console.log(`Phone registered with org: ${result.orgId}`);
-              } else {
-                console.log("Phone not registered - will create new account");
-              }
-            } catch (error) {
-              console.error("Lookup failed:", error);
-            }
-            // Send OTP
-            await sendSmsOtpAsync({ phoneNumber });
+            sendSmsOtp({ phoneNumber });
           }}
         >
           {sentSmsOtp ? "Resend" : "Send"} SMS OTP
@@ -246,12 +237,12 @@ const SmsAuthDemo = () => {
         {sentSmsOtp && (
           <button
             className="cursor-pointer rounded bg-green-500 px-4 py-2 font-bold text-white hover:bg-green-700"
-            onClick={async () => {
+            onClick={() => {
               const otpCode = prompt("Enter the OTP code:");
               if (!otpCode) {
                 return;
               }
-              await submitOtpCodeAsync({ otpCode });
+              submitOtpCode({ otpCode });
             }}
           >
             Enter OTP
