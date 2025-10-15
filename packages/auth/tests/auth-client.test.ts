@@ -439,7 +439,7 @@ describe("AuthClient", () => {
       expect(mockSignerHttpClient.request).toHaveBeenCalledWith({
         route: "signer/v1/signup",
         method: "POST",
-        body: { phone: phoneNumber, targetPublicKey },
+        body: { phone: phoneNumber, targetPublicKey, expirationSeconds: 900 },
       });
     });
 
@@ -470,7 +470,7 @@ describe("AuthClient", () => {
       expect(mockSignerHttpClient.request).toHaveBeenCalledWith({
         route: "signer/v1/auth",
         method: "POST",
-        body: { phone: phoneNumber, targetPublicKey },
+        body: { phone: phoneNumber, targetPublicKey, expirationSeconds: 900 },
       });
     });
 
