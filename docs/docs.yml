@@ -180,8 +180,12 @@ navigation:
                 path: wallets/pages/smart-contracts/modular-account-v2/managing-ownership.mdx
               - page: Export private key
                 path: wallets/pages/signer/export-private-key.mdx
-          - page: Third party signers
-            path: wallets/pages/third-party/signers.mdx
+          - section: Third party signers
+            contents:
+              - page: Privy
+                path: wallets/pages/third-party/signers/privy.mdx
+              - page: Custom integration
+                path: wallets/pages/third-party/signers/custom-integration.mdx
           - page: What is a signer?
             path: wallets/pages/authentication/what-is-a-signer.mdx
 
