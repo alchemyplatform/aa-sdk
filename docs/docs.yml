@@ -185,8 +185,12 @@ navigation:
                 path: wallets/pages/smart-contracts/modular-account-v2/managing-ownership.mdx
               - page: Export private key
                 path: wallets/pages/signer/export-private-key.mdx
-          - page: Third party signers
-            path: wallets/pages/third-party/signers.mdx
+          - section: Third party signers
+            contents:
+              - page: Privy
+                path: wallets/pages/third-party/signers/privy.mdx
+              - page: Custom integration
+                path: wallets/pages/third-party/signers/custom-integration.mdx
           - page: What is a signer?
             path: wallets/pages/authentication/what-is-a-signer.mdx
 
@@ -204,8 +208,10 @@ navigation:
             path: wallets/pages/transactions/sponsor-gas/index.mdx
           - page: Pay gas with any token
             path: wallets/pages/transactions/pay-gas-with-any-token/index.mdx
-          - page: "[NEW] Swap tokens"
+          - page: "[NEW] Same-chain swaps"
             path: wallets/pages/transactions/swap-tokens/index.mdx
+          - page: "[NEW] Cross-chain swaps"
+            path: wallets/pages/transactions/cross-chain-swap-tokens/index.mdx
           - page: Send parallel transactions
             path: wallets/pages/transactions/send-parallel-transactions/index.mdx
           - page: Retry transactions
