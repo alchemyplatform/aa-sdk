@@ -1097,6 +1097,8 @@ navigation:
                     path: wallets/pages/reference/alchemy/wagmi-core/functions/sendEmailOtp.mdx
                   - page: sendPreparedCalls
                     path: wallets/pages/reference/alchemy/wagmi-core/functions/sendPreparedCalls.mdx
+                  - page: sendSmsOtp
+                    path: wallets/pages/reference/alchemy/wagmi-core/functions/sendSmsOtp.mdx
                   - page: submitOtpCode
                     path: wallets/pages/reference/alchemy/wagmi-core/functions/submitOtpCode.mdx
 

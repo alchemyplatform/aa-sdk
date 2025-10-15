@@ -21,6 +21,7 @@ import {
   usePrepareCalls,
   usePrepareSwap,
   useSendEmailOtp,
+  useSendSmsOtp,
   useSendPreparedCalls,
   useSubmitOtpCode,
 } from "@alchemy/react";
@@ -45,7 +46,7 @@ export default function Home() {
         {account.isConnected ? "Connected" : "Not connected"}
       </p>
       {!account.isConnected ? (
-        <EmailAuthDemo />
+        <AuthenticationDemo />
       ) : (
         <>
           <ChainControls />
@@ -62,6 +63,36 @@ export default function Home() {
     </div>
   );
 }
+
+const AuthenticationDemo = () => {
+  const [authMode, setAuthMode] = useState<"email" | "sms">("email");
+
+  return (
+    <div className="flex flex-col gap-4 items-center">
+      <div className="flex gap-3">
+        <button
+          onClick={() => setAuthMode("email")}
+          className={`cursor-pointer rounded px-4 py-2 font-bold text-white text-sm ${
+            authMode === "email"
+              ? "bg-blue-700"
+              : "bg-blue-500 hover:bg-blue-600"
+          }`}
+        >
+          Email
+        </button>
+        <button
+          onClick={() => setAuthMode("sms")}
+          className={`cursor-pointer rounded px-4 py-2 font-bold text-white text-sm ${
+            authMode === "sms" ? "bg-blue-700" : "bg-blue-500 hover:bg-blue-600"
+          }`}
+        >
+          SMS
+        </button>
+      </div>
+      {authMode === "email" ? <EmailAuthDemo /> : <SmsAuthDemo />}
+    </div>
+  );
+};
 
 const ChainControls = () => {
   const account = useAccount();
@@ -147,19 +178,19 @@ const WalletClientDemo = () => {
 };
 
 const EmailAuthDemo = () => {
-  const { sendEmailOtpAsync, isSuccess: sentEmailOtp } = useSendEmailOtp();
-  const { submitOtpCodeAsync } = useSubmitOtpCode();
+  const { sendEmailOtp, isSuccess: sentEmailOtp } = useSendEmailOtp();
+  const { submitOtpCode } = useSubmitOtpCode();
 
   return (
     <div className="flex gap-3">
       <button
         className="cursor-pointer rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
-        onClick={async () => {
+        onClick={() => {
           const email = prompt("Enter your email:");
           if (!email) {
             return;
           }
-          await sendEmailOtpAsync({ email });
+          sendEmailOtp({ email });
         }}
       >
         {sentEmailOtp ? "Resend" : "Send"} OTP
@@ -167,17 +198,60 @@ const EmailAuthDemo = () => {
       {sentEmailOtp && (
         <button
           className="cursor-pointer rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
-          onClick={async () => {
+          onClick={() => {
             const otpCode = prompt("Enter the OTP code:");
             if (!otpCode) {
               return;
             }
-            await submitOtpCodeAsync({ otpCode });
+            submitOtpCode({ otpCode });
           }}
         >
           Enter OTP
         </button>
       )}
+    </div>
+  );
+};
+
+const SmsAuthDemo = () => {
+  const { sendSmsOtp, isSuccess: sentSmsOtp } = useSendSmsOtp();
+  const { submitOtpCode } = useSubmitOtpCode();
+
+  return (
+    <div className="flex flex-col gap-3 items-center">
+      <div className="flex gap-3">
+        <button
+          className="cursor-pointer rounded bg-green-500 px-4 py-2 font-bold text-white hover:bg-green-700"
+          onClick={() => {
+            const phoneNumber = prompt(
+              "Enter your phone number (E.164 format, e.g., +15551234567):",
+            );
+            if (!phoneNumber) {
+              return;
+            }
+            sendSmsOtp({ phoneNumber });
+          }}
+        >
+          {sentSmsOtp ? "Resend" : "Send"} SMS OTP
+        </button>
+        {sentSmsOtp && (
+          <button
+            className="cursor-pointer rounded bg-green-500 px-4 py-2 font-bold text-white hover:bg-green-700"
+            onClick={() => {
+              const otpCode = prompt("Enter the OTP code:");
+              if (!otpCode) {
+                return;
+              }
+              submitOtpCode({ otpCode });
+            }}
+          >
+            Enter OTP
+          </button>
+        )}
+      </div>
+      <p className="text-xs text-gray-500 max-w-md text-center">
+        Phone number must include country code (e.g., +15551234567)
+      </p>
     </div>
   );
 };

@@ -47,6 +47,7 @@
     "@alchemy/common": "*",
     "@turnkey/http": "^3.13.0",
     "eventemitter3": "^5.0.1",
+    "jwt-decode": "^4.0.0",
     "viem": "2.29.2"
   },
   "publishConfig": {

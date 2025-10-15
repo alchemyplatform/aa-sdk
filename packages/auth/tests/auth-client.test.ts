@@ -282,5 +282,283 @@ describe("AuthClient", () => {
       expect(restoredSession).toBeInstanceOf(AuthSession);
       expect(restoredSession?.getExpirationDateMs()).toBe(originalExpiration);
     });
+
+    it("should load valid SMS session state", async () => {
+      const validSmsState: AuthSessionState = {
+        type: "sms",
+        bundle: "test-sms-bundle",
+        expirationDateMs: Date.now() + 60 * 60 * 1000, // 1 hour from now
+        user: mockUser,
+      };
+
+      const authSession = await authClient.restoreAuthSession(
+        JSON.stringify(validSmsState),
+      );
+
+      expect(authSession).toBeInstanceOf(AuthSession);
+      expect(authSession?.getUser()).toEqual(
+        expect.objectContaining({
+          orgId: mockUser.orgId,
+          userId: mockUser.userId,
+          address: mockUser.address,
+        }),
+      );
+
+      // Verify the TEK stamper was created and bundle was injected
+      expect(mockCreateTekStamper).toHaveBeenCalled();
+      expect(mockTekStamper.injectCredentialBundle).toHaveBeenCalledWith(
+        "test-sms-bundle",
+      );
+    });
+  });
+
+  describe("sendEmailOtp", () => {
+    it("should send OTP to new email (signup flow)", async () => {
+      const email = "newuser@example.com";
+      const targetPublicKey = "mock-public-key";
+
+      vi.mocked(mockSignerHttpClient.request).mockImplementation(
+        async (params) => {
+          if (params.route === "signer/v1/lookup") {
+            return { orgId: null };
+          }
+          if (params.route === "signer/v1/signup") {
+            return { orgId: "new-org-id", otpId: "test-otp-id" };
+          }
+          throw new Error(`Unexpected route: ${params.route}`);
+        },
+      );
+
+      await authClient.sendEmailOtp({ email });
+
+      expect(mockTekStamper.init).toHaveBeenCalled();
+      expect(mockSignerHttpClient.request).toHaveBeenCalledWith({
+        route: "signer/v1/lookup",
+        method: "POST",
+        body: { email },
+      });
+      expect(mockSignerHttpClient.request).toHaveBeenCalledWith({
+        route: "signer/v1/signup",
+        method: "POST",
+        body: {
+          email,
+          emailMode: "otp",
+          targetPublicKey,
+          expirationSeconds: 900,
+        },
+      });
+    });
+
+    it("should send OTP to existing email (auth flow)", async () => {
+      const email = "existing@example.com";
+      const targetPublicKey = "mock-public-key";
+
+      vi.mocked(mockSignerHttpClient.request).mockImplementation(
+        async (params) => {
+          if (params.route === "signer/v1/lookup") {
+            return { orgId: "existing-org-id" };
+          }
+          if (params.route === "signer/v1/auth") {
+            return { orgId: "existing-org-id", otpId: "test-otp-id" };
+          }
+          throw new Error(`Unexpected route: ${params.route}`);
+        },
+      );
+
+      await authClient.sendEmailOtp({ email });
+
+      expect(mockTekStamper.init).toHaveBeenCalled();
+      expect(mockSignerHttpClient.request).toHaveBeenCalledWith({
+        route: "signer/v1/lookup",
+        method: "POST",
+        body: { email },
+      });
+      expect(mockSignerHttpClient.request).toHaveBeenCalledWith({
+        route: "signer/v1/auth",
+        method: "POST",
+        body: {
+          email,
+          emailMode: "otp",
+          targetPublicKey,
+          expirationSeconds: 900,
+        },
+      });
+    });
+
+    it("should use custom session expiration", async () => {
+      const email = "user@example.com";
+      const customExpiration = 30 * 60 * 1000; // 30 minutes
+
+      vi.mocked(mockSignerHttpClient.request).mockImplementation(
+        async (params) => {
+          if (params.route === "signer/v1/lookup") {
+            return { orgId: "test-org-id" };
+          }
+          if (params.route === "signer/v1/auth") {
+            return { orgId: "test-org-id", otpId: "test-otp-id" };
+          }
+          throw new Error(`Unexpected route: ${params.route}`);
+        },
+      );
+
+      await authClient.sendEmailOtp({
+        email,
+        sessionExpirationMs: customExpiration,
+      });
+
+      // Verify the expiration was set (we can't directly check private field, but method should succeed)
+      expect(mockSignerHttpClient.request).toHaveBeenCalled();
+    });
+  });
+
+  describe("sendSmsOtp", () => {
+    it("should send SMS OTP to new phone (signup flow)", async () => {
+      const phoneNumber = "+15551234567";
+      const targetPublicKey = "mock-public-key";
+
+      vi.mocked(mockSignerHttpClient.request).mockImplementation(
+        async (params) => {
+          if (params.route === "signer/v1/lookup") {
+            return { orgId: null };
+          }
+          if (params.route === "signer/v1/signup") {
+            return { orgId: "new-org-id", otpId: "test-otp-id" };
+          }
+          throw new Error(`Unexpected route: ${params.route}`);
+        },
+      );
+
+      await authClient.sendSmsOtp({ phoneNumber });
+
+      expect(mockTekStamper.init).toHaveBeenCalled();
+      expect(mockSignerHttpClient.request).toHaveBeenCalledWith({
+        route: "signer/v1/lookup",
+        method: "POST",
+        body: { phone: phoneNumber },
+      });
+      expect(mockSignerHttpClient.request).toHaveBeenCalledWith({
+        route: "signer/v1/signup",
+        method: "POST",
+        body: { phone: phoneNumber, targetPublicKey, expirationSeconds: 900 },
+      });
+    });
+
+    it("should send SMS OTP to existing phone (auth flow)", async () => {
+      const phoneNumber = "+15551234567";
+      const targetPublicKey = "mock-public-key";
+
+      vi.mocked(mockSignerHttpClient.request).mockImplementation(
+        async (params) => {
+          if (params.route === "signer/v1/lookup") {
+            return { orgId: "existing-org-id" };
+          }
+          if (params.route === "signer/v1/auth") {
+            return { orgId: "existing-org-id", otpId: "test-otp-id" };
+          }
+          throw new Error(`Unexpected route: ${params.route}`);
+        },
+      );
+
+      await authClient.sendSmsOtp({ phoneNumber });
+
+      expect(mockTekStamper.init).toHaveBeenCalled();
+      expect(mockSignerHttpClient.request).toHaveBeenCalledWith({
+        route: "signer/v1/lookup",
+        method: "POST",
+        body: { phone: phoneNumber },
+      });
+      expect(mockSignerHttpClient.request).toHaveBeenCalledWith({
+        route: "signer/v1/auth",
+        method: "POST",
+        body: { phone: phoneNumber, targetPublicKey, expirationSeconds: 900 },
+      });
+    });
+
+    it("should use custom session expiration for SMS", async () => {
+      const phoneNumber = "+15551234567";
+      const customExpiration = 30 * 60 * 1000; // 30 minutes
+
+      vi.mocked(mockSignerHttpClient.request).mockImplementation(
+        async (params) => {
+          if (params.route === "signer/v1/lookup") {
+            return { orgId: "test-org-id" };
+          }
+          if (params.route === "signer/v1/auth") {
+            return { orgId: "test-org-id", otpId: "test-otp-id" };
+          }
+          throw new Error(`Unexpected route: ${params.route}`);
+        },
+      );
+
+      await authClient.sendSmsOtp({
+        phoneNumber,
+        sessionExpirationMs: customExpiration,
+      });
+
+      expect(mockSignerHttpClient.request).toHaveBeenCalled();
+    });
+  });
+
+  describe("lookupUserByPhone", () => {
+    it("should return orgId for registered phone", async () => {
+      const phoneNumber = "+15551234567";
+
+      vi.mocked(mockSignerHttpClient.request).mockImplementation(
+        async (params) => {
+          if (params.route === "signer/v1/lookup") {
+            return { orgId: "existing-org-id" };
+          }
+          throw new Error(`Unexpected route: ${params.route}`);
+        },
+      );
+
+      const result = await authClient.lookupUserByPhone(phoneNumber);
+
+      expect(result).toEqual({ orgId: "existing-org-id" });
+      expect(mockSignerHttpClient.request).toHaveBeenCalledWith({
+        route: "signer/v1/lookup",
+        method: "POST",
+        body: { phone: phoneNumber },
+      });
+    });
+
+    it("should return null for unregistered phone", async () => {
+      const phoneNumber = "+12025555678";
+
+      vi.mocked(mockSignerHttpClient.request).mockImplementation(
+        async (params) => {
+          if (params.route === "signer/v1/lookup") {
+            return { orgId: null };
+          }
+          throw new Error(`Unexpected route: ${params.route}`);
+        },
+      );
+
+      const result = await authClient.lookupUserByPhone(phoneNumber);
+
+      expect(result).toBeNull();
+      expect(mockSignerHttpClient.request).toHaveBeenCalledWith({
+        route: "signer/v1/lookup",
+        method: "POST",
+        body: { phone: phoneNumber },
+      });
+    });
+
+    it("should return null when orgId is undefined", async () => {
+      const phoneNumber = "+12025555678";
+
+      vi.mocked(mockSignerHttpClient.request).mockImplementation(
+        async (params) => {
+          if (params.route === "signer/v1/lookup") {
+            return { orgId: undefined };
+          }
+          throw new Error(`Unexpected route: ${params.route}`);
+        },
+      );
+
+      const result = await authClient.lookupUserByPhone(phoneNumber);
+
+      expect(result).toBeNull();
+    });
   });
 });

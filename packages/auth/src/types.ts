@@ -6,6 +6,8 @@ import type { Address } from "viem";
 export type User = {
   /** User's email address (optional) */
   email?: string;
+  /** User's phone number (optional) */
+  phone?: string;
   /** Organization ID */
   orgId: string;
   /** Unique user identifier */
@@ -28,6 +30,8 @@ export type User = {
 export type AuthMethods = {
   /** User's email address if email authentication is configured */
   email?: string;
+  /** User's phone number if SMS authentication is configured */
+  phone?: string;
   /** List of configured OAuth providers */
   oauthProviders: OauthProviderInfo[];
   /** List of registered passkeys/WebAuthn credentials */
@@ -185,7 +189,7 @@ export type AuthProviderCustomization = {
 export type AuthSessionState =
   | {
       /** Authentication type that uses credential bundles */
-      type: "email" | "oauth" | "otp";
+      type: "email" | "oauth" | "otp" | "sms";
       /** Encrypted credential bundle for session restoration */
       bundle: string;
       /** Timestamp when this session state expires */
@@ -207,4 +211,4 @@ export type AuthSessionState =
 /**
  * Available authentication methods supported by the AuthSession
  */
-export type AuthType = "email" | "oauth" | "otp" | "passkey";
+export type AuthType = "email" | "oauth" | "otp" | "sms" | "passkey";
