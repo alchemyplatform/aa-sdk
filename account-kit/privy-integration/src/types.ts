@@ -8,8 +8,14 @@ import type { z } from "zod";
  * Uses ConnectionConfigSchema to ensure valid transport configuration
  */
 export type AlchemyProviderConfig = z.infer<typeof ConnectionConfigSchema> & {
-  /** Policy ID(s) for gas sponsorship */
+  /** Policy ID(s) for EVM gas sponsorship */
   policyId?: string | string[];
+
+  /** Policy ID(s) for Solana gas sponsorship */
+  solanaPolicyId?: string | string[];
+
+  /** Solana RPC URL (separate from EVM rpcUrl) */
+  solanaRpcUrl?: string;
 
   /**
    * Set to true to disable gas sponsorship by default

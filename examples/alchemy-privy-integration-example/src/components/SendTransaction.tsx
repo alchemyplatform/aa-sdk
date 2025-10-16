@@ -1,16 +1,56 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAlchemySendTransaction } from "@account-kit/privy-integration";
 import { parseEther, isAddress, type Address } from "viem";
+import { useWallets } from "@privy-io/react-auth";
+import { base, baseSepolia } from "viem/chains";
+
+/**
+ * Get block explorer URL for a transaction hash based on chain ID
+ *
+ * @param chainId
+ * @param txHash
+ * @returns
+ */
+function getExplorerUrl(chainId: number, txHash: string): string {
+  const explorers: Record<number, { name: string; url: string }> = {
+    [base.id]: { name: "BaseScan", url: "https://basescan.org" },
+    [baseSepolia.id]: {
+      name: "Base Sepolia Explorer",
+      url: "https://sepolia.basescan.org",
+    },
+  };
+
+  const explorer = explorers[chainId] || {
+    name: "Explorer",
+    url: `https://etherscan.io`,
+  };
+  return `View on ${explorer.name}: ${explorer.url}/tx/${txHash}`;
+}
 
 export function SendTransaction({ onSuccess }: { onSuccess?: () => void }) {
   const { sendTransaction, isLoading, error } = useAlchemySendTransaction();
+  const { wallets } = useWallets();
 
   const [recipient, setRecipient] = useState("");
   const [amount, setAmount] = useState("0.001");
   const [validationError, setValidationError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [currentChain, setCurrentChain] = useState<number | null>(null);
+
+  // Sync with wallet's current chain
+  useEffect(() => {
+    const wallet = wallets.find((w) => w.walletClientType === "privy");
+    if (!wallet) return;
+
+    const chainIdStr = wallet.chainId?.toString();
+    const chainId = chainIdStr?.includes(":")
+      ? Number(chainIdStr.split(":")[1])
+      : Number(chainIdStr);
+
+    setCurrentChain(chainId);
+  }, [wallets]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,9 +80,10 @@ export function SendTransaction({ onSuccess }: { onSuccess?: () => void }) {
         data: "0x",
       });
 
-      setSuccessMessage(
-        `Transaction sent! View on BaseScan: https://basescan.org/tx/${result.txnHash}`,
-      );
+      const explorerMessage = currentChain
+        ? getExplorerUrl(currentChain, result.txnHash)
+        : `Transaction sent! Hash: ${result.txnHash}`;
+      setSuccessMessage(explorerMessage);
       setRecipient("");
       setAmount("0.001");
 
