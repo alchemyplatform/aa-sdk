@@ -10,6 +10,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
   const alchemyApiKey = process.env.NEXT_PUBLIC_ALCHEMY_API_KEY;
   const policyId = process.env.NEXT_PUBLIC_ALCHEMY_POLICY_ID;
   const clientId = process.env.NEXT_PUBLIC_PRIVY_CLIENT_ID;
+  const solanaPolicyId = process.env.NEXT_PUBLIC_ALCHEMY_SOLANA_POLICY_ID;
 
   if (!clientId) {
     throw new Error("NEXT_PUBLIC_PRIVY_CLIENT_ID is not set");
@@ -30,9 +31,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
       config={{
         defaultChain: baseSepolia,
         embeddedWallets: {
-          // ethereum: {
-          //   createOnLogin: "all-users",
-          // },
+          ethereum: {
+            createOnLogin: "all-users",
+          },
           solana: {
             createOnLogin: "all-users",
           },
@@ -42,7 +43,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
           rpcs: {
             "solana:devnet": {
               rpc: createSolanaRpc(
-                "https://solana-devnet.g.alchemy.com/v2/kn7FRHENeJNSlQ78U4_KP",
+                `https://solana-devnet.g.alchemy.com/v2/${alchemyApiKey}`,
               ),
               rpcSubscriptions: createSolanaRpcSubscriptions(
                 "wss://api.devnet.solana.com",
@@ -55,8 +56,8 @@ export function Providers({ children }: { children: React.ReactNode }) {
       <AlchemyProvider
         apiKey={alchemyApiKey}
         policyId={policyId}
-        solanaPolicyId={"cc3738d7-6e46-4a21-b2cc-147b87a51265"}
-        solanaRpcUrl="https://solana-devnet.g.alchemy.com/v2/kn7FRHENeJNSlQ78U4_KP"
+        solanaPolicyId={solanaPolicyId}
+        solanaRpcUrl={`https://solana-devnet.g.alchemy.com/v2/${alchemyApiKey}`}
       >
         {children as any}
       </AlchemyProvider>
