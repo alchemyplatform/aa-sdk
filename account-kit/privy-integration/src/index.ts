@@ -6,6 +6,7 @@ export { useAlchemyClient } from "./hooks/useAlchemyClient.js";
 export { useAlchemySendTransaction } from "./hooks/useAlchemySendTransaction.js";
 export { useAlchemyPrepareSwap } from "./hooks/useAlchemyPrepareSwap.js";
 export { useAlchemySubmitSwap } from "./hooks/useAlchemySubmitSwap.js";
+export { useAlchemySolanaTransaction } from "./hooks/useAlchemySolanaTransaction.js";
 
 // Types
 export type {

@@ -3,6 +3,7 @@
 import { PrivyProvider } from "@privy-io/react-auth";
 import { AlchemyProvider } from "@account-kit/privy-integration";
 import { baseSepolia } from "viem/chains";
+import { createSolanaRpc, createSolanaRpcSubscriptions } from "@solana/kit";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const privyAppId = process.env.NEXT_PUBLIC_PRIVY_APP_ID;
@@ -29,14 +30,34 @@ export function Providers({ children }: { children: React.ReactNode }) {
       config={{
         defaultChain: baseSepolia,
         embeddedWallets: {
-          ethereum: {
+          // ethereum: {
+          //   createOnLogin: "all-users",
+          // },
+          solana: {
             createOnLogin: "all-users",
           },
           showWalletUIs: false,
         },
+        solana: {
+          rpcs: {
+            "solana:devnet": {
+              rpc: createSolanaRpc(
+                "https://solana-devnet.g.alchemy.com/v2/kn7FRHENeJNSlQ78U4_KP",
+              ),
+              rpcSubscriptions: createSolanaRpcSubscriptions(
+                "wss://api.devnet.solana.com",
+              ),
+            },
+          },
+        },
       }}
     >
-      <AlchemyProvider apiKey={alchemyApiKey} policyId={policyId}>
+      <AlchemyProvider
+        apiKey={alchemyApiKey}
+        policyId={policyId}
+        solanaPolicyId={"cc3738d7-6e46-4a21-b2cc-147b87a51265"}
+        solanaRpcUrl="https://solana-devnet.g.alchemy.com/v2/kn7FRHENeJNSlQ78U4_KP"
+      >
         {children as any}
       </AlchemyProvider>
     </PrivyProvider>
