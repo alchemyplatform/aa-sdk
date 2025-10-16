@@ -4,12 +4,13 @@ description: Use Privy with Alchemy Smart Wallets for EIP-7702, sponsorship, swa
 slug: wallets/third-party/signers/privy
 ---
 
-Upgrade existing Privy wallets to Smart Wallets to enable gasless transactions, batching, token swaps, and more in under 10 minutes. Keep Privy for authentication, no wallet migration needed. Add our battle-tested transaction infrastructure using EIP-7702 to upgrade EOAs to Smart Wallets:
+Upgrade existing Privy wallets to Smart Wallets to enable gasless transactions (EVM & Solana), batching, token swaps, and more in under 10 minutes. Keep Privy for authentication, no wallet migration needed. Add our battle-tested transaction infrastructure using EIP-7702 to upgrade EOAs to Smart Wallets:
 
 - [#1 gas abstraction infrastructure](https://www.bundlebear.com/erc4337-bundlers/all) on the market
 - [370M+](https://www.bundlebear.com/erc4337-paymasters/all) sponsored transactions
 - 99.9% SLAs
 - Trusted by Worldcoin, JP Morgan, Gensyn, and more
+- Solana gas sponsorship support
 
 <Tip>
   Don't have social login or a wallet set up yet? Start with the
@@ -69,7 +70,9 @@ Upgrade existing Privy wallets to Smart Wallets to enable gasless transactions, 
     Props for `AlchemyProvider`:
 
     - `apiKey` | `jwt` | `rpcUrl` (pick a valid transport config)
-    - `policyId` (optional) for gas sponsorship
+    - `policyId` (optional) for EVM gas sponsorship
+    - `solanaPolicyId` (optional) for Solana gas sponsorship
+    - `solanaRpcUrl` (optional) for Solana RPC URL (separate from EVM)
     - `disableSponsorship` (optional) to opt-out per default
 
     ### 2. Send Gasless Transactions
@@ -127,6 +130,31 @@ Upgrade existing Privy wallets to Smart Wallets to enable gasless transactions, 
     }
     ```
 
+    ### 4. Send Solana Transactions
+
+    ```tsx
+    import { useAlchemySolanaTransaction } from "@account-kit/privy-integration";
+
+    function SolanaButton() {
+      const { sendTransactionAsync, isPending } = useAlchemySolanaTransaction({
+        rpcUrl: "https://solana-mainnet.g.alchemy.com/v2/your-api-key",
+        policyId: "your-solana-policy-id", // optional
+      });
+
+      const handleTransfer = async () => {
+        const result = await sendTransactionAsync({
+          transfer: {
+            amount: 1_000_000_000, // 1 SOL in lamports
+            toAddress: "recipient-base58-address",
+          },
+        });
+        console.log("Transaction hash:", result.hash);
+      };
+
+      return <button onClick={handleTransfer} disabled={isPending}>Send SOL</button>;
+    }
+    ```
+
     ### Advanced: Access the Smart Wallet Client
 
     ```tsx
@@ -151,8 +179,9 @@ Upgrade existing Privy wallets to Smart Wallets to enable gasless transactions, 
 
     ### Notes
 
-    - EIP-7702 is used to delegate your EOA to a smart account at send time.
-    - The hooks API mirrors Privy's `useSendTransaction` for easy migration.
+    - **EVM**: EIP-7702 is used to delegate your EOA to a smart account at send time.
+    - **Solana**: Gas sponsorship via Alchemy's fee payer service for Privy's embedded Solana wallets.
+    - The hooks API mirrors Privy's transaction hooks for easy migration.
 
   </Tab>
 </Tabs>
