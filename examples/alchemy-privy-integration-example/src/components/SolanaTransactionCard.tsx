@@ -36,9 +36,8 @@ export function SolanaTransactionCard() {
       // handled via error state
     }
   };
-  console.log(solanaWallet);
+
   if (!privyReady || !walletsReady) {
-    console.log(solanaWallet);
     return (
       <div className="card" style={{ marginTop: "1rem" }}>
         <h3 style={{ marginBottom: "0.75rem" }}>Send Solana Transaction</h3>
