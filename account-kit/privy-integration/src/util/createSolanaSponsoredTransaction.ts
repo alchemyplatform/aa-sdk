@@ -35,7 +35,9 @@ export async function createSolanaSponsoredTransaction(
     versionedTransaction.serialize(),
   ).toString("base64");
   const body = JSON.stringify({
-    id: crypto?.randomUUID() ?? Math.floor(Math.random() * 1000000),
+    id:
+      crypto?.randomUUID() ??
+      `${Date.now()}-${Math.floor(Math.random() * Number.MAX_SAFE_INTEGER)}`,
     jsonrpc: "2.0",
     method: "alchemy_requestFeePayer",
     params: [
@@ -54,11 +56,7 @@ export async function createSolanaSponsoredTransaction(
     body,
   };
 
-  const response = await fetch(
-    // TODO: Use the connection??
-    connection.rpcEndpoint,
-    options,
-  );
+  const response = await fetch(connection.rpcEndpoint, options);
   const jsonResponse = await response.json();
   if (!jsonResponse?.result?.serializedTransaction)
     throw new Error(
