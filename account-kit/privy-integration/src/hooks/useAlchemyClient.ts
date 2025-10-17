@@ -1,22 +1,16 @@
 import { useCallback } from "react";
-import {
-  WalletClientSigner,
-  type AuthorizationRequest,
-  ConnectionConfigSchema,
-} from "@aa-sdk/core";
-import {
-  createWalletClient,
-  custom,
-  type Address,
-  type Authorization,
-} from "viem";
-import { useSign7702Authorization } from "@privy-io/react-auth";
+import { WalletClientSigner, ConnectionConfigSchema } from "@aa-sdk/core";
+import { createWalletClient, custom, type Address } from "viem";
 import {
   createSmartWalletClient,
   type SmartWalletClient,
 } from "@account-kit/wallet-client";
 import { alchemy } from "@account-kit/infra";
-import { useAlchemyConfig, useClientCache } from "../Provider.js";
+import {
+  useAlchemyConfig,
+  useClientCache,
+  useAdapter,
+} from "../context/AlchemyContext.js";
 import { getChain } from "../util/getChain.js";
 import { useEmbeddedWallet } from "./internal/useEmbeddedWallet.js";
 
@@ -34,7 +28,8 @@ import { useEmbeddedWallet } from "./internal/useEmbeddedWallet.js";
  * ```
  */
 export function useAlchemyClient() {
-  const { signAuthorization } = useSign7702Authorization();
+  const adapter = useAdapter();
+  const signAuthorizationFn = adapter.useAuthorizationSigner?.() || null;
   const config = useAlchemyConfig();
   const cache = useClientCache();
   const getEmbeddedWallet = useEmbeddedWallet();
@@ -97,23 +92,13 @@ export function useAlchemyClient() {
       "privy",
     );
 
-    // Extend signer with EIP-7702 authorization support
-    const signer = {
-      ...baseSigner,
-      signAuthorization: async (
-        unsignedAuth: AuthorizationRequest<number>,
-      ): Promise<Authorization<number, true>> => {
-        const signature = await signAuthorization({
-          ...unsignedAuth,
-          contractAddress: unsignedAuth.address ?? unsignedAuth.contractAddress,
-        });
-
-        return {
-          ...unsignedAuth,
-          ...signature,
-        };
-      },
-    };
+    // Extend signer with EIP-7702 authorization support (if available)
+    const signer = signAuthorizationFn
+      ? {
+          ...baseSigner,
+          signAuthorization: signAuthorizationFn,
+        }
+      : baseSigner;
 
     // Determine transport configuration using schema validation
     // This properly handles combinations like rpcUrl + jwt together
@@ -148,7 +133,7 @@ export function useAlchemyClient() {
   }, [
     getEmbeddedWallet,
     getEmbeddedWalletChain,
-    signAuthorization,
+    signAuthorizationFn,
     config.apiKey,
     config.jwt,
     config.rpcUrl,
