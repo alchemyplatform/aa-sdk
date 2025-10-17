@@ -201,25 +201,25 @@ Upgrade existing Privy wallets to Smart Wallets to enable gasless transactions (
 
     ### Prerequisites: Get your keys
 
-    - Alchemy API Key:
-      - Go to the [Alchemy Dashboard](https://dashboard.alchemy.com/)
+    - API Key:
+      - Go to your service dashboard ([link](https://dashboard.alchemy.com/))
       - Create or select an app and copy the API key
     - Gas sponsorship Policy ID (Gas Manager):
-      - Create a gas sponsorship policy in the [dashboard](https://dashboard.alchemy.com/services/gas-manager/configuration) and copy its Policy ID
-    - Privy App ID & Secret:
-      - Go to the [Privy Dashboard](https://dashboard.privy.io/)
+      - Create a gas sponsorship policy in your dashboard ([link](https://dashboard.alchemy.com/services/gas-manager/configuration)) and copy its Policy ID
+    - App ID & Secret:
+      - Go to your authentication provider dashboard ([link](https://dashboard.privy.io/))
       - Create or select an app and copy the App ID and App Secret
 
     <Warning>
       Both the Smart Wallets configuration and the gas sponsorship policy must be
-      linked to the application behind your Alchemy API key for sponsorship to work.
+      linked to the application associated with your API key for sponsorship to work.
     </Warning>
 
     ### Create Smart Wallet Client from Privy
 
     Create a helper function that converts a Privy wallet into an Alchemy Smart Wallet client:
 
-    ```ts
+    ```ts twoslash
     import { PrivyClient } from "@privy-io/node";
     import { createViemAccount } from "@privy-io/node/viem";
     import { createWalletClient } from "viem";
@@ -265,7 +265,7 @@ Upgrade existing Privy wallets to Smart Wallets to enable gasless transactions (
 
     Send gasless transactions using EIP-7702 to upgrade the Privy wallet to a smart wallet:
 
-    ```ts
+    ```ts twoslash
     import { PrivyClient } from "@privy-io/node";
 
     const PRIVY_APP_ID = "your-privy-app-id";
@@ -316,9 +316,9 @@ Upgrade existing Privy wallets to Smart Wallets to enable gasless transactions (
 
     ### Wait for Transaction Confirmation
 
-    Wait for the transaction to be confirmed on-chain:
+    Wait for the transaction to be confirmed onchain:
 
-    ```ts
+    ```ts twoslash
     async function sendAndWaitForTransaction() {
       // ... (setup code from above)
 
@@ -358,7 +358,7 @@ Upgrade existing Privy wallets to Smart Wallets to enable gasless transactions (
 
     Send multiple transactions in a single batch:
 
-    ```ts
+    ```ts twoslash
     const result = await client.sendCalls({
       from: wallet.address,
       calls: [
