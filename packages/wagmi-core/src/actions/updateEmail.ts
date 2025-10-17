@@ -1,6 +1,6 @@
 import { type Config } from "@wagmi/core";
 import { resolveAlchemyAuthConnector } from "../utils/resolveAuthConnector.js";
-import { BaseError } from "viem";
+import { BaseError } from "@alchemy/common";
 
 export type UpdateEmailParameters =
   | {
