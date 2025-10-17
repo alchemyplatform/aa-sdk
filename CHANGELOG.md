@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.72.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.71.1...v4.72.0) (2025-10-16)
+
+### Features
+
+- add solana hook to the privy integration ([#2186](https://github.com/alchemyplatform/aa-sdk/issues/2186)) ([ee614a6](https://github.com/alchemyplatform/aa-sdk/commit/ee614a6fbccbd142ef952e60c8947bc31fd08d4e))
+
+## [4.71.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.71.0...v4.71.1) (2025-10-16)
+
+### Bug Fixes
+
+- use case-insensitive address equality check in mav2 7702 check ([#2187](https://github.com/alchemyplatform/aa-sdk/issues/2187)) ([18bf022](https://github.com/alchemyplatform/aa-sdk/commit/18bf022ced4b7ff0eff5b4147ad4eb92cab0532a))
+
+### Features
+
+- add cross-chain swap client docs ([#2184](https://github.com/alchemyplatform/aa-sdk/issues/2184)) ([2a680db](https://github.com/alchemyplatform/aa-sdk/commit/2a680db5a5b8000ee23055174fcef429b253f279))
+
+# [4.71.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.70.1...v4.71.0) (2025-10-15)
+
+### Features
+
+- add webhook data to gas manager middleware ([#2180](https://github.com/alchemyplatform/aa-sdk/issues/2180)) ([93be151](https://github.com/alchemyplatform/aa-sdk/commit/93be151a004167e2d0cfaeb9a1eef94f324a3995))
+
 ## [4.70.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.70.0...v4.70.1) (2025-10-14)
 
 ### Bug Fixes

@@ -10,7 +10,8 @@
   },
   "dependencies": {
     "@account-kit/privy-integration": "*",
-    "@privy-io/react-auth": "^2.3.1",
+    "@privy-io/react-auth": "^3.3.0",
+    "@solana-program/memo": "^0.9.0",
     "next": "^14.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

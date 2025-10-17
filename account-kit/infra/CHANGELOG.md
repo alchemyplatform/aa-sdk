@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.72.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.71.1...v4.72.0) (2025-10-16)
+
+**Note:** Version bump only for package @account-kit/infra
+
+## [4.71.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.71.0...v4.71.1) (2025-10-16)
+
+**Note:** Version bump only for package @account-kit/infra
+
+# [4.71.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.70.1...v4.71.0) (2025-10-15)
+
+### Features
+
+- add webhook data to gas manager middleware ([#2180](https://github.com/alchemyplatform/aa-sdk/issues/2180)) ([93be151](https://github.com/alchemyplatform/aa-sdk/commit/93be151a004167e2d0cfaeb9a1eef94f324a3995))
+
 ## [4.70.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.70.0...v4.70.1) (2025-10-14)
 
 **Note:** Version bump only for package @account-kit/infra
