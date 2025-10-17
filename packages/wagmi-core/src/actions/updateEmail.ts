@@ -57,7 +57,6 @@ export async function updateEmail(
   // Remove email.
   if ("email" in parameters) {
     if (parameters.email !== null) {
-      console.log(parameters.email);
       throw new BaseError(
         "The 'email' parameter only accepts null for removal. " +
           "To update email, use { verificationCode: 'code' } after calling sendVerificationCode().",
