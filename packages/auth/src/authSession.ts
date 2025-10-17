@@ -371,6 +371,8 @@ export class AuthSession {
     return notImplemented();
   }
 
+  private isSendingEmailVerificationCode = false;
+
   /**
    * Initiates an OTP verification process for adding/changing an email address.
    * Call this first, then use setEmail() with the received code.
@@ -393,16 +395,29 @@ export class AuthSession {
   public async sendEmailVerificationCode(email: string): Promise<void> {
     this.throwIfDisconnected();
 
-    const { otpId } = await this.signerHttpClient.request({
-      route: "signer/v1/init-otp",
-      method: "POST",
-      body: {
-        contact: email,
-        otpType: "OTP_TYPE_EMAIL",
-      },
-    });
+    if (this.isSendingEmailVerificationCode) {
+      throw new BaseError(
+        "Code sending is already in progress. Please wait for it to finish before requesting another code.",
+      );
+    }
 
-    this.pendingEmailOtpId = otpId;
+    this.isSendingEmailVerificationCode = true;
+
+    try {
+      const { otpId } = await this.signerHttpClient.request({
+        route: "signer/v1/init-otp",
+        method: "POST",
+        body: {
+          contact: email,
+          otpType: "OTP_TYPE_EMAIL",
+        },
+      });
+      this.pendingEmailOtpId = otpId;
+    } catch (err) {
+      throw err;
+    } finally {
+      this.isSendingEmailVerificationCode = false;
+    }
   }
 
   /**
@@ -518,6 +533,8 @@ export class AuthSession {
     this.emitter.emit("userUpdated", this.user);
   }
 
+  private isSendingPhoneVerificationCode = false;
+
   /**
    * Initiates an OTP verification process for adding/changing a phone number.
    * Call this first, then use setPhoneNumber() with the received code.
@@ -540,16 +557,29 @@ export class AuthSession {
   public async sendPhoneVerificationCode(phoneNumber: string): Promise<void> {
     this.throwIfDisconnected();
 
-    const { otpId } = await this.signerHttpClient.request({
-      route: "signer/v1/init-otp",
-      method: "POST",
-      body: {
-        contact: phoneNumber,
-        otpType: "OTP_TYPE_SMS",
-      },
-    });
+    if (this.isSendingPhoneVerificationCode) {
+      throw new BaseError(
+        "Code sending is already in progress. Please wait for it to finish before requesting another code.",
+      );
+    }
 
-    this.pendingPhoneOtpId = otpId;
+    this.isSendingPhoneVerificationCode = true;
+
+    try {
+      const { otpId } = await this.signerHttpClient.request({
+        route: "signer/v1/init-otp",
+        method: "POST",
+        body: {
+          contact: phoneNumber,
+          otpType: "OTP_TYPE_SMS",
+        },
+      });
+      this.pendingPhoneOtpId = otpId;
+    } catch (err) {
+      throw err;
+    } finally {
+      this.isSendingPhoneVerificationCode = false;
+    }
   }
 
   /**
