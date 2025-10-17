@@ -7,39 +7,13 @@ slug: wallets/reference/alchemy/react/hooks/useAuthSession
 
 React hook that returns the current authentication session.
 
-This hook uses useSyncExternalStore to subscribe to auth session changes and
-automatically updates when the user connects or disconnects.
-
-Returns null if no authentication session exists.
+**Advanced usage only.** For most use cases, use higher-level hooks instead.
+If you just need user info, use `useUser()` instead.
 
 ## Import
 
 ```ts
 import { useAuthSession } from "@alchemy/react";
-```
-
-## Usage
-
-```tsx twoslash
-import { useAuthSession } from "@alchemy/react";
-
-function SessionInfo() {
-  const authSession = useAuthSession();
-
-  if (!authSession) {
-    return <div>No active session</div>;
-  }
-
-  const user = authSession.getUser();
-  const expiresAt = new Date(authSession.getExpirationDateMs());
-
-  return (
-    <div>
-      <p>Logged in as: {user.address}</p>
-      <p>Session expires: {expiresAt.toLocaleString()}</p>
-    </div>
-  );
-}
 ```
 
 ## Parameters

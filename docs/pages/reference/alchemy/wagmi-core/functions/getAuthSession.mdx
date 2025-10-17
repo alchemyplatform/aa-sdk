@@ -7,25 +7,13 @@ slug: wallets/reference/alchemy/wagmi-core/functions/getAuthSession
 
 Gets the current authentication session.
 
-Returns the AuthSession instance if a user is authenticated, or null if not authenticated.
-The AuthSession provides access to signing methods, user info, and session management.
+**Advanced usage only.** For most use cases, use higher-level actions instead.
+If you just need user info, use `getUser()` instead.
 
 ## Import
 
 ```ts
 import { getAuthSession } from "@alchemy/wagmi-core";
-```
-
-## Usage
-
-```ts
-const authSession = getAuthSession(config);
-if (authSession) {
-  const user = authSession.getUser();
-  console.log("Authenticated as:", user.address);
-} else {
-  console.log("Not authenticated");
-}
 ```
 
 ## Parameters
