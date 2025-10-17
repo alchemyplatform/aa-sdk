@@ -509,10 +509,9 @@ paths:
 components:
   securitySchemes:
     apiKey:
-      type: apiKey
-      name: Authorization
-      in: header
-      description: An API key that will be supplied in a named header.
+      type: http
+      scheme: bearer
+      description: Bearer token authentication. Use 'Bearer <apiKey>' as the value.
       x-default: "Bearer API_KEY"
   schemas:
     email:
