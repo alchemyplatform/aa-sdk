@@ -34,6 +34,10 @@ Upgrade existing Privy wallets to Smart Wallets to enable gasless transactions (
     pnpm add @account-kit/privy-integration
     ```
 
+    <Note>
+      **Solana Support (Optional):** To use `useAlchemySolanaTransaction`, install `@solana/web3.js` and import from `@account-kit/privy-integration/solana`. This dependency is optional—skip it if you only need EVM features.
+    </Note>
+
     ### Prerequisites: Get your keys (API key, Policy ID, Privy App ID)
 
     - Alchemy API Key:
@@ -133,7 +137,7 @@ Upgrade existing Privy wallets to Smart Wallets to enable gasless transactions (
     ### 4. Send Solana Transactions
 
     ```tsx
-    import { useAlchemySolanaTransaction } from "@account-kit/privy-integration";
+    import { useAlchemySolanaTransaction } from "@account-kit/privy-integration/solana";
 
     function SolanaButton() {
       const { sendTransactionAsync, isPending } = useAlchemySolanaTransaction({
