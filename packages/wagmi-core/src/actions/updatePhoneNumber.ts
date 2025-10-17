@@ -58,7 +58,8 @@ export async function updatePhoneNumber(
   if ("phoneNumber" in parameters) {
     if (parameters.phoneNumber !== null) {
       throw new BaseError(
-        "To update phone number, must provide a verification code instead of a phone number.",
+        "The 'phoneNumber' parameter only accepts null for removal. " +
+          "To update phone number, use { verificationCode: 'code' } after calling sendVerificationCode().",
       );
     }
     await authSession.removePhoneNumber();

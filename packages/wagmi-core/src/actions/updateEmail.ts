@@ -57,8 +57,10 @@ export async function updateEmail(
   // Remove email.
   if ("email" in parameters) {
     if (parameters.email !== null) {
+      console.log(parameters.email);
       throw new BaseError(
-        "To update email, must provide a verification code instead of an email address.",
+        "The 'email' parameter only accepts null for removal. " +
+          "To update email, use { verificationCode: 'code' } after calling sendVerificationCode().",
       );
     }
     await authSession.removeEmail();
