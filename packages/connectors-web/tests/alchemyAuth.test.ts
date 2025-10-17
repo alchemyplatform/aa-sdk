@@ -91,7 +91,7 @@ describe("alchemyAuth connector", () => {
       expect(session).toBe(mockAuthSession);
     });
 
-    it("should throw error when getting auth session without setting it first", async () => {
+    it("should return null when getting auth session without setting it first", async () => {
       const connector = alchemyAuth({ apiKey: "test-key" });
       const config = createConfig({
         chains: [sepolia],
@@ -104,9 +104,7 @@ describe("alchemyAuth connector", () => {
 
       const connectorInstance = config.connectors[0] as AlchemyAuthConnector;
 
-      await expect(() => connectorInstance.getAuthSession()).rejects.toThrow(
-        "No auth session available",
-      );
+      expect(connectorInstance.getAuthSession()).toBe(null);
     });
 
     it("should get auth client", () => {
