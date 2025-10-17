@@ -11,14 +11,31 @@ navigation:
   - tab: wallets
     layout:
       - section: Overview
+        path: wallets/pages/index.mdx
         skip-slug: true
         contents:
-          - page: Overview
-            slug: /
-            path: wallets/pages/index.mdx
           - page: Quickstart
             path: wallets/pages/react/getting-started/quickstart-at-top.mdx
-          - section: Get Started
+            hidden: true
+          - section: Integration paths
+            path: wallets/pages/index.mdx
+            contents:
+              - page: Embedded wallets
+                path: wallets/pages/index.mdx
+              - page: Server wallets
+                path: wallets/pages/index.mdx
+              - page: Custom integration
+                path: wallets/pages/index.mdx
+              - page: What is a signer?
+                path: wallets/pages/authentication/what-is-a-signer.mdx
+          - page: Configure client
+            path: wallets/pages/concepts/smart-account-client.mdx
+            hidden: true
+      - section: Embedded wallets
+        contents:
+          - page: Overview
+            path: wallets/pages/authentication/overview.mdx
+          - section: Quickstart by framework
             contents:
               - section: React
                 contents:
@@ -54,48 +71,6 @@ navigation:
                     path: wallets/pages/core/overview.mdx
                   - page: Quickstart
                     path: wallets/pages/core/quickstart.mdx
-              - section: Wallet APIs
-                contents:
-                  - page: Quickstart
-                    path: wallets/pages/smart-wallets/quickstart/index.mdx
-                  - page: Using SDK
-                    path: wallets/pages/smart-wallets/quickstart/sdk.mdx
-                  - page: Using API
-                    path: wallets/pages/smart-wallets/quickstart/api.mdx
-          - section: Recipes
-            contents:
-              - page: Overview
-                slug: recipes
-                path: wallets/pages/recipes/overview.mdx
-              - page: Send USDC
-                slug: recipes/send-usdc
-                path: wallets/pages/recipes/send-usdc.mdx
-              - page: Programmatic Wallet Creation
-                path: wallets/pages/recipes/programmatic-wallet-creation.mdx
-              - page: Onramp Funds
-                slug: recipes/onramp-funds
-                path: wallets/pages/recipes/onramp-funds.mdx
-              - page: Hyperliquid Transactions
-                slug: recipes/hyperliquid-wallets
-                path: wallets/pages/recipes/hyperliquid-wallets.mdx
-              - page: Smart Wallets with Aave
-                slug: wallets/recipes/smart-wallets-aave
-                path: wallets/pages/recipes/smart-wallets-aave.mdx
-              - page: Upgrade to Smart Accounts
-                slug: recipes/upgrade-to-smart-accounts
-                path: wallets/pages/recipes/upgrade-to-smart-accounts.mdx
-              - page: Multi-chain setup
-                slug: recipes/multi-chain-setup
-                path: wallets/pages/recipes/multi-chain-setup.mdx
-              - link: Multi-chain Balances
-                href: https://www.alchemy.com/docs/how-to-get-crosschain-token-balances
-          - page: Supported Chains
-            path: wallets/pages/overview/supported-chains.mdx
-
-      - section: Authentication
-        contents:
-          - page: Overview
-            path: wallets/pages/authentication/overview.mdx
           - section: Login methods
             contents:
               - page: Email OTP
@@ -106,8 +81,6 @@ navigation:
                 path: wallets/pages/authentication/login-methods/social-login.mdx
               - page: Custom social providers
                 path: wallets/pages/react/login-methods/social-providers.mdx
-              - page: Bring your own authentication
-                path: wallets/pages/authentication/login-methods/bring-your-own-auth.mdx
               - page: Passkey signup
                 path: wallets/pages/authentication/login-methods/passkey-signup.mdx
               - page: Passkey login
@@ -152,173 +125,43 @@ navigation:
                 path: wallets/pages/react/mfa/social-login.mdx
           - page: Solana wallets
             path: wallets/pages/react/solana-wallets/get-started.mdx
-          - page: Server wallets
-            path: wallets/pages/signer/authentication/server-wallets.mdx
-          - section: Account management
-            contents:
-              - page: Pregenerate wallets
-                path: wallets/pages/react/pregenerate-wallets.mdx
-              - page: User sessions
-                path: wallets/pages/signer/user-sessions.mdx
-              - section: Policies
-                contents:
-                  - page: Overview
-                    path: wallets/pages/authorization/policies/overview.mdx
-                  - page: Key Concepts
-                    path: wallets/pages/signer/policies/key-concepts-and-examples.mdx
-                  - page: Session key overview
-                    path: wallets/pages/smart-contracts/modular-account-v2/session-keys/index.mdx
-                  - page: Session key permissions
-                    path: wallets/pages/authorization/policies/session-key-permissions.mdx
-                  - page: Adding session keys
-                    path: wallets/pages/smart-contracts/modular-account-v2/session-keys/adding-session-keys.mdx
-                  - page: Using session keys
-                    path: wallets/pages/smart-contracts/modular-account-v2/session-keys/using-session-keys.mdx
-                  - page: Removing session keys
-                    path: wallets/pages/smart-contracts/modular-account-v2/session-keys/removing-session-keys.mdx
-              - page: Manage account ownership
-                path: wallets/pages/smart-contracts/modular-account-v2/managing-ownership.mdx
-              - page: Export private key
-                path: wallets/pages/signer/export-private-key.mdx
-          - section: Third party signers
-            contents:
-              - page: Privy
-                path: wallets/pages/third-party/signers/privy.mdx
-              - page: Custom integration
-                path: wallets/pages/third-party/signers/custom-integration.mdx
-          - page: What is a signer?
-            path: wallets/pages/authentication/what-is-a-signer.mdx
-
-      - section: Transactions
+          - page: User sessions
+            path: wallets/pages/signer/user-sessions.mdx
+          - page: Export private key
+            path: wallets/pages/signer/export-private-key.mdx
+      - section: Server wallets
         contents:
-          - page: Overview
-            path: wallets/pages/transactions/overview.mdx
+          - page: Quickstart
+            path: wallets/pages/signer/authentication/server-wallets.mdx
+      - section: Custom integration
+        contents:
+          - page: Third-party signer
+            path: wallets/pages/third-party/signers/custom-integration.mdx
+          - page: Privy
+            path: wallets/pages/third-party/signers/privy.mdx
+          - page: Bring your own
+            path: wallets/pages/authentication/login-methods/bring-your-own-auth.mdx
+      - section: Wallet management
+        contents:
+          - page: Pregenerate wallets
+            path: wallets/pages/react/pregenerate-wallets.mdx
+          - page: Manage account ownership
+            path: wallets/pages/smart-contracts/modular-account-v2/managing-ownership.mdx
+      - section: Next steps
+        contents:
           - page: Send transactions
             path: wallets/pages/transactions/send-transactions/index.mdx
-          - page: Using EIP-7702
-            path: wallets/pages/transactions/using-eip-7702/index.mdx
-          - page: Send batch transactions
-            path: wallets/pages/transactions/send-batch-transactions/index.mdx
           - page: Sponsor gas
             path: wallets/pages/transactions/sponsor-gas/index.mdx
-          - page: Pay gas with any token
-            path: wallets/pages/transactions/pay-gas-with-any-token/index.mdx
-          - page: "[NEW] Same-chain swaps"
-            path: wallets/pages/transactions/swap-tokens/index.mdx
-          - page: "[NEW] Cross-chain swaps"
-            path: wallets/pages/transactions/cross-chain-swap-tokens/index.mdx
-          - page: Send parallel transactions
-            path: wallets/pages/transactions/send-parallel-transactions/index.mdx
-          - page: Retry transactions
-            path: wallets/pages/transactions/retry-transactions/index.mdx
-          - page: Sponsor gas on Solana
-            path: wallets/pages/transactions/solana/sponsor-gas-solana.mdx
-          - section: Signing
-            contents:
-              - page: Sign messages
-                path: wallets/pages/transactions/signing/sign-messages/index.mdx
-              - page: Sign typed data
-                path: wallets/pages/transactions/signing/sign-typed-data/index.mdx
-          - page: Configure client
-            path: wallets/pages/concepts/smart-account-client.mdx
-      - section: Low-Level Infra
-        contents:
-          - page: Overview
-            path: wallets/pages/low-level-infra/overview.mdx
-          - page: Quickstart
-            path: wallets/pages/low-level-infra/quickstart.mdx
-          - section: Gas Manager
-            contents:
-              - section: Policy Management
-                contents:
-                  - page: API Endpoints
-                    path: wallets/pages/low-level-infra/gas-manager/policy-management/api-endpoints.mdx
-              - section: Gas Sponsorship
-                contents:
-                  - page: API Endpoints
-                    path: wallets/pages/low-level-infra/gas-manager/gas-sponsorship/api-endpoints.mdx
-                  - section: Using SDK
-                    contents:
-                      - page: Basic Gas Sponsorship
-                        path: wallets/pages/low-level-infra/gas-manager/gas-sponsorship/using-sdk/basic-gas-sponsorship.mdx
-                      - page: Conditional Gas Sponsorship
-                        path: wallets/pages/low-level-infra/gas-manager/gas-sponsorship/using-sdk/conditional-gas-sponsorship.mdx
-                      - page: Pay Gas with Any ERC20 Token
-                        path: wallets/pages/low-level-infra/gas-manager/gas-sponsorship/using-sdk/pay-gas-with-any-erc20-token.mdx
-          - section: Bundler
-            path: wallets/pages/low-level-infra/bundler/overview.mdx
-            contents:
-              - page: API Endpoints
-                path: wallets/pages/low-level-infra/bundler/api-endpoints.mdx
-              - page: Using SDK
-                path: wallets/pages/low-level-infra/bundler/sdk.mdx
-              - page: Bundler FAQs
-                path: wallets/pages/bundler-api/bundler-faqs.mdx
-          - section: Third Party Infrastructure
-            contents:
-              - page: Third Party Bundlers
-                path: wallets/pages/low-level-infra/third-party-infrastructure/bundlers.mdx
-              - page: Third Party Chains
-                path: wallets/pages/low-level-infra/third-party-infrastructure/chains.mdx
-              - page: Third Party Paymasters
-                path: wallets/pages/low-level-infra/third-party-infrastructure/paymasters.mdx
-
-      - section: Funding
-        contents:
-          - page: Early Access
-            path: wallets/pages/funding/signup.mdx
-
       - section: API Reference
         contents:
-          - section: Smart Wallets
+          - section: Signer API Endpoints
             contents:
-              - section: Wallet API Endpoints
-                contents:
-                  - api: Wallet API Endpoints
-                    api-name: wallet-api
-                    flattened: true
-              - section: Signer API Endpoints
-                contents:
-                  - api: Signer API Endpoints
-                    api-name: accounts
-                    flattened: true
-              - section: Session Keys
-                contents:
-                  - page: Overview
-                    path: wallets/pages/smart-wallets/session-keys/index.mdx
-                  - page: Using SDK
-                    path: wallets/pages/smart-wallets/session-keys/sdk.mdx
-                  - page: Using API
-                    path: wallets/pages/smart-wallets/session-keys/api.mdx
+              - api: Signer API Endpoints
+                api-name: accounts
+                flattened: true
               - page: How to stamp requests
                 path: wallets/pages/smart-wallets/how-to-stamp-requests.mdx
-            slug: smart-wallets
-          - section: Gas Manager
-            contents:
-              - api: Gas Abstraction API Endpoints
-                api-name: gas-manager-coverage
-              - api: Admin API Endpoints
-                api-name: admin
-            slug: gas-manager-admin-api
-          - section: Bundler
-            contents:
-              - api: Bundler API Endpoints
-                api-name: bundler
-                slug: bundler-api-endpoints
-              - api: UserOp Simulation Endpoints
-                api-name: user-op-sim
-                slug: useroperation-simulation-endpoints
-              - section: EntryPoint Revert Codes
-                contents:
-                  - page: EntryPoint v0.7 Revert Codes
-                    path: >-
-                      wallets/pages/bundler-api/entrypoint-revert-codes/entrypoint-v07-revert-codes.mdx
-                  - page: EntryPoint v0.6 Revert Codes
-                    path: >-
-                      wallets/pages/bundler-api/entrypoint-revert-codes/entrypoint-v06-revert-codes.mdx
-                slug: entrypoint-revert-codes
-            slug: bundler-api
-
       - section: SDK Reference
         contents:
           - section: AA-SDK core
@@ -2808,6 +2651,35 @@ navigation:
       - section: Resources
         skip-slug: true
         contents:
+          - section: Recipes
+            contents:
+              - page: Overview
+                slug: recipes
+                path: wallets/pages/recipes/overview.mdx
+              - page: Send USDC
+                slug: recipes/send-usdc
+                path: wallets/pages/recipes/send-usdc.mdx
+              - page: Programmatic Wallet Creation
+                path: wallets/pages/recipes/programmatic-wallet-creation.mdx
+              - page: Onramp Funds
+                slug: recipes/onramp-funds
+                path: wallets/pages/recipes/onramp-funds.mdx
+              - page: Hyperliquid Transactions
+                slug: recipes/hyperliquid-wallets
+                path: wallets/pages/recipes/hyperliquid-wallets.mdx
+              - page: Smart Wallets with Aave
+                slug: wallets/recipes/smart-wallets-aave
+                path: wallets/pages/recipes/smart-wallets-aave.mdx
+              - page: Upgrade to Smart Accounts
+                slug: recipes/upgrade-to-smart-accounts
+                path: wallets/pages/recipes/upgrade-to-smart-accounts.mdx
+              - page: Multi-chain setup
+                slug: recipes/multi-chain-setup
+                path: wallets/pages/recipes/multi-chain-setup.mdx
+              - link: Multi-chain Balances
+                href: https://www.alchemy.com/docs/how-to-get-crosschain-token-balances
+          - page: Supported Chains
+            path: wallets/pages/overview/supported-chains.mdx
           - page: Features
             slug: wallets/resources/features
             path: wallets/pages/features.mdx
@@ -2902,3 +2774,136 @@ navigation:
           - page: Contact us
             slug: resources/contact-us
             path: wallets/pages/resources/contact-us.mdx
+      - section: Transactions
+        contents:
+          - page: Overview
+            path: wallets/pages/transactions/overview.mdx
+          - section: Quickstart
+            path: wallets/pages/smart-wallets/quickstart/index.mdx
+            contents:
+              - page: Using SDK
+                path: wallets/pages/smart-wallets/quickstart/sdk.mdx
+              - page: Using API
+                path: wallets/pages/smart-wallets/quickstart/api.mdx
+          - page: Set up
+            path: wallets/pages/index.mdx
+      - section: Send transactions
+        contents:
+          - page: Send
+            path: wallets/pages/transactions/send-transactions/index.mdx
+          - page: Send batch transactions
+            path: wallets/pages/transactions/send-batch-transactions/index.mdx
+          - page: Send parallel transactions
+            path: wallets/pages/transactions/send-parallel-transactions/index.mdx
+          - page: Using EIP-7702
+            path: wallets/pages/transactions/using-eip-7702/index.mdx
+          - page: Retry transactions
+            path: wallets/pages/transactions/retry-transactions/index.mdx
+      - section: Gasless transactions
+        contents:
+          - page: Sponsor gas
+            path: wallets/pages/transactions/sponsor-gas/index.mdx
+          - section: Conditional sponsorship
+            path: wallets/pages/index.mdx
+            contents:
+              - page: Spending rules
+                path: wallets/pages/index.mdx
+              - page: Custom rules
+                path: wallets/pages/index.mdx
+          - page: Pay gas with any token
+            path: wallets/pages/transactions/pay-gas-with-any-token/index.mdx
+          - page: Sponsor gas on Solana
+            path: wallets/pages/transactions/solana/sponsor-gas-solana.mdx
+      - section: Swaps
+        contents:
+          - page: "Same-chain swaps"
+            path: wallets/pages/transactions/swap-tokens/index.mdx
+          - page: "Cross-chain swaps"
+            path: wallets/pages/transactions/cross-chain-swap-tokens/index.mdx
+      - section: Signing
+        contents:
+          - page: Sign messages
+            path: wallets/pages/transactions/signing/sign-messages/index.mdx
+          - page: Sign typed data
+            path: wallets/pages/transactions/signing/sign-typed-data/index.mdx
+      - section: Session Keys
+        contents:
+          - page: Overview
+            path: wallets/pages/smart-wallets/session-keys/index.mdx
+          - page: Using SDK
+            path: wallets/pages/smart-wallets/session-keys/sdk.mdx
+          - page: Using API
+            path: wallets/pages/smart-wallets/session-keys/api.mdx
+      - section: Low-Level AA infra
+        contents:
+          - page: Overview
+            path: wallets/pages/low-level-infra/overview.mdx
+          - page: Quickstart
+            path: wallets/pages/low-level-infra/quickstart.mdx
+          - section: Gas Manager
+            contents:
+              - section: Policy Management
+                contents:
+                  - page: API Endpoints
+                    path: wallets/pages/low-level-infra/gas-manager/policy-management/api-endpoints.mdx
+              - section: Gas Sponsorship
+                contents:
+                  - page: API Endpoints
+                    path: wallets/pages/low-level-infra/gas-manager/gas-sponsorship/api-endpoints.mdx
+                  - section: Using SDK
+                    contents:
+                      - page: Basic Gas Sponsorship
+                        path: wallets/pages/low-level-infra/gas-manager/gas-sponsorship/using-sdk/basic-gas-sponsorship.mdx
+                      - page: Conditional Gas Sponsorship
+                        path: wallets/pages/low-level-infra/gas-manager/gas-sponsorship/using-sdk/conditional-gas-sponsorship.mdx
+                      - page: Pay Gas with Any ERC20 Token
+                        path: wallets/pages/low-level-infra/gas-manager/gas-sponsorship/using-sdk/pay-gas-with-any-erc20-token.mdx
+          - section: Bundler
+            path: wallets/pages/low-level-infra/bundler/overview.mdx
+            contents:
+              - page: API Endpoints
+                path: wallets/pages/low-level-infra/bundler/api-endpoints.mdx
+              - page: Using SDK
+                path: wallets/pages/low-level-infra/bundler/sdk.mdx
+              - page: Bundler FAQs
+                path: wallets/pages/bundler-api/bundler-faqs.mdx
+          - section: Third Party Infrastructure
+            contents:
+              - page: Third Party Bundlers
+                path: wallets/pages/low-level-infra/third-party-infrastructure/bundlers.mdx
+              - page: Third Party Chains
+                path: wallets/pages/low-level-infra/third-party-infrastructure/chains.mdx
+              - page: Third Party Paymasters
+                path: wallets/pages/low-level-infra/third-party-infrastructure/paymasters.mdx
+      - section: API Reference
+        contents:
+          - section: Transaction API
+            contents:
+              - api: Wallet API Endpoints
+                api-name: wallet-api
+                flattened: true
+          - section: Gas Manager API
+            contents:
+              - api: Gas Abstraction API Endpoints
+                api-name: gas-manager-coverage
+              - api: Admin API Endpoints
+                api-name: admin
+            slug: gas-manager-admin-api
+          - section: Bundler API
+            contents:
+              - api: Bundler API Endpoints
+                api-name: bundler
+                slug: bundler-api-endpoints
+              - api: UserOp Simulation Endpoints
+                api-name: user-op-sim
+                slug: useroperation-simulation-endpoints
+              - section: EntryPoint Revert Codes
+                contents:
+                  - page: EntryPoint v0.7 Revert Codes
+                    path: >-
+                      wallets/pages/bundler-api/entrypoint-revert-codes/entrypoint-v07-revert-codes.mdx
+                  - page: EntryPoint v0.6 Revert Codes
+                    path: >-
+                      wallets/pages/bundler-api/entrypoint-revert-codes/entrypoint-v06-revert-codes.mdx
+                slug: entrypoint-revert-codes
+            slug: bundler-api
