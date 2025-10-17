@@ -52,6 +52,7 @@ export async function createSolanaSponsoredTransaction(
     headers: {
       accept: "application/json",
       "content-type": "application/json",
+      "X-Alchemy-Client-Breadcrumb": "privyIntegrationSdk",
     },
     body,
   };
