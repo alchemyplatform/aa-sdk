@@ -189,6 +189,8 @@ navigation:
             contents:
               - page: Privy
                 path: wallets/pages/third-party/signers/privy.mdx
+              - page: Turnkey
+                path: wallets/pages/third-party/signers/turnkey.mdx
               - page: Custom integration
                 path: wallets/pages/third-party/signers/custom-integration.mdx
           - page: What is a signer?
