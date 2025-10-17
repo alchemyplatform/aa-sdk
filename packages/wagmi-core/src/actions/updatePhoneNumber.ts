@@ -1,9 +1,10 @@
 import { type Config } from "@wagmi/core";
 import { resolveAlchemyAuthConnector } from "../utils/resolveAuthConnector.js";
+import { BaseError } from "@alchemy/common";
 
 export type UpdatePhoneNumberParameters =
   | {
-      /** The verification code received via SMS */
+      /** The OTP verification code received via SMS */
       verificationCode: string;
     }
   | {
@@ -22,7 +23,7 @@ export type UpdatePhoneNumberReturnType = void;
  * 3. Call updatePhoneNumber() with the verification code
  *
  * To remove a phone number:
- * - Call updatePhoneNumber() with { phoneNumber: null }
+ * - Call updatePhoneNumber() with `{ phoneNumber: null }`
  *
  * @param {Config} config - The shared Wagmi/Alchemy config
  * @param {UpdatePhoneNumberParameters} parameters - Update phone number parameters
@@ -50,18 +51,20 @@ export async function updatePhoneNumber(
   const authSession = connector.getAuthSession();
 
   if (!authSession) {
-    throw new Error("No active auth session. Please authenticate first.");
+    throw new BaseError("No active auth session. Please authenticate first.");
   }
 
-  if ("phoneNumber" in parameters && parameters.phoneNumber === null) {
-    // Remove phone number
+  // Remove phone number.
+  if ("phoneNumber" in parameters) {
+    if (parameters.phoneNumber !== null) {
+      throw new BaseError(
+        "To update phone number, must provide a verification code instead of a phone number.",
+      );
+    }
     await authSession.removePhoneNumber();
-  } else if ("verificationCode" in parameters) {
-    // Update phone number
-    await authSession.setPhoneNumber(parameters.verificationCode);
-  } else {
-    throw new Error(
-      "Invalid parameters. Provide either { verificationCode: string } or { phoneNumber: null }",
-    );
+    return;
   }
+
+  // Update phone number.
+  await authSession.setPhoneNumber(parameters);
 }

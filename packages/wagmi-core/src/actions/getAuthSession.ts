@@ -9,22 +9,11 @@ export type GetAuthSessionReturnType = AuthSession | null;
 /**
  * Gets the current authentication session.
  *
- * Returns the AuthSession instance if a user is authenticated, or null if not authenticated.
- * The AuthSession provides access to signing methods, user info, and session management.
+ * **Advanced usage only.** For most use cases, use higher-level actions instead.
+ * If you just need user info, use `getUser()` instead.
  *
  * @param {Config} config - The shared Wagmi/Alchemy config
  * @returns {AuthSession | null} The current auth session, or null if not authenticated
- *
- * @example
- * ```ts
- * const authSession = getAuthSession(config);
- * if (authSession) {
- *   const user = authSession.getUser();
- *   console.log("Authenticated as:", user.address);
- * } else {
- *   console.log("Not authenticated");
- * }
- * ```
  */
 export function getAuthSession(config: Config): GetAuthSessionReturnType {
   const { connector } = resolveAlchemyAuthConnector(config);

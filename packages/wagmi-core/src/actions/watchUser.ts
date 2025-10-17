@@ -13,7 +13,7 @@ export type WatchUserReturnType = () => void;
 /**
  * Watches for changes to the authenticated user's data.
  *
- * This subscribes to both account connection changes and AuthSession's userUpdate event,
+ * This subscribes to both account connection changes and AuthSession's userUpdated event,
  * calling the onChange callback whenever the user data changes (e.g., on connect/disconnect,
  * email/phone updates, or other profile changes).
  *
@@ -60,11 +60,11 @@ export function watchUser(
           const user = getUser(config);
           onChange(user);
 
-          // Subscribe to AuthSession userUpdate events
+          // Subscribe to AuthSession userUpdated events
           const authSession = getAuthSession(config);
           if (authSession) {
             authSessionUnsubscribe = authSession.on(
-              "userUpdate",
+              "userUpdated",
               (updatedUser) => {
                 onChange(updatedUser);
               },

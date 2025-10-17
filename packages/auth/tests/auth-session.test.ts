@@ -282,7 +282,7 @@ describe("AuthSession", () => {
           },
         );
 
-        await authSession.setPhoneNumber(verificationCode);
+        await authSession.setPhoneNumber({ verificationCode });
 
         expect(mockSignerHttpClient.request).toHaveBeenCalledWith({
           route: "signer/v1/verify-otp",
@@ -318,9 +318,9 @@ describe("AuthSession", () => {
       it("should throw if session is disconnected", async () => {
         authSession.disconnect();
 
-        await expect(authSession.setPhoneNumber("123456")).rejects.toThrow(
-          "Auth session has been disconnected",
-        );
+        await expect(
+          authSession.setPhoneNumber({ verificationCode: "123456" }),
+        ).rejects.toThrow("Auth session has been disconnected");
       });
     });
 

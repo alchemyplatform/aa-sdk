@@ -175,8 +175,11 @@ const UserProfileDemo = () => {
   const user = useUser();
   const authSession = useAuthSession();
   const authClient = useAuthClient();
-  const { sendVerificationCode, isPending: isSendingCode } =
-    useSendVerificationCode();
+  const {
+    sendVerificationCode,
+    isPending: isSendingCode,
+    variables: sendVerificationCodeVars,
+  } = useSendVerificationCode();
   const { updateEmail, isPending: isUpdatingEmail } = useUpdateEmail();
   const { updatePhoneNumber, isPending: isUpdatingPhone } =
     useUpdatePhoneNumber();
@@ -234,10 +237,14 @@ const UserProfileDemo = () => {
               if (!email) return;
               sendVerificationCode({ contact: email, type: "email" });
             }}
-            disabled={isSendingCode}
+            disabled={
+              isSendingCode && sendVerificationCodeVars.type === "email"
+            }
             className="cursor-pointer rounded bg-blue-500 px-3 py-1 text-sm font-bold text-white hover:bg-blue-700 disabled:opacity-50"
           >
-            {isSendingCode ? "Sending..." : "Update Email"}
+            {isSendingCode && sendVerificationCodeVars.type === "email"
+              ? "Sending..."
+              : "Update Email"}
           </button>
           <button
             onClick={() => {
@@ -278,10 +285,14 @@ const UserProfileDemo = () => {
               if (!phone) return;
               sendVerificationCode({ contact: phone, type: "phone" });
             }}
-            disabled={isSendingCode}
+            disabled={
+              isSendingCode && sendVerificationCodeVars.type === "phone"
+            }
             className="cursor-pointer rounded bg-blue-500 px-3 py-1 text-sm font-bold text-white hover:bg-blue-700 disabled:opacity-50"
           >
-            {isSendingCode ? "Sending..." : "Update Phone"}
+            {isSendingCode && sendVerificationCodeVars.type === "phone"
+              ? "Sending..."
+              : "Update Phone"}
           </button>
           <button
             onClick={() => {
@@ -444,13 +455,13 @@ const SmsAuthDemo = () => {
 };
 
 const OAuthDemo = () => {
-  const { loginWithOauth, isPending, error } = useLoginWithOauth();
+  const { loginWithOauth, isPending, error, variables } = useLoginWithOauth();
 
   return (
     <div className="flex flex-col gap-3 items-center">
       <div className="flex gap-3">
         <button
-          className="cursor-pointer rounded bg-purple-500 px-4 py-2 font-bold text-white hover:bg-purple-700 disabled:opacity-50"
+          className="cursor-pointer rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 disabled:opacity-50"
           disabled={isPending}
           onClick={() => {
             loginWithOauth({
@@ -459,10 +470,12 @@ const OAuthDemo = () => {
             });
           }}
         >
-          {isPending ? "Logging in..." : "Google (Popup)"}
+          {isPending && variables.mode === "popup"
+            ? "Logging in..."
+            : "Google (Popup)"}
         </button>
         <button
-          className="cursor-pointer rounded bg-purple-500 px-4 py-2 font-bold text-white hover:bg-purple-700 disabled:opacity-50"
+          className="cursor-pointer rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 disabled:opacity-50"
           disabled={isPending}
           onClick={() => {
             loginWithOauth({
@@ -471,7 +484,9 @@ const OAuthDemo = () => {
             });
           }}
         >
-          {isPending ? "Logging in..." : "Google (Redirect)"}
+          {isPending && variables.mode === "redirect"
+            ? "Logging in..."
+            : "Google (Redirect)"}
         </button>
       </div>
       {error && (

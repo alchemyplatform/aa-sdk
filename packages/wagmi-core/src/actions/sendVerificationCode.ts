@@ -1,5 +1,6 @@
 import { type Config } from "@wagmi/core";
 import { resolveAlchemyAuthConnector } from "../utils/resolveAuthConnector.js";
+import { BaseError } from "@alchemy/common";
 
 export type SendVerificationCodeParameters = {
   /** The contact to send verification code to (email or phone number) */
@@ -46,7 +47,7 @@ export async function sendVerificationCode(
   const authSession = connector.getAuthSession();
 
   if (!authSession) {
-    throw new Error("No active auth session. Please authenticate first.");
+    throw new BaseError("No active auth session. Please authenticate first.");
   }
 
   if (parameters.type === "email") {

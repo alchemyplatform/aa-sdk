@@ -1,6 +1,7 @@
 import { type Config } from "@wagmi/core";
 import type { User } from "@alchemy/auth";
 import { resolveAlchemyAuthConnector } from "../utils/resolveAuthConnector.js";
+import { BaseError } from "@alchemy/common";
 
 export type GetUserParameters = void;
 
@@ -28,7 +29,7 @@ export function getUser(config: Config): GetUserReturnType {
   const authSession = connector.getAuthSession();
 
   if (!authSession) {
-    throw new Error("No active auth session. Please authenticate first.");
+    throw new BaseError("No active auth session. Please authenticate first.");
   }
 
   return authSession.getUser();

@@ -37,7 +37,7 @@ export type UseUpdatePhoneNumberReturnType = UseMutationReturnType<
  * React hook for updating or removing the user's phone number.
  *
  * To update: First call useSendVerificationCode with the new phone, then call this with the code.
- * To remove: Call this with { phoneNumber: null }.
+ * To remove: Call this with `{ phoneNumber: null }`.
  *
  * @param {UseUpdatePhoneNumberParameters} parameters - Configuration options for the hook
  * @returns {UseUpdatePhoneNumberReturnType} TanStack Query mutation object

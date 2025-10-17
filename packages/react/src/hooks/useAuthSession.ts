@@ -13,37 +13,12 @@ export type UseAuthSessionReturnType = AuthSession | null;
 /**
  * React hook that returns the current authentication session.
  *
- * This hook uses useSyncExternalStore to subscribe to auth session changes and
- * automatically updates when the user connects or disconnects.
- *
- * Returns null if no authentication session exists.
+ * **Advanced usage only.** For most use cases, use higher-level hooks instead.
+ * If you just need user info, use `useUser()` instead.
  *
  * @param {UseAuthSessionParameters} parameters - Configuration options for the hook
  * @param {Config} [parameters.config] - Optional wagmi config override
  * @returns {AuthSession | null} The current auth session, or null if not authenticated
- *
- * @example
- * ```tsx twoslash
- * import { useAuthSession } from '@alchemy/react';
- *
- * function SessionInfo() {
- *   const authSession = useAuthSession();
- *
- *   if (!authSession) {
- *     return <div>No active session</div>;
- *   }
- *
- *   const user = authSession.getUser();
- *   const expiresAt = new Date(authSession.getExpirationDateMs());
- *
- *   return (
- *     <div>
- *       <p>Logged in as: {user.address}</p>
- *       <p>Session expires: {expiresAt.toLocaleString()}</p>
- *     </div>
- *   );
- * }
- * ```
  */
 export function useAuthSession(
   parameters: UseAuthSessionParameters = {},
@@ -54,12 +29,9 @@ export function useAuthSession(
     (onChange) => {
       let disconnectUnsubscribe: (() => void) | undefined;
 
-      // Subscribe to account/connection changes
+      // Subscribe to account status changes
       const unwatchAccount = config.subscribe(
-        (state) => ({
-          connections: state.connections,
-          current: state.current,
-        }),
+        (state) => state.status,
         () => {
           onChange();
 
@@ -74,10 +46,6 @@ export function useAuthSession(
               onChange();
             });
           }
-        },
-        {
-          equalityFn: (a, b) =>
-            a.connections === b.connections && a.current === b.current,
         },
       );
 

@@ -1,9 +1,10 @@
 import { type Config } from "@wagmi/core";
 import { resolveAlchemyAuthConnector } from "../utils/resolveAuthConnector.js";
+import { BaseError } from "viem";
 
 export type UpdateEmailParameters =
   | {
-      /** The verification code received via email */
+      /** The OTP verification code received via email */
       verificationCode: string;
     }
   | {
@@ -22,7 +23,7 @@ export type UpdateEmailReturnType = void;
  * 3. Call updateEmail() with the verification code
  *
  * To remove an email:
- * - Call updateEmail() with { email: null }
+ * - Call updateEmail() with `{ email: null }`
  *
  * @param {Config} config - The shared Wagmi/Alchemy config
  * @param {UpdateEmailParameters} parameters - Update email parameters
@@ -50,18 +51,20 @@ export async function updateEmail(
   const authSession = connector.getAuthSession();
 
   if (!authSession) {
-    throw new Error("No active auth session. Please authenticate first.");
+    throw new BaseError("No active auth session. Please authenticate first.");
   }
 
-  if ("email" in parameters && parameters.email === null) {
-    // Remove email
+  // Remove email.
+  if ("email" in parameters) {
+    if (parameters.email !== null) {
+      throw new BaseError(
+        "To update email, must provide a verification code instead of an email address.",
+      );
+    }
     await authSession.removeEmail();
-  } else if ("verificationCode" in parameters) {
-    // Update email
-    await authSession.setEmail(parameters.verificationCode);
-  } else {
-    throw new Error(
-      "Invalid parameters. Provide either { verificationCode: string } or { email: null }",
-    );
+    return;
   }
+
+  // Update email.
+  await authSession.setEmail(parameters);
 }

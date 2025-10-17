@@ -33,7 +33,7 @@ export type UseUpdateEmailReturnType = UseMutationReturnType<
  * React hook for updating or removing the user's email address.
  *
  * To update: First call useSendVerificationCode with the new email, then call this with the code.
- * To remove: Call this with { email: null }.
+ * To remove: Call this with `{ email: null }`.
  *
  * @param {UseUpdateEmailParameters} parameters - Configuration options for the hook
  * @returns {UseUpdateEmailReturnType} TanStack Query mutation object
