@@ -104,7 +104,7 @@ describe("alchemyAuth connector", () => {
 
       const connectorInstance = config.connectors[0] as AlchemyAuthConnector;
 
-      await expect(connectorInstance.getAuthSession()).rejects.toThrow(
+      await expect(() => connectorInstance.getAuthSession()).rejects.toThrow(
         "No auth session available",
       );
     });
