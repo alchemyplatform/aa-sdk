@@ -68,9 +68,7 @@ export default function Home() {
           OAuth redirect error: {redirectError.message}
         </div>
       )}
-      <p className="font-semibold">
-        {account.isConnected ? "Connected" : "Not connected"}
-      </p>
+      <p className="font-semibold">{account.status}</p>
       {!account.isConnected ? (
         <AuthenticationDemo />
       ) : (
