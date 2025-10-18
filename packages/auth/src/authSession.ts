@@ -27,7 +27,7 @@ import {
   type AlchemyAuthEip1193Provider,
   create1193Provider,
 } from "./provider.js";
-import type { AlchemyRestClient } from "@alchemy/common";
+import { BaseError, type AlchemyRestClient } from "@alchemy/common";
 import type { SignerHttpSchema } from "@alchemy/aa-infra";
 import EventEmitter from "eventemitter3";
 
@@ -73,6 +73,7 @@ export type SignMessageParams = {
 
 export type AuthSessionEvents = {
   disconnect(): void;
+  userUpdated(user: User): void;
 };
 
 export type AuthSessionEventType = keyof AuthSessionEvents;
@@ -105,6 +106,9 @@ export class AuthSession {
   // Type is any because it differs by environment and doesn't matter.
   private readonly expirationTimeoutId: any;
   private isDisconnected = false;
+
+  private pendingEmailOtpId?: string;
+  private pendingPhoneOtpId?: string;
 
   private constructor(
     private readonly signerHttpClient: AlchemyRestClient<SignerHttpSchema>,
@@ -367,82 +371,253 @@ export class AuthSession {
     return notImplemented();
   }
 
-  /**
-   * Sets or updates the email address associated with this authentication session.
-   *
-   * @param {string} email - The email address to set
-   * @returns {Promise<void>} A promise that resolves when the email is updated
-   */
-  public async setEmail(email: string): Promise<void> {
-    this.throwIfDisconnected();
-    return notImplemented(email);
-  }
+  private isSendingEmailVerificationCode = false;
 
   /**
-   * Initiates an OTP verification process for adding/changing a phone number.
-   * Call this first, then use setPhoneNumber() with the received code.
+   * Initiates an OTP verification process for adding/changing an email address.
+   * Call this first, then use setEmail() with the received code.
    *
-   * The OTP will be sent via SMS to the provided phone number.
+   * The OTP will be sent via email to the provided email address.
+   * The otpId is stored internally and will be used automatically when calling setEmail().
    *
-   * @param {string} phoneNumber - Phone number with country code (e.g., "+15551234567")
-   * @returns {Promise<{ otpId: string }>} OTP ID to use with setPhoneNumber
-   * @throws {Error} If the OTP request fails
+   * @param {string} email - Email address to verify
+   * @returns {Promise<void>} Promise that resolves when OTP is sent
+   * @throws {BaseError} If the OTP request fails
    *
    * @example
    * ```ts
-   * const { otpId } = await authSession.sendPhoneVerificationCode("+15551234567");
-   * // User receives SMS with code
-   * const code = prompt("Enter code from SMS:");
-   * await authSession.setPhoneNumber({ otpId, verificationCode: code });
+   * await authSession.sendEmailVerificationCode("user@example.com");
+   * // User receives email with code
+   * const code = prompt("Enter code from email:");
+   * await authSession.setEmail({ verificationCode: code });
    * ```
    */
-  public async sendPhoneVerificationCode(
-    phoneNumber: string,
-  ): Promise<{ otpId: string }> {
+  public async sendEmailVerificationCode(email: string): Promise<void> {
     this.throwIfDisconnected();
 
-    const { otpId } = await this.signerHttpClient.request({
-      route: "signer/v1/init-otp",
-      method: "POST",
-      body: {
-        contact: phoneNumber,
-        otpType: "OTP_TYPE_SMS",
-      },
-    });
+    if (this.isSendingEmailVerificationCode) {
+      throw new BaseError(
+        "Code sending is already in progress. Please wait for it to finish before requesting another code.",
+      );
+    }
 
-    return { otpId };
+    this.isSendingEmailVerificationCode = true;
+
+    try {
+      const { otpId } = await this.signerHttpClient.request({
+        route: "signer/v1/init-otp",
+        method: "POST",
+        body: {
+          contact: email,
+          otpType: "OTP_TYPE_EMAIL",
+        },
+      });
+      this.pendingEmailOtpId = otpId;
+    } catch (err) {
+      throw err;
+    } finally {
+      this.isSendingEmailVerificationCode = false;
+    }
   }
 
   /**
-   * Sets phone number for authenticated user after verification.
-   * Must call sendPhoneVerificationCode() first to get the OTP.
+   * Sets or updates the email address for authenticated user after verification.
+   * Must call sendEmailVerificationCode() first to get the OTP.
    *
-   * @param {object} params - Parameters for setting phone number
-   * @param {string} params.otpId - OTP ID from sendPhoneVerificationCode
-   * @param {string} params.verificationCode - The OTP code received via SMS
-   * @returns {Promise<void>} Promise that resolves when phone is set
-   * @throws {Error} If verification fails or user is not authenticated
+   * @param {object} params - The verification parameters
+   * @param {string} params.verificationCode - The OTP code received via email
+   * @returns {Promise<void>} Promise that resolves when email is set
+   * @throws {BaseError} If verification fails, no pending OTP, or user is not authenticated
    *
    * @example
    * ```ts
-   * const { otpId } = await authSession.sendPhoneVerificationCode("+15551234567");
-   * const code = "123456"; // Code from SMS
-   * await authSession.setPhoneNumber({ otpId, verificationCode: code });
+   * await authSession.sendEmailVerificationCode("user@example.com");
+   * const code = "123456"; // Code from email
+   * await authSession.setEmail({ verificationCode: code });
    * ```
    */
-  public async setPhoneNumber(params: {
-    otpId: string;
+  public async setEmail({
+    verificationCode,
+  }: {
     verificationCode: string;
   }): Promise<void> {
     this.throwIfDisconnected();
+
+    if (!this.pendingEmailOtpId) {
+      throw new BaseError(
+        "No pending email verification. Call sendEmailVerificationCode() first.",
+      );
+    }
 
     // Step 1: Verify the OTP to get a signed verification token
     const { verificationToken } = await this.signerHttpClient.request({
       route: "signer/v1/verify-otp",
       method: "POST",
       body: {
-        otpId: params.otpId,
-        otpCode: params.verificationCode,
+        otpId: this.pendingEmailOtpId,
+        otpCode: verificationCode,
+      },
+    });
+
+    // Step 2: Decode token to extract email
+    const { contact: email } = jwtDecode<{ contact: string }>(
+      verificationToken,
+    );
+
+    // Step 3: Create Turnkey stamped request to update email
+    const stampedRequest = await this.turnkey.stampUpdateUserEmail({
+      type: "ACTIVITY_TYPE_UPDATE_USER_EMAIL",
+      timestampMs: Date.now().toString(),
+      organizationId: this.user.orgId,
+      parameters: {
+        userId: this.user.userId,
+        userEmail: email,
+        verificationToken,
+      },
+    });
+
+    // Step 4: Submit to backend
+    await this.signerHttpClient.request({
+      route: "signer/v1/update-email-auth",
+      method: "POST",
+      body: { stampedRequest },
+    });
+
+    // Step 5: Update local user object and clear pending OTP
+    this.user = {
+      ...this.user,
+      email,
+    };
+    this.pendingEmailOtpId = undefined;
+    this.emitter.emit("userUpdated", this.user);
+  }
+
+  /**
+   * Removes email address from authenticated user account.
+   *
+   * @returns {Promise<void>} Promise that resolves when email is removed
+   * @throws {BaseError} If user is not authenticated or removal fails
+   *
+   * @example
+   * ```ts
+   * await authSession.removeEmail();
+   * console.log("Email address removed");
+   * ```
+   */
+  public async removeEmail(): Promise<void> {
+    this.throwIfDisconnected();
+
+    // Create Turnkey stamped request with empty email
+    const stampedRequest = await this.turnkey.stampUpdateUserEmail({
+      type: "ACTIVITY_TYPE_UPDATE_USER_EMAIL",
+      timestampMs: Date.now().toString(),
+      organizationId: this.user.orgId,
+      parameters: {
+        userId: this.user.userId,
+        userEmail: "", // Empty string removes the email
+      },
+    });
+
+    // Submit to backend
+    await this.signerHttpClient.request({
+      route: "signer/v1/update-email-auth",
+      method: "POST",
+      body: { stampedRequest },
+    });
+
+    // Update local user object (undefined removes the email)
+    this.user = {
+      ...this.user,
+      email: undefined,
+    };
+    this.emitter.emit("userUpdated", this.user);
+  }
+
+  private isSendingPhoneVerificationCode = false;
+
+  /**
+   * Initiates an OTP verification process for adding/changing a phone number.
+   * Call this first, then use setPhoneNumber() with the received code.
+   *
+   * The OTP will be sent via SMS to the provided phone number.
+   * The otpId is stored internally and will be used automatically when calling setPhoneNumber().
+   *
+   * @param {string} phoneNumber - Phone number with country code (e.g., "+15551234567")
+   * @returns {Promise<void>} Promise that resolves when OTP is sent
+   * @throws {BaseError} If the OTP request fails
+   *
+   * @example
+   * ```ts
+   * await authSession.sendPhoneVerificationCode("+15551234567");
+   * // User receives SMS with code
+   * const code = prompt("Enter code from SMS:");
+   * await authSession.setPhoneNumber({ verificationCode: code });
+   * ```
+   */
+  public async sendPhoneVerificationCode(phoneNumber: string): Promise<void> {
+    this.throwIfDisconnected();
+
+    if (this.isSendingPhoneVerificationCode) {
+      throw new BaseError(
+        "Code sending is already in progress. Please wait for it to finish before requesting another code.",
+      );
+    }
+
+    this.isSendingPhoneVerificationCode = true;
+
+    try {
+      const { otpId } = await this.signerHttpClient.request({
+        route: "signer/v1/init-otp",
+        method: "POST",
+        body: {
+          contact: phoneNumber,
+          otpType: "OTP_TYPE_SMS",
+        },
+      });
+      this.pendingPhoneOtpId = otpId;
+    } catch (err) {
+      throw err;
+    } finally {
+      this.isSendingPhoneVerificationCode = false;
+    }
+  }
+
+  /**
+   * Sets phone number for authenticated user after verification.
+   * Must call sendPhoneVerificationCode() first to get the OTP.
+   *
+   * @param {object} params - The verification parameters
+   * @param {string} params.verificationCode - The OTP code received via SMS
+   * @returns {Promise<void>} Promise that resolves when phone is set
+   * @throws {BaseError} If verification fails, no pending OTP, or user is not authenticated
+   *
+   * @example
+   * ```ts
+   * await authSession.sendPhoneVerificationCode("+15551234567");
+   * const code = "123456"; // Code from SMS
+   * await authSession.setPhoneNumber({ verificationCode: code });
+   * ```
+   */
+  public async setPhoneNumber({
+    verificationCode,
+  }: {
+    verificationCode: string;
+  }): Promise<void> {
+    this.throwIfDisconnected();
+
+    if (!this.pendingPhoneOtpId) {
+      throw new BaseError(
+        "No pending phone verification. Call sendPhoneVerificationCode() first.",
+      );
+    }
+
+    // Step 1: Verify the OTP to get a signed verification token
+    const { verificationToken } = await this.signerHttpClient.request({
+      route: "signer/v1/verify-otp",
+      method: "POST",
+      body: {
+        otpId: this.pendingPhoneOtpId,
+        otpCode: verificationCode,
       },
     });
 
@@ -470,18 +645,20 @@ export class AuthSession {
       body: { stampedRequest },
     });
 
-    // Step 5: Update local user object
+    // Step 5: Update local user object and clear pending OTP
     this.user = {
       ...this.user,
       phone: phoneNumber,
     };
+    this.pendingPhoneOtpId = undefined;
+    this.emitter.emit("userUpdated", this.user);
   }
 
   /**
    * Removes phone number from authenticated user account.
    *
    * @returns {Promise<void>} Promise that resolves when phone is removed
-   * @throws {Error} If user is not authenticated or removal fails
+   * @throws {BaseError} If user is not authenticated or removal fails
    *
    * @example
    * ```ts
@@ -515,6 +692,7 @@ export class AuthSession {
       ...this.user,
       phone: undefined,
     };
+    this.emitter.emit("userUpdated", this.user);
   }
 
   /**
@@ -623,7 +801,7 @@ export class AuthSession {
       return JSON.stringify(state);
     } else {
       if (!this.bundle) {
-        throw new Error(
+        throw new BaseError(
           "Bundle is required for non-passkey authentication types",
         );
       }
@@ -639,7 +817,7 @@ export class AuthSession {
 
   private throwIfDisconnected(): void {
     if (this.isDisconnected) {
-      throw new Error("Auth session has been disconnected");
+      throw new BaseError("Auth session has been disconnected");
     }
   }
 
@@ -663,7 +841,9 @@ export class AuthSession {
    */
   public on<E extends AuthSessionEventType>(
     eventType: E,
-    listener: AuthSessionEvents[E],
+    listener: AuthSessionEvents[E] extends (...args: infer Args) => infer R
+      ? (...args: Args) => R
+      : never,
   ): () => void {
     this.emitter.on(eventType, listener);
 
@@ -674,5 +854,5 @@ export class AuthSession {
 }
 
 function notImplemented(..._: unknown[]): Promise<never> {
-  throw new Error("Not implemented");
+  throw new BaseError("Not implemented");
 }

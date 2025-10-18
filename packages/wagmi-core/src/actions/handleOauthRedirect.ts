@@ -1,5 +1,6 @@
 import { type Config } from "@wagmi/core";
 import { resolveAlchemyAuthConnector } from "../utils/resolveAuthConnector.js";
+import { assertAuthSession } from "../utils/assertAuthSession.js";
 
 export type HandleOauthRedirectParameters = void;
 
@@ -20,10 +21,7 @@ export async function handleOauthRedirect(
   const authClient = connector.getAuthClient();
 
   const authSession = await authClient.handleOauthRedirect();
-
-  if (!authSession) {
-    throw new Error("OAuth authentication failed - no auth session returned");
-  }
+  assertAuthSession(authSession, "handleOauthRedirect"); // TODO(jh): double check this works now that it's sync!!!!
 
   connector.setAuthSession(authSession);
   await connectAlchemyAuth();
