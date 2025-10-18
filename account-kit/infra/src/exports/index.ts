@@ -12,6 +12,8 @@ export {
   base,
   baseGoerli,
   baseSepolia,
+  bsc,
+  bscTestnet,
   defineAlchemyChain,
   fraxtal,
   fraxtalSepolia,
