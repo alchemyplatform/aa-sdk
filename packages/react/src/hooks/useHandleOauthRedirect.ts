@@ -81,11 +81,6 @@ export function useHandleOauthRedirect(
       .then(() => {
         setIsSuccess(true);
         setError(null);
-        // Clean up OAuth-specific URL parameters while preserving others
-        const url = new URL(window.location.href);
-        url.searchParams.delete("alchemy-bundle");
-        url.searchParams.delete("alchemy-org-id");
-        window.history.replaceState({}, document.title, url.toString());
       })
       .catch((err: Error) => {
         setError(err);
@@ -93,6 +88,11 @@ export function useHandleOauthRedirect(
       })
       .finally(() => {
         setIsPending(false);
+        // Clean up OAuth-specific URL parameters while preserving others
+        const url = new URL(window.location.href);
+        url.searchParams.delete("alchemy-bundle");
+        url.searchParams.delete("alchemy-org-id");
+        window.history.replaceState({}, document.title, url.toString());
       });
   }, [config, enabled]);
 

@@ -1,6 +1,7 @@
 import { type Config } from "@wagmi/core";
 import { resolveAlchemyAuthConnector } from "../utils/resolveAuthConnector.js";
 import { BaseError } from "@alchemy/common";
+import { assertAuthSession } from "../utils/assertAuthSession.js";
 
 export type UpdateEmailParameters =
   | {
@@ -48,11 +49,9 @@ export async function updateEmail(
   parameters: UpdateEmailParameters,
 ): Promise<UpdateEmailReturnType> {
   const { connector } = resolveAlchemyAuthConnector(config);
-  const authSession = connector.getAuthSession();
 
-  if (!authSession) {
-    throw new BaseError("No active auth session. Please authenticate first.");
-  }
+  const authSession = connector.getAuthSession();
+  assertAuthSession(authSession, "updateEmail");
 
   // Remove email.
   if ("email" in parameters) {

@@ -10,7 +10,7 @@ import EventEmitter from "eventemitter3";
 // Type helper to get the connector instance type with custom properties
 type AlchemyAuthConnector = Connector & {
   getAuthClient(): AuthClient;
-  getAuthSession(): Promise<AuthSession>;
+  getAuthSession(): AuthSession | null;
   setAuthSession(authSession: AuthSession): void;
 };
 

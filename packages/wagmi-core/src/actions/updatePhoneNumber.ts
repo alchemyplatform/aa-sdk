@@ -1,6 +1,7 @@
 import { type Config } from "@wagmi/core";
 import { resolveAlchemyAuthConnector } from "../utils/resolveAuthConnector.js";
 import { BaseError } from "@alchemy/common";
+import { assertAuthSession } from "../utils/assertAuthSession.js";
 
 export type UpdatePhoneNumberParameters =
   | {
@@ -48,11 +49,9 @@ export async function updatePhoneNumber(
   parameters: UpdatePhoneNumberParameters,
 ): Promise<UpdatePhoneNumberReturnType> {
   const { connector } = resolveAlchemyAuthConnector(config);
-  const authSession = connector.getAuthSession();
 
-  if (!authSession) {
-    throw new BaseError("No active auth session. Please authenticate first.");
-  }
+  const authSession = connector.getAuthSession();
+  assertAuthSession(authSession, "updatePhoneNumber");
 
   // Remove phone number.
   if ("phoneNumber" in parameters) {
