@@ -132,7 +132,7 @@ type RpcConnectionConfig =
       transport: AlchemyTransport;
       // When providing multiple chains and no default transport, the signer connection is required
       signerConnection?: ConnectionConfig;
-      policyId?: never;
+      policyId?: string | string[];
       policyToken?: never;
     }
   | {
@@ -146,7 +146,7 @@ type RpcConnectionConfig =
       transport?: never;
       // When providing multiple chains, then the signer connection is required
       signerConnection: ConnectionConfig;
-      policyId?: never;
+      policyId?: string | string[];
       policyToken?: never;
     }
   | {
