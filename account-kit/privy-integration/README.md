@@ -32,6 +32,26 @@ yarn add @account-kit/privy-integration
 pnpm add @account-kit/privy-integration
 ```
 
+### Optional: Solana Support
+
+To use Solana features (like `useAlchemySolanaTransaction`), you'll need to install the Solana Web3.js library:
+
+```bash
+npm install @solana/web3.js
+# or
+yarn add @solana/web3.js
+# or
+pnpm add @solana/web3.js
+```
+
+Then import from the `/solana` export:
+
+```tsx
+import { useAlchemySolanaTransaction } from "@account-kit/privy-integration/solana";
+```
+
+> **Note:** The Solana functionality is completely optional. If you only need EVM features, you don't need to install `@solana/web3.js`.
+
 ## Quick Start
 
 ### 1. Wrap Your App with Both Providers
@@ -170,7 +190,7 @@ function SwapButton() {
 ### 4. Send Solana Transactions
 
 ```tsx
-import { useAlchemySolanaTransaction } from "@account-kit/privy-integration";
+import { useAlchemySolanaTransaction } from "@account-kit/privy-integration/solana";
 
 function SolanaSendButton() {
   const { sendTransactionAsync, isPending, error, data } =

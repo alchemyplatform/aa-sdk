@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { usePrivy } from "@privy-io/react-auth";
 import { useCreateWallet, useWallets } from "@privy-io/react-auth/solana";
-import { useAlchemySolanaTransaction } from "@account-kit/privy-integration";
+import { useAlchemySolanaTransaction } from "@account-kit/privy-integration/solana";
 
 export function SolanaTransactionCard() {
   const [toAddress, setToAddress] = useState(
