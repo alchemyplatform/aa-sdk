@@ -185,6 +185,10 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
         if (authSession) {
           setAuthSession(authSession);
           currentChainId = persisted.chainId;
+          config.emitter.emit("connect", {
+            chainId: currentChainId,
+            accounts: [authSession.getAddress()],
+          });
           return true;
         }
       } catch (error) {
