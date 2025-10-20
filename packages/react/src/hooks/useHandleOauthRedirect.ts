@@ -83,6 +83,7 @@ export function useHandleOauthRedirect(
         setError(null);
       })
       .catch((err: Error) => {
+        console.error(`Error handling OAuth redirect:`, err);
         setError(err);
         setIsSuccess(false);
       })
