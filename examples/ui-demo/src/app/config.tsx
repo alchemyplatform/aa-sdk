@@ -105,16 +105,15 @@ export const alchemyConfig = () => {
     {
       transport: alchemy({ rpcUrl: "/api/rpc" }),
       chain: arbitrumSepolia,
+      policyId: process.env.NEXT_PUBLIC_PAYMASTER_POLICY_ID,
       chains: [
         {
           chain: arbitrumSepolia,
           transport: alchemy({ rpcUrl: "/api/rpc" }),
-          policyId: process.env.NEXT_PUBLIC_PAYMASTER_POLICY_ID,
         },
         {
           chain: baseSepolia,
           transport: alchemy({ rpcUrl: "/api/rpc-base-sepolia" }),
-          policyId: process.env.NEXT_PUBLIC_PAYMASTER_POLICY_ID,
         },
       ],
       ssr: true,
