@@ -174,9 +174,8 @@ const UserProfileDemo = () => {
   const user = useUser();
   const authSession = useAuthSession();
   const authClient = useAuthClient();
-  const { data: authMethods, isLoading: isLoadingAuthMethods } = useAuthMethods(
-    {},
-  );
+  const { data: authMethods, isLoading: isLoadingAuthMethods } =
+    useAuthMethods();
   const {
     sendVerificationCode,
     isPending: isSendingCode,

@@ -9,13 +9,15 @@ import {
   type ListAuthMethodsQueryKey,
 } from "../query/listAuthMethods.js";
 
-export type UseAuthMethodsParameters = ConfigParameter &
-  QueryParameter<
-    ListAuthMethodsReturnType,
-    Error,
-    ListAuthMethodsReturnType,
-    ListAuthMethodsQueryKey
-  >;
+export type UseAuthMethodsParameters =
+  | (ConfigParameter &
+      QueryParameter<
+        ListAuthMethodsReturnType,
+        Error,
+        ListAuthMethodsReturnType,
+        ListAuthMethodsQueryKey
+      >)
+  | undefined;
 
 export type UseAuthMethodsReturnType = UseQueryResult<
   ListAuthMethodsReturnType,
@@ -81,7 +83,7 @@ export type UseAuthMethodsReturnType = UseQueryResult<
  * ```
  */
 export function useAuthMethods(
-  parameters: UseAuthMethodsParameters,
+  parameters: UseAuthMethodsParameters = {},
 ): UseAuthMethodsReturnType {
   const { query } = parameters;
 
