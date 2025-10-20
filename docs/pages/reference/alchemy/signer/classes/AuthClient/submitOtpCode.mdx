@@ -6,7 +6,7 @@ slug: wallets/reference/alchemy/signer/classes/AuthClient/submitOtpCode
 ---
 
 Submits an OTP code for verification and completes the authentication process.
-This method should be called after sendEmailOtp() with the code received via email.
+This method should be called after sendEmailOtp() or sendSmsOtp() with the code received via email or SMS.
 
 ## Import
 
@@ -17,10 +17,12 @@ import { AuthClient } from "@alchemy/auth";
 ## Usage
 
 ```ts twoslash
-// First send OTP
+// First send OTP via email
 await authClient.sendEmailOtp({ email: "user@example.com" });
+// OR send OTP via SMS
+await authClient.sendSmsOtp({ phoneNumber: "+15551234567" });
 
-// Then submit the code received via email
+// Then submit the code received
 const authSession = await authClient.submitOtpCode({ otpCode: "123456" });
 ```
 
@@ -36,7 +38,7 @@ const authSession = await authClient.submitOtpCode({ otpCode: "123456" });
 
 `string`
 
-- The OTP code received via email
+- The OTP code received via email or SMS
 
 ## Returns
 

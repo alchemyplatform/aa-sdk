@@ -52,10 +52,20 @@ export type SendEmailOtpParams = {
 };
 
 /**
+ * Parameters for sending an SMS OTP (One-Time Password)
+ */
+export type SendSmsOtpParams = {
+  /** Phone number with country code (e.g., "+15551234567") */
+  phoneNumber: string;
+  /** Length of the session in milliseconds. Defaults to 15 minutes. */
+  sessionExpirationMs?: number;
+};
+
+/**
  * Parameters for submitting an OTP code for verification
  */
 export type SubmitOtpCodeParams = {
-  /** The OTP code received via email */
+  /** The OTP code received via email or SMS */
   otpCode: string;
 };
 
@@ -213,19 +223,109 @@ export class AuthClient {
   }
 
   /**
+   * Sends an OTP (One-Time Password) to the specified phone number via SMS.
+   * The OTP will be sent to the user's phone and can be submitted using submitOtpCode().
+   *
+   * Phone number must include country code (e.g., "+15551234567").
+   *
+   * @param {SendSmsOtpParams} params - Parameters for sending the SMS OTP
+   * @param {string} params.phoneNumber - Phone number with country code to send the OTP to
+   * @param {number} [params.sessionExpirationMs] - Session expiration in milliseconds
+   * @returns {Promise<void>} Promise that resolves when the OTP has been sent
+   *
+   * @example
+   * ```ts twoslash
+   * await authClient.sendSmsOtp({ phoneNumber: "+15551234567" });
+   * // User will receive an OTP code via SMS
+   * ```
+   */
+  public async sendSmsOtp({
+    phoneNumber,
+    sessionExpirationMs = DEFAULT_SESSION_EXPIRATION_MS,
+  }: SendSmsOtpParams): Promise<void> {
+    const { targetPublicKey } = await this.getTekStamper();
+
+    // Check if user already exists
+    const { orgId: existingOrgId } = await this.signerHttpClient.request({
+      route: "signer/v1/lookup",
+      method: "POST",
+      body: { phone: phoneNumber },
+    });
+
+    const expirationDateMs = Date.now() + sessionExpirationMs;
+    const expirationSeconds = Math.floor(sessionExpirationMs / 1000);
+
+    // Signup or login based on whether user exists
+    const { orgId, otpId } = await (() => {
+      if (!existingOrgId) {
+        // New user - signup
+        return this.signerHttpClient.request({
+          route: "signer/v1/signup",
+          method: "POST",
+          body: { phone: phoneNumber, targetPublicKey, expirationSeconds },
+        });
+      } else {
+        // Existing user - login
+        return this.signerHttpClient.request({
+          route: "signer/v1/auth",
+          method: "POST",
+          body: { phone: phoneNumber, targetPublicKey, expirationSeconds },
+        });
+      }
+    })();
+
+    this.pendingOtp = { otpId: otpId!, orgId };
+    this.pendingExpirationDateMs = expirationDateMs;
+  }
+
+  /**
+   * Looks up if a phone number is registered in the system.
+   *
+   * @param {string} phoneNumber - Phone number with country code to look up
+   * @returns {Promise<{ orgId: string } | null>} Organization ID if phone exists, null otherwise
+   *
+   * @example
+   * ```ts twoslash
+   * const user = await authClient.lookupUserByPhone("+15551234567");
+   * if (user) {
+   *   console.log("User exists with orgId:", user.orgId);
+   * } else {
+   *   console.log("Phone number not registered");
+   * }
+   * ```
+   */
+  public async lookupUserByPhone(
+    phoneNumber: string,
+  ): Promise<{ orgId: string } | null> {
+    const result = await this.signerHttpClient.request({
+      route: "signer/v1/lookup",
+      method: "POST",
+      body: { phone: phoneNumber },
+    });
+
+    if (result?.orgId == null) {
+      return null;
+    }
+
+    return { orgId: result.orgId };
+  }
+
+  /**
    * Submits an OTP code for verification and completes the authentication process.
-   * This method should be called after sendEmailOtp() with the code received via email.
+   * This method should be called after sendEmailOtp() or sendSmsOtp() with the code received via email or SMS.
    *
    * @param {SubmitOtpCodeParams} params - Parameters for submitting the OTP code
-   * @param {string} params.otpCode - The OTP code received via email
+   * @param {string} params.otpCode - The OTP code received via email or SMS
    * @returns {Promise<AuthSession>} Promise that resolves to an auth session instance
    *
    * @example
    * ```ts twoslash
-   * // First send OTP
+   * // First send OTP via email
    * await authClient.sendEmailOtp({ email: "user@example.com" });
+   * // OR send OTP via SMS
+   * await authClient.sendSmsOtp({ phoneNumber: "+15551234567" });
    *
-   * // Then submit the code received via email
+   * // Then submit the code received
    * const authSession = await authClient.submitOtpCode({ otpCode: "123456" });
    * ```
    */

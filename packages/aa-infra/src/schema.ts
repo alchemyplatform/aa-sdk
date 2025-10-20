@@ -205,6 +205,7 @@ export type SignerHttpSchema = [
       orgId: string;
       address: Address;
       email?: string;
+      phone?: string;
       solanaAddress?: string;
     };
   },
@@ -260,6 +261,34 @@ export type SignerHttpSchema = [
     Method: "POST";
     Body: StampedRequestBody;
     Response: Record<string, never>; // Empty response object
+  },
+  {
+    Route: "signer/v1/init-otp";
+    Method: "POST";
+    Body: {
+      contact: string;
+      otpType: "OTP_TYPE_SMS" | "OTP_TYPE_EMAIL";
+    };
+    Response: {
+      otpId: string;
+    };
+  },
+  {
+    Route: "signer/v1/verify-otp";
+    Method: "POST";
+    Body: {
+      otpId: string;
+      otpCode: string;
+    };
+    Response: {
+      verificationToken: string;
+    };
+  },
+  {
+    Route: "signer/v1/update-phone-auth";
+    Method: "POST";
+    Body: StampedRequestBody;
+    Response: void;
   },
 ];
 

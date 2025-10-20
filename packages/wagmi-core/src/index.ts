@@ -5,6 +5,12 @@ export {
 } from "./actions/sendEmailOtp.js";
 
 export {
+  sendSmsOtp,
+  type SendSmsOtpParameters,
+  type SendSmsOtpReturnType,
+} from "./actions/sendSmsOtp.js";
+
+export {
   submitOtpCode,
   type SubmitOtpCodeParameters,
   type SubmitOtpCodeReturnType,
@@ -21,6 +27,24 @@ export {
   type HandleOauthRedirectParameters,
   type HandleOauthRedirectReturnType,
 } from "./actions/handleOauthRedirect.js";
+
+export {
+  prepareSwap,
+  type PrepareSwapParameters,
+  type PrepareSwapReturnType,
+} from "./actions/prepareSwap.js";
+
+export {
+  prepareCalls,
+  type PrepareCallsParameters,
+  type PrepareCallsReturnType,
+} from "./actions/prepareCalls.js";
+
+export {
+  sendPreparedCalls,
+  type SendPreparedCallsParameters,
+  type SendPreparedCallsReturnType,
+} from "./actions/sendPreparedCalls.js";
 
 export {
   createConfig,

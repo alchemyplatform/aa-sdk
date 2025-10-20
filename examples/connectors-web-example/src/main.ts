@@ -1,5 +1,7 @@
 import {
   sendEmailOtp,
+  sendSmsOtp,
+  lookupUserByPhone,
   submitOtpCode,
   loginWithOauth,
   handleOauthRedirect,
@@ -71,6 +73,45 @@ async function handleSendOtp() {
   }
 }
 
+async function handleSendSmsOtp() {
+  const phoneNumber = getInputValue("phone-input");
+  if (!phoneNumber) {
+    updateStatus("sms-status", "Please enter a phone number");
+    return;
+  }
+
+  try {
+    updateStatus("sms-status", "Sending SMS OTP...");
+    await sendSmsOtp(config, { phoneNumber });
+    updateStatus("sms-status", "OTP sent! Check your phone.");
+    focusElement("sms-otp-input");
+  } catch (error) {
+    console.error(error);
+    updateStatus("sms-status", `Error: ${(error as Error).message}`);
+  }
+}
+
+async function handleLookupPhone() {
+  const phoneNumber = getInputValue("phone-input");
+  if (!phoneNumber) {
+    updateStatus("sms-status", "Please enter a phone number");
+    return;
+  }
+
+  try {
+    updateStatus("sms-status", "Looking up phone...");
+    const result = await lookupUserByPhone(config, { phoneNumber });
+    if (result) {
+      updateStatus("sms-status", `Phone registered with org: ${result.orgId}`);
+    } else {
+      updateStatus("sms-status", "Phone not registered");
+    }
+  } catch (error) {
+    console.error(error);
+    updateStatus("sms-status", `Error: ${(error as Error).message}`);
+  }
+}
+
 async function handleSubmitOtp() {
   const otpCode = getInputValue("otp-input");
   if (!otpCode) {
@@ -85,6 +126,23 @@ async function handleSubmitOtp() {
   } catch (error) {
     console.error(error);
     updateStatus("auth-status", `Error: ${(error as Error).message}`);
+  }
+}
+
+async function handleSubmitSmsOtp() {
+  const otpCode = getInputValue("sms-otp-input");
+  if (!otpCode) {
+    updateStatus("sms-status", "Please enter the OTP code");
+    return;
+  }
+
+  try {
+    updateStatus("sms-status", "Verifying OTP...");
+    await submitOtpCode(config, { otpCode });
+    updateStatus("sms-status", "Authentication successful!");
+  } catch (error) {
+    console.error(error);
+    updateStatus("sms-status", `Error: ${(error as Error).message}`);
   }
 }
 
@@ -308,6 +366,21 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
       <div id="auth-status"></div>
     </div>
 
+    <div id="sms-auth">
+      <h2>SMS Authentication</h2>
+
+      <form id="phone-form">
+        <input type="tel" id="phone-input" placeholder="+15551234567" required autocomplete="off" data-1p-ignore />
+        <button id="lookup-phone" type="button">Lookup</button>
+        <button id="send-sms-otp" type="submit">Send SMS OTP</button>
+      </form>
+      <form id="sms-otp-form">
+        <input type="text" id="sms-otp-input" placeholder="Enter OTP code" maxlength="6" required autocomplete="off" data-1p-ignore />
+        <button id="submit-sms-otp" type="submit">Submit OTP</button>
+      </form>
+      <div id="sms-status"></div>
+    </div>
+
     <div id="oauth-auth">
       <h2>OAuth Authentication</h2>
 
@@ -473,6 +546,24 @@ function setupEmailAuth() {
   });
 }
 
+function setupSmsAuth() {
+  const phoneForm = document.querySelector<HTMLFormElement>("#phone-form");
+  const smsOtpForm = document.querySelector<HTMLFormElement>("#sms-otp-form");
+  const lookupButton = document.getElementById("lookup-phone");
+
+  phoneForm?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    await handleSendSmsOtp();
+  });
+
+  smsOtpForm?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    await handleSubmitSmsOtp();
+  });
+
+  lookupButton?.addEventListener("click", handleLookupPhone);
+}
+
 function setupOauthAuth() {
   const oauthButtons =
     document.querySelectorAll<HTMLButtonElement>(".oauth-btn");
@@ -627,6 +718,7 @@ function setupApp(element: HTMLDivElement) {
   setupConnectorButtons(element);
   setupAccountWatcher(element);
   setupEmailAuth();
+  setupSmsAuth();
   setupOauthAuth();
   setupWalletActions();
   setupSessionControls();

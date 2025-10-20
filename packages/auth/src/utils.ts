@@ -18,6 +18,7 @@ export const DEFAULT_SESSION_EXPIRATION_MS = 15 * 60 * 1000;
 
 export const UserSchema = z.object({
   email: z.string().optional(),
+  phone: z.string().optional(),
   orgId: z.string(),
   userId: z.string(),
   address: z.string(),
@@ -35,7 +36,7 @@ export const AuthSessionStateSchema = z.discriminatedUnion("type", [
     credentialId: z.string().optional(),
   }),
   z.object({
-    type: z.enum(["email", "oauth", "otp"]),
+    type: z.enum(["email", "oauth", "otp", "sms"]),
     bundle: z.string(),
     user: UserSchema,
     expirationDateMs: z.number(),

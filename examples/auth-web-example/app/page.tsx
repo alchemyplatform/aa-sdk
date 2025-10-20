@@ -50,7 +50,7 @@ export default function Home(): ReactElement {
   const handleLoginWithPasskey = useCallback(async () => {
     const authSession = await authClient.loginWithPasskey({ username: email });
     setAuthSession(authSession);
-  }, [authClient, email]);
+  }, [email]);
 
   const handleDisconnect = useCallback(async () => {
     authSession?.disconnect();
