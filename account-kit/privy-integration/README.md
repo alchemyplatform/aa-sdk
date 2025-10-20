@@ -7,9 +7,10 @@ Add gas sponsorship and smart wallet features to your Privy app in under 5 minut
 If you're already using [Privy](https://privy.io) for authentication, this package lets you upgrade your users' wallets with:
 
 - **🔄 EIP-7702 Delegation** - Upgrade EOAs to smart accounts without migration
-- **⛽ Gas Sponsorship** - Pay gas fees for your users via Alchemy Gas Manager
+- **⛽ Gas Sponsorship** - Pay gas fees for your users via Alchemy Gas Manager (EVM & Solana)
 - **💱 Token Swaps** - Execute swaps through Alchemy's swap infrastructure
-- **🚀 Batched Transactions** - Send multiple operations in a single transaction
+- **🚀 Batched Transactions** - Send multiple operations in a single transaction using `sendTransaction([...])`
+- **☀️ Solana Support** - Send sponsored Solana transactions with Privy's embedded Solana wallets
 
 All while keeping Privy as your authentication provider. No need to change your auth flow or migrate user accounts.
 
@@ -30,6 +31,26 @@ yarn add @account-kit/privy-integration
 # or
 pnpm add @account-kit/privy-integration
 ```
+
+### Optional: Solana Support
+
+To use Solana features (like `useAlchemySolanaTransaction`), you'll need to install the Solana Web3.js library:
+
+```bash
+npm install @solana/web3.js
+# or
+yarn add @solana/web3.js
+# or
+pnpm add @solana/web3.js
+```
+
+Then import from the `/solana` export:
+
+```tsx
+import { useAlchemySolanaTransaction } from "@account-kit/privy-integration/solana";
+```
+
+> **Note:** The Solana functionality is completely optional. If you only need EVM features, you don't need to install `@solana/web3.js`.
 
 ## Quick Start
 
@@ -73,6 +94,7 @@ function SendButton() {
 
   const handleSend = async () => {
     try {
+      // Single transaction
       const result = await sendTransaction({
         to: "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
         data: "0x...",
@@ -85,10 +107,30 @@ function SendButton() {
     }
   };
 
+  const handleBatch = async () => {
+    try {
+      // Batch transactions
+      const result = await sendTransaction([
+        { to: "0x...", data: "0x...", value: "1000000000000000000" },
+        { to: "0x...", data: "0x..." },
+        { to: "0x...", data: "0x..." },
+      ]);
+
+      console.log("Batch transaction hash:", result.txnHash);
+    } catch (err) {
+      console.error("Batch transaction failed:", err);
+    }
+  };
+
   return (
-    <button onClick={handleSend} disabled={isLoading}>
-      {isLoading ? "Sending..." : "Send Transaction"}
-    </button>
+    <>
+      <button onClick={handleSend} disabled={isLoading}>
+        {isLoading ? "Sending..." : "Send Transaction"}
+      </button>
+      <button onClick={handleBatch} disabled={isLoading}>
+        {isLoading ? "Sending..." : "Send Batch"}
+      </button>
+    </>
   );
 }
 ```
@@ -145,17 +187,81 @@ function SwapButton() {
 }
 ```
 
+### 4. Send Solana Transactions
+
+```tsx
+import { useAlchemySolanaTransaction } from "@account-kit/privy-integration/solana";
+
+function SolanaSendButton() {
+  const { sendTransactionAsync, isPending, error, data } =
+    useAlchemySolanaTransaction({
+      rpcUrl: "https://solana-mainnet.g.alchemy.com/v2/your-api-key",
+      policyId: "your-solana-policy-id", // optional, for gas sponsorship
+    });
+
+  const handleTransfer = async () => {
+    try {
+      // Simple SOL transfer
+      const result = await sendTransactionAsync({
+        transfer: {
+          amount: 1_000_000_000, // 1 SOL in lamports
+          toAddress: "recipient-base58-address",
+        },
+      });
+
+      console.log("Transaction hash:", result.hash);
+    } catch (err) {
+      console.error("Transaction failed:", err);
+    }
+  };
+
+  const handleCustomInstructions = async () => {
+    try {
+      // Custom instructions
+      import { SystemProgram, PublicKey } from "@solana/web3.js";
+
+      const instruction = SystemProgram.transfer({
+        fromPubkey: new PublicKey(walletAddress),
+        toPubkey: new PublicKey(recipientAddress),
+        lamports: 1_000_000,
+      });
+
+      const result = await sendTransactionAsync({
+        instructions: [instruction],
+      });
+
+      console.log("Transaction hash:", result.hash);
+    } catch (err) {
+      console.error("Transaction failed:", err);
+    }
+  };
+
+  return (
+    <>
+      <button onClick={handleTransfer} disabled={isPending}>
+        {isPending ? "Sending..." : "Send SOL"}
+      </button>
+      <button onClick={handleCustomInstructions} disabled={isPending}>
+        {isPending ? "Sending..." : "Custom Instructions"}
+      </button>
+    </>
+  );
+}
+```
+
 ## Configuration
 
 ### AlchemyProvider Props
 
-| Prop                 | Type                 | Required      | Description                                                                                          |
-| -------------------- | -------------------- | ------------- | ---------------------------------------------------------------------------------------------------- |
-| `apiKey`             | `string`             | Conditional\* | Your Alchemy API key for @account-kit/infra transport                                                |
-| `jwt`                | `string`             | Conditional\* | JWT token for authentication (alternative to `apiKey`)                                               |
-| `rpcUrl`             | `string`             | Conditional\* | Custom RPC URL (can be used alone or with `jwt`)                                                     |
-| `policyId`           | `string \| string[]` | No            | Gas Manager policy ID(s) for sponsorship. If array is provided, backend uses first applicable policy |
-| `disableSponsorship` | `boolean`            | No            | Set to `true` to disable gas sponsorship by default (default: `false`)                               |
+| Prop                 | Type                 | Required      | Description                                                                                              |
+| -------------------- | -------------------- | ------------- | -------------------------------------------------------------------------------------------------------- |
+| `apiKey`             | `string`             | Conditional\* | Your Alchemy API key for @account-kit/infra transport                                                    |
+| `jwt`                | `string`             | Conditional\* | JWT token for authentication (alternative to `apiKey`)                                                   |
+| `rpcUrl`             | `string`             | Conditional\* | Custom RPC URL for EVM chains (can be used alone or with `jwt`)                                          |
+| `solanaRpcUrl`       | `string`             | No            | Custom RPC URL for Solana (separate from EVM `rpcUrl`)                                                   |
+| `policyId`           | `string \| string[]` | No            | Gas Manager policy ID(s) for EVM sponsorship. If array is provided, backend uses first applicable policy |
+| `solanaPolicyId`     | `string \| string[]` | No            | Gas Manager policy ID(s) for Solana sponsorship                                                          |
+| `disableSponsorship` | `boolean`            | No            | Set to `true` to disable gas sponsorship by default (default: `false`)                                   |
 
 \* **Required configuration (pick one):**
 
@@ -185,11 +291,13 @@ await sendTransaction(
 
 #### `useAlchemySendTransaction()`
 
-Send transactions with optional gas sponsorship.
+Send single or batch EVM transactions with optional gas sponsorship.
 
 **Returns:**
 
-- `sendTransaction(input, options?)` - Send a transaction
+- `sendTransaction(input, options?)` - Send a single transaction or batch of transactions
+  - `input` - Single `UnsignedTransactionRequest` or array of them
+  - `options` - Optional `SendTransactionOptions`
 - `isLoading` - Loading state
 - `error` - Error object if failed
 - `data` - Transaction result with `txnHash`
@@ -217,6 +325,29 @@ Sign and submit prepared swap calls.
 - `isLoading` - Loading state
 - `error` - Error object if failed
 - `data` - Swap result with `txnHash`
+- `reset()` - Reset hook state
+
+#### `useAlchemySolanaTransaction(options?)`
+
+Send Solana transactions with optional gas sponsorship via Alchemy.
+
+**Parameters:**
+
+- `options.rpcUrl` - Solana RPC URL (overrides provider config)
+- `options.policyId` - Gas sponsorship policy ID (overrides provider config)
+- `options.walletAddress` - Specific wallet address to use (defaults to first wallet)
+- `options.confirmationOptions` - Transaction confirmation options
+
+**Returns:**
+
+- `sendTransactionAsync(params)` - Send transaction and await result (throws on error)
+  - `params.transfer` - Simple SOL transfer with `amount` (lamports) and `toAddress`
+  - `params.instructions` - Custom Solana transaction instructions array
+- `sendTransaction(params)` - Send transaction (fire-and-forget, errors caught internally)
+- `connection` - Active Solana connection instance
+- `isPending` - Whether a transaction is currently being sent
+- `error` - Error object if failed
+- `data` - Transaction result with `hash` (base58 signature)
 - `reset()` - Reset hook state
 
 #### `useAlchemyClient()`
@@ -300,7 +431,7 @@ The API is nearly identical, making migration seamless.
 
 ### Access the Smart Wallet Client
 
-For advanced use cases, access the underlying client:
+For advanced use cases, access the underlying client directly:
 
 ```tsx
 import { useAlchemyClient } from "@account-kit/privy-integration";
@@ -314,7 +445,7 @@ function AdvancedComponent() {
     // Use any SmartWalletClient method
     const address = await client.getAddress();
 
-    // Batch multiple calls
+    // Direct access to sendCalls with full control
     await client.sendCalls({
       from: address,
       calls: [
@@ -326,6 +457,8 @@ function AdvancedComponent() {
         paymasterService: { policyId: "your-policy-id" },
       },
     });
+
+    // Note: For most cases, use useAlchemySendTransaction instead
   };
 
   return <button onClick={doAdvancedOperation}>Advanced Op</button>;

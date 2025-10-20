@@ -3,6 +3,67 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.73.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.72.0...v4.73.0) (2025-10-17)
+
+### Features
+
+- make solana treeshakeable ([#2189](https://github.com/alchemyplatform/aa-sdk/issues/2189)) ([941484d](https://github.com/alchemyplatform/aa-sdk/commit/941484d29da7fcc8664d22f9084cfc20eb3ddacf))
+
+# [4.72.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.71.1...v4.72.0) (2025-10-16)
+
+### Features
+
+- add solana hook to the privy integration ([#2186](https://github.com/alchemyplatform/aa-sdk/issues/2186)) ([ee614a6](https://github.com/alchemyplatform/aa-sdk/commit/ee614a6fbccbd142ef952e60c8947bc31fd08d4e))
+
+## [4.71.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.71.0...v4.71.1) (2025-10-16)
+
+### Bug Fixes
+
+- use case-insensitive address equality check in mav2 7702 check ([#2187](https://github.com/alchemyplatform/aa-sdk/issues/2187)) ([18bf022](https://github.com/alchemyplatform/aa-sdk/commit/18bf022ced4b7ff0eff5b4147ad4eb92cab0532a))
+
+### Features
+
+- add cross-chain swap client docs ([#2184](https://github.com/alchemyplatform/aa-sdk/issues/2184)) ([2a680db](https://github.com/alchemyplatform/aa-sdk/commit/2a680db5a5b8000ee23055174fcef429b253f279))
+
+# [4.71.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.70.1...v4.71.0) (2025-10-15)
+
+### Features
+
+- add webhook data to gas manager middleware ([#2180](https://github.com/alchemyplatform/aa-sdk/issues/2180)) ([93be151](https://github.com/alchemyplatform/aa-sdk/commit/93be151a004167e2d0cfaeb9a1eef94f324a3995))
+
+## [4.70.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.70.0...v4.70.1) (2025-10-14)
+
+### Bug Fixes
+
+- bump axios version ([#2183](https://github.com/alchemyplatform/aa-sdk/issues/2183)) ([d0b05cf](https://github.com/alchemyplatform/aa-sdk/commit/d0b05cf4d7c7ec378abceaeb1afee466d6ef4f8f))
+
+# [4.70.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.69.0...v4.70.0) (2025-10-13)
+
+### Bug Fixes
+
+- use wallet apis to wait for call status in useSendUserOperation ([#2162](https://github.com/alchemyplatform/aa-sdk/issues/2162)) ([958378d](https://github.com/alchemyplatform/aa-sdk/commit/958378de001ecda7cb50b2aaacd8fc0e9e75d423))
+
+### Features
+
+- update types package and test cross-chain quote request ([#2165](https://github.com/alchemyplatform/aa-sdk/issues/2165)) ([6d01c49](https://github.com/alchemyplatform/aa-sdk/commit/6d01c4930ba754ac0980a11991348f621ab138d0))
+
+# [4.69.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.68.0...v4.69.0) (2025-10-13)
+
+### Features
+
+- add batching to useAlchemySendTransaction ([#2176](https://github.com/alchemyplatform/aa-sdk/issues/2176)) ([c75f99d](https://github.com/alchemyplatform/aa-sdk/commit/c75f99d7d41a1be818819986b73d3d344741789d))
+
+# [4.68.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.67.0...v4.68.0) (2025-10-09)
+
+### Bug Fixes
+
+- github action out of space issue ([#2166](https://github.com/alchemyplatform/aa-sdk/issues/2166)) ([0c1b48a](https://github.com/alchemyplatform/aa-sdk/commit/0c1b48a9572df3a0244976669fd82eb0da8515ba))
+
+### Features
+
+- adds an sdk to seamlessly integrate privy with Alchemy's infra ([#2154](https://github.com/alchemyplatform/aa-sdk/issues/2154)) ([46019a4](https://github.com/alchemyplatform/aa-sdk/commit/46019a442750ceb0de7cc06c8f2a9abf0145f6e7))
+- cross-chain API docs ([#2156](https://github.com/alchemyplatform/aa-sdk/issues/2156)) ([881c34d](https://github.com/alchemyplatform/aa-sdk/commit/881c34dc8627029ff87120b1fef2a766e1469e91))
+
 # [4.67.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.66.4...v4.67.0) (2025-10-06)
 
 ### Bug Fixes

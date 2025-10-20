@@ -1,6 +1,6 @@
 {
   "name": "@account-kit/privy-integration",
-  "version": "4.66.4",
+  "version": "4.73.0",
   "description": "Use Alchemy gas sponsorship, swaps and more with Privy",
   "author": "Alchemy",
   "license": "MIT",
@@ -27,6 +27,11 @@
       "import": "./dist/esm/index.js",
       "default": "./dist/esm/index.js"
     },
+    "./solana": {
+      "types": "./dist/types/solana.d.ts",
+      "import": "./dist/esm/solana.js",
+      "default": "./dist/esm/solana.js"
+    },
     "./package.json": "./package.json"
   },
   "scripts": {
@@ -39,16 +44,21 @@
     "test:run": "vitest run --passWithNoTests"
   },
   "devDependencies": {
-    "typescript-template": "*",
-    "@privy-io/react-auth": "^2.3.1"
+    "@privy-io/react-auth": "3.3.0",
+    "typescript-template": "*"
   },
   "dependencies": {
-    "@account-kit/infra": "^4.66.4",
-    "@account-kit/wallet-client": "^4.66.4"
+    "@account-kit/infra": "^4.73.0",
+    "@account-kit/wallet-client": "^4.73.0"
   },
   "peerDependencies": {
     "@privy-io/react-auth": "^2.3.1 || ^3.0.0",
     "viem": "^2.29.2"
+  },
+  "peerDependenciesMeta": {
+    "@solana/web3.js": {
+      "optional": true
+    }
   },
   "publishConfig": {
     "access": "public",

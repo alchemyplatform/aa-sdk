@@ -3,6 +3,40 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.73.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.72.0...v4.73.0) (2025-10-17)
+
+**Note:** Version bump only for package @account-kit/signer
+
+# [4.72.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.71.1...v4.72.0) (2025-10-16)
+
+**Note:** Version bump only for package @account-kit/signer
+
+## [4.71.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.71.0...v4.71.1) (2025-10-16)
+
+**Note:** Version bump only for package @account-kit/signer
+
+# [4.71.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.70.1...v4.71.0) (2025-10-15)
+
+**Note:** Version bump only for package @account-kit/signer
+
+## [4.70.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.70.0...v4.70.1) (2025-10-14)
+
+**Note:** Version bump only for package @account-kit/signer
+
+# [4.70.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.69.0...v4.70.0) (2025-10-13)
+
+**Note:** Version bump only for package @account-kit/signer
+
+# [4.69.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.68.0...v4.69.0) (2025-10-13)
+
+### Features
+
+- add batching to useAlchemySendTransaction ([#2176](https://github.com/alchemyplatform/aa-sdk/issues/2176)) ([c75f99d](https://github.com/alchemyplatform/aa-sdk/commit/c75f99d7d41a1be818819986b73d3d344741789d))
+
+# [4.68.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.67.0...v4.68.0) (2025-10-09)
+
+**Note:** Version bump only for package @account-kit/signer
+
 # [4.67.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.66.4...v4.67.0) (2025-10-06)
 
 **Note:** Version bump only for package @account-kit/signer

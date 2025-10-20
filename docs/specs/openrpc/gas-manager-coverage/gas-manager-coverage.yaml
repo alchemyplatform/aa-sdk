@@ -15,6 +15,10 @@ servers:
     name: Anime Mainnet
   - url: https://anime-sepolia.g.alchemy.com/v2
     name: Anime Sepolia
+  - url: https://apechain-mainnet.g.alchemy.com/v2
+    name: ApeChain Mainnet
+  - url: https://apechain-curtis.g.alchemy.com/v2
+    name: ApeChain Curtis
   - url: https://arb-mainnet.g.alchemy.com/v2
     name: Arbitrum Mainnet
   - url: https://arb-sepolia.g.alchemy.com/v2
@@ -594,9 +598,6 @@ methods:
             erc20Context:
               $ref: "../_shared_wallets/components.yaml#/components/schemas/erc20Context"
               description: "Erc20 context, required to enable users to pay gas with ERC-20 tokens."
-            webhookData:
-              type: "string"
-              description: "Additional data you can include in the request, such as proof of humanity, if you have enabled custom rules in your Gas Manager policy."
     result:
       name: "Response"
       description: "The response object may be one of two types:"

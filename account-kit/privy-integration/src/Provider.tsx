@@ -32,8 +32,10 @@ const ClientCacheContext = createContext<ClientCache | null>(null);
  * @param {React.ReactNode} props.children - React children to wrap with Alchemy configuration
  * @param {string} [props.apiKey] - Your Alchemy API key
  * @param {string} [props.jwt] - JWT token for authentication
- * @param {string} [props.rpcUrl] - Custom RPC URL
- * @param {string | string[]} [props.policyId] - Gas Manager policy ID(s)
+ * @param {string} [props.rpcUrl] - Custom RPC URL for EVM chains
+ * @param {string} [props.solanaRpcUrl] - Custom RPC URL for Solana
+ * @param {string | string[]} [props.policyId] - Gas Manager policy ID(s) for EVM chains
+ * @param {string | string[]} [props.solanaPolicyId] - Gas Manager policy ID(s) for Solana
  * @param {boolean} [props.disableSponsorship] - Set to true to disable sponsorship by default (default: false)
  * @returns {JSX.Element} Provider component
  *

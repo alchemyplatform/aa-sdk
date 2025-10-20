@@ -1,0 +1,389 @@
+---
+title: Privy
+description: Use Privy with Alchemy Smart Wallets for EIP-7702, sponsorship, swaps, and batching
+slug: wallets/third-party/signers/privy
+---
+
+Upgrade existing Privy wallets to Smart Wallets to enable gasless transactions (EVM & Solana), batching, token swaps, and more in under 10 minutes. Keep Privy for authentication, no wallet migration needed. Add our battle-tested transaction infrastructure using EIP-7702 to upgrade EOAs to Smart Wallets:
+
+- [#1 gas abstraction infrastructure](https://www.bundlebear.com/erc4337-bundlers/all) on the market
+- [370M+](https://www.bundlebear.com/erc4337-paymasters/all) sponsored transactions
+- 99.9% SLAs
+- Trusted by Worldcoin, JP Morgan, Gensyn, and more
+- Solana gas sponsorship support
+
+<Tip>
+  Don't have social login or a wallet set up yet? Start with the
+  <a href="/wallets/quickstart">Smart Wallet Quickstart</a> to create one in
+  minutes.
+</Tip>
+
+<Tabs>
+  <Tab title="React">
+    ## Setup
+
+    Follow these steps to integrate Privy with Smart Wallets.
+
+    ### Installation
+
+    ```bash
+    npm install @account-kit/privy-integration
+    # or
+    yarn add @account-kit/privy-integration
+    # or
+    pnpm add @account-kit/privy-integration
+    ```
+
+    <Note>
+      **Solana Support (Optional):** To use `useAlchemySolanaTransaction`, install `@solana/web3.js` and import from `@account-kit/privy-integration/solana`. This dependency is optional—skip it if you only need EVM features.
+    </Note>
+
+    ### Prerequisites: Get your keys (API key, Policy ID, Privy App ID)
+
+    - Alchemy API Key:
+      - Go to the [Alchemy Dashboard](https://dashboard.alchemy.com/)
+      - Create or select an app and copy the API key
+    - Gas sponsorship Policy ID (Gas Manager):
+      - Create a gas sponsorship policy in the [dashboard](https://dashboard.alchemy.com/services/gas-manager/configuration) and copy its Policy ID
+    - Privy App ID:
+      - Go to the [Privy Dashboard](https://dashboard.privy.io/)
+      - Create or select an app and copy the App ID
+
+    <Warning>
+      Both the Smart Wallets configuration and the gas sponsorship policy must be
+      linked to the application behind your Alchemy API key for sponsorship to work.
+    </Warning>
+
+    ### 1. Add AlchemyProvider
+
+    ```tsx
+    import { PrivyProvider } from "@privy-io/react-auth";
+    import { AlchemyProvider } from "@account-kit/privy-integration";
+
+    function App() {
+      return (
+        <PrivyProvider appId="your-privy-app-id" config={{}}>
+          <AlchemyProvider apiKey="your-alchemy-api-key" policyId="your-gas-policy-id">
+            <YourApp />
+          </AlchemyProvider>
+        </PrivyProvider>
+      );
+    }
+    ```
+
+    Props for `AlchemyProvider`:
+
+    - `apiKey` | `jwt` | `rpcUrl` (pick a valid transport config)
+    - `policyId` (optional) for EVM gas sponsorship
+    - `solanaPolicyId` (optional) for Solana gas sponsorship
+    - `solanaRpcUrl` (optional) for Solana RPC URL (separate from EVM)
+    - `disableSponsorship` (optional) to opt-out per default
+
+    ### 2. Send Gasless Transactions
+
+    ```tsx
+    import { useAlchemySendTransaction } from "@account-kit/privy-integration";
+
+    function SendButtons() {
+      const { sendTransaction, isLoading } = useAlchemySendTransaction();
+
+      const single = async () =>
+        await sendTransaction({ to: "0x...", data: "0x...", value: "0x0" });
+
+      const batch = async () =>
+        await sendTransaction([
+          { to: "0x...", data: "0x..." },
+          { to: "0x...", data: "0x..." },
+        ]);
+
+      return (
+        <>
+          <button onClick={single} disabled={isLoading}>Send</button>
+          <button onClick={batch} disabled={isLoading}>Send Batch</button>
+        </>
+      );
+    }
+    ```
+
+    Control sponsorship per call:
+
+    ```tsx
+    await sendTransaction({ to: "0x...", data: "0x..." });
+    await sendTransaction({ to: "0x...", data: "0x..." }, { disableSponsorship: true });
+    ```
+
+    ### 3. Execute Token Swaps
+
+    ```tsx
+    import { useAlchemyPrepareSwap, useAlchemySubmitSwap } from "@account-kit/privy-integration";
+
+    function SwapButton() {
+      const { prepareSwap } = useAlchemyPrepareSwap();
+      const { submitSwap, isLoading } = useAlchemySubmitSwap();
+
+      const handleSwap = async () => {
+        const prepared = await prepareSwap({
+          fromToken: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+          toToken: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", // USDC on Ethereum mainnet
+          fromAmount: "0xde0b6b3a7640000",
+        });
+        await submitSwap(prepared);
+      };
+
+      return <button onClick={handleSwap} disabled={isLoading}>Swap</button>;
+    }
+    ```
+
+    ### 4. Send Solana Transactions
+
+    ```tsx
+    import { useAlchemySolanaTransaction } from "@account-kit/privy-integration/solana";
+
+    function SolanaButton() {
+      const { sendTransactionAsync, isPending } = useAlchemySolanaTransaction({
+        rpcUrl: "https://solana-mainnet.g.alchemy.com/v2/your-api-key",
+        policyId: "your-solana-policy-id", // optional
+      });
+
+      const handleTransfer = async () => {
+        const result = await sendTransactionAsync({
+          transfer: {
+            amount: 1_000_000_000, // 1 SOL in lamports
+            toAddress: "recipient-base58-address",
+          },
+        });
+        console.log("Transaction hash:", result.hash);
+      };
+
+      return <button onClick={handleTransfer} disabled={isPending}>Send SOL</button>;
+    }
+    ```
+
+    ### Advanced: Access the Smart Wallet Client
+
+    ```tsx
+    import { useAlchemyClient } from "@account-kit/privy-integration";
+
+    function Advanced() {
+      const { getClient } = useAlchemyClient();
+
+      const doOp = async () => {
+        const client = await getClient();
+        const address = await client.getAddress();
+        await client.sendCalls({
+          from: address,
+          calls: [{ to: "0x...", data: "0x" }],
+          capabilities: { eip7702Auth: true, paymasterService: { policyId: "your-policy-id" } },
+        });
+      };
+
+      return <button onClick={doOp}>Advanced Op</button>;
+    }
+    ```
+
+    ### Notes
+
+    - **EVM**: EIP-7702 is used to delegate your EOA to a smart account at send time.
+    - **Solana**: Gas sponsorship via Alchemy's fee payer service for Privy's embedded Solana wallets.
+    - The hooks API mirrors Privy's transaction hooks for easy migration.
+
+  </Tab>
+  <Tab title="JavaScript">
+    ## Setup
+
+    Use the `@privy-io/node` package with Smart Wallets infrastructure in a server environment.
+
+    ### Installation
+
+    ```bash
+    npm install @privy-io/node @account-kit/wallet-client @account-kit/infra @aa-sdk/core viem
+    # or
+    yarn add @privy-io/node @account-kit/wallet-client @account-kit/infra @aa-sdk/core viem
+    # or
+    pnpm add @privy-io/node @account-kit/wallet-client @account-kit/infra @aa-sdk/core viem
+    ```
+
+    ### Prerequisites: Get your keys
+
+    - API Key:
+      - Go to your service dashboard ([link](https://dashboard.alchemy.com/))
+      - Create or select an app and copy the API key
+    - Gas sponsorship Policy ID (Gas Manager):
+      - Create a gas sponsorship policy in your dashboard ([link](https://dashboard.alchemy.com/services/gas-manager/configuration)) and copy its Policy ID
+    - App ID & Secret:
+      - Go to your authentication provider dashboard ([link](https://dashboard.privy.io/))
+      - Create or select an app and copy the App ID and App Secret
+
+    <Warning>
+      Both the Smart Wallets configuration and the gas sponsorship policy must be
+      linked to the application associated with your API key for sponsorship to work.
+    </Warning>
+
+    ### Create Smart Wallet Client from Privy
+
+    Create a helper function that converts a Privy wallet into an Alchemy Smart Wallet client:
+
+    ```ts twoslash
+    import { PrivyClient } from "@privy-io/node";
+    import { createViemAccount } from "@privy-io/node/viem";
+    import { createWalletClient } from "viem";
+    import { WalletClientSigner } from "@aa-sdk/core";
+    import { baseSepolia, alchemy } from "@account-kit/infra";
+    import { createSmartWalletClient } from "@account-kit/wallet-client";
+
+    const ALCHEMY_API_KEY = "your-alchemy-api-key";
+    const ALCHEMY_GAS_POLICY_ID = "your-gas-policy-id";
+
+    async function createPrivySmartWalletClient({
+      privyClient,
+      walletId,
+      walletAddress,
+    }) {
+      // Create a viem account from Privy's wallet
+      const viemAccount = createViemAccount(privyClient, {
+        walletId,
+        address: walletAddress,
+      });
+
+      // Create a viem wallet client
+      const walletClient = createWalletClient({
+        account: viemAccount,
+        chain: baseSepolia,
+        transport: alchemy({ apiKey: ALCHEMY_API_KEY }),
+      });
+
+      // Wrap it in a WalletClientSigner for Account Kit
+      const signer = new WalletClientSigner(walletClient, "privy-wallet");
+
+      // Create and return the Smart Wallet client
+      return createSmartWalletClient({
+        chain: baseSepolia,
+        transport: alchemy({ apiKey: ALCHEMY_API_KEY }),
+        signer,
+        policyId: ALCHEMY_GAS_POLICY_ID,
+      });
+    }
+    ```
+
+    ### Send Transactions with EIP-7702
+
+    Send gasless transactions using EIP-7702 to upgrade the Privy wallet to a smart wallet:
+
+    ```ts twoslash
+    import { PrivyClient } from "@privy-io/node";
+
+    const PRIVY_APP_ID = "your-privy-app-id";
+    const PRIVY_APP_SECRET = "your-privy-app-secret";
+
+    async function sendTransaction() {
+      // Initialize Privy client
+      const privyClient = new PrivyClient({
+        appId: PRIVY_APP_ID,
+        appSecret: PRIVY_APP_SECRET,
+      });
+
+      // Create or get a Privy embedded wallet
+      const wallet = await privyClient.wallets().create({
+        chain_type: "ethereum",
+      });
+
+      console.log("Wallet address:", wallet.address);
+
+      // Create Smart Wallet client from Privy wallet
+      const client = await createPrivySmartWalletClient({
+        privyClient,
+        walletId: wallet.id,
+        walletAddress: wallet.address,
+      });
+
+      // Send a gasless transaction with EIP-7702
+      const result = await client.sendCalls({
+        from: wallet.address,
+        calls: [
+          {
+            to: "0x0000000000000000000000000000000000000000",
+            value: "0x0",
+            data: "0x",
+          },
+        ],
+        capabilities: {
+          eip7702Auth: true,
+          paymasterService: {
+            policyId: ALCHEMY_GAS_POLICY_ID,
+          },
+        },
+      });
+
+      console.log("Transaction sent:", result.preparedCallIds[0]);
+    }
+    ```
+
+    ### Wait for Transaction Confirmation
+
+    Wait for the transaction to be confirmed onchain:
+
+    ```ts twoslash
+    async function sendAndWaitForTransaction() {
+      // ... (setup code from above)
+
+      const result = await client.sendCalls({
+        from: wallet.address,
+        calls: [
+          {
+            to: "0x0000000000000000000000000000000000000000",
+            value: "0x0",
+            data: "0x",
+          },
+        ],
+        capabilities: {
+          eip7702Auth: true,
+          paymasterService: {
+            policyId: ALCHEMY_GAS_POLICY_ID,
+          },
+        },
+      });
+
+      console.log("Waiting for confirmation...");
+
+      // Wait for the transaction to be confirmed
+      const txStatus = await client.waitForCallsStatus({
+        id: result.preparedCallIds[0],
+        timeout: 60_000, // 60 seconds
+      });
+
+      const txnHash = txStatus.receipts?.[0]?.transactionHash;
+
+      console.log("Transaction confirmed!");
+      console.log("Transaction hash:", txnHash);
+    }
+    ```
+
+    ### Batch Multiple Transactions
+
+    Send multiple transactions in a single batch:
+
+    ```ts twoslash
+    const result = await client.sendCalls({
+      from: wallet.address,
+      calls: [
+        { to: "0x...", data: "0x...", value: "0x0" },
+        { to: "0x...", data: "0x...", value: "0x0" },
+        { to: "0x...", data: "0x...", value: "0x0" },
+      ],
+      capabilities: {
+        eip7702Auth: true,
+        paymasterService: {
+          policyId: ALCHEMY_GAS_POLICY_ID,
+        },
+      },
+    });
+    ```
+
+    ### Notes
+
+    - **EIP-7702**: Upgrades the wallet to a smart wallet at transaction time without migration
+    - **Gas Sponsorship**: Use `paymasterService` with your policy ID for gasless transactions
+    - **Server-Side**: This example uses Privy's `@privy-io/node` package which is designed for server environments. However, the `@account-kit` packages (`@account-kit/wallet-client`, `@account-kit/infra`, etc.) can be used in any JavaScript environment including browsers, React Native, and Node.js
+
+  </Tab>
+</Tabs>
