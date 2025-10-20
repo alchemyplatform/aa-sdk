@@ -63,7 +63,7 @@ export type UseAuthMethodsReturnType = UseQueryResult<
  * import { useAuthMethods } from '@alchemy/react';
  *
  * function AuthMethodsList() {
- *   const { data, isLoading, error } = useAuthMethods({});
+ *   const { data, isLoading, error } = useAuthMethods();
  *
  *   if (isLoading) return <div>Loading...</div>;
  *   if (error) return <div>Error: {error.message}</div>;
@@ -71,11 +71,30 @@ export type UseAuthMethodsReturnType = UseQueryResult<
  *   return (
  *     <div>
  *       {data && (
- *         <ul>
- *           {data.map((method) => (
- *             <li key={method.type}>{method.type}</li>
- *           ))}
- *         </ul>
+ *         <div>
+ *           {data.email && <p>Email: {data.email}</p>}
+ *           {data.phone && <p>Phone: {data.phone}</p>}
+ *           {data.passkeys.length > 0 && (
+ *             <div>
+ *               <strong>Passkeys:</strong>
+ *               <ul>
+ *                 {data.passkeys.map((passkey) => (
+ *                   <li key={passkey.authenticatorId}>{passkey.name}</li>
+ *                 ))}
+ *               </ul>
+ *             </div>
+ *           )}
+ *           {data.oauthProviders.length > 0 && (
+ *             <div>
+ *               <strong>OAuth Providers:</strong>
+ *               <ul>
+ *                 {data.oauthProviders.map((provider) => (
+ *                   <li key={provider.providerId}>{provider.providerName || provider.providerId}</li>
+ *                 ))}
+ *               </ul>
+ *             </div>
+ *           )}
+ *         </div>
  *       )}
  *     </div>
  *   );
