@@ -39,3 +39,6 @@ export type * from "./hooks/usePrepareCalls.js";
 
 export { useSendPreparedCalls } from "./hooks/useSendPreparedCalls.js";
 export type * from "./hooks/useSendPreparedCalls.js";
+
+export { useAuthMethods } from "./hooks/useAuthMethods.js";
+export type * from "./hooks/useAuthMethods.js";

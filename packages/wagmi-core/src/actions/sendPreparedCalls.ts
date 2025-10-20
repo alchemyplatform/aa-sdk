@@ -54,7 +54,7 @@ export async function sendPreparedCalls(
   const apiParams = viemDecodePreparedCalls(params);
 
   const signPreparedCallsAction = getAction(
-    client,
+    client.signerClient, // Note that this action needs the signer client, not the SCA client.
     signPreparedCallsClientAction,
     "signPreparedCalls",
   );

@@ -69,6 +69,7 @@ export const createSmartWalletClient = <
     .extend(() => ({
       policyIds: _policyIds,
       internal: createInternalState(),
+      signerClient,
     }))
     .extend(smartWalletActions<TAccount>(signerClient));
 };

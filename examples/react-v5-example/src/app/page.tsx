@@ -32,6 +32,7 @@ import {
   useSendVerificationCode,
   useUpdateEmail,
   useUpdatePhoneNumber,
+  useAuthMethods,
 } from "@alchemy/react";
 import { zeroAddress, Address } from "viem";
 import { useState } from "react";
@@ -173,6 +174,9 @@ const UserProfileDemo = () => {
   const user = useUser();
   const authSession = useAuthSession();
   const authClient = useAuthClient();
+  const { data: authMethods, isLoading: isLoadingAuthMethods } = useAuthMethods(
+    {},
+  );
   const {
     sendVerificationCode,
     isPending: isSendingCode,
@@ -222,6 +226,40 @@ const UserProfileDemo = () => {
           <p>
             <strong>Auth Client:</strong> Connected
           </p>
+        </div>
+      )}
+
+      {/* Display auth methods */}
+      {isLoadingAuthMethods && (
+        <p className="text-sm text-gray-500">Loading auth methods...</p>
+      )}
+      {authMethods && (
+        <div className="text-sm bg-purple-50 p-3 rounded w-full max-w-md">
+          <p className="font-semibold mb-2">Authentication Methods:</p>
+          <ul className="list-disc list-inside">
+            {authMethods.email && (
+              <li className="text-xs">
+                <strong>Email:</strong> {authMethods.email}
+              </li>
+            )}
+            {authMethods.phone && (
+              <li className="text-xs">
+                <strong>Phone:</strong> {authMethods.phone}
+              </li>
+            )}
+            {authMethods.oauthProviders.map((provider) => (
+              <li key={provider.providerId} className="text-xs">
+                <strong>OAuth:</strong> {provider.providerId}
+                {provider.userDisplayName && ` (${provider.userDisplayName})`}
+              </li>
+            ))}
+            {authMethods.passkeys.map((passkey) => (
+              <li key={passkey.authenticatorId} className="text-xs">
+                <strong>Passkey:</strong> {passkey.authenticatorId} (
+                {passkey.name})
+              </li>
+            ))}
+          </ul>
         </div>
       )}
 
@@ -742,8 +780,6 @@ const SwapDemo = ({
     toToken,
     fromAmount,
   });
-
-  console.log({ preparedSwap, prepareSwapError });
 
   const {
     sendPreparedCalls,

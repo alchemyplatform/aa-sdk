@@ -1,6 +1,7 @@
 import type { Client, Address } from "viem";
 import type { SmartWalletActions } from "../decorators/smartWalletActions.js";
-import type { BaseWalletClient } from "../types.js";
+import type { BaseWalletClient, SignerClient } from "../types.js";
+import { BaseError } from "@alchemy/common";
 
 /**
  * Type guard function to check if a client is an Alchemy Smart Wallet Client.
@@ -29,8 +30,10 @@ export function assertSmartWalletClient<
 >(
   client: Client,
   message = "Expected an Alchemy Smart Wallet Client",
-): asserts client is BaseWalletClient<SmartWalletActions<TAccount>> {
+): asserts client is BaseWalletClient<SmartWalletActions<TAccount>> & {
+  signerClient: SignerClient;
+} {
   if (!isSmartWalletClient(client)) {
-    throw new Error(message);
+    throw new BaseError(message);
   }
 }

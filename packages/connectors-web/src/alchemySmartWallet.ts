@@ -1,7 +1,6 @@
 import { alchemyTransport, BaseError } from "@alchemy/common";
 import {
   createEip1193Provider,
-  createSmartWalletClient,
   type SmartWalletClientEip1193Provider,
 } from "@alchemy/wallet-apis";
 import { ALCHEMY_SMART_WALLET_CONNECTOR_TYPE } from "@alchemy/wagmi-core";
@@ -17,6 +16,7 @@ import {
   type Transport,
   type WalletClient,
   type Client,
+  createClient,
 } from "viem";
 import { createConnector, type CreateConnectorFn } from "wagmi";
 
@@ -335,14 +335,24 @@ export function alchemySmartWallet(
 
         const [account] = await getAccounts();
         const chain = getChainFromConfig(config, currentChainId);
-        const client = createSmartWalletClient({
+        const provider = await this.getProvider();
+        const policyIds = [
+          ...(options.policyId ? [options.policyId] : []),
+          ...(options.policyIds ?? []),
+        ];
+        const signerClient = await getSignerClient(chain);
+        // Create a minimal client instead of using `createSmartWalletClient` to keep actions
+        // tree-shakable. Extend with `signerClient` for actions like `signPreparedCalls` and
+        // use the 1193 provider for compatibility with wagmi's built-in hooks.
+        const client = createClient({
           account,
           chain,
-          transport,
-          signer: await getSignerClient(chain),
-          policyId: options.policyId,
-          policyIds: options.policyIds,
-        });
+          name: "alchemySmartWalletClient",
+          transport: (opts) => custom(provider)({ ...opts, retryCount: 0 }),
+        }).extend(() => ({
+          policyIds,
+          signerClient,
+        }));
         clients[currentChainId] = client;
         return client;
       },

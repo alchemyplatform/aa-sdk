@@ -98,3 +98,8 @@ export {
   ALCHEMY_AUTH_CONNECTOR_TYPE,
   ALCHEMY_SMART_WALLET_CONNECTOR_TYPE,
 } from "./utils/resolveAuthConnector.js";
+
+export {
+  listAuthMethods,
+  type ListAuthMethodsReturnType,
+} from "./actions/listAuthMethods.js";
