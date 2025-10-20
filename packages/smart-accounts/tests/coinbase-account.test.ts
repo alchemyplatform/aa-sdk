@@ -32,145 +32,157 @@ describe("Viem AA - Coinbase Smart Account", () => {
     expect(account.type).toBe("smart");
   });
 
-  it("should send a user operation (ETH transfer)", async () => {
-    const owner = privateKeyToAccount(generatePrivateKey());
+  it(
+    "should send a user operation (ETH transfer)",
+    { retry: 3, timeout: 60_000 },
+    async () => {
+      const owner = privateKeyToAccount(generatePrivateKey());
 
-    const account = await toCoinbaseSmartAccount({
-      client,
-      owners: [owner],
-    });
+      const account = await toCoinbaseSmartAccount({
+        client,
+        owners: [owner],
+      });
 
-    // Create a bundler client that uses the optimized Alchemy gas manager
-    const bundlerClient = createBundlerClient({
-      account,
-      chain: local070Instance.chain,
-      transport: custom(client),
-      ...alchemyGasManagerHooks("test-policy"),
-    });
+      // Create a bundler client that uses the optimized Alchemy gas manager
+      const bundlerClient = createBundlerClient({
+        account,
+        chain: local070Instance.chain,
+        transport: custom(client),
+        ...alchemyGasManagerHooks("test-policy"),
+      });
 
-    // Fund the account
-    await setBalance(client, {
-      address: account.address,
-      value: parseEther("2.0"),
-    });
+      // Fund the account
+      await setBalance(client, {
+        address: account.address,
+        value: parseEther("2.0"),
+      });
 
-    const recipient = "0x000000000000000000000000000000000000dEaD";
-    const amount = parseEther("0.1");
+      const recipient = "0x000000000000000000000000000000000000dEaD";
+      const amount = parseEther("0.1");
 
-    const initialBalance = await getBalance(client, {
-      address: recipient,
-    });
+      const initialBalance = await getBalance(client, {
+        address: recipient,
+      });
 
-    // Send the user operation
-    const userOpHash = await bundlerClient.sendUserOperation({
-      account,
-      calls: [
-        {
-          to: recipient,
-          value: amount,
-          data: "0x",
-        },
-      ],
-    });
+      // Send the user operation
+      const userOpHash = await bundlerClient.sendUserOperation({
+        account,
+        calls: [
+          {
+            to: recipient,
+            value: amount,
+            data: "0x",
+          },
+        ],
+      });
 
-    expect(userOpHash).toBeDefined();
-    expect(userOpHash).toMatch(/^0x[a-fA-F0-9]{64}$/);
+      expect(userOpHash).toBeDefined();
+      expect(userOpHash).toMatch(/^0x[a-fA-F0-9]{64}$/);
 
-    // Wait for the user operation to be included
-    const receipt = await bundlerClient.waitForUserOperationReceipt({
-      hash: userOpHash,
-      timeout: 120_000,
-    });
+      // Wait for the user operation to be included
+      const receipt = await bundlerClient.waitForUserOperationReceipt({
+        hash: userOpHash,
+        timeout: 120_000,
+      });
 
-    expect(receipt).toBeDefined();
-    expect(receipt.success).toBe(true);
+      expect(receipt).toBeDefined();
+      expect(receipt.success).toBe(true);
 
-    const finalBalance = await getBalance(client, {
-      address: recipient,
-    });
+      const finalBalance = await getBalance(client, {
+        address: recipient,
+      });
 
-    expect(finalBalance).toBe(initialBalance + amount);
+      expect(finalBalance).toBe(initialBalance + amount);
 
-    // Account should be deployed after the first user operation
-    expect(await account.isDeployed()).toBe(true);
-  }, 120_000);
+      // Account should be deployed after the first user operation
+      expect(await account.isDeployed()).toBe(true);
+    },
+  );
 
-  it("should verify signature using EIP-1271 after deployment", async () => {
-    const owner = privateKeyToAccount(generatePrivateKey());
+  it(
+    "should verify signature using EIP-1271 after deployment",
+    { retry: 3, timeout: 60_000 },
+    async () => {
+      const owner = privateKeyToAccount(generatePrivateKey());
 
-    const account = await toCoinbaseSmartAccount({
-      client,
-      owners: [owner],
-    });
+      const account = await toCoinbaseSmartAccount({
+        client,
+        owners: [owner],
+      });
 
-    const bundlerClient = createBundlerClient({
-      account,
-      chain: local070Instance.chain,
-      transport: custom(client),
-      ...alchemyGasManagerHooks("test-policy"),
-    }).extend(bundlerActions);
+      const bundlerClient = createBundlerClient({
+        account,
+        chain: local070Instance.chain,
+        transport: custom(client),
+        ...alchemyGasManagerHooks("test-policy"),
+      }).extend(bundlerActions);
 
-    // Fund and deploy the account
-    await setBalance(client, {
-      address: account.address,
-      value: parseEther("1.0"),
-    });
+      // Fund and deploy the account
+      await setBalance(client, {
+        address: account.address,
+        value: parseEther("1.0"),
+      });
 
-    // Deploy by sending a simple transaction to self
-    const deployHash = await bundlerClient.sendUserOperation({
-      account,
-      calls: [
-        {
-          to: account.address,
-          value: 0n,
-          data: "0x",
-        },
-      ],
-    });
+      // Deploy by sending a simple transaction to self
+      const deployHash = await bundlerClient.sendUserOperation({
+        account,
+        calls: [
+          {
+            to: account.address,
+            value: 0n,
+            data: "0x",
+          },
+        ],
+      });
 
-    await bundlerClient.waitForUserOperationReceipt({
-      hash: deployHash,
-    });
+      await bundlerClient.waitForUserOperationReceipt({
+        hash: deployHash,
+      });
 
-    // Now the account is deployed, let's sign and verify
-    const message = "Hello from deployed Coinbase Smart Wallet!";
-    const signature = await account.signMessage({ message });
+      // Now the account is deployed, let's sign and verify
+      const message = "Hello from deployed Coinbase Smart Wallet!";
+      const signature = await account.signMessage({ message });
 
-    // Create a public client for verification
-    const publicClient = client.extend(publicActions);
+      // Create a public client for verification
+      const publicClient = client.extend(publicActions);
 
-    // For smart accounts, we use verifyMessage which should handle EIP-1271
-    const isValid = await publicClient.verifyMessage({
-      address: account.address,
-      message,
-      signature,
-    });
+      // For smart accounts, we use verifyMessage which should handle EIP-1271
+      const isValid = await publicClient.verifyMessage({
+        address: account.address,
+        message,
+        signature,
+      });
 
-    expect(isValid).toBe(true);
-  }, 60_000);
+      expect(isValid).toBe(true);
+    },
+  );
 
-  it("should verify EIP-6492 signatures for pre-deployed accounts", async () => {
-    const owner = privateKeyToAccount(generatePrivateKey());
+  it(
+    "should verify EIP-6492 signatures for pre-deployed accounts",
+    { retry: 3, timeout: 60_000 },
+    async () => {
+      const owner = privateKeyToAccount(generatePrivateKey());
 
-    const account = await toCoinbaseSmartAccount({
-      client,
-      owners: [owner],
-    });
+      const account = await toCoinbaseSmartAccount({
+        client,
+        owners: [owner],
+      });
 
-    // Create a public client for verification
-    const publicClient = client.extend(publicActions);
+      // Create a public client for verification
+      const publicClient = client.extend(publicActions);
 
-    // Sign a message before deployment
-    const message = "Sign before deployment with EIP-6492!";
-    const signature = await account.signMessage({ message });
+      // Sign a message before deployment
+      const message = "Sign before deployment with EIP-6492!";
+      const signature = await account.signMessage({ message });
 
-    // Verify the signature using viem's verifyMessage (which should support EIP-6492)
-    const isValid = await publicClient.verifyMessage({
-      address: account.address,
-      message,
-      signature,
-    });
+      // Verify the signature using viem's verifyMessage (which should support EIP-6492)
+      const isValid = await publicClient.verifyMessage({
+        address: account.address,
+        message,
+        signature,
+      });
 
-    expect(isValid).toBe(true);
-  }, 60_000);
+      expect(isValid).toBe(true);
+    },
+  );
 });

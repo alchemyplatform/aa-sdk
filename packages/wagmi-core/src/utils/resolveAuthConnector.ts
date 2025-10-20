@@ -10,7 +10,7 @@ export const ALCHEMY_SMART_WALLET_CONNECTOR_TYPE = "alchemy-smart-wallet";
  */
 export interface AlchemyAuthConnector extends Connector {
   getAuthClient(): AuthClient;
-  getAuthSession(): Promise<AuthSession>;
+  getAuthSession(): AuthSession | null;
   setAuthSession(authSession: AuthSession): void;
 }
 

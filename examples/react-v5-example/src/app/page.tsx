@@ -24,12 +24,24 @@ import {
   useSendSmsOtp,
   useSendPreparedCalls,
   useSubmitOtpCode,
+  useLoginWithOauth,
+  useHandleOauthRedirect,
+  useUser,
+  useAuthSession,
+  useAuthClient,
+  useSendVerificationCode,
+  useUpdateEmail,
+  useUpdatePhoneNumber,
 } from "@alchemy/react";
 import { zeroAddress, Address } from "viem";
 import { useState } from "react";
 
 export default function Home() {
   const account = useAccount();
+
+  // Handle OAuth redirect automatically on page load
+  const { isPending: isHandlingRedirect, error: redirectError } =
+    useHandleOauthRedirect();
 
   useAccountEffect({
     onConnect(data) {
@@ -40,16 +52,29 @@ export default function Home() {
     },
   });
 
+  // Show loading state while handling OAuth redirect
+  if (isHandlingRedirect) {
+    return (
+      <div className="flex flex-col items-center justify-items-center min-h-screen p-12 gap-6">
+        <p className="font-semibold">Completing OAuth authentication...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col items-center justify-items-center min-h-screen p-12 gap-6">
-      <p className="font-semibold">
-        {account.isConnected ? "Connected" : "Not connected"}
-      </p>
+      {redirectError && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+          OAuth redirect error: {redirectError.message}
+        </div>
+      )}
+      <p className="font-semibold">{account.status}</p>
       {!account.isConnected ? (
         <AuthenticationDemo />
       ) : (
         <>
           <ChainControls />
+          <UserProfileDemo />
           <ConnectorClientDemo />
           <WalletClientDemo />
           <SigningDemo />
@@ -65,7 +90,7 @@ export default function Home() {
 }
 
 const AuthenticationDemo = () => {
-  const [authMode, setAuthMode] = useState<"email" | "sms">("email");
+  const [authMode, setAuthMode] = useState<"email" | "sms" | "oauth">("email");
 
   return (
     <div className="flex flex-col gap-4 items-center">
@@ -75,7 +100,7 @@ const AuthenticationDemo = () => {
           className={`cursor-pointer rounded px-4 py-2 font-bold text-white text-sm ${
             authMode === "email"
               ? "bg-blue-700"
-              : "bg-blue-500 hover:bg-blue-600"
+              : "bg-neutral-400 hover:bg-blue-600"
           }`}
         >
           Email
@@ -83,13 +108,31 @@ const AuthenticationDemo = () => {
         <button
           onClick={() => setAuthMode("sms")}
           className={`cursor-pointer rounded px-4 py-2 font-bold text-white text-sm ${
-            authMode === "sms" ? "bg-blue-700" : "bg-blue-500 hover:bg-blue-600"
+            authMode === "sms"
+              ? "bg-blue-700"
+              : "bg-neutral-400 hover:bg-blue-600"
           }`}
         >
           SMS
         </button>
+        <button
+          onClick={() => setAuthMode("oauth")}
+          className={`cursor-pointer rounded px-4 py-2 font-bold text-white text-sm ${
+            authMode === "oauth"
+              ? "bg-blue-700"
+              : "bg-neutral-400 hover:bg-blue-600"
+          }`}
+        >
+          OAuth
+        </button>
       </div>
-      {authMode === "email" ? <EmailAuthDemo /> : <SmsAuthDemo />}
+      {authMode === "email" ? (
+        <EmailAuthDemo />
+      ) : authMode === "sms" ? (
+        <SmsAuthDemo />
+      ) : (
+        <OAuthDemo />
+      )}
     </div>
   );
 };
@@ -121,6 +164,159 @@ const ChainControls = () => {
         >
           Disconnect
         </button>
+      </div>
+    </div>
+  );
+};
+
+const UserProfileDemo = () => {
+  const user = useUser();
+  const authSession = useAuthSession();
+  const authClient = useAuthClient();
+  const {
+    sendVerificationCode,
+    isPending: isSendingCode,
+    variables: sendVerificationCodeVars,
+  } = useSendVerificationCode();
+  const { updateEmail, isPending: isUpdatingEmail } = useUpdateEmail();
+  const { updatePhoneNumber, isPending: isUpdatingPhone } =
+    useUpdatePhoneNumber();
+
+  return (
+    <div className="flex flex-col gap-4 items-center border border-gray-300 p-4 rounded">
+      <p className="font-semibold text-lg">User Profile</p>
+
+      {/* Display user info */}
+      {user && (
+        <div className="text-sm bg-gray-100 p-3 rounded w-full max-w-md">
+          <p>
+            <strong>Address:</strong> {user.address}
+          </p>
+          <p>
+            <strong>Email:</strong> {user.email || "Not set"}
+          </p>
+          <p>
+            <strong>Phone:</strong> {user.phone || "Not set"}
+          </p>
+          <p>
+            <strong>Org ID:</strong> {user.orgId}
+          </p>
+        </div>
+      )}
+
+      {/* Display auth session info */}
+      {authSession && (
+        <div className="text-xs bg-blue-50 p-2 rounded w-full max-w-md">
+          <p>
+            <strong>Auth Session:</strong> Active
+          </p>
+          <p>
+            <strong>User ID:</strong> {authSession.getUser().userId}
+          </p>
+        </div>
+      )}
+
+      {/* Display auth client info */}
+      {authClient && (
+        <div className="text-xs bg-green-50 p-2 rounded w-full max-w-md">
+          <p>
+            <strong>Auth Client:</strong> Connected
+          </p>
+        </div>
+      )}
+
+      {/* Email Management */}
+      <div className="flex flex-col gap-2 w-full max-w-md">
+        <p className="font-semibold text-sm">Email Management</p>
+        <div className="flex gap-2">
+          <button
+            onClick={() => {
+              const email = prompt("Enter new email address:");
+              if (!email) return;
+              sendVerificationCode({ contact: email, type: "email" });
+            }}
+            disabled={
+              isSendingCode && sendVerificationCodeVars.type === "email"
+            }
+            className="cursor-pointer rounded bg-blue-500 px-3 py-1 text-sm font-bold text-white hover:bg-blue-700 disabled:opacity-50"
+          >
+            {isSendingCode && sendVerificationCodeVars.type === "email"
+              ? "Sending..."
+              : "Update Email"}
+          </button>
+          <button
+            onClick={() => {
+              const code = prompt("Enter verification code:");
+              if (!code) return;
+              updateEmail({ verificationCode: code });
+            }}
+            disabled={isUpdatingEmail}
+            className="cursor-pointer rounded bg-green-500 px-3 py-1 text-sm font-bold text-white hover:bg-green-700 disabled:opacity-50"
+          >
+            {isUpdatingEmail ? "Verifying..." : "Verify Code"}
+          </button>
+          {user?.email && (
+            <button
+              onClick={() => {
+                if (window.confirm("Remove email from your account?")) {
+                  updateEmail({ email: null });
+                }
+              }}
+              disabled={isUpdatingEmail}
+              className="cursor-pointer rounded bg-red-500 px-3 py-1 text-sm font-bold text-white hover:bg-red-700 disabled:opacity-50"
+            >
+              Remove Email
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* Phone Management */}
+      <div className="flex flex-col gap-2 w-full max-w-md">
+        <p className="font-semibold text-sm">Phone Management</p>
+        <div className="flex gap-2">
+          <button
+            onClick={() => {
+              const phone = prompt(
+                "Enter new phone number (E.164 format, e.g., +15551234567):",
+              );
+              if (!phone) return;
+              sendVerificationCode({ contact: phone, type: "phone" });
+            }}
+            disabled={
+              isSendingCode && sendVerificationCodeVars.type === "phone"
+            }
+            className="cursor-pointer rounded bg-blue-500 px-3 py-1 text-sm font-bold text-white hover:bg-blue-700 disabled:opacity-50"
+          >
+            {isSendingCode && sendVerificationCodeVars.type === "phone"
+              ? "Sending..."
+              : "Update Phone"}
+          </button>
+          <button
+            onClick={() => {
+              const code = prompt("Enter verification code:");
+              if (!code) return;
+              updatePhoneNumber({ verificationCode: code });
+            }}
+            disabled={isUpdatingPhone}
+            className="cursor-pointer rounded bg-green-500 px-3 py-1 text-sm font-bold text-white hover:bg-green-700 disabled:opacity-50"
+          >
+            {isUpdatingPhone ? "Verifying..." : "Verify Code"}
+          </button>
+          {user?.phone && (
+            <button
+              onClick={() => {
+                if (window.confirm("Remove phone number from your account?")) {
+                  updatePhoneNumber({ phoneNumber: null });
+                }
+              }}
+              disabled={isUpdatingPhone}
+              className="cursor-pointer rounded bg-red-500 px-3 py-1 text-sm font-bold text-white hover:bg-red-700 disabled:opacity-50"
+            >
+              Remove Phone
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
@@ -221,7 +417,7 @@ const SmsAuthDemo = () => {
     <div className="flex flex-col gap-3 items-center">
       <div className="flex gap-3">
         <button
-          className="cursor-pointer rounded bg-green-500 px-4 py-2 font-bold text-white hover:bg-green-700"
+          className="cursor-pointer rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
           onClick={() => {
             const phoneNumber = prompt(
               "Enter your phone number (E.164 format, e.g., +15551234567):",
@@ -236,7 +432,7 @@ const SmsAuthDemo = () => {
         </button>
         {sentSmsOtp && (
           <button
-            className="cursor-pointer rounded bg-green-500 px-4 py-2 font-bold text-white hover:bg-green-700"
+            className="cursor-pointer rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
             onClick={() => {
               const otpCode = prompt("Enter the OTP code:");
               if (!otpCode) {
@@ -251,6 +447,54 @@ const SmsAuthDemo = () => {
       </div>
       <p className="text-xs text-gray-500 max-w-md text-center">
         Phone number must include country code (e.g., +15551234567)
+      </p>
+    </div>
+  );
+};
+
+const OAuthDemo = () => {
+  const { loginWithOauth, isPending, error, variables } = useLoginWithOauth();
+
+  return (
+    <div className="flex flex-col gap-3 items-center">
+      <div className="flex gap-3">
+        <button
+          className="cursor-pointer rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 disabled:opacity-50"
+          disabled={isPending}
+          onClick={() => {
+            loginWithOauth({
+              provider: "google",
+              mode: "popup",
+            });
+          }}
+        >
+          {isPending && variables.mode === "popup"
+            ? "Logging in..."
+            : "Google (Popup)"}
+        </button>
+        <button
+          className="cursor-pointer rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 disabled:opacity-50"
+          disabled={isPending}
+          onClick={() => {
+            loginWithOauth({
+              provider: "google",
+              mode: "redirect",
+            });
+          }}
+        >
+          {isPending && variables.mode === "redirect"
+            ? "Logging in..."
+            : "Google (Redirect)"}
+        </button>
+      </div>
+      {error && (
+        <p className="text-xs text-red-500 max-w-md text-center">
+          Error: {error.message}
+        </p>
+      )}
+      <p className="text-xs text-gray-500 max-w-md text-center">
+        Popup mode opens OAuth in a new window. Redirect mode navigates away and
+        back.
       </p>
     </div>
   );
