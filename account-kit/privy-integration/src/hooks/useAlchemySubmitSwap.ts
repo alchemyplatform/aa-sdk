@@ -49,7 +49,7 @@ export function useAlchemySubmitSwap(): UseSubmitSwapResult {
       setError(null);
 
       try {
-        const client = await getClient();
+        const { client } = await getClient();
 
         // Extend client with swap actions
         const swapClient = client.extend(swapActions);
