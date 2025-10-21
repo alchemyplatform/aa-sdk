@@ -483,9 +483,8 @@ describe("AuthSession", () => {
           otpId: "test-otp-id",
         });
 
-        const result = await authSession.sendPhoneVerificationCode(phoneNumber);
+        await authSession.sendPhoneVerificationCode(phoneNumber);
 
-        expect(result).toEqual({ otpId: "test-otp-id" });
         expect(mockSignerHttpClient.request).toHaveBeenCalledWith({
           route: "signer/v1/init-otp",
           method: "POST",
@@ -511,6 +510,9 @@ describe("AuthSession", () => {
 
         vi.mocked(mockSignerHttpClient.request).mockImplementation(
           async (params) => {
+            if (params.route === "signer/v1/init-otp") {
+              return { otpId };
+            }
             if (params.route === "signer/v1/verify-otp") {
               return { verificationToken };
             }
@@ -521,7 +523,10 @@ describe("AuthSession", () => {
           },
         );
 
-        await authSession.setPhoneNumber({ otpId, verificationCode });
+        // First call sendPhoneVerificationCode to set pendingPhoneOtpId
+        await authSession.sendPhoneVerificationCode(phoneNumber);
+
+        await authSession.setPhoneNumber({ verificationCode });
 
         expect(mockSignerHttpClient.request).toHaveBeenCalledWith({
           route: "signer/v1/verify-otp",
@@ -558,10 +563,7 @@ describe("AuthSession", () => {
         authSession.disconnect();
 
         await expect(
-          authSession.setPhoneNumber({
-            otpId: "test-otp-id",
-            verificationCode: "123456",
-          }),
+          authSession.setPhoneNumber({ verificationCode: "123456" }),
         ).rejects.toThrow("Auth session has been disconnected");
       });
     });

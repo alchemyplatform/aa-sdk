@@ -290,6 +290,12 @@ export type SignerHttpSchema = [
     Body: StampedRequestBody;
     Response: void;
   },
+  {
+    Route: "signer/v1/update-email-auth";
+    Method: "POST";
+    Body: StampedRequestBody;
+    Response: void;
+  },
 ];
 
 export type StampedRequestBody = {

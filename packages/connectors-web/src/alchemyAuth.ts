@@ -116,12 +116,11 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
     getAuthClient(): AuthClient;
 
     /**
-     * Gets the current authentication session.
+     * Gets the current authentication session synchronously.
      *
-     * @returns {Promise<AuthSession>} Promise resolving to the current auth session
-     * @throws {Error} If no auth session is available
+     * @returns {AuthSession | null} The current auth session, or null if not authenticated
      */
-    getAuthSession(): Promise<AuthSession>;
+    getAuthSession(): AuthSession | null;
 
     /**
      * Sets the authentication session after successful authentication.
@@ -186,6 +185,10 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
         if (authSession) {
           setAuthSession(authSession);
           currentChainId = persisted.chainId;
+          config.emitter.emit("connect", {
+            chainId: currentChainId,
+            accounts: [authSession.getAddress()],
+          });
           return true;
         }
       } catch (error) {
@@ -522,9 +525,8 @@ export function alchemyAuth(options: AlchemyAuthOptions): CreateConnectorFn {
       // --- Custom methods for Alchemy Auth are defined below this comment ---
       getAuthClient,
 
-      async getAuthSession() {
-        await ensureSession();
-        return authSessionInstance!;
+      getAuthSession() {
+        return authSessionInstance ?? null;
       },
 
       setAuthSession,

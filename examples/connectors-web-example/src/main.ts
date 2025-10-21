@@ -1,7 +1,6 @@
 import {
   sendEmailOtp,
   sendSmsOtp,
-  lookupUserByPhone,
   submitOtpCode,
   loginWithOauth,
   handleOauthRedirect,
@@ -85,27 +84,6 @@ async function handleSendSmsOtp() {
     await sendSmsOtp(config, { phoneNumber });
     updateStatus("sms-status", "OTP sent! Check your phone.");
     focusElement("sms-otp-input");
-  } catch (error) {
-    console.error(error);
-    updateStatus("sms-status", `Error: ${(error as Error).message}`);
-  }
-}
-
-async function handleLookupPhone() {
-  const phoneNumber = getInputValue("phone-input");
-  if (!phoneNumber) {
-    updateStatus("sms-status", "Please enter a phone number");
-    return;
-  }
-
-  try {
-    updateStatus("sms-status", "Looking up phone...");
-    const result = await lookupUserByPhone(config, { phoneNumber });
-    if (result) {
-      updateStatus("sms-status", `Phone registered with org: ${result.orgId}`);
-    } else {
-      updateStatus("sms-status", "Phone not registered");
-    }
   } catch (error) {
     console.error(error);
     updateStatus("sms-status", `Error: ${(error as Error).message}`);
@@ -549,7 +527,6 @@ function setupEmailAuth() {
 function setupSmsAuth() {
   const phoneForm = document.querySelector<HTMLFormElement>("#phone-form");
   const smsOtpForm = document.querySelector<HTMLFormElement>("#sms-otp-form");
-  const lookupButton = document.getElementById("lookup-phone");
 
   phoneForm?.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -560,8 +537,6 @@ function setupSmsAuth() {
     e.preventDefault();
     await handleSubmitSmsOtp();
   });
-
-  lookupButton?.addEventListener("click", handleLookupPhone);
 }
 
 function setupOauthAuth() {
@@ -659,7 +634,7 @@ function updateSessionStatus() {
       } else {
         updateStatus("session-status", "ℹ️ No active session");
       }
-    } catch (error) {
+    } catch {
       updateStatus("session-status", "⚠️ Error reading session status");
     }
   } else {
@@ -731,7 +706,7 @@ function setupApp(element: HTMLDivElement) {
   setTimeout(async () => {
     try {
       await reconnect(config);
-    } catch (error) {
+    } catch {
       // Silent fail - no existing session to reconnect
     }
   }, 100);
