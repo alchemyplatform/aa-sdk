@@ -10,6 +10,7 @@
   "module": "./dist/esm/index.js",
   "types": "./dist/types/index.d.ts",
   "typings": "./dist/types/index.d.ts",
+  "react-native": "./dist/esm/react-native.js",
   "sideEffects": false,
   "files": [
     "dist",
@@ -23,6 +24,7 @@
   ],
   "exports": {
     ".": {
+      "react-native": "./dist/esm/react-native.js",
       "types": "./dist/types/index.d.ts",
       "import": "./dist/esm/index.js",
       "default": "./dist/esm/index.js"
