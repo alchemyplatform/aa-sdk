@@ -27,9 +27,10 @@ export type WebAuthClientParams = {
  * and popup-based OAuth flow for social authentication.
  *
  * The created AuthClient supports:
- * - Email OTP authentication
- * - OAuth authentication via popup windows
- * - Secure key management through Turnkey iframe stamper
+ * - Email OTP authentication (creates TurnkeyClient with iframe TEK stamper)
+ * - OAuth authentication via popup windows (creates TurnkeyClient with iframe TEK stamper)
+ * - Passkey authentication (creates TurnkeyClient with WebAuthn stamper)
+ * - Secure key management through Turnkey
  *
  * @param {WebAuthClientParams} params - Configuration parameters for the web auth client
  * @param {string} params.apiKey - API key for authentication with Alchemy services
@@ -51,14 +52,19 @@ export type WebAuthClientParams = {
  * // Send email OTP
  * await authClient.sendEmailOtp({ email: "user@example.com" });
  *
- * // Submit OTP code
+ * // Submit OTP code - creates AuthSession with TurnkeyClient
  * const authSession = await authClient.submitOtpCode({ otpCode: "123456" });
  *
- * // OAuth login
+ * // OAuth login - creates AuthSession with TurnkeyClient
  * const authSession = await authClient.loginWithOauth({
  *   type: "oauth",
  *   authProviderId: "google",
  *   mode: "popup"
+ * });
+ *
+ * // Passkey login - creates AuthSession with TurnkeyClient using WebAuthn stamper
+ * const passkeySession = await authClient.loginWithPasskey({
+ *   username: "user@example.com"
  * });
  * ```
  *
@@ -101,7 +107,26 @@ export function createWebAuthClient({
 
     createWebAuthnStamper:
       createWebAuthnStamper ??
-      (() => Promise.reject(new Error("Not implemented"))),
+      (async (params) => {
+        const { WebauthnStamper } = await import("@turnkey/webauthn-stamper");
+
+        const stamper = new WebauthnStamper({
+          rpId: params.rpId ?? window.location.hostname,
+        });
+
+        // If credentialId is provided, configure allowed credentials for this specific passkey
+        if (params.credentialId) {
+          stamper.allowCredentials = [
+            {
+              id: Buffer.from(params.credentialId, "base64"),
+              type: "public-key",
+              transports: ["internal", "hybrid"],
+            },
+          ];
+        }
+
+        return stamper;
+      }),
     handleOauthFlow: async (
       authUrl: Promise<string> | string,
       mode: "redirect" | "popup",

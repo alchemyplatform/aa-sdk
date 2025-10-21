@@ -3,11 +3,18 @@ import { sha256 } from "viem";
 import type {
   AuthProviderConfig,
   AuthProviderCustomization,
+  CredentialCreationOptionOverrides,
   GetOauthProviderUrlArgs,
   KnownAuthProvider,
   OauthState,
 } from "./types";
 import { z } from "zod";
+import { getWebAuthnAttestation } from "@turnkey/http";
+
+/**
+ * Default session expiration duration in milliseconds (15 minutes)
+ */
+export const DEFAULT_SESSION_EXPIRATION_MS = 15 * 60 * 1000;
 
 export const UserSchema = z.object({
   email: z.string().optional(),
@@ -362,3 +369,69 @@ export function getOauthProviderUrl(args: GetOauthProviderUrlArgs): string {
 
   return `${urlPath?.replace(/\/$/, "")}?${searchParams}`;
 }
+
+export const generateRandomBuffer = (): ArrayBuffer => {
+  const arr = new Uint8Array(32);
+  crypto.getRandomValues(arr);
+  return arr.buffer;
+};
+
+export type GetWebAuthnAttestationResult = {
+  attestation: Awaited<ReturnType<typeof getWebAuthnAttestation>>;
+  challenge: ArrayBuffer | string;
+  authenticatorUserId: BufferSource;
+};
+
+export const getWebAuthnAttestationInternal = async (
+  userDetails: { username: string },
+  options?: CredentialCreationOptionOverrides,
+): Promise<GetWebAuthnAttestationResult> => {
+  const challenge = generateRandomBuffer();
+  const authenticatorUserId = generateRandomBuffer();
+
+  const attestation = await getWebAuthnAttestation({
+    publicKey: {
+      ...options?.publicKey,
+      authenticatorSelection: {
+        residentKey: "preferred",
+        requireResidentKey: false,
+        userVerification: "preferred",
+        ...options?.publicKey?.authenticatorSelection,
+      },
+      challenge,
+      rp: {
+        id: window.location.hostname,
+        name: window.location.hostname,
+        ...options?.publicKey?.rp,
+      },
+      pubKeyCredParams: [
+        {
+          type: "public-key",
+          alg: -7,
+        },
+        {
+          type: "public-key",
+          alg: -257,
+        },
+      ],
+      user: {
+        id: authenticatorUserId,
+        name: userDetails.username,
+        displayName: userDetails.username,
+        ...options?.publicKey?.user,
+      },
+    },
+    signal: options?.signal,
+  });
+
+  // TO DO: separate web and mobile logic
+  // on iOS sometimes this is returned as empty or null, so handling that here
+  if (attestation.transports == null || attestation.transports.length === 0) {
+    attestation.transports = [
+      "AUTHENTICATOR_TRANSPORT_INTERNAL",
+      "AUTHENTICATOR_TRANSPORT_HYBRID",
+    ];
+  }
+
+  return { challenge, authenticatorUserId, attestation };
+};
