@@ -38,6 +38,7 @@ export function useAlchemyClient() {
   const config = useAlchemyConfig();
   const cache = useClientCache();
   const getEmbeddedWallet = useEmbeddedWallet();
+  const authMode = config.accountAuthMode ?? "eip7702";
 
   const getEmbeddedWalletChain = useCallback(() => {
     const embedded = getEmbeddedWallet();
@@ -77,6 +78,7 @@ export function useAlchemyClient() {
       jwt: config.jwt,
       rpcUrl: config.rpcUrl,
       policyId: config.policyId,
+      accountAuthMode: authMode,
     });
 
     // Return cached client if configuration hasn't changed
@@ -97,23 +99,23 @@ export function useAlchemyClient() {
       "privy",
     );
 
-    // Extend signer with EIP-7702 authorization support
-    const signer = {
-      ...baseSigner,
-      signAuthorization: async (
-        unsignedAuth: AuthorizationRequest<number>,
-      ): Promise<Authorization<number, true>> => {
-        const signature = await signAuthorization({
-          ...unsignedAuth,
-          contractAddress: unsignedAuth.address ?? unsignedAuth.contractAddress,
-        });
-
-        return {
-          ...unsignedAuth,
-          ...signature,
-        };
-      },
-    };
+    // Optionally extend signer with EIP-7702 authorization support
+    const signer =
+      authMode === "eip7702"
+        ? {
+            ...baseSigner,
+            signAuthorization: async (
+              unsignedAuth: AuthorizationRequest<number>,
+            ): Promise<Authorization<number, true>> => {
+              const signature = await signAuthorization({
+                ...unsignedAuth,
+                contractAddress:
+                  unsignedAuth.address ?? unsignedAuth.contractAddress,
+              });
+              return { ...unsignedAuth, ...signature };
+            },
+          }
+        : baseSigner;
 
     // Determine transport configuration using schema validation
     // This properly handles combinations like rpcUrl + jwt together
@@ -141,6 +143,19 @@ export function useAlchemyClient() {
         : undefined,
     });
 
+    // Request the account to properly initialize the smart wallet
+    // Pass an id based on auth mode to ensure different accounts for different modes
+    // This prevents 7702 accounts from being reused in owner mode and vice versa
+    if (authMode === "eip7702") {
+      await cache.client.requestAccount({
+        creationHint: { accountType: "7702" },
+      });
+    } else {
+      await cache.client.requestAccount({
+        creationHint: { accountType: "sma-b" },
+      });
+    }
+
     // Store the cache key
     cache.cacheKey = currentCacheKey;
 
@@ -154,6 +169,7 @@ export function useAlchemyClient() {
     config.rpcUrl,
     config.policyId,
     cache,
+    authMode,
   ]);
 
   return { getClient };

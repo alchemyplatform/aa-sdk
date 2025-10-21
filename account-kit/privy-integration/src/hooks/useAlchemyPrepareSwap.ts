@@ -2,12 +2,12 @@ import { useCallback, useState } from "react";
 import { type Address } from "viem";
 import { swapActions } from "@account-kit/wallet-client/experimental";
 import { useAlchemyClient } from "./useAlchemyClient.js";
-import { useEmbeddedWallet } from "./internal/useEmbeddedWallet.js";
 import type {
   PrepareSwapRequest,
   PrepareSwapResult,
   UsePrepareSwapResult,
 } from "../types";
+import { useAlchemyConfig } from "../Provider.js";
 
 /**
  * Hook to request swap quotes and prepare swap calls
@@ -51,7 +51,8 @@ import type {
  */
 export function useAlchemyPrepareSwap(): UsePrepareSwapResult {
   const { getClient } = useAlchemyClient();
-  const getEmbeddedWallet = useEmbeddedWallet();
+  const config = useAlchemyConfig();
+  const authMode = config.accountAuthMode ?? "eip7702";
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
@@ -64,7 +65,16 @@ export function useAlchemyPrepareSwap(): UsePrepareSwapResult {
 
       try {
         const client = await getClient();
-        const embeddedWallet = getEmbeddedWallet();
+
+        // Get the smart account address with the appropriate creation hint
+        const account =
+          authMode === "eip7702"
+            ? await client.requestAccount({
+                creationHint: { accountType: "7702" },
+              })
+            : await client.requestAccount({
+                creationHint: { accountType: "sma-b" },
+              });
 
         // Extend client with swap actions
         const swapClient = client.extend(swapActions);
@@ -73,7 +83,7 @@ export function useAlchemyPrepareSwap(): UsePrepareSwapResult {
         // Note: Gas sponsorship capabilities are configured on the client itself
         const response = await swapClient.requestQuoteV0({
           ...request,
-          from: request.from || (embeddedWallet.address as Address),
+          from: request.from || (account.address as Address),
         });
 
         // Validate that we got prepared calls, not raw calls
@@ -94,7 +104,7 @@ export function useAlchemyPrepareSwap(): UsePrepareSwapResult {
         setIsLoading(false);
       }
     },
-    [getClient, getEmbeddedWallet],
+    [getClient, authMode],
   );
 
   const reset = useCallback(() => {
