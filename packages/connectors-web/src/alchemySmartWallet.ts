@@ -342,8 +342,7 @@ export function alchemySmartWallet(
         ];
         const signerClient = await getSignerClient(chain);
         // Create a minimal client instead of using `createSmartWalletClient` to keep actions
-        // tree-shakable. Extend with `signerClient` for actions like `signPreparedCalls` and
-        // use the 1193 provider for compatibility with wagmi's built-in hooks.
+        // tree-shakable, using the 1193 provider for compatibility with wagmi's built-in hooks.
         const client = createClient({
           account,
           chain,
