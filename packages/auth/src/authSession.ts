@@ -1000,7 +1000,3 @@ export class AuthSession {
     };
   }
 }
-
-function notImplemented(..._: unknown[]): Promise<never> {
-  throw new BaseError("Not implemented");
-}
