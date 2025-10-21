@@ -58,7 +58,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
         policyId={policyId}
         solanaPolicyId={solanaPolicyId}
         solanaRpcUrl={`https://solana-devnet.g.alchemy.com/v2/${alchemyApiKey}`}
-        // accountAuthMode="owner"
+        accountAuthMode="owner"
       >
         {children as any}
       </AlchemyProvider>

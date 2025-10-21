@@ -68,7 +68,6 @@ function normalizeValue(value: string | number | bigint): Hex {
 export function useAlchemySendTransaction(): UseSendTransactionResult {
   const { getClient } = useAlchemyClient();
   const config = useAlchemyConfig();
-  const authMode = config.accountAuthMode ?? "eip7702";
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
@@ -83,17 +82,7 @@ export function useAlchemySendTransaction(): UseSendTransactionResult {
       setError(null);
 
       try {
-        const client = await getClient();
-
-        // Get the smart account address
-        const account =
-          authMode === "eip7702"
-            ? await client.requestAccount({
-                creationHint: { accountType: "7702" },
-              })
-            : await client.requestAccount({
-                creationHint: { accountType: "sma-b" },
-              });
+        const { client, account } = await getClient();
 
         // Determine if transaction should be sponsored
         const hasPolicyId = !!config.policyId;
@@ -120,7 +109,7 @@ export function useAlchemySendTransaction(): UseSendTransactionResult {
           | { eip7702Auth: true; paymasterService?: { policyId: string } }
           | { paymasterService?: { policyId: string } };
         const capabilities: Capabilities =
-          authMode === "eip7702" ? { eip7702Auth: true } : {};
+          config.accountAuthMode === "eip7702" ? { eip7702Auth: true } : {};
 
         if (shouldSponsor && policyId) {
           capabilities.paymasterService = { policyId };
@@ -162,7 +151,12 @@ export function useAlchemySendTransaction(): UseSendTransactionResult {
         setIsLoading(false);
       }
     },
-    [getClient, config.policyId, config.disableSponsorship, authMode],
+    [
+      getClient,
+      config.policyId,
+      config.disableSponsorship,
+      config.accountAuthMode,
+    ],
   );
 
   const reset = useCallback(() => {

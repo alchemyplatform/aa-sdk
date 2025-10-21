@@ -3,6 +3,7 @@ import {
   WalletClientSigner,
   type AuthorizationRequest,
   ConnectionConfigSchema,
+  type SmartContractAccount,
 } from "@aa-sdk/core";
 import {
   createWalletClient,
@@ -20,17 +21,22 @@ import { useAlchemyConfig, useClientCache } from "../Provider.js";
 import { getChain } from "../util/getChain.js";
 import { useEmbeddedWallet } from "./internal/useEmbeddedWallet.js";
 
+export type AlchemyClientResult = {
+  client: SmartWalletClient;
+  account: SmartContractAccount;
+};
+
 /**
- * Hook to get and memoize a SmartWalletClient instance
- * The client is cached in the AlchemyProvider context (React tree scoped)
+ * Hook to get and memoize a SmartWalletClient instance with its associated account
+ * The client and account are cached in the AlchemyProvider context (React tree scoped)
  * Automatically clears cache on logout via the provider
  *
- * @returns {{ getClient: () => Promise<SmartWalletClient> }} Object containing the smart wallet client getter
+ * @returns {{ getClient: () => Promise<AlchemyClientResult> }} Object containing the smart wallet client and account getter
  *
  * @example
  * ```tsx
  * const { getClient } = useAlchemyClient();
- * const smartWalletClient = await getClient();
+ * const { client, account } = await getClient();
  * ```
  */
 export function useAlchemyClient() {
@@ -38,7 +44,6 @@ export function useAlchemyClient() {
   const config = useAlchemyConfig();
   const cache = useClientCache();
   const getEmbeddedWallet = useEmbeddedWallet();
-  const authMode = config.accountAuthMode ?? "eip7702";
 
   const getEmbeddedWalletChain = useCallback(() => {
     const embedded = getEmbeddedWallet();
@@ -66,7 +71,7 @@ export function useAlchemyClient() {
     return getChain(parsedChainId);
   }, [getEmbeddedWallet]);
 
-  const getClient = useCallback(async (): Promise<SmartWalletClient> => {
+  const getClient = useCallback(async (): Promise<AlchemyClientResult> => {
     const embeddedWallet = getEmbeddedWallet();
     const chain = getEmbeddedWalletChain();
 
@@ -78,12 +83,12 @@ export function useAlchemyClient() {
       jwt: config.jwt,
       rpcUrl: config.rpcUrl,
       policyId: config.policyId,
-      accountAuthMode: authMode,
+      accountAuthMode: config.accountAuthMode,
     });
 
-    // Return cached client if configuration hasn't changed
-    if (cache.client && cache.cacheKey === currentCacheKey) {
-      return cache.client;
+    // Return cached client and account if configuration hasn't changed
+    if (cache.client && cache.account && cache.cacheKey === currentCacheKey) {
+      return { client: cache.client, account: cache.account };
     }
 
     // Configuration changed or no cache exists, create new client
@@ -101,7 +106,7 @@ export function useAlchemyClient() {
 
     // Optionally extend signer with EIP-7702 authorization support
     const signer =
-      authMode === "eip7702"
+      config.accountAuthMode === "eip7702"
         ? {
             ...baseSigner,
             signAuthorization: async (
@@ -144,22 +149,21 @@ export function useAlchemyClient() {
     });
 
     // Request the account to properly initialize the smart wallet
-    // Pass an id based on auth mode to ensure different accounts for different modes
+    // Pass a creation hint based on auth mode to ensure different accounts for different modes
     // This prevents 7702 accounts from being reused in owner mode and vice versa
-    if (authMode === "eip7702") {
-      await cache.client.requestAccount({
-        creationHint: { accountType: "7702" },
-      });
-    } else {
-      await cache.client.requestAccount({
-        creationHint: { accountType: "sma-b" },
-      });
-    }
+    cache.account =
+      config.accountAuthMode === "eip7702"
+        ? await cache.client.requestAccount({
+            creationHint: { accountType: "7702" },
+          })
+        : await cache.client.requestAccount({
+            creationHint: { accountType: "sma-b" },
+          });
 
     // Store the cache key
     cache.cacheKey = currentCacheKey;
 
-    return cache.client;
+    return { client: cache.client, account: cache.account };
   }, [
     getEmbeddedWallet,
     getEmbeddedWalletChain,
@@ -169,7 +173,7 @@ export function useAlchemyClient() {
     config.rpcUrl,
     config.policyId,
     cache,
-    authMode,
+    config.accountAuthMode,
   ]);
 
   return { getClient };

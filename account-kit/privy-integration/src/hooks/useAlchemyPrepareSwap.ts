@@ -7,7 +7,6 @@ import type {
   PrepareSwapResult,
   UsePrepareSwapResult,
 } from "../types";
-import { useAlchemyConfig } from "../Provider.js";
 
 /**
  * Hook to request swap quotes and prepare swap calls
@@ -51,8 +50,6 @@ import { useAlchemyConfig } from "../Provider.js";
  */
 export function useAlchemyPrepareSwap(): UsePrepareSwapResult {
   const { getClient } = useAlchemyClient();
-  const config = useAlchemyConfig();
-  const authMode = config.accountAuthMode ?? "eip7702";
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
@@ -64,17 +61,7 @@ export function useAlchemyPrepareSwap(): UsePrepareSwapResult {
       setError(null);
 
       try {
-        const client = await getClient();
-
-        // Get the smart account address with the appropriate creation hint
-        const account =
-          authMode === "eip7702"
-            ? await client.requestAccount({
-                creationHint: { accountType: "7702" },
-              })
-            : await client.requestAccount({
-                creationHint: { accountType: "sma-b" },
-              });
+        const { client, account } = await getClient();
 
         // Extend client with swap actions
         const swapClient = client.extend(swapActions);
@@ -104,7 +91,7 @@ export function useAlchemyPrepareSwap(): UsePrepareSwapResult {
         setIsLoading(false);
       }
     },
-    [getClient, authMode],
+    [getClient],
   );
 
   const reset = useCallback(() => {

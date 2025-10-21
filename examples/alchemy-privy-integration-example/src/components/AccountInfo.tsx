@@ -42,8 +42,6 @@ export function AccountInfo({ refreshTrigger }: { refreshTrigger?: number }) {
     null,
   );
 
-  const authMode = config.accountAuthMode ?? "eip7702";
-
   // Detect current chain
   useEffect(() => {
     const wallet = wallets.find((w) => w.walletClientType === "privy");
@@ -78,26 +76,12 @@ export function AccountInfo({ refreshTrigger }: { refreshTrigger?: number }) {
         transport: http(),
       });
 
-      // Get smart account address from client
-      let accountAddressForBalances = user.wallet.address as Address;
-      try {
-        const client = await getClient();
-        const account = await client.requestAccount();
-        setSmartAccountAddress(account.address);
-
-        // In owner mode, use smart account address for balances
-        // In eip7702 mode, use signer address (it's delegated to the smart account)
-        if (authMode === "owner") {
-          accountAddressForBalances = account.address as Address;
-        }
-      } catch (error) {
-        console.error("Failed to fetch smart account address:", error);
-        setSmartAccountAddress(null);
-      }
+      const { account } = await getClient();
+      setSmartAccountAddress(account.address);
 
       // Fetch ETH balance (from smart account in owner mode, from signer in eip7702 mode)
       const balanceWei = await publicClient.getBalance({
-        address: accountAddressForBalances,
+        address: account.address,
       });
       setEthBalance(formatEther(balanceWei));
 
@@ -107,7 +91,7 @@ export function AccountInfo({ refreshTrigger }: { refreshTrigger?: number }) {
           address: usdcAddress as Address,
           abi: ERC20_ABI,
           functionName: "balanceOf",
-          args: [accountAddressForBalances],
+          args: [account.address],
         });
         setUsdcBalance(formatUnits(usdcBalanceWei as bigint, 6));
       } catch (error) {
@@ -121,7 +105,7 @@ export function AccountInfo({ refreshTrigger }: { refreshTrigger?: number }) {
     } finally {
       setIsLoading(false);
     }
-  }, [user?.wallet?.address, currentChain, getClient, authMode]);
+  }, [user?.wallet?.address, currentChain, getClient]);
 
   // Fetch balances when wallet, chain, or refreshTrigger changes
   useEffect(() => {
@@ -149,12 +133,14 @@ export function AccountInfo({ refreshTrigger }: { refreshTrigger?: number }) {
             {user?.wallet?.address || "—"}
           </span>
         </div>
-        <div className="info-row">
-          <span className="info-label">Smart Account:</span>
-          <span className="info-value" style={{ fontSize: "0.85em" }}>
-            {isLoading ? "Loading..." : smartAccountAddress || "—"}
-          </span>
-        </div>
+        {config.accountAuthMode === "owner" && (
+          <div className="info-row">
+            <span className="info-label">Smart Account:</span>
+            <span className="info-value" style={{ fontSize: "0.85em" }}>
+              {isLoading ? "Loading..." : smartAccountAddress || "—"}
+            </span>
+          </div>
+        )}
         <div className="info-row">
           <span className="info-label">Network:</span>
           <span className="info-value">{chainName}</span>
@@ -162,7 +148,10 @@ export function AccountInfo({ refreshTrigger }: { refreshTrigger?: number }) {
         <div className="info-row">
           <span className="info-label">
             ETH Balance
-            {authMode === "owner" ? " (Smart Account)" : " (Signer)"}:
+            {config.accountAuthMode === "owner"
+              ? " (Smart Account)"
+              : " (Signer)"}
+            :
           </span>
           <span className="info-value">
             {isLoading
@@ -175,7 +164,10 @@ export function AccountInfo({ refreshTrigger }: { refreshTrigger?: number }) {
         <div className="info-row">
           <span className="info-label">
             USDC Balance
-            {authMode === "owner" ? " (Smart Account)" : " (Signer)"}:
+            {config.accountAuthMode === "owner"
+              ? " (Smart Account)"
+              : " (Signer)"}
+            :
           </span>
           <span className="info-value">
             {isLoading
