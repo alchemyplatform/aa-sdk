@@ -4,7 +4,7 @@ import {
   type Prettify,
   type SignableMessage,
 } from "viem";
-import type { InnerWalletApiClient, SignerClient } from "../types.js";
+import type { InnerWalletApiClient } from "../types.js";
 import { requestAccount } from "./requestAccount.js";
 import { prepareSign } from "./prepareSign.js";
 import { signSignatureRequest } from "./signSignatureRequest.js";
@@ -23,7 +23,6 @@ export type SignMessageResult = Prettify<Hex>;
  * This method requests the account associated with the signer and uses it to sign the message.
  *
  * @param {InnerWalletApiClient} client - The wallet API client to use for the request
- * @param {SignerClient} signerClient - The wallet client to use for signing
  * @param {SignMessageParams} params - Parameters for signing the message
  * @param {SignableMessage} params.message - The message to sign using EIP-191. Can be a string, or object with raw bytes.
  * @param {Address} [params.account] - Optional account address to use for signing. If not provided, uses the client's current account.
@@ -40,14 +39,12 @@ export type SignMessageResult = Prettify<Hex>;
  */
 export async function signMessage(
   client: InnerWalletApiClient,
-  signerClient: SignerClient,
   params: SignMessageParams,
 ): Promise<SignMessageResult> {
   const accountAddress = params.account ?? client.account?.address;
 
   const account = await requestAccount(
     client,
-    signerClient,
     accountAddress != null ? { accountAddress } : undefined,
   );
 
@@ -59,10 +56,7 @@ export async function signMessage(
     },
   });
 
-  const signed = await signSignatureRequest(
-    signerClient,
-    prepared.signatureRequest,
-  );
+  const signed = await signSignatureRequest(client, prepared.signatureRequest);
 
   const formatted = await formatSign(client, {
     from: account.address,

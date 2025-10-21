@@ -6,7 +6,7 @@ import type {
   Eip7702UnsignedAuth,
 } from "@alchemy/wallet-api-types";
 import { vToYParity } from "ox/Signature";
-import type { SignerClient, WithoutRawPayload } from "../types";
+import type { InnerWalletApiClient, WithoutRawPayload } from "../types";
 import { assertNever } from "@alchemy/common";
 import { getAction } from "viem/utils";
 import { signAuthorization, signMessage, signTypedData } from "viem/actions";
@@ -58,14 +58,14 @@ export type SignSignatureRequestResult = Prettify<{
  */
 
 export async function signSignatureRequest(
-  signerClient: SignerClient,
+  client: InnerWalletApiClient,
   params: SignSignatureRequestParams,
 ): Promise<SignSignatureRequestResult> {
   const actions = {
-    signMessage: getAction(signerClient, signMessage, "signMessage"),
-    signTypedData: getAction(signerClient, signTypedData, "signTypedData"),
+    signMessage: getAction(client.owner, signMessage, "signMessage"),
+    signTypedData: getAction(client.owner, signTypedData, "signTypedData"),
     signAuthorization: getAction(
-      signerClient,
+      client.owner,
       signAuthorization,
       "signAuthorization",
     ),
@@ -77,7 +77,7 @@ export async function signSignatureRequest(
         type: "secp256k1",
         data: await actions.signMessage({
           message: params.data,
-          account: signerClient.account,
+          account: client.owner.account,
         }),
       };
     }
@@ -86,7 +86,7 @@ export async function signSignatureRequest(
         type: "secp256k1",
         data: await actions.signTypedData({
           ...params.data,
-          account: signerClient.account,
+          account: client.owner.account,
         }),
       };
     }
@@ -102,7 +102,7 @@ export async function signSignatureRequest(
           chainId: hexToNumber(params.data.chainId),
           nonce: hexToNumber(params.data.nonce),
         },
-        account: signerClient.account,
+        account: client.owner.account,
       });
       // yParity *should* already be a number, but some 3rd
       // party signers may mistakenly return it as a bigint.

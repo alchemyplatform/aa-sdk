@@ -351,7 +351,7 @@ export function alchemySmartWallet(
           transport: (opts) => custom(provider)({ ...opts, retryCount: 0 }),
         }).extend(() => ({
           policyIds,
-          signerClient,
+          owner: signerClient,
         }));
         clients[currentChainId] = client;
         return client;

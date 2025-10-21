@@ -10,7 +10,6 @@ import { prepareSign } from "./prepareSign.js";
 import { signSignatureRequest } from "./signSignatureRequest.js";
 import { formatSign } from "./formatSign.js";
 import { typedDataToJsonSafe } from "../utils/format.js";
-import type { SignerClient } from "../types.js";
 
 export type SignTypedDataParams = Prettify<
   TypedDataDefinition & {
@@ -56,13 +55,11 @@ export type SignTypedDataResult = Prettify<Hex>;
 
 export async function signTypedData(
   client: InnerWalletApiClient,
-  signerClient: SignerClient,
   params: SignTypedDataParams,
 ): Promise<SignTypedDataResult> {
   const accountAddress = params.account ?? client.account?.address;
   const account = await requestAccount(
     client,
-    signerClient,
     accountAddress != null ? { accountAddress } : undefined,
   );
 
@@ -74,10 +71,7 @@ export async function signTypedData(
     },
   });
 
-  const signed = await signSignatureRequest(
-    signerClient,
-    prepared.signatureRequest,
-  );
+  const signed = await signSignatureRequest(client, prepared.signatureRequest);
 
   const formatted = await formatSign(client, {
     from: account.address,
