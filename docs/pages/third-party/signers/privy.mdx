@@ -4,7 +4,7 @@ description: Use Privy with Alchemy Smart Wallets for EIP-7702, sponsorship, swa
 slug: wallets/third-party/signers/privy
 ---
 
-Upgrade existing Privy wallets to Smart Wallets to enable gasless transactions (EVM & Solana), batching, token swaps, and more in under 10 minutes. Keep Privy for authentication, no wallet migration needed. Add our battle-tested transaction infrastructure using EIP-7702 to upgrade EOAs to Smart Wallets:
+Upgrade existing Privy wallets to Smart Wallets to enable gasless transactions (EVM & Solana), batching, token swaps, and more in under 10 minutes. Keep Privy for authentication, no wallet migration needed. Add our battle-tested transaction infrastructure using EIP-7702 to upgrade your wallets to Smart Wallets:
 
 - [#1 gas abstraction infrastructure](https://www.bundlebear.com/erc4337-bundlers/all) on the market
 - [370M+](https://www.bundlebear.com/erc4337-paymasters/all) sponsored transactions
@@ -78,7 +78,7 @@ Upgrade existing Privy wallets to Smart Wallets to enable gasless transactions (
     - `solanaPolicyId` (optional) for Solana gas sponsorship
     - `solanaRpcUrl` (optional) for Solana RPC URL (separate from EVM)
     - `disableSponsorship` (optional) to opt-out per default
-    - `accountAuthMode` (optional) - `'eip7702'` (default, recommended) or `'owner'` for traditional smart accounts
+    - `accountAuthMode` (optional) - `'eip7702'` (default, recommended) or `'owner'` for a traditional smart account
 
     ### 2. Send Gasless Transactions
 
@@ -185,7 +185,7 @@ Upgrade existing Privy wallets to Smart Wallets to enable gasless transactions (
 
     The integration supports two modes via `accountAuthMode`:
 
-    - **`'eip7702'` (default, recommended)**: Uses EIP-7702 to delegate the Privy EOA to a smart account. No deployment needed, funds stay at the EOA address.
+    - **`'eip7702'` (default, recommended)**: Uses EIP-7702 to delegate the Privy wallet to a smart account. No deployment needed, funds stay at the wallet address.
     - **`'owner'`**: Uses a traditional smart account with Privy wallet as owner. The smart account has a separate address. Use for environments without EIP-7702 support.
 
     ```tsx
@@ -220,7 +220,7 @@ Upgrade existing Privy wallets to Smart Wallets to enable gasless transactions (
 
     ### Notes
 
-    - **EVM**: EIP-7702 (default) delegates your EOA to a smart account at send time. Alternatively, use `accountAuthMode="owner"` for traditional smart accounts.
+    - **EVM**: EIP-7702 (default) delegates your wallet to a smart account at send time. Alternatively, use `accountAuthMode="owner"` for a traditional smart account.
     - **Solana**: Gas sponsorship via Alchemy's fee payer service for Privy's embedded Solana wallets.
     - The hooks API mirrors Privy's transaction hooks for easy migration.
 
