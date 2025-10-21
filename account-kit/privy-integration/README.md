@@ -6,7 +6,7 @@ Add gas sponsorship and smart wallet features to your Privy app in under 5 minut
 
 If you're already using [Privy](https://privy.io) for authentication, this package lets you upgrade your users' wallets with:
 
-- **🔄 EIP-7702 Delegation** - Upgrade EOAs to smart accounts without migration
+- **🔄 EIP-7702 Delegation** - Upgrade your wallets to smart accounts without migration
 - **⛽ Gas Sponsorship** - Pay gas fees for your users via Alchemy Gas Manager (EVM & Solana)
 - **💱 Token Swaps** - Execute swaps through Alchemy's swap infrastructure
 - **🚀 Batched Transactions** - Send multiple operations in a single transaction using `sendTransaction([...])`
@@ -369,7 +369,7 @@ This package uses [EIP-7702](https://eips.ethereum.org/EIPS/eip-7702) to upgrade
 
 When a user sends their first transaction:
 
-1. Their EOA signs an EIP-7702 authorization
+1. Their wallet signs an EIP-7702 authorization
 2. The authorization delegates to Alchemy's smart account implementation
 3. The transaction is executed with smart account features (batching, sponsorship, etc.)
 4. Gas is optionally sponsored by your Gas Manager policy
@@ -388,8 +388,8 @@ Under the hood, this package:
 
 The package supports two authorization modes via the `accountAuthMode` prop:
 
-- **`'eip7702'` (default, recommended)**: Uses EIP-7702 to delegate the Privy EOA to a smart account. No separate deployment needed, funds stay at the EOA address. This is the recommended mode for most applications.
-- **`'owner'`**: Uses a traditional smart account with the Privy wallet as the owner/signer. The smart account has a separate address from the EOA. Use this if you need compatibility with environments that don't support EIP-7702 yet.
+- **`'eip7702'` (default, recommended)**: Uses EIP-7702 to delegate the Privy wallet to a smart account. No separate deployment needed, funds stay at the wallet address. This is the recommended mode for most applications.
+- **`'owner'`**: Uses a traditional smart account with the Privy wallet as the owner/signer. The smart account has a separate address from the owner wallet. Use this if you need compatibility with environments that don't support EIP-7702 yet.
 
 ```tsx
 // Default behavior (EIP-7702)
