@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.73.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.72.0...v4.73.0) (2025-10-17)
+
+### Features
+
+- make solana treeshakeable ([#2189](https://github.com/alchemyplatform/aa-sdk/issues/2189)) ([941484d](https://github.com/alchemyplatform/aa-sdk/commit/941484d29da7fcc8664d22f9084cfc20eb3ddacf))
+
+# [4.72.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.71.1...v4.72.0) (2025-10-16)
+
+### Features
+
+- add solana hook to the privy integration ([#2186](https://github.com/alchemyplatform/aa-sdk/issues/2186)) ([ee614a6](https://github.com/alchemyplatform/aa-sdk/commit/ee614a6fbccbd142ef952e60c8947bc31fd08d4e))
+
+## [4.71.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.71.0...v4.71.1) (2025-10-16)
+
+**Note:** Version bump only for package @account-kit/privy-integration
+
 # [4.71.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.70.1...v4.71.0) (2025-10-15)
 
 **Note:** Version bump only for package @account-kit/privy-integration

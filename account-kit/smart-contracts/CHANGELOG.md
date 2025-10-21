@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.73.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.72.0...v4.73.0) (2025-10-17)
+
+**Note:** Version bump only for package @account-kit/smart-contracts
+
+# [4.72.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.71.1...v4.72.0) (2025-10-16)
+
+**Note:** Version bump only for package @account-kit/smart-contracts
+
+## [4.71.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.71.0...v4.71.1) (2025-10-16)
+
+### Bug Fixes
+
+- use case-insensitive address equality check in mav2 7702 check ([#2187](https://github.com/alchemyplatform/aa-sdk/issues/2187)) ([18bf022](https://github.com/alchemyplatform/aa-sdk/commit/18bf022ced4b7ff0eff5b4147ad4eb92cab0532a))
+
 # [4.71.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.70.1...v4.71.0) (2025-10-15)
 
 **Note:** Version bump only for package @account-kit/smart-contracts
