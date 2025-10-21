@@ -3,11 +3,7 @@ import type { Address } from "abitype";
 import type { Prettify, UnionOmit } from "viem";
 import type { wallet_requestAccount } from "@alchemy/wallet-api-types/rpc";
 import deepEqual from "deep-equal";
-import type {
-  InnerWalletApiClient,
-  OptionalSignerAddress,
-  SignerClient,
-} from "../types";
+import type { InnerWalletApiClient, OptionalSignerAddress } from "../types";
 
 export type RequestAccountParams = Prettify<
   OptionalSignerAddress<
@@ -26,7 +22,6 @@ export type RequestAccountResult = Prettify<{ address: Address }>;
  * If an account already exists, the creationHint will be ignored.
  *
  * @param {InnerWalletApiClient} client - The wallet API client to use for the request
- * @param {SignerClient} signerClient - The wallet client to use for signing
  * @param {RequestAccountParams} [params] - Optional parameters for requesting a specific account
  * @param {string} [params.id] - Optional identifier for the account. If specified, a new account with this ID will be created even if one already exists for the signer
  * @param {object} [params.creationHint] - Optional hints to guide account creation. These are ignored if an account already exists
@@ -41,7 +36,6 @@ export type RequestAccountResult = Prettify<{ address: Address }>;
  */
 export async function requestAccount(
   client: InnerWalletApiClient,
-  signerClient: SignerClient,
   params?: RequestAccountParams,
 ): Promise<RequestAccountResult> {
   const args =
@@ -58,11 +52,11 @@ export async function requestAccount(
         : {
             ...params,
             signerAddress:
-              params?.signerAddress ?? signerClient.account.address,
+              params?.signerAddress ?? client.owner.account.address,
             includeCounterfactualInfo: true,
           };
 
-  const cachedAccount = client.internal.getAccount();
+  const cachedAccount = client.internal?.getAccount();
 
   if (
     cachedAccount &&
@@ -79,7 +73,7 @@ export async function requestAccount(
     params: [args],
   });
 
-  client.internal.setAccount({
+  client.internal?.setAccount({
     address: resp.accountAddress,
     requestParams: args,
   });
