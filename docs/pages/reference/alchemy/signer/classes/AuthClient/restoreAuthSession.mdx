@@ -11,6 +11,11 @@ This method takes a JSON string representation of a serialized AuthSessionState 
 from AuthSession.getSerializedState()) and attempts to restore the authentication session.
 The method will validate the session expiration and handle different authentication types appropriately.
 
+For each auth type, it creates a new TurnkeyClient with the appropriate stamper:
+
+- Email/OAuth/OTP: Uses TEK stamper and injects the credential bundle
+- Passkey: Uses WebAuthn stamper with the stored credentialId
+
 ## Import
 
 ```ts

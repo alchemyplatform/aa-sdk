@@ -16,6 +16,7 @@ import type {
   AuthMethods,
   AuthSessionState,
   AuthType,
+  CredentialCreationOptionOverrides,
   OauthProviderInfo,
   PasskeyInfo,
   TurnkeyStamper,
@@ -30,6 +31,7 @@ import {
 import { BaseError, type AlchemyRestClient } from "@alchemy/common";
 import type { SignerHttpSchema } from "@alchemy/aa-infra";
 import EventEmitter from "eventemitter3";
+import { base64UrlEncode, getWebAuthnAttestationInternal } from "./utils.js";
 
 /**
  * Parameters required to create an AuthSession instance
@@ -37,8 +39,8 @@ import EventEmitter from "eventemitter3";
 export type CreateAuthSessionParams = {
   /** HTTP client for Signer API */
   signerHttpClient: AlchemyRestClient<SignerHttpSchema>;
-  /** Turnkey stamper instance for signing operations */
-  stamper: TurnkeyStamper;
+  /** Turnkey client */
+  turnkey: TurnkeyClient;
   /** Organization ID */
   orgId: string;
   /** ID token from authentication flow */
@@ -89,9 +91,16 @@ export type AuthSessionEventType = keyof AuthSessionEvents;
  *
  * @example
  * ```ts twoslash
+ * import { TurnkeyClient } from "@turnkey/http";
+ *
+ * const turnkeyClient = new TurnkeyClient(
+ *   { baseUrl: "https://api.turnkey.com" },
+ *   stamper
+ * );
+ *
  * const authSession = await AuthSession.create({
- *   apiKey: "your-api-key",
- *   stamper: turnkeyStamper,
+ *   signerHttpClient: alchemySignerHttpClient,
+ *   turnkey: turnkeyClient,
  *   orgId: "org123",
  *   idToken: "token",
  *   authType: "oauth"
@@ -128,7 +137,7 @@ export class AuthSession {
   /**
    * Creates a new AuthSession instance from the provided parameters.
    *
-   * This factory method initializes a Turnkey client, performs a whoami request
+   * This factory method uses the provided Turnkey client to perform a whoami request
    * to get user information, and returns a configured AuthSession.
    *
    * @param {CreateAuthSessionParams} params - Configuration parameters for the auth session
@@ -136,9 +145,16 @@ export class AuthSession {
    *
    * @example
    * ```ts twoslash
+   * import { TurnkeyClient } from "@turnkey/http";
+   *
+   * const turnkeyClient = new TurnkeyClient(
+   *   { baseUrl: "https://api.turnkey.com" },
+   *   stamper
+   * );
+   *
    * const authSession = await AuthSession.create({
-   *   apiKey: "your-api-key",
-   *   stamper: turnkeyStamper,
+   *   signerHttpClient: alchemySignerHttpClient,
+   *   turnkey: turnkeyClient,
    *   orgId: "org123",
    *   idToken: "jwt-token",
    *   bundle: "credential-bundle",
@@ -149,7 +165,7 @@ export class AuthSession {
    */
   public static async create({
     signerHttpClient,
-    stamper,
+    turnkey,
     orgId,
     idToken,
     bundle,
@@ -157,10 +173,6 @@ export class AuthSession {
     credentialId,
     expirationDateMs,
   }: CreateAuthSessionParams): Promise<AuthSession> {
-    const turnkey = new TurnkeyClient(
-      { baseUrl: "https://api.turnkey.com" },
-      stamper,
-    );
     const stampedRequest = await turnkey.stampGetWhoami({
       organizationId: orgId,
     });
@@ -228,7 +240,7 @@ export class AuthSession {
   }
 
   /**
-   * Signs a raw payload using the Turnkey stamper.
+   * Signs a raw payload using the Turnkey client.
    *
    * This method handles both Ethereum and Solana signing modes with appropriate
    * hash functions and encoding parameters.
@@ -714,7 +726,24 @@ export class AuthSession {
     params: AddOauthProviderParams,
   ): Promise<OauthProviderInfo> {
     this.throwIfDisconnected();
-    return notImplemented(params);
+    const { providerName, oidcToken } = params;
+    const stampedRequest = await this.turnkey.stampCreateOauthProviders({
+      type: "ACTIVITY_TYPE_CREATE_OAUTH_PROVIDERS",
+      timestampMs: Date.now().toString(),
+      organizationId: this.user.orgId,
+      parameters: {
+        userId: this.user.userId,
+        oauthProviders: [{ providerName, oidcToken }],
+      },
+    });
+    const response = await this.signerHttpClient.request({
+      route: "signer/v1/add-oauth-provider",
+      method: "POST",
+      body: {
+        stampedRequest,
+      },
+    });
+    return response.oauthProviders[0];
   }
 
   /**
@@ -725,20 +754,74 @@ export class AuthSession {
    */
   public async removeOauthProvider(providerId: string): Promise<void> {
     this.throwIfDisconnected();
-    return notImplemented(providerId);
+    const stampedRequest = await this.turnkey.stampDeleteOauthProviders({
+      type: "ACTIVITY_TYPE_DELETE_OAUTH_PROVIDERS",
+      timestampMs: Date.now().toString(),
+      organizationId: this.user.orgId,
+      parameters: {
+        userId: this.user.userId,
+        providerIds: [providerId],
+      },
+    });
+    await this.signerHttpClient.request({
+      route: "signer/v1/remove-oauth-provider",
+      method: "POST",
+      body: {
+        stampedRequest,
+      },
+    });
   }
 
   /**
    * Adds a new passkey (WebAuthn credential) to this user's authentication methods.
    *
-   * @param {CredentialCreationOptions} params - The credential creation options for WebAuthn
+   * @param {CredentialCreationOptionOverrides} params - The credential creation option overrides for WebAuthn
    * @returns {Promise<PasskeyInfo>} A promise that resolves to the created passkey info
    */
   public async addPasskey(
-    params: CredentialCreationOptions,
+    params?: CredentialCreationOptionOverrides,
   ): Promise<PasskeyInfo> {
     this.throwIfDisconnected();
-    return notImplemented(params);
+
+    const { attestation, challenge } = await getWebAuthnAttestationInternal(
+      {
+        username: params?.username || this.user.email || "Passkey",
+      },
+      params,
+    );
+
+    const createdAt: number = Date.now();
+
+    // 2. Call Turnkey directly to add authenticator to existing org
+    const { activity } = await this.turnkey.createAuthenticators({
+      type: "ACTIVITY_TYPE_CREATE_AUTHENTICATORS_V2",
+      timestampMs: createdAt.toString(),
+      organizationId: this.user.orgId,
+      parameters: {
+        userId: this.user.userId,
+        authenticators: [
+          {
+            attestation,
+            authenticatorName: `passkey-${createdAt}`,
+            challenge: base64UrlEncode(challenge),
+          },
+        ],
+      },
+    });
+
+    // 3. Poll for completion
+    const { authenticatorIds } = await this.pollActivityCompletion(
+      activity,
+      this.user.orgId,
+      "createAuthenticatorsResult",
+    );
+
+    return {
+      // we are adding one new passkey
+      authenticatorId: authenticatorIds[0],
+      name: `passkey-${createdAt}`,
+      createdAt,
+    };
   }
 
   /**
@@ -749,14 +832,23 @@ export class AuthSession {
    */
   public async removePasskey(authenticatorId: string): Promise<void> {
     this.throwIfDisconnected();
-    return notImplemented(authenticatorId);
+    await this.turnkey.deleteAuthenticators({
+      type: "ACTIVITY_TYPE_DELETE_AUTHENTICATORS",
+      timestampMs: Date.now().toString(),
+      organizationId: this.user.orgId,
+      parameters: {
+        userId: this.user.userId,
+        authenticatorIds: [authenticatorId],
+      },
+    });
   }
 
   /**
    * Disconnects and invalidates this authentication session.
    *
    * This method marks the session as disconnected and clears any stored
-   * credentials in the Turnkey stamper.
+   * credentials in the Turnkey client's stamper.
+   *
    */
   public disconnect(): void {
     this.isDisconnected = true;
@@ -821,6 +913,55 @@ export class AuthSession {
       return JSON.stringify(state);
     }
   }
+
+  private pollActivityCompletion = async <
+    T extends keyof Awaited<
+      ReturnType<(typeof this.turnkey)["getActivity"]>
+    >["activity"]["result"],
+  >(
+    activity: Awaited<
+      ReturnType<(typeof this.turnkey)["getActivity"]>
+    >["activity"],
+    organizationId: string,
+    resultKey: T,
+  ): Promise<
+    NonNullable<
+      Awaited<
+        ReturnType<(typeof this.turnkey)["getActivity"]>
+      >["activity"]["result"][T]
+    >
+  > => {
+    if (activity.status === "ACTIVITY_STATUS_COMPLETED") {
+      return activity.result[resultKey]!;
+    }
+
+    const {
+      activity: { status, id, result },
+    } = await this.turnkey.getActivity({
+      activityId: activity.id,
+      organizationId,
+    });
+
+    if (status === "ACTIVITY_STATUS_COMPLETED") {
+      return result[resultKey]!;
+    }
+
+    if (
+      status === "ACTIVITY_STATUS_FAILED" ||
+      status === "ACTIVITY_STATUS_REJECTED" ||
+      status === "ACTIVITY_STATUS_CONSENSUS_NEEDED"
+    ) {
+      throw new Error(
+        `Failed to get activity with with id ${id} (status: ${status})`,
+      );
+    }
+
+    // TODO: add ability to configure this + add exponential backoff
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
+    return this.pollActivityCompletion(activity, organizationId, resultKey);
+  };
+  // #endregion
 
   private throwIfDisconnected(): void {
     if (this.isDisconnected) {

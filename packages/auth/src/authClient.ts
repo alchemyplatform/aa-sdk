@@ -1,9 +1,11 @@
 import { AlchemyRestClient } from "@alchemy/common";
+import { TurnkeyClient } from "@turnkey/http";
 import type { SignerHttpSchema } from "@alchemy/aa-infra";
 import { AuthSession } from "./authSession.js";
 import type {
   AuthSessionState,
   AuthType,
+  CredentialCreationOptionOverrides,
   CreateTekStamperFn,
   CreateWebAuthnStamperFn,
   HandleOauthFlowFn,
@@ -11,16 +13,14 @@ import type {
   TurnkeyTekStamper,
 } from "./types.js";
 import {
+  DEFAULT_SESSION_EXPIRATION_MS,
+  base64UrlEncode,
   getOauthNonce,
   getOauthProviderUrl,
+  getWebAuthnAttestationInternal,
   extractOAuthCallbackParams,
   AuthSessionStateSchema,
 } from "./utils.js";
-
-/**
- * Default session expiration duration in milliseconds (15 minutes)
- */
-export const DEFAULT_SESSION_EXPIRATION_MS = 15 * 60 * 1000;
 
 /**
  * Configuration parameters for creating an AuthClient instance
@@ -32,6 +32,7 @@ export type AuthClientParams = {
   jwt?: string;
   /** Custom URL (optional - defaults to Alchemy's chain-agnostic URL, but can be used to override it) */
   url?: string;
+  rpId?: string;
   /** Function to create a TEK (Traffic Encryption Key) stamper */
   createTekStamper: CreateTekStamperFn;
   /** Function to create a WebAuthn stamper for passkey authentication */
@@ -88,6 +89,14 @@ export type LoginWithOauthParams = {
   sessionExpirationMs?: number;
 };
 
+export type LoginWithPasskeyParams = {
+  email?: string;
+  username?: string;
+  creationOpts?: CredentialCreationOptionOverrides;
+  credentialId?: string;
+  sessionExpirationMs?: number;
+};
+
 type TekStamperAndPublicKey = {
   stamper: TurnkeyTekStamper;
   targetPublicKey: string;
@@ -102,6 +111,9 @@ type PendingOtp = {
  * AuthClient handles authentication flows including email OTP, OAuth, and passkey authentication.
  * This is a simplified authentication client that provides methods for different authentication types.
  *
+ * The client creates Turnkey clients internally for each authentication flow, using the provided
+ * stamper factories (createTekStamper for email/OAuth, createWebAuthnStamper for passkeys).
+ *
  * @example
  * ```ts twoslash
  * const authClient = AuthClient.create({
@@ -114,8 +126,11 @@ type PendingOtp = {
  * // Send email OTP
  * await authClient.sendEmailOtp({ email: "user@example.com" });
  *
- * // Submit OTP code
+ * // Submit OTP code - creates TurnkeyClient with TEK stamper
  * const authSession = await authClient.submitOtpCode({ otpCode: "123456" });
+ *
+ * // Login with passkey - creates TurnkeyClient with WebAuthn stamper
+ * const passkeySession = await authClient.loginWithPasskey({ username: "user@example.com" });
  * ```
  */
 export class AuthClient {
@@ -124,6 +139,7 @@ export class AuthClient {
     private readonly createTekStamper: CreateTekStamperFn,
     private readonly createWebAuthnStamper: CreateWebAuthnStamperFn,
     private readonly handleOauthFlow: HandleOauthFlowFn,
+    private readonly rpId: string | undefined,
   ) {}
 
   /**
@@ -133,6 +149,7 @@ export class AuthClient {
    * @param {string} [params.apiKey] - API key for authentication with Alchemy services
    * @param {string} [params.jwt] - JWT token for authentication with Alchemy services
    * @param {string} [params.url] - Custom URL (optional - defaults to Alchemy's chain-agnostic URL)
+   * @param {string} [params.rpId] - Relying Party ID for WebAuthn operations
    * @param {CreateTekStamperFn} params.createTekStamper - Function to create a TEK stamper
    * @param {CreateWebAuthnStamperFn} params.createWebAuthnStamper - Function to create a WebAuthn stamper
    * @param {HandleOauthFlowFn} params.handleOauthFlow - Function to handle OAuth authentication flow
@@ -148,6 +165,7 @@ export class AuthClient {
       params.createTekStamper,
       params.createWebAuthnStamper,
       params.handleOauthFlow,
+      params.rpId,
     );
   }
 
@@ -155,6 +173,9 @@ export class AuthClient {
 
   private pendingOtp: PendingOtp | null = null;
   private pendingExpirationDateMs: number | null = null;
+
+  private static ROOT_ORG_ID_DEFAULT: string =
+    "24c1acf5-810f-41e0-a503-d5d13fa8e830";
 
   /**
    * Sends an OTP (One-Time Password) to the specified email address for authentication.
@@ -423,25 +444,106 @@ export class AuthClient {
    * Can be used for both new passkey creation (when credentialId is undefined) and
    * authentication with existing passkeys (when credentialId is provided).
    *
-   * @param {string} [credentialId] - Optional credential ID for authenticating with existing passkey
+   * Internally, this method creates a TurnkeyClient with a WebAuthn stamper and uses it to
+   * create an AuthSession for the authenticated user.
+   *
+   * @param {LoginWithPasskeyParams} params - Parameters for passkey authentication
    * @returns {Promise<AuthSession>} Promise that resolves to an auth session instance
    *
    * @example
    * ```ts twoslash
    * // New passkey authentication
-   * const authSession = await authClient.loginWithPasskey();
+   * const authSession = await authClient.loginWithPasskey({ username: "user@example.com" });
    *
    * // Authenticate with existing passkey
-   * const authSession = await authClient.loginWithPasskey("existing-credential-id");
+   * const authSession = await authClient.loginWithPasskey({
+   *   credentialId: "existing-credential-id"
+   * });
    * ```
    */
-  public async loginWithPasskey(credentialId?: string): Promise<AuthSession> {
-    // TODO: figure out what the current passkey code is doing.
+  public async loginWithPasskey(
+    params: LoginWithPasskeyParams,
+  ): Promise<AuthSession> {
     // For new passkey authentication, credentialId would be undefined initially
+    const { email, username, creationOpts, credentialId, sessionExpirationMs } =
+      params;
+
+    if (!credentialId) {
+      // NEW PASSKEY SIGNUP
+      const attestation = await getWebAuthnAttestationInternal(
+        {
+          username: email || username || "anonymous",
+        },
+        creationOpts,
+      );
+
+      // create Turnkey org
+      const result = await this.signerHttpClient.request({
+        route: "signer/v1/signup",
+        method: "POST",
+        body: {
+          passkey: {
+            challenge: base64UrlEncode(attestation.challenge),
+            attestation: attestation.attestation,
+          },
+          email: params?.email,
+        },
+      });
+
+      // Create stamper for this credential
+      const stamper = await this.createWebAuthnStamper({
+        credentialId: attestation.attestation.credentialId,
+        rpId: this.rpId,
+      });
+
+      return AuthSession.create({
+        signerHttpClient: this.signerHttpClient,
+        turnkey: new TurnkeyClient(
+          { baseUrl: "https://api.turnkey.com" },
+          stamper,
+        ),
+        orgId: result.orgId,
+        authType: "passkey",
+        credentialId: attestation.attestation.credentialId,
+        idToken: undefined,
+        expirationDateMs:
+          Date.now() + (sessionExpirationMs ?? DEFAULT_SESSION_EXPIRATION_MS),
+      });
+    }
+
+    // EXISTING PASSKEY LOGIN
     const stamper = await this.createWebAuthnStamper({
       credentialId,
+      rpId: this.rpId,
     });
-    return notImplemented(stamper);
+
+    const turnkeyClient = new TurnkeyClient(
+      { baseUrl: "https://api.turnkey.com" },
+      stamper,
+    );
+
+    // Use root org to lookup user's actual org
+    const stampedRequest = await turnkeyClient.stampGetWhoami({
+      organizationId: AuthClient.ROOT_ORG_ID_DEFAULT,
+    });
+    // Stamper signs the whoami request
+    // This proves user controls the private key for this credential
+    const whoamiResponse = await this.signerHttpClient.request({
+      route: "signer/v1/whoami",
+      method: "POST",
+      body: { stampedRequest },
+    });
+
+    return AuthSession.create({
+      signerHttpClient: this.signerHttpClient,
+      turnkey: turnkeyClient,
+      orgId: whoamiResponse.orgId,
+      authType: "passkey",
+      credentialId: params.credentialId,
+      idToken: undefined,
+      expirationDateMs:
+        Date.now() + (sessionExpirationMs ?? DEFAULT_SESSION_EXPIRATION_MS),
+    });
   }
 
   /**
@@ -450,6 +552,10 @@ export class AuthClient {
    * This method takes a JSON string representation of a serialized AuthSessionState (typically obtained
    * from AuthSession.getSerializedState()) and attempts to restore the authentication session.
    * The method will validate the session expiration and handle different authentication types appropriately.
+   *
+   * For each auth type, it creates a new TurnkeyClient with the appropriate stamper:
+   * - Email/OAuth/OTP: Uses TEK stamper and injects the credential bundle
+   * - Passkey: Uses WebAuthn stamper with the stored credentialId
    *
    * @param {string} state - The serialized authentication session state as a JSON string
    * @returns {Promise<AuthSession | undefined>} A promise that resolves to an AuthSession instance if the session is valid and not expired, undefined if expired
@@ -477,7 +583,7 @@ export class AuthClient {
     const parsedState: AuthSessionState = this.deserializeState(state);
 
     const { type, expirationDateMs, user } = parsedState;
-    if (expirationDateMs < Date.now()) {
+    if (expirationDateMs != null && expirationDateMs < Date.now()) {
       return undefined;
     }
     if (type === "passkey") {
@@ -485,7 +591,7 @@ export class AuthClient {
       if (!credentialId) {
         throw new Error("Credential ID is required for passkey authentication");
       }
-      return await this.loginWithPasskey(credentialId);
+      return await this.loginWithPasskey({ credentialId });
     }
     const { bundle } = parsedState;
     const { orgId, idToken } = user;
@@ -520,7 +626,10 @@ export class AuthClient {
     }
     const authSession = await AuthSession.create({
       signerHttpClient: this.signerHttpClient,
-      stamper,
+      turnkey: new TurnkeyClient(
+        { baseUrl: "https://api.turnkey.com" },
+        stamper,
+      ),
       orgId,
       idToken,
       bundle,
@@ -598,7 +707,4 @@ export class AuthClient {
       throw new Error(`Unknown OAuth flow response: ${response.status}`);
     }
   }
-}
-function notImplemented(..._: unknown[]): Promise<never> {
-  throw new Error("Not implemented");
 }

@@ -1,39 +1,29 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import {
-  AuthClient,
-  DEFAULT_SESSION_EXPIRATION_MS,
-} from "../src/authClient.js";
+import { AuthClient } from "../src/authClient.js";
 import { AuthSession } from "../src/authSession.js";
 import type {
   AuthSessionState,
   User,
-  TurnkeyTekStamper,
-  TurnkeyStamper,
   CreateTekStamperFn,
   CreateWebAuthnStamperFn,
   HandleOauthFlowFn,
 } from "../src/types.js";
+import { DEFAULT_SESSION_EXPIRATION_MS } from "../src/utils.js";
 import type { SignerHttpSchema } from "@alchemy/aa-infra";
 import type { AlchemyRestClient } from "@alchemy/common";
+import { TurnkeyClient } from "@turnkey/http";
+import * as utils from "../src/utils.js";
 
-// Mock Turnkey client
-vi.mock("@turnkey/http", () => ({
-  TurnkeyClient: vi.fn().mockImplementation(() => ({
-    stampGetWhoami: vi.fn().mockResolvedValue({
-      organizationId: "test-org-id",
-      userId: "test-user-id",
-    }),
-    stamper: {},
-  })),
-}));
+// Mock getWebAuthnAttestationInternal
+vi.spyOn(utils, "getWebAuthnAttestationInternal");
 
 describe("AuthClient", () => {
   let authClient: AuthClient;
   let mockCreateTekStamper: CreateTekStamperFn;
   let mockCreateWebAuthnStamper: CreateWebAuthnStamperFn;
   let mockHandleOauthFlow: HandleOauthFlowFn;
-  let mockTekStamper: TurnkeyTekStamper;
-  let mockWebAuthnStamper: TurnkeyStamper;
+  let mockTekStamper: Awaited<ReturnType<CreateTekStamperFn>>;
+  let mockWebAuthnStamper: Awaited<ReturnType<CreateWebAuthnStamperFn>>;
   let mockUser: User;
   let mockSignerHttpClient: AlchemyRestClient<SignerHttpSchema>;
 
@@ -56,7 +46,6 @@ describe("AuthClient", () => {
         stampHeaderName: "X-Stamp",
         stampHeaderValue: "mock-stamp",
       }),
-      clear: vi.fn(),
       init: vi.fn().mockResolvedValue("mock-public-key"),
       injectCredentialBundle: vi.fn().mockResolvedValue(true),
     };
@@ -66,7 +55,6 @@ describe("AuthClient", () => {
         stampHeaderName: "X-Stamp",
         stampHeaderValue: "mock-webauthn-stamp",
       }),
-      clear: vi.fn(),
     };
 
     mockCreateTekStamper = vi.fn().mockResolvedValue(mockTekStamper);
@@ -188,9 +176,13 @@ describe("AuthClient", () => {
       const expirationDateMs = Date.now() + 60 * 60 * 1000; // 1 hour from now
       // Mock the loginWithPasskey method to avoid the "not implemented" error
       const mockLoginWithPasskey = vi.spyOn(authClient, "loginWithPasskey");
+      const mockTurnkeyClient = new TurnkeyClient(
+        { baseUrl: "https://api.turnkey.com" },
+        mockWebAuthnStamper,
+      );
       const mockAuthSession = await AuthSession.create({
         signerHttpClient: mockSignerHttpClient,
-        stamper: mockWebAuthnStamper,
+        turnkey: mockTurnkeyClient,
         orgId: mockUser.orgId,
         idToken: mockUser.idToken,
         authType: "passkey",
@@ -211,9 +203,9 @@ describe("AuthClient", () => {
       );
 
       expect(authSession).toBeInstanceOf(AuthSession);
-      expect(mockLoginWithPasskey).toHaveBeenCalledWith(
-        "test-passkey-credential",
-      );
+      expect(mockLoginWithPasskey).toHaveBeenCalledWith({
+        credentialId: "test-passkey-credential",
+      });
 
       mockLoginWithPasskey.mockRestore();
     });
@@ -559,6 +551,92 @@ describe("AuthClient", () => {
       const result = await authClient.lookupUserByPhone(phoneNumber);
 
       expect(result).toBeNull();
+    });
+  });
+
+  describe("loginWithPasskey", () => {
+    describe("new passkey signup", () => {
+      it("should create a new passkey account and return auth session", async () => {
+        const mockAttestation = {
+          challenge: new ArrayBuffer(32),
+          authenticatorUserId: new ArrayBuffer(16),
+          attestation: {
+            credentialId: "new-passkey-credential-id",
+            clientDataJson: "client-data",
+            attestationObject: "attestation-object",
+            transports: ["AUTHENTICATOR_TRANSPORT_INTERNAL" as const],
+          },
+        };
+
+        // Mock getWebAuthnAttestationInternal
+        vi.mocked(utils.getWebAuthnAttestationInternal).mockResolvedValue(
+          mockAttestation as any,
+        );
+
+        // Mock the signup endpoint
+        vi.mocked(mockSignerHttpClient.request).mockImplementation(
+          async (params) => {
+            if (params.route === "signer/v1/signup") {
+              return { orgId: "new-org-id" };
+            }
+            if (params.route === "signer/v1/whoami") {
+              return mockUser;
+            }
+            throw new Error(`Unexpected route: ${params.route}`);
+          },
+        );
+
+        const authSession = await authClient.loginWithPasskey({
+          username: "newuser@example.com",
+        });
+
+        expect(authSession).toBeInstanceOf(AuthSession);
+        expect(mockCreateWebAuthnStamper).toHaveBeenCalledWith({
+          credentialId: "new-passkey-credential-id",
+          rpId: undefined,
+        });
+
+        // Verify signup was called with passkey data
+        expect(mockSignerHttpClient.request).toHaveBeenCalledWith({
+          route: "signer/v1/signup",
+          method: "POST",
+          body: {
+            passkey: {
+              challenge: expect.any(String),
+              attestation: mockAttestation.attestation,
+            },
+            email: undefined,
+          },
+        });
+      });
+    });
+
+    describe("existing passkey login", () => {
+      it("should login with existing passkey credential", async () => {
+        const credentialId = "existing-passkey-credential-id";
+
+        vi.mocked(mockSignerHttpClient.request).mockImplementation(
+          async (params) => {
+            if (params.route === "signer/v1/whoami") {
+              return {
+                ...mockUser,
+                orgId: "existing-user-org-id",
+              };
+            }
+            throw new Error(`Unexpected route: ${params.route}`);
+          },
+        );
+
+        const authSession = await authClient.loginWithPasskey({
+          credentialId,
+        });
+
+        expect(authSession).toBeInstanceOf(AuthSession);
+        expect(mockCreateWebAuthnStamper).toHaveBeenCalledWith({
+          credentialId: "existing-passkey-credential-id",
+          rpId: undefined,
+        });
+      });
     });
   });
 });
