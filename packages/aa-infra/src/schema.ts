@@ -296,6 +296,26 @@ export type SignerHttpSchema = [
     Body: StampedRequestBody;
     Response: void;
   },
+  {
+    Route: "signer/v1/list-auth-methods";
+    Method: "POST";
+    Body: { suborgId: string };
+    Response: {
+      email?: string;
+      phone?: string;
+      oauthProviders: {
+        providerId: string;
+        issuer: string;
+        providerName?: string;
+        userDisplayName?: string;
+      }[];
+      passkeys: {
+        authenticatorId: string;
+        name: string;
+        createdAt: number;
+      }[];
+    };
+  },
 ];
 
 export type StampedRequestBody = {

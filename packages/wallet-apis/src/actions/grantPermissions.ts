@@ -6,7 +6,7 @@ import {
   type Prettify,
   concatHex,
 } from "viem";
-import type { InnerWalletApiClient, SignerClient } from "../types.ts";
+import type { InnerWalletApiClient } from "../types.ts";
 import type { Static } from "@sinclair/typebox";
 import type { wallet_createSession } from "@alchemy/wallet-api-types/rpc";
 import { signSignatureRequest } from "./signSignatureRequest.js";
@@ -38,7 +38,6 @@ export type GrantPermissionsResult = Prettify<{
  * This allows another key to perform operations on behalf of the account.
  *
  * @param {InnerWalletApiClient} client - The wallet API client to use for the request
- * @param {SignerClient} signerClient - The wallet client to use for signing
  * @param {GrantPermissionsParams} params - The parameters for granting permissions
  * @param {Address} [params.account] - The account address (required if client was not initialized with an account)
  * @param {number} params.expirySec - Unix timestamp when the permissions expire
@@ -92,7 +91,6 @@ export async function grantPermissions<
   TAccount extends Address | undefined = Address | undefined,
 >(
   client: InnerWalletApiClient,
-  signerClient: SignerClient,
   params: GrantPermissionsParams<TAccount>,
 ): Promise<GrantPermissionsResult> {
   const account = params.account ?? client.account?.address;
@@ -111,7 +109,7 @@ export async function grantPermissions<
     ],
   });
 
-  const signature = await signSignatureRequest(signerClient, signatureRequest);
+  const signature = await signSignatureRequest(client, signatureRequest);
 
   return {
     context: concatHex([

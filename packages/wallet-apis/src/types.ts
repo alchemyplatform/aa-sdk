@@ -29,7 +29,8 @@ export type BaseWalletClient<
 >;
 
 export type InnerWalletApiClient = BaseWalletClient<{
-  internal: InternalState;
+  internal: InternalState | undefined; // undefined if you want to skip using an internal cache
+  owner: SignerClient;
   policyIds?: string[];
 }>;
 

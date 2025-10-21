@@ -1093,6 +1093,8 @@ navigation:
                     path: wallets/pages/reference/alchemy/wagmi-core/functions/getUser.mdx
                   - page: handleOauthRedirect
                     path: wallets/pages/reference/alchemy/wagmi-core/functions/handleOauthRedirect.mdx
+                  - page: listAuthMethods
+                    path: wallets/pages/reference/alchemy/wagmi-core/functions/listAuthMethods.mdx
                   - page: loginWithOauth
                     path: wallets/pages/reference/alchemy/wagmi-core/functions/loginWithOauth.mdx
                   - page: prepareCalls

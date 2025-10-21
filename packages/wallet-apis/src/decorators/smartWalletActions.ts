@@ -45,7 +45,6 @@ import {
   type GrantPermissionsResult,
 } from "../actions/grantPermissions.js";
 import type { InnerWalletApiClient } from "../types.js";
-import type { SignerClient } from "../types.js";
 import {
   getCallsStatus,
   waitForCallsStatus,
@@ -95,31 +94,30 @@ export type SmartWalletActions<
 };
 
 /**
- * This is a decorator that is used to add smart wallet actions to a client.
+ * Decorator that adds smart wallet actions to a wallet API client.
+ * Provides both Alchemy-specific methods and standard viem wallet actions.
  *
- * @param {SignerClient} signerClient The signer client for signing operations
- * @returns {Function} A function that takes an InnerWalletApiClient and returns smart wallet actions
+ * @param {InnerWalletApiClient} client The wallet API client instance
+ * @returns {SmartWalletActions<TAccount>} An object containing smart wallet action methods
  */
-export const smartWalletActions =
-  <TAccount extends Address | undefined = Address | undefined>(
-    signerClient: SignerClient,
-  ) =>
-  (client: InnerWalletApiClient): SmartWalletActions<TAccount> => ({
-    // Alchemy methods.
-    requestAccount: (params) => requestAccount(client, signerClient, params),
-    prepareCalls: (params) => prepareCalls(client, params),
-    listAccounts: (params) => listAccounts(client, signerClient, params),
-    sendPreparedCalls: (params) => sendPreparedCalls(client, params),
-    sendCalls: (params) => sendCalls(client, signerClient, params), // TODO(v5): adapt this to fit viem's exact interface?
-    signSignatureRequest: (params) =>
-      signSignatureRequest(signerClient, params),
-    signPreparedCalls: (params) => signPreparedCalls(signerClient, params),
-    signMessage: (params) => signMessage(client, signerClient, params),
-    signTypedData: (params) => signTypedData(client, signerClient, params),
-    grantPermissions: (params) =>
-      grantPermissions(client, signerClient, params),
-    // Viem methods.
-    getCallsStatus: (params) => getCallsStatus(client, params),
-    waitForCallsStatus: (params) => waitForCallsStatus(client, params),
-    getCapabilities: (params) => getCapabilities(client, params),
-  });
+export const smartWalletActions = <
+  TAccount extends Address | undefined = Address | undefined,
+>(
+  client: InnerWalletApiClient,
+): SmartWalletActions<TAccount> => ({
+  // Alchemy methods.
+  requestAccount: (params) => requestAccount(client, params),
+  prepareCalls: (params) => prepareCalls(client, params),
+  listAccounts: (params) => listAccounts(client, params),
+  sendPreparedCalls: (params) => sendPreparedCalls(client, params),
+  sendCalls: (params) => sendCalls(client, params), // TODO(v5): adapt this to fit viem's exact interface?
+  signSignatureRequest: (params) => signSignatureRequest(client, params),
+  signPreparedCalls: (params) => signPreparedCalls(client, params),
+  signMessage: (params) => signMessage(client, params),
+  signTypedData: (params) => signTypedData(client, params),
+  grantPermissions: (params) => grantPermissions(client, params),
+  // Viem methods.
+  getCallsStatus: (params) => getCallsStatus(client, params),
+  waitForCallsStatus: (params) => waitForCallsStatus(client, params),
+  getCapabilities: (params) => getCapabilities(client, params),
+});

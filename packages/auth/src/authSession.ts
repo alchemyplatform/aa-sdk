@@ -380,7 +380,14 @@ export class AuthSession {
    */
   public async listAuthMethods(): Promise<AuthMethods> {
     this.throwIfDisconnected();
-    return notImplemented();
+
+    return await this.signerHttpClient.request({
+      route: "signer/v1/list-auth-methods",
+      method: "POST",
+      body: {
+        suborgId: this.user.orgId,
+      },
+    });
   }
 
   private isSendingEmailVerificationCode = false;
@@ -992,8 +999,4 @@ export class AuthSession {
       this.emitter.removeListener(eventType, listener);
     };
   }
-}
-
-function notImplemented(..._: unknown[]): Promise<never> {
-  throw new BaseError("Not implemented");
 }
