@@ -1,6 +1,6 @@
 {
   "name": "@account-kit/privy-integration",
-  "version": "4.73.0",
+  "version": "4.73.1-alpha.8",
   "description": "Use Alchemy gas sponsorship, swaps and more with Privy",
   "author": "Alchemy",
   "license": "MIT",
