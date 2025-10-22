@@ -34,10 +34,16 @@ export function useAlchemyClient() {
   const cache = useClientCache();
   const getEmbeddedWallet = useEmbeddedWallet();
 
-  const getEmbeddedWalletChain = useCallback(() => {
-    const embedded = getEmbeddedWallet();
+  const getClient = useCallback(async (): Promise<SmartWalletClient> => {
+    const embeddedWallet = getEmbeddedWallet();
+
+    // IMPORTANT: Get provider FIRST to ensure chain ID is updated
+    // The provider fetch triggers chain ID update in the adapter
+    const provider = await embeddedWallet.getEthereumProvider();
+
+    // NOW get the chain from the SAME wallet instance with updated chain ID
     // Handle CAIP-2 format like "eip155:1"
-    const chainIdStr = embedded.chainId?.toString();
+    const chainIdStr = embeddedWallet.chainId?.toString();
 
     if (!chainIdStr) {
       throw new Error(
@@ -57,18 +63,7 @@ export function useAlchemyClient() {
       );
     }
 
-    return getChain(parsedChainId);
-  }, [getEmbeddedWallet]);
-
-  const getClient = useCallback(async (): Promise<SmartWalletClient> => {
-    const embeddedWallet = getEmbeddedWallet();
-
-    // IMPORTANT: Get provider FIRST to ensure chain ID is updated
-    // The provider fetch triggers chain ID update in the adapter
-    const provider = await embeddedWallet.getEthereumProvider();
-
-    // NOW get the chain with the updated chain ID
-    const chain = getEmbeddedWalletChain();
+    const chain = getChain(parsedChainId);
 
     // Generate a cache key based on configuration and wallet address
     const currentCacheKey = JSON.stringify({
@@ -137,7 +132,6 @@ export function useAlchemyClient() {
     return cache.client;
   }, [
     getEmbeddedWallet,
-    getEmbeddedWalletChain,
     signAuthorizationFn,
     config.apiKey,
     config.jwt,
