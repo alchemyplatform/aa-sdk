@@ -13,8 +13,8 @@ import {
 } from "viem";
 import { type ToWebAuthnAccountParameters } from "viem/account-abstraction";
 import {
-  assertNeverSignatureRequestType,
-  getIsDeferredAction,
+  assertNever,
+  isDeferredAction,
   pack1271Signature,
 } from "../../utils.js";
 import { getDefaultWebauthnValidationModuleAddress } from "../utils.js";
@@ -92,28 +92,24 @@ export const webauthnSigningFunctions = (
     prepareSign: async (
       request: SignatureRequest,
     ): Promise<SignatureRequest> => {
+      const requestType = request.type;
       let hash;
 
-      switch (request.type) {
+      switch (requestType) {
         case "personal_sign":
           hash = hashMessage(request.data);
           break;
 
         case "eth_signTypedData_v4":
-          const isDeferredAction = getIsDeferredAction(
-            request.data,
-            accountAddress,
-          );
-
-          if (isDeferredAction) {
+          if (isDeferredAction(request.data, accountAddress)) {
             return request;
           } else {
-            hash = await hashTypedData(request.data);
+            hash = hashTypedData(request.data);
             break;
           }
 
         default:
-          assertNeverSignatureRequestType();
+          return assertNever(requestType, "Invalid signature request type");
       }
 
       return {
@@ -179,11 +175,6 @@ export const webauthnSigningFunctions = (
     >(
       typedDataDefinition: TypedDataDefinition<typedData, primaryType>,
     ): Promise<Hex> => {
-      const isDeferredAction = getIsDeferredAction(
-        typedDataDefinition,
-        accountAddress,
-      );
-
       const { data, type } = await signingMethods.prepareSign({
         type: "eth_signTypedData_v4",
         data: typedDataDefinition as TypedDataDefinition,
@@ -195,7 +186,7 @@ export const webauthnSigningFunctions = (
 
       const signature = await sign({ hash: hashTypedData(data) });
 
-      return isDeferredAction
+      return isDeferredAction(typedDataDefinition, accountAddress)
         ? signature
         : signingMethods.formatSign(signature);
     },

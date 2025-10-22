@@ -22,8 +22,8 @@ import {
 import {
   packUOSignature,
   pack1271Signature,
-  assertNeverSignatureRequestType,
-  getIsDeferredAction,
+  isDeferredAction,
+  assertNever,
 } from "../../utils.js";
 
 /**
@@ -63,8 +63,9 @@ export const singleSignerMessageSigner = (
       request: SignatureRequest,
     ): Promise<SignatureRequest> => {
       let hash;
+      const requestType = request.type;
 
-      switch (request.type) {
+      switch (requestType) {
         case "personal_sign":
           hash = hashMessage(request.data);
           break;
@@ -74,7 +75,7 @@ export const singleSignerMessageSigner = (
           break;
 
         default:
-          assertNeverSignatureRequestType();
+          return assertNever(requestType, "Invalid signature request type");
       }
 
       return {
@@ -169,12 +170,7 @@ export const singleSignerMessageSigner = (
 
       const sig = await signer.signTypedData(data);
 
-      const isDeferredAction = getIsDeferredAction(
-        typedDataDefinition,
-        accountAddress,
-      );
-
-      return isDeferredAction
+      return isDeferredAction(typedDataDefinition, accountAddress)
         ? concat([SignatureType.EOA, sig])
         : signingMethods.formatSign(sig);
     },

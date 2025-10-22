@@ -19,8 +19,8 @@ import {
   packUOSignature,
   pack1271Signature,
   DEFAULT_OWNER_ENTITY_ID,
-  assertNeverSignatureRequestType,
-  getIsDeferredAction,
+  assertNever,
+  isDeferredAction,
 } from "../utils.js";
 import { SignatureType } from "../modules/utils.js";
 
@@ -58,19 +58,15 @@ export const nativeSMASigner = (
       request: SignatureRequest,
     ): Promise<SignatureRequest> => {
       let hash;
+      const requestType = request.type;
 
-      switch (request.type) {
+      switch (requestType) {
         case "personal_sign":
           hash = hashMessage(request.data);
           break;
 
         case "eth_signTypedData_v4":
-          const isDeferredAction = getIsDeferredAction(
-            request.data,
-            accountAddress,
-          );
-
-          if (isDeferredAction) {
+          if (isDeferredAction(request.data, accountAddress)) {
             return request;
           } else {
             hash = await hashTypedData(request.data);
@@ -78,7 +74,7 @@ export const nativeSMASigner = (
           }
 
         default:
-          assertNeverSignatureRequestType();
+          return assertNever(requestType, "Invalid signature request type");
       }
 
       return {
@@ -171,12 +167,7 @@ export const nativeSMASigner = (
 
       const sig = await signer.signTypedData(data);
 
-      const isDeferredAction = getIsDeferredAction(
-        typedDataDefinition,
-        accountAddress,
-      );
-
-      return isDeferredAction
+      return isDeferredAction(typedDataDefinition, accountAddress)
         ? concat([SignatureType.EOA, sig])
         : signingMethods.formatSign(sig);
     },

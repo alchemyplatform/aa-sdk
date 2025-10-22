@@ -12,8 +12,8 @@ import {
   concatHex,
   hexToNumber,
   type TypedDataDefinition,
-  getAddress,
   type TypedData,
+  isAddressEqual,
 } from "viem";
 import {
   arbitrum,
@@ -323,8 +323,8 @@ export const buildDeferredActionDigest = ({
   return encodedData;
 };
 
-export const assertNeverSignatureRequestType = (): never => {
-  throw new Error("Invalid signature request type ");
+export const assertNever = (_val: never, msg: string): never => {
+  throw new Error(msg);
 };
 
 /**
@@ -338,7 +338,7 @@ export const assertNeverSignatureRequestType = (): never => {
  * @param {Address} accountAddress - Account address to verify against domain.verifyingContract
  * @returns {boolean} - True if the typedDataDefinition is a deferred action for this account
  */
-export const getIsDeferredAction = <
+export const isDeferredAction = <
   const typedData extends TypedData | Record<string, unknown>,
   primaryType extends keyof typedData | "EIP712Domain" = keyof typedData,
 >(
@@ -355,9 +355,9 @@ export const getIsDeferredAction = <
   }
 
   try {
-    return (
-      getAddress(typedDataDefinition.domain.verifyingContract as Address) ===
-      getAddress(accountAddress)
+    return isAddressEqual(
+      typedDataDefinition.domain.verifyingContract as Address,
+      accountAddress,
     );
   } catch {
     return false;
