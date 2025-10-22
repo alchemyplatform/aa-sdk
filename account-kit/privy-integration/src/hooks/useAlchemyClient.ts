@@ -62,6 +62,12 @@ export function useAlchemyClient() {
 
   const getClient = useCallback(async (): Promise<SmartWalletClient> => {
     const embeddedWallet = getEmbeddedWallet();
+
+    // IMPORTANT: Get provider FIRST to ensure chain ID is updated
+    // The provider fetch triggers chain ID update in the adapter
+    const provider = await embeddedWallet.getEthereumProvider();
+
+    // NOW get the chain with the updated chain ID
     const chain = getEmbeddedWalletChain();
 
     // Generate a cache key based on configuration and wallet address
@@ -80,7 +86,6 @@ export function useAlchemyClient() {
     }
 
     // Configuration changed or no cache exists, create new client
-    const provider = await embeddedWallet.getEthereumProvider();
 
     // Create base signer from Privy wallet
     const baseSigner = new WalletClientSigner(
