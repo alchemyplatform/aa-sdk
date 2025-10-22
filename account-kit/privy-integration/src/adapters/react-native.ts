@@ -149,16 +149,42 @@ export const reactNativeAdapter: PrivyAdapter = {
  * @returns {EmbeddedWallet} The adapted wallet following the common interface
  */
 function adaptExpoWallet(wallet: ExpoEmbeddedWallet): EmbeddedWallet {
+  // Use closure to maintain up-to-date chain ID across chain switches
+  let cachedChainId = wallet.chainId || "1";
+
   return {
     address: wallet.address as `0x${string}`,
-    chainId: wallet.chainId || "1",
+    get chainId() {
+      return cachedChainId;
+    },
     getEthereumProvider: async () => {
       if (!wallet.getProvider) {
         throw new Error(
           "getProvider is not available on this wallet. Ensure you're using the embedded Ethereum wallet.",
         );
       }
-      return await wallet.getProvider();
+      const provider = await wallet.getProvider();
+
+      // Always fetch current chain ID when provider is accessed
+      // This ensures we have the latest chain after wallet_switchEthereumChain calls
+      try {
+        const currentChainId = (await provider.request({
+          method: "eth_chainId",
+          params: [],
+        })) as string;
+
+        // Convert hex to decimal string format (e.g., "0x1" -> "1")
+        cachedChainId = parseInt(currentChainId, 16).toString();
+        console.log("[RN Adapter] Updated chain ID to:", cachedChainId);
+      } catch (err) {
+        console.warn(
+          "[Privy Integration] Failed to fetch current chain ID:",
+          err,
+        );
+        // Fall back to cached value if fetch fails
+      }
+
+      return provider;
     },
   };
 }
