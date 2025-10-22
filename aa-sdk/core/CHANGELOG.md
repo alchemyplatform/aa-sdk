@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.73.1-alpha.10](https://github.com/alchemyplatform/aa-sdk/compare/v4.73.1-alpha.8...v4.73.1-alpha.10) (2025-10-22)
+
+**Note:** Version bump only for package @aa-sdk/core
+
 ## [4.73.1-alpha.8](https://github.com/alchemyplatform/aa-sdk/compare/v4.73.0...v4.73.1-alpha.8) (2025-10-22)
 
 **Note:** Version bump only for package @aa-sdk/core

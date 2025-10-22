@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.73.1-alpha.10](https://github.com/alchemyplatform/aa-sdk/compare/v4.73.1-alpha.8...v4.73.1-alpha.10) (2025-10-22)
+
+### Bug Fixes
+
+- chain id issues ([db73cbd](https://github.com/alchemyplatform/aa-sdk/commit/db73cbd565c14e9f9ce8eb9a76785f740bbd4e36))
+- sign auth issue ([51d094f](https://github.com/alchemyplatform/aa-sdk/commit/51d094fb184428b96871c8c45a5c1c4be7de54ce))
+
 ## [4.73.1-alpha.8](https://github.com/alchemyplatform/aa-sdk/compare/v4.73.0...v4.73.1-alpha.8) (2025-10-22)
 
 ### Bug Fixes
