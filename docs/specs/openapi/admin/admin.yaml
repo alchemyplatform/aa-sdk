@@ -448,6 +448,16 @@ paths:
           schema:
             type: integer
             default: 5
+        - name: after
+          in: query
+          description: If provided, will return sponsors after the page. Can not set if `before` is set.
+          schema:
+            type: string
+        - name: before
+          in: query
+          description: If provided, will return sponsors before the page. Can not set if `after` is set.
+          schema:
+            type: string
       responses:
         "200":
           description: Sponsorships fetched successfully
