@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import {
   useAlchemyPrepareSwap,
   useAlchemySubmitSwap,
+  useAlchemyClient,
   type PrepareSwapResult,
 } from "@account-kit/privy-integration";
 import { formatEther, formatUnits, type Address, type Hex } from "viem";
@@ -43,6 +44,7 @@ function getExplorerUrl(chainId: number, txHash: string): string {
 
 export function TokenSwap({ onSuccess }: { onSuccess?: () => void }) {
   const { wallets } = useWallets();
+  const { getClient } = useAlchemyClient();
   const prepareSwap = useAlchemyPrepareSwap();
   const submitSwap = useAlchemySubmitSwap();
 
@@ -107,8 +109,12 @@ export function TokenSwap({ onSuccess }: { onSuccess?: () => void }) {
         parseFloat(swapAmount) * 10 ** fromDecimals,
       );
 
+      // Get the account address to use for the swap
+      // This ensures we use the correct address for both eip7702 and owner modes
+      const { account } = await getClient();
+
       const result = await prepareSwap.prepareSwap({
-        from: wallets[0].address as Address,
+        from: account.address as Address,
         fromToken: fromToken as Address,
         toToken: toToken as Address,
         fromAmount: `0x${amountInSmallestUnit.toString(16)}` as Hex,

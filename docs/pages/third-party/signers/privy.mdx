@@ -4,7 +4,7 @@ description: Use Privy with Alchemy Smart Wallets for EIP-7702, sponsorship, swa
 slug: wallets/third-party/signers/privy
 ---
 
-Upgrade existing Privy wallets to Smart Wallets to enable gasless transactions (EVM & Solana), batching, token swaps, and more in under 10 minutes. Keep Privy for authentication, no wallet migration needed. Add our battle-tested transaction infrastructure using EIP-7702 to upgrade EOAs to Smart Wallets:
+Upgrade existing Privy wallets to Smart Wallets to enable gasless transactions (EVM & Solana), batching, token swaps, and more in under 10 minutes. Keep Privy for authentication, no wallet migration needed. Add our battle-tested transaction infrastructure using EIP-7702 to upgrade your wallets to Smart Wallets:
 
 - [#1 gas abstraction infrastructure](https://www.bundlebear.com/erc4337-bundlers/all) on the market
 - [370M+](https://www.bundlebear.com/erc4337-paymasters/all) sponsored transactions
@@ -78,6 +78,7 @@ Upgrade existing Privy wallets to Smart Wallets to enable gasless transactions (
     - `solanaPolicyId` (optional) for Solana gas sponsorship
     - `solanaRpcUrl` (optional) for Solana RPC URL (separate from EVM)
     - `disableSponsorship` (optional) to opt-out per default
+    - `accountAuthMode` (optional) - `'eip7702'` (default, recommended) or `'owner'` for a traditional smart account
 
     ### 2. Send Gasless Transactions
 
@@ -168,10 +169,9 @@ Upgrade existing Privy wallets to Smart Wallets to enable gasless transactions (
       const { getClient } = useAlchemyClient();
 
       const doOp = async () => {
-        const client = await getClient();
-        const address = await client.getAddress();
+        const { client, account } = await getClient();
         await client.sendCalls({
-          from: address,
+          from: account.address,
           calls: [{ to: "0x...", data: "0x" }],
           capabilities: { eip7702Auth: true, paymasterService: { policyId: "your-policy-id" } },
         });
@@ -181,9 +181,46 @@ Upgrade existing Privy wallets to Smart Wallets to enable gasless transactions (
     }
     ```
 
+    ### Authorization Modes
+
+    The integration supports two modes via `accountAuthMode`:
+
+    - **`'eip7702'` (default, recommended)**: Uses EIP-7702 to delegate the Privy wallet to a smart account. No deployment needed, funds stay at the wallet address.
+    - **`'owner'`**: Uses a traditional smart account with Privy wallet as owner. The smart account has a separate address. Use for environments without EIP-7702 support.
+
+    ```tsx
+    // Default (EIP-7702) - recommended
+    <AlchemyProvider apiKey="...">
+      <YourApp />
+    </AlchemyProvider>
+
+    // Traditional smart account mode
+    <AlchemyProvider apiKey="..." accountAuthMode="owner">
+      <YourApp />
+    </AlchemyProvider>
+    ```
+
+    **Getting the Smart Account Address (owner mode):**
+
+    When using `owner` mode, access the smart account address (different from the Privy signer address):
+
+    ```tsx
+    import { useAlchemyClient } from "@account-kit/privy-integration";
+
+    function MyComponent() {
+      const { getClient } = useAlchemyClient();
+
+      const getAddress = async () => {
+        const { account } = await getClient();
+        console.log("Smart account:", account.address);
+        // Different from Privy signer address in owner mode
+      };
+    }
+    ```
+
     ### Notes
 
-    - **EVM**: EIP-7702 is used to delegate your EOA to a smart account at send time.
+    - **EVM**: EIP-7702 (default) delegates your wallet to a smart account at send time. Alternatively, use `accountAuthMode="owner"` for a traditional smart account.
     - **Solana**: Gas sponsorship via Alchemy's fee payer service for Privy's embedded Solana wallets.
     - The hooks API mirrors Privy's transaction hooks for easy migration.
 
@@ -381,8 +418,9 @@ Upgrade existing Privy wallets to Smart Wallets to enable gasless transactions (
 
     ### Notes
 
-    - **EIP-7702**: Upgrades the wallet to a smart wallet at transaction time without migration
+    - **EIP-7702**: The examples above use EIP-7702 to upgrade the wallet to a smart wallet at transaction time without migration or separate deployment
     - **Gas Sponsorship**: Use `paymasterService` with your policy ID for gasless transactions
+    - **Traditional Smart Accounts**: To use traditional smart accounts instead of EIP-7702, omit the `eip7702Auth` capability and request an account with `await client.requestAccount({ creationHint: { accountType: "sma-b" } })`
     - **Server-Side**: This example uses Privy's `@privy-io/node` package which is designed for server environments. However, the `@account-kit` packages (`@account-kit/wallet-client`, `@account-kit/infra`, etc.) can be used in any JavaScript environment including browsers, React Native, and Node.js
 
   </Tab>

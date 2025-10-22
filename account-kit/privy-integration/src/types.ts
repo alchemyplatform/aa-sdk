@@ -18,6 +18,13 @@ export type AlchemyProviderConfig = z.infer<typeof ConnectionConfigSchema> & {
   solanaRpcUrl?: string;
 
   /**
+   * How EVM smart account calls should be authorized.
+   * - 'eip7702' (default): delegated authorization via EIP-7702.
+   * - 'owner': sign as the account owner (Privy embedded wallet), no 7702.
+   */
+  accountAuthMode?: "eip7702" | "owner";
+
+  /**
    * Set to true to disable gas sponsorship by default
    * Default: false (sponsorship enabled when policyId is provided)
    */
