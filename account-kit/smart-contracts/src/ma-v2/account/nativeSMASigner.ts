@@ -20,6 +20,7 @@ import {
   pack1271Signature,
   DEFAULT_OWNER_ENTITY_ID,
   assertNeverSignatureRequestType,
+  getIsDeferredAction,
 } from "../utils.js";
 import { SignatureType } from "../modules/utils.js";
 
@@ -64,9 +65,10 @@ export const nativeSMASigner = (
           break;
 
         case "eth_signTypedData_v4":
-          const isDeferredAction =
-            request.data?.primaryType === "DeferredAction" &&
-            request.data?.domain?.verifyingContract === accountAddress;
+          const isDeferredAction = getIsDeferredAction(
+            request.data,
+            accountAddress,
+          );
 
           if (isDeferredAction) {
             return request;
@@ -169,12 +171,10 @@ export const nativeSMASigner = (
 
       const sig = await signer.signTypedData(data);
 
-      const isDeferredAction =
-        typedDataDefinition.primaryType === "DeferredAction" &&
-        typedDataDefinition.domain != null &&
-        // @ts-expect-error the domain type I think changed in viem, so this is not working correctly (TODO: fix this)
-        "verifyingContract" in typedDataDefinition.domain &&
-        typedDataDefinition.domain.verifyingContract === accountAddress;
+      const isDeferredAction = getIsDeferredAction(
+        typedDataDefinition,
+        accountAddress,
+      );
 
       return isDeferredAction
         ? concat([SignatureType.EOA, sig])

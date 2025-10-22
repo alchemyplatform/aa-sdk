@@ -12,8 +12,13 @@ import {
   type TypedDataDefinition,
 } from "viem";
 import { type ToWebAuthnAccountParameters } from "viem/account-abstraction";
-import { pack1271Signature } from "../../utils.js";
+import {
+  assertNeverSignatureRequestType,
+  getIsDeferredAction,
+  pack1271Signature,
+} from "../../utils.js";
 import { getDefaultWebauthnValidationModuleAddress } from "../utils.js";
+import type { SignatureRequest, SigningMethods } from "@aa-sdk/core";
 
 /**
  * Creates an object with methods for generating a dummy signature, signing user operation hashes, signing messages, and signing typed data.
@@ -83,12 +88,66 @@ export const webauthnSigningFunctions = (
     );
   };
 
+  const signingMethods: SigningMethods = {
+    prepareSign: async (
+      request: SignatureRequest,
+    ): Promise<SignatureRequest> => {
+      let hash;
+
+      switch (request.type) {
+        case "personal_sign":
+          hash = hashMessage(request.data);
+          break;
+
+        case "eth_signTypedData_v4":
+          const isDeferredAction = getIsDeferredAction(
+            request.data,
+            accountAddress,
+          );
+
+          if (isDeferredAction) {
+            return request;
+          } else {
+            hash = await hashTypedData(request.data);
+            break;
+          }
+
+        default:
+          assertNeverSignatureRequestType();
+      }
+
+      return {
+        type: "eth_signTypedData_v4",
+        data: {
+          domain: {
+            chainId: Number(chain.id),
+            verifyingContract: getDefaultWebauthnValidationModuleAddress(chain),
+            salt: concatHex([`0x${"00".repeat(12)}`, accountAddress]),
+          },
+          types: {
+            ReplaySafeHash: [{ name: "hash", type: "bytes32" }],
+          },
+          message: {
+            hash,
+          },
+          primaryType: "ReplaySafeHash",
+        },
+      };
+    },
+    formatSign: async (signature: Hex) => {
+      return pack1271Signature({
+        validationSignature: signature,
+        entityId,
+      });
+    },
+  };
+
   return {
+    ...signingMethods,
     id,
     publicKey,
     getDummySignature: (): Hex =>
       "0xff000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000c0000000000000000000000000000000000000000000000000000000000000012000000000000000000000000000000000000000000000000000000000000000170000000000000000000000000000000000000000000000000000000000000001949fc7c88032b9fcb5f6efc7a7b8c63668eae9871b765e23123bb473ff57aa831a7c0d9276168ebcc29f2875a0239cffdf2a9cd1c2007c5c77c071db9264df1d000000000000000000000000000000000000000000000000000000000000002549960de5880e8c687434170f6476605b8fe4aeb9a28632c7995cf3ba831d97630500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008a7b2274797065223a22776562617574686e2e676574222c226368616c6c656e6765223a2273496a396e6164474850596759334b7156384f7a4a666c726275504b474f716d59576f4d57516869467773222c226f726967696e223a2268747470733a2f2f7369676e2e636f696e626173652e636f6d222c2263726f73734f726967696e223a66616c73657d00000000000000000000000000000000000000000000",
-    sign,
     signUserOperationHash: async (uoHash: Hex): Promise<Hex> => {
       let sig = await sign({ hash: hashMessage({ raw: uoHash }) });
       if (deferredActionData) {
@@ -100,25 +159,18 @@ export const webauthnSigningFunctions = (
     },
 
     async signMessage({ message }: { message: SignableMessage }): Promise<Hex> {
-      const hash = hashTypedData({
-        domain: {
-          chainId: Number(chain.id),
-          verifyingContract: getDefaultWebauthnValidationModuleAddress(chain),
-          salt: concatHex([`0x${"00".repeat(12)}`, accountAddress]),
-        },
-        types: {
-          ReplaySafeHash: [{ name: "hash", type: "bytes32" }],
-        },
-        message: {
-          hash: hashMessage(message),
-        },
-        primaryType: "ReplaySafeHash",
+      const { data, type } = await signingMethods.prepareSign({
+        type: "personal_sign",
+        data: message,
       });
 
-      return pack1271Signature({
-        validationSignature: await sign({ hash }),
-        entityId,
-      });
+      if (type !== "eth_signTypedData_v4") {
+        throw new Error("Invalid signature request type");
+      }
+
+      const signature = await sign({ hash: hashTypedData(data) });
+
+      return signingMethods.formatSign(signature);
     },
 
     signTypedData: async <
@@ -127,32 +179,25 @@ export const webauthnSigningFunctions = (
     >(
       typedDataDefinition: TypedDataDefinition<typedData, primaryType>,
     ): Promise<Hex> => {
-      const isDeferredAction =
-        typedDataDefinition?.primaryType === "DeferredAction" &&
-        // @ts-expect-error the domain type I think changed in viem, so this is not working correctly (TODO: fix this)
-        "verifyingContract" in typedDataDefinition.domain &&
-        typedDataDefinition.domain.verifyingContract === accountAddress;
+      const isDeferredAction = getIsDeferredAction(
+        typedDataDefinition,
+        accountAddress,
+      );
 
-      const hash = await hashTypedData({
-        domain: {
-          chainId: Number(chain.id),
-          verifyingContract: getDefaultWebauthnValidationModuleAddress(chain),
-          salt: concatHex([`0x${"00".repeat(12)}`, accountAddress]),
-        },
-        types: {
-          ReplaySafeHash: [{ name: "hash", type: "bytes32" }],
-        },
-        message: {
-          hash: hashTypedData(typedDataDefinition),
-        },
-        primaryType: "ReplaySafeHash",
+      const { data, type } = await signingMethods.prepareSign({
+        type: "eth_signTypedData_v4",
+        data: typedDataDefinition as TypedDataDefinition,
       });
 
-      const validationSignature = await sign({ hash });
+      if (type !== "eth_signTypedData_v4") {
+        throw new Error("Invalid signature request type");
+      }
+
+      const signature = await sign({ hash: hashTypedData(data) });
 
       return isDeferredAction
-        ? pack1271Signature({ validationSignature, entityId })
-        : validationSignature;
+        ? signature
+        : signingMethods.formatSign(signature);
     },
   };
 };

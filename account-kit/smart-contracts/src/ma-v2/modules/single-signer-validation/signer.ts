@@ -23,6 +23,7 @@ import {
   packUOSignature,
   pack1271Signature,
   assertNeverSignatureRequestType,
+  getIsDeferredAction,
 } from "../../utils.js";
 
 /**
@@ -168,12 +169,10 @@ export const singleSignerMessageSigner = (
 
       const sig = await signer.signTypedData(data);
 
-      const isDeferredAction =
-        typedDataDefinition.primaryType === "DeferredAction" &&
-        typedDataDefinition.domain != null &&
-        // @ts-expect-error the domain type I think changed in viem, so this is not working correctly (TODO: fix this)
-        "verifyingContract" in typedDataDefinition.domain &&
-        typedDataDefinition.domain.verifyingContract === accountAddress;
+      const isDeferredAction = getIsDeferredAction(
+        typedDataDefinition,
+        accountAddress,
+      );
 
       return isDeferredAction
         ? concat([SignatureType.EOA, sig])

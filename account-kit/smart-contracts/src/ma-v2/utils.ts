@@ -11,6 +11,9 @@ import {
   size,
   concatHex,
   hexToNumber,
+  type TypedDataDefinition,
+  getAddress,
+  type TypedData,
 } from "viem";
 import {
   arbitrum,
@@ -322,4 +325,41 @@ export const buildDeferredActionDigest = ({
 
 export const assertNeverSignatureRequestType = (): never => {
   throw new Error("Invalid signature request type ");
+};
+
+/**
+ * Type guard to check if a TypedDataDefinition is a deferred action.
+ *
+ * A deferred action has:
+ * - primaryType: "DeferredAction"
+ * - domain.verifyingContract matching the account address
+ *
+ * @param {TypedDataDefinition} typedDataDefinition - The typed data to check
+ * @param {Address} accountAddress - Account address to verify against domain.verifyingContract
+ * @returns {boolean} - True if the typedDataDefinition is a deferred action for this account
+ */
+export const getIsDeferredAction = <
+  const typedData extends TypedData | Record<string, unknown>,
+  primaryType extends keyof typedData | "EIP712Domain" = keyof typedData,
+>(
+  typedDataDefinition: TypedDataDefinition<typedData, primaryType>,
+  accountAddress: Address,
+): boolean => {
+  if (
+    typedDataDefinition.primaryType !== "DeferredAction" ||
+    !typedDataDefinition.domain ||
+    typeof typedDataDefinition.domain !== "object" ||
+    !("verifyingContract" in typedDataDefinition.domain)
+  ) {
+    return false;
+  }
+
+  try {
+    return (
+      getAddress(typedDataDefinition.domain.verifyingContract as Address) ===
+      getAddress(accountAddress)
+    );
+  } catch {
+    return false;
+  }
 };
