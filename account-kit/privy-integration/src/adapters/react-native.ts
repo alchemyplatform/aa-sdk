@@ -5,6 +5,8 @@ import {
   type PrivyEmbeddedWalletProvider,
 } from "@privy-io/expo";
 import type { Authorization } from "viem";
+import { hashAuthorization } from "viem/utils";
+import { parseSignature } from "viem";
 import type { AuthorizationRequest } from "@aa-sdk/core";
 import type { PrivyAdapter, EmbeddedWallet, PrivyAuthState } from "./types.js";
 
@@ -86,52 +88,33 @@ export const reactNativeAdapter: PrivyAdapter = {
         implementationAddress,
       );
 
-      // EIP-7702 Authorization structure
+      // Create the authorization structure (matches Privy's implementation)
       const authorization = {
-        domain: {
-          name: "EIP-7702",
-          version: "1",
-          chainId: unsignedAuth.chainId,
-        },
-        types: {
-          Authorization: [
-            { name: "chainId", type: "uint256" },
-            { name: "address", type: "address" },
-            { name: "nonce", type: "uint256" },
-          ],
-        },
-        primaryType: "Authorization" as const,
-        message: {
-          chainId: unsignedAuth.chainId,
-          address: implementationAddress,
-          nonce: unsignedAuth.nonce,
-        },
+        chainId: unsignedAuth.chainId,
+        address: implementationAddress,
+        nonce: unsignedAuth.nonce,
       };
 
+      // Hash the authorization using viem (same as Privy does)
+      const authorizationHash = hashAuthorization(authorization);
+      console.log("[RN Adapter] Authorization hash:", authorizationHash);
+
+      // Sign the hash directly with secp256k1_sign (same as Privy)
       const signature = (await provider.request({
-        method: "eth_signTypedData_v4",
-        params: [wallet.address, JSON.stringify(authorization)],
+        method: "secp256k1_sign",
+        params: [authorizationHash],
       })) as `0x${string}`;
 
       console.log("[RN Adapter] Received signature:", signature);
 
-      // Parse the signature into r, s, v components
-      // Signature format: 0x[r(64)][s(64)][v(2)]
-      const r = `0x${signature.slice(2, 66)}` as `0x${string}`;
-      const s = `0x${signature.slice(66, 130)}` as `0x${string}`;
-      const v = parseInt(signature.slice(130, 132), 16);
-
-      // Convert v to yParity (0 or 1)
-      // v can be 27/28 (legacy) or 0/1 (EIP-155)
-      const yParity = v >= 27 ? v - 27 : v;
+      // Parse the signature using viem (same as Privy)
+      const parsedSignature = parseSignature(signature);
 
       const result = {
         chainId: unsignedAuth.chainId,
         address: implementationAddress,
         nonce: unsignedAuth.nonce,
-        r,
-        s,
-        yParity,
+        ...parsedSignature,
       };
 
       console.log("[RN Adapter] Returning authorization:", result);
