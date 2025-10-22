@@ -426,7 +426,7 @@ paths:
     get:
       summary: Get Sponsorships
       description: |
-        Returns a list of sponsorships associated with the specified policy ID. The results are paginated.
+        Returns a list of sponsorships associated with the specified policy ID.
 
         <Note title="Header Access Token">
           To call this endpoint, you must use your [access token](/docs/how-to-create-access-keys) in the [authorization header](/docs/how-to-use-api-keys-in-http-headers) of the API request. 
@@ -459,12 +459,6 @@ paths:
                   data:
                     type: object
                     properties:
-                      before:
-                        type: string
-                        description: String - used for pagination. If there are previous results, `before` field is returned in the response and can be passed in the request to fetch the previous page. Can be null if there are no previous results.
-                      after:
-                        type: string
-                        description: String - used for pagination. If more results are available `after` field is returned in the response and can be passed in the request to fetch the next page. Can be null if there are no more results.
                       sponsorships:
                         type: array
                         items:
