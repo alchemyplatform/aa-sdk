@@ -1083,6 +1083,8 @@ navigation:
             contents:
               - section: Functions
                 contents:
+                  - page: addPasskey
+                    path: wallets/pages/reference/alchemy/wagmi-core/functions/addPasskey.mdx
                   - page: createConfig
                     path: wallets/pages/reference/alchemy/wagmi-core/functions/createConfig.mdx
                   - page: getAuthClient
@@ -1097,6 +1099,8 @@ navigation:
                     path: wallets/pages/reference/alchemy/wagmi-core/functions/listAuthMethods.mdx
                   - page: loginWithOauth
                     path: wallets/pages/reference/alchemy/wagmi-core/functions/loginWithOauth.mdx
+                  - page: loginWithPasskey
+                    path: wallets/pages/reference/alchemy/wagmi-core/functions/loginWithPasskey.mdx
                   - page: prepareCalls
                     path: wallets/pages/reference/alchemy/wagmi-core/functions/prepareCalls.mdx
                   - page: prepareSwap

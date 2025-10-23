@@ -23,6 +23,12 @@ export {
 } from "./actions/loginWithOauth.js";
 
 export {
+  loginWithPasskey,
+  type LoginWithPasskeyParameters,
+  type LoginWithPasskeyReturnType,
+} from "./actions/loginWithPasskey.js";
+
+export {
   handleOauthRedirect,
   type HandleOauthRedirectParameters,
   type HandleOauthRedirectReturnType,
@@ -33,6 +39,12 @@ export {
   type SendVerificationCodeParameters,
   type SendVerificationCodeReturnType,
 } from "./actions/sendVerificationCode.js";
+
+export {
+  addPasskey,
+  type AddPasskeyParameters,
+  type AddPasskeyReturnType,
+} from "./actions/addPasskey.js";
 
 export {
   updateEmail,
