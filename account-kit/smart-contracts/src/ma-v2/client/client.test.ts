@@ -252,33 +252,151 @@ describe("MA v2 Tests", async () => {
       });
   });
 
-  it.fails(
-    "successfully sign + validate a message, for WebAuthn account",
-    async () => {
-      const { provider } = await givenWebAuthnProvider();
+  it("successfully sign + validate a message, for WebAuthn account", async () => {
+    const { provider } = await givenWebAuthnProvider();
 
-      await setBalance(instance.getClient(), {
-        address: provider.getAddress(),
-        value: parseEther("2"),
+    await setBalance(instance.getClient(), {
+      address: provider.getAddress(),
+      value: parseEther("2"),
+    });
+
+    const accountContract = getContract({
+      address: provider.getAddress(),
+      abi: semiModularAccountBytecodeAbi,
+      client,
+    });
+
+    // Deploy the account first by sending a simple UO
+    const deployResult = await provider.sendUserOperation({
+      uo: {
+        target: target,
+        value: 0n,
+        data: "0x",
+      },
+    });
+
+    await provider
+      .waitForUserOperationTransaction(deployResult)
+      .catch(async () => {
+        const dropAndReplaceResult = await provider.dropAndReplaceUserOperation(
+          {
+            uoToDrop: deployResult.request,
+          },
+        );
+        await provider.waitForUserOperationTransaction(dropAndReplaceResult);
       });
 
-      const message = "0xdeadbeef";
+    const message = "testmessage";
 
-      let signature = await provider.signMessage({ message });
+    // WebAuthn signing wraps the message in EIP-712 format
+    // We need to get the properly formatted signature request
+    const { type, data } = await provider.account.prepareSign({
+      type: "personal_sign",
+      data: message,
+    });
 
-      const publicClient = instance.getClient().extend(publicActions);
+    if (type !== "eth_signTypedData_v4") {
+      throw new Error("Invalid signature request type");
+    }
 
-      // TODO: should be using verifyTypedData here
-      const isValid = await publicClient.verifyMessage({
-        // TODO: this is gonna fail until the message can be formatted since the actual message is EIP-712
-        message,
-        address: provider.getAddress(),
+    // Sign the typed data directly (WebAuthn signs the wrapped EIP-712 format)
+    const signature = await provider.signTypedData({ typedData: data });
+
+    // Verify the signature using the account contract's isValidSignature method
+    await expect(
+      accountContract.read.isValidSignature([hashMessage(message), signature]),
+    ).resolves.toEqual(isValidSigSuccess);
+  });
+
+  it("successfully sign + validate typed data, for WebAuthn account", async () => {
+    const { provider } = await givenWebAuthnProvider();
+
+    await setBalance(instance.getClient(), {
+      address: provider.getAddress(),
+      value: parseEther("2"),
+    });
+
+    const accountContract = getContract({
+      address: provider.getAddress(),
+      abi: semiModularAccountBytecodeAbi,
+      client,
+    });
+
+    // Deploy the account first by sending a simple UO
+    const deployResult = await provider.sendUserOperation({
+      uo: {
+        target: target,
+        value: 0n,
+        data: "0x",
+      },
+    });
+
+    await provider
+      .waitForUserOperationTransaction(deployResult)
+      .catch(async () => {
+        const dropAndReplaceResult = await provider.dropAndReplaceUserOperation(
+          {
+            uoToDrop: deployResult.request,
+          },
+        );
+        await provider.waitForUserOperationTransaction(dropAndReplaceResult);
+      });
+
+    const typedData = {
+      domain: {
+        name: "Ether Mail",
+        version: "1",
+        chainId: 1,
+        verifyingContract: "0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC",
+      },
+      types: {
+        Person: [
+          { name: "name", type: "string" },
+          { name: "wallet", type: "address" },
+        ],
+        Mail: [
+          { name: "from", type: "Person" },
+          { name: "to", type: "Person" },
+          { name: "contents", type: "string" },
+        ],
+      },
+      primaryType: "Mail",
+      message: {
+        from: {
+          name: "Cow",
+          wallet: "0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826",
+        },
+        to: {
+          name: "Bob",
+          wallet: "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
+        },
+        contents: "Hello, Bob!",
+      },
+    } as const;
+
+    const hashedMessageTypedData = hashTypedData(typedData);
+
+    // WebAuthn wraps typed data in a ReplaySafeHash format
+    const { type, data } = await provider.account.prepareSign({
+      type: "eth_signTypedData_v4",
+      data: typedData,
+    });
+
+    if (type !== "eth_signTypedData_v4") {
+      throw new Error("Invalid signature request type");
+    }
+
+    // Sign the wrapped typed data
+    const signature = await provider.signTypedData({ typedData: data });
+
+    // Verify the signature using the account contract's isValidSignature method
+    await expect(
+      accountContract.read.isValidSignature([
+        hashedMessageTypedData,
         signature,
-      });
-
-      expect(isValid).toBe(true);
-    },
-  );
+      ]),
+    ).resolves.toEqual(isValidSigSuccess);
+  });
 
   it("successfully sign + validate a message, for native and single signer validation", async () => {
     const provider = (await givenConnectedProvider({ signer })).extend(
