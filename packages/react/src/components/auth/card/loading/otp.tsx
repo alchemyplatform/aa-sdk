@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { EmailIllustration } from "../../../../icons/illustrations/email.js";
-import { ls } from "../../../../strings.js";
+import { ls } from "../../../strings.js";
 import {
   OTPInput,
   type OTPCodeType,
@@ -9,14 +9,13 @@ import {
 } from "../../../otp-input/otp-input.js";
 import { Spinner } from "../../../../icons/spinner.js";
 import { AuthStepStatus, useAuthContext } from "../../context.js";
-import { useAuthenticate } from "../../../../hooks/useAuthenticate.js";
-import { useSignerStatus } from "../../../../hooks/useSignerStatus.js";
-import { AlchemySignerStatus } from "@account-kit/signer";
+import { useAccount } from "wagmi";
+import { useSubmitOtpCode } from "../../../../hooks/useSubmitOtpCode.js";
 
 const AUTH_DELAY = 1000;
 
 export const LoadingOtp = () => {
-  const { isConnected, status } = useSignerStatus();
+  const { isConnected } = useAccount();
   const { setAuthStep, authStep } = useAuthContext("otp_verify");
   const [otpCode, setOtpCode] = useState<OTPCodeType>(initialOTPValue);
   const [errorText, setErrorText] = useState(authStep.error?.message || "");
@@ -27,23 +26,26 @@ export const LoadingOtp = () => {
     setErrorText(errorText);
     setTitleText(ls.loadingOtp.title);
   };
-  const { authenticate } = useAuthenticate({
-    onError: (error: any) => {
-      console.error(error);
 
-      setAuthStep({ ...authStep, error, status: AuthStepStatus.base });
-      resetOTP(getUserErrorMessage(error));
-    },
-    onSuccess: () => {
-      if (isConnected) {
-        setAuthStep({ ...authStep, status: AuthStepStatus.success });
-        setTitleText(ls.loadingOtp.verified);
+  const { submitOtpCode } = useSubmitOtpCode({
+    mutation: {
+      onError: (error: any) => {
+        console.error(error);
 
-        // Wait 3 seconds before completing the auth step
-        setTimeout(() => {
-          setAuthStep({ type: "complete" });
-        }, AUTH_DELAY);
-      }
+        setAuthStep({ ...authStep, error, status: AuthStepStatus.base });
+        resetOTP(getUserErrorMessage(error));
+      },
+      onSuccess: () => {
+        if (isConnected) {
+          setAuthStep({ ...authStep, status: AuthStepStatus.success });
+          setTitleText(ls.loadingOtp.verified);
+
+          // Wait 3 seconds before completing the auth step
+          setTimeout(() => {
+            setAuthStep({ type: "complete" });
+          }, AUTH_DELAY);
+        }
+      },
     },
   });
 
@@ -55,19 +57,9 @@ export const LoadingOtp = () => {
       setAuthStep({ ...authStep, status: AuthStepStatus.verifying });
       setTitleText(ls.loadingOtp.verifying);
 
-      authenticate({ type: "otp", otpCode: otp });
+      submitOtpCode({ otpCode: otp });
     }
   };
-
-  useEffect(() => {
-    if (status === AlchemySignerStatus.AWAITING_MFA_AUTH) {
-      setAuthStep({
-        type: "totp_verify",
-        previousStep: "otp",
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [status]);
 
   return (
     <div className="flex flex-col items-center">

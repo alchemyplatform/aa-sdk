@@ -1,5 +1,5 @@
 import { AlchemyLogo } from "../../../../icons/alchemy.js";
-import { ls } from "../../../../strings.js";
+import { ls } from "../../../strings.js";
 
 // eslint-disable-next-line jsdoc/require-jsdoc
 export const ProtectedBy = () => (

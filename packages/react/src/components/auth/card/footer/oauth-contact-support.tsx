@@ -1,5 +1,5 @@
 import { useUiConfig } from "../../../../hooks/useUiConfig.js";
-import { ls } from "../../../../strings.js";
+import { ls } from "../../../strings.js";
 
 export const OAuthContactSupport = () => {
   const { supportUrl } = useUiConfig(({ supportUrl }) => ({ supportUrl }));

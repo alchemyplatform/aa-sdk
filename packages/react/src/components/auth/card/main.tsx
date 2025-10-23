@@ -1,20 +1,14 @@
 import { Fragment } from "react";
-import { useAuthConfig } from "../../../hooks/internal/useAuthConfig.js";
 import { Divider } from "../../divider.js";
 import { useAuthContext } from "../context.js";
 import { AuthSection } from "../sections/AuthSection.js";
 import { GeneralError } from "./error/general-error.js";
+import { useAuthConfig } from "../../../hooks/useAuthConfig.js";
 
 export const MainAuthContent = () => {
   const { authStep } = useAuthContext();
   const isError = authStep.type === "initial" && authStep.error;
-  const { header, sections, hideSignInText } = useAuthConfig(
-    ({ header, sections, hideSignInText }) => ({
-      header,
-      sections,
-      hideSignInText,
-    }),
-  );
+  const { header, sections, hideSignInText } = useAuthConfig();
 
   return (
     <>

@@ -1,5 +1,5 @@
 import { Warning } from "../../../../icons/warning.js";
-import { ls } from "../../../../strings.js";
+import { ls } from "../../../strings.js";
 
 export const GeneralError = () => {
   return (

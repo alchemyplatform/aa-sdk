@@ -1,19 +1,15 @@
 import { useForm } from "@tanstack/react-form";
 import { zodValidator } from "@tanstack/zod-form-adapter";
-import { memo, useEffect } from "react";
+import { memo } from "react";
 import { z } from "zod";
-import { useAuthenticate } from "../../../hooks/useAuthenticate.js";
-import { useSigner } from "../../../hooks/useSigner.js";
 import { ChevronRight } from "../../../icons/chevron.js";
 import { MailIcon } from "../../../icons/mail.js";
-import { ls } from "../../../strings.js";
+import { ls } from "../../strings.js";
 import { Button } from "../../button.js";
-import { IS_SIGNUP_QP } from "../../constants.js";
 import { Input } from "../../input.js";
 import { useAuthContext } from "../context.js";
 import type { AuthType } from "../types.js";
-import { useSignerStatus } from "../../../hooks/useSignerStatus.js";
-import { AlchemySignerStatus, MfaRequiredError } from "@account-kit/signer";
+import { useSendEmailOtp } from "../../../hooks/useSendEmailOtp.js";
 
 type EmailAuthProps = Extract<AuthType, { type: "email" }>;
 
@@ -21,93 +17,37 @@ type EmailAuthProps = Extract<AuthType, { type: "email" }>;
 // eslint-disable-next-line jsdoc/require-jsdoc
 export const EmailAuth = memo(
   ({
-    emailMode: legacyEmailMode,
     hideButton = false,
     buttonLabel = ls.login.email.button,
     placeholder = ls.login.email.placeholder,
   }: EmailAuthProps) => {
-    const { status } = useSignerStatus();
     const { setAuthStep } = useAuthContext();
-    const signer = useSigner();
-    const { authenticate, isPending } = useAuthenticate({
-      onMutate: async (params) => {
-        const cfg = await signer?.getConfig();
-        if (params.type === "email" && "email" in params) {
-          const emailMode = cfg?.email.mode
-            ? cfg?.email.mode
-            : params.emailMode === "magicLink"
-              ? "MAGIC_LINK"
-              : "OTP";
-
-          if (emailMode === "OTP") {
+    const { sendEmailOtp, isPending: isSendingEmailOtpPending } =
+      useSendEmailOtp({
+        mutation: {
+          onMutate: (params) => {
             setAuthStep({ type: "otp_verify", email: params.email });
-          }
-        }
-      },
-      onSuccess: async (_data, params) => {
-        const cfg = await signer?.getConfig();
-        if (params.type === "email" && "email" in params) {
-          const emailMode = cfg?.email.mode
-            ? cfg?.email.mode
-            : params.emailMode === "magicLink"
-              ? "MAGIC_LINK"
-              : "OTP";
+          },
+          onError: (e) => {
+            console.error(e);
+            const error =
+              e instanceof Error ? e : new Error("An Unknown error");
+            setAuthStep({ type: "initial", error });
+          },
+        },
+      });
 
-          if (emailMode === "MAGIC_LINK") {
-            setAuthStep({ type: "email_verify", email: params.email });
-            return;
-          }
-        }
-      },
-      onError: (e, params) => {
-        console.error(e);
-        if (e instanceof MfaRequiredError && "email" in params) {
-          const { multiFactorId } = e.multiFactors[0];
-          setAuthStep({
-            type: "totp_verify",
-            previousStep: "magicLink",
-            factorId: multiFactorId,
-            email: params.email,
-          });
-          return;
-        }
-
-        const error = e instanceof Error ? e : new Error("An Unknown error");
-        setAuthStep({ type: "initial", error });
-      },
-    });
+    // TODO: support magic link email
 
     const form = useForm({
       defaultValues: {
         email: "",
       },
       onSubmit: async ({ value: { email } }) => {
-        const existingUser = await signer?.getUser(email);
-        const redirectParams = new URLSearchParams();
-
-        if (existingUser == null) {
-          redirectParams.set(IS_SIGNUP_QP, "true");
-        }
-
-        authenticate({
-          type: "email",
-          email,
-          emailMode: legacyEmailMode,
-          redirectParams,
-        });
+        sendEmailOtp({ email });
       },
       validatorAdapter: zodValidator(),
     });
-
-    useEffect(() => {
-      if (
-        status === AlchemySignerStatus.AWAITING_EMAIL_AUTH &&
-        form.state.values.email
-      ) {
-        setAuthStep({ type: "email_verify", email: form.state.values.email });
-      }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [status]);
 
     return (
       <form
@@ -144,7 +84,7 @@ export const EmailAuth = memo(
                     </button>
                   ) : undefined
                 }
-                disabled={isPending}
+                disabled={isSendingEmailOtpPending}
               />
             )}
           </form.Field>
@@ -161,7 +101,10 @@ export const EmailAuth = memo(
                   type="submit"
                   variant="primary"
                   disabled={Boolean(
-                    isPending || !canSubmit || isSubmitting || !email,
+                    isSendingEmailOtpPending ||
+                      !canSubmit ||
+                      isSubmitting ||
+                      !email,
                   )}
                 >
                   {buttonLabel}

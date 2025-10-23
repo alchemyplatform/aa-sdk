@@ -33,6 +33,8 @@ import {
   useUpdateEmail,
   useUpdatePhoneNumber,
   useAuthMethods,
+  AuthModal,
+  useAuthModal,
 } from "@alchemy/react";
 import { zeroAddress, Address } from "viem";
 import { useState } from "react";
@@ -91,10 +93,18 @@ export default function Home() {
 }
 
 const AuthenticationDemo = () => {
+  const { openAuthModal } = useAuthModal();
   const [authMode, setAuthMode] = useState<"email" | "sms" | "oauth">("email");
 
   return (
     <div className="flex flex-col gap-4 items-center">
+      <button
+        className="bg-blue-500 text-white px-4 py-2 rounded"
+        onClick={openAuthModal}
+      >
+        Open Auth Modal
+      </button>
+      <AuthModal />
       <div className="flex gap-3">
         <button
           onClick={() => setAuthMode("email")}

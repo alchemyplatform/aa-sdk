@@ -1,4 +1,4 @@
-import { ls } from "../strings.js";
+import { ls } from "./strings.js";
 
 // this isn't used externally
 // eslint-disable-next-line jsdoc/require-jsdoc

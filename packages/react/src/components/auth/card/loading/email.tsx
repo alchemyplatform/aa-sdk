@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { useSignerStatus } from "../../../../hooks/useSignerStatus.js";
 import { EmailIllustration } from "../../../../icons/illustrations/email.js";
 import { Spinner } from "../../../../icons/spinner.js";
-import { ls } from "../../../../strings.js";
+import { ls } from "../../../strings.js";
 import { useAuthContext } from "../../context.js";
+import { useAccount } from "wagmi";
 
 // eslint-disable-next-line jsdoc/require-jsdoc
 export const LoadingEmail = () => {
@@ -38,7 +38,7 @@ export const LoadingEmail = () => {
 
 // eslint-disable-next-line jsdoc/require-jsdoc
 export const CompletingEmailAuth = () => {
-  const { isConnected } = useSignerStatus();
+  const { isConnected } = useAccount();
   const { setAuthStep } = useAuthContext("email_completing");
 
   useEffect(() => {

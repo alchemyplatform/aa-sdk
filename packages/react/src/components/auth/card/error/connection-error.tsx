@@ -1,9 +1,8 @@
 "use client";
 import { useEffect } from "react";
-import { ls } from "../../../../strings.js";
+import { ls } from "../../../strings.js";
 import { Button } from "../../../button.js";
-import { disconnect } from "@account-kit/core";
-import { useAlchemyAccountContext } from "../../../../hooks/useAlchemyAccountContext.js";
+import { useDisconnect } from "wagmi";
 
 type ConnectionErrorProps = {
   headerText: string;
@@ -26,14 +25,13 @@ export const ConnectionError = ({
   shouldDisconnect = true,
   handleSkip,
 }: ConnectionErrorProps) => {
-  const { config } = useAlchemyAccountContext();
-
+  const { disconnect } = useDisconnect();
   useEffect(() => {
     // Terminate any inflight authentication on Error...
     if (shouldDisconnect) {
-      disconnect(config);
+      disconnect();
     }
-  }, [config, shouldDisconnect]);
+  }, [disconnect, shouldDisconnect]);
 
   return (
     <div className="flex flex-col justify-center content-center gap-3">

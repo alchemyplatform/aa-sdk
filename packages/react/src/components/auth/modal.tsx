@@ -1,16 +1,17 @@
-import { useCallback } from "react";
-import { useNewUserSignup } from "../../hooks/internal/useNewUserSignup.js";
+import { useEffect, useRef } from "react";
 import { useAuthModal } from "../../hooks/useAuthModal.js";
 import { useUiConfig } from "../../hooks/useUiConfig.js";
-import { useSignerStatus } from "../../hooks/useSignerStatus.js";
 import { Dialog } from "../dialog/dialog.js";
-import { AuthCardContent } from "./card/index.js";
+import { AuthCardContent } from "./card/auth-card.js";
 import { useAuthContext } from "./context.js";
-import { useEmailAuthLinkingRequired } from "../../hooks/internal/useEmailAuthLinkingRequired.js";
 
+/**
+ * Renders the Auth Modal component. Must be rendered within an `AlchemyUiProvider`. To customize this modal, use the `ui` prop of the `AlchemyUiProvider`.
+ *
+ * @returns {React.JSX.Element} The rendered Auth Modal component.
+ */
 export const AuthModal = () => {
-  const { isConnected } = useSignerStatus();
-  const { modalBaseClassName, addPasskeyOnSignup, uiMode } = useUiConfig(
+  const { modalBaseClassName } = useUiConfig(
     ({ modalBaseClassName, auth, uiMode = "modal" }) => ({
       modalBaseClassName,
       addPasskeyOnSignup: auth?.addPasskeyOnSignup,
@@ -18,30 +19,20 @@ export const AuthModal = () => {
     }),
   );
 
-  const { setAuthStep, authStep } = useAuthContext();
-  const { isOpen, closeAuthModal, openAuthModal } = useAuthModal();
+  const { isOpen, closeAuthModal } = useAuthModal();
+  const { resetAuthStep } = useAuthContext();
 
-  const handleSignup = useCallback(() => {
-    if (addPasskeyOnSignup) {
-      openAuthModal();
-      setAuthStep({
-        type: "passkey_create",
-      });
+  // Reset the auth step to the initial state when the modal is closed. Aside
+  // from generally being better UX, this prevents the modal from getting stuck
+  // in the "complete" state after successfully logging in and then
+  // disconnecting.
+  const previousIsOpen = useRef(isOpen);
+  useEffect(() => {
+    if (previousIsOpen.current && !isOpen) {
+      resetAuthStep();
     }
-  }, [addPasskeyOnSignup, openAuthModal, setAuthStep]);
-  useNewUserSignup(
-    handleSignup,
-    isConnected &&
-      (authStep.type === "complete" || authStep.type === "initial") &&
-      !isOpen,
-  );
-
-  useEmailAuthLinkingRequired((email) => {
-    if (uiMode === "modal") {
-      openAuthModal();
-    }
-    setAuthStep({ type: "otp_verify", email });
-  });
+    previousIsOpen.current = isOpen;
+  }, [isOpen, resetAuthStep]);
 
   return (
     <Dialog isOpen={isOpen} onClose={closeAuthModal}>

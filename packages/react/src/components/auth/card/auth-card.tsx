@@ -1,6 +1,5 @@
 "use client";
 
-import { disconnect } from "@account-kit/core";
 import {
   useCallback,
   useEffect,
@@ -8,15 +7,14 @@ import {
   useRef,
   type PropsWithChildren,
 } from "react";
-import { useAlchemyAccountContext } from "../../../hooks/useAlchemyAccountContext.js";
-import { useAuthConfig } from "../../../hooks/internal/useAuthConfig.js";
 import { useAuthModal } from "../../../hooks/useAuthModal.js";
 import { useElementHeight } from "../../../hooks/useElementHeight.js";
-import { useSignerStatus } from "../../../hooks/useSignerStatus.js";
 import { Navigation } from "../../navigation.js";
 import { useAuthContext } from "../context.js";
 import { Footer } from "../sections/Footer.js";
 import { Step } from "./steps.js";
+import { useAccount, useDisconnect } from "wagmi";
+import { useAuthConfig } from "../../../hooks/useAuthConfig.js";
 export type AuthCardProps = {
   className?: string;
 };
@@ -56,19 +54,14 @@ export const AuthCardContent = ({
   className?: string;
   showClose?: boolean;
 }) => {
-  const { openAuthModal, closeAuthModal } = useAuthModal();
-  const { status, isAuthenticating, isConnected } = useSignerStatus();
+  const { closeAuthModal } = useAuthModal();
+  const { isConnected } = useAccount();
   const { authStep, setAuthStep } = useAuthContext();
-  const { config } = useAlchemyAccountContext();
+  const { disconnect } = useDisconnect();
 
   const didGoBack = useRef(false);
 
-  const { onAuthSuccess, addPasskeyOnSignup } = useAuthConfig(
-    ({ onAuthSuccess, addPasskeyOnSignup }) => ({
-      onAuthSuccess,
-      addPasskeyOnSignup,
-    }),
-  );
+  const { onAuthSuccess, addPasskeyOnSignup } = useAuthConfig();
 
   const canGoBack = useMemo(() => {
     return [
@@ -90,7 +83,7 @@ export const AuthCardContent = ({
       case "passkey_verify":
       case "passkey_create":
       case "oauth_completing":
-        disconnect(config); // Terminate any inflight authentication
+        disconnect(); // Terminate any inflight authentication
         didGoBack.current = true;
         setAuthStep({ type: "initial" });
         break;
@@ -104,12 +97,12 @@ export const AuthCardContent = ({
       default:
         console.warn("Unhandled back action for auth step", authStep);
     }
-  }, [authStep, setAuthStep, config]);
+  }, [authStep, setAuthStep, disconnect]);
 
   const onClose = useCallback(() => {
     if (!isConnected) {
       // Terminate any inflight authentication
-      disconnect(config);
+      disconnect();
     }
 
     if (authStep.type === "passkey_create") {
@@ -118,7 +111,7 @@ export const AuthCardContent = ({
       setAuthStep({ type: "initial" });
     }
     closeAuthModal();
-  }, [isConnected, authStep.type, closeAuthModal, config, setAuthStep]);
+  }, [isConnected, authStep.type, closeAuthModal, disconnect, setAuthStep]);
 
   useEffect(() => {
     if (authStep.type === "complete") {
@@ -130,11 +123,8 @@ export const AuthCardContent = ({
     }
   }, [
     authStep,
-    status,
-    isAuthenticating,
     setAuthStep,
     onAuthSuccess,
-    openAuthModal,
     closeAuthModal,
     addPasskeyOnSignup,
     isConnected,

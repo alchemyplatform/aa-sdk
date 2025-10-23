@@ -1,13 +1,13 @@
 import { ConnectionFailed } from "../../../../icons/connectionFailed.js";
 import { LoadingPasskey } from "../../../../icons/passkey.js";
-import { ls } from "../../../../strings.js";
+import { ls } from "../../../strings.js";
 import { useAuthContext } from "../../context.js";
 import { usePasskeyVerify } from "../../hooks/usePasskeyVerify.js";
 import { ConnectionError } from "../error/connection-error.js";
 
 export const LoadingPasskeyAuth = () => {
   const { setAuthStep, authStep } = useAuthContext("passkey_verify");
-  const { authenticate } = usePasskeyVerify();
+  const { loginWithPasskey } = usePasskeyVerify();
 
   if (authStep.error) {
     return (
@@ -15,7 +15,7 @@ export const LoadingPasskeyAuth = () => {
         headerText={ls.error.connection.passkeyTitle}
         bodyText={ls.error.connection.passkeyBody}
         icon={<ConnectionFailed />}
-        handleTryAgain={authenticate}
+        handleTryAgain={loginWithPasskey}
         handleUseAnotherMethod={() => setAuthStep({ type: "initial" })}
       />
     );

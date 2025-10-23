@@ -1,6 +1,5 @@
 import { OauthCancelledError } from "@account-kit/signer";
 import { useEffect } from "react";
-import { useSignerStatus } from "../../../../hooks/useSignerStatus.js";
 import {
   ContinueWithOAuth,
   OAuthConnectionFailed,
@@ -8,11 +7,12 @@ import {
 import { useAuthContext } from "../../context.js";
 import { useOAuthVerify } from "../../hooks/useOAuthVerify.js";
 import { ConnectionError } from "../error/connection-error.js";
-import { ls } from "../../../../strings.js";
+import { ls } from "../../../strings.js";
 import { getSocialProviderDisplayName } from "../../types.js";
+import { useAccount } from "wagmi";
 
 export const CompletingOAuth = () => {
-  const { isConnected } = useSignerStatus();
+  const { isConnected } = useAccount();
   const { setAuthStep, authStep } = useAuthContext("oauth_completing");
   const { authenticate } = useOAuthVerify({ config: authStep.config });
   const oauthWasCancelled = authStep.error instanceof OauthCancelledError;

@@ -1,4 +1,4 @@
-import { ls } from "../../../../strings.js";
+import { ls } from "../../../strings.js";
 
 export const RegistrationDisclaimer = () => (
   <div className="flex flex-row gap-1 justify-center mb-2 sm:flex-col sm:items-center lg:flex-row">

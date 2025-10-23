@@ -1,8 +1,8 @@
 "use client";
 import { useCallback } from "react";
-import { useAuthenticate } from "../../../hooks/useAuthenticate.js";
 import { useAuthContext } from "../context.js";
 import type { AuthType } from "../types.js";
+import { useLoginWithOauth } from "../../../hooks/useLoginWithOauth.js";
 
 export type UseOAuthVerifyReturnType = {
   authenticate: () => void;
@@ -15,33 +15,34 @@ export const useOAuthVerify = ({
   config: Extract<AuthType, { type: "social" }>;
 }): UseOAuthVerifyReturnType => {
   const { setAuthStep } = useAuthContext();
-
-  const { authenticate: authenticate_, isPending } = useAuthenticate({
-    onMutate: () => {
-      setAuthStep({
-        config,
-        type: "oauth_completing",
-      });
-    },
-    onError: (err) => {
-      console.error(err);
-      setAuthStep({
-        type: "oauth_completing",
-        config,
-        error: err,
-      });
-    },
-    onSuccess: () => {
-      setAuthStep({ type: "complete" });
+  const { loginWithOauth, isPending } = useLoginWithOauth({
+    mutation: {
+      onMutate: () => {
+        setAuthStep({
+          config,
+          type: "oauth_completing",
+        });
+      },
+      onError: (err) => {
+        console.error(err);
+        setAuthStep({
+          type: "oauth_completing",
+          config,
+          error: err,
+        });
+      },
+      onSuccess: () => {
+        setAuthStep({ type: "complete" });
+      },
     },
   });
 
   const authenticate = useCallback(() => {
-    authenticate_({
+    loginWithOauth({
       ...config,
-      type: "oauth",
+      provider: config.authProviderId,
     });
-  }, [authenticate_, config]);
+  }, [config, loginWithOauth]);
 
   return {
     isPending,

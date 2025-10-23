@@ -1,15 +1,15 @@
-import { useAddPasskey } from "../../../hooks/useAddPasskey.js";
 import { AddPasskeyIllustration } from "../../../icons/illustrations/add-passkey.js";
 import {
   PasskeyShieldIllustration,
   PasskeySmileyIllustration,
 } from "../../../icons/illustrations/passkeys.js";
-import { ReactLogger } from "../../../metrics.js";
-import { ls } from "../../../strings.js";
+import { ls } from "../../strings.js";
 import { Button } from "../../button.js";
 import { useAuthContext } from "../context.js";
 import { ConnectionError } from "./error/connection-error.js";
 import { ConnectionFailed as PasskeyConnectionFailed } from "../../../icons/connectionFailed.js";
+import { useAddPasskey } from "../../../hooks/useAddPasskey.js";
+import { useCallback } from "react";
 
 const BENEFITS = [
   {
@@ -26,21 +26,25 @@ const BENEFITS = [
 
 export const AddPasskey = () => {
   const { setAuthStep, authStep } = useAuthContext("passkey_create");
-  const { addPasskey, isAddingPasskey } = useAddPasskey({
-    onSuccess: () => {
-      ReactLogger.trackEvent({
-        name: "add_passkey_on_signup_success",
-      });
+  const { addPasskey: addPasskey_, isPending: isAddingPasskey } = useAddPasskey(
+    {
+      mutation: {
+        onSuccess: () => {
+          setAuthStep({ type: "passkey_create_success" });
+        },
+        onError: () => {
+          setAuthStep({
+            type: "passkey_create",
+            error: new Error("Failed to add passkey"),
+          });
+        },
+      },
+    },
+  );
 
-      setAuthStep({ type: "passkey_create_success" });
-    },
-    onError: () => {
-      setAuthStep({
-        type: "passkey_create",
-        error: new Error("Failed to add passkey"),
-      });
-    },
-  });
+  const addPasskey = useCallback(() => {
+    addPasskey_(undefined);
+  }, [addPasskey_]);
 
   if (authStep.error) {
     return (
@@ -88,9 +92,6 @@ export const AddPasskey = () => {
         <Button
           variant="secondary"
           onClick={() => {
-            ReactLogger.trackEvent({
-              name: "add_passkey_on_signup_skip",
-            });
             setAuthStep({ type: "complete" });
           }}
           disabled={isAddingPasskey}

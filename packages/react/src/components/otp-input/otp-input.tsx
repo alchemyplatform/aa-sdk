@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { ls } from "../../strings.js";
+import { ls } from "../strings.js";
 
 export type OTPCodeType = [string, string, string, string, string, string];
 export const initialOTPValue: OTPCodeType = ["", "", "", "", "", ""];

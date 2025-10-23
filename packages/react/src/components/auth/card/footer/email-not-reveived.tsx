@@ -1,12 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
-import { useAuthenticate } from "../../../../hooks/useAuthenticate.js";
-import { ls } from "../../../../strings.js";
+import { ls } from "../../../strings.js";
 import {
   AuthStepStatus,
   useAuthContext,
   type AuthStep,
 } from "../../context.js";
 import { Button } from "../../../button.js";
+import { useSendEmailOtp } from "../../../../hooks/useSendEmailOtp.js";
 
 type EmailNotReceivedDisclaimerProps = {
   authStep: Extract<AuthStep, { type: "email_verify" | "otp_verify" }>;
@@ -16,9 +16,11 @@ export const EmailNotReceivedDisclaimer = ({
 }: EmailNotReceivedDisclaimerProps) => {
   const { setAuthStep } = useAuthContext();
   const [emailResent, setEmailResent] = useState(false);
-  const { authenticate } = useAuthenticate({
-    onSuccess: () => {
-      setAuthStep({ type: "complete" });
+  const { sendEmailOtp } = useSendEmailOtp({
+    mutation: {
+      onSuccess: () => {
+        setAuthStep({ type: "complete" });
+      },
     },
   });
 
@@ -57,11 +59,7 @@ export const EmailNotReceivedDisclaimer = ({
         }`}
         disabled={emailResent || isOTPVerifying}
         onClick={() => {
-          authenticate({
-            type: "email",
-            email: authStep.email,
-            emailMode: authStep.type === "email_verify" ? "magicLink" : "otp",
-          });
+          sendEmailOtp({ email: authStep.email });
           setEmailResent(true);
         }}
       >
