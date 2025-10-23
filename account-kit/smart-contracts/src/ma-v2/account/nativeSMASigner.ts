@@ -17,7 +17,7 @@ import {
 } from "viem";
 import {
   packUOSignature,
-  pack1271Signature,
+  pack1271EOASignature,
   DEFAULT_OWNER_ENTITY_ID,
   assertNever,
   isDeferredAction,
@@ -95,7 +95,7 @@ export const nativeSMASigner = (
       };
     },
     formatSign: async (signature: Hex) => {
-      return pack1271Signature({
+      return pack1271EOASignature({
         validationSignature: signature,
         entityId: DEFAULT_OWNER_ENTITY_ID,
       });

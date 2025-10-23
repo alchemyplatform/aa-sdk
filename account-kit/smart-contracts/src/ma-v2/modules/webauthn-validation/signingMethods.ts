@@ -15,7 +15,7 @@ import { type ToWebAuthnAccountParameters } from "viem/account-abstraction";
 import {
   assertNever,
   isDeferredAction,
-  pack1271Signature,
+  pack1271WebAuthnSignature,
 } from "../../utils.js";
 import { getDefaultWebauthnValidationModuleAddress } from "../utils.js";
 import type { SignatureRequest, SigningMethods } from "@aa-sdk/core";
@@ -131,7 +131,7 @@ export const webauthnSigningFunctions = (
       };
     },
     formatSign: async (signature: Hex) => {
-      return pack1271Signature({
+      return pack1271WebAuthnSignature({
         validationSignature: signature,
         entityId,
       });

@@ -61,8 +61,8 @@ export const packUOSignature = ({
   return concat(["0xFF", "0x00", validationSignature]);
 };
 
-// Signature packing utility for 1271 signatures
-export const pack1271Signature = ({
+// Signature packing utility for 1271 EOA signatures
+export const pack1271EOASignature = ({
   validationSignature,
   entityId,
 }: Pack1271SignatureParams): Hex => {
@@ -72,6 +72,21 @@ export const pack1271Signature = ({
     "0xFF",
     "0x00", // EOA type signature
     validationSignature,
+  ]);
+};
+
+// WebAuthn signatures for EIP-1271 need the MAv2 segment structure
+// Format: 0x00 (hooks) + entityId + 0xFF (segment marker) + WebAuthn signature
+// Unlike EOA signatures, there's no signature type byte (0x00) before the WebAuthn data
+export const pack1271WebAuthnSignature = ({
+  validationSignature,
+  entityId,
+}: Pack1271SignatureParams): Hex => {
+  return concatHex([
+    "0x00", // No pre-validation hooks
+    toHex(entityId, { size: 4 }), // Entity ID
+    "0xFF", // Reserved segment marker
+    validationSignature, // WebAuthn signature (already ABI-encoded)
   ]);
 };
 

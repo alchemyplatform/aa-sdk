@@ -21,7 +21,7 @@ import {
 } from "../utils.js";
 import {
   packUOSignature,
-  pack1271Signature,
+  pack1271EOASignature,
   isDeferredAction,
   assertNever,
 } from "../../utils.js";
@@ -98,7 +98,7 @@ export const singleSignerMessageSigner = (
       };
     },
     formatSign: async (signature: Hex) => {
-      return pack1271Signature({
+      return pack1271EOASignature({
         validationSignature: signature,
         entityId,
       });

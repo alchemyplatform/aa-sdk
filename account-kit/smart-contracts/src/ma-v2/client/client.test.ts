@@ -252,7 +252,7 @@ describe("MA v2 Tests", async () => {
       });
   });
 
-  it("successfully sign + validate a message, for WebAuthn account", async () => {
+  it("successfully sign and validate a message with EIP-1271 using WebAuthn account", async () => {
     const { provider } = await givenWebAuthnProvider();
 
     await setBalance(instance.getClient(), {
@@ -288,27 +288,18 @@ describe("MA v2 Tests", async () => {
 
     const message = "testmessage";
 
-    // WebAuthn signing wraps the message in EIP-712 format
-    // We need to get the properly formatted signature request
-    const { type, data } = await provider.account.prepareSign({
-      type: "personal_sign",
-      data: message,
-    });
+    // WebAuthn signMessage automatically wraps the message in EIP-712 ReplaySafeHash format
+    // and returns a properly formatted signature
+    const signature = await provider.signMessage({ message });
 
-    if (type !== "eth_signTypedData_v4") {
-      throw new Error("Invalid signature request type");
-    }
-
-    // Sign the typed data directly (WebAuthn signs the wrapped EIP-712 format)
-    const signature = await provider.signTypedData({ typedData: data });
-
-    // Verify the signature using the account contract's isValidSignature method
+    // Validate against the original message hash
+    // The WebAuthn validation module will wrap it in ReplaySafeHash internally
     await expect(
       accountContract.read.isValidSignature([hashMessage(message), signature]),
     ).resolves.toEqual(isValidSigSuccess);
   });
 
-  it("successfully sign + validate typed data, for WebAuthn account", async () => {
+  it("successfully sign and validate typed data with EIP-1271 using WebAuthn account", async () => {
     const { provider } = await givenWebAuthnProvider();
 
     await setBalance(instance.getClient(), {
@@ -374,25 +365,15 @@ describe("MA v2 Tests", async () => {
       },
     } as const;
 
-    const hashedMessageTypedData = hashTypedData(typedData);
+    // WebAuthn signTypedData automatically wraps the typed data in EIP-712 ReplaySafeHash format
+    // and returns a properly formatted signature
+    const signature = await provider.signTypedData({ typedData });
 
-    // WebAuthn wraps typed data in a ReplaySafeHash format
-    const { type, data } = await provider.account.prepareSign({
-      type: "eth_signTypedData_v4",
-      data: typedData,
-    });
-
-    if (type !== "eth_signTypedData_v4") {
-      throw new Error("Invalid signature request type");
-    }
-
-    // Sign the wrapped typed data
-    const signature = await provider.signTypedData({ typedData: data });
-
-    // Verify the signature using the account contract's isValidSignature method
+    // Validate against the original typed data hash
+    // The WebAuthn validation module will wrap it in ReplaySafeHash internally
     await expect(
       accountContract.read.isValidSignature([
-        hashedMessageTypedData,
+        hashTypedData(typedData),
         signature,
       ]),
     ).resolves.toEqual(isValidSigSuccess);
