@@ -72,5 +72,15 @@
         "no-warning-comments": "off",
       },
     },
+    {
+      "files": ["examples/rn-expo-example-v5/**/*"],
+      "rules": {
+        "import/extensions": "off",
+        "jsdoc/require-param": "off",
+        "jsdoc/require-returns": "off",
+        "jsdoc/require-param-type": "off",
+        "jsdoc/require-returns-type": "off"
+      }
+    }
   ],
 }
