@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.75.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.75.1...v4.75.2) (2025-10-24)
+
+### Bug Fixes
+
+- import type from wallet-api-types ([#2207](https://github.com/alchemyplatform/aa-sdk/issues/2207)) ([14b02f0](https://github.com/alchemyplatform/aa-sdk/commit/14b02f09a459f9124ae5a3191c3910473b8840d4))
+
 ## [4.75.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.75.0...v4.75.1) (2025-10-24)
 
 **Note:** Version bump only for package root
