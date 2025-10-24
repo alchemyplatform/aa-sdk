@@ -19,6 +19,7 @@ export interface AccountKitTheme {
     "fg-secondary": ColorVariantRecord;
     "fg-tertiary": ColorVariantRecord;
     "fg-invert": ColorVariantRecord;
+    "fg-btn-primary": ColorVariantRecord;
     "fg-disabled": ColorVariantRecord;
     "fg-accent-brand": ColorVariantRecord;
     "fg-critical": ColorVariantRecord;
