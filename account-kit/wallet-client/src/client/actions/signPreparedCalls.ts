@@ -3,10 +3,10 @@ import { BaseError, type SmartAccountSigner } from "@aa-sdk/core";
 import { signSignatureRequest } from "./signSignatureRequest.js";
 import type { Static } from "typebox";
 import type { wallet_sendPreparedCalls } from "@alchemy/wallet-api-types/rpc";
-import {
-  type PreparedCall_Authorization,
-  type PreparedCall_UserOpV060,
-  type PreparedCall_UserOpV070,
+import type {
+  PreparedCall_Authorization,
+  PreparedCall_UserOpV060,
+  PreparedCall_UserOpV070,
 } from "@alchemy/wallet-api-types";
 import { metrics } from "../../metrics.js";
 import { assertNever } from "../../utils.js";
