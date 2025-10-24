@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.75.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.74.0...v4.75.0) (2025-10-24)
+
+### Features
+
+- implement prepare and format sign on webauthn account ([#2201](https://github.com/alchemyplatform/aa-sdk/issues/2201)) ([46b070e](https://github.com/alchemyplatform/aa-sdk/commit/46b070ec9846aa0a2d4712000dc685f80e5987d8))
+
 # [4.74.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.73.0...v4.74.0) (2025-10-21)
 
 **Note:** Version bump only for package @account-kit/smart-contracts
