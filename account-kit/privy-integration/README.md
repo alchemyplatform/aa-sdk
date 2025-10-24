@@ -6,7 +6,7 @@ Add gas sponsorship and smart wallet features to your Privy app in under 5 minut
 
 If you're already using [Privy](https://privy.io) for authentication, this package lets you upgrade your users' wallets with:
 
-- **🔄 EIP-7702 Delegation** - Upgrade EOAs to smart accounts without migration
+- **🔄 EIP-7702 Delegation** - Upgrade your wallets to smart accounts without migration
 - **⛽ Gas Sponsorship** - Pay gas fees for your users via Alchemy Gas Manager (EVM & Solana)
 - **💱 Token Swaps** - Execute swaps through Alchemy's swap infrastructure
 - **🚀 Batched Transactions** - Send multiple operations in a single transaction using `sendTransaction([...])`
@@ -253,15 +253,16 @@ function SolanaSendButton() {
 
 ### AlchemyProvider Props
 
-| Prop                 | Type                 | Required      | Description                                                                                              |
-| -------------------- | -------------------- | ------------- | -------------------------------------------------------------------------------------------------------- |
-| `apiKey`             | `string`             | Conditional\* | Your Alchemy API key for @account-kit/infra transport                                                    |
-| `jwt`                | `string`             | Conditional\* | JWT token for authentication (alternative to `apiKey`)                                                   |
-| `rpcUrl`             | `string`             | Conditional\* | Custom RPC URL for EVM chains (can be used alone or with `jwt`)                                          |
-| `solanaRpcUrl`       | `string`             | No            | Custom RPC URL for Solana (separate from EVM `rpcUrl`)                                                   |
-| `policyId`           | `string \| string[]` | No            | Gas Manager policy ID(s) for EVM sponsorship. If array is provided, backend uses first applicable policy |
-| `solanaPolicyId`     | `string \| string[]` | No            | Gas Manager policy ID(s) for Solana sponsorship                                                          |
-| `disableSponsorship` | `boolean`            | No            | Set to `true` to disable gas sponsorship by default (default: `false`)                                   |
+| Prop                 | Type                   | Required      | Description                                                                                              |
+| -------------------- | ---------------------- | ------------- | -------------------------------------------------------------------------------------------------------- |
+| `apiKey`             | `string`               | Conditional\* | Your Alchemy API key for @account-kit/infra transport                                                    |
+| `jwt`                | `string`               | Conditional\* | JWT token for authentication (alternative to `apiKey`)                                                   |
+| `rpcUrl`             | `string`               | Conditional\* | Custom RPC URL for EVM chains (can be used alone or with `jwt`)                                          |
+| `solanaRpcUrl`       | `string`               | No            | Custom RPC URL for Solana (separate from EVM `rpcUrl`)                                                   |
+| `policyId`           | `string \| string[]`   | No            | Gas Manager policy ID(s) for EVM sponsorship. If array is provided, backend uses first applicable policy |
+| `solanaPolicyId`     | `string \| string[]`   | No            | Gas Manager policy ID(s) for Solana sponsorship                                                          |
+| `disableSponsorship` | `boolean`              | No            | Set to `true` to disable gas sponsorship by default (default: `false`)                                   |
+| `accountAuthMode`    | `'eip7702' \| 'owner'` | No            | Authorization mode for EVM smart accounts (default: `'eip7702'`)                                         |
 
 \* **Required configuration (pick one):**
 
@@ -352,21 +353,23 @@ Send Solana transactions with optional gas sponsorship via Alchemy.
 
 #### `useAlchemyClient()`
 
-Get the underlying smart wallet client (advanced use cases).
+Get the underlying smart wallet client and account (advanced use cases).
 
 **Returns:**
 
-- `getClient()` - Async function that returns `SmartWalletClient`
+- `getClient()` - Async function that returns `{ client: SmartWalletClient, account: SmartContractAccount }`
+  - `client` - The smart wallet client instance
+  - `account` - The smart account with address and other account info
 
 ## How It Works
 
-### EIP-7702 Delegation
+### EIP-7702 Delegation (Default)
 
 This package uses [EIP-7702](https://eips.ethereum.org/EIPS/eip-7702) to upgrade your users' Privy wallets into smart accounts **without requiring them to deploy new contracts or migrate funds**.
 
 When a user sends their first transaction:
 
-1. Their EOA signs an EIP-7702 authorization
+1. Their wallet signs an EIP-7702 authorization
 2. The authorization delegates to Alchemy's smart account implementation
 3. The transaction is executed with smart account features (batching, sponsorship, etc.)
 4. Gas is optionally sponsored by your Gas Manager policy
@@ -377,9 +380,46 @@ Under the hood, this package:
 
 1. Connects to your user's Privy embedded wallet
 2. Wraps it with `WalletClientSigner` from `@aa-sdk/core`
-3. Creates a `SmartWalletClient` with EIP-7702 support
+3. Creates a `SmartWalletClient` with EIP-7702 support (default) or traditional smart account support
 4. Routes transactions through Alchemy infrastructure
 5. Automatically handles sponsorship via Gas Manager policies
+
+### Authorization Modes
+
+The package supports two authorization modes via the `accountAuthMode` prop:
+
+- **`'eip7702'` (default, recommended)**: Uses EIP-7702 to delegate the Privy wallet to a smart account. No separate deployment needed, funds stay at the wallet address. This is the recommended mode for most applications.
+- **`'owner'`**: Uses a traditional smart account with the Privy wallet as the owner/signer. The smart account has a separate address from the owner wallet. Use this if you need compatibility with environments that don't support EIP-7702 yet.
+
+```tsx
+// Default behavior (EIP-7702)
+<AlchemyProvider apiKey="...">
+  <YourApp />
+</AlchemyProvider>
+
+// Traditional smart account mode
+<AlchemyProvider apiKey="..." accountAuthMode="owner">
+  <YourApp />
+</AlchemyProvider>
+```
+
+**Getting the Smart Account Address:**
+
+When using `owner` mode, the smart account has a different address from your Privy signer. Access it via `useAlchemyClient`:
+
+```tsx
+import { useAlchemyClient } from "@account-kit/privy-integration";
+
+function MyComponent() {
+  const { getClient } = useAlchemyClient();
+
+  const getSmartAccountAddress = async () => {
+    const { account } = await getClient();
+    console.log("Smart account address:", account.address);
+    // This is different from the Privy signer address in owner mode
+  };
+}
+```
 
 ## Get Your API Keys
 
@@ -431,7 +471,7 @@ The API is nearly identical, making migration seamless.
 
 ### Access the Smart Wallet Client
 
-For advanced use cases, access the underlying client directly:
+For advanced use cases, access the underlying client and account directly:
 
 ```tsx
 import { useAlchemyClient } from "@account-kit/privy-integration";
@@ -440,20 +480,20 @@ function AdvancedComponent() {
   const { getClient } = useAlchemyClient();
 
   const doAdvancedOperation = async () => {
-    const client = await getClient();
+    const { client, account } = await getClient();
 
-    // Use any SmartWalletClient method
-    const address = await client.getAddress();
+    // Access the smart account address
+    console.log("Smart account address:", account.address);
 
     // Direct access to sendCalls with full control
     await client.sendCalls({
-      from: address,
+      from: account.address,
       calls: [
         { to: "0x...", data: "0x..." },
         { to: "0x...", data: "0x..." },
       ],
       capabilities: {
-        eip7702Auth: true,
+        eip7702Auth: true, // Set to true for EIP-7702 mode
         paymasterService: { policyId: "your-policy-id" },
       },
     });

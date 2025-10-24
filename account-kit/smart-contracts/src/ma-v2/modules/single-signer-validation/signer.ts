@@ -21,8 +21,9 @@ import {
 } from "../utils.js";
 import {
   packUOSignature,
-  pack1271Signature,
-  assertNeverSignatureRequestType,
+  pack1271EOASignature,
+  isDeferredAction,
+  assertNever,
 } from "../../utils.js";
 
 /**
@@ -62,8 +63,9 @@ export const singleSignerMessageSigner = (
       request: SignatureRequest,
     ): Promise<SignatureRequest> => {
       let hash;
+      const requestType = request.type;
 
-      switch (request.type) {
+      switch (requestType) {
         case "personal_sign":
           hash = hashMessage(request.data);
           break;
@@ -73,7 +75,7 @@ export const singleSignerMessageSigner = (
           break;
 
         default:
-          assertNeverSignatureRequestType();
+          return assertNever(requestType, "Invalid signature request type");
       }
 
       return {
@@ -96,7 +98,7 @@ export const singleSignerMessageSigner = (
       };
     },
     formatSign: async (signature: Hex) => {
-      return pack1271Signature({
+      return pack1271EOASignature({
         validationSignature: signature,
         entityId,
       });
@@ -168,14 +170,7 @@ export const singleSignerMessageSigner = (
 
       const sig = await signer.signTypedData(data);
 
-      const isDeferredAction =
-        typedDataDefinition.primaryType === "DeferredAction" &&
-        typedDataDefinition.domain != null &&
-        // @ts-expect-error the domain type I think changed in viem, so this is not working correctly (TODO: fix this)
-        "verifyingContract" in typedDataDefinition.domain &&
-        typedDataDefinition.domain.verifyingContract === accountAddress;
-
-      return isDeferredAction
+      return isDeferredAction(typedDataDefinition, accountAddress)
         ? concat([SignatureType.EOA, sig])
         : signingMethods.formatSign(sig);
     },

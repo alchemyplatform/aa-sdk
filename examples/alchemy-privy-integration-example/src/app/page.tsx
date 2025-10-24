@@ -50,7 +50,7 @@ export default function Home() {
       <div className="header">
         <h1>Alchemy + Privy Integration Example</h1>
         <p style={{ color: "#666" }}>
-          Demonstrating gas sponsorship and token swaps with EIP-7702 delegation
+          Demonstrating gas sponsorship and token swaps with owner auth mode
         </p>
       </div>
 

@@ -1,8 +1,7 @@
 import { useCallback, useState } from "react";
-import { type Address, type Hex, isHex } from "viem";
+import { type Hex, isHex } from "viem";
 import { useAlchemyClient } from "./useAlchemyClient.js";
 import { useAlchemyConfig } from "../Provider.js";
-import { useEmbeddedWallet } from "./internal/useEmbeddedWallet.js";
 import type {
   UnsignedTransactionRequest,
   SendTransactionOptions,
@@ -69,7 +68,6 @@ function normalizeValue(value: string | number | bigint): Hex {
 export function useAlchemySendTransaction(): UseSendTransactionResult {
   const { getClient } = useAlchemyClient();
   const config = useAlchemyConfig();
-  const getEmbeddedWallet = useEmbeddedWallet();
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
@@ -84,8 +82,7 @@ export function useAlchemySendTransaction(): UseSendTransactionResult {
       setError(null);
 
       try {
-        const client = await getClient();
-        const embeddedWallet = getEmbeddedWallet();
+        const { client, account } = await getClient();
 
         // Determine if transaction should be sponsored
         const hasPolicyId = !!config.policyId;
@@ -103,23 +100,24 @@ export function useAlchemySendTransaction(): UseSendTransactionResult {
           value: txn.value ? normalizeValue(txn.value) : undefined,
         }));
 
-        // Build capabilities based on sponsorship
+        // Build capabilities based on sponsorship and auth mode
         const policyId = Array.isArray(config.policyId)
           ? config.policyId[0]
           : config.policyId;
 
-        const capabilities: {
-          eip7702Auth: true;
-          paymasterService?: { policyId: string };
-        } = { eip7702Auth: true };
+        type Capabilities =
+          | { eip7702Auth: true; paymasterService?: { policyId: string } }
+          | { paymasterService?: { policyId: string } };
+        const capabilities: Capabilities =
+          config.accountAuthMode === "eip7702" ? { eip7702Auth: true } : {};
 
         if (shouldSponsor && policyId) {
           capabilities.paymasterService = { policyId };
         }
 
-        // Send the transaction(s)
+        // Send the transaction(s) from the smart account address
         const result = await client.sendCalls({
-          from: embeddedWallet.address as Address,
+          from: account.address,
           calls: formattedCalls,
           capabilities,
         });
@@ -153,7 +151,12 @@ export function useAlchemySendTransaction(): UseSendTransactionResult {
         setIsLoading(false);
       }
     },
-    [getClient, getEmbeddedWallet, config.policyId, config.disableSponsorship],
+    [
+      getClient,
+      config.policyId,
+      config.disableSponsorship,
+      config.accountAuthMode,
+    ],
   );
 
   const reset = useCallback(() => {
