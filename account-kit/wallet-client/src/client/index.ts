@@ -1,4 +1,4 @@
-import { type SmartAccountSigner } from "@aa-sdk/core";
+import type { SmartAccountSigner } from "@aa-sdk/core";
 import type { AlchemyTransport } from "@account-kit/infra";
 import {
   type Address,
