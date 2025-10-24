@@ -32,7 +32,7 @@ export const buttonComponents: ComponentDef = {
     "@apply active:shadow-none": {},
   },
   ".akui-btn-primary": {
-    // "@apply bg-btn-primary text-fg-btn-primary": {},
+    "@apply bg-btn-primary text-fg-btn-primary": {},
   },
   ".akui-btn-secondary": {
     "@apply bg-btn-secondary text-fg-primary": {},
