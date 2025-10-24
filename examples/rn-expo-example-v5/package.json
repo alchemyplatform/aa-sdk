@@ -48,7 +48,9 @@
   },
   "expo": {
     "autolinking": {
-      "searchPaths": ["./node_modules"]
+      "searchPaths": [
+        "./node_modules"
+      ]
     }
   },
   "private": true
