@@ -52,12 +52,7 @@ export async function createAccount(
   const { counterfactualInfo: ci, ...accountParams } = params;
 
   if (params.delegation) {
-    if (
-      !isAddressEqual(
-        params.delegation,
-        "0x69007702764179f14F51cdce752f4f775d74E139",
-      )
-    ) {
+    if (!isAddressEqual(params.delegation, MAV2_7702_DELEGATION_ADDRESS)) {
       throw new Error("7702 mode currently only supports ModularAccountV2");
     }
     return createModularAccountV2({
@@ -136,3 +131,6 @@ export async function createAccount(
       return assertNever(factoryType, "Unsupported factory type");
   }
 }
+
+const MAV2_7702_DELEGATION_ADDRESS =
+  "0x69007702764179f14F51cdce752f4f775d74E139";
