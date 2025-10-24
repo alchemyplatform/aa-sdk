@@ -1,19 +1,24 @@
-import type { SmartAccountSigner } from "@aa-sdk/core";
+import { type SmartAccountSigner } from "@aa-sdk/core";
 import type { AlchemyTransport } from "@account-kit/infra";
 import {
   type Address,
   type Chain,
   type Prettify,
+  type Transport,
   createClient,
   custom,
+  type JsonRpcAccount,
 } from "viem";
 import type { InnerWalletApiClientBase } from "../types.ts";
 import {
   smartWalletClientActions,
   type SmartWalletActions,
 } from "./decorator.js";
-import { Provider } from "ox";
-import { WalletServerRpcSchema } from "@alchemy/wallet-api-types/rpc";
+import { Provider, RpcSchema } from "ox";
+import type {
+  WalletServerRpcSchemaType,
+  WalletServerViemRpcSchema,
+} from "@alchemy/wallet-api-types/rpc";
 import { internalStateDecorator } from "../internal/decorator.js";
 import { metrics } from "../metrics.js";
 
@@ -79,11 +84,18 @@ export function createSmartWalletClient(
       ? params.policyIds
       : undefined;
 
-  const innerClient = createClient({
+  const innerClient = createClient<
+    Transport,
+    Chain,
+    JsonRpcAccount<Address> | undefined,
+    WalletServerViemRpcSchema
+  >({
     transport: (opts) =>
-      custom(Provider.from(transport(opts), { schema: WalletServerRpcSchema }))(
-        opts,
-      ),
+      custom(
+        Provider.from(transport(opts), {
+          schema: RpcSchema.from<WalletServerRpcSchemaType>(),
+        }),
+      )(opts),
     chain,
     account,
   }).extend(() => ({

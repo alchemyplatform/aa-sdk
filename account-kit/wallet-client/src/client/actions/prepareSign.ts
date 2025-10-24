@@ -1,8 +1,8 @@
 import type { InnerWalletApiClient } from "../../types.ts";
 import { toHex, type Address, type IsUndefined } from "viem";
 import { AccountNotFoundError } from "@aa-sdk/core";
-import type { Static } from "@sinclair/typebox";
-import { wallet_prepareSign } from "@alchemy/wallet-api-types/rpc";
+import type { Static } from "typebox";
+import type { wallet_prepareSign } from "@alchemy/wallet-api-types/rpc";
 import { metrics } from "../../metrics.js";
 
 export type PrepareSignParams<

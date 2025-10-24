@@ -89,14 +89,14 @@
   resolved "https://registry.npmjs.org/@adraffy/ens-normalize/-/ens-normalize-1.11.0.tgz"
   integrity sha512-/3DDPKHqqIqxUULp8yP4zODUY1i+2xvVWsv8A79xGWdCAG+8sb0hRh0Rk2QyOJUnnbyPUAZYcpBuRe3nS2OIUg==
 
-"@alchemy/wallet-api-types@0.1.0-alpha.17":
-  version "0.1.0-alpha.17"
-  resolved "https://registry.yarnpkg.com/@alchemy/wallet-api-types/-/wallet-api-types-0.1.0-alpha.17.tgz#3ee54301712d31b31f8e59a812fb6c1bb7d786f5"
-  integrity sha512-ekweIMT8iQ7aDpdieOBW2ASop06kfkZ0+JGcckVfbwqombju0tp7IX1pGj+FihAQxM9R7VerVVHErBatbOnPQQ==
+"@alchemy/wallet-api-types@0.1.0-alpha.18":
+  version "0.1.0-alpha.18"
+  resolved "https://registry.yarnpkg.com/@alchemy/wallet-api-types/-/wallet-api-types-0.1.0-alpha.18.tgz#83b4e6d56c5e3b993f5cc3110588b9c21720aaa2"
+  integrity sha512-zhp1JjyM8eVIutl+iMcXfAYTVvtLTSGn2ty36akfx3eC4okUeVZilgt7N1qN6sx5ydJOPlhh3z1dRJJ0HC2DXA==
   dependencies:
-    "@sinclair/typebox" "^0.34.33"
     deep-equal "^2.2.3"
     ox "^0.6.12"
+    typebox "^1.0.0"
     viem "2.29.2"
 
 "@alloc/quick-lru@^5.2.0":
@@ -6696,11 +6696,6 @@
   version "0.33.22"
   resolved "https://registry.npmjs.org/@sinclair/typebox/-/typebox-0.33.22.tgz"
   integrity sha512-auUj4k+f4pyrIVf4GW5UKquSZFHJWri06QgARy9C0t9ZTjJLIuNIrr1yl9bWcJWJ1Gz1vOvYN1D+QPaIlNMVkQ==
-
-"@sinclair/typebox@^0.34.33":
-  version "0.34.33"
-  resolved "https://registry.npmjs.org/@sinclair/typebox/-/typebox-0.34.33.tgz"
-  integrity sha512-5HAV9exOMcXRUxo+9iYB5n09XxzCXnfy4VTNW4xnDv+FgjzAGY989C28BIdljKqmF+ZltUwujE3aossvcVtq6g==
 
 "@sindresorhus/merge-streams@^4.0.0":
   version "4.0.0"
@@ -26132,6 +26127,11 @@ type@^2.7.2:
   version "2.7.3"
   resolved "https://registry.npmjs.org/type/-/type-2.7.3.tgz"
   integrity sha512-8j+1QmAbPvLZow5Qpi6NCaN8FB60p/6x8/vfNqOk/hC+HuvFZhL4+WfekuhQLiqFZXOgQdrs3B+XxEmCc6b3FQ==
+
+typebox@^1.0.0:
+  version "1.0.43"
+  resolved "https://registry.yarnpkg.com/typebox/-/typebox-1.0.43.tgz#e796a1bc8c1a91027b7582bb174c989af3a390b0"
+  integrity sha512-NALtTG+DfndC+48JURdOQ6y6CrCEZl9xLM+BMNwFduUIUJv6AqqVT3ZcCf+jQ9uEJlLAhLyds/gkfufkpBh+2g==
 
 typed-array-buffer@^1.0.3:
   version "1.0.3"

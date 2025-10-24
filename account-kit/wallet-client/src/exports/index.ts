@@ -6,10 +6,7 @@ export {
   type SmartWalletClientParams,
 } from "../client/index.js";
 
-export {
-  WalletServerRpcSchema,
-  type WalletServerRpcSchemaType,
-} from "@alchemy/wallet-api-types/rpc";
+export type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
 
 // client actions
 export type * from "../client/actions/getCallsStatus.js";
