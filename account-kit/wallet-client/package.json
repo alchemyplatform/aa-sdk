@@ -47,12 +47,12 @@
     "@aa-sdk/core": "^4.75.0",
     "@account-kit/infra": "^4.75.0",
     "@account-kit/smart-contracts": "^4.75.0",
-    "@alchemy/wallet-api-types": "0.1.0-alpha.17",
     "deep-equal": "^2.2.3",
     "ox": "^0.6.12"
   },
   "devDependencies": {
-    "@sinclair/typebox": "^0.34.33",
+    "@alchemy/wallet-api-types": "0.1.0-alpha.18",
+    "typebox": "^1.0.0",
     "@types/deep-equal": "^1.0.4",
     "@types/node": "^24.0.11",
     "bun": "^1.2.18",

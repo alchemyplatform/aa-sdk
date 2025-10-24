@@ -2,7 +2,7 @@ import {
   type SmartAccountSigner,
   type SmartContractAccount,
 } from "@aa-sdk/core";
-import type { Static } from "@sinclair/typebox";
+import type { Static } from "typebox";
 import type { Address } from "abitype";
 import deepEqual from "deep-equal";
 import { custom } from "viem";

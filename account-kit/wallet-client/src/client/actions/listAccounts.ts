@@ -1,4 +1,4 @@
-import type { Static } from "@sinclair/typebox";
+import type { Static } from "typebox";
 import type { wallet_listAccounts } from "@alchemy/wallet-api-types/rpc";
 import type { InnerWalletApiClient } from "../../types.ts";
 import type { SmartAccountSigner } from "@aa-sdk/core";

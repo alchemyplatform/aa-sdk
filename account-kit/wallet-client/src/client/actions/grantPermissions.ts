@@ -5,11 +5,11 @@ import {
   type Hex,
   type IsUndefined,
   type Prettify,
+  concatHex,
 } from "viem";
 import type { InnerWalletApiClient } from "../../types.ts";
-import type { Static } from "@sinclair/typebox";
-import { wallet_createSession } from "@alchemy/wallet-api-types/rpc";
-import { encodePermissionsContext } from "@alchemy/wallet-api-types/capabilities";
+import type { Static } from "typebox";
+import type { wallet_createSession } from "@alchemy/wallet-api-types/rpc";
 import { signSignatureRequest } from "./signSignatureRequest.js";
 import { metrics } from "../../metrics.js";
 
@@ -116,10 +116,10 @@ export async function grantPermissions<
   const signature = await signSignatureRequest(signer, signatureRequest);
 
   return {
-    context: encodePermissionsContext({
-      contextVersion: "REMOTE_MODE_DEFERRED_ACTION",
+    context: concatHex([
+      "0x00", // remote mode
       sessionId,
-      signature: signature.data,
-    }),
+      signature.data,
+    ]),
   };
 }

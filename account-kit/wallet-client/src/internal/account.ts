@@ -5,12 +5,17 @@ import {
   createMultiOwnerLightAccount,
   createMultiOwnerModularAccount,
 } from "@account-kit/smart-contracts";
-import { concatHex, type Chain, type Transport, type Address } from "viem";
-import type { StaticDecode } from "@sinclair/typebox";
-import { SerializedInitcode } from "@alchemy/wallet-api-types";
+import {
+  concatHex,
+  type Chain,
+  type Transport,
+  type Address,
+  isAddressEqual,
+} from "viem";
+import type { StaticDecode } from "typebox";
+import type { SerializedInitcode } from "@alchemy/wallet-api-types";
 import { InternalError, InvalidRequestError } from "ox/RpcResponse";
 import { assertNever } from "../utils.js";
-import { getAccountTypeForDelegationAddress7702 } from "@alchemy/wallet-api-types/capabilities";
 import { metrics } from "../metrics.js";
 
 type CreateAccountParams = {
@@ -47,10 +52,7 @@ export async function createAccount(
   const { counterfactualInfo: ci, ...accountParams } = params;
 
   if (params.delegation) {
-    const accountType = getAccountTypeForDelegationAddress7702(
-      params.delegation,
-    );
-    if (accountType !== "ModularAccountV2") {
+    if (!isAddressEqual(params.delegation, MAV2_7702_DELEGATION_ADDRESS)) {
       throw new Error("7702 mode currently only supports ModularAccountV2");
     }
     return createModularAccountV2({
@@ -129,3 +131,6 @@ export async function createAccount(
       return assertNever(factoryType, "Unsupported factory type");
   }
 }
+
+const MAV2_7702_DELEGATION_ADDRESS =
+  "0x69007702764179f14F51cdce752f4f775d74E139";

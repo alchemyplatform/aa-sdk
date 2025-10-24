@@ -1,8 +1,8 @@
 import type { PrepareCallsResult } from "./prepareCalls.ts";
 import { BaseError, type SmartAccountSigner } from "@aa-sdk/core";
 import { signSignatureRequest } from "./signSignatureRequest.js";
-import type { Static } from "@sinclair/typebox";
-import { wallet_sendPreparedCalls } from "@alchemy/wallet-api-types/rpc";
+import type { Static } from "typebox";
+import type { wallet_sendPreparedCalls } from "@alchemy/wallet-api-types/rpc";
 import {
   type PreparedCall_Authorization,
   type PreparedCall_UserOpV060,
