@@ -1,7 +1,5 @@
 import { createLogger } from "@account-kit/logging";
 import { VERSION } from "./version.js";
-import type { StaticDecode } from "typebox";
-import type { SerializedInitcode } from "@alchemy/wallet-api-types";
 
 export type CoreEventsSchema = [
   {
@@ -14,7 +12,6 @@ export type CoreEventsSchema = [
     EventName: "account_initialized";
     EventData: {
       chainId: number;
-      factory: StaticDecode<typeof SerializedInitcode>["factoryType"] | "7702";
     };
   },
   {
