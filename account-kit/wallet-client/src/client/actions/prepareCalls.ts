@@ -1,10 +1,18 @@
 import { AccountNotFoundError } from "@aa-sdk/core";
 import { toHex, type Address, type IsUndefined } from "viem";
 import type { InnerWalletApiClient } from "../../types.ts";
-import type { Static } from "typebox";
-import type { wallet_prepareCalls } from "@alchemy/wallet-api-types/rpc";
+import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
 import { metrics } from "../../metrics.js";
 import { mergeClientCapabilities } from "../../internal/capabilities.js";
+
+type RpcSchema = Extract<
+  WalletServerRpcSchemaType,
+  {
+    Request: {
+      method: "wallet_prepareCalls";
+    };
+  }
+>;
 
 export type GetAccountParam<TAccount> =
   IsUndefined<TAccount> extends true
@@ -13,17 +21,10 @@ export type GetAccountParam<TAccount> =
 
 export type PrepareCallsParams<
   TAccount extends Address | undefined = Address | undefined,
-> = Omit<
-  Static<
-    (typeof wallet_prepareCalls)["properties"]["Request"]["properties"]["params"]
-  >[0],
-  "from" | "chainId"
-> &
+> = Omit<RpcSchema["Request"]["params"][0], "from" | "chainId"> &
   (IsUndefined<TAccount> extends true ? { from: Address } : { from?: never });
 
-export type PrepareCallsResult = Static<
-  typeof wallet_prepareCalls
->["ReturnType"];
+export type PrepareCallsResult = RpcSchema["ReturnType"];
 
 /**
  * Prepares a set of contract calls for execution by building a user operation.
