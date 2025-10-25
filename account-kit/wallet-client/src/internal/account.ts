@@ -12,7 +12,6 @@ import {
   type Address,
   isAddressEqual,
 } from "viem";
-import type { StaticDecode } from "typebox";
 import type { SerializedInitcode } from "@alchemy/wallet-api-types";
 import { InternalError, InvalidRequestError } from "ox/RpcResponse";
 import { assertNever } from "../utils.js";
@@ -23,7 +22,7 @@ type CreateAccountParams = {
   transport: Transport;
   signer: SmartAccountSigner;
   accountAddress: Address;
-  counterfactualInfo?: StaticDecode<typeof SerializedInitcode>; // undefined for 7702 accounts
+  counterfactualInfo?: SerializedInitcode; // undefined for 7702 accounts
   delegation?: Address; // for 7702 accounts
 };
 

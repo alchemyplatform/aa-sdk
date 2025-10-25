@@ -1,18 +1,24 @@
-import type { Static } from "typebox";
-import type { wallet_listAccounts } from "@alchemy/wallet-api-types/rpc";
+import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
 import type { InnerWalletApiClient } from "../../types.ts";
 import type { SmartAccountSigner } from "@aa-sdk/core";
 import type { Address } from "viem";
 import { metrics } from "../../metrics.js";
 
+type RpcSchema = Extract<
+  WalletServerRpcSchemaType,
+  {
+    Request: {
+      method: "wallet_listAccounts";
+    };
+  }
+>;
+
 export type ListAccountsParams = Omit<
-  Static<typeof wallet_listAccounts>["Request"]["params"][0],
+  RpcSchema["Request"]["params"][0],
   "signerAddress"
 > & { signerAddress?: Address };
 
-export type ListAccountsResult = Static<
-  typeof wallet_listAccounts
->["ReturnType"];
+export type ListAccountsResult = RpcSchema["ReturnType"];
 
 /**
  * Lists all smart accounts for a given signer using the wallet API client.

@@ -8,20 +8,23 @@ import {
   concatHex,
 } from "viem";
 import type { InnerWalletApiClient } from "../../types.ts";
-import type { Static } from "typebox";
-import type { wallet_createSession } from "@alchemy/wallet-api-types/rpc";
+import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
 import { signSignatureRequest } from "./signSignatureRequest.js";
 import { metrics } from "../../metrics.js";
+
+type RpcSchema = Extract<
+  WalletServerRpcSchemaType,
+  {
+    Request: {
+      method: "wallet_createSession";
+    };
+  }
+>;
 
 export type GrantPermissionsParams<
   TAccount extends Address | undefined = Address | undefined,
 > = Prettify<
-  Omit<
-    Static<
-      (typeof wallet_createSession)["properties"]["Request"]["properties"]["params"]
-    >[0],
-    "account" | "chainId"
-  > &
+  Omit<RpcSchema["Request"]["params"][0], "account" | "chainId"> &
     (IsUndefined<TAccount> extends true
       ? { account: Address }
       : { account?: never })

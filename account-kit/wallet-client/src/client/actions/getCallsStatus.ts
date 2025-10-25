@@ -1,15 +1,19 @@
 import type { InnerWalletApiClient } from "../../types.ts";
-import type { Static } from "typebox";
-import type { wallet_getCallsStatus } from "@alchemy/wallet-api-types/rpc";
+import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
 import { metrics } from "../../metrics.js";
 
-export type GetCallsStatusParams = Static<
-  typeof wallet_getCallsStatus
->["Request"]["params"][0];
+type RpcSchema = Extract<
+  WalletServerRpcSchemaType,
+  {
+    Request: {
+      method: "wallet_getCallsStatus";
+    };
+  }
+>;
 
-export type GetCallsStatusResult = Static<
-  typeof wallet_getCallsStatus
->["ReturnType"];
+export type GetCallsStatusParams = RpcSchema["Request"]["params"][0];
+
+export type GetCallsStatusResult = RpcSchema["ReturnType"];
 
 /**
  * Gets the status of a prepared call by its ID.
