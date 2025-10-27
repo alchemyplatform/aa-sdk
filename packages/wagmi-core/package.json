@@ -44,7 +44,7 @@
     "viem": "^2"
   },
   "devDependencies": {
-    "@alchemy/wallet-api-types": "^0.1.0-alpha.16",
+    "@alchemy/wallet-api-types": "^0.1.0-alpha.18",
     "typescript-template": "*"
   },
   "dependencies": {

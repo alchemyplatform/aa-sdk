@@ -1,27 +1,26 @@
 import { toHex, type Address, type IsUndefined, type Prettify } from "viem";
 import type { InnerWalletApiClient, OptionalChainId } from "../types.ts";
-import type { Static } from "@sinclair/typebox";
-import type { wallet_prepareCalls } from "@alchemy/wallet-api-types/rpc";
 import { AccountNotFoundError } from "@alchemy/common";
 import { mergeClientCapabilities } from "../utils/capabilities.js";
+import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
+
+type RpcSchema = Extract<
+  WalletServerRpcSchemaType,
+  {
+    Request: {
+      method: "wallet_prepareCalls";
+    };
+  }
+>;
 
 export type PrepareCallsParams<
   TAccount extends Address | undefined = Address | undefined,
 > = Prettify<
-  OptionalChainId<
-    Omit<
-      Static<
-        (typeof wallet_prepareCalls)["properties"]["Request"]["properties"]["params"]
-      >[0],
-      "from"
-    >
-  > &
+  OptionalChainId<Omit<RpcSchema["Request"]["params"][0], "from">> &
     (IsUndefined<TAccount> extends true ? { from: Address } : { from?: never })
 >;
 
-export type PrepareCallsResult = Prettify<
-  Static<typeof wallet_prepareCalls>["ReturnType"]
->;
+export type PrepareCallsResult = Prettify<RpcSchema["ReturnType"]>;
 
 /**
  * Prepares a set of contract calls for execution by building a user operation.

@@ -1,18 +1,23 @@
-import type { Static } from "@sinclair/typebox";
-import type { wallet_listAccounts } from "@alchemy/wallet-api-types/rpc";
 import type { InnerWalletApiClient } from "../types.ts";
 import type { Address, Prettify } from "viem";
+import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
+
+type RpcSchema = Extract<
+  WalletServerRpcSchemaType,
+  {
+    Request: {
+      method: "wallet_listAccounts";
+    };
+  }
+>;
 
 export type ListAccountsParams = Prettify<
-  Omit<
-    Static<typeof wallet_listAccounts>["Request"]["params"][0],
-    "signerAddress"
-  > & { signerAddress?: Address }
+  Omit<RpcSchema["Request"]["params"][0], "signerAddress"> & {
+    signerAddress?: Address;
+  }
 >;
 
-export type ListAccountsResult = Prettify<
-  Static<typeof wallet_listAccounts>["ReturnType"]
->;
+export type ListAccountsResult = Prettify<RpcSchema["ReturnType"]>;
 
 /**
  * Lists all smart accounts for a given signer using the wallet API client.

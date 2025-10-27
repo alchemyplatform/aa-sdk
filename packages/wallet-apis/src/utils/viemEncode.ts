@@ -9,7 +9,7 @@ import {
   type Signature,
   type UnionOmit,
 } from "viem";
-import { type PrepareCallsResult } from "@alchemy/wallet-apis";
+import type { PrepareCallsResult } from "@alchemy/wallet-apis";
 import { assertNever } from "@alchemy/common";
 import type { UserOperation } from "viem/account-abstraction";
 import type {
@@ -19,7 +19,7 @@ import type {
   PreparedCall_UserOpV060,
   PreparedCall_UserOpV070,
 } from "@alchemy/wallet-api-types";
-import { Capabilities as WalletApiCapabilities } from "@alchemy/wallet-api-types/capabilities";
+import type { Capabilities as WalletApiCapabilities } from "@alchemy/wallet-api-types/capabilities";
 
 export type ViemEncodedPreparedCalls =
   | (ViemEncodedUserOperationCall | ViemEncodedPaymasterPermitCall)
