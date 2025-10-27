@@ -105,7 +105,7 @@ jobs:
         run: yarn lint:docs
 
       # This ensures the job still *passes* when there were no doc changes.
-      - name: No docs changed — skipping lint (passing)
+      - name: No docs changed - skipping lint (passing)
         if: steps.gate.outputs.run != 'true'
         run: |
           echo "No documentation changes detected; skipping lint."
