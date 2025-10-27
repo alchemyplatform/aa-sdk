@@ -110,7 +110,6 @@ jobs:
         run: |
           echo "No documentation changes detected; skipping lint."
 
-
   check_broken_links:
     name: Check Broken Links
     runs-on: ubuntu-latest
