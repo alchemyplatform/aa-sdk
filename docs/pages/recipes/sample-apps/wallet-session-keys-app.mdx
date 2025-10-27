@@ -1,0 +1,27 @@
+---
+title: Session Keys App
+description:
+slug: wallets/recipes/sample-apps/session-keys-app
+---
+
+Below is a demo application that showcases Session Keys on Alchemy Smart Wallets.
+
+![Session Keys Demo](https://alchemyapi-res.cloudinary.com/image/upload/v1761582943/docs/Screenshot_2025-10-27_at_9.35.39_AM_nekcbs.png)
+
+This demo walks you through the flow of creating and using session keys with smart wallets. You'll learn how to request a smart account, create session keys with different permissions, authorize sessions, and execute transactions without repeated wallet signatures.
+
+## Key Features
+
+The demo includes step-by-step guidance through:
+
+- **Session Key Creation** — Generate temporary keys with scoped permissions
+- **Permission Types** — Choose from root permissions, native token transfers, or ERC20 token transfers
+- **Session Duration** — Set expiration (5 minutes, 1 hour, or 1 day)
+- **Authorization Flow** — See how session keys are authorized by the wallet owner
+- **Transaction Execution** — Execute multiple transactions using session keys without additional wallet approvals
+- **Real-time Feedback** — Watch transaction status updates on Sepolia
+
+This application uses our react hooks and built-in auth components to demonstrate the complete session key lifecycle.
+
+- **Hosted Demo**: https://wallet-session-key-app.vercel.app/
+- **Github**: https://github.com/alchemyplatform/wallet-session-key-app
