@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.75.4](https://github.com/alchemyplatform/aa-sdk/compare/v4.75.3...v4.75.4) (2025-10-27)
+
+### Bug Fixes
+
+- wallet client requires wallet-api-types as a non-dev dep ([#2210](https://github.com/alchemyplatform/aa-sdk/issues/2210)) ([de9571c](https://github.com/alchemyplatform/aa-sdk/commit/de9571cca3acf7dcf66b5fc28f3d0384b03845dc))
+
 ## [4.75.3](https://github.com/alchemyplatform/aa-sdk/compare/v4.75.2...v4.75.3) (2025-10-27)
 
 ### Bug Fixes
