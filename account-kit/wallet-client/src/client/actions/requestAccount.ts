@@ -2,19 +2,24 @@ import {
   type SmartAccountSigner,
   type SmartContractAccount,
 } from "@aa-sdk/core";
-import type { Static } from "@sinclair/typebox";
 import type { Address } from "abitype";
 import deepEqual from "deep-equal";
 import { custom } from "viem";
-import type { wallet_requestAccount } from "@alchemy/wallet-api-types/rpc";
+import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
 import type { InnerWalletApiClient } from "../../types.js";
 import { createAccount } from "../../internal/account.js";
 
+type RpcSchema = Extract<
+  WalletServerRpcSchemaType,
+  {
+    Request: {
+      method: "wallet_requestAccount";
+    };
+  }
+>;
+
 export type RequestAccountParams = Omit<
-  Extract<
-    Static<typeof wallet_requestAccount>["Request"]["params"][0],
-    { signerAddress: Address }
-  >,
+  Extract<RpcSchema["Request"]["params"][0], { signerAddress: Address }>,
   "signerAddress" | "includeCounterfactualInfo"
 > & { accountAddress?: Address };
 
