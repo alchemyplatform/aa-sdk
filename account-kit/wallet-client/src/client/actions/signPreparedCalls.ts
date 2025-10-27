@@ -1,8 +1,7 @@
 import type { PrepareCallsResult } from "./prepareCalls.ts";
 import { BaseError, type SmartAccountSigner } from "@aa-sdk/core";
 import { signSignatureRequest } from "./signSignatureRequest.js";
-import type { Static } from "typebox";
-import type { wallet_sendPreparedCalls } from "@alchemy/wallet-api-types/rpc";
+import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
 import type {
   PreparedCall_Authorization,
   PreparedCall_UserOpV060,
@@ -11,11 +10,18 @@ import type {
 import { metrics } from "../../metrics.js";
 import { assertNever } from "../../utils.js";
 
+type RpcSchema = Extract<
+  WalletServerRpcSchemaType,
+  {
+    Request: {
+      method: "wallet_sendPreparedCalls";
+    };
+  }
+>;
+
 export type SignPreparedCallsParams = PrepareCallsResult;
 
-export type SignPreparedCallsResult = Static<
-  (typeof wallet_sendPreparedCalls)["properties"]["Request"]["properties"]["params"]
->[0];
+export type SignPreparedCallsResult = RpcSchema["Request"]["params"][0];
 
 /**
  * Signs prepared calls using the provided signer.
