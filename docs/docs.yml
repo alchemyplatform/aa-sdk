@@ -75,6 +75,9 @@ navigation:
               - page: Onramp Funds
                 slug: recipes/onramp-funds
                 path: wallets/pages/recipes/onramp-funds.mdx
+              - page: Session Keys with Smart Wallets
+                slug: recipes/session-keys-with-smart-wallets
+                path: wallets/pages/recipes/wallet-session-keys.mdx
               - page: Hyperliquid Transactions
                 slug: recipes/hyperliquid-wallets
                 path: wallets/pages/recipes/hyperliquid-wallets.mdx
@@ -94,6 +97,9 @@ navigation:
                   - page: Social Payments and Defi
                     slug: recipes/sample-apps/social-payments-and-defi
                     path: wallets/pages/recipes/sample-apps/social-payments-and-defi.mdx
+                  - page: Session Keys App
+                    slug: recipes/sample-apps/session-keys-app
+                    path: wallets/pages/recipes/sample-apps/wallet-session-keys-app.mdx
           - page: Supported Chains
             path: wallets/pages/overview/supported-chains.mdx
 
