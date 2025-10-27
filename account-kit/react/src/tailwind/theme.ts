@@ -23,6 +23,7 @@ export function createDefaultTheme(): AccountKitTheme {
       "fg-secondary": createColorSet("#475569", "#E2E8F0"),
       "fg-tertiary": createColorSet("#94A3B8", "#94A3B8"),
       "fg-invert": createColorSet("#FFF", "#020617"),
+      "fg-btn-primary": createColorSet("#FFF", "#FFF"),
       "fg-disabled": createColorSet("#CBD5E1", "#475569"),
       "fg-accent-brand": createColorSet("#E82594", "#FF66CC"),
       "fg-critical": createColorSet("#B91C1C", "#F87171"),
