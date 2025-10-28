@@ -35,8 +35,10 @@ export interface PrivyAdapter {
   /**
    * Hook to get embedded wallet
    * Must be called as a React hook (follows rules of hooks)
+   *
+   * @param preferredAddress - Optional address to find a specific wallet
    */
-  useEmbeddedWallet(): () => EmbeddedWallet;
+  useEmbeddedWallet(preferredAddress?: string): () => EmbeddedWallet;
 
   /**
    * Hook to get Privy authentication state
@@ -48,14 +50,20 @@ export interface PrivyAdapter {
    * Hook to get current wallet address (for cache invalidation)
    * Returns undefined if no wallet is available
    * Must be called as a React hook (follows rules of hooks)
+   *
+   * @param preferredAddress - Optional address to find a specific wallet
    */
-  useWalletAddress(): string | undefined;
+  useWalletAddress(preferredAddress?: string): string | undefined;
 
   /**
    * Hook to get EIP-7702 authorization signer (optional, web only)
    * Must be called as a React hook (follows rules of hooks)
+   *
+   * @param preferredAddress - Optional address to find a specific wallet
    */
-  useAuthorizationSigner?():
+  useAuthorizationSigner?(
+    preferredAddress?: string,
+  ):
     | ((
         auth: AuthorizationRequest<number>,
       ) => Promise<Authorization<number, true>>)

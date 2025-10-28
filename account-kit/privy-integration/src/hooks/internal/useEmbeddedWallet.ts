@@ -1,4 +1,4 @@
-import { useAdapter } from "../../context/AlchemyContext.js";
+import { useAdapter, useAlchemyConfig } from "../../context/AlchemyContext.js";
 
 /**
  * Internal hook to get the Privy embedded wallet
@@ -10,5 +10,6 @@ import { useAdapter } from "../../context/AlchemyContext.js";
  */
 export function useEmbeddedWallet() {
   const adapter = useAdapter();
-  return adapter.useEmbeddedWallet();
+  const config = useAlchemyConfig();
+  return adapter.useEmbeddedWallet(config.walletAddress);
 }

@@ -38,8 +38,9 @@ export type AlchemyClientResult = {
  */
 export function useAlchemyClient() {
   const adapter = useAdapter();
-  const signAuthorizationFn = adapter.useAuthorizationSigner?.() || null;
   const config = useAlchemyConfig();
+  const signAuthorizationFn =
+    adapter.useAuthorizationSigner?.(config.walletAddress) || null;
   const cache = useClientCache();
   const getEmbeddedWallet = useEmbeddedWallet();
 

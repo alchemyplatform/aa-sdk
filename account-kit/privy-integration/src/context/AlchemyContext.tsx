@@ -68,7 +68,7 @@ export function AlchemyContextProvider({
   adapter,
 }: AlchemyContextProviderProps) {
   const { authenticated } = adapter.usePrivyAuth();
-  const walletAddress = adapter.useWalletAddress();
+  const walletAddress = adapter.useWalletAddress(config.walletAddress);
 
   // Normalize config with default values
   const normalizedConfig: NormalizedAlchemyConfig = {

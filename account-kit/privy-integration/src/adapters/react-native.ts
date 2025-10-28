@@ -25,19 +25,33 @@ interface ExpoEmbeddedWallet {
  * Implements platform-specific hooks for React Native applications
  */
 export const reactNativeAdapter: PrivyAdapter = {
-  useEmbeddedWallet() {
+  useEmbeddedWallet(preferredAddress?: string) {
     const { wallets } = useEmbeddedEthereumWallet();
 
     const getEmbeddedWallet = useCallback((): EmbeddedWallet => {
-      const wallet = wallets?.[0];
-      if (!wallet) {
+      if (!wallets || wallets.length === 0) {
         throw new Error(
           "Privy embedded wallet not found. Please ensure the user is authenticated and has created a wallet.",
         );
       }
 
+      // If a preferred address is specified, find that wallet
+      const wallet = preferredAddress
+        ? wallets.find(
+            (w) => w.address.toLowerCase() === preferredAddress.toLowerCase(),
+          )
+        : wallets[0];
+
+      if (!wallet) {
+        throw new Error(
+          preferredAddress
+            ? `Privy embedded wallet with address ${preferredAddress} not found.`
+            : "Privy embedded wallet not found. Please ensure the user is authenticated and has created a wallet.",
+        );
+      }
+
       return adaptExpoWallet(wallet);
-    }, [wallets]);
+    }, [wallets, preferredAddress]);
 
     return getEmbeddedWallet;
   },
@@ -47,22 +61,50 @@ export const reactNativeAdapter: PrivyAdapter = {
     return { authenticated: !!user, user };
   },
 
-  useWalletAddress(): string | undefined {
+  useWalletAddress(preferredAddress?: string): string | undefined {
     const { wallets } = useEmbeddedEthereumWallet();
-    return wallets?.[0]?.address;
+
+    if (!wallets || wallets.length === 0) {
+      return undefined;
+    }
+
+    // If a preferred address is specified, find that wallet
+    if (preferredAddress) {
+      const wallet = wallets.find(
+        (w) => w.address.toLowerCase() === preferredAddress.toLowerCase(),
+      );
+      return wallet?.address;
+    }
+
+    // Otherwise return the first wallet
+    return wallets[0]?.address;
   },
 
-  useAuthorizationSigner() {
+  useAuthorizationSigner(preferredAddress?: string) {
     const { wallets } = useEmbeddedEthereumWallet();
 
     const signAuthorization = useCallback(
       async (
         unsignedAuth: AuthorizationRequest<number>,
       ): Promise<Authorization<number, true>> => {
-        const wallet = wallets?.[0];
-        if (!wallet) {
+        if (!wallets || wallets.length === 0) {
           throw new Error(
             "Privy embedded wallet not found. Please ensure the user is authenticated and has created a wallet.",
+          );
+        }
+
+        // If a preferred address is specified, find that wallet
+        const wallet = preferredAddress
+          ? wallets.find(
+              (w) => w.address.toLowerCase() === preferredAddress.toLowerCase(),
+            )
+          : wallets[0];
+
+        if (!wallet) {
+          throw new Error(
+            preferredAddress
+              ? `Privy embedded wallet with address ${preferredAddress} not found.`
+              : "Privy embedded wallet not found. Please ensure the user is authenticated and has created a wallet.",
           );
         }
 
@@ -109,7 +151,7 @@ export const reactNativeAdapter: PrivyAdapter = {
           ...parsedSignature,
         };
       },
-      [wallets],
+      [wallets, preferredAddress],
     );
 
     return signAuthorization;
