@@ -58,7 +58,7 @@ export async function requestAccount(
             ...params,
             signerAddress:
               (params && "signerAddress" in params
-                ? params?.signerAddress
+                ? params.signerAddress
                 : undefined) ?? client.owner.account.address,
             includeCounterfactualInfo: true,
           };
