@@ -1,4 +1,4 @@
-import { AccountNotFoundError, type SmartAccountSigner } from "@aa-sdk/core";
+import { AccountNotFoundError } from "@aa-sdk/core";
 import {
   toHex,
   type Address,
@@ -6,11 +6,15 @@ import {
   type IsUndefined,
   type Prettify,
   concatHex,
+  serializeSignature,
 } from "viem";
 import type { InnerWalletApiClient } from "../../types.ts";
 import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
 import { signSignatureRequest } from "./signSignatureRequest.js";
 import { metrics } from "../../metrics.js";
+import type { SmartWalletSigner } from "../index.js";
+import { isWebAuthnSigner } from "../../utils.js";
+import type { EcdsaSig } from "@alchemy/wallet-api-types";
 
 type RpcSchema = Extract<
   WalletServerRpcSchemaType,
@@ -93,7 +97,7 @@ export async function grantPermissions<
   TAccount extends Address | undefined = Address | undefined,
 >(
   client: InnerWalletApiClient,
-  signer: SmartAccountSigner,
+  signer: SmartWalletSigner,
   params: GrantPermissionsParams<TAccount>,
 ): Promise<GrantPermissionsResult> {
   metrics.trackEvent({
@@ -103,6 +107,12 @@ export async function grantPermissions<
   const account = params.account ?? client.account?.address;
   if (!account) {
     throw new AccountNotFoundError();
+  }
+
+  if (isWebAuthnSigner(signer)) {
+    throw new Error(
+      "WebAuthn signer is not currently supported for grantPermissions",
+    );
   }
 
   const { sessionId, signatureRequest } = await client.request({
@@ -116,13 +126,36 @@ export async function grantPermissions<
     ],
   });
 
-  const signature = await signSignatureRequest(signer, signatureRequest);
+  const signature = (await signSignatureRequest(
+    signer,
+    signatureRequest,
+  )) as EcdsaSig["signature"];
+
+  let signatureHex: Hex;
+  if (typeof signature.data === "string") {
+    signatureHex = signature.data;
+  } else {
+    const sigData = signature.data;
+    if ("yParity" in sigData) {
+      signatureHex = serializeSignature({
+        r: sigData.r,
+        s: sigData.s,
+        yParity: Number(sigData.yParity),
+      });
+    } else {
+      signatureHex = serializeSignature({
+        r: sigData.r,
+        s: sigData.s,
+        v: BigInt(sigData.v),
+      });
+    }
+  }
 
   return {
     context: concatHex([
       "0x00", // remote mode
       sessionId,
-      signature.data,
+      signatureHex,
     ]),
   };
 }

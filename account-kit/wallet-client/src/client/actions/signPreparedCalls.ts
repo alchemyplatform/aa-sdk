@@ -1,5 +1,5 @@
 import type { PrepareCallsResult } from "./prepareCalls.ts";
-import { BaseError, type SmartAccountSigner } from "@aa-sdk/core";
+import { BaseError } from "@aa-sdk/core";
 import { signSignatureRequest } from "./signSignatureRequest.js";
 import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
 import type {
@@ -8,7 +8,8 @@ import type {
   PreparedCall_UserOpV070,
 } from "@alchemy/wallet-api-types";
 import { metrics } from "../../metrics.js";
-import { assertNever } from "../../utils.js";
+import { assertNever, isWebAuthnSigner } from "../../utils.js";
+import type { SmartWalletSigner } from "../index.js";
 
 type RpcSchema = Extract<
   WalletServerRpcSchemaType,
@@ -31,7 +32,7 @@ export type SignPreparedCallsResult = RpcSchema["Request"]["params"][0];
  * @returns {Promise<SignPreparedCallsResult>} A Promise that resolves to the signed calls
  */
 export async function signPreparedCalls(
-  signer: SmartAccountSigner,
+  signer: SmartWalletSigner,
   params: SignPreparedCallsParams,
 ): Promise<SignPreparedCallsResult> {
   metrics.trackEvent({
@@ -43,6 +44,11 @@ export async function signPreparedCalls(
 
   const signAuthorizationCall = async (call: PreparedCall_Authorization) => {
     const { signatureRequest: _signatureRequest, ...rest } = call;
+    if (isWebAuthnSigner(signer)) {
+      throw new Error(
+        "WebAuthn account cannot sign EIP-7702 authorization requests",
+      );
+    }
     const signature = await signSignatureRequest(signer, {
       type: "eip7702Auth",
       data: {

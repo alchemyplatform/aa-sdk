@@ -1,15 +1,19 @@
 import type { SmartAccountSigner } from "@aa-sdk/core";
-import { type Hex, hexToNumber, serializeSignature } from "viem";
-import { assertNever } from "../../utils.js";
+import { hexToNumber, serializeSignature } from "viem";
+import { assertNever, isWebAuthnSigner } from "../../utils.js";
 import type {
   PersonalSignSignatureRequest,
   TypedDataSignatureRequest,
   AuthorizationSignatureRequest,
   Eip7702UnsignedAuth,
+  UserOpSig,
+  EcdsaSig,
 } from "@alchemy/wallet-api-types";
 import { vToYParity } from "ox/Signature";
 import type { WithoutRawPayload } from "../../types.ts";
 import { metrics } from "../../metrics.js";
+import type { SmartWalletSigner, WebAuthnSigner } from "../index.js";
+import { toWebAuthnAccount } from "viem/account-abstraction";
 
 export type SignSignatureRequestParams = WithoutRawPayload<
   | PersonalSignSignatureRequest
@@ -19,10 +23,25 @@ export type SignSignatureRequestParams = WithoutRawPayload<
     })
 >;
 
-export type SignSignatureRequestResult = {
-  type: "secp256k1";
-  data: Hex;
-};
+export type SignSignatureRequestResult = UserOpSig["signature"];
+
+// Overload: Authorization requests always return ECDSA signatures
+export async function signSignatureRequest(
+  signer: SmartAccountSigner,
+  params: WithoutRawPayload<
+    AuthorizationSignatureRequest & {
+      data: Eip7702UnsignedAuth;
+    }
+  >,
+): Promise<EcdsaSig["signature"]>;
+
+// Overload: User operation requests can return ECDSA or WebAuthn signatures
+export async function signSignatureRequest(
+  signer: SmartAccountSigner | WebAuthnSigner,
+  params: WithoutRawPayload<
+    PersonalSignSignatureRequest | TypedDataSignatureRequest
+  >,
+): Promise<UserOpSig["signature"]>;
 
 /**
  * Signs a signature request using the provided signer.
@@ -56,7 +75,7 @@ export type SignSignatureRequestResult = {
  */
 
 export async function signSignatureRequest(
-  signer: SmartAccountSigner,
+  signer: SmartWalletSigner,
   params: SignSignatureRequestParams,
 ): Promise<SignSignatureRequestResult> {
   metrics.trackEvent({
@@ -68,18 +87,55 @@ export async function signSignatureRequest(
 
   switch (params.type) {
     case "personal_sign": {
+      if (isWebAuthnSigner(signer)) {
+        const webAuthnAccount = toWebAuthnAccount({ ...signer });
+
+        const { signature, webauthn: metadata } =
+          await webAuthnAccount.signMessage({
+            message: params.data,
+          });
+
+        return {
+          type: "webauthn-p256",
+          data: {
+            signature,
+            metadata,
+          },
+        };
+      }
+
       return {
         type: "secp256k1",
         data: await signer.signMessage(params.data),
       };
     }
     case "eth_signTypedData_v4": {
+      if (isWebAuthnSigner(signer)) {
+        const webAuthnAccount = toWebAuthnAccount({ ...signer });
+
+        const { signature, webauthn: metadata } =
+          await webAuthnAccount.signTypedData(params.data);
+
+        return {
+          type: "webauthn-p256",
+          data: {
+            signature,
+            metadata,
+          },
+        };
+      }
       return {
         type: "secp256k1",
         data: await signer.signTypedData(params.data),
       };
     }
     case "eip7702Auth": {
+      if (isWebAuthnSigner(signer)) {
+        throw new Error(
+          "WebAuthn account cannot sign EIP-7702 authorization requests",
+        );
+      }
+
       if (!signer.signAuthorization) {
         throw new Error("Signer does not implement signAuthorization");
       }

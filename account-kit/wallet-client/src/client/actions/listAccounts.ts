@@ -1,8 +1,13 @@
 import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
 import type { InnerWalletApiClient } from "../../types.ts";
-import type { SmartAccountSigner } from "@aa-sdk/core";
 import type { Address } from "viem";
 import { metrics } from "../../metrics.js";
+import type { SmartWalletSigner } from "../index.js";
+import type { WebAuthnPublicKey } from "@alchemy/wallet-api-types";
+import {
+  credentialToWebAuthnPublicKey,
+  isWebAuthnSigner,
+} from "../../utils.js";
 
 type RpcSchema = Extract<
   WalletServerRpcSchemaType,
@@ -15,8 +20,9 @@ type RpcSchema = Extract<
 
 export type ListAccountsParams = Omit<
   RpcSchema["Request"]["params"][0],
-  "signerAddress"
-> & { signerAddress?: Address };
+  "signerAddress" | "signerPublicKey"
+> &
+  ({ signerAddress: Address } | { signerPublicKey: WebAuthnPublicKey } | {});
 
 export type ListAccountsResult = RpcSchema["ReturnType"];
 
@@ -49,21 +55,44 @@ export type ListAccountsResult = RpcSchema["ReturnType"];
  */
 export async function listAccounts(
   client: InnerWalletApiClient,
-  signer: SmartAccountSigner,
+  signer: SmartWalletSigner,
   params: ListAccountsParams,
 ): Promise<ListAccountsResult> {
   metrics.trackEvent({
     name: "list_accounts",
   });
 
-  const signerAddress = params.signerAddress ?? (await signer.getAddress());
+  // Coalesce:
+  // signerAddress or signerPublicKey in params takes priority
+  // if not present, then fallback to client's attached signer
+
+  const signerArg =
+    "signerAddress" in params
+      ? { signerAddress: params.signerAddress }
+      : "signerPublicKey" in params
+        ? {
+            signerPublicKey: {
+              ...params.signerPublicKey,
+              type: "webauthn-p256" as const,
+            },
+          }
+        : isWebAuthnSigner(signer)
+          ? {
+              signerPublicKey: {
+                ...credentialToWebAuthnPublicKey(signer.credential),
+                type: "webauthn-p256" as const,
+              },
+            }
+          : ({
+              signerAddress: await signer.getAddress(),
+            } satisfies RpcSchema["Request"]["params"][0]);
 
   return client.request({
     method: "wallet_listAccounts",
     params: [
       {
         ...params,
-        signerAddress,
+        ...signerArg,
       },
     ],
   });

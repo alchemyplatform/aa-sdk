@@ -6,7 +6,10 @@ import {
   type UserOperationRequest,
   AccountNotFoundError,
 } from "@aa-sdk/core";
-import type { SmartWalletClient } from "@account-kit/wallet-client";
+import type {
+  SignSignatureRequestResult,
+  SmartWalletClient,
+} from "@account-kit/wallet-client";
 import {
   useMutation,
   type UseMutateAsyncFunction,
@@ -179,9 +182,10 @@ export function useSendCalls<
         let preparedCalls = await _smartWalletClient.prepareCalls(params);
 
         if (preparedCalls.type === "paymaster-permit") {
-          const signature = await _smartWalletClient.signSignatureRequest(
+          const signature = (await _smartWalletClient.signSignatureRequest(
             preparedCalls.signatureRequest,
-          );
+            // It is not possible to attach a webauthn signer to account-kit/core, so this assertion is safe to make
+          )) as Exclude<SignSignatureRequestResult, { type: "webauthn-p256" }>;
 
           const params = {
             calls: preparedCalls.modifiedRequest.calls,
