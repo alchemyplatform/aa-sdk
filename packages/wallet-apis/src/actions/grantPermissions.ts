@@ -7,23 +7,24 @@ import {
   concatHex,
 } from "viem";
 import type { InnerWalletApiClient } from "../types.ts";
-import type { Static } from "@sinclair/typebox";
-import type { wallet_createSession } from "@alchemy/wallet-api-types/rpc";
+import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
 import { signSignatureRequest } from "./signSignatureRequest.js";
 import { AccountNotFoundError } from "@alchemy/common";
 import type { OptionalChainId } from "../types.ts";
 
+type RpcSchema = Extract<
+  WalletServerRpcSchemaType,
+  {
+    Request: {
+      method: "wallet_createSession";
+    };
+  }
+>;
+
 export type GrantPermissionsParams<
   TAccount extends Address | undefined = Address | undefined,
 > = Prettify<
-  OptionalChainId<
-    Omit<
-      Static<
-        (typeof wallet_createSession)["properties"]["Request"]["properties"]["params"]
-      >[0],
-      "account"
-    >
-  > &
+  OptionalChainId<Omit<RpcSchema["Request"]["params"][0], "account">> &
     (IsUndefined<TAccount> extends true
       ? { account: Address }
       : { account?: never })

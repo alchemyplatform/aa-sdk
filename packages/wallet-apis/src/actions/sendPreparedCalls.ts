@@ -1,19 +1,21 @@
-import type { Static } from "@sinclair/typebox";
 import { toHex, type Prettify } from "viem";
-import type { wallet_sendPreparedCalls } from "@alchemy/wallet-api-types/rpc";
+import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
 import type { InnerWalletApiClient, OptionalChainId } from "../types.ts";
 
-export type SendPreparedCallsParams = Prettify<
-  OptionalChainId<
-    Static<
-      (typeof wallet_sendPreparedCalls)["properties"]["Request"]["properties"]["params"]
-    >[0]
-  >
+type RpcSchema = Extract<
+  WalletServerRpcSchemaType,
+  {
+    Request: {
+      method: "wallet_sendPreparedCalls";
+    };
+  }
 >;
 
-export type SendPreparedCallsResult = Prettify<
-  Static<typeof wallet_sendPreparedCalls>["ReturnType"]
+export type SendPreparedCallsParams = Prettify<
+  OptionalChainId<RpcSchema["Request"]["params"][0]>
 >;
+
+export type SendPreparedCallsResult = Prettify<RpcSchema["ReturnType"]>;
 
 /**
  * Sends prepared calls by submitting a signed user operation.

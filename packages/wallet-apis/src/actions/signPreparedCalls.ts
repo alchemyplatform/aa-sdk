@@ -1,6 +1,4 @@
-import type { Static } from "@sinclair/typebox";
 import { assertNever, BaseError } from "@alchemy/common";
-import type { wallet_sendPreparedCalls } from "@alchemy/wallet-api-types/rpc";
 import type { PrepareCallsResult } from "./prepareCalls.ts";
 import { signSignatureRequest } from "./signSignatureRequest.js";
 import type { Prettify } from "viem";
@@ -10,14 +8,11 @@ import type {
   PreparedCall_UserOpV070,
 } from "@alchemy/wallet-api-types";
 import type { InnerWalletApiClient } from "../types.js";
+import type { SendPreparedCallsParams } from "./sendPreparedCalls.js";
 
 export type SignPreparedCallsParams = Prettify<PrepareCallsResult>;
 
-export type SignPreparedCallsResult = Prettify<
-  Static<
-    (typeof wallet_sendPreparedCalls)["properties"]["Request"]["properties"]["params"]
-  >[0]
->;
+export type SignPreparedCallsResult = SendPreparedCallsParams;
 
 /**
  * Signs prepared calls using the provided signer.

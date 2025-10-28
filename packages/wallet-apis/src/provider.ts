@@ -24,7 +24,7 @@ import {
   createSmartWalletClientAndRequestAccount,
   type CreateSmartWalletClientParams,
 } from "./client.js";
-import type { CreationOptions } from "@alchemy/wallet-api-types";
+import type { CreationOptionsBySignerAddress } from "@alchemy/wallet-api-types";
 import { viemDecodeCapabilities } from "./utils/viemDecode.js";
 
 export type SmartWalletClient1193Methods = [
@@ -46,12 +46,14 @@ const handler = createEip1193HandlerFactory<SmartWalletClient1193Methods>();
  * wallet client to sign requests.
  *
  * @param {CreateSmartWalletClientParams<undefined>} clientParams Parameters for creating the provider.
- * @param {CreationOptions | { accountAddress: Address }} accountOptions Options for the created smart wallet account.
+ * @param {CreationOptionsBySignerAddress | { accountAddress: Address }} accountOptions Options for the created smart wallet account.
  * @returns {SmartWalletClientEip1193Provider} The created provider.
  */
 export const createEip1193Provider = (
   clientParams: CreateSmartWalletClientParams<undefined>,
-  accountOptions: CreationOptions | { accountAddress: Address } = {},
+  accountOptions:
+    | CreationOptionsBySignerAddress
+    | { accountAddress: Address } = {},
 ): SmartWalletClientEip1193Provider => {
   let clientPromise: Promise<SmartWalletClient<Address>> | undefined;
 

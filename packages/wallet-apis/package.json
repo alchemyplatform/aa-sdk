@@ -50,14 +50,15 @@
     "test:run": "vitest run"
   },
   "devDependencies": {
-    "@alchemy/wallet-api-types": "^0.1.0-alpha.16",
-    "@sinclair/typebox": "^0.34.38",
+    "typebox": "^1.0.0",
     "@types/deep-equal": "^1.0.4",
     "typescript-template": "*"
   },
   "dependencies": {
     "@alchemy/common": "*",
+    "@alchemy/wallet-api-types": "^0.1.0-alpha.18",
     "deep-equal": "^2.2.3",
+    "ox": "^0.6.12",
     "viem": "2.29.2"
   },
   "publishConfig": {

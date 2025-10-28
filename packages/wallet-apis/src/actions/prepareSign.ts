@@ -1,26 +1,25 @@
 import type { InnerWalletApiClient, OptionalChainId } from "../types.ts";
 import { toHex, type Address, type IsUndefined, type Prettify } from "viem";
-import type { Static } from "@sinclair/typebox";
-import type { wallet_prepareSign } from "@alchemy/wallet-api-types/rpc";
+import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
 import { AccountNotFoundError } from "@alchemy/common";
+
+type RpcSchema = Extract<
+  WalletServerRpcSchemaType,
+  {
+    Request: {
+      method: "wallet_prepareSign";
+    };
+  }
+>;
 
 export type PrepareSignParams<
   TAccount extends Address | undefined = Address | undefined,
 > = Prettify<
-  OptionalChainId<
-    Omit<
-      Static<
-        (typeof wallet_prepareSign)["properties"]["Request"]["properties"]["params"]
-      >[0],
-      "from"
-    >
-  > &
+  OptionalChainId<Omit<RpcSchema["Request"]["params"][0], "from">> &
     (IsUndefined<TAccount> extends true ? { from: Address } : { from?: never })
 >;
 
-export type PrepareSignResult = Prettify<
-  Static<typeof wallet_prepareSign>["ReturnType"]
->;
+export type PrepareSignResult = Prettify<RpcSchema["ReturnType"]>;
 
 /**
  * Prepares a signature request for signing messages or transactions.
