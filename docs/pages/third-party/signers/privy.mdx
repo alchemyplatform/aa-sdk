@@ -79,7 +79,7 @@ Upgrade existing Privy wallets to Smart Wallets to enable gasless transactions (
     - `solanaRpcUrl` (optional) for Solana RPC URL (separate from EVM)
     - `disableSponsorship` (optional) to opt-out per default
     - `accountAuthMode` (optional) - `'eip7702'` (default, recommended) or `'owner'` for a traditional smart account
-    - `walletAddress` (optional) - specify which wallet address to use if user has multiple wallets (defaults to first embedded wallet)
+    - `walletAddress` (optional) - specify which wallet address to use if user has multiple wallets (defaults to first wallet)
 
     ### 2. Send Gasless Transactions
 
@@ -513,7 +513,7 @@ Upgrade existing Privy wallets to Smart Wallets to enable gasless transactions (
         appSecret: PRIVY_APP_SECRET,
       });
 
-      // Create or get a Privy embedded wallet
+      // Create or get a Privy wallet
       const wallet = await privyClient.wallets().create({
         chain_type: "ethereum",
       });
