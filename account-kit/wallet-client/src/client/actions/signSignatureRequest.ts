@@ -1,11 +1,11 @@
 import type { SmartAccountSigner } from "@aa-sdk/core";
 import { type Hex, hexToNumber, serializeSignature } from "viem";
 import { assertNever } from "../../utils.js";
-import {
-  type PersonalSignSignatureRequest,
-  type TypedDataSignatureRequest,
-  type AuthorizationSignatureRequest,
-  type Eip7702UnsignedAuth,
+import type {
+  PersonalSignSignatureRequest,
+  TypedDataSignatureRequest,
+  AuthorizationSignatureRequest,
+  Eip7702UnsignedAuth,
 } from "@alchemy/wallet-api-types";
 import { vToYParity } from "ox/Signature";
 import type { WithoutRawPayload } from "../../types.ts";

@@ -5,23 +5,26 @@ import {
   type Hex,
   type IsUndefined,
   type Prettify,
+  concatHex,
 } from "viem";
 import type { InnerWalletApiClient } from "../../types.ts";
-import type { Static } from "@sinclair/typebox";
-import { wallet_createSession } from "@alchemy/wallet-api-types/rpc";
-import { encodePermissionsContext } from "@alchemy/wallet-api-types/capabilities";
+import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
 import { signSignatureRequest } from "./signSignatureRequest.js";
 import { metrics } from "../../metrics.js";
+
+type RpcSchema = Extract<
+  WalletServerRpcSchemaType,
+  {
+    Request: {
+      method: "wallet_createSession";
+    };
+  }
+>;
 
 export type GrantPermissionsParams<
   TAccount extends Address | undefined = Address | undefined,
 > = Prettify<
-  Omit<
-    Static<
-      (typeof wallet_createSession)["properties"]["Request"]["properties"]["params"]
-    >[0],
-    "account" | "chainId"
-  > &
+  Omit<RpcSchema["Request"]["params"][0], "account" | "chainId"> &
     (IsUndefined<TAccount> extends true
       ? { account: Address }
       : { account?: never })
@@ -116,10 +119,10 @@ export async function grantPermissions<
   const signature = await signSignatureRequest(signer, signatureRequest);
 
   return {
-    context: encodePermissionsContext({
-      contextVersion: "REMOTE_MODE_DEFERRED_ACTION",
+    context: concatHex([
+      "0x00", // remote mode
       sessionId,
-      signature: signature.data,
-    }),
+      signature.data,
+    ]),
   };
 }

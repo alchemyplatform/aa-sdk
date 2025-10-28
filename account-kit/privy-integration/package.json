@@ -1,6 +1,6 @@
 {
   "name": "@account-kit/privy-integration",
-  "version": "4.73.0",
+  "version": "4.76.0",
   "description": "Use Alchemy gas sponsorship, swaps and more with Privy",
   "author": "Alchemy",
   "license": "MIT",
@@ -11,9 +11,18 @@
   "types": "./dist/types/index.d.ts",
   "typings": "./dist/types/index.d.ts",
   "sideEffects": false,
+  "react-native": {
+    "main": "./dist/esm/react-native.js",
+    "./dist/esm/adapters/web.js": "./dist/esm/adapters/web.native.js",
+    "./dist/esm/providers/WebProvider.js": "./dist/esm/providers/WebProvider.native.js",
+    "./dist/esm/Provider.js": "./dist/esm/Provider.native.js",
+    "@privy-io/react-auth": false,
+    "@privy-io/react-auth/solana": false
+  },
   "files": [
     "dist",
     "src/**/*.ts",
+    "src/**/*.tsx",
     "!dist/**/*.tsbuildinfo",
     "!vitest.config.ts",
     "!.env",
@@ -23,9 +32,15 @@
   ],
   "exports": {
     ".": {
+      "react-native": "./dist/esm/react-native.js",
       "types": "./dist/types/index.d.ts",
       "import": "./dist/esm/index.js",
       "default": "./dist/esm/index.js"
+    },
+    "./react-native": {
+      "types": "./dist/types/react-native.d.ts",
+      "import": "./dist/esm/react-native.js",
+      "default": "./dist/esm/react-native.js"
     },
     "./solana": {
       "types": "./dist/types/solana.d.ts",
@@ -44,18 +59,26 @@
     "test:run": "vitest run --passWithNoTests"
   },
   "devDependencies": {
+    "@privy-io/expo": "0.58.1",
     "@privy-io/react-auth": "3.3.0",
     "typescript-template": "*"
   },
   "dependencies": {
-    "@account-kit/infra": "^4.73.0",
-    "@account-kit/wallet-client": "^4.73.0"
+    "@account-kit/infra": "^4.76.0",
+    "@account-kit/wallet-client": "^4.76.0"
   },
   "peerDependencies": {
+    "@privy-io/expo": "^0.58.1",
     "@privy-io/react-auth": "^2.3.1 || ^3.0.0",
     "viem": "^2.29.2"
   },
   "peerDependenciesMeta": {
+    "@privy-io/react-auth": {
+      "optional": true
+    },
+    "@privy-io/expo": {
+      "optional": true
+    },
     "@solana/web3.js": {
       "optional": true
     }

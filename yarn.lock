@@ -89,14 +89,14 @@
   resolved "https://registry.npmjs.org/@adraffy/ens-normalize/-/ens-normalize-1.11.0.tgz"
   integrity sha512-/3DDPKHqqIqxUULp8yP4zODUY1i+2xvVWsv8A79xGWdCAG+8sb0hRh0Rk2QyOJUnnbyPUAZYcpBuRe3nS2OIUg==
 
-"@alchemy/wallet-api-types@0.1.0-alpha.17":
-  version "0.1.0-alpha.17"
-  resolved "https://registry.yarnpkg.com/@alchemy/wallet-api-types/-/wallet-api-types-0.1.0-alpha.17.tgz#3ee54301712d31b31f8e59a812fb6c1bb7d786f5"
-  integrity sha512-ekweIMT8iQ7aDpdieOBW2ASop06kfkZ0+JGcckVfbwqombju0tp7IX1pGj+FihAQxM9R7VerVVHErBatbOnPQQ==
+"@alchemy/wallet-api-types@0.1.0-alpha.18":
+  version "0.1.0-alpha.18"
+  resolved "https://registry.yarnpkg.com/@alchemy/wallet-api-types/-/wallet-api-types-0.1.0-alpha.18.tgz#83b4e6d56c5e3b993f5cc3110588b9c21720aaa2"
+  integrity sha512-zhp1JjyM8eVIutl+iMcXfAYTVvtLTSGn2ty36akfx3eC4okUeVZilgt7N1qN6sx5ydJOPlhh3z1dRJJ0HC2DXA==
   dependencies:
-    "@sinclair/typebox" "^0.34.33"
     deep-equal "^2.2.3"
     ox "^0.6.12"
+    typebox "^1.0.0"
     viem "2.29.2"
 
 "@alloc/quick-lru@^5.2.0":
@@ -2378,7 +2378,7 @@
     "@ethersproject/constants" "^5.8.0"
     "@ethersproject/logger" "^5.8.0"
 
-"@ethersproject/transactions@^5.8.0":
+"@ethersproject/transactions@^5.7.0", "@ethersproject/transactions@^5.8.0":
   version "5.8.0"
   resolved "https://registry.npmjs.org/@ethersproject/transactions/-/transactions-5.8.0.tgz"
   integrity sha512-UglxSDjByHG0TuU17bDfCemZ3AnKO2vYrL5/2n2oXvKzvb7Cz+W9gOWXKARjp2URVwcWlQlPOEQyAviKwT4AHg==
@@ -4881,6 +4881,13 @@
   dependencies:
     playwright "1.52.0"
 
+"@privy-io/api-base@1.5.2":
+  version "1.5.2"
+  resolved "https://registry.yarnpkg.com/@privy-io/api-base/-/api-base-1.5.2.tgz#ca59943c485b19e3fe8cbc8f438281596b255350"
+  integrity sha512-0eJBoQNmCSsWSWhzEVSU8WqPm7bgeN6VaAmqeXvjk8Ni0jM8nyTYjmRAqiCSs3mRzsnlQVchkGR6lsMTHkHKbw==
+  dependencies:
+    zod "^3.24.3"
+
 "@privy-io/api-base@1.7.1":
   version "1.7.1"
   resolved "https://registry.yarnpkg.com/@privy-io/api-base/-/api-base-1.7.1.tgz#712310def47194d10e79c41afc3d262fe933c9cd"
@@ -4897,6 +4904,40 @@
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/@privy-io/ethereum/-/ethereum-0.0.2.tgz#1b6eddf48e5e0c3aa13adb8ca61f62496f744677"
   integrity sha512-FnJ1dzgg/tij4jLeKHLlZM9uNk4WN+iIOkc8CG0FZKUQxqXH60Fs/dMF6Xbndd5CQkUO8LUU7FLom/405VKXpQ==
+
+"@privy-io/expo@0.58.1":
+  version "0.58.1"
+  resolved "https://registry.yarnpkg.com/@privy-io/expo/-/expo-0.58.1.tgz#0479bcc51f27fa3216b75d7c1add5498d061786e"
+  integrity sha512-73s5r7lKg7pRPQwLPaeBDwwuNutPqqTkmQX/Ijve9hGCfYf5+HEJaEfAZ12iAAtv+I3JZ/5u/NMihJXCHXXv6Q==
+  dependencies:
+    "@privy-io/js-sdk-core" "0.53.2"
+    "@scure/base" "^1.2.4"
+    react-fast-compare "^3.2.2"
+    tweetnacl "^1.0.3"
+    zustand "^5.0.4"
+
+"@privy-io/js-sdk-core@0.53.2":
+  version "0.53.2"
+  resolved "https://registry.yarnpkg.com/@privy-io/js-sdk-core/-/js-sdk-core-0.53.2.tgz#86532b3f4bd1df1beec6b8463ce0170685291777"
+  integrity sha512-QeUjedOrdV3QiThR13TY8W9UT2T7T8hN3xz2TJYXP0Yl4hShpJZzs6xHZfyEUbyedPNMM1UH9pIy8wB0/jMCrQ==
+  dependencies:
+    "@ethersproject/abstract-signer" "^5.7.0"
+    "@ethersproject/bignumber" "^5.7.0"
+    "@ethersproject/contracts" "^5.7.0"
+    "@ethersproject/providers" "^5.7.2"
+    "@ethersproject/transactions" "^5.7.0"
+    "@ethersproject/units" "^5.7.0"
+    "@privy-io/api-base" "1.5.2"
+    "@privy-io/chains" "0.0.2"
+    "@privy-io/public-api" "2.42.0"
+    canonicalize "^2.0.0"
+    eventemitter3 "^5.0.1"
+    fetch-retry "^6.0.0"
+    jose "^4.15.5"
+    js-cookie "^3.0.5"
+    libphonenumber-js "^1.10.44"
+    set-cookie-parser "^2.6.0"
+    uuid ">=8 <10"
 
 "@privy-io/js-sdk-core@0.56.1":
   version "0.56.1"
@@ -4915,6 +4956,17 @@
     libphonenumber-js "^1.10.44"
     set-cookie-parser "^2.6.0"
     uuid ">=8 <10"
+
+"@privy-io/public-api@2.42.0":
+  version "2.42.0"
+  resolved "https://registry.yarnpkg.com/@privy-io/public-api/-/public-api-2.42.0.tgz#a402aeb29452fd09b5f737f815534518222733ee"
+  integrity sha512-cmo4Bx85f6zdxojjTmc9z+bxaoINGP8HzsMTor7e8olQcHvVxnol0otcMs1haG+6wrvZL7zn6+SBlQtK0bQmJg==
+  dependencies:
+    "@privy-io/api-base" "1.5.2"
+    bs58 "^5.0.0"
+    libphonenumber-js "^1.10.31"
+    viem "^2"
+    zod "^3.24.3"
 
 "@privy-io/public-api@2.49.0":
   version "2.49.0"
@@ -6448,7 +6500,7 @@
   resolved "https://registry.npmjs.org/@safe-global/safe-gateway-typescript-sdk/-/safe-gateway-typescript-sdk-3.23.1.tgz"
   integrity sha512-6ORQfwtEJYpalCeVO21L4XXGSdbEMfyp2hEv6cP82afKXSwvse6d3sdelgaPWUxHIsFRkWvHDdzh8IyyKHZKxw==
 
-"@scure/base@1.2.6", "@scure/base@^1.2.5", "@scure/base@~1.2.5":
+"@scure/base@1.2.6", "@scure/base@^1.2.4", "@scure/base@^1.2.5", "@scure/base@~1.2.5":
   version "1.2.6"
   resolved "https://registry.npmjs.org/@scure/base/-/base-1.2.6.tgz"
   integrity sha512-g/nm5FgUa//MCj1gV09zTJTaM6KBAHqLN907YVQqf7zC49+DcO4B1so4ZX07Ef10Twr6nuqYEH9GEggFXA4Fmg==
@@ -6696,11 +6748,6 @@
   version "0.33.22"
   resolved "https://registry.npmjs.org/@sinclair/typebox/-/typebox-0.33.22.tgz"
   integrity sha512-auUj4k+f4pyrIVf4GW5UKquSZFHJWri06QgARy9C0t9ZTjJLIuNIrr1yl9bWcJWJ1Gz1vOvYN1D+QPaIlNMVkQ==
-
-"@sinclair/typebox@^0.34.33":
-  version "0.34.33"
-  resolved "https://registry.npmjs.org/@sinclair/typebox/-/typebox-0.34.33.tgz"
-  integrity sha512-5HAV9exOMcXRUxo+9iYB5n09XxzCXnfy4VTNW4xnDv+FgjzAGY989C28BIdljKqmF+ZltUwujE3aossvcVtq6g==
 
 "@sindresorhus/merge-streams@^4.0.0":
   version "4.0.0"
@@ -26133,6 +26180,11 @@ type@^2.7.2:
   resolved "https://registry.npmjs.org/type/-/type-2.7.3.tgz"
   integrity sha512-8j+1QmAbPvLZow5Qpi6NCaN8FB60p/6x8/vfNqOk/hC+HuvFZhL4+WfekuhQLiqFZXOgQdrs3B+XxEmCc6b3FQ==
 
+typebox@^1.0.0:
+  version "1.0.43"
+  resolved "https://registry.yarnpkg.com/typebox/-/typebox-1.0.43.tgz#e796a1bc8c1a91027b7582bb174c989af3a390b0"
+  integrity sha512-NALtTG+DfndC+48JURdOQ6y6CrCEZl9xLM+BMNwFduUIUJv6AqqVT3ZcCf+jQ9uEJlLAhLyds/gkfufkpBh+2g==
+
 typed-array-buffer@^1.0.3:
   version "1.0.3"
   resolved "https://registry.npmjs.org/typed-array-buffer/-/typed-array-buffer-1.0.3.tgz"
@@ -27644,7 +27696,7 @@ zod@^3.24.3:
   resolved "https://registry.yarnpkg.com/zod/-/zod-3.25.76.tgz#26841c3f6fd22a6a2760e7ccb719179768471e34"
   integrity sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==
 
-zustand@4.4.1, zustand@5.0.3, zustand@^5.0.0, zustand@^5.0.0-rc.2, zustand@^5.0.1:
+zustand@4.4.1, zustand@5.0.3, zustand@^5.0.0, zustand@^5.0.0-rc.2, zustand@^5.0.1, zustand@^5.0.4:
   version "5.0.5"
   resolved "https://registry.npmjs.org/zustand/-/zustand-5.0.5.tgz"
   integrity sha512-mILtRfKW9xM47hqxGIxCv12gXusoY/xTSHBYApXozR0HmQv299whhBeeAcRy+KrPPybzosvJBCOmVjq6x12fCg==

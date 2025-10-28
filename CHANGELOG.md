@@ -3,6 +3,52 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.76.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.75.4...v4.76.0) (2025-10-28)
+
+### Bug Fixes
+
+- 'Continue' button color on dark ([#2205](https://github.com/alchemyplatform/aa-sdk/issues/2205)) ([f678a77](https://github.com/alchemyplatform/aa-sdk/commit/f678a77bb72eadcf21fa2ae88cb7c54febd9b9b9))
+
+### Features
+
+- add docs for react swaps ([#2198](https://github.com/alchemyplatform/aa-sdk/issues/2198)) ([d925835](https://github.com/alchemyplatform/aa-sdk/commit/d9258359e4220c521a120ef2f863f36e1a1d2675))
+- add react native expo support to the privy integration sdk ([#2215](https://github.com/alchemyplatform/aa-sdk/issues/2215)) ([e37426e](https://github.com/alchemyplatform/aa-sdk/commit/e37426e5ffda79f6f210276eceb394d9c8444e3a))
+
+## [4.75.4](https://github.com/alchemyplatform/aa-sdk/compare/v4.75.3...v4.75.4) (2025-10-27)
+
+### Bug Fixes
+
+- wallet client requires wallet-api-types as a non-dev dep ([#2210](https://github.com/alchemyplatform/aa-sdk/issues/2210)) ([de9571c](https://github.com/alchemyplatform/aa-sdk/commit/de9571cca3acf7dcf66b5fc28f3d0384b03845dc))
+
+## [4.75.3](https://github.com/alchemyplatform/aa-sdk/compare/v4.75.2...v4.75.3) (2025-10-27)
+
+### Bug Fixes
+
+- wallet client rpc type inference ([#2208](https://github.com/alchemyplatform/aa-sdk/issues/2208)) ([d584af0](https://github.com/alchemyplatform/aa-sdk/commit/d584af0ba6ccdeaca73e302f36840bbe9130f110))
+
+## [4.75.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.75.1...v4.75.2) (2025-10-24)
+
+### Bug Fixes
+
+- import type from wallet-api-types ([#2207](https://github.com/alchemyplatform/aa-sdk/issues/2207)) ([14b02f0](https://github.com/alchemyplatform/aa-sdk/commit/14b02f09a459f9124ae5a3191c3910473b8840d4))
+
+## [4.75.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.75.0...v4.75.1) (2025-10-24)
+
+**Note:** Version bump only for package root
+
+# [4.75.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.74.0...v4.75.0) (2025-10-24)
+
+### Features
+
+- implement prepare and format sign on webauthn account ([#2201](https://github.com/alchemyplatform/aa-sdk/issues/2201)) ([46b070e](https://github.com/alchemyplatform/aa-sdk/commit/46b070ec9846aa0a2d4712000dc685f80e5987d8))
+- remove funding signup ([#2163](https://github.com/alchemyplatform/aa-sdk/issues/2163)) ([e3cd0dc](https://github.com/alchemyplatform/aa-sdk/commit/e3cd0dc2706adbb1bca019ccfa212057b20dd446))
+
+# [4.74.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.73.0...v4.74.0) (2025-10-21)
+
+### Features
+
+- support non-7702 mode in the privy integration ([#2196](https://github.com/alchemyplatform/aa-sdk/issues/2196)) ([9909265](https://github.com/alchemyplatform/aa-sdk/commit/9909265cbdc241e35c590657e746619d74fe9816))
+
 # [4.73.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.72.0...v4.73.0) (2025-10-17)
 
 ### Features

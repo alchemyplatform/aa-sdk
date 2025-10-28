@@ -1,0 +1,174 @@
+<Info>Required SDK version: ^v4.70.0</Info>
+
+<Info>
+  **Important**: Cross-chain swaps do not support `postCalls`. You cannot batch
+  additional actions after a cross-chain swap completes.
+</Info>
+
+Use the `usePrepareSwap` hook with the `toChainId` parameter to request cross-chain swap quotes and the `useSignAndSendPreparedCalls` hook to execute token swaps across different chains.
+
+**Prerequisites**
+
+- [Smart Wallets installed and configured in your project](/wallets/react/quickstart)
+- An [authenticated user](/wallets/authentication/overview)
+- Tokens in your smart account to swap
+
+<CodeBlocks>
+
+```tsx title="crossChainSwap.tsx"
+import {
+  useSmartAccountClient,
+  usePrepareSwap,
+  useSignAndSendPreparedCalls,
+  useWaitForCallsStatus,
+  useUser,
+} from "@account-kit/react";
+
+// Chain IDs
+const CHAIN_IDS = {
+  ARBITRUM: "0xa4b1",
+  BASE: "0x2105",
+} as const;
+
+// Token addresses
+const TOKENS = {
+  NATIVE: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEee", // ETH
+  BASE_USDC: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+} as const;
+
+export default function CrossChainSwap() {
+  const user = useUser();
+  const { client } = useSmartAccountClient({
+    accountParams: { mode: "7702" },
+  });
+
+  const { prepareSwapAsync, isPreparingSwap } = usePrepareSwap({
+    client,
+  });
+
+  const {
+    signAndSendPreparedCallsAsync,
+    isSigningAndSendingPreparedCalls,
+    signAndSendPreparedCallsResult,
+  } = useSignAndSendPreparedCalls({ client });
+
+  const {
+    data: statusResult,
+    isLoading: isWaitingForConfirmation,
+    error,
+  } = useWaitForCallsStatus({
+    client,
+    id: signAndSendPreparedCallsResult?.preparedCallIds[0],
+  });
+
+  const handleCrossChainSwap = async () => {
+    if (!client?.account.address) {
+      throw new Error("No account connected");
+    }
+
+    try {
+      // Step 1: Request cross-chain swap quote
+      const result = await prepareSwapAsync({
+        from: client.account.address,
+        fromToken: TOKENS.NATIVE,
+        toChainId: CHAIN_IDS.BASE, // Destination chain
+        toToken: TOKENS.BASE_USDC,
+        fromAmount: "0x5af3107a4000", // 0.0001 ETH
+      });
+
+      const { quote, ...calls } = result;
+      console.log("Cross-chain swap quote:", quote);
+
+      // Ensure we have prepared calls
+      if (calls.rawCalls) {
+        throw new Error("Expected prepared calls");
+      }
+
+      // Step 2: Sign and send the prepared calls
+      const callIds = await signAndSendPreparedCallsAsync(calls);
+
+      console.log("Cross-chain swap initiated");
+      console.log("Call ID:", callIds?.preparedCallIds[0]);
+    } catch (error) {
+      console.error("Cross-chain swap failed:", error);
+    }
+  };
+
+  if (!user) {
+    return <div>Please log in to use swap functionality</div>;
+  }
+
+  return (
+    <div>
+      <button onClick={handleCrossChainSwap} disabled={!client}>
+        {isPreparingSwap
+          ? "Requesting quote..."
+          : isSigningAndSendingPreparedCalls
+            ? "Signing and sending..."
+            : "Swap ETH Arbitrum → Base USDC"}
+      </button>
+
+      {signAndSendPreparedCallsResult && (
+        <p>
+          {isWaitingForConfirmation
+            ? "Waiting for cross-chain confirmation..."
+            : error
+              ? `Error: ${error}`
+              : statusResult?.statusCode === 200
+                ? "Cross-chain swap confirmed!"
+                : `Status: ${statusResult?.statusCode}`}
+        </p>
+      )}
+    </div>
+  );
+}
+```
+
+</CodeBlocks>
+
+## How it works
+
+1. **Request quote**: `usePrepareSwap` requests a cross-chain swap quote with the `toChainId` parameter
+2. **Destructure result**: Extract `quote` for display and `calls` for signing
+3. **Sign and send**: `useSignAndSendPreparedCalls` signs and submits the transaction (callId automatically preserved)
+4. **Track status**: `useWaitForCallsStatus` monitors the transaction with cross-chain status codes
+
+Cross-chain swaps take longer than single-chain swaps due to cross-chain messaging and confirmation requirements.
+
+## Cross-chain status codes
+
+Cross-chain swaps have additional status codes to reflect the cross-chain nature:
+
+| Code    | Status                      |
+| ------- | --------------------------- |
+| 100     | Pending                     |
+| **120** | **Cross-Chain In Progress** |
+| 200     | Confirmed                   |
+| 400     | Offchain Failure            |
+| **410** | **Cross-chain Refund**      |
+| 500     | Onchain Failure             |
+| 600     | Partial Onchain Failure     |
+
+## Swap options
+
+You can specify either an exact input amount or a minimum output amount:
+
+```tsx
+// Mode 1: Swap exact input amount
+await prepareSwapAsync({
+  from: address,
+  toChainId: "0x2105", // Base
+  fromToken: "0x...",
+  toToken: "0x...",
+  fromAmount: "0x2710", // Swap exactly 0.01 USDC
+});
+
+// Mode 2: Get minimum output amount
+await prepareSwapAsync({
+  from: address,
+  toChainId: "0x2105", // Base
+  fromToken: "0x...",
+  toToken: "0x...",
+  minimumToAmount: "0x5AF3107A4000", // Get at least 0.0001 ETH
+});
+```
