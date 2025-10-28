@@ -47,6 +47,11 @@ export const reactNativeAdapter: PrivyAdapter = {
     return { authenticated: !!user, user };
   },
 
+  useWalletAddress(): string | undefined {
+    const { wallets } = useEmbeddedEthereumWallet();
+    return wallets?.[0]?.address;
+  },
+
   useAuthorizationSigner() {
     const { wallets } = useEmbeddedEthereumWallet();
 
@@ -144,12 +149,9 @@ function adaptExpoWallet(wallet: ExpoEmbeddedWallet): EmbeddedWallet {
 
         // Convert hex to decimal string format (e.g., "0x1" -> "1")
         cachedChainId = parseInt(currentChainId, 16).toString();
-      } catch (err) {
-        console.warn(
-          "[Privy Integration] Failed to fetch current chain ID:",
-          err,
-        );
+      } catch {
         // Fall back to cached value if fetch fails
+        // Chain ID fetch errors are non-critical and can happen during initialization
       }
 
       return provider;

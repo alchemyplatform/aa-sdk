@@ -67,7 +67,8 @@ export function AlchemyContextProvider({
   config,
   adapter,
 }: AlchemyContextProviderProps) {
-  const { authenticated, user } = adapter.usePrivyAuth();
+  const { authenticated } = adapter.usePrivyAuth();
+  const walletAddress = adapter.useWalletAddress();
 
   // Normalize config with default values
   const normalizedConfig: NormalizedAlchemyConfig = {
@@ -85,13 +86,13 @@ export function AlchemyContextProvider({
 
   // Track previous state to detect logout and wallet changes
   const prevAuthenticatedRef = useRef(authenticated);
-  const prevWalletAddressRef = useRef(user?.wallet?.address);
+  const prevWalletAddressRef = useRef(walletAddress);
 
   // Automatically reset cache when user logs out or switches wallets
   useEffect(() => {
     const wasAuthenticated = prevAuthenticatedRef.current;
     const prevWalletAddress = prevWalletAddressRef.current;
-    const currentWalletAddress = user?.wallet?.address;
+    const currentWalletAddress = walletAddress;
 
     // Reset cache on logout
     if (wasAuthenticated && !authenticated) {
@@ -115,7 +116,7 @@ export function AlchemyContextProvider({
     // Update refs for next render
     prevAuthenticatedRef.current = authenticated;
     prevWalletAddressRef.current = currentWalletAddress;
-  }, [authenticated, user?.wallet?.address]);
+  }, [authenticated, walletAddress]);
 
   return (
     <AlchemyConfigContext.Provider value={normalizedConfig}>

@@ -36,6 +36,12 @@ export const webAdapter: PrivyAdapter = {
     return { authenticated: !!user, user };
   },
 
+  useWalletAddress(): string | undefined {
+    const { wallets } = useWallets();
+    const embedded = wallets.find((w) => w.walletClientType === "privy");
+    return embedded?.address;
+  },
+
   useAuthorizationSigner() {
     const { signAuthorization } = useSign7702Authorization();
 

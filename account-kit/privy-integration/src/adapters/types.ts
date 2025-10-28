@@ -45,6 +45,13 @@ export interface PrivyAdapter {
   usePrivyAuth(): PrivyAuthState;
 
   /**
+   * Hook to get current wallet address (for cache invalidation)
+   * Returns undefined if no wallet is available
+   * Must be called as a React hook (follows rules of hooks)
+   */
+  useWalletAddress(): string | undefined;
+
+  /**
    * Hook to get EIP-7702 authorization signer (optional, web only)
    * Must be called as a React hook (follows rules of hooks)
    */
