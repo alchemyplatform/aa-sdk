@@ -9,8 +9,8 @@ export interface EmbeddedWallet {
   /** Wallet address */
   address: Address;
 
-  /** Chain ID (may be CAIP-2 format like "eip155:1" or numeric) */
-  chainId: string | number;
+  /** Chain ID as a string (may be CAIP-2 format like "eip155:1" or numeric string like "1") */
+  chainId: string;
 
   /** Get EVM provider for the wallet */
   getEthereumProvider(): Promise<any>;

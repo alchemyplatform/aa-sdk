@@ -5,14 +5,14 @@
 
 export function AlchemyProvider() {
   throw new Error(
-    "Web Provider is not available in React Native. " +
+    "This module requires @privy-io/react-auth which is not available in React Native. " +
       'Import from "@account-kit/privy-integration/react-native" instead.',
   );
 }
 
 export function useAlchemyConfig() {
   throw new Error(
-    "useAlchemyConfig from web Provider is not available in React Native. " +
+    "This module requires @privy-io/react-auth which is not available in React Native. " +
       'Import from "@account-kit/privy-integration/react-native" instead.',
   );
 }

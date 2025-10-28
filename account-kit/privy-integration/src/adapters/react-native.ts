@@ -50,76 +50,62 @@ export const reactNativeAdapter: PrivyAdapter = {
   useAuthorizationSigner() {
     const { wallets } = useEmbeddedEthereumWallet();
 
-    // Don't memoize the callback - create it fresh each time to ensure we have the latest wallets
-    const signAuthorization = async (
-      unsignedAuth: AuthorizationRequest<number>,
-    ): Promise<Authorization<number, true>> => {
-      console.log("[RN Adapter] signAuthorization called with:", unsignedAuth);
-      console.log("[RN Adapter] Current wallets:", wallets);
+    const signAuthorization = useCallback(
+      async (
+        unsignedAuth: AuthorizationRequest<number>,
+      ): Promise<Authorization<number, true>> => {
+        const wallet = wallets?.[0];
+        if (!wallet) {
+          throw new Error(
+            "Privy embedded wallet not found. Please ensure the user is authenticated and has created a wallet.",
+          );
+        }
 
-      const wallet = wallets?.[0];
-      if (!wallet) {
-        throw new Error(
-          "Privy embedded wallet not found. Please ensure the user is authenticated and has created a wallet.",
-        );
-      }
+        const provider = await wallet.getProvider?.();
+        if (!provider) {
+          throw new Error(
+            "Provider not available on this wallet. Ensure you're using the embedded Ethereum wallet.",
+          );
+        }
 
-      console.log("[RN Adapter] Using wallet:", wallet.address);
+        // Extract the implementation address (handle both 'address' and 'contractAddress' fields)
+        const implementationAddress =
+          unsignedAuth.address ?? unsignedAuth.contractAddress;
 
-      const provider = await wallet.getProvider?.();
-      if (!provider) {
-        throw new Error(
-          "Provider not available on this wallet. Ensure you're using the embedded Ethereum wallet.",
-        );
-      }
+        if (!implementationAddress) {
+          throw new Error(
+            "Implementation address is required for EIP-7702 authorization",
+          );
+        }
 
-      // Extract the implementation address (handle both 'address' and 'contractAddress' fields)
-      const implementationAddress =
-        unsignedAuth.address ?? unsignedAuth.contractAddress;
+        // Create the authorization structure (matches Privy's implementation)
+        const authorization = {
+          chainId: unsignedAuth.chainId,
+          address: implementationAddress,
+          nonce: unsignedAuth.nonce,
+        };
 
-      if (!implementationAddress) {
-        throw new Error(
-          "Implementation address is required for EIP-7702 authorization",
-        );
-      }
+        // Hash the authorization using viem (same as Privy does)
+        const authorizationHash = hashAuthorization(authorization);
 
-      console.log(
-        "[RN Adapter] Signing 7702 auth for address:",
-        implementationAddress,
-      );
+        // Sign the hash directly with secp256k1_sign (same as Privy)
+        const signature = (await provider.request({
+          method: "secp256k1_sign",
+          params: [authorizationHash],
+        })) as `0x${string}`;
 
-      // Create the authorization structure (matches Privy's implementation)
-      const authorization = {
-        chainId: unsignedAuth.chainId,
-        address: implementationAddress,
-        nonce: unsignedAuth.nonce,
-      };
+        // Parse the signature using viem (same as Privy)
+        const parsedSignature = parseSignature(signature);
 
-      // Hash the authorization using viem (same as Privy does)
-      const authorizationHash = hashAuthorization(authorization);
-      console.log("[RN Adapter] Authorization hash:", authorizationHash);
-
-      // Sign the hash directly with secp256k1_sign (same as Privy)
-      const signature = (await provider.request({
-        method: "secp256k1_sign",
-        params: [authorizationHash],
-      })) as `0x${string}`;
-
-      console.log("[RN Adapter] Received signature:", signature);
-
-      // Parse the signature using viem (same as Privy)
-      const parsedSignature = parseSignature(signature);
-
-      const result = {
-        chainId: unsignedAuth.chainId,
-        address: implementationAddress,
-        nonce: unsignedAuth.nonce,
-        ...parsedSignature,
-      };
-
-      console.log("[RN Adapter] Returning authorization:", result);
-      return result;
-    };
+        return {
+          chainId: unsignedAuth.chainId,
+          address: implementationAddress,
+          nonce: unsignedAuth.nonce,
+          ...parsedSignature,
+        };
+      },
+      [wallets],
+    );
 
     return signAuthorization;
   },
@@ -158,7 +144,6 @@ function adaptExpoWallet(wallet: ExpoEmbeddedWallet): EmbeddedWallet {
 
         // Convert hex to decimal string format (e.g., "0x1" -> "1")
         cachedChainId = parseInt(currentChainId, 16).toString();
-        console.log("[RN Adapter] Updated chain ID to:", cachedChainId);
       } catch (err) {
         console.warn(
           "[Privy Integration] Failed to fetch current chain ID:",

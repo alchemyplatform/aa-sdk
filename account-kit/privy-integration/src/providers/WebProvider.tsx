@@ -16,6 +16,7 @@ import type { AlchemyProviderConfig } from "../types.js";
  * @param {string | string[]} [props.policyId] - Gas Manager policy ID(s) for EVM chains
  * @param {string | string[]} [props.solanaPolicyId] - Gas Manager policy ID(s) for Solana
  * @param {boolean} [props.disableSponsorship] - Set to true to disable sponsorship by default (default: false)
+ * @param {'eip7702' | 'owner'} [props.accountAuthMode] - Authorization mode for EVM smart accounts (default: 'eip7702')
  * @returns {JSX.Element} Provider component
  *
  * @example
@@ -27,6 +28,7 @@ import type { AlchemyProviderConfig } from "../types.js";
  *   <AlchemyProvider
  *     apiKey="your-alchemy-api-key"
  *     policyId="your-gas-policy-id"
+ *     accountAuthMode="eip7702"
  *   >
  *     <YourApp />
  *   </AlchemyProvider>

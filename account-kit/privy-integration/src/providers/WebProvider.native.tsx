@@ -5,7 +5,7 @@
 
 export function AlchemyProvider() {
   throw new Error(
-    "WebProvider is not available in React Native. " +
+    "This module requires @privy-io/react-auth which is not available in React Native. " +
       'Import from "@account-kit/privy-integration/react-native" instead.',
   );
 }
