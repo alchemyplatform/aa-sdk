@@ -116,7 +116,7 @@ function SendButton() {
       const result = await sendTransaction({
         to: "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
         data: "0x...",
-        value: "1000000000000000000", // 1 ETH
+        value: "0xde0b6b3a7640000", // 1 ETH in hex (also accepts decimal string or bigint)
       });
 
       console.log("Transaction hash:", result.txnHash);
@@ -129,7 +129,7 @@ function SendButton() {
     try {
       // Batch transactions
       const result = await sendTransaction([
-        { to: "0x...", data: "0x...", value: "1000000000000000000" },
+        { to: "0x...", data: "0x...", value: "0xde0b6b3a7640000" }, // 1 ETH
         { to: "0x...", data: "0x..." },
         { to: "0x...", data: "0x..." },
       ]);
@@ -310,7 +310,7 @@ function SendButton() {
       const result = await sendTransaction({
         to: "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
         data: "0x...",
-        value: "1000000000000000000", // 1 ETH
+        value: "0xde0b6b3a7640000", // 1 ETH in hex (also accepts decimal string or bigint)
       });
 
       console.log("Transaction hash:", result.txnHash);
@@ -323,7 +323,7 @@ function SendButton() {
     try {
       // Batch transactions
       const result = await sendTransaction([
-        { to: "0x...", data: "0x...", value: "1000000000000000000" },
+        { to: "0x...", data: "0x...", value: "0xde0b6b3a7640000" }, // 1 ETH
         { to: "0x...", data: "0x..." },
         { to: "0x...", data: "0x..." },
       ]);

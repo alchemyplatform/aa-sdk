@@ -5,7 +5,7 @@ import {
   useSign7702Authorization,
   type ConnectedWallet as PrivyWallet,
 } from "@privy-io/react-auth";
-import type { Authorization } from "viem";
+import { isAddressEqual, type Authorization } from "viem";
 import type { AuthorizationRequest } from "@aa-sdk/core";
 import type { PrivyAdapter, EmbeddedWallet, PrivyAuthState } from "./types.js";
 
@@ -30,8 +30,11 @@ export const webAdapter: PrivyAdapter = {
 
       // If a preferred address is specified, find that wallet
       const embedded = preferredAddress
-        ? privyWallets.find(
-            (w) => w.address.toLowerCase() === preferredAddress.toLowerCase(),
+        ? privyWallets.find((w) =>
+            isAddressEqual(
+              w.address as `0x${string}`,
+              preferredAddress as `0x${string}`,
+            ),
           )
         : privyWallets[0];
 
@@ -60,8 +63,11 @@ export const webAdapter: PrivyAdapter = {
 
     // If a preferred address is specified, find that wallet
     if (preferredAddress) {
-      const wallet = privyWallets.find(
-        (w) => w.address.toLowerCase() === preferredAddress.toLowerCase(),
+      const wallet = privyWallets.find((w) =>
+        isAddressEqual(
+          w.address as `0x${string}`,
+          preferredAddress as `0x${string}`,
+        ),
       );
       return wallet?.address;
     }

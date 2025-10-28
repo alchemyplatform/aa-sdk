@@ -4,9 +4,8 @@ import {
   useEmbeddedEthereumWallet,
   type PrivyEmbeddedWalletProvider,
 } from "@privy-io/expo";
-import type { Authorization } from "viem";
+import { isAddressEqual, parseSignature, type Authorization } from "viem";
 import { hashAuthorization } from "viem/utils";
-import { parseSignature } from "viem";
 import type { AuthorizationRequest } from "@aa-sdk/core";
 import type { PrivyAdapter, EmbeddedWallet, PrivyAuthState } from "./types.js";
 
@@ -37,8 +36,11 @@ export const reactNativeAdapter: PrivyAdapter = {
 
       // If a preferred address is specified, find that wallet
       const wallet = preferredAddress
-        ? wallets.find(
-            (w) => w.address.toLowerCase() === preferredAddress.toLowerCase(),
+        ? wallets.find((w) =>
+            isAddressEqual(
+              w.address as `0x${string}`,
+              preferredAddress as `0x${string}`,
+            ),
           )
         : wallets[0];
 
@@ -70,8 +72,11 @@ export const reactNativeAdapter: PrivyAdapter = {
 
     // If a preferred address is specified, find that wallet
     if (preferredAddress) {
-      const wallet = wallets.find(
-        (w) => w.address.toLowerCase() === preferredAddress.toLowerCase(),
+      const wallet = wallets.find((w) =>
+        isAddressEqual(
+          w.address as `0x${string}`,
+          preferredAddress as `0x${string}`,
+        ),
       );
       return wallet?.address;
     }
@@ -95,8 +100,11 @@ export const reactNativeAdapter: PrivyAdapter = {
 
         // If a preferred address is specified, find that wallet
         const wallet = preferredAddress
-          ? wallets.find(
-              (w) => w.address.toLowerCase() === preferredAddress.toLowerCase(),
+          ? wallets.find((w) =>
+              isAddressEqual(
+                w.address as `0x${string}`,
+                preferredAddress as `0x${string}`,
+              ),
             )
           : wallets[0];
 

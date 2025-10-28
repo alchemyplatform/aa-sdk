@@ -73,7 +73,7 @@ export function useAlchemyClient() {
     const chain = getChain(parsedChainId);
 
     // Generate a cache key based on configuration and wallet address
-    // IMPORTANT: Include whether authorization signer is available in cache key
+    // IMPORTANT: Include whether authorization signing is supported in cache key
     const currentCacheKey = JSON.stringify({
       address: embeddedWallet.address,
       chainId: chain.id,
@@ -82,7 +82,7 @@ export function useAlchemyClient() {
       rpcUrl: config.rpcUrl,
       policyId: config.policyId,
       accountAuthMode: config.accountAuthMode,
-      hasAuthSigner: !!signAuthorizationFn,
+      supportsSignAuthorization: !!signAuthorizationFn,
     });
 
     // Return cached client and account if configuration hasn't changed
