@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
 import { type Hex, isHex } from "viem";
 import { useAlchemyClient } from "./useAlchemyClient.js";
-import { useAlchemyConfig } from "../Provider.js";
+import { useAlchemyConfig } from "../context/AlchemyContext.js";
 import type {
   UnsignedTransactionRequest,
   SendTransactionOptions,

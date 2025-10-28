@@ -7,7 +7,7 @@ import {
   TransactionInstruction,
   VersionedTransaction,
 } from "@solana/web3.js";
-import { useAlchemyConfig } from "../Provider.js";
+import { useAlchemyConfig } from "../context/AlchemyContext.js";
 import { createSolanaSponsoredTransaction } from "../util/createSolanaSponsoredTransaction.js";
 import { useSignTransaction, useWallets } from "@privy-io/react-auth/solana";
 import { createSolanaTransaction } from "../util/createSolanaTransaction.js";

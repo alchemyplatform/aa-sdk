@@ -1,6 +1,6 @@
 # @account-kit/privy-integration
 
-Add gas sponsorship and smart wallet features to your Privy app in under 5 minutes.
+Add gas sponsorship and smart wallet features to your Privy app in under 5 minutes. Works with **React Web** and **React Native (Expo)**.
 
 ## What This Package Does
 
@@ -10,7 +10,8 @@ If you're already using [Privy](https://privy.io) for authentication, this packa
 - **⛽ Gas Sponsorship** - Pay gas fees for your users via Alchemy Gas Manager (EVM & Solana)
 - **💱 Token Swaps** - Execute swaps through Alchemy's swap infrastructure
 - **🚀 Batched Transactions** - Send multiple operations in a single transaction using `sendTransaction([...])`
-- **☀️ Solana Support** - Send sponsored Solana transactions with Privy's embedded Solana wallets
+- **☀️ Solana Support** - Send sponsored Solana transactions with Privy's embedded Solana wallets (Web only)
+- **📱 React Native Support** - Full EVM support for React Native apps using `@privy-io/expo`
 
 All while keeping Privy as your authentication provider. No need to change your auth flow or migrate user accounts.
 
@@ -24,6 +25,8 @@ All while keeping Privy as your authentication provider. No need to change your 
 
 ## Installation
 
+### React Web
+
 ```bash
 npm install @account-kit/privy-integration
 # or
@@ -32,7 +35,17 @@ yarn add @account-kit/privy-integration
 pnpm add @account-kit/privy-integration
 ```
 
-### Optional: Solana Support
+### React Native (Expo)
+
+```bash
+npm install @account-kit/privy-integration @privy-io/expo
+# or
+yarn add @account-kit/privy-integration @privy-io/expo
+# or
+pnpm add @account-kit/privy-integration @privy-io/expo
+```
+
+### Optional: Solana Support (Web Only)
 
 To use Solana features (like `useAlchemySolanaTransaction`), you'll need to install the Solana Web3.js library:
 
@@ -50,9 +63,14 @@ Then import from the `/solana` export:
 import { useAlchemySolanaTransaction } from "@account-kit/privy-integration/solana";
 ```
 
-> **Note:** The Solana functionality is completely optional. If you only need EVM features, you don't need to install `@solana/web3.js`.
+> **Note:** The Solana functionality is completely optional and currently only available for React web. If you only need EVM features, you don't need to install `@solana/web3.js`.
 
 ## Quick Start
+
+Choose your platform:
+
+<details>
+<summary><strong>React Web</strong></summary>
 
 ### 1. Wrap Your App with Both Providers
 
@@ -98,7 +116,7 @@ function SendButton() {
       const result = await sendTransaction({
         to: "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
         data: "0x...",
-        value: "1000000000000000000", // 1 ETH
+        value: "0xde0b6b3a7640000", // 1 ETH in hex (also accepts decimal string or bigint)
       });
 
       console.log("Transaction hash:", result.txnHash);
@@ -111,7 +129,7 @@ function SendButton() {
     try {
       // Batch transactions
       const result = await sendTransaction([
-        { to: "0x...", data: "0x...", value: "1000000000000000000" },
+        { to: "0x...", data: "0x...", value: "0xde0b6b3a7640000" }, // 1 ETH
         { to: "0x...", data: "0x..." },
         { to: "0x...", data: "0x..." },
       ]);
@@ -249,6 +267,146 @@ function SolanaSendButton() {
 }
 ```
 
+</details>
+
+<details>
+<summary><strong>React Native (Expo)</strong></summary>
+
+### 1. Wrap Your App with Both Providers
+
+**Important:** Use `@privy-io/expo` and import from `/react-native` for React Native apps.
+
+```tsx
+import { PrivyProvider } from "@privy-io/expo";
+import { AlchemyProvider } from "@account-kit/privy-integration/react-native";
+
+function App() {
+  return (
+    <PrivyProvider appId="your-privy-app-id" clientId="your-privy-client-id">
+      <AlchemyProvider
+        apiKey="your-alchemy-api-key"
+        policyId="your-gas-policy-id" // optional, for gas sponsorship
+      >
+        <YourApp />
+      </AlchemyProvider>
+    </PrivyProvider>
+  );
+}
+```
+
+### 2. Send Gasless Transactions
+
+```tsx
+import { useAlchemySendTransaction } from "@account-kit/privy-integration/react-native";
+import { Button } from "react-native";
+
+function SendButton() {
+  const { sendTransaction, isLoading, error, data } =
+    useAlchemySendTransaction();
+
+  const handleSend = async () => {
+    try {
+      // Single transaction
+      const result = await sendTransaction({
+        to: "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
+        data: "0x...",
+        value: "0xde0b6b3a7640000", // 1 ETH in hex (also accepts decimal string or bigint)
+      });
+
+      console.log("Transaction hash:", result.txnHash);
+    } catch (err) {
+      console.error("Transaction failed:", err);
+    }
+  };
+
+  const handleBatch = async () => {
+    try {
+      // Batch transactions
+      const result = await sendTransaction([
+        { to: "0x...", data: "0x...", value: "0xde0b6b3a7640000" }, // 1 ETH
+        { to: "0x...", data: "0x..." },
+        { to: "0x...", data: "0x..." },
+      ]);
+
+      console.log("Batch transaction hash:", result.txnHash);
+    } catch (err) {
+      console.error("Batch transaction failed:", err);
+    }
+  };
+
+  return (
+    <>
+      <Button
+        onPress={handleSend}
+        disabled={isLoading}
+        title={isLoading ? "Sending..." : "Send Transaction"}
+      />
+      <Button
+        onPress={handleBatch}
+        disabled={isLoading}
+        title={isLoading ? "Sending..." : "Send Batch"}
+      />
+    </>
+  );
+}
+```
+
+### 3. Execute Token Swaps
+
+```tsx
+import {
+  useAlchemyPrepareSwap,
+  useAlchemySubmitSwap,
+} from "@account-kit/privy-integration/react-native";
+import { Button } from "react-native";
+
+function SwapButton() {
+  const { prepareSwap } = useAlchemyPrepareSwap();
+  const { submitSwap, isLoading } = useAlchemySubmitSwap();
+
+  const handleSwap = async () => {
+    try {
+      // Prepare swap
+      const preparedSwap = await prepareSwap({
+        fromToken: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE", // ETH
+        toToken: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", // USDC
+        fromAmount: "0xde0b6b3a7640000", // Swap exactly 1 ETH
+      });
+
+      // Execute swap
+      const result = await submitSwap(preparedSwap);
+      console.log("Swap confirmed:", result.txnHash);
+    } catch (err) {
+      console.error("Swap failed:", err);
+    }
+  };
+
+  return (
+    <Button
+      onPress={handleSwap}
+      disabled={isLoading}
+      title={isLoading ? "Swapping..." : "Swap Tokens"}
+    />
+  );
+}
+```
+
+### Multiple Wallet Support
+
+If your users have multiple Privy wallets, specify which one to use:
+
+```tsx
+<AlchemyProvider
+  apiKey="your-alchemy-api-key"
+  policyId="your-gas-policy-id"
+  walletAddress="0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb"
+>
+  <YourApp />
+</AlchemyProvider>
+```
+
+</details>
+
 ## Configuration
 
 ### AlchemyProvider Props
@@ -263,6 +421,7 @@ function SolanaSendButton() {
 | `solanaPolicyId`     | `string \| string[]`   | No            | Gas Manager policy ID(s) for Solana sponsorship                                                          |
 | `disableSponsorship` | `boolean`              | No            | Set to `true` to disable gas sponsorship by default (default: `false`)                                   |
 | `accountAuthMode`    | `'eip7702' \| 'owner'` | No            | Authorization mode for EVM smart accounts (default: `'eip7702'`)                                         |
+| `walletAddress`      | `string`               | No            | Specific wallet address to use if user has multiple wallets (defaults to first wallet)                   |
 
 \* **Required configuration (pick one):**
 
