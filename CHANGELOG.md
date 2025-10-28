@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.76.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.75.4...v4.76.0) (2025-10-28)
+
+### Bug Fixes
+
+- 'Continue' button color on dark ([#2205](https://github.com/alchemyplatform/aa-sdk/issues/2205)) ([f678a77](https://github.com/alchemyplatform/aa-sdk/commit/f678a77bb72eadcf21fa2ae88cb7c54febd9b9b9))
+
+### Features
+
+- add docs for react swaps ([#2198](https://github.com/alchemyplatform/aa-sdk/issues/2198)) ([d925835](https://github.com/alchemyplatform/aa-sdk/commit/d9258359e4220c521a120ef2f863f36e1a1d2675))
+- add react native expo support to the privy integration sdk ([#2215](https://github.com/alchemyplatform/aa-sdk/issues/2215)) ([e37426e](https://github.com/alchemyplatform/aa-sdk/commit/e37426e5ffda79f6f210276eceb394d9c8444e3a))
+
 ## [4.75.4](https://github.com/alchemyplatform/aa-sdk/compare/v4.75.3...v4.75.4) (2025-10-27)
 
 ### Bug Fixes
