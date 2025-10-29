@@ -261,6 +261,9 @@ navigation:
                 path: wallets/pages/low-level-infra/bundler/sdk.mdx
               - page: Bundler FAQs
                 path: wallets/pages/bundler-api/bundler-faqs.mdx
+              - page: Using flashblocks for pre-confirmation
+                path: wallets/pages/low-level-infra/bundler/use-flashblocks.mdx
+
           - section: Third Party Infrastructure
             contents:
               - page: Third Party Bundlers
