@@ -60,7 +60,7 @@ export async function createAccount(
     }
 
     if (isWebAuthnSigner(signer)) {
-      throw new InvalidSignerTypeError("webAuthn");
+      throw new InvalidSignerTypeError("WebAuthn");
     }
 
     return createModularAccountV2({
@@ -106,7 +106,7 @@ export async function createAccount(
   }
 
   if (isWebAuthnSigner(signer)) {
-    throw new InvalidSignerTypeError("webAuthn");
+    throw new InvalidSignerTypeError("WebAuthn");
   }
 
   // Return the account created based on the factory type

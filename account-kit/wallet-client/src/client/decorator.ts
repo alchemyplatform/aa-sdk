@@ -68,6 +68,8 @@ async function signSignatureRequestSafe(
         "WebAuthn signer cannot sign EIP-7702 authorization requests",
       );
     }
+    // We must split up the call to signSignatureRequest across two conditionals for the TS compiler to
+    // correctly infer which overload to use.
     return signSignatureRequest(signer, params);
   }
   return signSignatureRequest(signer, params);
