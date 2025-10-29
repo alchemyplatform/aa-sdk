@@ -93,8 +93,6 @@ servers:
     name: Story Mainnet
   - url: https://story-aeneid.g.alchemy.com/v2
     name: Story Aeneid
-  - url: https://tea-sepolia.g.alchemy.com/v2
-    name: Tea Sepolia
   - url: https://unichain-mainnet.g.alchemy.com/v2
     name: Unichain Mainnet
   - url: https://unichain-sepolia.g.alchemy.com/v2
