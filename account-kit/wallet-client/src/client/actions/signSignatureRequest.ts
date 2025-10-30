@@ -8,6 +8,7 @@ import type {
   Eip7702UnsignedAuth,
   UserOpSig,
   EcdsaSig,
+  WebauthnSig,
 } from "@alchemy/wallet-api-types";
 import { vToYParity } from "ox/Signature";
 import type { WithoutRawPayload } from "../../types.ts";
@@ -25,17 +26,27 @@ export type SignSignatureRequestParams = WithoutRawPayload<
 
 export type SignSignatureRequestResult = UserOpSig["signature"];
 
-// Overload: Authorization requests always return ECDSA signatures
+// Overload: Always an ECDSA signer, can sign any type of request
 export async function signSignatureRequest(
   signer: SmartAccountSigner,
   params: WithoutRawPayload<
-    AuthorizationSignatureRequest & {
-      data: Eip7702UnsignedAuth;
-    }
+    | PersonalSignSignatureRequest
+    | TypedDataSignatureRequest
+    | (AuthorizationSignatureRequest & {
+        data: Eip7702UnsignedAuth;
+      })
   >,
 ): Promise<EcdsaSig["signature"]>;
 
-// Overload: User operation requests can return ECDSA or WebAuthn signatures
+// Overload: WebAuthn signer, can only sign personal_sign and eth_signTypedData_v4
+export async function signSignatureRequest(
+  signer: WebAuthnSigner,
+  params: WithoutRawPayload<
+    PersonalSignSignatureRequest | TypedDataSignatureRequest
+  >,
+): Promise<WebauthnSig["signature"]>;
+
+// Overload: Union type of signer, can only sign personal_sign and eth_signTypedData_v4
 export async function signSignatureRequest(
   signer: SmartAccountSigner | WebAuthnSigner,
   params: WithoutRawPayload<
@@ -47,7 +58,7 @@ export async function signSignatureRequest(
  * Signs a signature request using the provided signer.
  * This method handles different types of signature requests including personal_sign, eth_signTypedData_v4, and authorization.
  *
- * @param {SmartAccountSigner} signer - The signer to use for signing the request
+ * @param {SmartAccountSigner | WebAuthnSigner} signer - The signer to use for signing the request
  * @param {SignSignatureRequestParams} params - The signature request parameters
  * @param {string} params.type - The type of signature request ('personal_sign', 'eth_signTypedData_v4', or 'signature_with_authorization')
  * @param {SignSignatureRequestParams["data"]} params.data - The data to sign, format depends on the signature type

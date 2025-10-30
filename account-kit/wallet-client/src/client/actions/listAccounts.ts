@@ -30,9 +30,10 @@ export type ListAccountsResult = RpcSchema["ReturnType"];
  * Lists all smart accounts for a given signer using the wallet API client.
  *
  * @param {InnerWalletApiClient} client - The wallet API client to use for the request
- * @param {SmartAccountSigner} signer - The signer for which to list accounts
+ * @param {SmartAccountSigner | WebAuthnSigner} signer - The signer for which to list accounts
  * @param {ListAccountsParams} params - Parameters for listing accounts
- * @param {string} params.signerAddress - The address of the signer to list accounts for
+ * @param {Address} [params.signerAddress] - The address of the signer to list accounts for
+ * @param {WebAuthnPublicKey} [params.signerPublicKey] - The public key of the signer to list accounts for
  * @param {number} [params.limit] - Optional maximum number of accounts to return (default: 100, max: 100)
  * @param {string} [params.after] - Optional pagination cursor for fetching subsequent pages
  * @returns {Promise<ListAccountsResult>} A Promise that resolves to the list of accounts and pagination metadata

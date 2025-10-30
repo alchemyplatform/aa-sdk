@@ -14,7 +14,6 @@ import { signSignatureRequest } from "./signSignatureRequest.js";
 import { metrics } from "../../metrics.js";
 import type { SmartWalletSigner } from "../index.js";
 import { isWebAuthnSigner } from "../../utils.js";
-import type { EcdsaSig } from "@alchemy/wallet-api-types";
 
 type RpcSchema = Extract<
   WalletServerRpcSchemaType,
@@ -43,7 +42,7 @@ export type GrantPermissionsResult = {
  * This allows another key to perform operations on behalf of the account.
  *
  * @param {InnerWalletApiClient} client - The wallet API client to use for the request
- * @param {SmartAccountSigner} signer - The signer of the smart account
+ * @param {SmartAccountSigner | WebAuthnSigner} signer - The signer of the smart account
  * @param {GrantPermissionsParams} params - The parameters for granting permissions
  * @param {Address} [params.account] - The account address (required if client was not initialized with an account)
  * @param {number} params.expirySec - Unix timestamp when the permissions expire
@@ -126,10 +125,7 @@ export async function grantPermissions<
     ],
   });
 
-  const signature = (await signSignatureRequest(
-    signer,
-    signatureRequest,
-  )) as EcdsaSig["signature"];
+  const signature = await signSignatureRequest(signer, signatureRequest);
 
   let signatureHex: Hex;
   if (typeof signature.data === "string") {

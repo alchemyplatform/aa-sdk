@@ -55,7 +55,7 @@ export type SmartWalletClient<
  * @param {SmartWalletClientParams} params - The parameters for creating the smart wallet client
  * @param {AlchemyTransport} params.transport - The Alchemy transport to use
  * @param {Chain} params.chain - The chain to use
- * @param {SmartAccountSigner} params.signer - The signer to use for the smart account
+ * @param {SmartAccountSigner | WebAuthnSigner} params.signer - The signer to use for the smart account
  * @param {string} [params.policyId] - The policy ID for gas sponsorship (optional)
  * @param {Address} [params.account] - The smart account address to use (optional)
  * @returns {SmartWalletClient} - A viem-compatible client

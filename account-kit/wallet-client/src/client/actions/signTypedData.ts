@@ -15,7 +15,7 @@ export type SignTypedDataResult = Hex;
  * This method requests the account associated with the signer and uses it to sign the typed data.
  *
  * @param {InnerWalletApiClient} client - The wallet API client to use for the request
- * @param {SmartAccountSigner} signer - The signer of the smart account
+ * @param {SmartAccountSigner | WebAuthnSigner} signer - The signer of the smart account
  * @param {TypedDataDefinition} params - The typed data to sign, following EIP-712 format
  * @returns {Promise<SignTypedDataResult>} A Promise that resolves to the signature as a hex string
  *

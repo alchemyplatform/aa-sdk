@@ -10,7 +10,6 @@ import {
 import { signSignatureRequest } from "./signSignatureRequest.js";
 import type { SmartWalletSigner } from "../index.js";
 import { isWebAuthnSigner } from "../../utils.js";
-import type { EcdsaSig } from "@alchemy/wallet-api-types";
 
 export type SendCallsParams<
   TAccount extends Address | undefined = Address | undefined,
@@ -27,7 +26,7 @@ export type SendCallsResult = SendPreparedCallsResult;
  * </Note>
  *
  * @param {InnerWalletApiClient} client - The wallet API client to use for the request
- * @param {SmartAccountSigner} signer - The signer to use
+ * @param {SmartAccountSigner | WebAuthnSigner} signer - The signer to use
  * @param {PrepareCallsParams<TAccount>} params - Parameters for sending calls
  * @param {Array<{to: Address, data?: Hex, value?: Hex}>} params.calls - Array of contract calls to execute
  * @param {Address} [params.from] - The address to execute the calls from (required if the client wasn't initialized with an account)
@@ -70,10 +69,10 @@ export async function sendCalls<
         "WebAuthn signer is not currently supported for signing paymaster permit signatures",
       );
     }
-    const signature = (await signSignatureRequest(
+    const signature = await signSignatureRequest(
       signer,
       calls.signatureRequest,
-    )) as EcdsaSig["signature"];
+    );
 
     const secondCallParams = {
       from: calls.modifiedRequest.from,

@@ -41,7 +41,7 @@ export type RequestAccountResult = SmartContractAccount;
  * If an account already exists, the creationHint will be ignored.
  *
  * @param {InnerWalletApiClient} client - The wallet API client to use for the request
- * @param {SmartAccountSigner} signer - The signer that will be associated with the account
+ * @param {SmartAccountSigner | WebAuthnSigner} signer - The signer that will be associated with the account
  * @param {RequestAccountParams} [params] - Optional parameters for requesting a specific account
  * @param {string} [params.id] - Optional identifier for the account. If specified, a new account with this ID will be created even if one already exists for the signer
  * @param {object} [params.creationHint] - Optional hints to guide account creation. These are ignored if an account already exists

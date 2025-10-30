@@ -27,7 +27,7 @@ export type SignPreparedCallsResult = RpcSchema["Request"]["params"][0];
 /**
  * Signs prepared calls using the provided signer.
  *
- * @param {SmartAccountSigner} signer - The signer to use
+ * @param {SmartAccountSigner | WebAuthnSigner} signer - The signer to use
  * @param {SignPreparedCallsParams} params - The prepared calls with signature requests
  * @returns {Promise<SignPreparedCallsResult>} A Promise that resolves to the signed calls
  */
