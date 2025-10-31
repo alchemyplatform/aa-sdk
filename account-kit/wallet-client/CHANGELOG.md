@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.77.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.77.0...v4.77.1) (2025-10-31)
+
+### Bug Fixes
+
+- infer default webauthn client account type ([#2224](https://github.com/alchemyplatform/aa-sdk/issues/2224)) ([2314f1b](https://github.com/alchemyplatform/aa-sdk/commit/2314f1b00b2e76558022a9bd469062d9e9baf289))
+
 # [4.77.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.76.0...v4.77.0) (2025-10-31)
 
 ### Features
