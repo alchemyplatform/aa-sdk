@@ -210,6 +210,14 @@ navigation:
             path: wallets/pages/transactions/sponsor-gas/index.mdx
           - page: Pay gas with any token
             path: wallets/pages/transactions/pay-gas-with-any-token/index.mdx
+          - section: Session Keys
+            contents:
+              - page: Overview
+                path: wallets/pages/smart-wallets/session-keys/index.mdx
+              - page: Using SDK
+                path: wallets/pages/smart-wallets/session-keys/sdk.mdx
+              - page: Using API
+                path: wallets/pages/smart-wallets/session-keys/api.mdx
           - page: "[NEW] Same-chain swaps"
             path: wallets/pages/transactions/swap-tokens/index.mdx
           - page: "[NEW] Cross-chain swaps"
@@ -284,14 +292,6 @@ navigation:
                   - api: Signer API Endpoints
                     api-name: accounts
                     flattened: true
-              - section: Session Keys
-                contents:
-                  - page: Overview
-                    path: wallets/pages/smart-wallets/session-keys/index.mdx
-                  - page: Using SDK
-                    path: wallets/pages/smart-wallets/session-keys/sdk.mdx
-                  - page: Using API
-                    path: wallets/pages/smart-wallets/session-keys/api.mdx
               - page: How to stamp requests
                 path: wallets/pages/smart-wallets/how-to-stamp-requests.mdx
             slug: smart-wallets
