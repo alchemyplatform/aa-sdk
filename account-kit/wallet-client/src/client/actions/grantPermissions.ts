@@ -1,4 +1,4 @@
-import { AccountNotFoundError, type SmartAccountSigner } from "@aa-sdk/core";
+import { AccountNotFoundError } from "@aa-sdk/core";
 import {
   toHex,
   type Address,
@@ -6,11 +6,14 @@ import {
   type IsUndefined,
   type Prettify,
   concatHex,
+  serializeSignature,
 } from "viem";
 import type { InnerWalletApiClient } from "../../types.ts";
 import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
 import { signSignatureRequest } from "./signSignatureRequest.js";
 import { metrics } from "../../metrics.js";
+import type { SmartWalletSigner } from "../index.js";
+import { isWebAuthnSigner } from "../../utils.js";
 
 type RpcSchema = Extract<
   WalletServerRpcSchemaType,
@@ -39,7 +42,7 @@ export type GrantPermissionsResult = {
  * This allows another key to perform operations on behalf of the account.
  *
  * @param {InnerWalletApiClient} client - The wallet API client to use for the request
- * @param {SmartAccountSigner} signer - The signer of the smart account
+ * @param {SmartAccountSigner | WebAuthnSigner} signer - The signer of the smart account
  * @param {GrantPermissionsParams} params - The parameters for granting permissions
  * @param {Address} [params.account] - The account address (required if client was not initialized with an account)
  * @param {number} params.expirySec - Unix timestamp when the permissions expire
@@ -93,7 +96,7 @@ export async function grantPermissions<
   TAccount extends Address | undefined = Address | undefined,
 >(
   client: InnerWalletApiClient,
-  signer: SmartAccountSigner,
+  signer: SmartWalletSigner,
   params: GrantPermissionsParams<TAccount>,
 ): Promise<GrantPermissionsResult> {
   metrics.trackEvent({
@@ -103,6 +106,12 @@ export async function grantPermissions<
   const account = params.account ?? client.account?.address;
   if (!account) {
     throw new AccountNotFoundError();
+  }
+
+  if (isWebAuthnSigner(signer)) {
+    throw new Error(
+      "WebAuthn signer is not currently supported for grantPermissions",
+    );
   }
 
   const { sessionId, signatureRequest } = await client.request({
@@ -118,11 +127,31 @@ export async function grantPermissions<
 
   const signature = await signSignatureRequest(signer, signatureRequest);
 
+  let signatureHex: Hex;
+  if (typeof signature.data === "string") {
+    signatureHex = signature.data;
+  } else {
+    const sigData = signature.data;
+    if ("yParity" in sigData) {
+      signatureHex = serializeSignature({
+        r: sigData.r,
+        s: sigData.s,
+        yParity: Number(sigData.yParity),
+      });
+    } else {
+      signatureHex = serializeSignature({
+        r: sigData.r,
+        s: sigData.s,
+        v: BigInt(sigData.v),
+      });
+    }
+  }
+
   return {
     context: concatHex([
       "0x00", // remote mode
       sessionId,
-      signature.data,
+      signatureHex,
     ]),
   };
 }
