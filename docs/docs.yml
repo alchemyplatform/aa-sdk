@@ -97,6 +97,79 @@ navigation:
           - page: Supported Chains
             path: wallets/pages/overview/supported-chains.mdx
 
+      - section: Transactions
+        contents:
+          - page: Overview
+            path: wallets/pages/transactions/overview.mdx
+          - page: Send transactions
+            path: wallets/pages/transactions/send-transactions/index.mdx
+          - page: Using EIP-7702
+            path: wallets/pages/transactions/using-eip-7702/index.mdx
+          - page: Send batch transactions
+            path: wallets/pages/transactions/send-batch-transactions/index.mdx
+          - page: Sponsor gas
+            path: wallets/pages/transactions/sponsor-gas/index.mdx
+          - page: Pay gas with any token
+            path: wallets/pages/transactions/pay-gas-with-any-token/index.mdx
+          - section: Session Keys
+            contents:
+              - page: Overview
+                path: wallets/pages/smart-wallets/session-keys/index.mdx
+              - page: Using SDK
+                path: wallets/pages/smart-wallets/session-keys/sdk.mdx
+              - page: Using API
+                path: wallets/pages/smart-wallets/session-keys/api.mdx
+          - page: "[NEW] Same-chain swaps"
+            path: wallets/pages/transactions/swap-tokens/index.mdx
+          - page: "[NEW] Cross-chain swaps"
+            path: wallets/pages/transactions/cross-chain-swap-tokens/index.mdx
+          - page: Send parallel transactions
+            path: wallets/pages/transactions/send-parallel-transactions/index.mdx
+          - page: Retry transactions
+            path: wallets/pages/transactions/retry-transactions/index.mdx
+          - page: Sponsor gas on Solana
+            path: wallets/pages/transactions/solana/sponsor-gas-solana.mdx
+          - section: Signing
+            contents:
+              - page: Sign messages
+                path: wallets/pages/transactions/signing/sign-messages/index.mdx
+              - page: Sign typed data
+                path: wallets/pages/transactions/signing/sign-typed-data/index.mdx
+          - page: Configure client
+            path: wallets/pages/concepts/smart-account-client.mdx
+      - section: Low-Level Infra
+        contents:
+          - page: Overview
+            path: wallets/pages/low-level-infra/overview.mdx
+          - page: Quickstart
+            path: wallets/pages/low-level-infra/quickstart.mdx
+          - section: Gas Manager
+            contents:
+              - section: Policy Management
+                contents:
+                  - page: API Endpoints
+                    path: wallets/pages/low-level-infra/gas-manager/policy-management/api-endpoints.mdx
+              - section: Gas Sponsorship
+                contents:
+                  - page: API Endpoints
+                    path: wallets/pages/low-level-infra/gas-manager/gas-sponsorship/api-endpoints.mdx
+                  - section: Using SDK
+                    contents:
+                      - page: Basic Gas Sponsorship
+                        path: wallets/pages/low-level-infra/gas-manager/gas-sponsorship/using-sdk/basic-gas-sponsorship.mdx
+                      - page: Conditional Gas Sponsorship
+                        path: wallets/pages/low-level-infra/gas-manager/gas-sponsorship/using-sdk/conditional-gas-sponsorship.mdx
+                      - page: Pay Gas with Any ERC20 Token
+                        path: wallets/pages/low-level-infra/gas-manager/gas-sponsorship/using-sdk/pay-gas-with-any-erc20-token.mdx
+          - section: Bundler
+            path: wallets/pages/low-level-infra/bundler/overview.mdx
+            contents:
+              - page: API Endpoints
+                path: wallets/pages/low-level-infra/bundler/api-endpoints.mdx
+              - page: Using SDK
+                path: wallets/pages/low-level-infra/bundler/sdk.mdx
+              - page: Bundler FAQs
+                path: wallets/pages/bundler-api/bundler-faqs.mdx
       - section: Authentication
         contents:
           - page: Overview
@@ -195,88 +268,6 @@ navigation:
                 path: wallets/pages/third-party/signers/custom-integration.mdx
           - page: What is a signer?
             path: wallets/pages/authentication/what-is-a-signer.mdx
-
-      - section: Transactions
-        contents:
-          - page: Overview
-            path: wallets/pages/transactions/overview.mdx
-          - page: Send transactions
-            path: wallets/pages/transactions/send-transactions/index.mdx
-          - page: Using EIP-7702
-            path: wallets/pages/transactions/using-eip-7702/index.mdx
-          - page: Send batch transactions
-            path: wallets/pages/transactions/send-batch-transactions/index.mdx
-          - page: Sponsor gas
-            path: wallets/pages/transactions/sponsor-gas/index.mdx
-          - page: Pay gas with any token
-            path: wallets/pages/transactions/pay-gas-with-any-token/index.mdx
-          - section: Session Keys
-            contents:
-              - page: Overview
-                path: wallets/pages/smart-wallets/session-keys/index.mdx
-              - page: Using SDK
-                path: wallets/pages/smart-wallets/session-keys/sdk.mdx
-              - page: Using API
-                path: wallets/pages/smart-wallets/session-keys/api.mdx
-          - page: "[NEW] Same-chain swaps"
-            path: wallets/pages/transactions/swap-tokens/index.mdx
-          - page: "[NEW] Cross-chain swaps"
-            path: wallets/pages/transactions/cross-chain-swap-tokens/index.mdx
-          - page: Send parallel transactions
-            path: wallets/pages/transactions/send-parallel-transactions/index.mdx
-          - page: Retry transactions
-            path: wallets/pages/transactions/retry-transactions/index.mdx
-          - page: Sponsor gas on Solana
-            path: wallets/pages/transactions/solana/sponsor-gas-solana.mdx
-          - section: Signing
-            contents:
-              - page: Sign messages
-                path: wallets/pages/transactions/signing/sign-messages/index.mdx
-              - page: Sign typed data
-                path: wallets/pages/transactions/signing/sign-typed-data/index.mdx
-          - page: Configure client
-            path: wallets/pages/concepts/smart-account-client.mdx
-      - section: Low-Level Infra
-        contents:
-          - page: Overview
-            path: wallets/pages/low-level-infra/overview.mdx
-          - page: Quickstart
-            path: wallets/pages/low-level-infra/quickstart.mdx
-          - section: Gas Manager
-            contents:
-              - section: Policy Management
-                contents:
-                  - page: API Endpoints
-                    path: wallets/pages/low-level-infra/gas-manager/policy-management/api-endpoints.mdx
-              - section: Gas Sponsorship
-                contents:
-                  - page: API Endpoints
-                    path: wallets/pages/low-level-infra/gas-manager/gas-sponsorship/api-endpoints.mdx
-                  - section: Using SDK
-                    contents:
-                      - page: Basic Gas Sponsorship
-                        path: wallets/pages/low-level-infra/gas-manager/gas-sponsorship/using-sdk/basic-gas-sponsorship.mdx
-                      - page: Conditional Gas Sponsorship
-                        path: wallets/pages/low-level-infra/gas-manager/gas-sponsorship/using-sdk/conditional-gas-sponsorship.mdx
-                      - page: Pay Gas with Any ERC20 Token
-                        path: wallets/pages/low-level-infra/gas-manager/gas-sponsorship/using-sdk/pay-gas-with-any-erc20-token.mdx
-          - section: Bundler
-            path: wallets/pages/low-level-infra/bundler/overview.mdx
-            contents:
-              - page: API Endpoints
-                path: wallets/pages/low-level-infra/bundler/api-endpoints.mdx
-              - page: Using SDK
-                path: wallets/pages/low-level-infra/bundler/sdk.mdx
-              - page: Bundler FAQs
-                path: wallets/pages/bundler-api/bundler-faqs.mdx
-          - section: Third Party Infrastructure
-            contents:
-              - page: Third Party Bundlers
-                path: wallets/pages/low-level-infra/third-party-infrastructure/bundlers.mdx
-              - page: Third Party Chains
-                path: wallets/pages/low-level-infra/third-party-infrastructure/chains.mdx
-              - page: Third Party Paymasters
-                path: wallets/pages/low-level-infra/third-party-infrastructure/paymasters.mdx
 
       - section: API Reference
         contents:
