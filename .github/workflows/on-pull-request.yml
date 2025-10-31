@@ -36,7 +36,7 @@ jobs:
         env:
           TITLE: ${{ github.event.pull_request.title }}
         run: echo "$TITLE" | yarn commitlint
-  
+
   preview:
     name: Generate Documentation Preview
     runs-on: ubuntu-latest
@@ -121,13 +121,13 @@ jobs:
 
       - name: Check for broken links
         run: yarn docs:broken-links
-  
+
   lint:
     name: Lint
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      pull-requests: write 
+      pull-requests: write
     env:
       REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.ALCHEMY_BOT_PAT }}
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -155,7 +155,7 @@ jobs:
       - name: Run eslint with reviewdog
         run: |
           npx --no-install -c "eslint -f=rdjson ." | reviewdog -f=rdjson -reporter=github-pr-review -filter-mode=added -tee
-      
+
       - name: Run eslint for errors
         run: yarn lint:check
 
@@ -174,6 +174,17 @@ jobs:
           token: ${{ secrets.ALCHEMY_BOT_PAT }}
           fetch-depth: "0"
           submodules: "recursive"
+      
+      - name: Free up disk space
+        run: |
+          echo "Disk space before cleanup:"
+          df -h
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /opt/ghc
+          sudo rm -rf /opt/hostedtoolcache/CodeQL
+          sudo docker image prune --all --force
+          echo "Disk space after cleanup:"
+          df -h
 
       - name: Setup
         uses: ./.github/actions/setup
@@ -201,10 +212,10 @@ jobs:
 
       - name: Unit Test
         run: yarn test:ci
-        
+
       - name: Typecheck Test
         run: yarn test:typecheck
-    
+
   build_ios:
     name: Build iOS
     runs-on: macos-14
@@ -230,7 +241,7 @@ jobs:
           pod install
         env:
           NO_FLIPPER: 1
-      
+
       - name: Build example for iOS
         run: |
           yarn turbo run build:ios

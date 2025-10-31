@@ -1,31 +1,38 @@
 import type { PrepareCallsResult } from "./prepareCalls.ts";
-import { BaseError, type SmartAccountSigner } from "@aa-sdk/core";
+import { BaseError } from "@aa-sdk/core";
 import { signSignatureRequest } from "./signSignatureRequest.js";
-import type { Static } from "@sinclair/typebox";
-import { wallet_sendPreparedCalls } from "@alchemy/wallet-api-types/rpc";
-import {
-  type PreparedCall_Authorization,
-  type PreparedCall_UserOpV060,
-  type PreparedCall_UserOpV070,
+import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
+import type {
+  PreparedCall_Authorization,
+  PreparedCall_UserOpV060,
+  PreparedCall_UserOpV070,
 } from "@alchemy/wallet-api-types";
 import { metrics } from "../../metrics.js";
-import { assertNever } from "../../utils.js";
+import { assertNever, isWebAuthnSigner } from "../../utils.js";
+import type { SmartWalletSigner } from "../index.js";
+
+type RpcSchema = Extract<
+  WalletServerRpcSchemaType,
+  {
+    Request: {
+      method: "wallet_sendPreparedCalls";
+    };
+  }
+>;
 
 export type SignPreparedCallsParams = PrepareCallsResult;
 
-export type SignPreparedCallsResult = Static<
-  (typeof wallet_sendPreparedCalls)["properties"]["Request"]["properties"]["params"]
->[0];
+export type SignPreparedCallsResult = RpcSchema["Request"]["params"][0];
 
 /**
  * Signs prepared calls using the provided signer.
  *
- * @param {SmartAccountSigner} signer - The signer to use
+ * @param {SmartAccountSigner | WebAuthnSigner} signer - The signer to use
  * @param {SignPreparedCallsParams} params - The prepared calls with signature requests
  * @returns {Promise<SignPreparedCallsResult>} A Promise that resolves to the signed calls
  */
 export async function signPreparedCalls(
-  signer: SmartAccountSigner,
+  signer: SmartWalletSigner,
   params: SignPreparedCallsParams,
 ): Promise<SignPreparedCallsResult> {
   metrics.trackEvent({
@@ -37,6 +44,11 @@ export async function signPreparedCalls(
 
   const signAuthorizationCall = async (call: PreparedCall_Authorization) => {
     const { signatureRequest: _signatureRequest, ...rest } = call;
+    if (isWebAuthnSigner(signer)) {
+      throw new Error(
+        "WebAuthn account cannot sign EIP-7702 authorization requests",
+      );
+    }
     const signature = await signSignatureRequest(signer, {
       type: "eip7702Auth",
       data: {

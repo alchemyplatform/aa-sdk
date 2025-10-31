@@ -1,8 +1,7 @@
 import { useCallback, useState } from "react";
-import { type Address, type Hex, isHex } from "viem";
+import { type Hex, isHex } from "viem";
 import { useAlchemyClient } from "./useAlchemyClient.js";
-import { useAlchemyConfig } from "../Provider.js";
-import { useEmbeddedWallet } from "./internal/useEmbeddedWallet.js";
+import { useAlchemyConfig } from "../context/AlchemyContext.js";
 import type {
   UnsignedTransactionRequest,
   SendTransactionOptions,
@@ -33,11 +32,12 @@ function normalizeValue(value: string | number | bigint): Hex {
 
 /**
  * Hook to send transactions with optional gas sponsorship via Alchemy
+ * Supports both single transactions and batch transactions
  * Drop-in alternative to Privy's useSendTransaction hook
  *
  * @returns {UseSendTransactionResult} Hook result with sendTransaction function and state
  *
- * @example
+ * @example Single transaction
  * ```tsx
  * const { sendTransaction, isLoading, error, data } = useAlchemySendTransaction();
  *
@@ -54,11 +54,20 @@ function normalizeValue(value: string | number | bigint): Hex {
  *   }
  * };
  * ```
+ *
+ * @example Batch transactions
+ * ```tsx
+ * const { sendTransaction } = useAlchemySendTransaction();
+ *
+ * const result = await sendTransaction([
+ *   { to: '0x...', data: '0x...', value: '1000000000000000000' },
+ *   { to: '0x...', data: '0x...' },
+ * ]);
+ * ```
  */
 export function useAlchemySendTransaction(): UseSendTransactionResult {
   const { getClient } = useAlchemyClient();
   const config = useAlchemyConfig();
-  const getEmbeddedWallet = useEmbeddedWallet();
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
@@ -66,15 +75,14 @@ export function useAlchemySendTransaction(): UseSendTransactionResult {
 
   const sendTransaction = useCallback(
     async (
-      input: UnsignedTransactionRequest,
+      input: UnsignedTransactionRequest | UnsignedTransactionRequest[],
       options?: SendTransactionOptions,
     ): Promise<SendTransactionResult> => {
       setIsLoading(true);
       setError(null);
 
       try {
-        const client = await getClient();
-        const embeddedWallet = getEmbeddedWallet();
+        const { client, account } = await getClient();
 
         // Determine if transaction should be sponsored
         const hasPolicyId = !!config.policyId;
@@ -84,31 +92,33 @@ export function useAlchemySendTransaction(): UseSendTransactionResult {
             ? !options.disableSponsorship
             : hasPolicyId && enableSponsorship;
 
-        // Format the transaction call
-        const formattedCall = {
-          to: input.to,
-          data: input.data,
-          value: input.value ? normalizeValue(input.value) : undefined,
-        };
+        // Format the transaction call(s)
+        const inputs = Array.isArray(input) ? input : [input];
+        const formattedCalls = inputs.map((txn) => ({
+          to: txn.to,
+          data: txn.data,
+          value: txn.value ? normalizeValue(txn.value) : undefined,
+        }));
 
-        // Build capabilities based on sponsorship
+        // Build capabilities based on sponsorship and auth mode
         const policyId = Array.isArray(config.policyId)
           ? config.policyId[0]
           : config.policyId;
 
-        const capabilities: {
-          eip7702Auth: true;
-          paymasterService?: { policyId: string };
-        } = { eip7702Auth: true };
+        type Capabilities =
+          | { eip7702Auth: true; paymasterService?: { policyId: string } }
+          | { paymasterService?: { policyId: string } };
+        const capabilities: Capabilities =
+          config.accountAuthMode === "eip7702" ? { eip7702Auth: true } : {};
 
         if (shouldSponsor && policyId) {
           capabilities.paymasterService = { policyId };
         }
 
-        // Send the transaction
+        // Send the transaction(s) from the smart account address
         const result = await client.sendCalls({
-          from: embeddedWallet.address as Address,
-          calls: [formattedCall],
+          from: account.address,
+          calls: formattedCalls,
           capabilities,
         });
 
@@ -141,7 +151,12 @@ export function useAlchemySendTransaction(): UseSendTransactionResult {
         setIsLoading(false);
       }
     },
-    [getClient, getEmbeddedWallet, config.policyId, config.disableSponsorship],
+    [
+      getClient,
+      config.policyId,
+      config.disableSponsorship,
+      config.accountAuthMode,
+    ],
   );
 
   const reset = useCallback(() => {

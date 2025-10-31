@@ -1,4 +1,4 @@
-If you have an existing custom signer or another third-party embedded wallet provider, you can upgrade your embedded EOAs to our smart wallets by connecting your existing signer.
+If you have an existing custom signer or another third-party embedded wallet provider, you can upgrade your embedded EOAs to smart wallets by connecting your existing signer.
 This will allow you to use EIP-7702 to get features like gas sponsorship, batching, and more.
 
 <Warning>
@@ -6,7 +6,7 @@ This will allow you to use EIP-7702 to get features like gas sponsorship, batchi
   EIP-7702 authorizations in order to delegate to a smart account.
 </Warning>
 
-To bring your own signer, you'll create a `SmartAccountSigner` that implements `signAuthorization`. See the details for the interface requirements [here](/wallets/resources/types#smartaccountsigner).
+To bring your own signer, you create a `SmartAccountSigner` that implements `signAuthorization`. See the details for the interface requirements [here](/wallets/resources/types#smartaccountsigner).
 
 For example, you can upgrade an existing Privy embedded EOA by extending a Wallet Client to use the `sign7702Authorization` action exposed by Privy.
 See full example code [here](https://github.com/alchemyplatform/alchemy-wallets-7702-thirdparty-example).

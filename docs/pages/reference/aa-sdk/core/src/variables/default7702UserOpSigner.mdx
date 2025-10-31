@@ -11,11 +11,15 @@ layout: reference
 const default7702UserOpSigner: (userOpSigner?) => ClientMiddlewareFn;
 ```
 
-Defined in: [aa-sdk/core/src/middleware/defaults/7702signer.ts:43](https://github.com/alchemyplatform/aa-sdk/blob/dc58c113ff1eeb06d4b3f76c505cbbaad47db8fc/aa-sdk/core/src/middleware/defaults/7702signer.ts#L43)
+Defined in: [aa-sdk/core/src/middleware/defaults/7702signer.ts:18](https://github.com/alchemyplatform/aa-sdk/blob/17aad1f572375d42a06c7e3238078a88a435d459/aa-sdk/core/src/middleware/defaults/7702signer.ts#L18)
 
 Provides a default middleware function for signing user operations with a client account when using EIP-7702 delegated accounts.
 If the signer doesn't support `signAuthorization`, then this just runs the provided `signUserOperation` middleware.
 This function is only compatible with accounts using EntryPoint v0.7.0, and the account must have an implementation address defined in `getImplementationAddress()`.
+
+## Deprecated
+
+The EIP-7702 auth signature is now handled by the defaultUserOpSigner middleware. This middleware is no longer necessary.
 
 ## Parameters
 

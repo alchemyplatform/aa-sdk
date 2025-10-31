@@ -2,7 +2,6 @@ import { useCallback, useState } from "react";
 import { type Address } from "viem";
 import { swapActions } from "@account-kit/wallet-client/experimental";
 import { useAlchemyClient } from "./useAlchemyClient.js";
-import { useEmbeddedWallet } from "./internal/useEmbeddedWallet.js";
 import type {
   PrepareSwapRequest,
   PrepareSwapResult,
@@ -51,7 +50,6 @@ import type {
  */
 export function useAlchemyPrepareSwap(): UsePrepareSwapResult {
   const { getClient } = useAlchemyClient();
-  const getEmbeddedWallet = useEmbeddedWallet();
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
@@ -63,8 +61,7 @@ export function useAlchemyPrepareSwap(): UsePrepareSwapResult {
       setError(null);
 
       try {
-        const client = await getClient();
-        const embeddedWallet = getEmbeddedWallet();
+        const { client, account } = await getClient();
 
         // Extend client with swap actions
         const swapClient = client.extend(swapActions);
@@ -73,7 +70,7 @@ export function useAlchemyPrepareSwap(): UsePrepareSwapResult {
         // Note: Gas sponsorship capabilities are configured on the client itself
         const response = await swapClient.requestQuoteV0({
           ...request,
-          from: request.from || (embeddedWallet.address as Address),
+          from: request.from || (account.address as Address),
         });
 
         // Validate that we got prepared calls, not raw calls
@@ -94,7 +91,7 @@ export function useAlchemyPrepareSwap(): UsePrepareSwapResult {
         setIsLoading(false);
       }
     },
-    [getClient, getEmbeddedWallet],
+    [getClient],
   );
 
   const reset = useCallback(() => {

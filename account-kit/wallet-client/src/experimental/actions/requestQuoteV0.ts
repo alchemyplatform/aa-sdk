@@ -1,4 +1,3 @@
-import type { Static } from "@sinclair/typebox";
 import {
   toHex,
   type Address,
@@ -6,26 +5,26 @@ import {
   type Prettify,
   type UnionOmit,
 } from "viem";
-import type { wallet_requestQuote_v0 } from "@alchemy/wallet-api-types/rpc";
+import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
 import type { InnerWalletApiClientBase } from "../../types.js";
 import { AccountNotFoundError } from "@aa-sdk/core";
 import { mergeClientCapabilities } from "../../internal/capabilities.js";
 
+type RpcSchema = Extract<
+  WalletServerRpcSchemaType,
+  {
+    Request: {
+      method: "wallet_requestQuote_v0";
+    };
+  }
+>;
+
 export type RequestQuoteV0Params<
   TAccount extends Address | undefined = Address | undefined,
-> = Prettify<
-  UnionOmit<
-    Static<
-      (typeof wallet_requestQuote_v0)["properties"]["Request"]["properties"]["params"]
-    >[0],
-    "from" | "chainId"
-  >
-> &
+> = Prettify<UnionOmit<RpcSchema["Request"]["params"][0], "from" | "chainId">> &
   (IsUndefined<TAccount> extends true ? { from: Address } : { from?: never });
 
-export type RequestQuoteV0Result = Prettify<
-  Static<typeof wallet_requestQuote_v0>["ReturnType"]
->;
+export type RequestQuoteV0Result = Prettify<RpcSchema["ReturnType"]>;
 
 export async function requestQuoteV0<
   TAccount extends Address | undefined = Address | undefined,

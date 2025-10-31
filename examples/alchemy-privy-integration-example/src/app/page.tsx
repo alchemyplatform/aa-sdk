@@ -6,6 +6,7 @@ import { AccountInfo } from "@/components/AccountInfo";
 import { SendTransaction } from "@/components/SendTransaction";
 import { TokenSwap } from "@/components/TokenSwap";
 import { NetworkSwitcher } from "@/components/NetworkSwitcher";
+import { SolanaTransactionCard } from "@/components/SolanaTransactionCard";
 
 export default function Home() {
   const { ready, authenticated, login } = usePrivy();
@@ -49,7 +50,7 @@ export default function Home() {
       <div className="header">
         <h1>Alchemy + Privy Integration Example</h1>
         <p style={{ color: "#666" }}>
-          Demonstrating gas sponsorship and token swaps with EIP-7702 delegation
+          Demonstrating gas sponsorship and token swaps with owner auth mode
         </p>
       </div>
 
@@ -64,6 +65,7 @@ export default function Home() {
         <div>
           <SendTransaction onSuccess={refreshBalances} />
           <TokenSwap onSuccess={refreshBalances} />
+          <SolanaTransactionCard />
         </div>
       </div>
     </main>

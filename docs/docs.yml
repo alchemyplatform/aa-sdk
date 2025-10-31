@@ -89,8 +89,114 @@ navigation:
                 path: wallets/pages/recipes/multi-chain-setup.mdx
               - link: Multi-chain Balances
                 href: https://www.alchemy.com/docs/how-to-get-crosschain-token-balances
+              - section: Sample apps
+                contents:
+                  - page: Social Payments and Defi
+                    slug: recipes/sample-apps/social-payments-and-defi
+                    path: wallets/pages/recipes/sample-apps/social-payments-and-defi.mdx
           - page: Supported Chains
             path: wallets/pages/overview/supported-chains.mdx
+
+      - section: Transactions
+        contents:
+          - page: Overview
+            path: wallets/pages/transactions/overview.mdx
+          - page: Send transactions
+            path: wallets/pages/transactions/send-transactions/index.mdx
+          - page: Using EIP-7702
+            path: wallets/pages/transactions/using-eip-7702/index.mdx
+          - page: Send batch transactions
+            path: wallets/pages/transactions/send-batch-transactions/index.mdx
+          - page: Sponsor gas
+            path: wallets/pages/transactions/sponsor-gas/index.mdx
+          - page: Pay gas with any token
+            path: wallets/pages/transactions/pay-gas-with-any-token/index.mdx
+          - section: Session Keys
+            contents:
+              - page: Overview
+                path: wallets/pages/smart-wallets/session-keys/index.mdx
+              - page: Using SDK
+                path: wallets/pages/smart-wallets/session-keys/sdk.mdx
+              - page: Using API
+                path: wallets/pages/smart-wallets/session-keys/api.mdx
+          - page: "[NEW] Same-chain swaps"
+            path: wallets/pages/transactions/swap-tokens/index.mdx
+          - page: "[NEW] Cross-chain swaps"
+            path: wallets/pages/transactions/cross-chain-swap-tokens/index.mdx
+          - page: Send parallel transactions
+            path: wallets/pages/transactions/send-parallel-transactions/index.mdx
+          - page: Retry transactions
+            path: wallets/pages/transactions/retry-transactions/index.mdx
+          - page: Sponsor gas on Solana
+            path: wallets/pages/transactions/solana/sponsor-gas-solana.mdx
+          - section: Signing
+            contents:
+              - page: Sign messages
+                path: wallets/pages/transactions/signing/sign-messages/index.mdx
+              - page: Sign typed data
+                path: wallets/pages/transactions/signing/sign-typed-data/index.mdx
+          - page: Configure client
+            path: wallets/pages/concepts/smart-account-client.mdx
+      - section: Low-Level Infra
+        contents:
+          - page: Overview
+            path: wallets/pages/low-level-infra/overview.mdx
+          - page: Quickstart
+            path: wallets/pages/low-level-infra/quickstart.mdx
+          - section: Gas Manager
+            contents:
+              - section: Policy Management
+                contents:
+                  - page: API Endpoints
+                    path: wallets/pages/low-level-infra/gas-manager/policy-management/api-endpoints.mdx
+              - section: Gas Sponsorship
+                contents:
+                  - page: API Endpoints
+                    path: wallets/pages/low-level-infra/gas-manager/gas-sponsorship/api-endpoints.mdx
+                  - section: Using SDK
+                    contents:
+                      - page: Basic Gas Sponsorship
+                        path: wallets/pages/low-level-infra/gas-manager/gas-sponsorship/using-sdk/basic-gas-sponsorship.mdx
+                      - page: Conditional Gas Sponsorship
+                        path: wallets/pages/low-level-infra/gas-manager/gas-sponsorship/using-sdk/conditional-gas-sponsorship.mdx
+                      - page: Pay Gas with Any ERC20 Token
+                        path: wallets/pages/low-level-infra/gas-manager/gas-sponsorship/using-sdk/pay-gas-with-any-erc20-token.mdx
+          - section: Bundler
+            path: wallets/pages/low-level-infra/bundler/overview.mdx
+            contents:
+              - page: API Endpoints
+                path: wallets/pages/low-level-infra/bundler/api-endpoints.mdx
+              - page: Using SDK
+                path: wallets/pages/low-level-infra/bundler/sdk.mdx
+              - page: Bundler FAQs
+                path: wallets/pages/bundler-api/bundler-faqs.mdx
+          - section: Smart Account Types
+            contents:
+              - page: Choosing a Smart Account
+                path: wallets/pages/authorization/smart-account-types/choosing-a-smart-account.mdx
+              - section: Modular Account V2
+                contents:
+                  - page: Overview
+                    path: wallets/pages/authorization/smart-account-types/modular-account-v2/overview.mdx
+                  - page: Getting started
+                    path: wallets/pages/smart-contracts/modular-account-v2/getting-started.mdx
+                  - page: Upgrading to MAv2
+                    path: wallets/pages/smart-contracts/modular-account-v2/upgrading-to-MAv2.mdx
+
+              - section: Light Account
+                contents:
+                  - page: Overview
+                    path: wallets/pages/smart-contracts/other-accounts/light-account/index.mdx
+                  - page: Getting started
+                    path: wallets/pages/smart-contracts/other-accounts/light-account/getting-started.mdx
+                  - page: Transfer ownership
+                    path: wallets/pages/smart-contracts/other-accounts/light-account/transfer-ownership-light-account.mdx
+                  - page: Manage multiple owners
+                    path: wallets/pages/smart-contracts/other-accounts/light-account/multi-owner-light-account.mdx
+              - page: Third party
+                path: wallets/pages/third-party/smart-contracts.mdx
+              - page: Deployed addresses
+                path: wallets/pages/smart-contracts/deployed-addresses.mdx
 
       - section: Authentication
         contents:
@@ -180,89 +286,16 @@ navigation:
                 path: wallets/pages/smart-contracts/modular-account-v2/managing-ownership.mdx
               - page: Export private key
                 path: wallets/pages/signer/export-private-key.mdx
-          - page: Third party signers
-            path: wallets/pages/third-party/signers.mdx
+          - section: Third party signers
+            contents:
+              - page: Privy
+                path: wallets/pages/third-party/signers/privy.mdx
+              - page: Turnkey
+                path: wallets/pages/third-party/signers/turnkey.mdx
+              - page: Custom integration
+                path: wallets/pages/third-party/signers/custom-integration.mdx
           - page: What is a signer?
             path: wallets/pages/authentication/what-is-a-signer.mdx
-
-      - section: Transactions
-        contents:
-          - page: Overview
-            path: wallets/pages/transactions/overview.mdx
-          - page: Send transactions
-            path: wallets/pages/transactions/send-transactions/index.mdx
-          - page: Using EIP-7702
-            path: wallets/pages/transactions/using-eip-7702/index.mdx
-          - page: Send batch transactions
-            path: wallets/pages/transactions/send-batch-transactions/index.mdx
-          - page: Sponsor gas
-            path: wallets/pages/transactions/sponsor-gas/index.mdx
-          - page: Pay gas with any token
-            path: wallets/pages/transactions/pay-gas-with-any-token/index.mdx
-          - page: "[NEW] Swap tokens"
-            path: wallets/pages/transactions/swap-tokens/index.mdx
-          - page: "[NEW] Cross-Chain Swaps"
-            path: wallets/pages/transactions/cross-chain-swap-tokens/index.mdx
-          - page: Send parallel transactions
-            path: wallets/pages/transactions/send-parallel-transactions/index.mdx
-          - page: Retry transactions
-            path: wallets/pages/transactions/retry-transactions/index.mdx
-          - page: Sponsor gas on Solana
-            path: wallets/pages/transactions/solana/sponsor-gas-solana.mdx
-          - section: Signing
-            contents:
-              - page: Sign messages
-                path: wallets/pages/transactions/signing/sign-messages/index.mdx
-              - page: Sign typed data
-                path: wallets/pages/transactions/signing/sign-typed-data/index.mdx
-          - page: Configure client
-            path: wallets/pages/concepts/smart-account-client.mdx
-      - section: Low-Level Infra
-        contents:
-          - page: Overview
-            path: wallets/pages/low-level-infra/overview.mdx
-          - page: Quickstart
-            path: wallets/pages/low-level-infra/quickstart.mdx
-          - section: Gas Manager
-            contents:
-              - section: Policy Management
-                contents:
-                  - page: API Endpoints
-                    path: wallets/pages/low-level-infra/gas-manager/policy-management/api-endpoints.mdx
-              - section: Gas Sponsorship
-                contents:
-                  - page: API Endpoints
-                    path: wallets/pages/low-level-infra/gas-manager/gas-sponsorship/api-endpoints.mdx
-                  - section: Using SDK
-                    contents:
-                      - page: Basic Gas Sponsorship
-                        path: wallets/pages/low-level-infra/gas-manager/gas-sponsorship/using-sdk/basic-gas-sponsorship.mdx
-                      - page: Conditional Gas Sponsorship
-                        path: wallets/pages/low-level-infra/gas-manager/gas-sponsorship/using-sdk/conditional-gas-sponsorship.mdx
-                      - page: Pay Gas with Any ERC20 Token
-                        path: wallets/pages/low-level-infra/gas-manager/gas-sponsorship/using-sdk/pay-gas-with-any-erc20-token.mdx
-          - section: Bundler
-            path: wallets/pages/low-level-infra/bundler/overview.mdx
-            contents:
-              - page: API Endpoints
-                path: wallets/pages/low-level-infra/bundler/api-endpoints.mdx
-              - page: Using SDK
-                path: wallets/pages/low-level-infra/bundler/sdk.mdx
-              - page: Bundler FAQs
-                path: wallets/pages/bundler-api/bundler-faqs.mdx
-          - section: Third Party Infrastructure
-            contents:
-              - page: Third Party Bundlers
-                path: wallets/pages/low-level-infra/third-party-infrastructure/bundlers.mdx
-              - page: Third Party Chains
-                path: wallets/pages/low-level-infra/third-party-infrastructure/chains.mdx
-              - page: Third Party Paymasters
-                path: wallets/pages/low-level-infra/third-party-infrastructure/paymasters.mdx
-
-      - section: Funding
-        contents:
-          - page: Early Access
-            path: wallets/pages/funding/signup.mdx
 
       - section: API Reference
         contents:
@@ -278,14 +311,6 @@ navigation:
                   - api: Signer API Endpoints
                     api-name: accounts
                     flattened: true
-              - section: Session Keys
-                contents:
-                  - page: Overview
-                    path: wallets/pages/smart-wallets/session-keys/index.mdx
-                  - page: Using SDK
-                    path: wallets/pages/smart-wallets/session-keys/sdk.mdx
-                  - page: Using API
-                    path: wallets/pages/smart-wallets/session-keys/api.mdx
               - page: How to stamp requests
                 path: wallets/pages/smart-wallets/how-to-stamp-requests.mdx
             slug: smart-wallets
@@ -630,6 +655,8 @@ navigation:
                     path: wallets/pages/reference/aa-sdk/core/src/type-aliases/IsOneOf.mdx
                   - page: IsUndefined
                     path: wallets/pages/reference/aa-sdk/core/src/type-aliases/IsUndefined.mdx
+                  - page: MiddlewareClient
+                    path: wallets/pages/reference/aa-sdk/core/src/type-aliases/MiddlewareClient.mdx
                   - page: Multiplier
                     path: wallets/pages/reference/aa-sdk/core/src/type-aliases/Multiplier.mdx
                   - page: Never
@@ -1144,6 +1171,8 @@ navigation:
                     path: wallets/pages/reference/account-kit/core/src/type-aliases/Pack1271SignatureParams.mdx
                   - page: PackUOSignatureParams
                     path: wallets/pages/reference/account-kit/core/src/type-aliases/PackUOSignatureParams.mdx
+                  - page: PaymasterContext
+                    path: wallets/pages/reference/account-kit/core/src/type-aliases/PaymasterContext.mdx
                   - page: Plugin
                     path: wallets/pages/reference/account-kit/core/src/type-aliases/Plugin.mdx
                   - page: PluginManagerActions
@@ -1270,8 +1299,8 @@ navigation:
                     path: wallets/pages/reference/account-kit/core/src/variables/arbitrumNova.mdx
                   - page: arbitrumSepolia
                     path: wallets/pages/reference/account-kit/core/src/variables/arbitrumSepolia.mdx
-                  - page: assertNeverSignatureRequestType
-                    path: wallets/pages/reference/account-kit/core/src/variables/assertNeverSignatureRequestType.mdx
+                  - page: assertNever
+                    path: wallets/pages/reference/account-kit/core/src/variables/assertNever.mdx
                   - page: base
                     path: wallets/pages/reference/account-kit/core/src/variables/base.mdx
                   - page: baseGoerli
@@ -1344,6 +1373,8 @@ navigation:
                     path: wallets/pages/reference/account-kit/core/src/variables/inkMainnet.mdx
                   - page: inkSepolia
                     path: wallets/pages/reference/account-kit/core/src/variables/inkSepolia.mdx
+                  - page: isDeferredAction
+                    path: wallets/pages/reference/account-kit/core/src/variables/isDeferredAction.mdx
                   - page: isMultisigModularAccount
                     path: wallets/pages/reference/account-kit/core/src/variables/isMultisigModularAccount.mdx
                   - page: lightAccountClientActions
@@ -1378,8 +1409,10 @@ navigation:
                     path: wallets/pages/reference/account-kit/core/src/variables/optimismGoerli.mdx
                   - page: optimismSepolia
                     path: wallets/pages/reference/account-kit/core/src/variables/optimismSepolia.mdx
-                  - page: pack1271Signature
-                    path: wallets/pages/reference/account-kit/core/src/variables/pack1271Signature.mdx
+                  - page: pack1271EOASignature
+                    path: wallets/pages/reference/account-kit/core/src/variables/pack1271EOASignature.mdx
+                  - page: pack1271WebAuthnSignature
+                    path: wallets/pages/reference/account-kit/core/src/variables/pack1271WebAuthnSignature.mdx
                   - page: packUOSignature
                     path: wallets/pages/reference/account-kit/core/src/variables/packUOSignature.mdx
                   - page: parseDeferredAction
@@ -1503,6 +1536,8 @@ navigation:
                     path: wallets/pages/reference/account-kit/infra/src/exports/type-aliases/BaseAlchemyActions.mdx
                   - page: ClientWithAlchemyMethods
                     path: wallets/pages/reference/account-kit/infra/src/exports/type-aliases/ClientWithAlchemyMethods.mdx
+                  - page: PaymasterContext
+                    path: wallets/pages/reference/account-kit/infra/src/exports/type-aliases/PaymasterContext.mdx
                   - page: PolicyToken
                     path: wallets/pages/reference/account-kit/infra/src/exports/type-aliases/PolicyToken.mdx
                   - page: RequestGasAndPaymasterAndDataRequest
@@ -1682,6 +1717,8 @@ navigation:
                     path: wallets/pages/reference/account-kit/react/src/functions/useMFA.mdx
                   - page: usePrepareCalls
                     path: wallets/pages/reference/account-kit/react/src/functions/usePrepareCalls.mdx
+                  - page: usePrepareSwap
+                    path: wallets/pages/reference/account-kit/react/src/functions/usePrepareSwap.mdx
                   - page: useRemoveEmail
                     path: wallets/pages/reference/account-kit/react/src/functions/useRemoveEmail.mdx
                   - page: useRemoveOauthProvider
@@ -1698,6 +1735,8 @@ navigation:
                     path: wallets/pages/reference/account-kit/react/src/functions/useSendVerificationCode.mdx
                   - page: useSetEmail
                     path: wallets/pages/reference/account-kit/react/src/functions/useSetEmail.mdx
+                  - page: useSignAndSendPreparedCalls
+                    path: wallets/pages/reference/account-kit/react/src/functions/useSignAndSendPreparedCalls.mdx
                   - page: useSignMessage
                     path: wallets/pages/reference/account-kit/react/src/functions/useSignMessage.mdx
                   - page: useSignTypedData
@@ -1848,6 +1887,10 @@ navigation:
                     path: wallets/pages/reference/account-kit/react/src/type-aliases/UsePrepareCallsParams.mdx
                   - page: UsePrepareCallsResult
                     path: wallets/pages/reference/account-kit/react/src/type-aliases/UsePrepareCallsResult.mdx
+                  - page: UsePrepareSwapParams
+                    path: wallets/pages/reference/account-kit/react/src/type-aliases/UsePrepareSwapParams.mdx
+                  - page: UsePrepareSwapResult
+                    path: wallets/pages/reference/account-kit/react/src/type-aliases/UsePrepareSwapResult.mdx
                   - page: UseRemoveEmailMutationArgs
                     path: wallets/pages/reference/account-kit/react/src/type-aliases/UseRemoveEmailMutationArgs.mdx
                   - page: UseRemoveEmailResult
@@ -1882,6 +1925,10 @@ navigation:
                     path: wallets/pages/reference/account-kit/react/src/type-aliases/UseSetEmailMutationArgs.mdx
                   - page: UseSetEmailResult
                     path: wallets/pages/reference/account-kit/react/src/type-aliases/UseSetEmailResult.mdx
+                  - page: UseSignAndSendPreparedCallsParams
+                    path: wallets/pages/reference/account-kit/react/src/type-aliases/UseSignAndSendPreparedCallsParams.mdx
+                  - page: UseSignAndSendPreparedCallsResult
+                    path: wallets/pages/reference/account-kit/react/src/type-aliases/UseSignAndSendPreparedCallsResult.mdx
                   - page: UseSignMessageArgs
                     path: wallets/pages/reference/account-kit/react/src/type-aliases/UseSignMessageArgs.mdx
                   - page: UseSignMessageResult
@@ -2386,8 +2433,8 @@ navigation:
                     path: wallets/pages/reference/account-kit/smart-contracts/src/enumerations/SessionKeyAccessListType.mdx
               - section: Functions
                 contents:
-                  - page: assertNeverSignatureRequestType
-                    path: wallets/pages/reference/account-kit/smart-contracts/src/functions/assertNeverSignatureRequestType.mdx
+                  - page: assertNever
+                    path: wallets/pages/reference/account-kit/smart-contracts/src/functions/assertNever.mdx
                   - page: buildDeferredActionDigest
                     path: wallets/pages/reference/account-kit/smart-contracts/src/functions/buildDeferredActionDigest.mdx
                   - page: buildFullNonceKey
@@ -2462,12 +2509,16 @@ navigation:
                     path: wallets/pages/reference/account-kit/smart-contracts/src/functions/getSignerType.mdx
                   - page: installPlugin
                     path: wallets/pages/reference/account-kit/smart-contracts/src/functions/installPlugin.mdx
+                  - page: isDeferredAction
+                    path: wallets/pages/reference/account-kit/smart-contracts/src/functions/isDeferredAction.mdx
                   - page: isModularAccountV2
                     path: wallets/pages/reference/account-kit/smart-contracts/src/functions/isModularAccountV2.mdx
                   - page: isMultisigModularAccount
                     path: wallets/pages/reference/account-kit/smart-contracts/src/functions/isMultisigModularAccount.mdx
-                  - page: pack1271Signature
-                    path: wallets/pages/reference/account-kit/smart-contracts/src/functions/pack1271Signature.mdx
+                  - page: pack1271EOASignature
+                    path: wallets/pages/reference/account-kit/smart-contracts/src/functions/pack1271EOASignature.mdx
+                  - page: pack1271WebAuthnSignature
+                    path: wallets/pages/reference/account-kit/smart-contracts/src/functions/pack1271WebAuthnSignature.mdx
                   - page: packUOSignature
                     path: wallets/pages/reference/account-kit/smart-contracts/src/functions/packUOSignature.mdx
                   - page: parseDeferredAction
@@ -2797,10 +2848,6 @@ navigation:
                     path: wallets/pages/reference/account-kit/wallet-client/src/exports/type-aliases/SmartWalletClientParams.mdx
                   - page: WalletServerRpcSchemaType
                     path: wallets/pages/reference/account-kit/wallet-client/src/exports/type-aliases/WalletServerRpcSchemaType.mdx
-              - section: Variables
-                contents:
-                  - page: WalletServerRpcSchema
-                    path: wallets/pages/reference/account-kit/wallet-client/src/exports/variables/WalletServerRpcSchema.mdx
       - section: Resources
         skip-slug: true
         contents:
@@ -2828,58 +2875,7 @@ navigation:
             path: wallets/pages/resources/types.mdx
           - page: Middleware
             path: wallets/pages/concepts/middleware.mdx
-          - section: Smart Account Types
-            contents:
-              - page: Choosing a Smart Account
-                path: wallets/pages/authorization/smart-account-types/choosing-a-smart-account.mdx
-              - section: Modular Account V2
-                contents:
-                  - page: Overview
-                    path: wallets/pages/authorization/smart-account-types/modular-account-v2/overview.mdx
-                  - page: Getting started
-                    path: wallets/pages/smart-contracts/modular-account-v2/getting-started.mdx
-                  - page: Upgrading to MAv2
-                    path: wallets/pages/smart-contracts/modular-account-v2/upgrading-to-MAv2.mdx
-              - section: Modular Account V1
-                contents:
-                  - page: Overview
-                    path: wallets/pages/smart-contracts/other-accounts/modular-account/index.mdx
-                  - page: Getting started
-                    path: wallets/pages/smart-contracts/other-accounts/modular-account/getting-started.mdx
-                  - page: Manage multiple owners
-                    path: wallets/pages/smart-contracts/other-accounts/modular-account/manage-ownership-mav1.mdx
-                  - page: Upgrade to MAv1
-                    path: wallets/pages/smart-contracts/other-accounts/modular-account/upgrading-to-modular-account.mdx
-                  - section: Multisig
-                    contents:
-                      - page: Introduction
-                        path: wallets/pages/smart-contracts/other-accounts/modular-account/multisig-plugin/index.mdx
-                      - page: Getting started
-                        path: wallets/pages/smart-contracts/other-accounts/modular-account/multisig-plugin/getting-started.mdx
-                      - page: Technical details
-                        path: wallets/pages/smart-contracts/other-accounts/modular-account/multisig-plugin/details.mdx
-                  - section: Session keys
-                    contents:
-                      - page: Overview
-                        path: wallets/pages/smart-contracts/other-accounts/modular-account/session-keys/index.mdx
-                      - page: Getting started
-                        path: wallets/pages/smart-contracts/other-accounts/modular-account/session-keys/getting-started.mdx
-                      - page: Supported permissions
-                        path: wallets/pages/smart-contracts/other-accounts/modular-account/session-keys/supported-permissions.mdx
-              - section: Light Account
-                contents:
-                  - page: Overview
-                    path: wallets/pages/smart-contracts/other-accounts/light-account/index.mdx
-                  - page: Getting started
-                    path: wallets/pages/smart-contracts/other-accounts/light-account/getting-started.mdx
-                  - page: Transfer ownership
-                    path: wallets/pages/smart-contracts/other-accounts/light-account/transfer-ownership-light-account.mdx
-                  - page: Manage multiple owners
-                    path: wallets/pages/smart-contracts/other-accounts/light-account/multi-owner-light-account.mdx
-              - page: Third party
-                path: wallets/pages/third-party/smart-contracts.mdx
-              - page: Deployed addresses
-                path: wallets/pages/smart-contracts/deployed-addresses.mdx
+
           - section: Troubleshooting
             contents:
               - page: General FAQs

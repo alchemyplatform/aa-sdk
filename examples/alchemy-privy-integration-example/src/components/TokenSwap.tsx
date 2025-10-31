@@ -4,17 +4,47 @@ import { useState, useEffect } from "react";
 import {
   useAlchemyPrepareSwap,
   useAlchemySubmitSwap,
+  useAlchemyClient,
   type PrepareSwapResult,
 } from "@account-kit/privy-integration";
 import { formatEther, formatUnits, type Address, type Hex } from "viem";
 import { useWallets } from "@privy-io/react-auth";
-import { base } from "viem/chains";
+import { base, baseSepolia } from "viem/chains";
 
 const ETH_ADDRESS = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE";
 const USDC_ADDRESS_BASE = "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913";
 
+/**
+ * Get block explorer URL for a transaction hash based on chain ID
+ *
+ * @param chainId
+ * @param txHash
+ * @returns
+ */
+function getExplorerUrl(chainId: number, txHash: string): string {
+  const explorers = {
+    [base.id]: {
+      name: "BaseScan",
+      url: base.blockExplorers?.default?.url || "https://basescan.org",
+    },
+    [baseSepolia.id]: {
+      name: "Base Sepolia Explorer",
+      url:
+        baseSepolia.blockExplorers?.default?.url ||
+        "https://sepolia.basescan.org",
+    },
+  };
+
+  const explorer = explorers[chainId as keyof typeof explorers] || {
+    name: "Explorer",
+    url: `https://etherscan.io`,
+  };
+  return `View on ${explorer.name}: ${explorer.url}/tx/${txHash}`;
+}
+
 export function TokenSwap({ onSuccess }: { onSuccess?: () => void }) {
   const { wallets } = useWallets();
+  const { getClient } = useAlchemyClient();
   const prepareSwap = useAlchemyPrepareSwap();
   const submitSwap = useAlchemySubmitSwap();
 
@@ -79,8 +109,12 @@ export function TokenSwap({ onSuccess }: { onSuccess?: () => void }) {
         parseFloat(swapAmount) * 10 ** fromDecimals,
       );
 
+      // Get the account address to use for the swap
+      // This ensures we use the correct address for both eip7702 and owner modes
+      const { account } = await getClient();
+
       const result = await prepareSwap.prepareSwap({
-        from: wallets[0].address as Address,
+        from: account.address as Address,
         fromToken: fromToken as Address,
         toToken: toToken as Address,
         fromAmount: `0x${amountInSmallestUnit.toString(16)}` as Hex,
@@ -102,9 +136,10 @@ export function TokenSwap({ onSuccess }: { onSuccess?: () => void }) {
 
     try {
       const result = await submitSwap.submitSwap(preparedSwap);
-      setSuccessMessage(
-        `Swap successful! View on BaseScan: https://basescan.org/tx/${result.txnHash}`,
-      );
+      const explorerMessage = currentChain
+        ? getExplorerUrl(currentChain, result.txnHash)
+        : `Swap successful! Transaction: ${result.txnHash}`;
+      setSuccessMessage(explorerMessage);
 
       // Reset form
       setPreparedSwap(null);

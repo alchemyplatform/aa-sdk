@@ -11,6 +11,10 @@ import {
 } from "viem";
 import { base, baseSepolia } from "viem/chains";
 import { useWallets } from "@privy-io/react-auth";
+import {
+  useAlchemyClient,
+  useAlchemyConfig,
+} from "@account-kit/privy-integration";
 
 const USDC_ADDRESS_BASE = "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913";
 const USDC_ADDRESS_BASE_SEPOLIA = "0x036CbD53842c5426634e7929541eC2318f3dCF7e";
@@ -28,10 +32,15 @@ const ERC20_ABI = [
 export function AccountInfo({ refreshTrigger }: { refreshTrigger?: number }) {
   const { user, logout } = usePrivy();
   const { wallets } = useWallets();
+  const { getClient } = useAlchemyClient();
+  const config = useAlchemyConfig();
   const [ethBalance, setEthBalance] = useState<string | null>(null);
   const [usdcBalance, setUsdcBalance] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [currentChain, setCurrentChain] = useState<number | null>(null);
+  const [smartAccountAddress, setSmartAccountAddress] = useState<string | null>(
+    null,
+  );
 
   // Detect current chain
   useEffect(() => {
@@ -50,6 +59,7 @@ export function AccountInfo({ refreshTrigger }: { refreshTrigger?: number }) {
     if (!user?.wallet?.address || currentChain === null) {
       setEthBalance(null);
       setUsdcBalance(null);
+      setSmartAccountAddress(null);
       return;
     }
 
@@ -66,19 +76,22 @@ export function AccountInfo({ refreshTrigger }: { refreshTrigger?: number }) {
         transport: http(),
       });
 
-      // Fetch ETH balance
+      const { account } = await getClient();
+      setSmartAccountAddress(account.address);
+
+      // Fetch ETH balance (from smart account in owner mode, from signer in eip7702 mode)
       const balanceWei = await publicClient.getBalance({
-        address: user.wallet.address as Address,
+        address: account.address,
       });
       setEthBalance(formatEther(balanceWei));
 
-      // Fetch USDC balance
+      // Fetch USDC balance (from smart account in owner mode, from signer in eip7702 mode)
       try {
         const usdcBalanceWei = await publicClient.readContract({
           address: usdcAddress as Address,
           abi: ERC20_ABI,
           functionName: "balanceOf",
-          args: [user.wallet.address as Address],
+          args: [account.address],
         });
         setUsdcBalance(formatUnits(usdcBalanceWei as bigint, 6));
       } catch (error) {
@@ -92,7 +105,7 @@ export function AccountInfo({ refreshTrigger }: { refreshTrigger?: number }) {
     } finally {
       setIsLoading(false);
     }
-  }, [user?.wallet?.address, currentChain]);
+  }, [user?.wallet?.address, currentChain, getClient]);
 
   // Fetch balances when wallet, chain, or refreshTrigger changes
   useEffect(() => {
@@ -115,15 +128,31 @@ export function AccountInfo({ refreshTrigger }: { refreshTrigger?: number }) {
           <span className="info-value">{user?.email?.address || "N/A"}</span>
         </div>
         <div className="info-row">
-          <span className="info-label">Wallet:</span>
-          <span className="info-value">{user?.wallet?.address}</span>
+          <span className="info-label">Signer Address:</span>
+          <span className="info-value" style={{ fontSize: "0.85em" }}>
+            {user?.wallet?.address || "—"}
+          </span>
         </div>
+        {config.accountAuthMode === "owner" && (
+          <div className="info-row">
+            <span className="info-label">Smart Account:</span>
+            <span className="info-value" style={{ fontSize: "0.85em" }}>
+              {isLoading ? "Loading..." : smartAccountAddress || "—"}
+            </span>
+          </div>
+        )}
         <div className="info-row">
           <span className="info-label">Network:</span>
           <span className="info-value">{chainName}</span>
         </div>
         <div className="info-row">
-          <span className="info-label">ETH Balance:</span>
+          <span className="info-label">
+            ETH Balance
+            {config.accountAuthMode === "owner"
+              ? " (Smart Account)"
+              : " (Signer)"}
+            :
+          </span>
           <span className="info-value">
             {isLoading
               ? "Loading..."
@@ -133,7 +162,13 @@ export function AccountInfo({ refreshTrigger }: { refreshTrigger?: number }) {
           </span>
         </div>
         <div className="info-row">
-          <span className="info-label">USDC Balance:</span>
+          <span className="info-label">
+            USDC Balance
+            {config.accountAuthMode === "owner"
+              ? " (Smart Account)"
+              : " (Signer)"}
+            :
+          </span>
           <span className="info-value">
             {isLoading
               ? "Loading..."

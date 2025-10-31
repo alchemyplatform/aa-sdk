@@ -8,14 +8,34 @@ import type { z } from "zod";
  * Uses ConnectionConfigSchema to ensure valid transport configuration
  */
 export type AlchemyProviderConfig = z.infer<typeof ConnectionConfigSchema> & {
-  /** Policy ID(s) for gas sponsorship */
+  /** Policy ID(s) for EVM gas sponsorship */
   policyId?: string | string[];
+
+  /** Policy ID(s) for Solana gas sponsorship */
+  solanaPolicyId?: string | string[];
+
+  /** Solana RPC URL (separate from EVM rpcUrl) */
+  solanaRpcUrl?: string;
+
+  /**
+   * How EVM smart account calls should be authorized.
+   * - 'eip7702' (default): delegated authorization via EIP-7702.
+   * - 'owner': sign as the account owner (Privy embedded wallet), no 7702.
+   */
+  accountAuthMode?: "eip7702" | "owner";
 
   /**
    * Set to true to disable gas sponsorship by default
    * Default: false (sponsorship enabled when policyId is provided)
    */
   disableSponsorship?: boolean;
+
+  /**
+   * Optional: Specify which wallet address to use
+   * - If provided, will use the wallet matching this address
+   * - If not provided, defaults to the first embedded wallet (web) or first wallet in array (React Native)
+   */
+  walletAddress?: string;
 };
 
 /**
@@ -67,9 +87,9 @@ export interface UseSendTransactionResult {
   /** Reset the hook state */
   reset(): void;
 
-  /** Send a transaction */
+  /** Send a single transaction or batch of transactions */
   sendTransaction(
-    input: UnsignedTransactionRequest,
+    input: UnsignedTransactionRequest | UnsignedTransactionRequest[],
     options?: SendTransactionOptions,
   ): Promise<SendTransactionResult>;
 }

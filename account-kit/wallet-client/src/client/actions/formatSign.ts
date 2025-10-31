@@ -1,23 +1,24 @@
-import type { Static } from "@sinclair/typebox";
-import type { wallet_formatSign } from "@alchemy/wallet-api-types/rpc";
+import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
 import type { InnerWalletApiClient, WithoutChainId } from "../../types.ts";
 import { toHex, type Address, type IsUndefined } from "viem";
 import { AccountNotFoundError } from "@aa-sdk/core";
 import { metrics } from "../../metrics.js";
 
+type RpcSchema = Extract<
+  WalletServerRpcSchemaType,
+  {
+    Request: {
+      method: "wallet_formatSign";
+    };
+  }
+>;
+
 export type FormatSignParams<
   TAccount extends Address | undefined = Address | undefined,
-> = Omit<
-  WithoutChainId<
-    Static<
-      (typeof wallet_formatSign)["properties"]["Request"]["properties"]["params"]
-    >[0]
-  >,
-  "from"
-> &
+> = Omit<WithoutChainId<RpcSchema["Request"]["params"][0]>, "from"> &
   (IsUndefined<TAccount> extends true ? { from: Address } : { from?: never });
 
-export type FormatSignResult = Static<typeof wallet_formatSign>["ReturnType"];
+export type FormatSignResult = RpcSchema["ReturnType"];
 
 /**
  * Formats a signature request for signing messages or transactions.
