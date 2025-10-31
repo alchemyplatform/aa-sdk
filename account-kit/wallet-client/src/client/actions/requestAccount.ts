@@ -62,8 +62,10 @@ export async function requestAccount(
   const { creationHint = {} } = params ?? {};
 
   if (isWebAuthnSigner(signer)) {
-    if (creationHint.accountType !== "mav2-webauthn") {
-      // todo: validate error details
+    if (
+      creationHint.accountType &&
+      creationHint.accountType !== "mav2-webauthn"
+    ) {
       throw new BaseError(
         "WebAuthn signers are only supported with mav2-webauthn account type",
       );
@@ -90,7 +92,6 @@ export async function requestAccount(
                   ...credentialToWebAuthnPublicKey(signer.credential),
                   type: "webauthn-p256",
                 },
-                // todo: re-enable after fixing type assertions above
                 ...(creationHint
                   ? { creationHint: creationHint as CreationOptionsByPublicKey }
                   : {}),
