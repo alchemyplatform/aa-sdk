@@ -97,7 +97,6 @@ navigation:
           - page: Supported Chains
             path: wallets/pages/overview/supported-chains.mdx
 
-
       - section: Transactions
         contents:
           - page: Overview
@@ -297,7 +296,6 @@ navigation:
                 path: wallets/pages/third-party/signers/custom-integration.mdx
           - page: What is a signer?
             path: wallets/pages/authentication/what-is-a-signer.mdx
-
 
       - section: API Reference
         contents:
