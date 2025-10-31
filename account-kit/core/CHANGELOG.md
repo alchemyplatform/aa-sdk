@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.77.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.76.0...v4.77.0) (2025-10-31)
+
+### Features
+
+- allow global policy id w/ multiple chains ([#2194](https://github.com/alchemyplatform/aa-sdk/issues/2194)) ([dadeb20](https://github.com/alchemyplatform/aa-sdk/commit/dadeb205763691c190b9f63d012c42d7ea1e0535))
+
 # [4.76.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.75.4...v4.76.0) (2025-10-28)
 
 **Note:** Version bump only for package @account-kit/core
