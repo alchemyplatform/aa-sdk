@@ -9,9 +9,7 @@ layout: reference
 
 ```ts
 type PrepareCallsParams<TAccount> = Omit<
-  Static<
-    (typeof wallet_prepareCalls)["properties"]["Request"]["properties"]["params"]
-  >[0],
+  RpcSchema["Request"]["params"][0],
   "from" | "chainId"
 > &
   IsUndefined<TAccount> extends true
@@ -19,7 +17,7 @@ type PrepareCallsParams<TAccount> = Omit<
   : object;
 ```
 
-Defined in: [account-kit/wallet-client/src/client/actions/prepareCalls.ts:14](https://github.com/alchemyplatform/aa-sdk/blob/dc58c113ff1eeb06d4b3f76c505cbbaad47db8fc/account-kit/wallet-client/src/client/actions/prepareCalls.ts#L14)
+Defined in: [account-kit/wallet-client/src/client/actions/prepareCalls.ts:22](https://github.com/alchemyplatform/aa-sdk/blob/17aad1f572375d42a06c7e3238078a88a435d459/account-kit/wallet-client/src/client/actions/prepareCalls.ts#L22)
 
 ## Type Parameters
 

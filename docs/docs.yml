@@ -636,6 +636,8 @@ navigation:
                     path: wallets/pages/reference/aa-sdk/core/src/type-aliases/IsOneOf.mdx
                   - page: IsUndefined
                     path: wallets/pages/reference/aa-sdk/core/src/type-aliases/IsUndefined.mdx
+                  - page: MiddlewareClient
+                    path: wallets/pages/reference/aa-sdk/core/src/type-aliases/MiddlewareClient.mdx
                   - page: Multiplier
                     path: wallets/pages/reference/aa-sdk/core/src/type-aliases/Multiplier.mdx
                   - page: Never
@@ -1150,6 +1152,8 @@ navigation:
                     path: wallets/pages/reference/account-kit/core/src/type-aliases/Pack1271SignatureParams.mdx
                   - page: PackUOSignatureParams
                     path: wallets/pages/reference/account-kit/core/src/type-aliases/PackUOSignatureParams.mdx
+                  - page: PaymasterContext
+                    path: wallets/pages/reference/account-kit/core/src/type-aliases/PaymasterContext.mdx
                   - page: Plugin
                     path: wallets/pages/reference/account-kit/core/src/type-aliases/Plugin.mdx
                   - page: PluginManagerActions
@@ -1276,8 +1280,8 @@ navigation:
                     path: wallets/pages/reference/account-kit/core/src/variables/arbitrumNova.mdx
                   - page: arbitrumSepolia
                     path: wallets/pages/reference/account-kit/core/src/variables/arbitrumSepolia.mdx
-                  - page: assertNeverSignatureRequestType
-                    path: wallets/pages/reference/account-kit/core/src/variables/assertNeverSignatureRequestType.mdx
+                  - page: assertNever
+                    path: wallets/pages/reference/account-kit/core/src/variables/assertNever.mdx
                   - page: base
                     path: wallets/pages/reference/account-kit/core/src/variables/base.mdx
                   - page: baseGoerli
@@ -1350,6 +1354,8 @@ navigation:
                     path: wallets/pages/reference/account-kit/core/src/variables/inkMainnet.mdx
                   - page: inkSepolia
                     path: wallets/pages/reference/account-kit/core/src/variables/inkSepolia.mdx
+                  - page: isDeferredAction
+                    path: wallets/pages/reference/account-kit/core/src/variables/isDeferredAction.mdx
                   - page: isMultisigModularAccount
                     path: wallets/pages/reference/account-kit/core/src/variables/isMultisigModularAccount.mdx
                   - page: lightAccountClientActions
@@ -1384,8 +1390,10 @@ navigation:
                     path: wallets/pages/reference/account-kit/core/src/variables/optimismGoerli.mdx
                   - page: optimismSepolia
                     path: wallets/pages/reference/account-kit/core/src/variables/optimismSepolia.mdx
-                  - page: pack1271Signature
-                    path: wallets/pages/reference/account-kit/core/src/variables/pack1271Signature.mdx
+                  - page: pack1271EOASignature
+                    path: wallets/pages/reference/account-kit/core/src/variables/pack1271EOASignature.mdx
+                  - page: pack1271WebAuthnSignature
+                    path: wallets/pages/reference/account-kit/core/src/variables/pack1271WebAuthnSignature.mdx
                   - page: packUOSignature
                     path: wallets/pages/reference/account-kit/core/src/variables/packUOSignature.mdx
                   - page: parseDeferredAction
@@ -1509,6 +1517,8 @@ navigation:
                     path: wallets/pages/reference/account-kit/infra/src/exports/type-aliases/BaseAlchemyActions.mdx
                   - page: ClientWithAlchemyMethods
                     path: wallets/pages/reference/account-kit/infra/src/exports/type-aliases/ClientWithAlchemyMethods.mdx
+                  - page: PaymasterContext
+                    path: wallets/pages/reference/account-kit/infra/src/exports/type-aliases/PaymasterContext.mdx
                   - page: PolicyToken
                     path: wallets/pages/reference/account-kit/infra/src/exports/type-aliases/PolicyToken.mdx
                   - page: RequestGasAndPaymasterAndDataRequest
@@ -1688,6 +1698,8 @@ navigation:
                     path: wallets/pages/reference/account-kit/react/src/functions/useMFA.mdx
                   - page: usePrepareCalls
                     path: wallets/pages/reference/account-kit/react/src/functions/usePrepareCalls.mdx
+                  - page: usePrepareSwap
+                    path: wallets/pages/reference/account-kit/react/src/functions/usePrepareSwap.mdx
                   - page: useRemoveEmail
                     path: wallets/pages/reference/account-kit/react/src/functions/useRemoveEmail.mdx
                   - page: useRemoveOauthProvider
@@ -1704,6 +1716,8 @@ navigation:
                     path: wallets/pages/reference/account-kit/react/src/functions/useSendVerificationCode.mdx
                   - page: useSetEmail
                     path: wallets/pages/reference/account-kit/react/src/functions/useSetEmail.mdx
+                  - page: useSignAndSendPreparedCalls
+                    path: wallets/pages/reference/account-kit/react/src/functions/useSignAndSendPreparedCalls.mdx
                   - page: useSignMessage
                     path: wallets/pages/reference/account-kit/react/src/functions/useSignMessage.mdx
                   - page: useSignTypedData
@@ -1854,6 +1868,10 @@ navigation:
                     path: wallets/pages/reference/account-kit/react/src/type-aliases/UsePrepareCallsParams.mdx
                   - page: UsePrepareCallsResult
                     path: wallets/pages/reference/account-kit/react/src/type-aliases/UsePrepareCallsResult.mdx
+                  - page: UsePrepareSwapParams
+                    path: wallets/pages/reference/account-kit/react/src/type-aliases/UsePrepareSwapParams.mdx
+                  - page: UsePrepareSwapResult
+                    path: wallets/pages/reference/account-kit/react/src/type-aliases/UsePrepareSwapResult.mdx
                   - page: UseRemoveEmailMutationArgs
                     path: wallets/pages/reference/account-kit/react/src/type-aliases/UseRemoveEmailMutationArgs.mdx
                   - page: UseRemoveEmailResult
@@ -1888,6 +1906,10 @@ navigation:
                     path: wallets/pages/reference/account-kit/react/src/type-aliases/UseSetEmailMutationArgs.mdx
                   - page: UseSetEmailResult
                     path: wallets/pages/reference/account-kit/react/src/type-aliases/UseSetEmailResult.mdx
+                  - page: UseSignAndSendPreparedCallsParams
+                    path: wallets/pages/reference/account-kit/react/src/type-aliases/UseSignAndSendPreparedCallsParams.mdx
+                  - page: UseSignAndSendPreparedCallsResult
+                    path: wallets/pages/reference/account-kit/react/src/type-aliases/UseSignAndSendPreparedCallsResult.mdx
                   - page: UseSignMessageArgs
                     path: wallets/pages/reference/account-kit/react/src/type-aliases/UseSignMessageArgs.mdx
                   - page: UseSignMessageResult
@@ -2392,8 +2414,8 @@ navigation:
                     path: wallets/pages/reference/account-kit/smart-contracts/src/enumerations/SessionKeyAccessListType.mdx
               - section: Functions
                 contents:
-                  - page: assertNeverSignatureRequestType
-                    path: wallets/pages/reference/account-kit/smart-contracts/src/functions/assertNeverSignatureRequestType.mdx
+                  - page: assertNever
+                    path: wallets/pages/reference/account-kit/smart-contracts/src/functions/assertNever.mdx
                   - page: buildDeferredActionDigest
                     path: wallets/pages/reference/account-kit/smart-contracts/src/functions/buildDeferredActionDigest.mdx
                   - page: buildFullNonceKey
@@ -2468,12 +2490,16 @@ navigation:
                     path: wallets/pages/reference/account-kit/smart-contracts/src/functions/getSignerType.mdx
                   - page: installPlugin
                     path: wallets/pages/reference/account-kit/smart-contracts/src/functions/installPlugin.mdx
+                  - page: isDeferredAction
+                    path: wallets/pages/reference/account-kit/smart-contracts/src/functions/isDeferredAction.mdx
                   - page: isModularAccountV2
                     path: wallets/pages/reference/account-kit/smart-contracts/src/functions/isModularAccountV2.mdx
                   - page: isMultisigModularAccount
                     path: wallets/pages/reference/account-kit/smart-contracts/src/functions/isMultisigModularAccount.mdx
-                  - page: pack1271Signature
-                    path: wallets/pages/reference/account-kit/smart-contracts/src/functions/pack1271Signature.mdx
+                  - page: pack1271EOASignature
+                    path: wallets/pages/reference/account-kit/smart-contracts/src/functions/pack1271EOASignature.mdx
+                  - page: pack1271WebAuthnSignature
+                    path: wallets/pages/reference/account-kit/smart-contracts/src/functions/pack1271WebAuthnSignature.mdx
                   - page: packUOSignature
                     path: wallets/pages/reference/account-kit/smart-contracts/src/functions/packUOSignature.mdx
                   - page: parseDeferredAction
@@ -2803,10 +2829,6 @@ navigation:
                     path: wallets/pages/reference/account-kit/wallet-client/src/exports/type-aliases/SmartWalletClientParams.mdx
                   - page: WalletServerRpcSchemaType
                     path: wallets/pages/reference/account-kit/wallet-client/src/exports/type-aliases/WalletServerRpcSchemaType.mdx
-              - section: Variables
-                contents:
-                  - page: WalletServerRpcSchema
-                    path: wallets/pages/reference/account-kit/wallet-client/src/exports/variables/WalletServerRpcSchema.mdx
       - section: Resources
         skip-slug: true
         contents:

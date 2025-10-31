@@ -10,124 +10,6 @@ layout: reference
 ```ts
 function prepareCalls<TAccount>(client, params): Promise<
   | {
-  data: (
-     | {
-     chainId: `0x${string}`;
-     data: {
-        callData: `0x${string}`;
-        callGasLimit: `0x${string}`;
-        initCode: `0x${string}`;
-        maxFeePerGas: `0x${string}`;
-        maxPriorityFeePerGas: `0x${string}`;
-        nonce: `0x${string}`;
-        paymasterAndData: `0x${string}`;
-        preVerificationGas: `0x${string}`;
-        sender: `0x${string}`;
-        verificationGasLimit: `0x${string}`;
-     };
-     feePayment: {
-        maxAmount: `0x${string}`;
-        sponsored: boolean;
-        tokenAddress: `0x${string}`;
-     };
-     signatureRequest?:   | {
-        data:   | string
-           | {
-           raw: `0x${(...)}`;
-         };
-        rawPayload: `0x${string}`;
-        type: "personal_sign";
-      }
-        | {
-        data: {
-           domain?: {
-              chainId?: ...;
-              name?: ...;
-              salt?: ...;
-              verifyingContract?: ...;
-              version?: ...;
-           };
-           message: {
-            [key: string]: unknown;
-           };
-           primaryType: string;
-           types: {
-            [key: string]: ...[];
-           };
-        };
-        rawPayload: `0x${string}`;
-        type: "eth_signTypedData_v4";
-      };
-     type: "user-operation-v060";
-   }
-     | {
-     chainId: `0x${string}`;
-     data: {
-        callData: `0x${string}`;
-        callGasLimit: `0x${string}`;
-        factory?: `0x${string}`;
-        factoryData?: `0x${string}`;
-        maxFeePerGas: `0x${string}`;
-        maxPriorityFeePerGas: `0x${string}`;
-        nonce: `0x${string}`;
-        paymaster?: `0x${string}`;
-        paymasterData?: `0x${string}`;
-        paymasterPostOpGasLimit?: `0x${string}`;
-        paymasterVerificationGasLimit?: `0x${string}`;
-        preVerificationGas: `0x${string}`;
-        sender: `0x${string}`;
-        verificationGasLimit: `0x${string}`;
-     };
-     feePayment: {
-        maxAmount: `0x${string}`;
-        sponsored: boolean;
-        tokenAddress: `0x${string}`;
-     };
-     signatureRequest?:   | {
-        data:   | string
-           | {
-           raw: `0x${(...)}`;
-         };
-        rawPayload: `0x${string}`;
-        type: "personal_sign";
-      }
-        | {
-        data: {
-           domain?: {
-              chainId?: ...;
-              name?: ...;
-              salt?: ...;
-              verifyingContract?: ...;
-              version?: ...;
-           };
-           message: {
-            [key: string]: unknown;
-           };
-           primaryType: string;
-           types: {
-            [key: string]: ...[];
-           };
-        };
-        rawPayload: `0x${string}`;
-        type: "eth_signTypedData_v4";
-      };
-     type: "user-operation-v070";
-   }
-     | {
-     chainId: `0x${string}`;
-     data: {
-        address: `0x${string}`;
-        nonce: `0x${string}`;
-     };
-     signatureRequest: {
-        rawPayload: `0x${string}`;
-        type: "eip7702Auth";
-     };
-     type: "authorization";
-  })[];
-  type: "array";
-}
-  | {
   chainId: `0x${string}`;
   data: {
      callData: `0x${string}`;
@@ -163,13 +45,9 @@ function prepareCalls<TAccount>(client, params): Promise<
            verifyingContract?: `0x${string}`;
            version?: string;
         };
-        message: {
-         [key: string]: unknown;
-        };
+        message: Record<string, unknown>;
         primaryType: string;
-        types: {
-         [key: string]: object[];
-        };
+        types: Record<string, object[]>;
      };
      rawPayload: `0x${string}`;
      type: "eth_signTypedData_v4";
@@ -216,13 +94,9 @@ function prepareCalls<TAccount>(client, params): Promise<
            verifyingContract?: `0x${string}`;
            version?: string;
         };
-        message: {
-         [key: string]: unknown;
-        };
+        message: Record<string, unknown>;
         primaryType: string;
-        types: {
-         [key: string]: object[];
-        };
+        types: Record<string, object[]>;
      };
      rawPayload: `0x${string}`;
      type: "eth_signTypedData_v4";
@@ -238,13 +112,9 @@ function prepareCalls<TAccount>(client, params): Promise<
         verifyingContract?: `0x${string}`;
         version?: string;
      };
-     message: {
-      [key: string]: unknown;
-     };
+     message: Record<string, unknown>;
      primaryType: string;
-     types: {
-      [key: string]: object[];
-     };
+     types: Record<string, object[]>;
   };
   modifiedRequest: {
      calls: object[];
@@ -252,7 +122,7 @@ function prepareCalls<TAccount>(client, params): Promise<
         eip7702Auth?:   | true
            | {
            account?: `0x${string}`;
-           delegation: "0x69007702764179f14F51cdce752f4f775d74E139" | "ModularAccountV2";
+           delegation: "ModularAccountV2" | "0x69007702764179f14F51cdce752f4f775d74E139";
          };
         gasParamsOverride?: {
            callGasLimit?:   | `0x${string}`
@@ -287,7 +157,7 @@ function prepareCalls<TAccount>(client, params): Promise<
         nonceOverride?: {
            nonceKey: `0x${string}`;
         };
-        paymasterService?: ({ policyId: string; } | { policyIds: string[]; }) & { onlyEstimation?: boolean | undefined; erc20?: ({ maxTokenAmount?: `0x${string}` | undefined; tokenAddress: `0x${string}`; } & ({ preOpSettings: { ...; } | { ...; }; } | { ...; } | {})) | undefined; };
+        paymasterService?: ({ policyId: string; } | { policyIds: string[]; }) & { onlyEstimation?: boolean | undefined; erc20?: { maxTokenAmount?: `0x${string}` | undefined; tokenAddress: `0x${string}`; preOpSettings: { autoPermit: { ...; }; }; } | { ...; } | { ...; } | { ...; } | undefined; webhookData?: string | undefined; };
         permissions?:   | {
            context: `0x${string}`;
          }
@@ -336,22 +206,128 @@ function prepareCalls<TAccount>(client, params): Promise<
            verifyingContract?: `0x${string}`;
            version?: string;
         };
-        message: {
-         [key: string]: unknown;
-        };
+        message: Record<string, unknown>;
         primaryType: string;
-        types: {
-         [key: string]: object[];
-        };
+        types: Record<string, object[]>;
      };
      rawPayload: `0x${string}`;
      type: "eth_signTypedData_v4";
   };
   type: "paymaster-permit";
+}
+  | {
+  data: (
+     | {
+     chainId: `0x${string}`;
+     data: {
+        callData: `0x${string}`;
+        callGasLimit: `0x${string}`;
+        initCode: `0x${string}`;
+        maxFeePerGas: `0x${string}`;
+        maxPriorityFeePerGas: `0x${string}`;
+        nonce: `0x${string}`;
+        paymasterAndData: `0x${string}`;
+        preVerificationGas: `0x${string}`;
+        sender: `0x${string}`;
+        verificationGasLimit: `0x${string}`;
+     };
+     feePayment: {
+        maxAmount: `0x${string}`;
+        sponsored: boolean;
+        tokenAddress: `0x${string}`;
+     };
+     signatureRequest?:   | {
+        data:   | string
+           | {
+           raw: `0x${(...)}`;
+         };
+        rawPayload: `0x${string}`;
+        type: "personal_sign";
+      }
+        | {
+        data: {
+           domain?: {
+              chainId?: ...;
+              name?: ...;
+              salt?: ...;
+              verifyingContract?: ...;
+              version?: ...;
+           };
+           message: Record<string, unknown>;
+           primaryType: string;
+           types: Record<string, ...[]>;
+        };
+        rawPayload: `0x${string}`;
+        type: "eth_signTypedData_v4";
+      };
+     type: "user-operation-v060";
+   }
+     | {
+     chainId: `0x${string}`;
+     data: {
+        callData: `0x${string}`;
+        callGasLimit: `0x${string}`;
+        factory?: `0x${string}`;
+        factoryData?: `0x${string}`;
+        maxFeePerGas: `0x${string}`;
+        maxPriorityFeePerGas: `0x${string}`;
+        nonce: `0x${string}`;
+        paymaster?: `0x${string}`;
+        paymasterData?: `0x${string}`;
+        paymasterPostOpGasLimit?: `0x${string}`;
+        paymasterVerificationGasLimit?: `0x${string}`;
+        preVerificationGas: `0x${string}`;
+        sender: `0x${string}`;
+        verificationGasLimit: `0x${string}`;
+     };
+     feePayment: {
+        maxAmount: `0x${string}`;
+        sponsored: boolean;
+        tokenAddress: `0x${string}`;
+     };
+     signatureRequest?:   | {
+        data:   | string
+           | {
+           raw: `0x${(...)}`;
+         };
+        rawPayload: `0x${string}`;
+        type: "personal_sign";
+      }
+        | {
+        data: {
+           domain?: {
+              chainId?: ...;
+              name?: ...;
+              salt?: ...;
+              verifyingContract?: ...;
+              version?: ...;
+           };
+           message: Record<string, unknown>;
+           primaryType: string;
+           types: Record<string, ...[]>;
+        };
+        rawPayload: `0x${string}`;
+        type: "eth_signTypedData_v4";
+      };
+     type: "user-operation-v070";
+   }
+     | {
+     chainId: `0x${string}`;
+     data: {
+        address: `0x${string}`;
+        nonce: `0x${string}`;
+     };
+     signatureRequest: {
+        rawPayload: `0x${string}`;
+        type: "eip7702Auth";
+     };
+     type: "authorization";
+  })[];
+  type: "array";
 }>;
 ```
 
-Defined in: [account-kit/wallet-client/src/client/actions/prepareCalls.ts:56](https://github.com/alchemyplatform/aa-sdk/blob/dc58c113ff1eeb06d4b3f76c505cbbaad47db8fc/account-kit/wallet-client/src/client/actions/prepareCalls.ts#L56)
+Defined in: [account-kit/wallet-client/src/client/actions/prepareCalls.ts:57](https://github.com/alchemyplatform/aa-sdk/blob/17aad1f572375d42a06c7e3238078a88a435d459/account-kit/wallet-client/src/client/actions/prepareCalls.ts#L57)
 
 Prepares a set of contract calls for execution by building a user operation.
 Returns the built user operation and a signature request that needs to be signed
@@ -446,124 +422,6 @@ const result = await client.prepareCalls({
 
 `Promise`\<
 | \{
-`data`: (
-| \{
-`chainId`: `` `0x${string}` ``;
-`data`: \{
-`callData`: `` `0x${string}` ``;
-`callGasLimit`: `` `0x${string}` ``;
-`initCode`: `` `0x${string}` ``;
-`maxFeePerGas`: `` `0x${string}` ``;
-`maxPriorityFeePerGas`: `` `0x${string}` ``;
-`nonce`: `` `0x${string}` ``;
-`paymasterAndData`: `` `0x${string}` ``;
-`preVerificationGas`: `` `0x${string}` ``;
-`sender`: `` `0x${string}` ``;
-`verificationGasLimit`: `` `0x${string}` ``;
-};
-`feePayment`: \{
-`maxAmount`: `` `0x${string}` ``;
-`sponsored`: `boolean`;
-`tokenAddress`: `` `0x${string}` ``;
-};
-`signatureRequest?`: | \{
-`data`: | `string`
-| \{
-`raw`: `` `0x${(...)}` ``;
-};
-`rawPayload`: `` `0x${string}` ``;
-`type`: `"personal_sign"`;
-}
-| \{
-`data`: \{
-`domain?`: \{
-`chainId?`: ...;
-`name?`: ...;
-`salt?`: ...;
-`verifyingContract?`: ...;
-`version?`: ...;
-};
-`message`: \{
-\[`key`: `string`]: `unknown`;
-};
-`primaryType`: `string`;
-`types`: \{
-\[`key`: `string`]: ...\[];
-};
-};
-`rawPayload`: `` `0x${string}` ``;
-`type`: `"eth_signTypedData_v4"`;
-};
-`type`: `"user-operation-v060"`;
-}
-| \{
-`chainId`: `` `0x${string}` ``;
-`data`: \{
-`callData`: `` `0x${string}` ``;
-`callGasLimit`: `` `0x${string}` ``;
-`factory?`: `` `0x${string}` ``;
-`factoryData?`: `` `0x${string}` ``;
-`maxFeePerGas`: `` `0x${string}` ``;
-`maxPriorityFeePerGas`: `` `0x${string}` ``;
-`nonce`: `` `0x${string}` ``;
-`paymaster?`: `` `0x${string}` ``;
-`paymasterData?`: `` `0x${string}` ``;
-`paymasterPostOpGasLimit?`: `` `0x${string}` ``;
-`paymasterVerificationGasLimit?`: `` `0x${string}` ``;
-`preVerificationGas`: `` `0x${string}` ``;
-`sender`: `` `0x${string}` ``;
-`verificationGasLimit`: `` `0x${string}` ``;
-};
-`feePayment`: \{
-`maxAmount`: `` `0x${string}` ``;
-`sponsored`: `boolean`;
-`tokenAddress`: `` `0x${string}` ``;
-};
-`signatureRequest?`: | \{
-`data`: | `string`
-| \{
-`raw`: `` `0x${(...)}` ``;
-};
-`rawPayload`: `` `0x${string}` ``;
-`type`: `"personal_sign"`;
-}
-| \{
-`data`: \{
-`domain?`: \{
-`chainId?`: ...;
-`name?`: ...;
-`salt?`: ...;
-`verifyingContract?`: ...;
-`version?`: ...;
-};
-`message`: \{
-\[`key`: `string`]: `unknown`;
-};
-`primaryType`: `string`;
-`types`: \{
-\[`key`: `string`]: ...\[];
-};
-};
-`rawPayload`: `` `0x${string}` ``;
-`type`: `"eth_signTypedData_v4"`;
-};
-`type`: `"user-operation-v070"`;
-}
-| \{
-`chainId`: `` `0x${string}` ``;
-`data`: \{
-`address`: `` `0x${string}` ``;
-`nonce`: `` `0x${string}` ``;
-};
-`signatureRequest`: \{
-`rawPayload`: `` `0x${string}` ``;
-`type`: `"eip7702Auth"`;
-};
-`type`: `"authorization"`;
-})\[];
-`type`: `"array"`;
-}
-| \{
 `chainId`: `` `0x${string}` ``;
 `data`: \{
 `callData`: `` `0x${string}` ``;
@@ -599,13 +457,9 @@ const result = await client.prepareCalls({
 `verifyingContract?`: `` `0x${string}` ``;
 `version?`: `string`;
 };
-`message`: \{
-\[`key`: `string`]: `unknown`;
-};
+`message`: `Record`\<`string`, `unknown`>;
 `primaryType`: `string`;
-`types`: \{
-\[`key`: `string`]: `object`\[];
-};
+`types`: `Record`\<`string`, `object`\[]>;
 };
 `rawPayload`: `` `0x${string}` ``;
 `type`: `"eth_signTypedData_v4"`;
@@ -652,13 +506,9 @@ const result = await client.prepareCalls({
 `verifyingContract?`: `` `0x${string}` ``;
 `version?`: `string`;
 };
-`message`: \{
-\[`key`: `string`]: `unknown`;
-};
+`message`: `Record`\<`string`, `unknown`>;
 `primaryType`: `string`;
-`types`: \{
-\[`key`: `string`]: `object`\[];
-};
+`types`: `Record`\<`string`, `object`\[]>;
 };
 `rawPayload`: `` `0x${string}` ``;
 `type`: `"eth_signTypedData_v4"`;
@@ -674,13 +524,9 @@ const result = await client.prepareCalls({
 `verifyingContract?`: `` `0x${string}` ``;
 `version?`: `string`;
 };
-`message`: \{
-\[`key`: `string`]: `unknown`;
-};
+`message`: `Record`\<`string`, `unknown`>;
 `primaryType`: `string`;
-`types`: \{
-\[`key`: `string`]: `object`\[];
-};
+`types`: `Record`\<`string`, `object`\[]>;
 };
 `modifiedRequest`: \{
 `calls`: `object`\[];
@@ -688,7 +534,7 @@ const result = await client.prepareCalls({
 `eip7702Auth?`: | `true`
 | \{
 `account?`: `` `0x${string}` ``;
-`delegation`: `"0x69007702764179f14F51cdce752f4f775d74E139"` | `"ModularAccountV2"`;
+`delegation`: `"ModularAccountV2"` | `"0x69007702764179f14F51cdce752f4f775d74E139"`;
 };
 `gasParamsOverride?`: \{
 `callGasLimit?`: | `` `0x${string}` ``
@@ -723,7 +569,7 @@ const result = await client.prepareCalls({
 `nonceOverride?`: \{
 `nonceKey`: `` `0x${string}` ``;
 };
-`paymasterService?`: (\{ policyId: string; } | \{ policyIds: string\[]; }) & \{ onlyEstimation?: boolean | undefined; erc20?: (\{ maxTokenAmount?: \`0x$\{string}\` | undefined; tokenAddress: \`0x$\{string}\`; } & (\{ preOpSettings: \{ ...; } | \{ ...; }; } | \{ ...; } | \{})) | undefined; };
+`paymasterService?`: (\{ policyId: string; } | \{ policyIds: string\[]; }) & \{ onlyEstimation?: boolean | undefined; erc20?: \{ maxTokenAmount?: \`0x$\{string}\` | undefined; tokenAddress: \`0x$\{string}\`; preOpSettings: \{ autoPermit: \{ ...; }; }; } | \{ ...; } | \{ ...; } | \{ ...; } | undefined; webhookData?: string | undefined; };
 `permissions?`: | \{
 `context`: `` `0x${string}` ``;
 }
@@ -772,18 +618,124 @@ const result = await client.prepareCalls({
 `verifyingContract?`: `` `0x${string}` ``;
 `version?`: `string`;
 };
-`message`: \{
-\[`key`: `string`]: `unknown`;
-};
+`message`: `Record`\<`string`, `unknown`>;
 `primaryType`: `string`;
-`types`: \{
-\[`key`: `string`]: `object`\[];
-};
+`types`: `Record`\<`string`, `object`\[]>;
 };
 `rawPayload`: `` `0x${string}` ``;
 `type`: `"eth_signTypedData_v4"`;
 };
 `type`: `"paymaster-permit"`;
+}
+| \{
+`data`: (
+| \{
+`chainId`: `` `0x${string}` ``;
+`data`: \{
+`callData`: `` `0x${string}` ``;
+`callGasLimit`: `` `0x${string}` ``;
+`initCode`: `` `0x${string}` ``;
+`maxFeePerGas`: `` `0x${string}` ``;
+`maxPriorityFeePerGas`: `` `0x${string}` ``;
+`nonce`: `` `0x${string}` ``;
+`paymasterAndData`: `` `0x${string}` ``;
+`preVerificationGas`: `` `0x${string}` ``;
+`sender`: `` `0x${string}` ``;
+`verificationGasLimit`: `` `0x${string}` ``;
+};
+`feePayment`: \{
+`maxAmount`: `` `0x${string}` ``;
+`sponsored`: `boolean`;
+`tokenAddress`: `` `0x${string}` ``;
+};
+`signatureRequest?`: | \{
+`data`: | `string`
+| \{
+`raw`: `` `0x${(...)}` ``;
+};
+`rawPayload`: `` `0x${string}` ``;
+`type`: `"personal_sign"`;
+}
+| \{
+`data`: \{
+`domain?`: \{
+`chainId?`: ...;
+`name?`: ...;
+`salt?`: ...;
+`verifyingContract?`: ...;
+`version?`: ...;
+};
+`message`: `Record`\<`string`, `unknown`>;
+`primaryType`: `string`;
+`types`: `Record`\<`string`, ...\[]>;
+};
+`rawPayload`: `` `0x${string}` ``;
+`type`: `"eth_signTypedData_v4"`;
+};
+`type`: `"user-operation-v060"`;
+}
+| \{
+`chainId`: `` `0x${string}` ``;
+`data`: \{
+`callData`: `` `0x${string}` ``;
+`callGasLimit`: `` `0x${string}` ``;
+`factory?`: `` `0x${string}` ``;
+`factoryData?`: `` `0x${string}` ``;
+`maxFeePerGas`: `` `0x${string}` ``;
+`maxPriorityFeePerGas`: `` `0x${string}` ``;
+`nonce`: `` `0x${string}` ``;
+`paymaster?`: `` `0x${string}` ``;
+`paymasterData?`: `` `0x${string}` ``;
+`paymasterPostOpGasLimit?`: `` `0x${string}` ``;
+`paymasterVerificationGasLimit?`: `` `0x${string}` ``;
+`preVerificationGas`: `` `0x${string}` ``;
+`sender`: `` `0x${string}` ``;
+`verificationGasLimit`: `` `0x${string}` ``;
+};
+`feePayment`: \{
+`maxAmount`: `` `0x${string}` ``;
+`sponsored`: `boolean`;
+`tokenAddress`: `` `0x${string}` ``;
+};
+`signatureRequest?`: | \{
+`data`: | `string`
+| \{
+`raw`: `` `0x${(...)}` ``;
+};
+`rawPayload`: `` `0x${string}` ``;
+`type`: `"personal_sign"`;
+}
+| \{
+`data`: \{
+`domain?`: \{
+`chainId?`: ...;
+`name?`: ...;
+`salt?`: ...;
+`verifyingContract?`: ...;
+`version?`: ...;
+};
+`message`: `Record`\<`string`, `unknown`>;
+`primaryType`: `string`;
+`types`: `Record`\<`string`, ...\[]>;
+};
+`rawPayload`: `` `0x${string}` ``;
+`type`: `"eth_signTypedData_v4"`;
+};
+`type`: `"user-operation-v070"`;
+}
+| \{
+`chainId`: `` `0x${string}` ``;
+`data`: \{
+`address`: `` `0x${string}` ``;
+`nonce`: `` `0x${string}` ``;
+};
+`signatureRequest`: \{
+`rawPayload`: `` `0x${string}` ``;
+`type`: `"eip7702Auth"`;
+};
+`type`: `"authorization"`;
+})\[];
+`type`: `"array"`;
 }>
 
 A Promise that resolves to the prepared calls result containing

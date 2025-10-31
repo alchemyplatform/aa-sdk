@@ -10,17 +10,20 @@ layout: reference
 ```ts
 type RequestAccountParams = Omit<
   Extract<
-    Static<typeof wallet_requestAccount>["Request"]["params"][0],
-    {
-      signerAddress: Address;
-    }
+    RpcSchema["Request"]["params"][0],
+    | {
+        signerAddress: Address;
+      }
+    | {
+        signerPublicKey: WebAuthnPublicKey;
+      }
   >,
-  "signerAddress" | "includeCounterfactualInfo"
+  "signerAddress" | "signerPublicKey" | "includeCounterfactualInfo"
 > &
   object;
 ```
 
-Defined in: [account-kit/wallet-client/src/client/actions/requestAccount.ts:13](https://github.com/alchemyplatform/aa-sdk/blob/dc58c113ff1eeb06d4b3f76c505cbbaad47db8fc/account-kit/wallet-client/src/client/actions/requestAccount.ts#L13)
+Defined in: [account-kit/wallet-client/src/client/actions/requestAccount.ts:28](https://github.com/alchemyplatform/aa-sdk/blob/17aad1f572375d42a06c7e3238078a88a435d459/account-kit/wallet-client/src/client/actions/requestAccount.ts#L28)
 
 ## Type Declaration
 

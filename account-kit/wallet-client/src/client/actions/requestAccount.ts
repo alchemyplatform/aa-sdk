@@ -1,13 +1,20 @@
-import {
-  type SmartAccountSigner,
-  type SmartContractAccount,
-} from "@aa-sdk/core";
+import { BaseError, type SmartContractAccount } from "@aa-sdk/core";
 import type { Address } from "abitype";
 import deepEqual from "deep-equal";
 import { custom } from "viem";
 import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
 import type { InnerWalletApiClient } from "../../types.js";
 import { createAccount } from "../../internal/account.js";
+import type { SmartWalletSigner } from "../index.js";
+import {
+  credentialToWebAuthnPublicKey,
+  isWebAuthnSigner,
+} from "../../utils.js";
+import {
+  CreationOptionsByPublicKey,
+  CreationOptionsBySignerAddress,
+  type WebAuthnPublicKey,
+} from "@alchemy/wallet-api-types";
 
 type RpcSchema = Extract<
   WalletServerRpcSchemaType,
@@ -19,8 +26,11 @@ type RpcSchema = Extract<
 >;
 
 export type RequestAccountParams = Omit<
-  Extract<RpcSchema["Request"]["params"][0], { signerAddress: Address }>,
-  "signerAddress" | "includeCounterfactualInfo"
+  Extract<
+    RpcSchema["Request"]["params"][0],
+    { signerAddress: Address } | { signerPublicKey: WebAuthnPublicKey }
+  >,
+  "signerAddress" | "signerPublicKey" | "includeCounterfactualInfo"
 > & { accountAddress?: Address };
 
 export type RequestAccountResult = SmartContractAccount;
@@ -31,7 +41,7 @@ export type RequestAccountResult = SmartContractAccount;
  * If an account already exists, the creationHint will be ignored.
  *
  * @param {InnerWalletApiClient} client - The wallet API client to use for the request
- * @param {SmartAccountSigner} signer - The signer that will be associated with the account
+ * @param {SmartAccountSigner | WebAuthnSigner} signer - The signer that will be associated with the account
  * @param {RequestAccountParams} [params] - Optional parameters for requesting a specific account
  * @param {string} [params.id] - Optional identifier for the account. If specified, a new account with this ID will be created even if one already exists for the signer
  * @param {object} [params.creationHint] - Optional hints to guide account creation. These are ignored if an account already exists
@@ -46,20 +56,57 @@ export type RequestAccountResult = SmartContractAccount;
  */
 export async function requestAccount(
   client: InnerWalletApiClient,
-  signer: SmartAccountSigner,
+  signer: SmartWalletSigner,
   params?: RequestAccountParams,
 ): Promise<RequestAccountResult> {
-  const args =
+  const { creationHint = {} } = params ?? {};
+
+  if (isWebAuthnSigner(signer)) {
+    if (creationHint.accountType !== "mav2-webauthn") {
+      // todo: validate error details
+      throw new BaseError(
+        "WebAuthn signers are only supported with mav2-webauthn account type",
+      );
+    }
+  } else {
+    // non-webauthn signers do not support the "mav2-webauthn" account type
+    if (creationHint.accountType === "mav2-webauthn") {
+      throw new BaseError(
+        "ECDSA (secp256k1) signers are not supported with mav2-webauthn account type",
+      );
+    }
+  }
+
+  const args = (
     (client.account && !params) || params?.accountAddress
       ? {
           accountAddress: params?.accountAddress ?? client.account!.address,
           includeCounterfactualInfo: true,
         }
       : {
-          ...params,
-          signerAddress: await signer.getAddress(),
+          ...(isWebAuthnSigner(signer)
+            ? {
+                signerPublicKey: {
+                  ...credentialToWebAuthnPublicKey(signer.credential),
+                  type: "webauthn-p256",
+                },
+                // todo: re-enable after fixing type assertions above
+                ...(creationHint
+                  ? { creationHint: creationHint as CreationOptionsByPublicKey }
+                  : {}),
+              }
+            : {
+                signerAddress: await signer.getAddress(),
+                ...(creationHint
+                  ? {
+                      creationHint:
+                        creationHint as CreationOptionsBySignerAddress,
+                    }
+                  : {}),
+              }),
           includeCounterfactualInfo: true,
-        };
+        }
+  ) satisfies RpcSchema["Request"]["params"][0];
 
   const cachedAccount = client.internal.getAccount();
 
