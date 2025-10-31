@@ -78,6 +78,12 @@ After sending your cross-chain swap, you can track its progress using the `walle
   via API only. SDK support coming soon.
 </Info>
 
+<Tip>
+  The `wallet_getCrossChainStatus_v0` endpoint is in beta. Note that there may
+  be changes in the future to simplify the endpoint. We will let you know
+  if/when that happens.
+</Tip>
+
 ## Use the status endpoint
 
 Pass the `callId` from your swap request to check the current status:
@@ -210,11 +216,19 @@ The expiry is an informational indicator of when you can expect to be able to pr
 
 ## What are the different status codes for cross-chain swaps?
 
-Cross-chain swaps may have additional status codes beyond standard transaction statuses to reflect the cross-chain nature of the transaction. These are:
+Cross-chain swaps support comprehensive status tracking. See the [tracking documentation](/wallets/transactions/cross-chain-swap-tokens#status-codes) for a complete list of status codes including:
 
-- 120: Cross-chain in progress
-- 410: Cross-chain refund
+- 100: Pending
+- 110: Preconfirmed
+- 115: Preconfirmed Onchain Failure
+- 116: Preconfirmed Partial Onchain Failure
+- 120: Cross-Chain In Progress
+- 200: Confirmed
+- 400: Offchain Failure
+- 410: Cross-Chain Refunded
+- 500: Onchain Failure
+- 600: Partial Onchain Failure
 
 ## When is a CallId returned from `wallet_requestQuote_v0`?
 
-Any time you’re requesting a cross-chain quote via `wallet_requestQuote_v0` , a `callId` is returned. This `callId` includes important data for cross-chain tracking. You can use this just like any other `callId` in `wallet_getCallsStatus`!
+Any time you're requesting a cross-chain quote via `wallet_requestQuote_v0` , a `callId` is returned. This `callId` includes important data for cross-chain tracking. You can use this just like any other `callId` in `wallet_getCallsStatus` or `wallet_getCrossChainStatus_v0`!

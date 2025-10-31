@@ -166,4 +166,52 @@ For other potential responses, [check out the API reference!](/docs/wallets/api-
 
 </Step>
 
+<Step title="Track the cross-chain swap">
+
+<Tip>
+  We recommend using `wallet_getCrossChainStatus_v0` for richer data including
+  separate origin and destination transaction details. [See the tracking
+  documentation](/wallets/transactions/cross-chain-swap-tokens#tracking-a-cross-chain-swap)
+  for more details.
+</Tip>
+
+You can use the `wallet_getCallsStatus` endpoint to check the status of your cross-chain swap. Cross-chain swaps may take longer than single-chain swaps due to cross-chain messaging.
+
+```bash
+curl -X POST https://api.g.alchemy.com/v2/{API_KEY} \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "method": "wallet_getCallsStatus",
+    "params": [
+      [
+        "{CALL_ID_FROM_STEP_2_OR_STEP_4}"
+      ]
+    ],
+    "id": 1
+  }'
+```
+
+This returns:
+
+```json
+{
+  "id": "1",
+  "jsonrpc": "2.0",
+  "result": {
+    "id": "CALL_ID",
+    "chainId": "SOURCE_CHAIN_ID",
+    "atomic": true,
+    "status": 200,
+    "receipts": [...]
+  }
+}
+```
+
+To get your transaction hash, you can access `result.receipts[0].transactionHash`.
+
+For status codes and more details on tracking cross-chain swaps, see the [tracking documentation](/wallets/transactions/cross-chain-swap-tokens#tracking-a-cross-chain-swap).
+
+</Step>
+
 </Steps>
