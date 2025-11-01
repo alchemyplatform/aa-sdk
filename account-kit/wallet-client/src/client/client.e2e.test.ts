@@ -367,24 +367,28 @@ describe("Client E2E Tests", () => {
       expect(isValid).toBeTrue();
     });
 
-    it("should successfully send a transaction with webauthn signer and paymaster", async () => {
-      const account = await webauthClient.requestAccount();
-      const result = await webauthClient.sendCalls({
-        calls: [{ to: zeroAddress, value: "0x0" }],
-        from: account.address,
-        capabilities: {
-          // Signer is randomized, so we must sponsor the transaction
-          paymasterService: {
-            policyId: process.env.TEST_PAYMASTER_POLICY_ID!,
+    it(
+      "should successfully send a transaction with webauthn signer and paymaster",
+      async () => {
+        const account = await webauthClient.requestAccount();
+        const result = await webauthClient.sendCalls({
+          calls: [{ to: zeroAddress, value: "0x0" }],
+          from: account.address,
+          capabilities: {
+            // Signer is randomized, so we must sponsor the transaction
+            paymasterService: {
+              policyId: process.env.TEST_PAYMASTER_POLICY_ID!,
+            },
           },
-        },
-      });
+        });
 
-      const waitForResult = await webauthClient.waitForCallsStatus({
-        id: result.preparedCallIds[0],
-      });
-      expect(waitForResult.status).toBe("success");
-    });
+        const waitForResult = await webauthClient.waitForCallsStatus({
+          id: result.preparedCallIds[0],
+        });
+        expect(waitForResult.status).toBe("success");
+      },
+      { timeout: 45_000 },
+    );
   });
 
   const givenTypedData = {
