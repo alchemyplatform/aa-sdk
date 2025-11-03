@@ -663,25 +663,25 @@ export const storyAeneid: Chain = defineChain({
   testnet: true,
 });
 
-export const celoAlfajores: Chain = defineChain({
-  id: 44787,
-  name: "Celo Alfajores",
-  nativeCurrency: { name: "Celo native asset", symbol: "CELO", decimals: 18 },
+export const celoSepolia: Chain = defineChain({
+  id: 11142220,
+  name: "Celo Sepolia Testnet",
+  nativeCurrency: { name: "Celo", symbol: "CELO", decimals: 18 },
   rpcUrls: {
     default: {
-      http: ["https://celo-alfajores.g.alchemy.com/v2"],
+      http: ["https://celo-sepolia.g.alchemy.com/v2"],
     },
     public: {
-      http: ["https://celo-alfajores.g.alchemy.com/v2"],
+      http: ["https://forno.celo-sepolia.celo-testnet.org"],
     },
     alchemy: {
-      http: ["https://celo-alfajores.g.alchemy.com/v2"],
+      http: ["https://celo-sepolia.g.alchemy.com/v2"],
     },
   },
   blockExplorers: {
     default: {
       name: "Block Explorer",
-      url: "https://celo-alfajores.blockscout.com/",
+      url: "https://celo-sepolia.blockscout.com",
     },
   },
   testnet: true,
