@@ -1083,40 +1083,14 @@ navigation:
             contents:
               - section: Functions
                 contents:
-                  - page: createConfig
-                    path: wallets/pages/reference/alchemy/wagmi-core/functions/createConfig.mdx
-                  - page: getAuthClient
-                    path: wallets/pages/reference/alchemy/wagmi-core/functions/getAuthClient.mdx
-                  - page: getAuthSession
-                    path: wallets/pages/reference/alchemy/wagmi-core/functions/getAuthSession.mdx
-                  - page: getUser
-                    path: wallets/pages/reference/alchemy/wagmi-core/functions/getUser.mdx
-                  - page: handleOauthRedirect
-                    path: wallets/pages/reference/alchemy/wagmi-core/functions/handleOauthRedirect.mdx
-                  - page: listAuthMethods
-                    path: wallets/pages/reference/alchemy/wagmi-core/functions/listAuthMethods.mdx
-                  - page: loginWithOauth
-                    path: wallets/pages/reference/alchemy/wagmi-core/functions/loginWithOauth.mdx
+                  - page: alchemySmartWallet
+                    path: wallets/pages/reference/alchemy/wagmi-core/functions/alchemySmartWallet.mdx
                   - page: prepareCalls
                     path: wallets/pages/reference/alchemy/wagmi-core/functions/prepareCalls.mdx
                   - page: prepareSwap
                     path: wallets/pages/reference/alchemy/wagmi-core/functions/prepareSwap.mdx
-                  - page: sendEmailOtp
-                    path: wallets/pages/reference/alchemy/wagmi-core/functions/sendEmailOtp.mdx
                   - page: sendPreparedCalls
                     path: wallets/pages/reference/alchemy/wagmi-core/functions/sendPreparedCalls.mdx
-                  - page: sendSmsOtp
-                    path: wallets/pages/reference/alchemy/wagmi-core/functions/sendSmsOtp.mdx
-                  - page: sendVerificationCode
-                    path: wallets/pages/reference/alchemy/wagmi-core/functions/sendVerificationCode.mdx
-                  - page: submitOtpCode
-                    path: wallets/pages/reference/alchemy/wagmi-core/functions/submitOtpCode.mdx
-                  - page: updateEmail
-                    path: wallets/pages/reference/alchemy/wagmi-core/functions/updateEmail.mdx
-                  - page: updatePhoneNumber
-                    path: wallets/pages/reference/alchemy/wagmi-core/functions/updatePhoneNumber.mdx
-                  - page: watchUser
-                    path: wallets/pages/reference/alchemy/wagmi-core/functions/watchUser.mdx
 
       - section: Alchemy Wagmi Connector Web
         contents:
@@ -1125,8 +1099,6 @@ navigation:
             contents:
               - section: Functions
                 contents:
-                  - page: alchemyAuth
-                    path: wallets/pages/reference/alchemy/connectors-web/functions/alchemyAuth.mdx
                   - page: alchemySmartWallet
                     path: wallets/pages/reference/alchemy/connectors-web/functions/alchemySmartWallet.mdx
 
