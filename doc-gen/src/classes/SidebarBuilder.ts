@@ -371,8 +371,11 @@ class SidebarBuilder {
       return "";
     }
 
-    // account-kit/react is unique in that it has custom section grouping for hooks
-    if (this.packageName === "account-kit/react") {
+    // React packages are unique in that they have custom section grouping for hooks
+    if (
+      this.packageName === "account-kit/react" ||
+      this.packageName === "alchemy/react"
+    ) {
       return this.generateReactSdkSection();
     }
 
