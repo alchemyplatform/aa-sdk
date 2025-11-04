@@ -11,4 +11,615 @@ navigation:
   - tab: wallets
     layout:
       - section: SDK Reference
-        contents: []
+        contents:
+          - section: Infra
+            path: wallets/pages/reference/packages/aa-infra/src/README.mdx
+            contents:
+              - section: Classes
+                contents:
+                  - page: InvalidHexValueError
+                    path: wallets/pages/reference/packages/aa-infra/src/classes/InvalidHexValueError.mdx
+              - section: Functions
+                contents:
+                  - page: alchemyEstimateFeesPerGas
+                    path: wallets/pages/reference/packages/aa-infra/src/functions/alchemyEstimateFeesPerGas.mdx
+                  - page: alchemyGasManagerHooks
+                    path: wallets/pages/reference/packages/aa-infra/src/functions/alchemyGasManagerHooks.mdx
+                  - page: createAlchemyBundlerClient
+                    path: wallets/pages/reference/packages/aa-infra/src/functions/createAlchemyBundlerClient.mdx
+                  - page: requestGasAndPaymasterAndData
+                    path: wallets/pages/reference/packages/aa-infra/src/functions/requestGasAndPaymasterAndData.mdx
+              - section: Type Aliases
+                contents:
+                  - page: AlchemyGasManagerHooks
+                    path: wallets/pages/reference/packages/aa-infra/src/type-aliases/AlchemyGasManagerHooks.mdx
+                  - page: AlchemyRequestGasAndPaymasterAndDataSchema
+                    path: wallets/pages/reference/packages/aa-infra/src/type-aliases/AlchemyRequestGasAndPaymasterAndDataSchema.mdx
+                  - page: AlchemyWalletApisRpcSchema
+                    path: wallets/pages/reference/packages/aa-infra/src/type-aliases/AlchemyWalletApisRpcSchema.mdx
+                  - page: GasAndFeeOverridesRequest
+                    path: wallets/pages/reference/packages/aa-infra/src/type-aliases/GasAndFeeOverridesRequest.mdx
+                  - page: GasManagerActions
+                    path: wallets/pages/reference/packages/aa-infra/src/type-aliases/GasManagerActions.mdx
+                  - page: Multiplier
+                    path: wallets/pages/reference/packages/aa-infra/src/type-aliases/Multiplier.mdx
+                  - page: PolicyToken
+                    path: wallets/pages/reference/packages/aa-infra/src/type-aliases/PolicyToken.mdx
+                  - page: PriorityFeeClient
+                    path: wallets/pages/reference/packages/aa-infra/src/type-aliases/PriorityFeeClient.mdx
+                  - page: RequestGasAndPaymasterAndDataRequest
+                    path: wallets/pages/reference/packages/aa-infra/src/type-aliases/RequestGasAndPaymasterAndDataRequest.mdx
+                  - page: RequestGasAndPaymasterAndDataResponse
+                    path: wallets/pages/reference/packages/aa-infra/src/type-aliases/RequestGasAndPaymasterAndDataResponse.mdx
+                  - page: RpcGasAndFeeOverrides
+                    path: wallets/pages/reference/packages/aa-infra/src/type-aliases/RpcGasAndFeeOverrides.mdx
+                  - page: RundlerMaxPriorityFeePerGasSchema
+                    path: wallets/pages/reference/packages/aa-infra/src/type-aliases/RundlerMaxPriorityFeePerGasSchema.mdx
+                  - page: RundlerRpcSchema
+                    path: wallets/pages/reference/packages/aa-infra/src/type-aliases/RundlerRpcSchema.mdx
+                  - page: SignerHttpSchema
+                    path: wallets/pages/reference/packages/aa-infra/src/type-aliases/SignerHttpSchema.mdx
+                  - page: StampedRequestBody
+                    path: wallets/pages/reference/packages/aa-infra/src/type-aliases/StampedRequestBody.mdx
+              - section: Variables
+                contents:
+                  - page: alchemyRpcSchema
+                    path: wallets/pages/reference/packages/aa-infra/src/variables/alchemyRpcSchema.mdx
+                  - page: gasManagerActions
+                    path: wallets/pages/reference/packages/aa-infra/src/variables/gasManagerActions.mdx
+          - section: Common
+            path: wallets/pages/reference/packages/common/src/README.mdx
+            contents:
+              - section: Classes
+                contents:
+                  - page: AccountNotFoundError
+                    path: wallets/pages/reference/packages/common/src/classes/AccountNotFoundError.mdx
+                  - page: AlchemyRestClient
+                    path: wallets/pages/reference/packages/common/src/classes/AlchemyRestClient.mdx
+                  - page: BaseError
+                    path: wallets/pages/reference/packages/common/src/classes/BaseError.mdx
+                  - page: ChainNotFoundError
+                    path: wallets/pages/reference/packages/common/src/classes/ChainNotFoundError.mdx
+                  - page: ConnectionConfigError
+                    path: wallets/pages/reference/packages/common/src/classes/ConnectionConfigError.mdx
+                  - page: FetchError
+                    path: wallets/pages/reference/packages/common/src/classes/FetchError.mdx
+                  - page: InvalidRequestError
+                    path: wallets/pages/reference/packages/common/src/classes/InvalidRequestError.mdx
+                  - page: MethodUnsupportedError
+                    path: wallets/pages/reference/packages/common/src/classes/MethodUnsupportedError.mdx
+                  - page: ServerError
+                    path: wallets/pages/reference/packages/common/src/classes/ServerError.mdx
+              - section: Functions
+                contents:
+                  - page: addBreadCrumb
+                    path: wallets/pages/reference/packages/common/src/functions/addBreadCrumb.mdx
+                  - page: alchemyTransport
+                    path: wallets/pages/reference/packages/common/src/functions/alchemyTransport.mdx
+                  - page: assertNever
+                    path: wallets/pages/reference/packages/common/src/functions/assertNever.mdx
+                  - page: bigIntMultiply
+                    path: wallets/pages/reference/packages/common/src/functions/bigIntMultiply.mdx
+                  - page: createEip1193HandlerFactory
+                    path: wallets/pages/reference/packages/common/src/functions/createEip1193HandlerFactory.mdx
+                  - page: getAlchemyRpcUrl
+                    path: wallets/pages/reference/packages/common/src/functions/getAlchemyRpcUrl.mdx
+                  - page: getSupportedChainIds
+                    path: wallets/pages/reference/packages/common/src/functions/getSupportedChainIds.mdx
+                  - page: isAlchemyConnectionConfig
+                    path: wallets/pages/reference/packages/common/src/functions/isAlchemyConnectionConfig.mdx
+                  - page: isAlchemyTransport
+                    path: wallets/pages/reference/packages/common/src/functions/isAlchemyTransport.mdx
+                  - page: isChainSupported
+                    path: wallets/pages/reference/packages/common/src/functions/isChainSupported.mdx
+                  - page: lowerAddress
+                    path: wallets/pages/reference/packages/common/src/functions/lowerAddress.mdx
+                  - page: raise
+                    path: wallets/pages/reference/packages/common/src/functions/raise.mdx
+                  - page: validateAlchemyConnectionConfig
+                    path: wallets/pages/reference/packages/common/src/functions/validateAlchemyConnectionConfig.mdx
+              - section: Interfaces
+                contents:
+                  - page: AlchemyTransportConfig
+                    path: wallets/pages/reference/packages/common/src/interfaces/AlchemyTransportConfig.mdx
+              - section: Type Aliases
+                contents:
+                  - page: AlchemyConnectionConfig
+                    path: wallets/pages/reference/packages/common/src/type-aliases/AlchemyConnectionConfig.mdx
+                  - page: AlchemyRestClientParams
+                    path: wallets/pages/reference/packages/common/src/type-aliases/AlchemyRestClientParams.mdx
+                  - page: AlchemyTransport
+                    path: wallets/pages/reference/packages/common/src/type-aliases/AlchemyTransport.mdx
+                  - page: ExtractRpcMethod
+                    path: wallets/pages/reference/packages/common/src/type-aliases/ExtractRpcMethod.mdx
+                  - page: Never
+                    path: wallets/pages/reference/packages/common/src/type-aliases/Never.mdx
+                  - page: RestRequestFn
+                    path: wallets/pages/reference/packages/common/src/type-aliases/RestRequestFn.mdx
+                  - page: RestRequestParams
+                    path: wallets/pages/reference/packages/common/src/type-aliases/RestRequestParams.mdx
+                  - page: RestRequestSchema
+                    path: wallets/pages/reference/packages/common/src/type-aliases/RestRequestSchema.mdx
+              - section: Variables
+                contents:
+                  - page: AlchemyConnectionConfigSchema
+                    path: wallets/pages/reference/packages/common/src/variables/AlchemyConnectionConfigSchema.mdx
+                  - page: fraxtalSepolia
+                    path: wallets/pages/reference/packages/common/src/variables/fraxtalSepolia.mdx
+                  - page: gensynTestnet
+                    path: wallets/pages/reference/packages/common/src/variables/gensynTestnet.mdx
+                  - page: openlootSepolia
+                    path: wallets/pages/reference/packages/common/src/variables/openlootSepolia.mdx
+                  - page: riseTestnet
+                    path: wallets/pages/reference/packages/common/src/variables/riseTestnet.mdx
+                  - page: storyMainnet
+                    path: wallets/pages/reference/packages/common/src/variables/storyMainnet.mdx
+                  - page: teaSepolia
+                    path: wallets/pages/reference/packages/common/src/variables/teaSepolia.mdx
+          - section: Smart Accounts
+            path: wallets/pages/reference/packages/smart-accounts/src/README.mdx
+            contents:
+              - section: Classes
+                contents:
+                  - page: AccountAddressAsTargetError
+                    path: wallets/pages/reference/packages/smart-accounts/src/classes/AccountAddressAsTargetError.mdx
+                  - page: DeadlineOverLimitError
+                    path: wallets/pages/reference/packages/smart-accounts/src/classes/DeadlineOverLimitError.mdx
+                  - page: DuplicateTargetAddressError
+                    path: wallets/pages/reference/packages/smart-accounts/src/classes/DuplicateTargetAddressError.mdx
+                  - page: EntityIdOverrideError
+                    path: wallets/pages/reference/packages/smart-accounts/src/classes/EntityIdOverrideError.mdx
+                  - page: ExpiredDeadlineError
+                    path: wallets/pages/reference/packages/smart-accounts/src/classes/ExpiredDeadlineError.mdx
+                  - page: InvalidDeferredActionNonceError
+                    path: wallets/pages/reference/packages/smart-accounts/src/classes/InvalidDeferredActionNonceError.mdx
+                  - page: InvalidEntityIdError
+                    path: wallets/pages/reference/packages/smart-accounts/src/classes/InvalidEntityIdError.mdx
+                  - page: InvalidNonceKeyError
+                    path: wallets/pages/reference/packages/smart-accounts/src/classes/InvalidNonceKeyError.mdx
+                  - page: InvalidOwnerError
+                    path: wallets/pages/reference/packages/smart-accounts/src/classes/InvalidOwnerError.mdx
+                  - page: MultipleGasLimitError
+                    path: wallets/pages/reference/packages/smart-accounts/src/classes/MultipleGasLimitError.mdx
+                  - page: MultipleNativeTokenTransferError
+                    path: wallets/pages/reference/packages/smart-accounts/src/classes/MultipleNativeTokenTransferError.mdx
+                  - page: NoFunctionsProvidedError
+                    path: wallets/pages/reference/packages/smart-accounts/src/classes/NoFunctionsProvidedError.mdx
+                  - page: PermissionBuilder
+                    path: wallets/pages/reference/packages/smart-accounts/src/classes/PermissionBuilder.mdx
+                  - page: PermissionBuilderError
+                    path: wallets/pages/reference/packages/smart-accounts/src/classes/PermissionBuilderError.mdx
+                  - page: RootPermissionOnlyError
+                    path: wallets/pages/reference/packages/smart-accounts/src/classes/RootPermissionOnlyError.mdx
+                  - page: SelectorNotAllowed
+                    path: wallets/pages/reference/packages/smart-accounts/src/classes/SelectorNotAllowed.mdx
+                  - page: UnsupportedPermissionTypeError
+                    path: wallets/pages/reference/packages/smart-accounts/src/classes/UnsupportedPermissionTypeError.mdx
+                  - page: ValidationConfigUnsetError
+                    path: wallets/pages/reference/packages/smart-accounts/src/classes/ValidationConfigUnsetError.mdx
+                  - page: ZeroAddressError
+                    path: wallets/pages/reference/packages/smart-accounts/src/classes/ZeroAddressError.mdx
+              - section: Functions
+                contents:
+                  - page: buildDeferredActionDigest
+                    path: wallets/pages/reference/packages/smart-accounts/src/functions/buildDeferredActionDigest.mdx
+                  - page: buildFullNonceKey
+                    path: wallets/pages/reference/packages/smart-accounts/src/functions/buildFullNonceKey.mdx
+                  - page: defaultLightAccountVersion
+                    path: wallets/pages/reference/packages/smart-accounts/src/functions/defaultLightAccountVersion.mdx
+                  - page: deferralActions
+                    path: wallets/pages/reference/packages/smart-accounts/src/functions/deferralActions.mdx
+                  - page: getLightAccountImplAddress
+                    path: wallets/pages/reference/packages/smart-accounts/src/functions/getLightAccountImplAddress.mdx
+                  - page: getMAV2UpgradeToData
+                    path: wallets/pages/reference/packages/smart-accounts/src/functions/getMAV2UpgradeToData.mdx
+                  - page: installValidationActions
+                    path: wallets/pages/reference/packages/smart-accounts/src/functions/installValidationActions.mdx
+                  - page: isModularAccountV2
+                    path: wallets/pages/reference/packages/smart-accounts/src/functions/isModularAccountV2.mdx
+                  - page: multiOwnerLightAccountActions
+                    path: wallets/pages/reference/packages/smart-accounts/src/functions/multiOwnerLightAccountActions.mdx
+                  - page: pack1271Signature
+                    path: wallets/pages/reference/packages/smart-accounts/src/functions/pack1271Signature.mdx
+                  - page: packUOSignature
+                    path: wallets/pages/reference/packages/smart-accounts/src/functions/packUOSignature.mdx
+                  - page: parseDeferredAction
+                    path: wallets/pages/reference/packages/smart-accounts/src/functions/parseDeferredAction.mdx
+                  - page: predictLightAccountAddress
+                    path: wallets/pages/reference/packages/smart-accounts/src/functions/predictLightAccountAddress.mdx
+                  - page: predictModularAccountV2Address
+                    path: wallets/pages/reference/packages/smart-accounts/src/functions/predictModularAccountV2Address.mdx
+                  - page: predictMultiOwnerLightAccountAddress
+                    path: wallets/pages/reference/packages/smart-accounts/src/functions/predictMultiOwnerLightAccountAddress.mdx
+                  - page: serializeHookConfig
+                    path: wallets/pages/reference/packages/smart-accounts/src/functions/serializeHookConfig.mdx
+                  - page: serializeModuleEntity
+                    path: wallets/pages/reference/packages/smart-accounts/src/functions/serializeModuleEntity.mdx
+                  - page: serializeValidationConfig
+                    path: wallets/pages/reference/packages/smart-accounts/src/functions/serializeValidationConfig.mdx
+                  - page: singleOwnerLightAccountActions
+                    path: wallets/pages/reference/packages/smart-accounts/src/functions/singleOwnerLightAccountActions.mdx
+                  - page: toLightAccount
+                    path: wallets/pages/reference/packages/smart-accounts/src/functions/toLightAccount.mdx
+                  - page: toModularAccountV2
+                    path: wallets/pages/reference/packages/smart-accounts/src/functions/toModularAccountV2.mdx
+                  - page: toModularAccountV2Base
+                    path: wallets/pages/reference/packages/smart-accounts/src/functions/toModularAccountV2Base.mdx
+                  - page: toMultiOwnerLightAccount
+                    path: wallets/pages/reference/packages/smart-accounts/src/functions/toMultiOwnerLightAccount.mdx
+                  - page: toReplaySafeTypedData
+                    path: wallets/pages/reference/packages/smart-accounts/src/functions/toReplaySafeTypedData.mdx
+                  - page: toWebAuthnSignature
+                    path: wallets/pages/reference/packages/smart-accounts/src/functions/toWebAuthnSignature.mdx
+              - section: Type Aliases
+                contents:
+                  - page: BaseModularAccountV2Implementation
+                    path: wallets/pages/reference/packages/smart-accounts/src/type-aliases/BaseModularAccountV2Implementation.mdx
+                  - page: BuildDeferredActionDigestParams
+                    path: wallets/pages/reference/packages/smart-accounts/src/type-aliases/BuildDeferredActionDigestParams.mdx
+                  - page: BuildNonceParams
+                    path: wallets/pages/reference/packages/smart-accounts/src/type-aliases/BuildNonceParams.mdx
+                  - page: BuildPreSignatureDeferredActionDigestParams
+                    path: wallets/pages/reference/packages/smart-accounts/src/type-aliases/BuildPreSignatureDeferredActionDigestParams.mdx
+                  - page: CreateDeferredActionTypedDataParams
+                    path: wallets/pages/reference/packages/smart-accounts/src/type-aliases/CreateDeferredActionTypedDataParams.mdx
+                  - page: DeferralActions
+                    path: wallets/pages/reference/packages/smart-accounts/src/type-aliases/DeferralActions.mdx
+                  - page: DeferredActionReturnData
+                    path: wallets/pages/reference/packages/smart-accounts/src/type-aliases/DeferredActionReturnData.mdx
+                  - page: DeferredActionTypedData
+                    path: wallets/pages/reference/packages/smart-accounts/src/type-aliases/DeferredActionTypedData.mdx
+                  - page: EntityIdAndNonceParams
+                    path: wallets/pages/reference/packages/smart-accounts/src/type-aliases/EntityIdAndNonceParams.mdx
+                  - page: EntryPointFromAccountRegistry
+                    path: wallets/pages/reference/packages/smart-accounts/src/type-aliases/EntryPointFromAccountRegistry.mdx
+                  - page: ExecutionDataView
+                    path: wallets/pages/reference/packages/smart-accounts/src/type-aliases/ExecutionDataView.mdx
+                  - page: GetLightAccountType
+                    path: wallets/pages/reference/packages/smart-accounts/src/type-aliases/GetLightAccountType.mdx
+                  - page: GetMAV2UpgradeToData
+                    path: wallets/pages/reference/packages/smart-accounts/src/type-aliases/GetMAV2UpgradeToData.mdx
+                  - page: HookConfig
+                    path: wallets/pages/reference/packages/smart-accounts/src/type-aliases/HookConfig.mdx
+                  - page: HookIdentifier
+                    path: wallets/pages/reference/packages/smart-accounts/src/type-aliases/HookIdentifier.mdx
+                  - page: HookType
+                    path: wallets/pages/reference/packages/smart-accounts/src/type-aliases/HookType.mdx
+                  - page: InstallValidationActions
+                    path: wallets/pages/reference/packages/smart-accounts/src/type-aliases/InstallValidationActions.mdx
+                  - page: InstallValidationParams
+                    path: wallets/pages/reference/packages/smart-accounts/src/type-aliases/InstallValidationParams.mdx
+                  - page: LightAccount
+                    path: wallets/pages/reference/packages/smart-accounts/src/type-aliases/LightAccount.mdx
+                  - page: LightAccountActions
+                    path: wallets/pages/reference/packages/smart-accounts/src/type-aliases/LightAccountActions.mdx
+                  - page: LightAccountType
+                    path: wallets/pages/reference/packages/smart-accounts/src/type-aliases/LightAccountType.mdx
+                  - page: LightAccountVersion
+                    path: wallets/pages/reference/packages/smart-accounts/src/type-aliases/LightAccountVersion.mdx
+                  - page: ModularAccountV2
+                    path: wallets/pages/reference/packages/smart-accounts/src/type-aliases/ModularAccountV2.mdx
+                  - page: ModularAccountV2Base
+                    path: wallets/pages/reference/packages/smart-accounts/src/type-aliases/ModularAccountV2Base.mdx
+                  - page: ModuleEntity
+                    path: wallets/pages/reference/packages/smart-accounts/src/type-aliases/ModuleEntity.mdx
+                  - page: MultiOwnerLightAccount
+                    path: wallets/pages/reference/packages/smart-accounts/src/type-aliases/MultiOwnerLightAccount.mdx
+                  - page: MultiOwnerLightAccountActions
+                    path: wallets/pages/reference/packages/smart-accounts/src/type-aliases/MultiOwnerLightAccountActions.mdx
+                  - page: Pack1271SignatureParams
+                    path: wallets/pages/reference/packages/smart-accounts/src/type-aliases/Pack1271SignatureParams.mdx
+                  - page: PackUOSignatureParams
+                    path: wallets/pages/reference/packages/smart-accounts/src/type-aliases/PackUOSignatureParams.mdx
+                  - page: Permission
+                    path: wallets/pages/reference/packages/smart-accounts/src/type-aliases/Permission.mdx
+                  - page: PermissionType
+                    path: wallets/pages/reference/packages/smart-accounts/src/type-aliases/PermissionType.mdx
+                  - page: PredictLightAccountAddressParams
+                    path: wallets/pages/reference/packages/smart-accounts/src/type-aliases/PredictLightAccountAddressParams.mdx
+                  - page: PredictModularAccountV2AddressParams
+                    path: wallets/pages/reference/packages/smart-accounts/src/type-aliases/PredictModularAccountV2AddressParams.mdx
+                  - page: PredictMultiOwnerLightAccountAddressParams
+                    path: wallets/pages/reference/packages/smart-accounts/src/type-aliases/PredictMultiOwnerLightAccountAddressParams.mdx
+                  - page: SemiModularAccount7702StaticImpl
+                    path: wallets/pages/reference/packages/smart-accounts/src/type-aliases/SemiModularAccount7702StaticImpl.mdx
+                  - page: SemiModularAccountV2FactoryArgs
+                    path: wallets/pages/reference/packages/smart-accounts/src/type-aliases/SemiModularAccountV2FactoryArgs.mdx
+                  - page: SemiModularAccountV2StaticImpl
+                    path: wallets/pages/reference/packages/smart-accounts/src/type-aliases/SemiModularAccountV2StaticImpl.mdx
+                  - page: SignaturePrefix
+                    path: wallets/pages/reference/packages/smart-accounts/src/type-aliases/SignaturePrefix.mdx
+                  - page: SignerEntity
+                    path: wallets/pages/reference/packages/smart-accounts/src/type-aliases/SignerEntity.mdx
+                  - page: ToLightAccountParams
+                    path: wallets/pages/reference/packages/smart-accounts/src/type-aliases/ToLightAccountParams.mdx
+                  - page: ToModularAccountV2BaseParams
+                    path: wallets/pages/reference/packages/smart-accounts/src/type-aliases/ToModularAccountV2BaseParams.mdx
+                  - page: ToModularAccountV2Params
+                    path: wallets/pages/reference/packages/smart-accounts/src/type-aliases/ToModularAccountV2Params.mdx
+                  - page: ToMultiOwnerLightAccountParams
+                    path: wallets/pages/reference/packages/smart-accounts/src/type-aliases/ToMultiOwnerLightAccountParams.mdx
+                  - page: UninstallValidationParams
+                    path: wallets/pages/reference/packages/smart-accounts/src/type-aliases/UninstallValidationParams.mdx
+                  - page: UpgradeToData
+                    path: wallets/pages/reference/packages/smart-accounts/src/type-aliases/UpgradeToData.mdx
+                  - page: ValidationConfig
+                    path: wallets/pages/reference/packages/smart-accounts/src/type-aliases/ValidationConfig.mdx
+                  - page: ValidationData
+                    path: wallets/pages/reference/packages/smart-accounts/src/type-aliases/ValidationData.mdx
+                  - page: ValidationDataParams
+                    path: wallets/pages/reference/packages/smart-accounts/src/type-aliases/ValidationDataParams.mdx
+                  - page: ValidationDataView
+                    path: wallets/pages/reference/packages/smart-accounts/src/type-aliases/ValidationDataView.mdx
+                  - page: WebAuthnModularAccountV2FactoryArgs
+                    path: wallets/pages/reference/packages/smart-accounts/src/type-aliases/WebAuthnModularAccountV2FactoryArgs.mdx
+                  - page: WebAuthnModularAccountV2StaticImpl
+                    path: wallets/pages/reference/packages/smart-accounts/src/type-aliases/WebAuthnModularAccountV2StaticImpl.mdx
+              - section: Variables
+                contents:
+                  - page: AccountVersionRegistry
+                    path: wallets/pages/reference/packages/smart-accounts/src/variables/AccountVersionRegistry.mdx
+                  - page: AllowlistModule
+                    path: wallets/pages/reference/packages/smart-accounts/src/variables/AllowlistModule.mdx
+                  - page: DEFAULT_OWNER_ENTITY_ID
+                    path: wallets/pages/reference/packages/smart-accounts/src/variables/DEFAULT_OWNER_ENTITY_ID.mdx
+                  - page: DefaultAddress
+                    path: wallets/pages/reference/packages/smart-accounts/src/variables/DefaultAddress.mdx
+                  - page: DefaultModuleAddress
+                    path: wallets/pages/reference/packages/smart-accounts/src/variables/DefaultModuleAddress.mdx
+                  - page: ENTITY_ID_AND_NONCE_READER_BYTECODE
+                    path: wallets/pages/reference/packages/smart-accounts/src/variables/ENTITY_ID_AND_NONCE_READER_BYTECODE.mdx
+                  - page: EXECUTE_USER_OP_SELECTOR
+                    path: wallets/pages/reference/packages/smart-accounts/src/variables/EXECUTE_USER_OP_SELECTOR.mdx
+                  - page: HookIdentifier
+                    path: wallets/pages/reference/packages/smart-accounts/src/variables/HookIdentifier.mdx
+                  - page: HookType
+                    path: wallets/pages/reference/packages/smart-accounts/src/variables/HookType.mdx
+                  - page: LightAccountUnsupported1271Factories
+                    path: wallets/pages/reference/packages/smart-accounts/src/variables/LightAccountUnsupported1271Factories.mdx
+                  - page: LightAccountUnsupported1271Impls
+                    path: wallets/pages/reference/packages/smart-accounts/src/variables/LightAccountUnsupported1271Impls.mdx
+                  - page: NativeTokenLimitModule
+                    path: wallets/pages/reference/packages/smart-accounts/src/variables/NativeTokenLimitModule.mdx
+                  - page: PaymasterGuardModule
+                    path: wallets/pages/reference/packages/smart-accounts/src/variables/PaymasterGuardModule.mdx
+                  - page: PermissionType
+                    path: wallets/pages/reference/packages/smart-accounts/src/variables/PermissionType.mdx
+                  - page: SignaturePrefix
+                    path: wallets/pages/reference/packages/smart-accounts/src/variables/SignaturePrefix.mdx
+                  - page: SingleSignerValidationModule
+                    path: wallets/pages/reference/packages/smart-accounts/src/variables/SingleSignerValidationModule.mdx
+                  - page: TimeRangeModule
+                    path: wallets/pages/reference/packages/smart-accounts/src/variables/TimeRangeModule.mdx
+                  - page: WebAuthnValidationModule
+                    path: wallets/pages/reference/packages/smart-accounts/src/variables/WebAuthnValidationModule.mdx
+                  - page: lightAccountStaticImplV1_0_1
+                    path: wallets/pages/reference/packages/smart-accounts/src/variables/lightAccountStaticImplV1_0_1.mdx
+                  - page: lightAccountStaticImplV1_0_2
+                    path: wallets/pages/reference/packages/smart-accounts/src/variables/lightAccountStaticImplV1_0_2.mdx
+                  - page: lightAccountStaticImplV1_1_0
+                    path: wallets/pages/reference/packages/smart-accounts/src/variables/lightAccountStaticImplV1_1_0.mdx
+                  - page: lightAccountStaticImplV2_0_0
+                    path: wallets/pages/reference/packages/smart-accounts/src/variables/lightAccountStaticImplV2_0_0.mdx
+                  - page: multiOwnerLightAccountStaticImplV2_0_0
+                    path: wallets/pages/reference/packages/smart-accounts/src/variables/multiOwnerLightAccountStaticImplV2_0_0.mdx
+                  - page: semiModularAccount7702StaticImpl
+                    path: wallets/pages/reference/packages/smart-accounts/src/variables/semiModularAccount7702StaticImpl.mdx
+                  - page: semiModularAccountV2StaticImpl
+                    path: wallets/pages/reference/packages/smart-accounts/src/variables/semiModularAccountV2StaticImpl.mdx
+                  - page: webAuthnModularAccountV2StaticImpl
+                    path: wallets/pages/reference/packages/smart-accounts/src/variables/webAuthnModularAccountV2StaticImpl.mdx
+          - section: Wagmi Core
+            path: wallets/pages/reference/packages/wagmi-core/src/README.mdx
+            contents:
+              - section: Functions
+                contents:
+                  - page: createConfig
+                    path: wallets/pages/reference/packages/wagmi-core/src/functions/createConfig.mdx
+                  - page: getAuthClient
+                    path: wallets/pages/reference/packages/wagmi-core/src/functions/getAuthClient.mdx
+                  - page: getAuthSession
+                    path: wallets/pages/reference/packages/wagmi-core/src/functions/getAuthSession.mdx
+                  - page: getUser
+                    path: wallets/pages/reference/packages/wagmi-core/src/functions/getUser.mdx
+                  - page: handleOauthRedirect
+                    path: wallets/pages/reference/packages/wagmi-core/src/functions/handleOauthRedirect.mdx
+                  - page: listAuthMethods
+                    path: wallets/pages/reference/packages/wagmi-core/src/functions/listAuthMethods.mdx
+                  - page: loginWithOauth
+                    path: wallets/pages/reference/packages/wagmi-core/src/functions/loginWithOauth.mdx
+                  - page: prepareCalls
+                    path: wallets/pages/reference/packages/wagmi-core/src/functions/prepareCalls.mdx
+                  - page: prepareSwap
+                    path: wallets/pages/reference/packages/wagmi-core/src/functions/prepareSwap.mdx
+                  - page: sendEmailOtp
+                    path: wallets/pages/reference/packages/wagmi-core/src/functions/sendEmailOtp.mdx
+                  - page: sendPreparedCalls
+                    path: wallets/pages/reference/packages/wagmi-core/src/functions/sendPreparedCalls.mdx
+                  - page: sendSmsOtp
+                    path: wallets/pages/reference/packages/wagmi-core/src/functions/sendSmsOtp.mdx
+                  - page: sendVerificationCode
+                    path: wallets/pages/reference/packages/wagmi-core/src/functions/sendVerificationCode.mdx
+                  - page: submitOtpCode
+                    path: wallets/pages/reference/packages/wagmi-core/src/functions/submitOtpCode.mdx
+                  - page: updateEmail
+                    path: wallets/pages/reference/packages/wagmi-core/src/functions/updateEmail.mdx
+                  - page: updatePhoneNumber
+                    path: wallets/pages/reference/packages/wagmi-core/src/functions/updatePhoneNumber.mdx
+                  - page: watchUser
+                    path: wallets/pages/reference/packages/wagmi-core/src/functions/watchUser.mdx
+              - section: Type Aliases
+                contents:
+                  - page: AlchemyConfig
+                    path: wallets/pages/reference/packages/wagmi-core/src/type-aliases/AlchemyConfig.mdx
+                  - page: AlchemyCreateConfigParameters
+                    path: wallets/pages/reference/packages/wagmi-core/src/type-aliases/AlchemyCreateConfigParameters.mdx
+                  - page: GetAuthClientParameters
+                    path: wallets/pages/reference/packages/wagmi-core/src/type-aliases/GetAuthClientParameters.mdx
+                  - page: GetAuthClientReturnType
+                    path: wallets/pages/reference/packages/wagmi-core/src/type-aliases/GetAuthClientReturnType.mdx
+                  - page: GetAuthSessionParameters
+                    path: wallets/pages/reference/packages/wagmi-core/src/type-aliases/GetAuthSessionParameters.mdx
+                  - page: GetAuthSessionReturnType
+                    path: wallets/pages/reference/packages/wagmi-core/src/type-aliases/GetAuthSessionReturnType.mdx
+                  - page: GetUserParameters
+                    path: wallets/pages/reference/packages/wagmi-core/src/type-aliases/GetUserParameters.mdx
+                  - page: GetUserReturnType
+                    path: wallets/pages/reference/packages/wagmi-core/src/type-aliases/GetUserReturnType.mdx
+                  - page: HandleOauthRedirectParameters
+                    path: wallets/pages/reference/packages/wagmi-core/src/type-aliases/HandleOauthRedirectParameters.mdx
+                  - page: HandleOauthRedirectReturnType
+                    path: wallets/pages/reference/packages/wagmi-core/src/type-aliases/HandleOauthRedirectReturnType.mdx
+                  - page: ListAuthMethodsReturnType
+                    path: wallets/pages/reference/packages/wagmi-core/src/type-aliases/ListAuthMethodsReturnType.mdx
+                  - page: LoginWithOauthParameters
+                    path: wallets/pages/reference/packages/wagmi-core/src/type-aliases/LoginWithOauthParameters.mdx
+                  - page: LoginWithOauthReturnType
+                    path: wallets/pages/reference/packages/wagmi-core/src/type-aliases/LoginWithOauthReturnType.mdx
+                  - page: PrepareCallsParameters
+                    path: wallets/pages/reference/packages/wagmi-core/src/type-aliases/PrepareCallsParameters.mdx
+                  - page: PrepareCallsReturnType
+                    path: wallets/pages/reference/packages/wagmi-core/src/type-aliases/PrepareCallsReturnType.mdx
+                  - page: PrepareSwapParameters
+                    path: wallets/pages/reference/packages/wagmi-core/src/type-aliases/PrepareSwapParameters.mdx
+                  - page: PrepareSwapReturnType
+                    path: wallets/pages/reference/packages/wagmi-core/src/type-aliases/PrepareSwapReturnType.mdx
+                  - page: SendEmailOtpParameters
+                    path: wallets/pages/reference/packages/wagmi-core/src/type-aliases/SendEmailOtpParameters.mdx
+                  - page: SendEmailOtpReturnType
+                    path: wallets/pages/reference/packages/wagmi-core/src/type-aliases/SendEmailOtpReturnType.mdx
+                  - page: SendPreparedCallsParameters
+                    path: wallets/pages/reference/packages/wagmi-core/src/type-aliases/SendPreparedCallsParameters.mdx
+                  - page: SendPreparedCallsReturnType
+                    path: wallets/pages/reference/packages/wagmi-core/src/type-aliases/SendPreparedCallsReturnType.mdx
+                  - page: SendSmsOtpParameters
+                    path: wallets/pages/reference/packages/wagmi-core/src/type-aliases/SendSmsOtpParameters.mdx
+                  - page: SendSmsOtpReturnType
+                    path: wallets/pages/reference/packages/wagmi-core/src/type-aliases/SendSmsOtpReturnType.mdx
+                  - page: SendVerificationCodeParameters
+                    path: wallets/pages/reference/packages/wagmi-core/src/type-aliases/SendVerificationCodeParameters.mdx
+                  - page: SendVerificationCodeReturnType
+                    path: wallets/pages/reference/packages/wagmi-core/src/type-aliases/SendVerificationCodeReturnType.mdx
+                  - page: SubmitOtpCodeParameters
+                    path: wallets/pages/reference/packages/wagmi-core/src/type-aliases/SubmitOtpCodeParameters.mdx
+                  - page: SubmitOtpCodeReturnType
+                    path: wallets/pages/reference/packages/wagmi-core/src/type-aliases/SubmitOtpCodeReturnType.mdx
+                  - page: UpdateEmailParameters
+                    path: wallets/pages/reference/packages/wagmi-core/src/type-aliases/UpdateEmailParameters.mdx
+                  - page: UpdateEmailReturnType
+                    path: wallets/pages/reference/packages/wagmi-core/src/type-aliases/UpdateEmailReturnType.mdx
+                  - page: UpdatePhoneNumberParameters
+                    path: wallets/pages/reference/packages/wagmi-core/src/type-aliases/UpdatePhoneNumberParameters.mdx
+                  - page: UpdatePhoneNumberReturnType
+                    path: wallets/pages/reference/packages/wagmi-core/src/type-aliases/UpdatePhoneNumberReturnType.mdx
+                  - page: WatchUserParameters
+                    path: wallets/pages/reference/packages/wagmi-core/src/type-aliases/WatchUserParameters.mdx
+                  - page: WatchUserReturnType
+                    path: wallets/pages/reference/packages/wagmi-core/src/type-aliases/WatchUserReturnType.mdx
+              - section: Variables
+                contents:
+                  - page: ALCHEMY_AUTH_CONNECTOR_TYPE
+                    path: wallets/pages/reference/packages/wagmi-core/src/variables/ALCHEMY_AUTH_CONNECTOR_TYPE.mdx
+                  - page: ALCHEMY_SMART_WALLET_CONNECTOR_TYPE
+                    path: wallets/pages/reference/packages/wagmi-core/src/variables/ALCHEMY_SMART_WALLET_CONNECTOR_TYPE.mdx
+          - section: Wallet APIs
+            path: wallets/pages/reference/packages/wallet-apis/src/exports/README.mdx
+            contents:
+              - section: Functions
+                contents:
+                  - page: createEip1193Provider
+                    path: wallets/pages/reference/packages/wallet-apis/src/exports/functions/createEip1193Provider.mdx
+                  - page: createSmartWalletClient
+                    path: wallets/pages/reference/packages/wallet-apis/src/exports/functions/createSmartWalletClient.mdx
+                  - page: createSmartWalletClientAndRequestAccount
+                    path: wallets/pages/reference/packages/wallet-apis/src/exports/functions/createSmartWalletClientAndRequestAccount.mdx
+                  - page: formatSign
+                    path: wallets/pages/reference/packages/wallet-apis/src/exports/functions/formatSign.mdx
+                  - page: grantPermissions
+                    path: wallets/pages/reference/packages/wallet-apis/src/exports/functions/grantPermissions.mdx
+                  - page: listAccounts
+                    path: wallets/pages/reference/packages/wallet-apis/src/exports/functions/listAccounts.mdx
+                  - page: prepareCalls
+                    path: wallets/pages/reference/packages/wallet-apis/src/exports/functions/prepareCalls.mdx
+                  - page: prepareSign
+                    path: wallets/pages/reference/packages/wallet-apis/src/exports/functions/prepareSign.mdx
+                  - page: requestAccount
+                    path: wallets/pages/reference/packages/wallet-apis/src/exports/functions/requestAccount.mdx
+                  - page: sendCalls
+                    path: wallets/pages/reference/packages/wallet-apis/src/exports/functions/sendCalls.mdx
+                  - page: sendPreparedCalls
+                    path: wallets/pages/reference/packages/wallet-apis/src/exports/functions/sendPreparedCalls.mdx
+                  - page: signMessage
+                    path: wallets/pages/reference/packages/wallet-apis/src/exports/functions/signMessage.mdx
+                  - page: signPreparedCalls
+                    path: wallets/pages/reference/packages/wallet-apis/src/exports/functions/signPreparedCalls.mdx
+                  - page: signSignatureRequest
+                    path: wallets/pages/reference/packages/wallet-apis/src/exports/functions/signSignatureRequest.mdx
+                  - page: signTypedData
+                    path: wallets/pages/reference/packages/wallet-apis/src/exports/functions/signTypedData.mdx
+                  - page: smartWalletActions
+                    path: wallets/pages/reference/packages/wallet-apis/src/exports/functions/smartWalletActions.mdx
+              - section: Type Aliases
+                contents:
+                  - page: BaseWalletClient
+                    path: wallets/pages/reference/packages/wallet-apis/src/exports/type-aliases/BaseWalletClient.mdx
+                  - page: CreateSmartWalletClientParams
+                    path: wallets/pages/reference/packages/wallet-apis/src/exports/type-aliases/CreateSmartWalletClientParams.mdx
+                  - page: FormatSignParams
+                    path: wallets/pages/reference/packages/wallet-apis/src/exports/type-aliases/FormatSignParams.mdx
+                  - page: FormatSignResult
+                    path: wallets/pages/reference/packages/wallet-apis/src/exports/type-aliases/FormatSignResult.mdx
+                  - page: GrantPermissionsParams
+                    path: wallets/pages/reference/packages/wallet-apis/src/exports/type-aliases/GrantPermissionsParams.mdx
+                  - page: GrantPermissionsResult
+                    path: wallets/pages/reference/packages/wallet-apis/src/exports/type-aliases/GrantPermissionsResult.mdx
+                  - page: ListAccountsParams
+                    path: wallets/pages/reference/packages/wallet-apis/src/exports/type-aliases/ListAccountsParams.mdx
+                  - page: ListAccountsResult
+                    path: wallets/pages/reference/packages/wallet-apis/src/exports/type-aliases/ListAccountsResult.mdx
+                  - page: PrepareCallsParams
+                    path: wallets/pages/reference/packages/wallet-apis/src/exports/type-aliases/PrepareCallsParams.mdx
+                  - page: PrepareCallsResult
+                    path: wallets/pages/reference/packages/wallet-apis/src/exports/type-aliases/PrepareCallsResult.mdx
+                  - page: PrepareSignParams
+                    path: wallets/pages/reference/packages/wallet-apis/src/exports/type-aliases/PrepareSignParams.mdx
+                  - page: PrepareSignResult
+                    path: wallets/pages/reference/packages/wallet-apis/src/exports/type-aliases/PrepareSignResult.mdx
+                  - page: RequestAccountParams
+                    path: wallets/pages/reference/packages/wallet-apis/src/exports/type-aliases/RequestAccountParams.mdx
+                  - page: RequestAccountResult
+                    path: wallets/pages/reference/packages/wallet-apis/src/exports/type-aliases/RequestAccountResult.mdx
+                  - page: SendCallsParams
+                    path: wallets/pages/reference/packages/wallet-apis/src/exports/type-aliases/SendCallsParams.mdx
+                  - page: SendCallsResult
+                    path: wallets/pages/reference/packages/wallet-apis/src/exports/type-aliases/SendCallsResult.mdx
+                  - page: SendPreparedCallsParams
+                    path: wallets/pages/reference/packages/wallet-apis/src/exports/type-aliases/SendPreparedCallsParams.mdx
+                  - page: SendPreparedCallsResult
+                    path: wallets/pages/reference/packages/wallet-apis/src/exports/type-aliases/SendPreparedCallsResult.mdx
+                  - page: SignMessageParams
+                    path: wallets/pages/reference/packages/wallet-apis/src/exports/type-aliases/SignMessageParams.mdx
+                  - page: SignMessageResult
+                    path: wallets/pages/reference/packages/wallet-apis/src/exports/type-aliases/SignMessageResult.mdx
+                  - page: SignPreparedCallsParams
+                    path: wallets/pages/reference/packages/wallet-apis/src/exports/type-aliases/SignPreparedCallsParams.mdx
+                  - page: SignPreparedCallsResult
+                    path: wallets/pages/reference/packages/wallet-apis/src/exports/type-aliases/SignPreparedCallsResult.mdx
+                  - page: SignSignatureRequestParams
+                    path: wallets/pages/reference/packages/wallet-apis/src/exports/type-aliases/SignSignatureRequestParams.mdx
+                  - page: SignSignatureRequestResult
+                    path: wallets/pages/reference/packages/wallet-apis/src/exports/type-aliases/SignSignatureRequestResult.mdx
+                  - page: SignTypedDataParams
+                    path: wallets/pages/reference/packages/wallet-apis/src/exports/type-aliases/SignTypedDataParams.mdx
+                  - page: SignTypedDataResult
+                    path: wallets/pages/reference/packages/wallet-apis/src/exports/type-aliases/SignTypedDataResult.mdx
+                  - page: SignerClient
+                    path: wallets/pages/reference/packages/wallet-apis/src/exports/type-aliases/SignerClient.mdx
+                  - page: SmartWalletActions
+                    path: wallets/pages/reference/packages/wallet-apis/src/exports/type-aliases/SmartWalletActions.mdx
+                  - page: SmartWalletClient
+                    path: wallets/pages/reference/packages/wallet-apis/src/exports/type-aliases/SmartWalletClient.mdx
+                  - page: SmartWalletClient1193Methods
+                    path: wallets/pages/reference/packages/wallet-apis/src/exports/type-aliases/SmartWalletClient1193Methods.mdx
+                  - page: SmartWalletClientEip1193Provider
+                    path: wallets/pages/reference/packages/wallet-apis/src/exports/type-aliases/SmartWalletClientEip1193Provider.mdx
