@@ -1,7 +1,0 @@
-{
-  "extends": "typescript-template/base.json",
-  "compilerOptions": {
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext"
-  }
-}
