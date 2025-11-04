@@ -1,0 +1,32 @@
+<CodeBlocks>
+```ts title="config.ts"
+import { alchemy, sepolia } from "@account-kit/infra";
+
+const YOUR_API_KEY = "<YOUR_API_KEY>";
+
+export const chain = sepolia;
+
+export const policyId = "<POLICY_ID>";
+
+export const transport = alchemy({
+  apiKey: YOUR_API_KEY,
+});
+```
+
+```ts title="client.ts"
+import { createModularAccountV2Client } from "@account-kit/smart-contracts";
+import { chain, transport, policyId } from "./config";
+import { LocalAccountSigner } from "@aa-sdk/core";
+import { generatePrivateKey } from "viem/accounts";
+
+export async function createClient() {
+  return createModularAccountV2Client({
+    chain,
+    transport,
+    signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
+    policyId,
+  });
+}
+```
+
+</CodeBlocks>

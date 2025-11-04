@@ -1,0 +1,715 @@
+components:
+  schemas:
+    address:
+      title: hex encoded address
+      type: string
+      pattern: ^0x[0-9a-fA-F]{40}$
+
+    addresses:
+      title: hex encoded address
+      type: array
+      items:
+        $ref: "#/components/schemas/address"
+
+    byte:
+      title: hex encoded byte
+      type: string
+      pattern: ^0x([0-9a-fA-F]?){1,2}$
+
+    bytes:
+      title: hex encoded bytes
+      type: string
+      pattern: ^0x[0-9a-f]*$
+
+    bytesMax32:
+      title: 32 hex encoded bytes
+      type: string
+      pattern: ^0x[0-9a-f]{0,64}$
+
+    bytes8:
+      title: 8 hex encoded bytes
+      type: string
+      pattern: ^0x[0-9a-f]{16}$
+
+    bytes32:
+      title: 32 hex encoded bytes
+      type: string
+      pattern: ^0x[0-9a-f]{64}$
+
+    bytes48:
+      title: 48 hex encoded bytes
+      type: string
+      pattern: ^0x[0-9a-f]{96}$
+
+    bytes65:
+      title: 65 hex encoded bytes
+      type: string
+      pattern: ^0x[0-9a-f]{130}$
+
+    bytes96:
+      title: 96 hex encoded bytes
+      type: string
+      pattern: ^0x[0-9a-f]{192}$
+
+    bytes256:
+      title: 256 hex encoded bytes
+      type: string
+      pattern: ^0x[0-9a-f]{512}$
+
+    bytesAnyCase:
+      title: hex encoded bytes (any case)
+      type: string
+      pattern: ^0x[0-9a-fA-F]*$
+
+    blockTag:
+      title: block tag
+      type: string
+      enum: ["latest", "earliest", "pending"]
+
+    bytes256AnyCase:
+      title: 256 hex encoded bytes (any case)
+      type: string
+      pattern: ^0x[0-9a-fA-F]{512}$
+
+    hash32:
+      title: 32 byte hex value
+      type: string
+      pattern: ^0x[0-9a-f]{64}$
+
+    hash32AnyCase:
+      title: 32 byte hex value (any case)
+      type: string
+      pattern: ^0[xX][0-9A-Fa-f]{64}$
+
+    uint:
+      title: hex encoded unsigned integer
+      type: string
+      pattern: ^0x([1-9a-f]+[0-9a-f]*|0)$
+
+    uint64:
+      title: hex encoded 64 bit unsigned integer
+      type: string
+      pattern: ^0x([1-9a-f]+[0-9a-f]{0,15})|0$
+
+    uint256:
+      title: hex encoded 256 bit unsigned integer
+      type: string
+      pattern: ^0x([1-9a-f]+[0-9a-f]{0,31})|0$
+
+    uintHexAnyCase:
+      title: hex encoded unsigned integer (any case)
+      type: string
+      pattern: ^0[xX]([1-9A-Fa-f]+[0-9A-Fa-f]*|0)$
+
+    ratio:
+      title: normalized ratio
+      type: number
+      minimum: 0
+      maximum: 1
+
+    positiveDecimal:
+      title: positive decimal number
+      type: number
+      minimum: 0
+
+    BlockChange:
+      type: object
+      required:
+        - assetType
+        - changeType
+      properties:
+        assetType:
+          type: string
+          enum: [NATIVE, ERC20, ERC721, ERC1155, SPECIAL_NFT]
+        changeType:
+          type: string
+          enum: [APPROVE, TRANSFER]
+        from:
+          $ref: "#/components/schemas/address"
+          description: "address the transaction is sent from"
+        to:
+          $ref: "#/components/schemas/address"
+
+    notFound:
+      title: "Not Found (null)"
+      type: "string"
+
+    AssetChange:
+      type: object
+      required:
+        - assetType
+        - changeType
+        - from
+        - to
+        - rawAmount
+        - amount
+        - symbol
+        - decimals
+        - contractAddress
+        - name
+        - logo
+        - tokenId
+      properties:
+        assetType:
+          type: string
+          enum: [NATIVE, ERC20, ERC721, ERC1155, SPECIAL_NFT]
+        changeType:
+          type: string
+          enum: [APPROVE, TRANSFER]
+        from:
+          description: "address the transaction is sent from"
+          $ref: "#/components/schemas/address"
+        to:
+          description: "address the transaction is directed to"
+          $ref: "#/components/schemas/address"
+        rawAmount:
+          type: string
+        amount:
+          type: string
+        symbol:
+          type: string
+        decimals:
+          type: [number, "null"]
+        contractAddress:
+          type: [string, "null"]
+        name:
+          type: [string, "null"]
+        logo:
+          type: [string, "null"]
+        tokenId:
+          type: [number, "null"]
+
+    RevertMessage:
+      type: string
+      nullable: true
+      description: "The reason why a transaction would revert. Provides details about potential transaction failure before execution."
+
+    Eip7702Auth:
+      title: "Eip 7702 Auth"
+      type: object
+      properties:
+        chain_id:
+          $ref: "#/components/schemas/uint64"
+          description: "The chain Id of the authorization"
+        address:
+          $ref: "#/components/schemas/address"
+          description: "The address of the authorization"
+        nonce:
+          $ref: "#/components/schemas/uint64"
+          description: "The nonce for the authorization"
+        y_parity:
+          $ref: "#/components/schemas/uint"
+          description: "Y parity of signed authorizzation tuple"
+        r:
+          $ref: "#/components/schemas/uint256"
+          description: "R of signed authorizzation tuple"
+        s:
+          $ref: "#/components/schemas/uint256"
+          description: "S of signed authorizzation tuple"
+
+    UserOperationV06:
+      type: object
+      title: "User Operation v0.6"
+      properties:
+        sender:
+          $ref: "#/components/schemas/address"
+          description: "The account making the operation"
+        nonce:
+          $ref: "#/components/schemas/uint"
+          description: "Anti-replay parameter; used as salt for first-time account creation"
+        initCode:
+          $ref: "#/components/schemas/bytes"
+          description: "The initCode of the account (needed if the account is not yet on-chain and needs creation)"
+        callData:
+          $ref: "#/components/schemas/bytes"
+          description: "Encoded data for the primary function call or operation"
+        callGasLimit:
+          $ref: "#/components/schemas/uint64"
+          description: "Gas allocated for the main execution call"
+        verificationGasLimit:
+          $ref: "#/components/schemas/uint64"
+          description: "Gas allocated for verification"
+        preVerificationGas:
+          $ref: "#/components/schemas/uint64"
+          description: "Gas for pre-verification execution and calldata"
+        maxFeePerGas:
+          $ref: "#/components/schemas/uint64"
+          description: "Maximum fee per gas (EIP-1559)"
+        maxPriorityFeePerGas:
+          $ref: "#/components/schemas/uint64"
+          description: "Max priority fee per gas (EIP-1559)"
+        signature:
+          $ref: "#/components/schemas/bytesAnyCase"
+          description: "Data passed during verification"
+        paymasterAndData:
+          $ref: "#/components/schemas/bytes"
+          description: "Paymaster address and extra data"
+        eip7702Auth:
+          $ref: "#/components/schemas/Eip7702Auth"
+          description: "The authorization tuple that an EOA account delegates to in EIP-7702"
+
+    UserOperationV06Partial:
+      type: object
+      properties:
+        sender:
+          $ref: "#/components/schemas/address"
+          description: "The account making the operation"
+        nonce:
+          $ref: "#/components/schemas/uint"
+          description: "Anti-replay parameter; used as salt for first-time account creation"
+        initCode:
+          $ref: "#/components/schemas/bytes"
+          description: "The initCode of the account (needed if the account is not yet on-chain and needs creation)"
+        callData:
+          $ref: "#/components/schemas/bytes"
+          description: "Encoded data for the primary function call or operation"
+        callGasLimit:
+          $ref: "#/components/schemas/uint64"
+          description: "Gas allocated for the main execution call"
+        verificationGasLimit:
+          $ref: "#/components/schemas/uint64"
+          description: "Gas allocated for verification"
+        preVerificationGas:
+          $ref: "#/components/schemas/uint64"
+          description: "Gas for pre-verification execution and calldata"
+        maxFeePerGas:
+          $ref: "#/components/schemas/uint64"
+          description: "Maximum fee per gas (EIP-1559)"
+        maxPriorityFeePerGas:
+          $ref: "#/components/schemas/uint64"
+          description: "Max priority fee per gas (EIP-1559)"
+        eip7702Auth:
+          $ref: "#/components/schemas/Eip7702Auth"
+          description: "The authorization tuple that an EOA account delegates to in EIP-7702"
+
+    UserOperationV07:
+      type: object
+      title: "User Operation v0.7"
+      properties:
+        sender:
+          $ref: "#/components/schemas/address"
+          description: "Account initiating operation"
+        nonce:
+          $ref: "#/components/schemas/uint"
+          description: "Account nonce or creation salt"
+        callData:
+          $ref: "#/components/schemas/bytes"
+          description: "Data for operation call"
+        callGasLimit:
+          $ref: "#/components/schemas/uint64"
+          description: "Gas allocated for call"
+        verificationGasLimit:
+          $ref: "#/components/schemas/uint64"
+          description: "Gas allocated for verification"
+        maxFeePerGas:
+          $ref: "#/components/schemas/uint64"
+          description: "Max fee per gas (EIP-1559)"
+        maxPriorityFeePerGas:
+          $ref: "#/components/schemas/uint64"
+          description: "Priority fee per gas (EIP-1559)"
+        paymaster:
+          $ref: "#/components/schemas/address"
+          description: "Paymaster contract address"
+        paymasterData:
+          $ref: "#/components/schemas/bytes"
+          description: "Data for paymaster"
+        paymasterVerificationGasLimit:
+          type: string
+          description: "The gas limit for paymaster verification."
+        factory:
+          $ref: "#/components/schemas/address"
+          description: "The account factory address (needed if and only if the account is not yet on-chain and needs to be created)"
+        factoryData:
+          $ref: "#/components/schemas/bytes"
+          description: "Data for the account factory (only if the account factory exists)"
+        preVerificationGas:
+          $ref: "#/components/schemas/uint64"
+          description: "The amount of gas to pay for to compensate the bundler for pre-verification execution and calldata"
+        paymasterPostOpGasLimit:
+          $ref: "#/components/schemas/uint64"
+          description: "The amount of gas to allocate for the paymaster post-op code (only if a paymaster exists)"
+        signature:
+          $ref: "#/components/schemas/bytesAnyCase"
+          description: "Data passed into the account along with the nonce during the verification step"
+        eip7702Auth:
+          $ref: "#/components/schemas/Eip7702Auth"
+          description: "The authorization tuple that an EOA account delegates to in EIP-7702"
+
+    UserOperationV07Partial:
+      type: object
+      properties:
+        sender:
+          $ref: "#/components/schemas/address"
+          description: "Account initiating operation"
+        nonce:
+          $ref: "#/components/schemas/uint"
+          description: "Account nonce or creation salt"
+        callData:
+          $ref: "#/components/schemas/bytes"
+          description: "Data for operation call"
+        callGasLimit:
+          $ref: "#/components/schemas/uint64"
+          description: "Gas allocated for call"
+        verificationGasLimit:
+          $ref: "#/components/schemas/uint64"
+          description: "Gas allocated for verification"
+        maxFeePerGas:
+          $ref: "#/components/schemas/uint64"
+          description: "Max fee per gas (EIP-1559)"
+        maxPriorityFeePerGas:
+          $ref: "#/components/schemas/uint64"
+          description: "Priority fee per gas (EIP-1559)"
+        paymaster:
+          $ref: "#/components/schemas/address"
+          description: "Paymaster contract address"
+        paymasterVerificationGasLimit:
+          $ref: "#/components/schemas/uint64"
+          description: "The gas limit for paymaster verification."
+        factory:
+          $ref: "#/components/schemas/address"
+          description: "The account factory address (needed if and only if the account is not yet on-chain and needs to be created)"
+        factoryData:
+          $ref: "#/components/schemas/bytes"
+          description: "Data for the account factory (only if the account factory exists)"
+        preVerificationGas:
+          $ref: "#/components/schemas/uint64"
+          description: "The amount of gas to pay for to compensate the bundler for pre-verification execution and calldata"
+        paymasterPostOpGasLimit:
+          $ref: "#/components/schemas/uint64"
+          description: "The amount of gas to allocate for the paymaster post-op code (only if a paymaster exists)"
+        eip7702Auth:
+          $ref: "#/components/schemas/Eip7702Auth"
+          description: "The authorization tuple that an EOA account delegates to in EIP-7702"
+
+    erc20Context:
+      title: Context for Erc20 paymaster
+      type: object
+      properties:
+        tokenAddress:
+          $ref: "#/components/schemas/address"
+          description: "Erc20 contract address"
+        maxTokenAmount:
+          $ref: "#/components/schemas/positiveDecimal"
+          description: "Maximum allowed amount of value in raw token amount"
+        permit:
+          $ref: "#/components/schemas/bytes"
+          description: "A 7597 typed permit"
+
+    transactionObject:
+      title: Transaction Object
+      type: object
+      properties:
+        from:
+          type: string
+          pattern: "^0[xX][0-9a-fA-F]{40}$"
+        to:
+          type: string
+          pattern: "^0[xX][0-9a-fA-F]{40}$"
+        gas:
+          type: string
+          pattern: "^0[xX]([1-9a-fA-F][0-9a-fA-F]*|0)$"
+        gasPrice:
+          type: string
+          pattern: "^0[xX]([1-9a-fA-F][0-9a-fA-F]*|0)$"
+        value:
+          type: string
+          pattern: "^0[xX]([1-9a-fA-F][0-9a-fA-F]*|0)$"
+        data:
+          type: string
+          pattern: "^0[xX][0-9a-fA-F]*$"
+
+    tracer:
+      title: Tracer
+      type: object
+      properties:
+        tracer:
+          type: string
+          enum: ["callTracer", "prestateTracer"]
+        tracerConfig:
+          type: object
+          properties:
+            onlyTopCall:
+              type: boolean
+
+    options:
+      title: Options
+      type: object
+      properties:
+        tracer:
+          type: string
+          enum: ["callTracer", "prestateTracer"]
+        tracerConfig:
+          type: object
+          properties:
+            onlyTopCall:
+              type: boolean
+        timeout:
+          type: string
+          description: A duration string that overrides the default timeout.
+
+    tracerResult:
+      type: array
+      description: Array of block traces.
+      items:
+        type: object
+        description: Array of block traces.
+        properties:
+          type:
+            type: string
+            description: CALL or CREATE
+          from:
+            type: string
+            description: 20-byte address of the caller
+          to:
+            type: string
+            description: 20-byte address of the recipient. Null when its a contract creation transaction.
+          value:
+            type: string
+            description: Amount of value included in the transfer (in hex)
+          gas:
+            type: string
+            description: Amount of gas provided for the call (in hex)
+          gasUsed:
+            type: string
+            description: Amount of gas used during the call (in hex)
+          input:
+            type: string
+            description: Call data
+          output:
+            type: string
+            description: Return data
+          error:
+            type: string
+            description: Error message, if any.
+          revertReason:
+            type: string
+            description: Solidity revert reason, if any.
+          calls:
+            type: array
+            description: Array of sub-calls made within the transaction.
+            items:
+              type: object
+              description: Array of block traces.
+              properties:
+                type:
+                  type: string
+                  description: CALL or CREATE
+                from:
+                  type: string
+                  description: 20-byte address of the caller
+                to:
+                  type: string
+                  description: 20-byte address of the recipient. Null when its a contract creation transaction.
+                value:
+                  type: string
+                  description: Amount of value included in the transfer (in hex)
+                gas:
+                  type: string
+                  description: Amount of gas provided for the call (in hex)
+                gasUsed:
+                  type: string
+                  description: Amount of gas used during the call (in hex)
+                input:
+                  type: string
+                  description: Call data
+                output:
+                  type: string
+                  description: Return data
+                error:
+                  type: string
+                  description: Error message, if any.
+                revertReason:
+                  type: string
+                  description: Solidity revert reason, if any.
+
+    SimulateAssetChangesResult:
+      title: SimulateAssetChangesResult
+      type: object
+      required:
+        - changes
+        - error
+      properties:
+        changes:
+          type: array
+          items:
+            $ref: "#/components/schemas/AssetChange"
+        gasUsed:
+          type: string
+          description: "The amount of gas used for the simulation"
+        error:
+          type: ["string", "null"]
+          description: "Error message if the transaction would revert, null otherwise"
+
+    SimulateExecutionResult:
+      title: SimulateExecutionResult
+      type: object
+      required:
+        - calls
+        - logs
+        - error
+      properties:
+        calls:
+          type: array
+          items:
+            $ref: "#/components/schemas/Call"
+        logs:
+          type: array
+          items:
+            $ref: "#/components/schemas/Log"
+        error:
+          type: ["string", "null"]
+          description: "If the transaction would revert, error explains the reason"
+        revertReason:
+          $ref: "#/components/schemas/RevertMessage"
+
+    Call:
+      title: Call
+      type: object
+      required:
+        - type
+        - from
+        - to
+        - gas
+        - gasUsed
+        - input
+        - output
+        - decoded
+      properties:
+        type:
+          $ref: "#/components/schemas/CallType"
+        from:
+          $ref: "#/components/schemas/address"
+          description: Address the transaction is sent from
+        to:
+          $ref: "#/components/schemas/address"
+          description: Address the transaction is directed to
+        value:
+          description: Amount in wei to transfer from sender to recipient
+          anyOf:
+            - $ref: "#/components/schemas/uint"
+            - type: "null"
+        gas:
+          $ref: "#/components/schemas/uint"
+          description: Hex-encoded gas limit
+        gasUsed:
+          $ref: "#/components/schemas/bytesAnyCase"
+          description: Hex-encoded gas actually used by this call
+        input:
+          $ref: "#/components/schemas/bytesAnyCase"
+          description: Hex-encoded call data
+        output:
+          type: string
+          description: Hex-encoded return data
+        decoded:
+          anyOf:
+            - $ref: "#/components/schemas/DecodedCall"
+            - type: "null"
+
+    CallType:
+      title: CallType
+      type: string
+      enum: [CALL, STATICCALL, DELEGATECALL]
+
+    DecodedCall:
+      title: DecodedCall
+      type: object
+      required:
+        - methodName
+        - inputs
+        - outputs
+        - authority
+      properties:
+        methodName:
+          type: string
+        inputs:
+          type: array
+          items:
+            $ref: "#/components/schemas/DecodedCallParam"
+        outputs:
+          type: array
+          items:
+            $ref: "#/components/schemas/DecodedCallParam"
+        authority:
+          $ref: "#/components/schemas/DecodingAuthority"
+
+    DecodedCallParam:
+      title: DecodedCallParam
+      type: object
+      required:
+        - name
+        - type
+        - value
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+        value:
+          anyOf:
+            - $ref: "#/components/schemas/bytesAnyCase"
+            - type: string
+          description: The decoded field value
+
+    DecodingAuthority:
+      title: DecodingAuthority
+      type: string
+      enum: [ETHERSCAN]
+
+    Log:
+      title: Log
+      type: object
+      required:
+        - topics
+        - address
+        - data
+        - decoded
+      properties:
+        topics:
+          type: array
+          items:
+            $ref: "#/components/schemas/bytesAnyCase"
+        address:
+          $ref: "#/components/schemas/address"
+        data:
+          $ref: "#/components/schemas/bytesAnyCase"
+        decoded:
+          anyOf:
+            - $ref: "#/components/schemas/DecodedLog"
+            - type: "null"
+
+    DecodedLog:
+      title: DecodedLog
+      type: object
+      required:
+        - eventName
+        - inputs
+        - authority
+      properties:
+        eventName:
+          type: string
+        inputs:
+          type: array
+          items:
+            $ref: "#/components/schemas/DecodedLogInput"
+        authority:
+          $ref: "#/components/schemas/DecodingAuthority"
+
+    DecodedLogInput:
+      title: DecodedLogInput
+      type: object
+      required:
+        - name
+        - type
+        - value
+        - indexed
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+        value:
+          anyOf:
+            - $ref: "#/components/schemas/bytesAnyCase"
+            - type: string
+        indexed:
+          type: boolean

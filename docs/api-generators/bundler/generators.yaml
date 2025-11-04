@@ -1,0 +1,3 @@
+api:
+  specs:
+    - openrpc: ../../api-specs/alchemy/json-rpc/bundler.json

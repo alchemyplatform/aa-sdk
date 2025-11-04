@@ -1,0 +1,28 @@
+Network fees can change quickly. When fees rise, pending transactions may become underpriced and stop progressing. Without retries, these transactions may never confirm. Use retries to keep your app reliable.
+
+**Why retries matter**
+
+- **Production reliability**: Proper wait and retry mechanisms ensure transactions don’t get stuck and fail silently.
+- **Fee volatility**: Gas markets fluctuate constantly, especially on testnets, so transactions can become underpriced and take much longer to mine.
+- **Automatic recovery**: Retries automatically replace stuck transactions with higher fees so they continue to progress.
+
+## How it works
+
+Drop and replace resubmits a transaction with whichever is greater:
+
+- 10% higher fees
+- The current minimum fees
+
+The SDK exports a `dropAndReplace` function from `@aa-sdk/core`. It is available on the `Smart Account Client`, so use it directly.
+
+Here’s a common production flow:
+
+1. Send a transaction with `sendUserOperation`
+2. Wait for confirmation using `waitForUserOperationTransaction`
+3. If waiting times out, call `dropAndReplace` to resend the transaction with higher fees
+
+<Warning>
+  If you sponsor gas, each retry creates a pending gas sponsorship in your
+  dashboard. Pending sponsorships expire after 10 minutes of inactivity.
+  Excessive retries can temporarily exhaust your sponsorship limit.
+</Warning>
