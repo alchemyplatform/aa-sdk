@@ -52,11 +52,6 @@ Before you begin, ensure you have:
   - **Important**: You'll need to send these tokens to your smart wallet address to be able to swap!
 - A signer to own the account and sign messages
 
-<Info>
-  Note that Cross-chain Swaps are currently supported via direct APIs and the
-  SDK. React support coming soon!
-</Info>
-
 <Tabs>
   <Tab title="React">
     <Markdown src="react.mdx" />
@@ -68,6 +63,126 @@ Before you begin, ensure you have:
     <Markdown src="api.mdx" />
   </Tab>
 </Tabs>
+
+# Tracking a cross-chain swap
+
+After sending your cross-chain swap, you can track its progress using the `wallet_getCrossChainStatus_v0` endpoint. This endpoint provides detailed status information for both the origin and destination transactions.
+
+<Info>
+  **Note**: The `wallet_getCrossChainStatus_v0` endpoint is currently available
+  via API only. SDK support coming soon.
+</Info>
+
+<Tip>
+  The `wallet_getCrossChainStatus_v0` endpoint is in beta. Note that there may
+  be changes in the future to simplify the endpoint. We will let you know
+  if/when that happens.
+</Tip>
+
+## Use the status endpoint
+
+Pass the `callId` from your swap request to check the current status:
+
+```bash
+curl -X POST https://api.g.alchemy.com/v2/{API_KEY} \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "method": "wallet_getCrossChainStatus_v0",
+    "params": [
+      "{CALL_ID}"
+    ],
+    "id": 1
+  }'
+```
+
+## Response format
+
+The response type depends on whether your transaction is same-chain or cross-chain.
+
+### Cross-chain response
+
+For cross-chain swaps, the response includes both origin and destination transaction details:
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "type": "cross-chain",
+    "id": "0x...",
+    "status": 120,
+    "originTransaction": {
+      "chainId": "0xa4b1",
+      "status": 200,
+      "receipt": {
+        "status": "0x1",
+        "blockHash": "0x...",
+        "blockNumber": "0x...",
+        "gasUsed": "0x...",
+        "transactionHash": "0x...",
+        "logs": []
+      }
+    },
+    "destinationTransaction": {
+      "chainId": "0x1",
+      "status": 100
+    }
+  }
+}
+```
+
+### Same-chain response
+
+For same-chain transactions, the response includes origin transaction details only:
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "type": "same-chain",
+    "id": "0x...",
+    "status": 200,
+    "originTransaction": {
+      "chainId": "0x1",
+      "status": 200,
+      "receipt": {
+        "status": "0x1",
+        "blockHash": "0x...",
+        "blockNumber": "0x...",
+        "gasUsed": "0x...",
+        "transactionHash": "0x...",
+        "logs": []
+      }
+    }
+  }
+}
+```
+
+## Status codes
+
+The `status` field indicates the current state of your transaction:
+
+| Code | Status                               | Description                                                   |
+| ---- | ------------------------------------ | ------------------------------------------------------------- |
+| 100  | Pending                              | Transaction received but not confirmed onchain                |
+| 110  | Preconfirmed                         | Transaction preconfirmed onchain                              |
+| 115  | Preconfirmed Onchain Failure         | Transaction reverted completely in preconfirmation            |
+| 116  | Preconfirmed Partial Onchain Failure | Transaction reverted partially in preconfirmation             |
+| 120  | Cross-Chain In Progress              | Origin transaction confirmed, destination transaction pending |
+| 200  | Confirmed                            | Transaction confirmed onchain without reverts                 |
+| 400  | Offchain Failure                     | Transaction failed offchain and will not be retried           |
+| 410  | Cross-Chain Refunded                 | Cross-chain transaction failed and was refunded               |
+| 500  | Onchain Failure                      | Transaction reverted completely onchain                       |
+| 600  | Partial Onchain Failure              | Transaction reverted partially onchain                        |
+
+## Get transaction hashes
+
+To access transaction hashes from the response:
+
+- **Origin transaction hash**: `result.originTransaction.receipt.transactionHash`
+- **Destination transaction hash**: `result.destinationTransaction.receipt.transactionHash` (when available)
 
 # FAQs
 
@@ -96,11 +211,12 @@ The expiry is an informational indicator of when you can expect to be able to pr
 
 ## What are the different status codes for cross-chain swaps?
 
-Cross-chain swaps may have additional status codes beyond standard transaction statuses to reflect the cross-chain nature of the transaction. These are:
+Cross-chain swaps support comprehensive status tracking. See the [tracking documentation](/wallets/transactions/cross-chain-swap-tokens#status-codes) for a complete list of status codes including:
 
-- 120: Cross-chain in progress
-- 410: Cross-chain refund
+- 120: Cross-Chain In Progress
+- 400: Offchain Failure
+- 410: Cross-Chain Refunded
 
 ## When is a CallId returned from `wallet_requestQuote_v0`?
 
-Any time you’re requesting a cross-chain quote via `wallet_requestQuote_v0` , a `callId` is returned. This `callId` includes important data for cross-chain tracking. You can use this just like any other `callId` in `wallet_getCallsStatus`!
+Any time you're requesting a cross-chain quote via `wallet_requestQuote_v0` , a `callId` is returned. This `callId` includes important data for cross-chain tracking. You can use this just like any other `callId` in `wallet_getCallsStatus` or `wallet_getCrossChainStatus_v0`!

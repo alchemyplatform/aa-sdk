@@ -168,7 +168,14 @@ For other potential responses, [check out the API reference!](/docs/wallets/api-
 
 <Step title="Track the cross-chain swap">
 
-Use the `wallet_getCallsStatus` endpoint to check the status of your cross-chain swap. Cross-chain swaps may take longer than single-chain swaps due to cross-chain messaging.
+<Tip>
+  We recommend using `wallet_getCrossChainStatus_v0` for richer data including
+  separate origin and destination transaction details. [See the tracking
+  documentation](/wallets/transactions/cross-chain-swap-tokens#tracking-a-cross-chain-swap)
+  for more details.
+</Tip>
+
+You can use the `wallet_getCallsStatus` endpoint to check the status of your cross-chain swap. Cross-chain swaps may take longer than single-chain swaps due to cross-chain messaging.
 
 ```bash
 curl -X POST https://api.g.alchemy.com/v2/{API_KEY} \
@@ -201,21 +208,9 @@ This returns:
 }
 ```
 
-Cross-chain swaps have additional status codes to reflect the cross-chain nature of the transaction:
-
-| Code | Title                   |
-| ---- | ----------------------- |
-| 100  | Pending                 |
-| 120  | Cross-Chain In Progress |
-| 200  | Confirmed               |
-| 400  | Offchain Failure        |
-| 410  | Cross-chain Refund      |
-| 500  | Onchain Failure         |
-| 600  | Partial Onchain Failure |
-
 To get your transaction hash, you can access `result.receipts[0].transactionHash`.
 
-For more details, check out [the API reference!](/docs/wallets/api-reference/smart-wallets/wallet-api-endpoints/wallet-api-endpoints/wallet-get-calls-status)
+For status codes and more details on tracking cross-chain swaps, see the [tracking documentation](/wallets/transactions/cross-chain-swap-tokens#tracking-a-cross-chain-swap).
 
 </Step>
 
