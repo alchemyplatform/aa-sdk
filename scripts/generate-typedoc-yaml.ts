@@ -55,12 +55,12 @@ type TypeSections = Record<string, string>;
 
 const PACKAGE_DISPLAY_NAMES: PackageDisplayNames = {
   packages: {
-    "aa-infra": "Alchemy Account Abstraction Infrastructure",
-    alchemy: "Alchemy SDK",
-    common: "Alchemy Common",
-    "smart-accounts": "Alchemy Smart Accounts",
-    "wagmi-core": "Alchemy Wagmi Core",
-    "wallet-apis": "Alchemy Smart Wallet APIs",
+    "aa-infra": "Infra",
+    // alchemy: "Alchemy SDK",
+    common: "Common",
+    "smart-accounts": "Smart Accounts",
+    "wagmi-core": "Wagmi Core",
+    "wallet-apis": "Wallet APIs",
   },
 } as const;
 

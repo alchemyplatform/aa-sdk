@@ -10,7 +10,6 @@
   },
   "include": [
     "packages/aa-infra/src/**/*",
-    "packages/alchemy/src/**/*",
     "packages/common/src/**/*",
     "packages/smart-accounts/src/**/*",
     "packages/wagmi-core/src/**/*",
