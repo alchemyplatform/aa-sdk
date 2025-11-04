@@ -23,18 +23,18 @@ options and behaviors.
 ## Example
 
 ```ts
-import { http } from 'viem'
-import { mainnet } from 'wagmi/chains'
-import { alchemyAuth } from '@alchemy/connectors-web'
-import { createConfig } from '@alchemy/wagmi-core'
+import { http } from "viem";
+import { mainnet } from "wagmi/chains";
+import { alchemyAuth } from "@alchemy/connectors-web";
+import { createConfig } from "@alchemy/wagmi-core";
 
 const config = createConfig({
   chains: [mainnet],
   transports: {
-    [mainnet.id]: http('https://eth-mainnet.g.alchemy.com/v2/<api-key>')
+    [mainnet.id]: http("https://eth-mainnet.g.alchemy.com/v2/<api-key>"),
   },
   connectors: [alchemyAuth()],
-})
+});
 ```
 
 ## Parameters
@@ -63,6 +63,7 @@ const config = createConfig({
         Alchemy-specific extensions in the future).
       </td>
     </tr>
+
   </tbody>
 </table>
 

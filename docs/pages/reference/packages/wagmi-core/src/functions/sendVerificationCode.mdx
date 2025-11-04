@@ -25,13 +25,13 @@ submitted using the updateEmail or updatePhoneNumber actions.
 // Send code to email
 await sendVerificationCode(config, {
   contact: "user@example.com",
-  type: "email"
+  type: "email",
 });
 
 // Send code to phone
 await sendVerificationCode(config, {
   contact: "+15551234567",
-  type: "phone"
+  type: "phone",
 });
 ```
 
@@ -74,6 +74,7 @@ await sendVerificationCode(config, {
         Verification code parameters
       </td>
     </tr>
+
   </tbody>
 </table>
 
