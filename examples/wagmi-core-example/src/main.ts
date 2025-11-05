@@ -18,7 +18,12 @@ import { zeroAddress } from "viem";
 
 globalThis.Buffer = Buffer;
 
-// DOM helpers
+// Storage viewer variables
+const STORAGE_KEY = "alchemyAuth.authSession";
+// Wagmi prefixes all storage keys with "wagmi." to namespace localStorage entries
+const WAGMI_STORAGE_PREFIX = "wagmi.";
+
+// DOM helper functions
 function updateStatus(elementId: string, message: string) {
   const element = document.getElementById(elementId);
   if (element) element.innerText = message;
@@ -29,23 +34,192 @@ function getInputValue(elementId: string): string {
   return input?.value || "";
 }
 
-const appHtml = `
-  <div>
-    <h1>Wagmi + Alchemy Smart Wallet</h1>
+function focusElement(elementId: string) {
+  const element = document.getElementById(elementId);
+  element?.focus();
+}
 
-    <div id="connect">
-      <h2>Connect</h2>
-      <div class="connect-group">
-        <h3>Alchemy Smart Wallet (recommended)</h3>
-        <div id="smartwallet"></div>
-      </div>
-      <div class="connect-group">
-        <h3>Other wallet connectors (EOA/3p)</h3>
-        <div id="others"></div>
+function getSelectedOauthMode(): "popup" | "redirect" {
+  const checkedRadio = document.querySelector<HTMLInputElement>(
+    'input[name="oauth-mode"]:checked',
+  );
+  return (checkedRadio?.value as "popup" | "redirect") || "popup";
+}
+
+async function handleSignMessage() {
+  const account = getAccount(config);
+  if (account.status !== "connected") {
+    alert("Not connected");
+    return;
+  }
+
+  const message = getInputValue("message-input");
+  if (!message) {
+    alert("Please enter a message");
+    return;
+  }
+
+  try {
+    const signature = await signMessage(config, { message });
+    const isValid = await verifyMessage(config, {
+      message,
+      signature,
+      address: account.address,
+    });
+    console.log({ signature, isValid });
+    alert(`Signature: ${signature}\n\n Verified: ${isValid}`);
+  } catch (error) {
+    console.error(error);
+    alert("Failed to sign message");
+  }
+}
+
+async function handleSignTypedData() {
+  const account = getAccount(config);
+  if (account.status !== "connected") {
+    alert("Not connected");
+    return;
+  }
+
+  const typedData = {
+    domain: {
+      name: "Ether Mail",
+      version: "1",
+      chainId: account.chainId,
+      verifyingContract: "0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC" as const,
+    },
+    types: {
+      Person: [
+        { name: "name", type: "string" },
+        { name: "wallet", type: "address" },
+      ],
+      Mail: [
+        { name: "from", type: "Person" },
+        { name: "to", type: "Person" },
+        { name: "contents", type: "string" },
+      ],
+    },
+    primaryType: "Mail" as const,
+    message: {
+      from: {
+        name: "Cow",
+        wallet: "0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826",
+      },
+      to: {
+        name: "Bob",
+        wallet: "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
+      },
+      contents: "Hello, Bob!",
+    },
+  };
+
+  try {
+    const signature = await signTypedData(config, typedData);
+    const isValid = await verifyTypedData(config, {
+      ...typedData,
+      signature,
+      address: account.address,
+    });
+    console.log({ typedData, signature, isValid });
+    alert(`Typed Data Signature: ${signature}\n\n Verified: ${isValid}`);
+  } catch (error) {
+    console.error(error);
+    alert("Failed to sign typed data");
+  }
+}
+
+async function handleSendCalls() {
+  const account = getAccount(config);
+  if (account.status !== "connected") {
+    alert("Not connected");
+    return;
+  }
+
+  try {
+    updateStatus(
+      "smart-wallet-status",
+      "Sending call (see console for more info)...",
+    );
+    const result = await sendCalls(config, {
+      calls: [{ to: zeroAddress, data: "0x" }],
+      // Paymaster capability should already be set up in the connector.
+    });
+    updateStatus("smart-wallet-status", `Result: ${result.id}`);
+  } catch (error) {
+    console.error("Call failed:", error);
+    updateStatus("smart-wallet-status", `Error: ${(error as Error).message}`);
+  }
+}
+
+async function handleSwitchChain(chainId: number) {
+  try {
+    switchChain(config, { chainId });
+  } catch (error) {
+    console.error(error);
+    alert("Failed to switch chain");
+  }
+}
+
+// Disconnect handler
+async function handleDisconnect() {
+  try {
+    updateStatus("disconnect-status", "Disconnecting...");
+
+    await disconnect(config);
+
+    updateStatus("disconnect-status", "Successfully disconnected!");
+
+    setTimeout(updateSessionStatus, 100);
+  } catch (error) {
+    console.error("Disconnect error details:", error);
+    updateStatus(
+      "disconnect-status",
+      `Disconnect error: ${(error as Error).message}`,
+    );
+  }
+}
+
+// Clear storage handler
+function handleClearStorage() {
+  try {
+    localStorage.clear();
+    sessionStorage.clear();
+    updateStatus("disconnect-status", "Storage cleared successfully!");
+  } catch (error) {
+    console.error("Clear storage error:", error);
+    updateStatus(
+      "disconnect-status",
+      `Clear storage error: ${(error as Error).message}`,
+    );
+  }
+}
+
+document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
+  <div>
+    <div id="account">
+      <h2>Account</h2>
+
+      <div>
+        status:
+        <br />
+        addresses:
+        <br />
+        chainId:
       </div>
     </div>
 
-    <div id="account"></div>
+    <div id="connect">
+      <h2>3rd Party Connectors</h2>
+      ${config.connectors
+        .filter((connector) => connector.id !== "alchemyAuth")
+        .map(
+          (connector) =>
+            `<button class="connect" id="${connector.uid}" type="button">${connector.name}</button>`,
+        )
+        .join("")}
+    </div>
+
+
 
     <div id="wallet-actions">
       <h2>Wallet Actions</h2>
@@ -69,33 +243,41 @@ const appHtml = `
       <button id="disconnect-btn" type="button" class="disconnect-btn">
         Disconnect
       </button>
+      <button id="clear-storage-btn" type="button" class="clear-storage-btn">
+        Clear Storage
+      </button>
+      <div id="disconnect-status"></div>
+    </div>
+
+    <div id="persistence-testing">
+      <h2>Local Storage Viewer</h2>
+      <div class="test-actions">
+        <button id="view-storage" type="button">View Storage</button>
+      </div>
+      <div id="storage-display"></div>
+      <div id="storage-status"></div>
     </div>
   </div>
 `;
 
 setupApp(document.querySelector<HTMLDivElement>("#app")!);
 
+// Setup functions
 function setupConnectorButtons(element: HTMLDivElement) {
   const connectElement = element.querySelector<HTMLDivElement>("#connect");
-  const smartDiv = element.querySelector<HTMLDivElement>("#smartwallet")!;
-  const othersDiv = element.querySelector<HTMLDivElement>("#others")!;
-
-  const connectors = config.connectors;
-  const smart = connectors.find((c: any) => (c as any).type === "alchemy-smart-wallet" || c.name === "Alchemy Smart Wallet");
-  const others = connectors.filter((c) => c !== smart);
-
-  smartDiv.innerHTML = smart ? `<button class="connect" id="${(smart as any).uid}">${smart.name}</button>` : "";
-  othersDiv.innerHTML = others
-    .map((c) => `<button class="connect" id="${(c as any).uid}">${c.name}</button>`)
-    .join("");
-
   const buttons = element.querySelectorAll<HTMLButtonElement>(".connect");
+
   for (const button of buttons) {
-    const connector = connectors.find((conn: any) => (conn as any).uid === button.id)!;
+    const connector = config.connectors.find(
+      (connector) => connector.uid === button.id,
+    )!;
+
     button.addEventListener("click", async () => {
       try {
+        // Clear previous errors
         const errorElement = element.querySelector<HTMLDivElement>("#error");
         if (errorElement) errorElement.remove();
+
         await connect(config, { connector });
       } catch (error) {
         const errorElement = document.createElement("div");
@@ -114,8 +296,12 @@ function setupAccountWatcher(element: HTMLDivElement) {
       accountElement.innerHTML = `
         <h2>Account</h2>
         <div>
-          status: ${account.status}<br />
-          addresses: ${account.addresses ? JSON.stringify(account.addresses) : ""}<br />
+          status: ${account.status}
+          <br />
+          addresses: ${
+            account.addresses ? JSON.stringify(account.addresses) : ""
+          }
+          <br />
           chainId: ${account.chainId ?? ""}
         </div>
         ${
@@ -170,125 +356,145 @@ function setupWalletActions() {
 
   const sendCallsButton = document.getElementById("send-calls");
   sendCallsButton?.addEventListener("click", handleSendCalls);
+
+  const chainButtons =
+    document.querySelectorAll<HTMLButtonElement>(".chain-btn");
+  chainButtons.forEach((button) => {
+    button.addEventListener("click", async () => {
+      const chainId = parseInt(button.getAttribute("data-chain-id") || "0", 10);
+      await handleSwitchChain(chainId);
+    });
+  });
 }
 
 function setupSessionControls() {
   const disconnectButton = document.getElementById("disconnect-btn");
   disconnectButton?.addEventListener("click", handleDisconnect);
 
+  const clearStorageButton = document.getElementById("clear-storage-btn");
+  clearStorageButton?.addEventListener("click", handleClearStorage);
+
   updateSessionStatus();
 }
 
-function updateSessionStatus() {
-  const account = getAccount(config);
-  const status = account.status;
-  updateStatus("session-status", `Session: ${status}`);
-}
-
-async function handleSignMessage() {
-  const account = getAccount(config);
-  if (account.status !== "connected") {
-    alert("Not connected");
-    return;
-  }
+// Storage viewer functions
+function getStorageContents() {
   try {
-    const message = getInputValue("message-input");
-    const signature = await signMessage(config, { message });
-    const isValid = await verifyMessage(config, {
-      address: account.address,
-      message,
-      signature,
-    });
-    alert(`Signature: ${signature}\n\n Verified: ${isValid}`);
-  } catch (error) {
-    console.error(error);
-    alert("Failed to sign message");
-  }
-}
-
-async function handleSignTypedData() {
-  const account = getAccount(config);
-  if (account.status !== "connected") {
-    alert("Not connected");
-    return;
-  }
-  try {
-    const typedData = {
-      domain: { name: "Example DApp", version: "1", chainId: account.chainId },
-      types: {
-        Mail: [
-          { name: "from", type: "address" },
-          { name: "to", type: "address" },
-          { name: "contents", type: "string" },
-        ],
-      },
-      primaryType: "Mail" as const,
-      message: {
-        from: account.address,
-        to: account.address,
-        contents: "Hello from Alchemy Smart Wallet!",
-      },
-    };
-    const signature = await signTypedData(config, typedData as any);
-    const isValid = await verifyTypedData(config, {
-      ...typedData,
-      signature,
-      address: account.address,
-    });
-    console.log({ typedData, signature, isValid });
-    alert(`Typed Data Signature: ${signature}\n\n Verified: ${isValid}`);
-  } catch (error) {
-    console.error(error);
-    alert("Failed to sign typed data");
-  }
-}
-
-async function handleSendCalls() {
-  const account = getAccount(config);
-  if (account.status !== "connected") {
-    alert("Not connected");
-    return;
-  }
-  try {
-    updateStatus(
-      "smart-wallet-status",
-      "Sending call (see console for more info)...",
+    // Use the correct wagmi storage key format
+    const stored = localStorage.getItem(
+      `${WAGMI_STORAGE_PREFIX}${STORAGE_KEY}`,
     );
-    const result = await sendCalls(config, {
-      calls: [{ to: zeroAddress, data: "0x" }],
-    });
-    updateStatus("smart-wallet-status", `Result: ${result.id}`);
+    return stored ? JSON.parse(stored) : null;
   } catch (error) {
-    console.error("Call failed:", error);
-    updateStatus("smart-wallet-status", `Error: ${(error as Error).message}`);
+    console.warn("Error reading storage:", error);
+    return null;
   }
 }
 
-async function handleSwitchChain(chainId: number) {
-  try {
-    switchChain(config, { chainId });
-  } catch (error) {
-    console.error(error);
-    alert("Failed to switch chain");
+// Session status functions
+function updateSessionStatus() {
+  const storage = getStorageContents();
+  if (storage) {
+    try {
+      const data = typeof storage === "string" ? JSON.parse(storage) : storage;
+
+      // Check for expiration in the main data or nested authSessionState
+      let expirationDateMs = data.expirationDateMs;
+      if (!expirationDateMs && data.authSessionState) {
+        const sessionState =
+          typeof data.authSessionState === "string"
+            ? JSON.parse(data.authSessionState)
+            : data.authSessionState;
+        expirationDateMs = sessionState.expirationDateMs;
+      }
+
+      if (expirationDateMs) {
+        const expirationDate = new Date(expirationDateMs);
+        const isExpired = expirationDateMs < Date.now();
+        const timeUntilExpiry = Math.abs(expirationDateMs - Date.now());
+        const minutesUntilExpiry = Math.round(timeUntilExpiry / (1000 * 60));
+
+        const statusIcon = isExpired ? "🔴" : "🟢";
+        const statusText = isExpired ? "EXPIRED" : "ACTIVE";
+        const timeText = isExpired
+          ? `Expired ${minutesUntilExpiry} minutes ago`
+          : `Expires in ${minutesUntilExpiry} minutes`;
+
+        updateStatus(
+          "session-status",
+          `${statusIcon} Session: ${statusText} | ${timeText} | Expires: ${expirationDate.toLocaleString()}`,
+        );
+      } else {
+        updateStatus("session-status", "ℹ️ No active session");
+      }
+    } catch {
+      updateStatus("session-status", "⚠️ Error reading session status");
+    }
+  } else {
+    updateStatus("session-status", "ℹ️ No stored session");
   }
 }
 
-function handleDisconnect() {
-  disconnect(config);
+function updateStorageDisplay() {
+  const storageElement = document.getElementById("storage-display");
+  if (storageElement) {
+    const storage = getStorageContents();
+    if (storage) {
+      try {
+        // Ensure we have an object, not a string
+        const data =
+          typeof storage === "string" ? JSON.parse(storage) : storage;
+
+        // Handle double-serialized authSessionState for better display
+        const displayData = { ...data };
+        if (
+          displayData.authSessionState &&
+          typeof displayData.authSessionState === "string"
+        ) {
+          displayData.authSessionState = JSON.parse(
+            displayData.authSessionState,
+          );
+        }
+
+        const formattedJson = JSON.stringify(displayData, null, 2);
+        storageElement.innerHTML = `<pre>${formattedJson}</pre>`;
+      } catch (error) {
+        storageElement.innerHTML = `<pre>Error formatting storage: ${error}</pre>`;
+      }
+    } else {
+      storageElement.innerHTML = "<em>No stored session data</em>";
+    }
+  }
+}
+
+function handleViewStorage() {
+  updateStorageDisplay();
+  updateSessionStatus();
+  updateStatus("storage-status", "Storage contents updated");
+}
+
+function setupStorageViewer() {
+  const viewStorageBtn = document.getElementById("view-storage");
+
+  viewStorageBtn?.addEventListener("click", handleViewStorage);
+
+  // Initial display update
+  updateStorageDisplay();
 }
 
 function setupApp(element: HTMLDivElement) {
-  element.innerHTML = appHtml;
   setupConnectorButtons(element);
   setupAccountWatcher(element);
   setupWalletActions();
   setupSessionControls();
+  setupStorageViewer();
 
+  // Attempt graceful reconnection on page load
   setTimeout(async () => {
     try {
       await reconnect(config);
     } catch {
-      // No existing session
+      // Silent fail - no existing session to reconnect
     }
   }, 100);
 }
