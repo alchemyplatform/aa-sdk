@@ -256,6 +256,28 @@ methods:
                       required:
                         - "sessionId"
                         - "signature"
+                stateOverride:
+                  description: |
+                    Allows changes to the state of a contract before executing the call. For example, you can modify variable values (like balances or approvals) for that call without changing the contract itself on the blockchain.
+
+                    In more technical terms, the state override set is an optional parameter that allows executing the call against a modified chain state. It is an address-to-state mapping, where each entry specifies some state to be overridden prior to executing the call.
+                  type: "object"
+                  properties:
+                    balance:
+                      type: "string"
+                      description: "Fake balance to set for the account before executing the call (<= 32 bytes)"
+                    nonce:
+                      type: "string"
+                      description: "Fake nonce to set for the account before executing the call (<= 8 bytes)."
+                    code:
+                      type: "string"
+                      description: "Fake EVM bytecode to inject into the account before executing the call."
+                    state:
+                      type: "object"
+                      description: "Fake key-value mapping to override all slots in the account storage before executing the call."
+                    stateDiff:
+                      type: "object"
+                      description: "Fake key-value mapping to override individual slots in the account storage before executing the call."
                 paymasterService:
                   allOf:
                     - anyOf:
