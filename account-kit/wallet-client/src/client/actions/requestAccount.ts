@@ -10,10 +10,10 @@ import {
   credentialToWebAuthnPublicKey,
   isWebAuthnSigner,
 } from "../../utils.js";
-import {
+import type {
   CreationOptionsByPublicKey,
   CreationOptionsBySignerAddress,
-  type WebAuthnPublicKey,
+  WebAuthnPublicKey,
 } from "@alchemy/wallet-api-types";
 
 type RpcSchema = Extract<
