@@ -87,6 +87,7 @@
           }
         ],
         "@typescript-eslint/no-import-type-side-effects": "error",
+        // Typebox imports break React Native bundling, so we restrict imports from wallet-api-types to type-only.
         "@typescript-eslint/no-restricted-imports": [
           "error",
           {
