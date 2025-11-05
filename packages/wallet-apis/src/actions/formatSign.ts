@@ -2,6 +2,7 @@ import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
 import type { InnerWalletApiClient, OptionalChainId } from "../types.ts";
 import { toHex, type Address, type IsUndefined, type Prettify } from "viem";
 import { AccountNotFoundError } from "@alchemy/common";
+import { LOGGER } from "../logger.js";
 
 type RpcSchema = Extract<
   WalletServerRpcSchemaType,
@@ -51,10 +52,13 @@ export async function formatSign<
     throw new AccountNotFoundError();
   }
 
-  return client.request({
+  LOGGER.debug("formatSign:start", { hasFrom: true });
+  const res = await client.request({
     method: "wallet_formatSign",
     params: [
       { ...params, from, chainId: params.chainId ?? toHex(client.chain.id) },
     ],
   });
+  LOGGER.debug("formatSign:done");
+  return res;
 }

@@ -15,6 +15,7 @@ import {
 import type { ConnectorParameter } from "@wagmi/core/internal";
 import { getAction } from "viem/utils";
 import { prepareCalls as prepareCallsClientAction } from "@alchemy/wallet-apis";
+import { LOGGER } from "../logger.js";
 
 export type PrepareCallsParameters = Prettify<
   {
@@ -43,6 +44,12 @@ export async function prepareCalls(
 ): Promise<PrepareCallsReturnType> {
   const { connector, chainId, ...params } = parameters;
 
+  LOGGER.debug("prepareCalls:start", {
+    callsCount: params.calls.length,
+    chainId,
+    hasCapabilities: !!params.capabilities,
+  });
+
   const client = await getConnectorClient(config, {
     chainId,
     connector,
@@ -69,5 +76,6 @@ export async function prepareCalls(
     capabilities: viemDecodeCapabilities(params.capabilities),
   });
 
+  LOGGER.debug("prepareCalls:success", { type: preparedCalls.type });
   return viemEncodePreparedCalls(preparedCalls);
 }

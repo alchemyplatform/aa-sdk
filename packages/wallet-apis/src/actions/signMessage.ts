@@ -10,6 +10,7 @@ import { prepareSign } from "./prepareSign.js";
 import { signSignatureRequest } from "./signSignatureRequest.js";
 import { formatSign } from "./formatSign.js";
 import { signableMessageToJsonSafe } from "../utils/format.js";
+import { LOGGER } from "../logger.js";
 
 export type SignMessageParams = Prettify<{
   message: SignableMessage;
@@ -42,6 +43,9 @@ export async function signMessage(
   params: SignMessageParams,
 ): Promise<SignMessageResult> {
   const accountAddress = params.account ?? client.account?.address;
+  LOGGER.debug("signMessage:start", {
+    hasExplicitAccount: params.account != null,
+  });
 
   const account = await requestAccount(
     client,
@@ -65,6 +69,6 @@ export async function signMessage(
       data: signed.data,
     },
   });
-
+  LOGGER.debug("signMessage:done", { from: account.address });
   return formatted.signature;
 }

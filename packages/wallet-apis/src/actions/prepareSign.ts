@@ -2,6 +2,7 @@ import type { InnerWalletApiClient, OptionalChainId } from "../types.ts";
 import { toHex, type Address, type IsUndefined, type Prettify } from "viem";
 import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
 import { AccountNotFoundError } from "@alchemy/common";
+import { LOGGER } from "../logger.js";
 
 type RpcSchema = Extract<
   WalletServerRpcSchemaType,
@@ -46,10 +47,12 @@ export async function prepareSign<
 ): Promise<PrepareSignResult> {
   const from = params.from ?? client.account?.address;
   if (!from) {
+    LOGGER.warn("prepareSign:no-from", { hasClientAccount: !!client.account });
     throw new AccountNotFoundError();
   }
 
-  return client.request({
+  LOGGER.debug("prepareSign:start", { type: (params as any)?.type });
+  const res = await client.request({
     method: "wallet_prepareSign",
     params: [
       {
@@ -59,4 +62,6 @@ export async function prepareSign<
       },
     ],
   });
+  LOGGER.debug("prepareSign:done");
+  return res;
 }

@@ -10,6 +10,7 @@ import type { InnerWalletApiClient, WithoutRawPayload } from "../types";
 import { assertNever } from "@alchemy/common";
 import { getAction } from "viem/utils";
 import { signAuthorization, signMessage, signTypedData } from "viem/actions";
+import { LOGGER } from "../logger.js";
 
 export type SignSignatureRequestParams = Prettify<
   WithoutRawPayload<
@@ -61,6 +62,7 @@ export async function signSignatureRequest(
   client: InnerWalletApiClient,
   params: SignSignatureRequestParams,
 ): Promise<SignSignatureRequestResult> {
+  LOGGER.debug("signSignatureRequest:start", { type: params.type });
   const actions = {
     signMessage: getAction(client.owner, signMessage, "signMessage"),
     signTypedData: getAction(client.owner, signTypedData, "signTypedData"),
@@ -73,22 +75,26 @@ export async function signSignatureRequest(
 
   switch (params.type) {
     case "personal_sign": {
-      return {
+      const res = {
         type: "secp256k1",
         data: await actions.signMessage({
           message: params.data,
           account: client.owner.account,
         }),
-      };
+      } as const;
+      LOGGER.debug("signSignatureRequest:personal_sign:ok");
+      return res;
     }
     case "eth_signTypedData_v4": {
-      return {
+      const res = {
         type: "secp256k1",
         data: await actions.signTypedData({
           ...params.data,
           account: client.owner.account,
         }),
-      };
+      } as const;
+      LOGGER.debug("signSignatureRequest:typedData:ok");
+      return res;
     }
     case "eip7702Auth": {
       const {
@@ -109,16 +115,21 @@ export async function signSignatureRequest(
       const yParity =
         _yParity != null ? Number(_yParity) : vToYParity(Number(v));
 
-      return {
+      const res = {
         type: "secp256k1",
         data: serializeSignature({
           r,
           s,
           yParity,
         }),
-      };
+      } as const;
+      LOGGER.debug("signSignatureRequest:eip7702Auth:ok");
+      return res;
     }
     default:
+      LOGGER.warn("signSignatureRequest:unknown-type", {
+        type: (params as any)?.type,
+      });
       return assertNever(params, `Unexpected signature request type.`);
   }
 }

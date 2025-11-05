@@ -299,7 +299,21 @@ export function alchemySmartWallet(
       },
 
       async connect(params): Promise<ConnectResult> {
-        const { chainId } = await innerConnector.connect(params);
+        // Some connector implementations may not expose `connect` (depending on
+        // how they were constructed). In that case, assume the inner connector
+        // is already authorized and derive the chain id from it.
+        let chainId: number | undefined;
+        if (typeof (innerConnector as any).connect === "function") {
+          const res = await (innerConnector as any).connect(params);
+          chainId = (res as any)?.chainId;
+        } else {
+          chainId = await innerConnector.getChainId();
+        }
+        if (chainId == null) {
+          throw new BaseError(
+            "Failed to determine chain id from owner connector",
+          );
+        }
         return outerConnect(chainId);
       },
 

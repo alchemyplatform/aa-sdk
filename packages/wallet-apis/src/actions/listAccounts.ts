@@ -1,4 +1,5 @@
 import type { InnerWalletApiClient } from "../types.ts";
+import { LOGGER } from "../logger.js";
 import type { Address, Prettify } from "viem";
 import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
 
@@ -50,8 +51,8 @@ export async function listAccounts(
   params: ListAccountsParams,
 ): Promise<ListAccountsResult> {
   const signerAddress = params.signerAddress ?? client.owner.account.address;
-
-  return client.request({
+  LOGGER.debug("listAccounts:start", { hasAfter: !!params.after });
+  const res = await client.request({
     method: "wallet_listAccounts",
     params: [
       {
@@ -60,4 +61,6 @@ export async function listAccounts(
       },
     ],
   });
+  LOGGER.debug("listAccounts:done", { count: res.accounts.length });
+  return res;
 }

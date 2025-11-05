@@ -1253,8 +1253,12 @@ navigation:
                     path: wallets/pages/reference/alchemy/common/functions/bigIntMultiply.mdx
                   - page: createEip1193HandlerFactory
                     path: wallets/pages/reference/alchemy/common/functions/createEip1193HandlerFactory.mdx
+                  - page: createLogger
+                    path: wallets/pages/reference/alchemy/common/functions/createLogger.mdx
                   - page: getAlchemyRpcUrl
                     path: wallets/pages/reference/alchemy/common/functions/getAlchemyRpcUrl.mdx
+                  - page: getGlobalLoggerConfig
+                    path: wallets/pages/reference/alchemy/common/functions/getGlobalLoggerConfig.mdx
                   - page: getSupportedChainIds
                     path: wallets/pages/reference/alchemy/common/functions/getSupportedChainIds.mdx
                   - page: isAlchemyConnectionConfig
@@ -1263,10 +1267,16 @@ navigation:
                     path: wallets/pages/reference/alchemy/common/functions/isAlchemyTransport.mdx
                   - page: isChainSupported
                     path: wallets/pages/reference/alchemy/common/functions/isChainSupported.mdx
+                  - page: isLevelEnabled
+                    path: wallets/pages/reference/alchemy/common/functions/isLevelEnabled.mdx
+                  - page: isNamespaceEnabled
+                    path: wallets/pages/reference/alchemy/common/functions/isNamespaceEnabled.mdx
                   - page: lowerAddress
                     path: wallets/pages/reference/alchemy/common/functions/lowerAddress.mdx
                   - page: raise
                     path: wallets/pages/reference/alchemy/common/functions/raise.mdx
+                  - page: setGlobalLoggerConfig
+                    path: wallets/pages/reference/alchemy/common/functions/setGlobalLoggerConfig.mdx
                   - page: validateAlchemyConnectionConfig
                     path: wallets/pages/reference/alchemy/common/functions/validateAlchemyConnectionConfig.mdx
               - section: Classes
@@ -1285,6 +1295,22 @@ navigation:
                     path: wallets/pages/reference/alchemy/common/classes/ConnectionConfigError/constructor.mdx
                   - page: FetchError
                     path: wallets/pages/reference/alchemy/common/classes/FetchError/constructor.mdx
+                  - section: InMemorySink
+                    contents:
+                      - page: clear
+                        path: wallets/pages/reference/alchemy/common/classes/InMemorySink/clear.mdx
+                      - page: constructor
+                        path: wallets/pages/reference/alchemy/common/classes/InMemorySink/constructor.mdx
+                      - page: getByLevel
+                        path: wallets/pages/reference/alchemy/common/classes/InMemorySink/getByLevel.mdx
+                      - page: getByMessage
+                        path: wallets/pages/reference/alchemy/common/classes/InMemorySink/getByMessage.mdx
+                      - page: getByNamespace
+                        path: wallets/pages/reference/alchemy/common/classes/InMemorySink/getByNamespace.mdx
+                      - page: latest
+                        path: wallets/pages/reference/alchemy/common/classes/InMemorySink/latest.mdx
+                      - page: sink
+                        path: wallets/pages/reference/alchemy/common/classes/InMemorySink/sink.mdx
                   - page: InvalidRequestError
                     path: wallets/pages/reference/alchemy/common/classes/InvalidRequestError/constructor.mdx
                   - page: MethodUnsupportedError

@@ -25,6 +25,7 @@ import {
 import { toLightAccountBase, type LightAccountBase } from "./base.js";
 import { BaseError, lowerAddress } from "@alchemy/common";
 import { getAction } from "viem/utils";
+import { LOGGER } from "../../logger.js";
 
 export type LightAccount<
   TLightAccountVersion extends
@@ -65,6 +66,11 @@ export async function toLightAccount<
 }: ToLightAccountParams<TLightAccountVersion>): Promise<
   LightAccount<TLightAccountVersion>
 > {
+  LOGGER.debug("toLightAccount:start", {
+    version,
+    hasAccountAddress: !!accountAddress_,
+  });
+
   const accountAbi =
     version === "v2.0.0" ? LightAccountAbi_v2 : LightAccountAbi_v1;
   const factoryAbi =
@@ -86,6 +92,8 @@ export async function toLightAccount<
       ownerAddress: owner.address,
       version,
     });
+
+  LOGGER.debug("toLightAccount:address-resolved", { accountAddress });
 
   const getFactoryArgs = async () => {
     const factoryData = encodeFunctionData({
@@ -122,6 +130,7 @@ export async function toLightAccount<
     },
 
     async getOwnerAddress(): Promise<Address> {
+      LOGGER.debug("getOwnerAddress:start", { accountAddress });
       const readContractAction = getAction(
         client,
         readContract,
@@ -134,9 +143,11 @@ export async function toLightAccount<
       });
 
       if (owner == null) {
+        LOGGER.error("getOwnerAddress:failed", { accountAddress });
         throw new BaseError("could not get on-chain owner");
       }
 
+      LOGGER.debug("getOwnerAddress:success", { owner });
       return owner;
     },
   };
