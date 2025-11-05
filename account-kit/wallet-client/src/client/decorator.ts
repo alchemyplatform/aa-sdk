@@ -1,7 +1,7 @@
 import type { Address, Hex } from "viem";
-import {
-  type WaitForCallsStatusParameters,
-  type WaitForCallsStatusReturnType,
+import type {
+  WaitForCallsStatusParameters,
+  WaitForCallsStatusReturnType,
 } from "viem/actions";
 import type { InnerWalletApiClient } from "../types.ts";
 import {
