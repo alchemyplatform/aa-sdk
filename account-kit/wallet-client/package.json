@@ -55,8 +55,7 @@
     "@types/deep-equal": "^1.0.4",
     "@types/node": "^24.0.11",
     "bun": "^1.2.18",
-    "bun-types": "^1.2.18",
-    "typebox": "^1.0.0"
+    "bun-types": "^1.2.18"
   },
   "peerDependencies": {
     "viem": "^2.29.2"

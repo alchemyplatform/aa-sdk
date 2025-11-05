@@ -1,4 +1,4 @@
-import { type Address, type Hex, type TypedDataDefinition } from "viem";
+import type { Address, Hex, TypedDataDefinition } from "viem";
 import type { InnerWalletApiClient } from "../../types.ts";
 import { requestAccount } from "./requestAccount.js";
 import { metrics } from "../../metrics.js";
