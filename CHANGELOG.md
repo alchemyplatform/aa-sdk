@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.78.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.77.1...v4.78.0) (2025-11-05)
+
+### Bug Fixes
+
+- override webauthn send test timeout ([#2225](https://github.com/alchemyplatform/aa-sdk/issues/2225)) ([f1e2d19](https://github.com/alchemyplatform/aa-sdk/commit/f1e2d1995d71eb8fa365d9b662045e15212c425a))
+- prevent non-type imports in wallet-client from wallet-api-types ([#2235](https://github.com/alchemyplatform/aa-sdk/issues/2235)) ([a39bd58](https://github.com/alchemyplatform/aa-sdk/commit/a39bd58ba3a204a9066628835ce9f6d1de6c490a))
+
+### Features
+
+- adding-bsc-import ([395e839](https://github.com/alchemyplatform/aa-sdk/commit/395e839cd07c71bdd1bdf3ce2dde24f51fd73ec0))
+
 ## [4.77.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.77.0...v4.77.1) (2025-10-31)
 
 ### Bug Fixes

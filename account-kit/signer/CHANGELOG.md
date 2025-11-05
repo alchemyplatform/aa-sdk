@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.78.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.77.1...v4.78.0) (2025-11-05)
+
+**Note:** Version bump only for package @account-kit/signer
+
 ## [4.77.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.77.0...v4.77.1) (2025-10-31)
 
 **Note:** Version bump only for package @account-kit/signer
