@@ -1,0 +1,85 @@
+name: 'Setup Docs (Versioned)'
+description: 'Sets up everything needed to generate docs with Fern CLI for both v4 and v5'
+
+inputs:
+  docs-github-token:
+    description: 'GitHub token for accessing the docs repository'
+    required: true
+  v4-branch:
+    description: 'Branch name for v4 docs'
+    required: false
+    default: 'main'
+  v5-branch:
+    description: 'Branch name for v5 docs'
+    required: false
+    default: 'blake/merge-v4-and-v5'
+
+runs:
+  using: "composite"
+  steps:
+    - name: Setup working directories
+      shell: bash
+      run: |
+        # Clean up any stale worktree references
+        git worktree prune
+        
+        # Remove existing directories if they exist
+        git worktree remove /tmp/aa-sdk-v4 --force 2>/dev/null || true
+        rm -rf /tmp/aa-sdk-v4
+        rm -rf /tmp/aa-sdk-v5
+        
+        # Create fresh directories
+        mkdir -p /tmp/aa-sdk-v4
+        mkdir -p /tmp/aa-sdk-v5
+        echo "✅ Created temporary directories for v4 and v5"
+
+    - name: Checkout v4 branch (main)
+      shell: bash
+      run: |
+        git fetch origin ${{ inputs.v4-branch }}
+        git worktree add /tmp/aa-sdk-v4 origin/${{ inputs.v4-branch }}
+        echo "✅ Checked out ${{ inputs.v4-branch }} to /tmp/aa-sdk-v4"
+
+    - name: Extract code snippets for v4
+      shell: bash
+      run: |
+        cd /tmp/aa-sdk-v4
+        if [ -f "docs/scripts/extract-include-statements.js" ]; then
+          node docs/scripts/extract-include-statements.js
+          echo "✅ Extracted v4 code snippets"
+        else
+          echo "⚠️  extract-include-statements.js not found in v4, skipping"
+        fi
+
+    - name: Extract code snippets for v5 (current branch)
+      shell: bash
+      run: |
+        if [ -f "docs/scripts/extract-include-statements.js" ]; then
+          node docs/scripts/extract-include-statements.js
+          echo "✅ Extracted v5 code snippets"
+        else
+          echo "⚠️  extract-include-statements.js not found in v5, skipping"
+        fi
+
+    - name: Ensure docs-site submodule is up-to-date
+      shell: bash
+      run: |
+        git submodule update --init --remote docs-site/
+        echo "✅ Updated docs-site submodule"
+
+    - name: Insert versioned docs into docs-site
+      shell: bash
+      run: |
+        cd docs-site
+        ../docs/scripts/insert-docs-versioned.sh aa-sdk /tmp/aa-sdk-v4/docs $GITHUB_WORKSPACE/docs
+        echo "✅ Inserted versioned docs with tab variants"
+
+    - name: Cleanup worktrees
+      shell: bash
+      if: always()
+      run: |
+        git worktree remove /tmp/aa-sdk-v4 --force 2>/dev/null || true
+        rm -rf /tmp/aa-sdk-v4
+        rm -rf /tmp/aa-sdk-v5
+        echo "✅ Cleaned up temporary directories"
+
