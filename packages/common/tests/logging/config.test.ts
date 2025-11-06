@@ -417,7 +417,9 @@ describe("config", () => {
       consoleSink(entry);
 
       expect(mockConsole.info).toHaveBeenCalledWith(
-        expect.stringContaining('[@test/pkg@1.0.0] test {"custom":"data","count":5}'),
+        expect.stringContaining(
+          '[@test/pkg@1.0.0] test {"custom":"data","count":5}',
+        ),
       );
     });
 
