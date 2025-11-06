@@ -71,23 +71,11 @@ fi
 
 cd "$DOCS_SITE_DIR"
 
+# Install dependencies
+pnpm i
+
 if [ "$DUAL_VERSION" = true ]; then
     echo "🔄 Dual version mode: Setting up both v4 and v5 docs..."
-    
-    # Tab variants requires latest Fern version - always upgrade in dual mode
-    CURRENT_FERN_VERSION=$(grep '"fern-api"' package.json | grep -o '[0-9]\+\.[0-9]\+\.[0-9]\+' | head -1)
-    echo "📦 Current Fern version: $CURRENT_FERN_VERSION"
-    echo "🔄 Upgrading Fern to latest version (required for tab variants)..."
-    
-    # Update both package.json AND lockfile
-    pnpm update fern-api@latest
-    
-    # Verify it updated
-    NEW_FERN_VERSION=$(grep '"fern-api"' package.json | grep -o '[0-9]\+\.[0-9]\+\.[0-9]\+' | head -1)
-    echo "✅ Fern upgraded: $CURRENT_FERN_VERSION → $NEW_FERN_VERSION"
-    
-    # Important: Don't run pnpm i after this, as it would revert to lockfile version
-    # The predev script will run pnpm generate, but that shouldn't affect fern-api
     
     # Note: We don't check for uncommitted changes because:
     # 1. The script is for local development/testing
@@ -195,9 +183,6 @@ else
     echo ""
     echo "💡 To see both v4 and v5 versions, run: $0 --dual"
     echo ""
-    
-    # For single mode, just install dependencies (no Fern upgrade needed)
-    pnpm i
     
     # Extract code snippets
     cd "$PROJECT_ROOT"

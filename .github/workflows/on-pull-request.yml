@@ -49,14 +49,53 @@ jobs:
     steps:
       - name: Checkout aa-sdk
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Required for git worktree
+
+      - name: Setup Versioned Docs
+        uses: ./.github/actions/setup-docs-versioned
+        with:
+          docs-github-token: ${{ github.token }}
+          v4-branch: main
+          v5-branch: ${{ github.head_ref }}
+
+      - name: Set Build Comment to In Progress
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const workspace = process.env.GITHUB_WORKSPACE;
+            const { updatePreviewComment } = await import(`${workspace}/docs-site/scripts/preview-comment.js`);
+
+            await updatePreviewComment({
+              github,
+              context,
+              status: 'building',
+            });
 
       - name: Generate Documentation Preview
         id: preview
-        uses: ./.github/actions/preview-fern-docs
+        uses: ./.github/actions/publish-fern
         with:
           github-token: ${{ github.token }}
           fern-token: ${{ secrets.FERN_TOKEN }}
+          environment: docs-preview
           ref: ${{ github.head_ref }}
+          preview: "true"
+
+      - name: Comment Preview URL in PR
+        uses: actions/github-script@v7
+        if: always()
+        with:
+          script: |
+            const workspace = process.env.GITHUB_WORKSPACE;
+            const { updatePreviewComment } = await import(`${workspace}/docs-site/scripts/preview-comment.js`);
+
+            await updatePreviewComment({
+              github,
+              context,
+              previewUrl: '${{ steps.preview.outputs.url }}',
+              status: '${{ steps.preview.outcome }}',
+            });
 
   # TODO: Add this back when we write docs for v5
   # lint_docs:
