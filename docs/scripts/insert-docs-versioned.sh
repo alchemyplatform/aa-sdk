@@ -41,6 +41,7 @@ echo "✅ Found v5 docs at: $V5_DOCS_PATH"
 # Clean up any existing files from previous runs
 rm -rf fern/wallets-v4
 rm -rf fern/wallets-v5
+rm -rf fern/wallets  # Also remove old single wallets directory
 rm -rf fern/images/wallets
 
 echo "📦 Copying v4 docs from: $V4_DOCS_PATH"
@@ -90,11 +91,13 @@ fi
 
 # Extract the v4 wallets navigation layout
 echo "   Extracting v4 navigation..."
-sed -n '/^  - tab: wallets/,/^  - tab:/p' fern/wallets-v4/docs.yml | sed '$d' > fern/wallets-v4/temp_v4_nav.yml
+# Use awk to extract from wallets tab to next tab (or end), excluding the next tab line
+awk 'BEGIN{found=0} /^  - tab: wallets/{found=1} found{if(/^  - tab:/ && !/^  - tab: wallets/){exit} print}' fern/wallets-v4/docs.yml > fern/wallets-v4/temp_v4_nav.yml
 
-# Extract the v5 wallets navigation layout
+# Extract the v5 wallets navigation layout  
 echo "   Extracting v5 navigation..."
-sed -n '/^  - tab: wallets/,/^  - tab:/p' fern/wallets-v5/docs.yml | sed '$d' > fern/wallets-v5/temp_v5_nav.yml
+# Use awk to extract from wallets tab to next tab (or end), excluding the next tab line
+awk 'BEGIN{found=0} /^  - tab: wallets/{found=1} found{if(/^  - tab:/ && !/^  - tab: wallets/){exit} print}' fern/wallets-v5/docs.yml > fern/wallets-v5/temp_v5_nav.yml
 
 # Check that we extracted something
 if [ ! -s "fern/wallets-v4/temp_v4_nav.yml" ]; then
@@ -256,25 +259,33 @@ v5_pattern = r'(- title: Account Kit v5.*?)(\n  - tab:|\Z)'
 def replace_v4_paths(match):
     v4_section = match.group(1)
     # Only replace paths that start with 'wallets/' (not already versioned)
+    # Handle both single-line and multi-line YAML paths
     v4_section = re.sub(r'path: wallets/pages', 'path: wallets-v4/pages', v4_section)
     v4_section = re.sub(r'path: wallets/shared', 'path: wallets-v4/shared', v4_section)
+    # Handle multi-line paths (path: >- followed by wallets/pages on next line)
+    v4_section = re.sub(r'(path: >-\s+)wallets/pages', r'\1wallets-v4/pages', v4_section)
+    v4_section = re.sub(r'(path: >-\s+)wallets/shared', r'\1wallets-v4/shared', v4_section)
     return v4_section + match.group(2)
 
 def replace_v5_paths(match):
     v5_section = match.group(1)
     # Only replace paths that start with 'wallets/' (not already versioned)
+    # Handle both single-line and multi-line YAML paths
     v5_section = re.sub(r'path: wallets/pages', 'path: wallets-v5/pages', v5_section)
     v5_section = re.sub(r'path: wallets/shared', 'path: wallets-v5/shared', v5_section)
+    # Handle multi-line paths (path: >- followed by wallets/pages on next line)
+    v5_section = re.sub(r'(path: >-\s+)wallets/pages', r'\1wallets-v5/pages', v5_section)
+    v5_section = re.sub(r'(path: >-\s+)wallets/shared', r'\1wallets-v5/shared', v5_section)
     return v5_section + match.group(2)
 
 # Apply replacements
 content = re.sub(v4_pattern, replace_v4_paths, content, flags=re.DOTALL)
 content = re.sub(v5_pattern, replace_v5_paths, content, flags=re.DOTALL)
 
-# Also update mdx-components if they reference wallets
-# Only update if not already versioned
-if 'wallets/components' in content and 'wallets-v' not in content:
-    # For now, point both to v5 components (or we could duplicate them)
+# Also update mdx-components if they reference wallets (outside the variants sections)
+# This is in the global mdx-components section at the top of the file
+if 'wallets/components' in content:
+    # Point to v5 components (or we could duplicate them for both versions)
     content = re.sub(r'- wallets/components', '- wallets-v5/components', content)
 
 with open('fern/docs.yml', 'w') as f:

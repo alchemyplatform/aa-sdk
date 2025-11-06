@@ -21,7 +21,8 @@ DOCS_DIR="$PROJECT_ROOT/docs"
 CURRENT_BRANCH=$(git branch --show-current)
 
 cleanup() {
-    echo "Exiting and cleaning up..."
+    echo ""
+    echo "🧹 Cleaning up..."
     # Kill the onchange process if it exists
     if [ ! -z "$ONCHANGE_PID" ]; then
         kill $ONCHANGE_PID 2>/dev/null || true
@@ -29,6 +30,7 @@ cleanup() {
     
     # Clean up git worktree if we created one
     if [ "$DUAL_VERSION" = true ]; then
+        cd "$PROJECT_ROOT"
         git worktree remove /tmp/aa-sdk-v4 --force 2>/dev/null || true
         rm -rf /tmp/aa-sdk-v4
     fi
@@ -37,7 +39,7 @@ cleanup() {
     git restore .
     git clean -fdq
     cd "$PROJECT_ROOT"
-    exit 0
+    echo "✅ Cleanup complete"
 }
 
 # Check if port 3020 is in use
@@ -46,8 +48,9 @@ if lsof -i :3020 > /dev/null; then
     exit 1
 fi
 
-# clean up changes to docs-site on script termination
-trap cleanup SIGINT SIGTERM
+# Only cleanup on Ctrl+C (SIGINT), not on errors
+# This way if the script fails, you can inspect what went wrong
+trap cleanup SIGINT
 
 # check if user has pnpm installed
 if ! command -v pnpm &> /dev/null; then
@@ -57,42 +60,53 @@ if ! command -v pnpm &> /dev/null; then
     exit 1
 fi
 
-# Update docs-site submodule
-git submodule update --init --recursive --remote docs-site/
+if [ "$DUAL_VERSION" = true ]; then
+    # For dual mode, don't update submodule to remote - keep local changes (like Fern upgrades)
+    echo "📦 Using local docs-site submodule (skipping remote update to preserve local changes)"
+    git submodule update --init docs-site/
+else
+    # For single mode, update to remote
+    git submodule update --init --recursive --remote docs-site/
+fi
 
 cd "$DOCS_SITE_DIR"
-# Install/update dependencies
-pnpm i
 
 if [ "$DUAL_VERSION" = true ]; then
     echo "🔄 Dual version mode: Setting up both v4 and v5 docs..."
     
-    # Check for uncommitted changes (excluding submodules and untracked files)
-    # We allow submodule changes since docs-site might have been modified during development
-    # We also allow untracked files (like new scripts we're testing)
+    # Tab variants requires latest Fern version - always upgrade in dual mode
+    CURRENT_FERN_VERSION=$(grep '"fern-api"' package.json | grep -o '[0-9]\+\.[0-9]\+\.[0-9]\+' | head -1)
+    echo "📦 Current Fern version: $CURRENT_FERN_VERSION"
+    echo "🔄 Upgrading Fern to latest version (required for tab variants)..."
     
-    # Get changed files, excluding docs-site submodule
-    CHANGED_FILES=$(git diff --name-only HEAD | grep -v "^docs-site")
+    # Update both package.json AND lockfile
+    pnpm update fern-api@latest
     
-    if [ -n "$CHANGED_FILES" ]; then
-        echo "❌ Error: You have uncommitted changes in the main repository."
-        echo "   Please commit or stash them before running in dual version mode."
-        echo ""
-        echo "   Changed files:"
-        echo "$CHANGED_FILES" | sed 's/^/   - /'
-        echo ""
-        echo "   Note: Changes in docs-site submodule and untracked files are allowed."
-        exit 1
-    fi
+    # Verify it updated
+    NEW_FERN_VERSION=$(grep '"fern-api"' package.json | grep -o '[0-9]\+\.[0-9]\+\.[0-9]\+' | head -1)
+    echo "✅ Fern upgraded: $CURRENT_FERN_VERSION → $NEW_FERN_VERSION"
+    
+    # Important: Don't run pnpm i after this, as it would revert to lockfile version
+    # The predev script will run pnpm generate, but that shouldn't affect fern-api
+    
+    # Note: We don't check for uncommitted changes because:
+    # 1. The script is for local development/testing
+    # 2. The cleanup function will restore docs-site anyway
+    # 3. Git worktree works fine with uncommitted changes in the main repo
     
     # Clean up any stale worktree references first
     echo "🧹 Cleaning up any stale worktrees..."
     git worktree prune
     
-    # Remove existing worktree if it exists
+    # Remove existing worktree if it exists (both git reference and directory)
+    if git worktree list | grep -q "/tmp/aa-sdk-v4"; then
+        echo "   Removing existing git worktree reference..."
+        git worktree remove /tmp/aa-sdk-v4 --force 2>/dev/null || true
+    fi
+    
     if [ -d "/tmp/aa-sdk-v4" ]; then
         echo "   Removing existing /tmp/aa-sdk-v4 directory..."
-        git worktree remove /tmp/aa-sdk-v4 --force 2>/dev/null || rm -rf /tmp/aa-sdk-v4
+        rm -rf /tmp/aa-sdk-v4
     fi
     
     # Create worktree for v4 (main branch)
@@ -100,27 +114,25 @@ if [ "$DUAL_VERSION" = true ]; then
     cd "$PROJECT_ROOT"
     git fetch origin main
     
-    if ! git worktree add /tmp/aa-sdk-v4 origin/main; then
+    # Use -f to force if there's still a stale reference
+    if ! git worktree add -f /tmp/aa-sdk-v4 origin/main; then
         echo "❌ Failed to create worktree for v4"
         echo "   This could be due to:"
         echo "   - Network issues fetching origin/main"
         echo "   - Insufficient permissions on /tmp"
         echo "   - Stale worktree (try: git worktree prune)"
-        cleanup
         exit 1
     fi
     
     # Verify the worktree was created
     if [ ! -d "/tmp/aa-sdk-v4" ]; then
         echo "❌ Worktree directory /tmp/aa-sdk-v4 was not created"
-        cleanup
         exit 1
     fi
     
     if [ ! -f "/tmp/aa-sdk-v4/docs/scripts/extract-include-statements.js" ]; then
         echo "❌ v4 branch doesn't have expected docs structure"
         echo "   Expected: /tmp/aa-sdk-v4/docs/scripts/extract-include-statements.js"
-        cleanup
         exit 1
     fi
     
@@ -144,7 +156,10 @@ if [ "$DUAL_VERSION" = true ]; then
     
     if ! bash "$DOCS_DIR/scripts/insert-docs-versioned.sh" aa-sdk /tmp/aa-sdk-v4/docs "$DOCS_DIR"; then
         echo "❌ Failed to insert versioned docs"
-        cleanup
+        echo ""
+        echo "💡 Debug tip: Check the error above for details"
+        echo "   The docs-site directory has NOT been cleaned up so you can inspect it."
+        echo "   To clean up manually, run: cd docs-site && git restore . && git clean -fdq"
         exit 1
     fi
     
@@ -155,7 +170,9 @@ if [ "$DUAL_VERSION" = true ]; then
         echo ""
         echo "   Actual directories in fern/:"
         ls -la fern/ | grep wallets
-        cleanup
+        echo ""
+        echo "💡 Debug tip: Inspect docs-site/fern/ to see what was created"
+        echo "   To clean up manually, run: cd docs-site && git restore . && git clean -fdq"
         exit 1
     fi
     
@@ -179,6 +196,9 @@ else
     echo "💡 To see both v4 and v5 versions, run: $0 --dual"
     echo ""
     
+    # For single mode, just install dependencies (no Fern upgrade needed)
+    pnpm i
+    
     # Extract code snippets
     cd "$PROJECT_ROOT"
     if [ -f "docs/scripts/extract-include-statements.js" ]; then
@@ -199,12 +219,16 @@ fi
 
 # Start the docs site
 cd "$DOCS_SITE_DIR"
-pnpm dev || {
-    echo "Fern local dev server failed to start"
-    cleanup
-    exit 1
-}
 
-# Catch-all to ensure cleanup is always run at termination
+echo ""
+echo "🚀 Starting Fern docs dev server..."
+echo ""
+
+# Run pnpm dev - this will block until you Ctrl+C
+pnpm dev
+
+# If we get here, it means the dev server was stopped (Ctrl+C or error)
+echo ""
+echo "📝 Dev server stopped. Cleaning up..."
 cleanup
 
