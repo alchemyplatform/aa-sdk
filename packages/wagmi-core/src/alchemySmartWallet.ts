@@ -34,6 +34,8 @@ export type AlchemySmartWalletOptions = {
   jwt?: string;
   /** Custom API URL (optional - defaults to Alchemy's API URL, but can be used to override the chain's Alchemy URL) */
   url?: string;
+  /** Account type to create. Use "7702" for EIP-7702 delegation (requires local signer), or "sma-b" for SMA-B. Defaults to "sma-b". */
+  accountType?: "7702" | "sma-b";
 };
 
 alchemySmartWallet.type = ALCHEMY_SMART_WALLET_CONNECTOR_TYPE;
@@ -163,7 +165,7 @@ export function alchemySmartWallet(
           // TODO(v5): support other account params
           // https://app.asana.com/1/1129441638109975/project/1210112085973163/task/1211568982181252
           {
-            accountType: "7702",
+            accountType: options.accountType ?? "sma-b",
           },
         );
       };
