@@ -22,14 +22,16 @@ before submitting to sendPreparedCalls.
 ```ts
 // Prepare a sponsored user operation call
 const result = await client.prepareCalls({
-  calls: [{
-    to: "0x1234...",
-    data: "0xabcdef...",
-    value: "0x0"
-  }],
+  calls: [
+    {
+      to: "0x1234...",
+      data: "0xabcdef...",
+      value: "0x0",
+    },
+  ],
   capabilities: {
-    paymasterService: { policyId: "your-policy-id" }
-  }
+    paymasterService: { policyId: "your-policy-id" },
+  },
 });
 ```
 
@@ -53,6 +55,7 @@ const result = await client.prepareCalls({
         `` `0x${string}` `` | `undefined`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -95,6 +98,7 @@ const result = await client.prepareCalls({
         Parameters for preparing calls
       </td>
     </tr>
+
   </tbody>
 </table>
 

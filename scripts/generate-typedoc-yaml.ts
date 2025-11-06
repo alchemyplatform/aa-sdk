@@ -182,7 +182,7 @@ function generatePackageSection(
   packageName: string,
   subPackageName: string,
   packageData: DirectoryItem,
-  packagePath: string
+  packagePath: string,
 ): YamlPackageSection {
   const displayName =
     PACKAGE_DISPLAY_NAMES[packageName]?.[subPackageName] ||
@@ -335,7 +335,7 @@ function generateSDKReference(): SDKReference {
 
       let srcDir = packageDir.children.find(
         (child): child is DirectoryItem =>
-          child.type === "directory" && child.name === "src"
+          child.type === "directory" && child.name === "src",
       );
 
       if (!srcDir) continue;
@@ -345,7 +345,7 @@ function generateSDKReference(): SDKReference {
       if (packageDir.name === "wallet-apis" || packageDir.name === "infra") {
         const exportsDir = srcDir.children.find(
           (child): child is DirectoryItem =>
-            child.type === "directory" && child.name === "exports"
+            child.type === "directory" && child.name === "exports",
         );
         if (exportsDir) {
           srcDir = exportsDir;
@@ -357,7 +357,7 @@ function generateSDKReference(): SDKReference {
         packageName,
         packageDir.name,
         srcDir,
-        actualPackagePath
+        actualPackagePath,
       );
 
       if (packageSection.contents.length > 0) {
@@ -416,7 +416,7 @@ function updateDocsYml(sdkReference: SDKReference): void {
   }
 
   console.log(
-    `Found SDK Reference section from line ${startIndex + 1} to ${endIndex}`
+    `Found SDK Reference section from line ${startIndex + 1} to ${endIndex}`,
   );
 
   const sdkReferenceYaml = yaml.dump([sdkReference], {
@@ -463,10 +463,10 @@ function main(): void {
     updateDocsYml(sdkReference);
 
     console.log(
-      "\n✅ Successfully updated docs.yml with new SDK Reference structure!"
+      "\n✅ Successfully updated docs.yml with new SDK Reference structure!",
     );
     console.log(
-      "💡 The SDK Reference section has been automatically replaced with the TypeDoc-generated content."
+      "💡 The SDK Reference section has been automatically replaced with the TypeDoc-generated content.",
     );
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);

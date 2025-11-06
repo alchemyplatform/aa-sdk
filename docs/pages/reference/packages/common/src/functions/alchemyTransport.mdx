@@ -35,6 +35,7 @@ Creates an Alchemy HTTP transport for connecting to Alchemy's services.
         `undefined`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -63,6 +64,7 @@ Creates an Alchemy HTTP transport for connecting to Alchemy's services.
         The configuration object for the Alchemy transport (extends viem's HttpTransportConfig)
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -95,7 +97,9 @@ Using URL directly:
 ```ts
 import { alchemyTransport } from "@alchemy/common";
 
-const transport = alchemyTransport({ url: "https://eth-mainnet.g.alchemy.com/v2/your-key" });
+const transport = alchemyTransport({
+  url: "https://eth-mainnet.g.alchemy.com/v2/your-key",
+});
 ```
 
 Using custom URL with API key:
@@ -105,7 +109,7 @@ import { alchemyTransport } from "@alchemy/common";
 
 const transport = alchemyTransport({
   url: "https://custom-alchemy.com/v2",
-  apiKey: "your-api-key"
+  apiKey: "your-api-key",
 });
 ```
 
@@ -116,7 +120,7 @@ import { alchemyTransport } from "@alchemy/common";
 
 const transport = alchemyTransport({
   url: "https://custom-alchemy.com/v2",
-  jwt: "your-jwt-token"
+  jwt: "your-jwt-token",
 });
 ```
 
@@ -131,6 +135,6 @@ const transport = alchemyTransport({
   onFetchResponse: (response) => console.log("Response:", response),
   timeout: 30000,
   retryCount: 3,
-  retryDelay: 1000
+  retryDelay: 1000,
 });
 ```

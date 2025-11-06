@@ -23,7 +23,9 @@ This method requests the account associated with the signer and uses it to sign 
 const signature = await client.signMessage("Hello, world!");
 
 // Sign a raw hex message
-const signature = await client.signMessage({ raw: "0x48656c6c6f2c20776f726c6421" });
+const signature = await client.signMessage({
+  raw: "0x48656c6c6f2c20776f726c6421",
+});
 ```
 
 ## Parameters
@@ -93,6 +95,7 @@ const signature = await client.signMessage({ raw: "0x48656c6c6f2c20776f726c6421"
         The message to sign using EIP-191. Can be a string, or object with raw bytes.
       </td>
     </tr>
+
   </tbody>
 </table>
 

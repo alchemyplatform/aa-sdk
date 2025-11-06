@@ -9,42 +9,42 @@ layout: reference
 
 ## Classes
 
-| Class | Description |
-| :------ | :------ |
+| Class                                                    | Description                                                                  |
+| :------------------------------------------------------- | :--------------------------------------------------------------------------- |
 | [InvalidHexValueError](classes/InvalidHexValueError.mdx) | Error thrown when an invalid hex value is encountered during fee estimation. |
 
 ## Type Aliases
 
-| Type Alias | Description |
-| :------ | :------ |
-| [AlchemyGasManagerHooks](type-aliases/AlchemyGasManagerHooks.mdx) | - |
-| [AlchemyRequestGasAndPaymasterAndDataSchema](type-aliases/AlchemyRequestGasAndPaymasterAndDataSchema.mdx) | - |
-| [AlchemyWalletApisRpcSchema](type-aliases/AlchemyWalletApisRpcSchema.mdx) | - |
-| [GasAndFeeOverridesRequest](type-aliases/GasAndFeeOverridesRequest.mdx) | - |
-| [GasManagerActions](type-aliases/GasManagerActions.mdx) | - |
-| [Multiplier](type-aliases/Multiplier.mdx) | - |
-| [PolicyToken](type-aliases/PolicyToken.mdx) | - |
-| [PriorityFeeClient](type-aliases/PriorityFeeClient.mdx) | - |
-| [RequestGasAndPaymasterAndDataRequest](type-aliases/RequestGasAndPaymasterAndDataRequest.mdx) | - |
-| [RequestGasAndPaymasterAndDataResponse](type-aliases/RequestGasAndPaymasterAndDataResponse.mdx) | - |
-| [RpcGasAndFeeOverrides](type-aliases/RpcGasAndFeeOverrides.mdx) | - |
-| [RundlerMaxPriorityFeePerGasSchema](type-aliases/RundlerMaxPriorityFeePerGasSchema.mdx) | - |
-| [RundlerRpcSchema](type-aliases/RundlerRpcSchema.mdx) | - |
-| [SignerHttpSchema](type-aliases/SignerHttpSchema.mdx) | - |
-| [StampedRequestBody](type-aliases/StampedRequestBody.mdx) | - |
+| Type Alias                                                                                                | Description |
+| :-------------------------------------------------------------------------------------------------------- | :---------- |
+| [AlchemyGasManagerHooks](type-aliases/AlchemyGasManagerHooks.mdx)                                         | -           |
+| [AlchemyRequestGasAndPaymasterAndDataSchema](type-aliases/AlchemyRequestGasAndPaymasterAndDataSchema.mdx) | -           |
+| [AlchemyWalletApisRpcSchema](type-aliases/AlchemyWalletApisRpcSchema.mdx)                                 | -           |
+| [GasAndFeeOverridesRequest](type-aliases/GasAndFeeOverridesRequest.mdx)                                   | -           |
+| [GasManagerActions](type-aliases/GasManagerActions.mdx)                                                   | -           |
+| [Multiplier](type-aliases/Multiplier.mdx)                                                                 | -           |
+| [PolicyToken](type-aliases/PolicyToken.mdx)                                                               | -           |
+| [PriorityFeeClient](type-aliases/PriorityFeeClient.mdx)                                                   | -           |
+| [RequestGasAndPaymasterAndDataRequest](type-aliases/RequestGasAndPaymasterAndDataRequest.mdx)             | -           |
+| [RequestGasAndPaymasterAndDataResponse](type-aliases/RequestGasAndPaymasterAndDataResponse.mdx)           | -           |
+| [RpcGasAndFeeOverrides](type-aliases/RpcGasAndFeeOverrides.mdx)                                           | -           |
+| [RundlerMaxPriorityFeePerGasSchema](type-aliases/RundlerMaxPriorityFeePerGasSchema.mdx)                   | -           |
+| [RundlerRpcSchema](type-aliases/RundlerRpcSchema.mdx)                                                     | -           |
+| [SignerHttpSchema](type-aliases/SignerHttpSchema.mdx)                                                     | -           |
+| [StampedRequestBody](type-aliases/StampedRequestBody.mdx)                                                 | -           |
 
 ## Variables
 
-| Variable | Description |
-| :------ | :------ |
-| [alchemyRpcSchema](variables/alchemyRpcSchema.mdx) | - |
+| Variable                                             | Description                                                              |
+| :--------------------------------------------------- | :----------------------------------------------------------------------- |
+| [alchemyRpcSchema](variables/alchemyRpcSchema.mdx)   | -                                                                        |
 | [gasManagerActions](variables/gasManagerActions.mdx) | This is a decorator that is used to add gas manager actions to a client. |
 
 ## Functions
 
-| Function | Description |
-| :------ | :------ |
-| [alchemyEstimateFeesPerGas](functions/alchemyEstimateFeesPerGas.mdx) | A custom `estimateFeesPerGas` function for viem bundler clients to use `rundler_maxPriorityFeePerGas` for priority fee estimation. |
-| [alchemyGasManagerHooks](functions/alchemyGasManagerHooks.mdx) | Adapts Alchemy's Gas Manager to viem's paymaster interface using the optimized `alchemy_requestGasAndPaymasterAndData` flow that combines gas estimation and paymaster sponsorship in a single RPC call. |
-| [createAlchemyBundlerClient](functions/createAlchemyBundlerClient.mdx) | Create a viem Bundler Client pre-configured for Alchemy Bundler. |
+| Function                                                                     | Description                                                                                                                                                                                                                                                            |
+| :--------------------------------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [alchemyEstimateFeesPerGas](functions/alchemyEstimateFeesPerGas.mdx)         | A custom `estimateFeesPerGas` function for viem bundler clients to use `rundler_maxPriorityFeePerGas` for priority fee estimation.                                                                                                                                     |
+| [alchemyGasManagerHooks](functions/alchemyGasManagerHooks.mdx)               | Adapts Alchemy's Gas Manager to viem's paymaster interface using the optimized `alchemy_requestGasAndPaymasterAndData` flow that combines gas estimation and paymaster sponsorship in a single RPC call.                                                               |
+| [createAlchemyBundlerClient](functions/createAlchemyBundlerClient.mdx)       | Create a viem Bundler Client pre-configured for Alchemy Bundler.                                                                                                                                                                                                       |
 | [requestGasAndPaymasterAndData](functions/requestGasAndPaymasterAndData.mdx) | Requests gas estimation and paymaster data from the Alchemy Gas Manager API for a user operation. This function retrieves the necessary gas parameters and paymaster data needed to properly construct and submit user operations to the network with gas sponsorship. |
