@@ -48,7 +48,7 @@ export async function sendCalls<
   params: SendCallsParams<TAccount>,
 ): Promise<SendCallsResult> {
   LOGGER.info("sendCalls:start", {
-    calls: (params as any)?.calls?.length,
+    calls: params.calls?.length,
     hasCapabilities: !!params.capabilities,
   });
   const calls = await prepareCalls(client, params);

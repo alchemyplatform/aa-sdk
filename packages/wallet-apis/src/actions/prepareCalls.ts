@@ -66,7 +66,7 @@ export async function prepareCalls<
   const capabilities = mergeClientCapabilities(client, params.capabilities);
 
   LOGGER.debug("prepareCalls:start", {
-    callsCount: (params as any)?.calls?.length,
+    callsCount: params.calls?.length,
     hasCapabilities: !!params.capabilities,
   });
   const res = await client.request({

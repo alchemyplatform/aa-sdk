@@ -52,7 +52,7 @@ export async function formatSign<
     throw new AccountNotFoundError();
   }
 
-  LOGGER.debug("formatSign:start", { hasFrom: true });
+  LOGGER.debug("formatSign:start");
   const res = await client.request({
     method: "wallet_formatSign",
     params: [
