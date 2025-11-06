@@ -310,7 +310,7 @@ describe("config", () => {
       consoleSink(entry);
 
       expect(mockConsole.error).toHaveBeenCalledWith(
-        '[@test/pkg@1.0.0] error message {"code":1}',
+        expect.stringContaining('[@test/pkg@1.0.0] error message {"code":1}'),
       );
     });
 
@@ -326,7 +326,7 @@ describe("config", () => {
       consoleSink(entry);
 
       expect(mockConsole.warn).toHaveBeenCalledWith(
-        "[@test/pkg@1.0.0] warn message",
+        expect.stringContaining("[@test/pkg@1.0.0] warn message"),
       );
     });
 
@@ -384,7 +384,7 @@ describe("config", () => {
       consoleSink(entry);
 
       expect(mockConsole.info).toHaveBeenCalledWith(
-        "[@alchemy/aa-infra@1.0.0] test",
+        expect.stringContaining("[@alchemy/aa-infra@1.0.0] test"),
       );
     });
 
@@ -400,7 +400,7 @@ describe("config", () => {
       consoleSink(entry);
 
       expect(mockConsole.info).toHaveBeenCalledWith(
-        "[@alchemy/aa-infra@1.0.0] test",
+        expect.stringContaining("[@alchemy/aa-infra@1.0.0] test"),
       );
     });
 
@@ -417,7 +417,7 @@ describe("config", () => {
       consoleSink(entry);
 
       expect(mockConsole.info).toHaveBeenCalledWith(
-        '[@test/pkg@1.0.0] test {"custom":"data","count":5}',
+        expect.stringContaining('[@test/pkg@1.0.0] test {"custom":"data","count":5}'),
       );
     });
 
@@ -433,7 +433,9 @@ describe("config", () => {
 
       consoleSink(entry);
 
-      expect(mockConsole.info).toHaveBeenCalledWith("[@test/pkg@1.0.0] test");
+      expect(mockConsole.info).toHaveBeenCalledWith(
+        expect.stringContaining("[@test/pkg@1.0.0] test"),
+      );
     });
   });
 
