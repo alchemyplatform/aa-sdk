@@ -13,7 +13,7 @@ export const config: Config = createConfig({
   connectors: [
     // Smart Wallet wraps the owner connector (injected). Pass the connector factory, not an instance.
     alchemySmartWallet({
-      ownerConnector: injected,
+      ownerConnector: injected(),
       apiKey,
       policyId: import.meta.env.VITE_PAYMASTER_POLICY_ID,
     }),
