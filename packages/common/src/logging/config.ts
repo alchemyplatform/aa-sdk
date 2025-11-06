@@ -269,6 +269,21 @@ export function redactObject(
 }
 
 /**
+ * Format timestamp as HH:MM:SS.mmm
+ *
+ * @param {number} ts - Timestamp in milliseconds since epoch
+ * @returns {string} Formatted timestamp string
+ */
+function formatTimestamp(ts: number): string {
+  const date = new Date(ts);
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  const seconds = String(date.getSeconds()).padStart(2, "0");
+  const milliseconds = String(date.getMilliseconds()).padStart(3, "0");
+  return `${hours}:${minutes}:${seconds}.${milliseconds}`;
+}
+
+/**
  * Format data as a JSON object for console output.
  * Filters out context fields (package, version) to avoid duplication.
  *
@@ -298,7 +313,7 @@ function formatData(data: Record<string, unknown> | undefined): string {
  * Default console sink for diagnostics logging.
  * Routes log entries to appropriate console methods based on log level.
  *
- * Format: [package@version] message {data}
+ * Format: [HH:MM:SS.mmm] [package@version] message {data}
  *
  * @param {LogEntry} entry - The log entry to output
  * @example
@@ -312,8 +327,9 @@ function formatData(data: Record<string, unknown> | undefined): string {
  * ```
  */
 export function consoleSink(entry: LogEntry): void {
-  const { level, message, data, context } = entry;
-  const prefix = `[${context.package}@${context.version}]`;
+  const { ts, level, message, data, context } = entry;
+  const timestamp = formatTimestamp(ts);
+  const prefix = `[${timestamp}] [${context.package}@${context.version}]`;
   const dataStr = formatData(data);
   const output = `${prefix} ${message}${dataStr}`;
 
