@@ -110,7 +110,7 @@ export async function signPreparedCalls(
     );
   } else {
     LOGGER.warn("signPreparedCalls:unexpected-call-type", {
-      type: params.type,
+      type: (params as { type?: unknown }).type,
     });
     return assertNever(
       params,

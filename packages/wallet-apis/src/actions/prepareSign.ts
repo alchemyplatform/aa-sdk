@@ -51,7 +51,7 @@ export async function prepareSign<
     throw new AccountNotFoundError();
   }
 
-  LOGGER.debug("prepareSign:start", { type: params.type });
+  LOGGER.debug("prepareSign:start", { type: params.signatureRequest.type });
   const res = await client.request({
     method: "wallet_prepareSign",
     params: [

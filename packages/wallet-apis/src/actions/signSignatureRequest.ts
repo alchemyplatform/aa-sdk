@@ -128,7 +128,7 @@ export async function signSignatureRequest(
     }
     default:
       LOGGER.warn("signSignatureRequest:unknown-type", {
-        type: params.type,
+        type: (params as { type?: unknown }).type,
       });
       return assertNever(params, `Unexpected signature request type.`);
   }
