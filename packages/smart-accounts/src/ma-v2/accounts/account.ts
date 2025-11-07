@@ -22,6 +22,7 @@ import { webAuthnFactoryAbi } from "../abis/webAuthnFactoryAbi.js";
 import { EntityIdOverrideError } from "../../errors/EntityIdOverrideError.js";
 import { InvalidOwnerError } from "../../errors/InvalidOwnerError.js";
 import { DEFAULT_OWNER_ENTITY_ID, DefaultAddress } from "../utils/account.js";
+import { LOGGER } from "../../logger.js";
 
 type Mode = "default" | "7702";
 
@@ -70,6 +71,13 @@ export async function toModularAccountV2<TMode extends Mode = Mode>({
   mode,
 }: ToModularAccountV2Params<TMode>): Promise<ModularAccountV2> {
   const is7702 = mode === "7702";
+
+  LOGGER.debug("toModularAccountV2:start", {
+    ownerType: owner.type,
+    mode,
+    hasDeferredAction: !!deferredAction,
+    hasAccountAddress: !!accountAddress_,
+  });
 
   const entityId = signerEntity?.entityId ?? DEFAULT_OWNER_ENTITY_ID;
 
@@ -147,15 +155,25 @@ export async function toModularAccountV2<TMode extends Mode = Mode>({
               }),
         }));
 
+  LOGGER.debug("toModularAccountV2:address-resolved", {
+    accountAddress,
+    is7702,
+  });
+
   let authorization: ToSmartAccountParameters["authorization"];
   if (is7702) {
+    LOGGER.debug("toModularAccountV2:7702-mode");
     // TODO(v5): Ensure this works w/ our signer types.
     if (owner.type !== "local") {
+      LOGGER.error("toModularAccountV2:invalid-owner-type", {
+        ownerType: owner.type,
+      });
       throw new InvalidOwnerError(
         `Owner of type ${owner.type} is unsupported for 7702 mode.`,
       );
     }
     if (owner.signAuthorization == null) {
+      LOGGER.error("toModularAccountV2:missing-signAuthorization");
       throw new InvalidOwnerError(
         "Owner must implement `signAuthorization` to be used with 7702 mode.",
       );
@@ -164,6 +182,7 @@ export async function toModularAccountV2<TMode extends Mode = Mode>({
       entityId === DEFAULT_OWNER_ENTITY_ID &&
       owner.address !== accountAddress
     ) {
+      LOGGER.error("toModularAccountV2:entity-id-override");
       throw new EntityIdOverrideError();
     }
     authorization = {

@@ -8,6 +8,7 @@ import type {
   PreparedCall_UserOpV070,
 } from "@alchemy/wallet-api-types";
 import type { InnerWalletApiClient } from "../types.js";
+import { LOGGER } from "../logger.js";
 import type { SendPreparedCallsParams } from "./sendPreparedCalls.js";
 
 export type SignPreparedCallsParams = Prettify<PrepareCallsResult>;
@@ -43,6 +44,7 @@ export async function signPreparedCalls(
   client: InnerWalletApiClient,
   params: SignPreparedCallsParams,
 ): Promise<SignPreparedCallsResult> {
+  LOGGER.debug("signPreparedCalls:start", { type: params.type });
   const signAuthorizationCall = async (call: PreparedCall_Authorization) => {
     const { signatureRequest: _signatureRequest, ...rest } = call;
     const signature = await signSignatureRequest(client, {
@@ -64,20 +66,25 @@ export async function signPreparedCalls(
     const { signatureRequest, ...rest } = call;
 
     if (!signatureRequest) {
+      LOGGER.warn("signPreparedCalls:missing-signatureRequest", {
+        type: call.type,
+      });
       throw new BaseError(
         "Signature request is required for signing user operation calls. Ensure `onlyEstimation` is set to `false` when calling `prepareCalls`.",
       );
     }
 
     const signature = await signSignatureRequest(client, signatureRequest);
-    return {
+    const res = {
       ...rest,
       signature,
-    };
+    } as const;
+    LOGGER.debug("signPreparedCalls:userOp:ok");
+    return res;
   };
 
   if (params.type === "array") {
-    return {
+    const res = {
       type: "array" as const,
       data: await Promise.all(
         params.data.map((call) =>
@@ -87,16 +94,24 @@ export async function signPreparedCalls(
         ),
       ),
     };
+    LOGGER.debug("signPreparedCalls:array:ok", { count: res.data.length });
+    return res;
   } else if (
     params.type === "user-operation-v060" ||
     params.type === "user-operation-v070"
   ) {
-    return signUserOperationCall(params);
+    const res = await signUserOperationCall(params);
+    LOGGER.debug("signPreparedCalls:single-userOp:ok");
+    return res;
   } else if (params.type === "paymaster-permit") {
+    LOGGER.warn("signPreparedCalls:invalid-call-type", { type: params.type });
     throw new BaseError(
       `Invalid call type ${params.type} for signing prepared calls`,
     );
   } else {
+    LOGGER.warn("signPreparedCalls:unexpected-call-type", {
+      type: (params as { type?: unknown }).type,
+    });
     return assertNever(
       params,
       `Unexpected call type in ${params} for signing prepared calls`,

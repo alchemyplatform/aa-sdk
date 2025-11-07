@@ -10,6 +10,7 @@ import {
   formatGasAndPaymasterResponse,
   formatOverridesRequest,
 } from "./utils.js";
+import { LOGGER } from "../logger.js";
 
 /**
  * Requests gas estimation and paymaster data from the Alchemy Gas Manager API for a user operation.
@@ -43,6 +44,7 @@ export const requestGasAndPaymasterAndData = async <
     },
   ] = params;
 
+  LOGGER.debug("requestGasAndPaymasterAndData", { policyId, entryPoint });
   const response = await client.request({
     method: "alchemy_requestGasAndPaymasterAndData",
     params: [
@@ -58,5 +60,11 @@ export const requestGasAndPaymasterAndData = async <
     ] as const,
   });
 
-  return formatGasAndPaymasterResponse(response);
+  const formatted = formatGasAndPaymasterResponse(response);
+  LOGGER.debug("gas manager response", {
+    hasPaymasterData:
+      ("paymasterAndData" in formatted && !!formatted.paymasterAndData) ||
+      ("paymaster" in formatted && !!(formatted as any).paymaster),
+  });
+  return formatted;
 };
