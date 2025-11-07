@@ -129,9 +129,7 @@ function defaultConfig(): Required<DiagnosticsConfig> {
  * ```
  */
 export function getGlobalLoggerConfig(): Required<DiagnosticsConfig> {
-  if (!globalConfig) {
-    globalConfig = defaultConfig();
-  }
+  globalConfig ??= defaultConfig();
   return globalConfig;
 }
 
