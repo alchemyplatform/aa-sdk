@@ -711,6 +711,30 @@ export const celoMainnet: Chain = defineChain({
   testnet: false,
 });
 
+export const celoSepolia: Chain = defineChain({
+  id: 11142220,
+  name: "Celo Sepolia",
+  nativeCurrency: { name: "Celo native asset", symbol: "CELO", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://celo-sepolia.g.alchemy.com/v2"],
+    },
+    public: {
+      http: ["https://celo-sepolia.g.alchemy.com/v2"],
+    },
+    alchemy: {
+      http: ["https://celo-sepolia.g.alchemy.com/v2"],
+    },
+  },
+  blockExplorers: {
+    default: {
+      name: "Block Explorer",
+      url: "https://celo-sepolia.blockscout.com/",
+    },
+  },
+  testnet: true,
+});
+
 export const teaSepolia: Chain = defineChain({
   id: 10218,
   name: "Tea Sepolia",
