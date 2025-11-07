@@ -45,6 +45,17 @@ jobs:
           token: ${{ secrets.ALCHEMY_BOT_PAT }}
           fetch-depth: "0"
           submodules: "recursive"
+      
+      - name: Free up disk space
+        run: |
+          echo "Disk space before cleanup:"
+          df -h
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /opt/ghc
+          sudo rm -rf /opt/hostedtoolcache/CodeQL
+          sudo docker image prune --all --force
+          echo "Disk space after cleanup:"
+          df -h
           
       - name: Setup
         uses: ./.github/actions/setup

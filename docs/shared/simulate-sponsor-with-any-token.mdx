@@ -10,12 +10,17 @@ Example:
 
 ```tsx
 ...
+const erc20Abi = parseAbi([
+  "function approve(address spender, uint256 amount) public returns (bool)",]);
 const client = createAlchemyPublicRpcClient(...);
 const response = await simulateUserOperationChanges(client, {
 uo: [{
       // approve
         target: tokenAddress,
-        data: getApprove(paymasterAddress_07, 1_000_000_000n) as `0x${string}`,
+        data: encodeFunctionData({abi: erc20Abi,
+              functionName: "approve",
+              args: [paymasterAddress, 1_000_000_000n]}
+            ) as `0x${string}`,
     },
      // underlying transaction.
     {
