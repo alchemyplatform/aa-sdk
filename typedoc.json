@@ -1,0 +1,115 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+
+  // ============================================================================
+  // INPUT CONFIGURATION
+  // Defines what TypeScript files and modules to process
+  // ============================================================================
+  "entryPoints": [
+    "packages/aa-infra/src/index.ts",
+    "packages/common/src/index.ts",
+    "packages/smart-accounts/src/index.ts",
+    "packages/wagmi-core/src/index.ts",
+    "packages/wallet-apis/src/exports/index.ts"
+  ],
+  "entryPointStrategy": "expand",
+  "tsconfig": "./tsconfig.typedoc.json",
+  "exclude": [
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/*.test-d.ts",
+    "**/*.e2e.test.ts",
+    "**/__tests__/**/*",
+    "**/e2e-tests/**/*",
+    "**/vitest.config.ts",
+    "**/vitest.config.e2e.ts",
+    "**/*.stories.ts",
+    "**/*.stories.tsx",
+    ".vitest/**/*"
+  ],
+
+  // ============================================================================
+  // OUTPUT CONFIGURATION
+  // Controls where and how documentation files are generated
+  // ============================================================================
+  "out": "./docs/pages/reference",
+  "cleanOutputDir": true,
+  "fileExtension": ".mdx",
+
+  // ============================================================================
+  // PLUGIN CONFIGURATION
+  // TypeDoc plugins and their settings for markdown generation
+  // ============================================================================
+  "plugin": [
+    "typedoc-plugin-markdown",
+    "typedoc-plugin-frontmatter",
+    "typedoc-plugin-remark",
+    "./custom-frontmatter.mjs"
+  ],
+  "remarkPlugins": ["remark-mdx"],
+
+  // ============================================================================
+  // FRONTMATTER CONFIGURATION
+  // Settings for MDX frontmatter generation
+  // ============================================================================
+  "frontmatterGlobals": {
+    "layout": "reference"
+  },
+  "frontmatterCommentTags": ["description"],
+  "frontmatterNamingConvention": "camelCase",
+
+  // ============================================================================
+  // TYPESCRIPT COMPILER CONFIGURATION
+  // TypeScript-specific settings for documentation generation
+  // ============================================================================
+  "skipErrorChecking": true,
+  "compilerOptions": {
+    "skipLibCheck": true
+  },
+
+  // ============================================================================
+  // CONTENT FORMATTING
+  // Controls how code and content is formatted in the output
+  // ============================================================================
+  "useHTMLEncodedBrackets": true,
+  "useCodeBlocks": true,
+  "sanitizeComments": true,
+  "typePrintWidth": 80,
+  "expandObjects": false,
+  "expandParameters": false,
+
+  // ============================================================================
+  // PAGE LAYOUT & NAVIGATION
+  // Controls page structure, headers, and navigation elements
+  // ============================================================================
+  "hideBreadcrumbs": true,
+  "hidePageHeader": true,
+  "hidePageTitle": true,
+  "blockTagsPreserveOrder": ["@example", "@deprecated", "@remarks"],
+  "strikeDeprecatedPageTitles": true,
+  "pageTitleTemplates": {
+    "index": "{projectName} API Reference",
+    "member": "{name}",
+    "module": "{name}"
+  },
+
+  // ============================================================================
+  // TABLE FORMATTING
+  // Controls how parameters, properties, and other data are displayed in tables
+  // ============================================================================
+  "parametersFormat": "htmlTable",
+  "interfacePropertiesFormat": "htmlTable",
+  "classPropertiesFormat": "htmlTable",
+  "typeAliasPropertiesFormat": "htmlTable",
+  "enumMembersFormat": "htmlTable",
+  "propertyMembersFormat": "htmlTable",
+  "typeDeclarationFormat": "htmlTable",
+  "indexFormat": "table",
+  "tableColumnSettings": {
+    "hideInherited": true,
+    "hideModifiers": true,
+    "hideOverrides": true,
+    "hideSources": true,
+    "leftAlignHeaders": true
+  }
+}

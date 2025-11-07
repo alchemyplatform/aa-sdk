@@ -1,0 +1,32 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "Node16",
+    "strict": true,
+    "composite": false,
+    "declaration": true,
+    "declarationMap": true,
+    "skipLibCheck": true
+  },
+  "include": [
+    "packages/aa-infra/src/**/*",
+    "packages/common/src/**/*",
+    "packages/smart-accounts/src/**/*",
+    "packages/wagmi-core/src/**/*",
+    "packages/wallet-apis/src/**/*"
+  ],
+  "exclude": [
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/*.test-d.ts",
+    "**/*.e2e.test.ts",
+    "**/__tests__/**/*",
+    "**/e2e-tests/**/*",
+    "**/vitest.config.ts",
+    "**/vitest.config.e2e.ts",
+    "**/*.stories.ts",
+    "**/*.stories.tsx",
+    ".vitest/**/*",
+    "**/node_modules/**/*"
+  ]
+}
