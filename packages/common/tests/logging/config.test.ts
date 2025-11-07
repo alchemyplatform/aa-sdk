@@ -312,7 +312,13 @@ describe("config", () => {
       const result = redactObject(input);
 
       expect(result).toEqual({
-        mixed: ["string", 123, { secret: "[REDACTED]", data: "show" }, null, undefined],
+        mixed: [
+          "string",
+          123,
+          { secret: "[REDACTED]", data: "show" },
+          null,
+          undefined,
+        ],
       });
     });
 
