@@ -1,5 +1,5 @@
 /**
- * Log level enumeration for controlling diagnostics output.
+ * Log level constants for controlling diagnostics output.
  * Lower numeric values indicate higher priority (more restrictive filtering).
  *
  * @example
@@ -9,18 +9,21 @@
  * setGlobalLoggerConfig({ level: LogLevel.DEBUG });
  * ```
  */
-export enum LogLevel {
+export const LogLevel = {
   /** Critical errors only */
-  ERROR = 0,
+  ERROR: 0,
   /** Warnings and errors */
-  WARN = 1,
+  WARN: 1,
   /** Informational messages, warnings, and errors */
-  INFO = 2,
+  INFO: 2,
   /** Debug messages and all above */
-  DEBUG = 3,
+  DEBUG: 3,
   /** All messages including verbose details */
-  VERBOSE = 4,
-}
+  VERBOSE: 4,
+} as const;
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export type LogLevel = (typeof LogLevel)[keyof typeof LogLevel];
 
 /**
  * Configuration for redacting sensitive data in log output.
@@ -86,23 +89,16 @@ function defaultConfig(): Required<DiagnosticsConfig> {
   const isDev = env.NODE_ENV === "development";
   const defaultLevel = isDev ? LogLevel.INFO : LogLevel.ERROR;
 
-  let level = defaultLevel;
+  let level: LogLevel = defaultLevel;
   const envLevel = env.ALCHEMY_LOG_LEVEL;
   if (envLevel) {
-    const map: Record<string, LogLevel> = {
-      error: LogLevel.ERROR,
-      warn: LogLevel.WARN,
-      info: LogLevel.INFO,
-      debug: LogLevel.DEBUG,
-      verbose: LogLevel.VERBOSE,
-    };
-    const normalized = envLevel.toLowerCase();
-    if (normalized in map) {
-      level = map[normalized];
+    const normalized = envLevel.toUpperCase() as keyof typeof LogLevel;
+    if (normalized in LogLevel) {
+      level = LogLevel[normalized];
     } else {
-      const asNum = Number(envLevel);
-      if (!Number.isNaN(asNum) && asNum >= 0 && asNum <= 4)
-        level = asNum as LogLevel;
+      console.warn(
+        `[alchemy/common] Invalid ALCHEMY_LOG_LEVEL value: "${envLevel}". Expected one of: ERROR, WARN, INFO, DEBUG, VERBOSE. Using default: ${isDev ? "INFO" : "ERROR"}`,
+      );
     }
   }
 
@@ -224,7 +220,7 @@ export function isNamespaceEnabled(namespace: string | undefined): boolean {
     return true;
   }
 
-  // If namespace is undefined, only allow if undefined is explicitly in the list
+  // If namespace is undefined, disable it (only named namespaces can be filtered)
   if (namespace === undefined) {
     return false;
   }
@@ -235,6 +231,7 @@ export function isNamespaceEnabled(namespace: string | undefined): boolean {
 
 /**
  * Redacts sensitive keys in an object based on global redaction configuration.
+ * Performs deep redaction by recursively processing nested objects and arrays.
  * Default redaction includes: authorization, apiKey, jwt, privateKey, secret, password.
  *
  * @param {Record<string, unknown> | undefined} obj - The object to redact
@@ -245,11 +242,12 @@ export function isNamespaceEnabled(namespace: string | undefined): boolean {
  *
  * const data = {
  *   apiKey: "secret123",
- *   userId: "user-456"
+ *   userId: "user-456",
+ *   nested: { secret: "hidden" }
  * };
  *
  * const redacted = redactObject(data);
- * // { apiKey: "[REDACTED]", userId: "user-456" }
+ * // { apiKey: "[REDACTED]", userId: "user-456", nested: { secret: "[REDACTED]" } }
  * ```
  */
 export function redactObject(
@@ -261,6 +259,16 @@ export function redactObject(
   for (const [k, v] of Object.entries(obj)) {
     if (keys && keys(k)) {
       out[k] = replacer ? replacer(v, k) : "[REDACTED]";
+    } else if (Array.isArray(v)) {
+      // Recursively redact array elements
+      out[k] = v.map((item) =>
+        item != null && typeof item === "object"
+          ? redactObject(item as Record<string, unknown>)
+          : item,
+      );
+    } else if (v != null && typeof v === "object") {
+      // Recursively redact nested objects
+      out[k] = redactObject(v as Record<string, unknown>);
     } else {
       out[k] = v;
     }
@@ -286,6 +294,7 @@ function formatTimestamp(ts: number): string {
 /**
  * Format data as a JSON object for console output.
  * Filters out context fields (package, version) to avoid duplication.
+ * Handles BigInt values by converting them to strings.
  *
  * @param {Record<string, unknown> | undefined} data - The data object to format
  * @returns {string} Formatted JSON string with leading space, or empty string if no data
@@ -306,7 +315,12 @@ function formatData(data: Record<string, unknown> | undefined): string {
 
   if (Object.keys(filtered).length === 0) return "";
 
-  return " " + JSON.stringify(filtered);
+  return (
+    " " +
+    JSON.stringify(filtered, (_key, value) =>
+      typeof value === "bigint" ? value.toString() : value,
+    )
+  );
 }
 
 /**
@@ -335,23 +349,18 @@ export function consoleSink(entry: LogEntry): void {
 
   switch (level) {
     case LogLevel.ERROR:
-      // eslint-disable-next-line no-console
       console.error(output);
       break;
     case LogLevel.WARN:
-      // eslint-disable-next-line no-console
       console.warn(output);
       break;
     case LogLevel.INFO:
-      // eslint-disable-next-line no-console
       console.info(output);
       break;
     case LogLevel.DEBUG:
-      // eslint-disable-next-line no-console
       console.debug(output);
       break;
     case LogLevel.VERBOSE:
-      // eslint-disable-next-line no-console
       console.log(output);
       break;
   }

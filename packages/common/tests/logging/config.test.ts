@@ -89,34 +89,18 @@ describe("config", () => {
       ]).toContain(config.level);
     });
 
-    it("should parse numeric log levels", () => {
-      const levels = [
-        { value: "0", expected: LogLevel.ERROR },
-        { value: "1", expected: LogLevel.WARN },
-        { value: "2", expected: LogLevel.INFO },
-        { value: "3", expected: LogLevel.DEBUG },
-        { value: "4", expected: LogLevel.VERBOSE },
-      ];
-
-      for (const { value } of levels) {
-        process.env.AA_LOG_LEVEL = value;
-        // This would require module reloading to test properly
-      }
-    });
-
     it("should handle invalid log level gracefully", () => {
-      process.env.AA_LOG_LEVEL = "invalid";
+      process.env.ALCHEMY_LOG_LEVEL = "invalid";
 
-      // Should fall back to default
-      setGlobalLoggerConfig({});
-
+      // Should fall back to default (would warn in actual usage but requires fresh module load)
+      // The config persists from previous test, so just verify it doesn't crash
       const config = getGlobalLoggerConfig();
       expect(config.level).toBeDefined();
+      expect(typeof config.level).toBe("number");
     });
 
     it("should default to INFO in development", () => {
       process.env.NODE_ENV = "development";
-      delete process.env.AA_LOG_LEVEL;
       delete process.env.ALCHEMY_LOG_LEVEL;
 
       // The default config would set INFO in dev
@@ -125,7 +109,6 @@ describe("config", () => {
 
     it("should default to ERROR in production", () => {
       process.env.NODE_ENV = "production";
-      delete process.env.AA_LOG_LEVEL;
       delete process.env.ALCHEMY_LOG_LEVEL;
 
       // The default config would set ERROR in prod
@@ -265,6 +248,98 @@ describe("config", () => {
       redactObject(input);
 
       expect(input.apiKey).toBe(originalApiKey);
+    });
+
+    it("should redact nested objects (deep redaction)", () => {
+      const input = {
+        user: {
+          apiKey: "secret123",
+          name: "John",
+          credentials: {
+            password: "pass456",
+            email: "john@example.com",
+          },
+        },
+        publicData: "visible",
+      };
+
+      const result = redactObject(input);
+
+      expect(result).toEqual({
+        user: {
+          apiKey: "[REDACTED]",
+          name: "John",
+          credentials: {
+            password: "[REDACTED]",
+            email: "john@example.com",
+          },
+        },
+        publicData: "visible",
+      });
+    });
+
+    it("should redact sensitive keys in arrays", () => {
+      const input = {
+        users: [
+          { apiKey: "key1", name: "Alice" },
+          { apiKey: "key2", name: "Bob" },
+        ],
+        publicList: ["item1", "item2"],
+      };
+
+      const result = redactObject(input);
+
+      expect(result).toEqual({
+        users: [
+          { apiKey: "[REDACTED]", name: "Alice" },
+          { apiKey: "[REDACTED]", name: "Bob" },
+        ],
+        publicList: ["item1", "item2"],
+      });
+    });
+
+    it("should handle arrays with mixed types", () => {
+      const input = {
+        mixed: [
+          "string",
+          123,
+          { secret: "hide", data: "show" },
+          null,
+          undefined,
+        ],
+      };
+
+      const result = redactObject(input);
+
+      expect(result).toEqual({
+        mixed: ["string", 123, { secret: "[REDACTED]", data: "show" }, null, undefined],
+      });
+    });
+
+    it("should handle deeply nested structures", () => {
+      const input = {
+        level1: {
+          level2: {
+            level3: {
+              apiKey: "deep-secret",
+              value: "visible",
+            },
+          },
+        },
+      };
+
+      const result = redactObject(input);
+
+      expect(result).toEqual({
+        level1: {
+          level2: {
+            level3: {
+              apiKey: "[REDACTED]",
+              value: "visible",
+            },
+          },
+        },
+      });
     });
   });
 
@@ -438,6 +513,55 @@ describe("config", () => {
       expect(mockConsole.info).toHaveBeenCalledWith(
         expect.stringContaining("[@test/pkg@1.0.0] test"),
       );
+    });
+
+    it("should handle BigInt values in data", () => {
+      const entry: LogEntry = {
+        ts: Date.now(),
+        level: LogLevel.INFO,
+        namespace: "test",
+        message: "test",
+        data: {
+          balance: BigInt("1000000000000000000"),
+          count: 5,
+          address: "0x123",
+        },
+        context: { package: "@test/pkg", version: "1.0.0" },
+      };
+
+      consoleSink(entry);
+
+      // BigInt should be converted to string
+      expect(mockConsole.info).toHaveBeenCalledWith(
+        expect.stringContaining('"balance":"1000000000000000000"'),
+      );
+      expect(mockConsole.info).toHaveBeenCalledWith(
+        expect.stringContaining('"count":5'),
+      );
+    });
+
+    it("should handle nested BigInt values", () => {
+      const entry: LogEntry = {
+        ts: Date.now(),
+        level: LogLevel.INFO,
+        namespace: "test",
+        message: "test",
+        data: {
+          transaction: {
+            value: BigInt("999"),
+            gasLimit: BigInt("21000"),
+          },
+        },
+        context: { package: "@test/pkg", version: "1.0.0" },
+      };
+
+      consoleSink(entry);
+
+      // Should not throw an error and should convert BigInt to string
+      expect(mockConsole.info).toHaveBeenCalled();
+      const call = mockConsole.info.mock.calls[0][0];
+      expect(call).toContain('"value":"999"');
+      expect(call).toContain('"gasLimit":"21000"');
     });
   });
 
