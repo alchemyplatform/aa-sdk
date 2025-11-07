@@ -39,6 +39,8 @@ servers:
     name: Celo Mainnet
   - url: https://celo-alfajores.g.alchemy.com/v2
     name: Celo Alfajores
+  - url: https://celo-sepolia.g.alchemy.com/v2
+    name: Celo Sepolia
   - url: https://frax-mainnet.g.alchemy.com/v2
     name: Frax Mainnet
   - url: https://gensyn-testnet.g.alchemy.com/v2
