@@ -67,6 +67,13 @@
       },
     },
     {
+      "files": ["docs/pages/reference/**/*.mdx"],
+      "rules": {
+        "jsx-a11y/anchor-has-content": "off",
+        "jsx-a11y/anchor-is-valid": "off",
+      },
+    },
+    {
       "files": ["packages/**/*"],
       "rules": {
         "no-warning-comments": "off",

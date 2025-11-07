@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "module": "Node16",
+    "strict": true,
+    "composite": true,
+
+    // These options are necessary so that TypeDoc can resolve references across packages
+    "declaration": true,
+    "declarationMap": true
+  },
+  "files": [],
+  "references": [
+    { "path": "./packages/aa-infra" },
+    { "path": "./packages/alchemy" },
+    { "path": "./packages/common" },
+    { "path": "./packages/smart-accounts" },
+    { "path": "./packages/wagmi-core" },
+    { "path": "./packages/wallet-apis" }
+  ]
+}
