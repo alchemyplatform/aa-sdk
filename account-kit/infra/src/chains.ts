@@ -806,3 +806,27 @@ export const bobaMainnet: Chain = defineChain({
   },
   testnet: false,
 });
+
+export const edgeMainnet: Chain = defineChain({
+  id: 3343,
+  name: "Edge Mainnet",
+  nativeCurrency: { name: "eth", symbol: "eth", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://edge-mainnet.g.alchemy.com/v2"],
+    },
+    public: {
+      http: ["https://edge-mainnet.g.alchemy.com/v2"],
+    },
+    alchemy: {
+      http: ["https://edge-mainnet.g.alchemy.com/v2"],
+    },
+  },
+  blockExplorers: {
+    default: {
+      name: "Block Explorer",
+      url: "https://edge-mainnet.blockscout.com/",
+    },
+  },
+  testnet: false,
+});
