@@ -50,6 +50,7 @@ export {
   storyAeneid,
   celoAlfajores,
   celoMainnet,
+  celoSepolia,
   teaSepolia,
   bobaSepolia,
   bobaMainnet,
