@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.78.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.77.1...v4.78.0) (2025-11-05)
+
+**Note:** Version bump only for package @account-kit/react
+
+## [4.77.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.77.0...v4.77.1) (2025-10-31)
+
+**Note:** Version bump only for package @account-kit/react
+
+# [4.77.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.76.0...v4.77.0) (2025-10-31)
+
+### Features
+
+- support webauthn signers in wallet client ([#2214](https://github.com/alchemyplatform/aa-sdk/issues/2214)) ([4297dc3](https://github.com/alchemyplatform/aa-sdk/commit/4297dc3dc631f2aa0a7230260af2d71ab90856b6))
+
+# [4.76.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.75.4...v4.76.0) (2025-10-28)
+
+### Bug Fixes
+
+- 'Continue' button color on dark ([#2205](https://github.com/alchemyplatform/aa-sdk/issues/2205)) ([f678a77](https://github.com/alchemyplatform/aa-sdk/commit/f678a77bb72eadcf21fa2ae88cb7c54febd9b9b9))
+
+## [4.75.4](https://github.com/alchemyplatform/aa-sdk/compare/v4.75.3...v4.75.4) (2025-10-27)
+
+**Note:** Version bump only for package @account-kit/react
+
 ## [4.75.3](https://github.com/alchemyplatform/aa-sdk/compare/v4.75.2...v4.75.3) (2025-10-27)
 
 **Note:** Version bump only for package @account-kit/react

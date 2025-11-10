@@ -79,6 +79,7 @@ Upgrade existing Privy wallets to Smart Wallets to enable gasless transactions (
     - `solanaRpcUrl` (optional) for Solana RPC URL (separate from EVM)
     - `disableSponsorship` (optional) to opt-out per default
     - `accountAuthMode` (optional) - `'eip7702'` (default, recommended) or `'owner'` for a traditional smart account
+    - `walletAddress` (optional) - specify which wallet address to use if user has multiple wallets (defaults to first wallet)
 
     ### 2. Send Gasless Transactions
 
@@ -225,6 +226,199 @@ Upgrade existing Privy wallets to Smart Wallets to enable gasless transactions (
     - The hooks API mirrors Privy's transaction hooks for easy migration.
 
   </Tab>
+  <Tab title="React Native (Expo)">
+    ## Setup
+
+    Follow these steps to integrate Privy with Smart Wallets in React Native using Expo.
+
+    ### Installation
+
+    ```bash
+    npm install @account-kit/privy-integration @privy-io/expo
+    # or
+    yarn add @account-kit/privy-integration @privy-io/expo
+    # or
+    pnpm add @account-kit/privy-integration @privy-io/expo
+    ```
+
+    ### Prerequisites: Get your keys (API key, Policy ID, Privy App ID & Client ID)
+
+    - Alchemy API Key:
+      - Go to the [Alchemy Dashboard](https://dashboard.alchemy.com/)
+      - Create or select an app and copy the API key
+    - Gas sponsorship Policy ID (Gas Manager):
+      - Create a gas sponsorship policy in the [dashboard](https://dashboard.alchemy.com/services/gas-manager/configuration) and copy its Policy ID
+    - Privy App ID & Client ID:
+      - Go to the [Privy Dashboard](https://dashboard.privy.io/)
+      - Create or select an app and copy both the App ID and Client ID (needed for Expo)
+
+    <Warning>
+      Both the Smart Wallets configuration and the gas sponsorship policy must be
+      linked to the application behind your Alchemy API key for sponsorship to work.
+    </Warning>
+
+    ### 1. Add AlchemyProvider
+
+    **Important:** Import from `@account-kit/privy-integration/react-native` for React Native apps.
+
+    ```tsx
+    import { PrivyProvider } from "@privy-io/expo";
+    import { AlchemyProvider } from "@account-kit/privy-integration/react-native";
+
+    function App() {
+      return (
+        <PrivyProvider appId="your-privy-app-id" clientId="your-privy-client-id">
+          <AlchemyProvider apiKey="your-alchemy-api-key" policyId="your-gas-policy-id">
+            <YourApp />
+          </AlchemyProvider>
+        </PrivyProvider>
+      );
+    }
+    ```
+
+    Props for `AlchemyProvider`:
+
+    - `apiKey` | `jwt` | `rpcUrl` (pick a valid transport config)
+    - `policyId` (optional) for EVM gas sponsorship
+    - `disableSponsorship` (optional) to opt-out by default
+    - `accountAuthMode` (optional) - `'eip7702'` (default, recommended) or `'owner'` for a traditional smart account
+    - `walletAddress` (optional) - specify which wallet address to use if user has multiple wallets (defaults to first wallet)
+
+    ### 2. Send Gasless Transactions
+
+    ```tsx
+    import { useAlchemySendTransaction } from "@account-kit/privy-integration/react-native";
+
+    function SendButtons() {
+      const { sendTransaction, isLoading } = useAlchemySendTransaction();
+
+      const single = async () =>
+        await sendTransaction({ to: "0x...", data: "0x...", value: "0x0" });
+
+      const batch = async () =>
+        await sendTransaction([
+          { to: "0x...", data: "0x..." },
+          { to: "0x...", data: "0x..." },
+        ]);
+
+      return (
+        <>
+          <Button onPress={single} disabled={isLoading} title="Send" />
+          <Button onPress={batch} disabled={isLoading} title="Send Batch" />
+        </>
+      );
+    }
+    ```
+
+    Control sponsorship per call:
+
+    ```tsx
+    await sendTransaction({ to: "0x...", data: "0x..." });
+    await sendTransaction({ to: "0x...", data: "0x..." }, { disableSponsorship: true });
+    ```
+
+    ### 3. Execute Token Swaps
+
+    ```tsx
+    import { useAlchemyPrepareSwap, useAlchemySubmitSwap } from "@account-kit/privy-integration/react-native";
+
+    function SwapButton() {
+      const { prepareSwap } = useAlchemyPrepareSwap();
+      const { submitSwap, isLoading } = useAlchemySubmitSwap();
+
+      const handleSwap = async () => {
+        const prepared = await prepareSwap({
+          fromToken: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+          toToken: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", // USDC on Ethereum mainnet
+          fromAmount: "0xde0b6b3a7640000",
+        });
+        await submitSwap(prepared);
+      };
+
+      return <Button onPress={handleSwap} disabled={isLoading} title="Swap" />;
+    }
+    ```
+
+    ### 4. Advanced: Access the Smart Wallet Client
+
+    ```tsx
+    import { useAlchemyClient } from "@account-kit/privy-integration/react-native";
+
+    function Advanced() {
+      const { getClient } = useAlchemyClient();
+
+      const doOp = async () => {
+        const { client, account } = await getClient();
+        await client.sendCalls({
+          from: account.address,
+          calls: [{ to: "0x...", data: "0x" }],
+          capabilities: { eip7702Auth: true, paymasterService: { policyId: "your-policy-id" } },
+        });
+      };
+
+      return <Button onPress={doOp} title="Advanced Op" />;
+    }
+    ```
+
+    ### Authorization Modes
+
+    The integration supports two modes via `accountAuthMode`:
+
+    - **`'eip7702'` (default, recommended)**: Uses EIP-7702 to delegate the Privy wallet to a smart account. No deployment needed, funds stay at the wallet address.
+    - **`'owner'`**: Uses a traditional smart account with Privy wallet as owner. The smart account has a separate address. Use for environments without EIP-7702 support.
+
+    ```tsx
+    // Default (EIP-7702) - recommended
+    <AlchemyProvider apiKey="...">
+      <YourApp />
+    </AlchemyProvider>
+
+    // Traditional smart account mode
+    <AlchemyProvider apiKey="..." accountAuthMode="owner">
+      <YourApp />
+    </AlchemyProvider>
+    ```
+
+    **Getting the Smart Account Address (owner mode):**
+
+    When using `owner` mode, access the smart account address (different from the Privy signer address):
+
+    ```tsx
+    import { useAlchemyClient } from "@account-kit/privy-integration/react-native";
+
+    function MyComponent() {
+      const { getClient } = useAlchemyClient();
+
+      const getAddress = async () => {
+        const { account } = await getClient();
+        console.log("Smart account:", account.address);
+        // Different from Privy signer address in owner mode
+      };
+    }
+    ```
+
+    ### Multiple Wallet Support
+
+    If your users have multiple Privy wallets, specify which one to use:
+
+    ```tsx
+    <AlchemyProvider
+      apiKey="your-alchemy-api-key"
+      policyId="your-gas-policy-id"
+      walletAddress="0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb"
+    >
+      <YourApp />
+    </AlchemyProvider>
+    ```
+
+    ### Notes
+
+    - **Platform**: Uses `@privy-io/expo` for React Native authentication
+    - **EVM Only**: React Native integration currently supports EVM chains (Solana support coming soon)
+    - **EIP-7702**: Delegates your wallet to a smart account at send time. Alternatively, use `accountAuthMode="owner"` for a traditional smart account.
+    - The hooks API mirrors the React web version for easy cross-platform development.
+
+  </Tab>
   <Tab title="JavaScript">
     ## Setup
 
@@ -319,7 +513,7 @@ Upgrade existing Privy wallets to Smart Wallets to enable gasless transactions (
         appSecret: PRIVY_APP_SECRET,
       });
 
-      // Create or get a Privy embedded wallet
+      // Create or get a Privy wallet
       const wallet = await privyClient.wallets().create({
         chain_type: "ethereum",
       });

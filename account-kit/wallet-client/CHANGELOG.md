@@ -3,6 +3,35 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.78.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.77.1...v4.78.0) (2025-11-05)
+
+### Bug Fixes
+
+- override webauthn send test timeout ([#2225](https://github.com/alchemyplatform/aa-sdk/issues/2225)) ([f1e2d19](https://github.com/alchemyplatform/aa-sdk/commit/f1e2d1995d71eb8fa365d9b662045e15212c425a))
+- prevent non-type imports in wallet-client from wallet-api-types ([#2235](https://github.com/alchemyplatform/aa-sdk/issues/2235)) ([a39bd58](https://github.com/alchemyplatform/aa-sdk/commit/a39bd58ba3a204a9066628835ce9f6d1de6c490a))
+
+## [4.77.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.77.0...v4.77.1) (2025-10-31)
+
+### Bug Fixes
+
+- infer default webauthn client account type ([#2224](https://github.com/alchemyplatform/aa-sdk/issues/2224)) ([2314f1b](https://github.com/alchemyplatform/aa-sdk/commit/2314f1b00b2e76558022a9bd469062d9e9baf289))
+
+# [4.77.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.76.0...v4.77.0) (2025-10-31)
+
+### Features
+
+- support webauthn signers in wallet client ([#2214](https://github.com/alchemyplatform/aa-sdk/issues/2214)) ([4297dc3](https://github.com/alchemyplatform/aa-sdk/commit/4297dc3dc631f2aa0a7230260af2d71ab90856b6))
+
+# [4.76.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.75.4...v4.76.0) (2025-10-28)
+
+**Note:** Version bump only for package @account-kit/wallet-client
+
+## [4.75.4](https://github.com/alchemyplatform/aa-sdk/compare/v4.75.3...v4.75.4) (2025-10-27)
+
+### Bug Fixes
+
+- wallet client requires wallet-api-types as a non-dev dep ([#2210](https://github.com/alchemyplatform/aa-sdk/issues/2210)) ([de9571c](https://github.com/alchemyplatform/aa-sdk/commit/de9571cca3acf7dcf66b5fc28f3d0384b03845dc))
+
 ## [4.75.3](https://github.com/alchemyplatform/aa-sdk/compare/v4.75.2...v4.75.3) (2025-10-27)
 
 ### Bug Fixes

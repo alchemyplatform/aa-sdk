@@ -1,8 +1,8 @@
-import type { SmartAccountSigner } from "@aa-sdk/core";
-import { type Address, type Hex, type TypedDataDefinition } from "viem";
+import type { Address, Hex, TypedDataDefinition } from "viem";
 import type { InnerWalletApiClient } from "../../types.ts";
 import { requestAccount } from "./requestAccount.js";
 import { metrics } from "../../metrics.js";
+import type { SmartWalletSigner } from "../index.js";
 
 export type SignTypedDataParams = TypedDataDefinition & {
   account?: Address;
@@ -15,7 +15,7 @@ export type SignTypedDataResult = Hex;
  * This method requests the account associated with the signer and uses it to sign the typed data.
  *
  * @param {InnerWalletApiClient} client - The wallet API client to use for the request
- * @param {SmartAccountSigner} signer - The signer of the smart account
+ * @param {SmartAccountSigner | WebAuthnSigner} signer - The signer of the smart account
  * @param {TypedDataDefinition} params - The typed data to sign, following EIP-712 format
  * @returns {Promise<SignTypedDataResult>} A Promise that resolves to the signature as a hex string
  *
@@ -45,7 +45,7 @@ export type SignTypedDataResult = Hex;
  */
 export async function signTypedData(
   client: InnerWalletApiClient,
-  signer: SmartAccountSigner,
+  signer: SmartWalletSigner,
   params: SignTypedDataParams,
 ): Promise<SignTypedDataResult> {
   metrics.trackEvent({

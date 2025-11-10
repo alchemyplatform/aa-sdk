@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.78.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.77.1...v4.78.0) (2025-11-05)
+
+**Note:** Version bump only for package @account-kit/privy-integration
+
+## [4.77.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.77.0...v4.77.1) (2025-10-31)
+
+**Note:** Version bump only for package @account-kit/privy-integration
+
+# [4.77.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.76.0...v4.77.0) (2025-10-31)
+
+**Note:** Version bump only for package @account-kit/privy-integration
+
+# [4.76.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.75.4...v4.76.0) (2025-10-28)
+
+### Features
+
+- add react native expo support to the privy integration sdk ([#2215](https://github.com/alchemyplatform/aa-sdk/issues/2215)) ([e37426e](https://github.com/alchemyplatform/aa-sdk/commit/e37426e5ffda79f6f210276eceb394d9c8444e3a))
+
+## [4.75.4](https://github.com/alchemyplatform/aa-sdk/compare/v4.75.3...v4.75.4) (2025-10-27)
+
+**Note:** Version bump only for package @account-kit/privy-integration
+
 ## [4.75.3](https://github.com/alchemyplatform/aa-sdk/compare/v4.75.2...v4.75.3) (2025-10-27)
 
 **Note:** Version bump only for package @account-kit/privy-integration

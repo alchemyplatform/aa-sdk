@@ -1,8 +1,7 @@
-import type { SmartAccountSigner } from "@aa-sdk/core";
 import type { Address, Hex } from "viem";
-import {
-  type WaitForCallsStatusParameters,
-  type WaitForCallsStatusReturnType,
+import type {
+  WaitForCallsStatusParameters,
+  WaitForCallsStatusReturnType,
 } from "viem/actions";
 import type { InnerWalletApiClient } from "../types.ts";
 import {
@@ -56,6 +55,25 @@ import {
   type SendCallsParams,
   type SendCallsResult,
 } from "./actions/sendCalls.js";
+import type { SmartWalletSigner } from "./index.js";
+import { isWebAuthnSigner } from "../utils.js";
+
+async function signSignatureRequestSafe(
+  signer: SmartWalletSigner,
+  params: SignSignatureRequestParams,
+): Promise<SignSignatureRequestResult> {
+  if (params.type === "eip7702Auth") {
+    if (isWebAuthnSigner(signer)) {
+      throw new Error(
+        "WebAuthn signer cannot sign EIP-7702 authorization requests",
+      );
+    }
+    // We must split up the call to signSignatureRequest across two conditionals for the TS compiler to
+    // correctly infer which overload to use.
+    return signSignatureRequest(signer, params);
+  }
+  return signSignatureRequest(signer, params);
+}
 
 export type SmartWalletActions<
   TAccount extends Address | undefined = Address | undefined,
@@ -94,7 +112,7 @@ export function smartWalletClientActions<
   TAccount extends Address | undefined = Address | undefined,
 >(
   client: InnerWalletApiClient,
-  signer: SmartAccountSigner,
+  signer: SmartWalletSigner,
 ): SmartWalletActions<TAccount> {
   return {
     requestAccount: (params) => requestAccount(client, signer, params),
@@ -104,7 +122,7 @@ export function smartWalletClientActions<
     sendCalls: (params) => sendCalls(client, signer, params),
     getCallsStatus: (params) => getCallsStatus(client, params),
     waitForCallsStatus: (params) => waitForCallsStatus(client, params),
-    signSignatureRequest: (params) => signSignatureRequest(signer, params),
+    signSignatureRequest: (params) => signSignatureRequestSafe(signer, params),
     signPreparedCalls: (params) => signPreparedCalls(signer, params),
     signMessage: (params) => signMessage(client, signer, params),
     signTypedData: (params) => signTypedData(client, signer, params),

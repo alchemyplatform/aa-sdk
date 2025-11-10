@@ -29,6 +29,13 @@ export type AlchemyProviderConfig = z.infer<typeof ConnectionConfigSchema> & {
    * Default: false (sponsorship enabled when policyId is provided)
    */
   disableSponsorship?: boolean;
+
+  /**
+   * Optional: Specify which wallet address to use
+   * - If provided, will use the wallet matching this address
+   * - If not provided, defaults to the first embedded wallet (web) or first wallet in array (React Native)
+   */
+  walletAddress?: string;
 };
 
 /**
