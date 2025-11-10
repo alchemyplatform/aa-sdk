@@ -126,31 +126,30 @@ if [ ! -s "fern/temp_v5_layout.yml" ]; then
     exit 1
 fi
 
-# Create the tab variants structure
-cat > fern/temp_wallets_variants.yml << 'EOF'
+# Create the wallets tab structure with two top-level sections (no variants)
+cat > fern/temp_wallets_merged.yml << 'EOF'
   - tab: wallets
-    variants:
-      - title: Account Kit v4
-        slug: v4
-        default: false
-        layout:
-EOF
-
-# Add v4 layout (remove the "layout:" line and adjust indentation)
-sed 's/^    layout://' fern/temp_v4_layout.yml | sed 's/^    /          /' >> fern/temp_wallets_variants.yml
-
-# Add v5 variant
-cat >> fern/temp_wallets_variants.yml << 'EOF'
-      - title: Account Kit v5
+    layout:
+      - section: SDK Reference (v5)
         slug: v5
-        default: true
-        layout:
+        contents:
 EOF
 
-# Add v5 layout (remove the "layout:" line and adjust indentation)
-sed 's/^    layout://' fern/temp_v5_layout.yml | sed 's/^    /          /' >> fern/temp_wallets_variants.yml
+# Add v5 layout content (remove the "layout:" line and re-indent everything)
+# Original: base 4 spaces, target: base 8 spaces (add 4 to every line)
+sed '1d' fern/temp_v5_layout.yml | sed 's/^/    /' >> fern/temp_wallets_merged.yml
 
-# Replace the wallets tab in docs.yml with the new variants structure
+# Add v4 section
+cat >> fern/temp_wallets_merged.yml << 'EOF'
+      - section: SDK Reference (v4)
+        slug: v4
+        contents:
+EOF
+
+# Add v4 layout content (remove the "layout:" line and re-indent everything)
+sed '1d' fern/temp_v4_layout.yml | sed 's/^/    /' >> fern/temp_wallets_merged.yml
+
+# Replace the wallets tab in docs.yml with the new merged structure
 echo "   Merging into main docs.yml..."
 
 # Check if wallets tab exists in main docs.yml
@@ -162,7 +161,7 @@ if grep -q "^  - tab: wallets" fern/docs.yml; then
         /^  - tab: wallets/ {
             in_wallets = 1;
             if (!printed) {
-                system("cat fern/temp_wallets_variants.yml");
+                system("cat fern/temp_wallets_merged.yml");
                 printed = 1;
             }
             next;
@@ -179,21 +178,21 @@ if grep -q "^  - tab: wallets" fern/docs.yml; then
         }
     ' fern/docs.yml > fern/docs.yml.tmp && mv fern/docs.yml.tmp fern/docs.yml
 else
-    echo "   No existing wallets tab found, appending new variants..."
+    echo "   No existing wallets tab found, appending new structure..."
     # Append wallets tab to navigation section
     # Find the end of navigation section and insert before it
     awk '
         /^navigation:/ { print; in_nav = 1; next; }
         in_nav && /^[a-z]/ { 
             # We hit a top-level key after navigation, insert before this
-            system("cat fern/temp_wallets_variants.yml");
+            system("cat fern/temp_wallets_merged.yml");
             in_nav = 0;
         }
         { print; }
         END {
             # If we never hit another top-level key, append at end
             if (in_nav) {
-                system("cat fern/temp_wallets_variants.yml");
+                system("cat fern/temp_wallets_merged.yml");
             }
         }
     ' fern/docs.yml > fern/docs.yml.tmp && mv fern/docs.yml.tmp fern/docs.yml
@@ -251,10 +250,11 @@ except FileNotFoundError:
     print("❌ Error: fern/docs.yml not found")
     exit(1)
 
-# Find the v4 variant section and v5 variant section
-# Replace paths in v4 section
-v4_pattern = r'(- title: Account Kit v4.*?)(- title: Account Kit v5)'
-v5_pattern = r'(- title: Account Kit v5.*?)(\n  - tab:|\Z)'
+# Find the v5 section and v4 section (now they're regular sections, not variants)
+# Replace paths in v5 section (comes first in our generated structure)
+v5_pattern = r'(- section: SDK Reference \(v5\).*?)(- section: SDK Reference \(v4\))'
+# Replace paths in v4 section (comes second, goes to end of wallets tab or next tab)
+v4_pattern = r'(- section: SDK Reference \(v4\).*?)(\n  - tab:|\Z)'
 
 def replace_v4_paths(match):
     v4_section = match.group(1)
@@ -304,7 +304,7 @@ rm -f fern/wallets-v4/temp_v4_nav.yml
 rm -f fern/wallets-v5/temp_v5_nav.yml
 rm -f fern/temp_v4_layout.yml
 rm -f fern/temp_v5_layout.yml
-rm -f fern/temp_wallets_variants.yml
+rm -f fern/temp_wallets_merged.yml
 rm -f fern/temp_mdx_v4.yml
 rm -f fern/temp_mdx_v5.yml
 rm -f fern/temp_mdx_combined.yml
@@ -339,10 +339,10 @@ if [ $? -ne 0 ]; then
 fi
 
 echo ""
-echo "✅ Successfully inserted versioned docs with tab variants!"
+echo "✅ Successfully inserted versioned docs!"
 echo "   - v4 docs: fern/wallets-v4/"
 echo "   - v5 docs: fern/wallets-v5/"
-echo "   - Tab variants created in fern/docs.yml"
+echo "   - Two sections created in wallets tab: 'SDK Reference (v5)' and 'SDK Reference (v4)'"
 echo ""
 echo "💡 Tip: Check fern/docs.yml to review the generated structure"
 
