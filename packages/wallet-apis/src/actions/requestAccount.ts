@@ -3,6 +3,7 @@ import type { Prettify, UnionOmit } from "viem";
 import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
 import deepEqual from "deep-equal";
 import type { InnerWalletApiClient, OptionalSignerAddress } from "../types";
+import { LOGGER } from "../logger.js";
 
 type RpcSchema = Extract<
   WalletServerRpcSchemaType,
@@ -43,6 +44,10 @@ export async function requestAccount(
   client: InnerWalletApiClient,
   params?: RequestAccountParams,
 ): Promise<RequestAccountResult> {
+  LOGGER.debug("requestAccount:start", {
+    hasParams: !!params,
+    hasAccountOnClient: !!client.account,
+  });
   const args =
     client.account && !params
       ? {
@@ -70,6 +75,9 @@ export async function requestAccount(
     ((args.accountAddress && cachedAccount.address === args.accountAddress) ||
       deepEqual(cachedAccount.requestParams, args, { strict: true }))
   ) {
+    LOGGER.debug("requestAccount:cache-hit", {
+      address: cachedAccount.address,
+    });
     return {
       address: cachedAccount.address,
     };
@@ -85,6 +93,7 @@ export async function requestAccount(
     requestParams: args,
   });
 
+  LOGGER.debug("requestAccount:done", { address: resp.accountAddress });
   return {
     address: resp.accountAddress,
   };

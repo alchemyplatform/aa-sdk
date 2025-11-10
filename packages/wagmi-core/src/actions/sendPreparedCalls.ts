@@ -11,6 +11,7 @@ import {
   sendPreparedCalls as sendPreparedCallsClientAction,
   signPreparedCalls as signPreparedCallsClientAction,
 } from "@alchemy/wallet-apis";
+import { LOGGER } from "../logger.js";
 
 export type SendPreparedCallsParameters = Prettify<
   ViemEncodedPreparedCalls & ConnectorParameter
@@ -41,6 +42,8 @@ export async function sendPreparedCalls(
   parameters: SendPreparedCallsParameters,
 ): Promise<SendPreparedCallsReturnType> {
   const { connector, ...params } = parameters;
+
+  LOGGER.info("sendPreparedCalls:start", { type: params.type });
 
   const client = await getConnectorClient(config, {
     chainId: "chainId" in params ? params.chainId : undefined,
@@ -74,6 +77,7 @@ export async function sendPreparedCalls(
     preparedCallIds: [id],
   } = await sendPreparedCallsAction(signed);
 
+  LOGGER.info("sendPreparedCalls:success", { id });
   return {
     id,
   };

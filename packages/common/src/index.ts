@@ -46,3 +46,15 @@ export { addBreadCrumb } from "./actions/addBreadCrumb.js";
 
 // chains (convenience exports for Alchemy-supported chains)
 export * from "./chains.js";
+
+// diagnostics logging
+export { createLogger } from "./logging/logger.js";
+export {
+  setGlobalLoggerConfig,
+  getGlobalLoggerConfig,
+  LogLevel,
+  isLevelEnabled,
+  isNamespaceEnabled,
+} from "./logging/config.js";
+export type { DiagnosticsLogger } from "./logging/logger.js";
+export { InMemorySink } from "./logging/sinks.js";
