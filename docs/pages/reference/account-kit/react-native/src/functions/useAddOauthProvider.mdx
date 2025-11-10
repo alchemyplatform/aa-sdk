@@ -21,11 +21,11 @@ A custom hook to handle adding an OAuth provider to an already authenticated acc
 import { useAddOauthProvider } from "@account-kit/react";
 
 const { addOauthProvider, isAddingOauthProvider, error } = useAddOauthProvider({
-  // these are optional
-  onSuccess: () => {
-    // do something on success
-  },
-  onError: (error) => console.error(error),
+ // these are optional
+ onSuccess: () => {
+   // do something on success
+ },
+ onError: (error) => console.error(error),
 });
 ```
 
@@ -54,7 +54,6 @@ const { addOauthProvider, isAddingOauthProvider, error } = useAddOauthProvider({
         Optional arguments for the mutation used for adding an OAuth provider.
       </td>
     </tr>
-
   </tbody>
 </table>
 

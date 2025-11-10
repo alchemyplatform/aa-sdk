@@ -11,12 +11,12 @@ layout: reference
 function formatSignatures(signatures, usingMaxValues): `0x${string}`;
 ```
 
-Defined in: [account-kit/smart-contracts/src/msca/plugins/multisig/utils/formatSignatures.ts:15](https://github.com/alchemyplatform/aa-sdk/blob/17aad1f572375d42a06c7e3238078a88a435d459/account-kit/smart-contracts/src/msca/plugins/multisig/utils/formatSignatures.ts#L15)
+Defined in: [account-kit/smart-contracts/src/msca/plugins/multisig/utils/formatSignatures.ts:15](https://github.com/alchemyplatform/aa-sdk/blob/27e36329c103b4660886c9508b86d0a2c5c6c47e/account-kit/smart-contracts/src/msca/plugins/multisig/utils/formatSignatures.ts#L15)
 
 Formats a collection of Signature objects into a single aggregated signature.
-The format is in the form of EOA_SIGS | CONTRACT_SIG_DATAS. The signatures are ordered
+The format is in the form of EOA\_SIGS | CONTRACT\_SIG\_DATAS. The signatures are ordered
 by signer address. The EOA SIGS contain the 65 signautre data for EOA signers and 65 bytes containing SIGNER | OFFSET | V for contract signers.
-The OFFSET is used to fetch the signature data from the CONTRACT_SIG_DATAS.
+The OFFSET is used to fetch the signature data from the CONTRACT\_SIG\_DATAS.
 
 ## Parameters
 
@@ -66,7 +66,6 @@ The OFFSET is used to fetch the signature data from the CONTRACT_SIG_DATAS.
         a boolean indicating wether or not the UserOperation is using the UPPER\_LIMIT for the gas and fee values
       </td>
     </tr>
-
   </tbody>
 </table>
 

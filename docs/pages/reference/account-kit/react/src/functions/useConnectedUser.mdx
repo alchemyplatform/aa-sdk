@@ -11,7 +11,7 @@ layout: reference
 function useConnectedUser(): UseConnectedUserResult;
 ```
 
-Defined in: [account-kit/react/src/hooks/useConnectedUser.ts:48](https://github.com/alchemyplatform/aa-sdk/blob/17aad1f572375d42a06c7e3238078a88a435d459/account-kit/react/src/hooks/useConnectedUser.ts#L48)
+Defined in: [account-kit/react/src/hooks/useConnectedUser.ts:48](https://github.com/alchemyplatform/aa-sdk/blob/27e36329c103b4660886c9508b86d0a2c5c6c47e/account-kit/react/src/hooks/useConnectedUser.ts#L48)
 
 A React hook that returns the currently connected user across external wallets (EVM or Solana)
 or the smart account user from the client store. It prioritizes the EVM wallet connection, then
@@ -20,10 +20,10 @@ Solana, and finally the smart account user.
 Useful for building UI that needs a single "connected user" concept regardless of whether a
 smart account session exists.
 
-- If an EVM wallet is connected, returns `{ address, type: "eoa", orgId?, userId? }`.
-- If a Solana wallet is connected, returns `{ solanaAddress, type: "eoa", orgId?, userId? }` and
+* If an EVM wallet is connected, returns `{ address, type: "eoa", orgId?, userId? }`.
+* If a Solana wallet is connected, returns `{ solanaAddress, type: "eoa", orgId?, userId? }` and
   `address` may be undefined. `orgId` and `userId` may also be undefined.
-- Otherwise, returns the smart account user from the store with `type: "sca"`, or `null` if no
+* Otherwise, returns the smart account user from the store with `type: "sca"`, or `null` if no
   user exists.
 
 ## Example

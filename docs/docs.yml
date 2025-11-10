@@ -1313,14 +1313,18 @@ navigation:
                     path: wallets/pages/reference/account-kit/core/src/variables/bobaMainnet.mdx
                   - page: bobaSepolia
                     path: wallets/pages/reference/account-kit/core/src/variables/bobaSepolia.mdx
+                  - page: bsc
+                    path: wallets/pages/reference/account-kit/core/src/variables/bsc.mdx
+                  - page: bscTestnet
+                    path: wallets/pages/reference/account-kit/core/src/variables/bscTestnet.mdx
                   - page: buildDeferredActionDigest
                     path: wallets/pages/reference/account-kit/core/src/variables/buildDeferredActionDigest.mdx
                   - page: buildFullNonceKey
                     path: wallets/pages/reference/account-kit/core/src/variables/buildFullNonceKey.mdx
-                  - page: celoAlfajores
-                    path: wallets/pages/reference/account-kit/core/src/variables/celoAlfajores.mdx
                   - page: celoMainnet
                     path: wallets/pages/reference/account-kit/core/src/variables/celoMainnet.mdx
+                  - page: celoSepolia
+                    path: wallets/pages/reference/account-kit/core/src/variables/celoSepolia.mdx
                   - page: convertHeadersToObject
                     path: wallets/pages/reference/account-kit/core/src/variables/convertHeadersToObject.mdx
                   - page: createAlchemyPublicRpcClient
@@ -1329,6 +1333,8 @@ navigation:
                     path: wallets/pages/reference/account-kit/core/src/variables/defaultLightAccountVersion.mdx
                   - page: defineAlchemyChain
                     path: wallets/pages/reference/account-kit/core/src/variables/defineAlchemyChain.mdx
+                  - page: edgeMainnet
+                    path: wallets/pages/reference/account-kit/core/src/variables/edgeMainnet.mdx
                   - page: entityIdAndNonceReaderBytecode
                     path: wallets/pages/reference/account-kit/core/src/variables/entityIdAndNonceReaderBytecode.mdx
                   - page: executeUserOpSelector
@@ -1580,10 +1586,16 @@ navigation:
                     path: wallets/pages/reference/account-kit/infra/src/exports/variables/bobaMainnet.mdx
                   - page: bobaSepolia
                     path: wallets/pages/reference/account-kit/infra/src/exports/variables/bobaSepolia.mdx
-                  - page: celoAlfajores
-                    path: wallets/pages/reference/account-kit/infra/src/exports/variables/celoAlfajores.mdx
+                  - page: bsc
+                    path: wallets/pages/reference/account-kit/infra/src/exports/variables/bsc.mdx
+                  - page: bscTestnet
+                    path: wallets/pages/reference/account-kit/infra/src/exports/variables/bscTestnet.mdx
                   - page: celoMainnet
                     path: wallets/pages/reference/account-kit/infra/src/exports/variables/celoMainnet.mdx
+                  - page: celoSepolia
+                    path: wallets/pages/reference/account-kit/infra/src/exports/variables/celoSepolia.mdx
+                  - page: edgeMainnet
+                    path: wallets/pages/reference/account-kit/infra/src/exports/variables/edgeMainnet.mdx
                   - page: fraxtal
                     path: wallets/pages/reference/account-kit/infra/src/exports/variables/fraxtal.mdx
                   - page: fraxtalSepolia

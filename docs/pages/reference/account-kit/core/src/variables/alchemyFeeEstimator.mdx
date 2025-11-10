@@ -23,13 +23,13 @@ import { alchemyFeeEstimator, alchemy } from "@account-kit/infra";
 import { createSmartAccountClient } from "@aa-sdk/core";
 
 const alchemyTransport = alchemy({
-  chain: sepolia,
-  apiKey: "your-api-key",
+ chain: sepolia,
+ apiKey: "your-api-key"
 });
 
 const client = createSmartAccountClient({
-  feeEstimator: alchemyFeeEstimator(alchemyTransport),
-  ...otherParams,
+ feeEstimator: alchemyFeeEstimator(alchemyTransport),
+ ...otherParams
 });
 ```
 
@@ -58,7 +58,6 @@ const client = createSmartAccountClient({
         An alchemy transport for making Alchemy specific RPC calls
       </td>
     </tr>
-
   </tbody>
 </table>
 

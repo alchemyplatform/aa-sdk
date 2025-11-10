@@ -26,22 +26,16 @@ To reiterate, the signature that is returned must be verified against the accoun
 
 ```ts twoslash
 import { useSignMessage, useSmartAccountClient } from "@account-kit/react";
-const data = "messageToSign";
+const data = "messageToSign"
 const { client } = useSmartAccountClient({});
 
-const {
-  signMessage,
-  signMessageAsync,
-  signedMessage,
-  isSigningMessage,
-  error,
-} = useSignMessage({
-  client,
-  // these are optional
-  onSuccess: (result) => {
-    // do something on success
-  },
-  onError: (error) => console.error(error),
+const { signMessage, signMessageAsync, signedMessage, isSigningMessage, error } = useSignMessage({
+ client,
+ // these are optional
+ onSuccess: (result) => {
+   // do something on success
+ },
+ onError: (error) => console.error(error),
 });
 
 const result = await signMessage({ message: data });
@@ -72,7 +66,6 @@ const result = await signMessage({ message: data });
         The configuration arguments for the hook, including the client and additional mutation arguments. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useSignMessage.ts#L25)
       </td>
     </tr>
-
   </tbody>
 </table>
 

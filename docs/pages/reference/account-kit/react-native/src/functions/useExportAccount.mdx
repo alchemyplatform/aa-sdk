@@ -22,15 +22,15 @@ What is returned is dependent on what you used most recently used to authenticat
 import { useExportAccount } from "@account-kit/react";
 
 const {
-  exportAccount,
-  isExported,
-  isExporting,
-  error,
-  ExportAccountComponent,
+ exportAccount,
+ isExported,
+ isExporting,
+ error,
+ ExportAccountComponent
 } = useExportAccount({
-  params: {
-    iframeContainerId: "my-iframe-container",
-  },
+ params: {
+   iframeContainerId: "my-iframe-container",
+ },
 });
 ```
 
@@ -59,7 +59,6 @@ const {
         Optional arguments for the mutation and export parameters. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useExportAccount.ts#L11)
       </td>
     </tr>
-
   </tbody>
 </table>
 

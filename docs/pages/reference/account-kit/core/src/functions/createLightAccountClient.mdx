@@ -10,15 +10,7 @@ layout: reference
 ## Call Signature
 
 ```ts
-function createLightAccountClient<TSigner>(
-  params,
-): Promise<
-  AlchemySmartAccountClient<
-    undefined | Chain,
-    LightAccount<TSigner>,
-    LightAccountClientActions<TSigner>
-  >
->;
+function createLightAccountClient<TSigner>(params): Promise<AlchemySmartAccountClient<undefined | Chain, LightAccount<TSigner>, LightAccountClientActions<TSigner>>>;
 ```
 
 Defined in: account-kit/smart-contracts/dist/types/src/light-account/clients/client.d.ts:11
@@ -43,7 +35,6 @@ Defined in: account-kit/smart-contracts/dist/types/src/light-account/clients/cli
         `SmartAccountSigner`\<`any`>
       </td>
     </tr>
-
   </tbody>
 </table>
 
@@ -67,7 +58,6 @@ Defined in: account-kit/smart-contracts/dist/types/src/light-account/clients/cli
         `Omit`\<[`CreateLightAccountParams`](../type-aliases/CreateLightAccountParams.mdx)\<[`HttpTransport`](../../../../aa-sdk/core/src/type-aliases/HttpTransport.mdx), `TSigner`>, `"transport"`> & `Omit`\<[`AlchemySmartAccountClientConfig`](../type-aliases/AlchemySmartAccountClientConfig.mdx)\<`Chain`, [`LightAccount`](../type-aliases/LightAccount.mdx)\<`TSigner`>>, `"account"`> & `object`
       </td>
     </tr>
-
   </tbody>
 </table>
 
@@ -78,17 +68,7 @@ Defined in: account-kit/smart-contracts/dist/types/src/light-account/clients/cli
 ## Call Signature
 
 ```ts
-function createLightAccountClient<TChain, TSigner, TTransport>(
-  args,
-): Promise<
-  SmartAccountClient<
-    CustomTransport,
-    TChain,
-    LightAccount<TSigner>,
-    SmartAccountClientActions<Chain, SmartContractAccount> &
-      LightAccountClientActions<TSigner, LightAccount<TSigner>>
-  >
->;
+function createLightAccountClient<TChain, TSigner, TTransport>(args): Promise<SmartAccountClient<CustomTransport, TChain, LightAccount<TSigner>, SmartAccountClientActions<Chain, SmartContractAccount> & LightAccountClientActions<TSigner, LightAccount<TSigner>>>>;
 ```
 
 Defined in: account-kit/smart-contracts/dist/types/src/light-account/clients/client.d.ts:14
@@ -133,7 +113,6 @@ Defined in: account-kit/smart-contracts/dist/types/src/light-account/clients/cli
         `Transport`
       </td>
     </tr>
-
   </tbody>
 </table>
 
@@ -157,7 +136,6 @@ Defined in: account-kit/smart-contracts/dist/types/src/light-account/clients/cli
         `object` & `Omit`\<[`CreateLightAccountParams`](../type-aliases/CreateLightAccountParams.mdx)\<`TTransport`, `TSigner`>, `"chain"` | `"transport"`> & `Omit`\<\{ `account?`: `SmartContractAccount`; `addBreadCrumb?`: \<`T`>(`crumb`) => `T`; `cacheTime?`: `number`; `chain?`: `Chain` | `TChain`; `customMiddleware?`: `ClientMiddlewareFn`\<`undefined` | `UserOperationContext`>; `dummyPaymasterAndData?`: `ClientMiddlewareFn`\<`undefined` | `UserOperationContext`>; `feeEstimator?`: `ClientMiddlewareFn`\<`undefined` | `UserOperationContext`>; `gasEstimator?`: `ClientMiddlewareFn`\<`undefined` | `UserOperationContext`>; `key?`: `string`; `name?`: `string`; `opts?`: \{ `feeOptions?`: \{ `callGasLimit?`: \{ `max?`: `number` | `bigint` | `` `0x${(...)}` ``; `min?`: `number` | `bigint` | `` `0x${(...)}` ``; `multiplier?`: `number`; }; `maxFeePerGas?`: \{ `max?`: `number` | `bigint` | `` `0x${(...)}` ``; `min?`: `number` | `bigint` | `` `0x${(...)}` ``; `multiplier?`: `number`; }; `maxPriorityFeePerGas?`: \{ `max?`: `number` | `bigint` | `` `0x${(...)}` ``; `min?`: `number` | `bigint` | `` `0x${(...)}` ``; `multiplier?`: `number`; }; `paymasterPostOpGasLimit?`: \{ `max?`: `number` | `bigint` | `` `0x${(...)}` ``; `min?`: `number` | `bigint` | `` `0x${(...)}` ``; `multiplier?`: `number`; }; `paymasterVerificationGasLimit?`: \{ `max?`: `number` | `bigint` | `` `0x${(...)}` ``; `min?`: `number` | `bigint` | `` `0x${(...)}` ``; `multiplier?`: `number`; }; `preVerificationGas?`: \{ `max?`: `number` | `bigint` | `` `0x${(...)}` ``; `min?`: `number` | `bigint` | `` `0x${(...)}` ``; `multiplier?`: `number`; }; `verificationGasLimit?`: \{ `max?`: `number` | `bigint` | `` `0x${(...)}` ``; `min?`: `number` | `bigint` | `` `0x${(...)}` ``; `multiplier?`: `number`; }; }; `txMaxRetries?`: `number`; `txRetryIntervalMs?`: `number`; `txRetryMultiplier?`: `number`; }; `paymasterAndData?`: `ClientMiddlewareFn`\<`undefined` | `UserOperationContext`>; `pollingInterval?`: `number`; `signUserOperation?`: `ClientMiddlewareFn`\<`undefined` | `UserOperationContext`>; `transport`: `TTransport`; `type?`: `string`; `userOperationSimulator?`: `ClientMiddlewareFn`\<`undefined` | `UserOperationContext`>; }, `"account"` | `"chain"` | `"transport"`> & `NotType`\<`TTransport`, [`AlchemyTransport`](../type-aliases/AlchemyTransport.mdx)>
       </td>
     </tr>
-
   </tbody>
 </table>
 

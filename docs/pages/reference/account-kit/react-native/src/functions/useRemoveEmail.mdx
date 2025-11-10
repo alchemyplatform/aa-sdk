@@ -21,11 +21,11 @@ A custom hook to handle the removal of an email from an already authenticated ac
 import { useRemoveEmail } from "@account-kit/react";
 
 const { removeEmail, isRemovingEmail, error } = useRemoveEmail({
-  // these are optional
-  onSuccess: () => {
-    // do something on success
-  },
-  onError: (error) => console.error(error),
+ // these are optional
+ onSuccess: () => {
+   // do something on success
+ },
+ onError: (error) => console.error(error),
 });
 ```
 
@@ -54,7 +54,6 @@ const { removeEmail, isRemovingEmail, error } = useRemoveEmail({
         Optional arguments for the mutation used for removing an email.
       </td>
     </tr>
-
   </tbody>
 </table>
 

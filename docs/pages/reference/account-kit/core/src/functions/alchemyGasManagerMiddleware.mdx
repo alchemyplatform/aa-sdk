@@ -9,12 +9,9 @@ layout: reference
 
 ```ts
 function alchemyGasManagerMiddleware(
-  policyId,
-  policyToken?,
-  webhookData?,
-): Required<
-  Pick<ClientMiddlewareConfig, "dummyPaymasterAndData" | "paymasterAndData">
->;
+   policyId, 
+   policyToken?, 
+   webhookData?): Required<Pick<ClientMiddlewareConfig, "dummyPaymasterAndData" | "paymasterAndData">>;
 ```
 
 Defined in: account-kit/infra/dist/types/middleware/gasManager.d.ts:45
@@ -29,9 +26,9 @@ import { sepolia, alchemyGasManagerMiddleware } from "@account-kit/infra";
 import { http } from "viem";
 
 const client = createSmartAccountClient({
-  transport: http("rpc-url"),
-  chain: sepolia,
-  ...alchemyGasManagerMiddleware("policyId"),
+ transport: http("rpc-url"),
+ chain: sepolia,
+ ...alchemyGasManagerMiddleware("policyId")
 });
 ```
 
@@ -88,7 +85,6 @@ const client = createSmartAccountClient({
         The webhook data to include in the request
       </td>
     </tr>
-
   </tbody>
 </table>
 

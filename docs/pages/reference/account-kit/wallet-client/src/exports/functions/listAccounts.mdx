@@ -9,19 +9,18 @@ layout: reference
 
 ```ts
 function listAccounts(
-  client,
-  signer,
-  params,
-): Promise<{
+   client, 
+   signer, 
+   params): Promise<{
   accounts: object[];
   meta: {
-    after: null | string;
-    totalCount: number;
+     after: null | string;
+     totalCount: number;
   };
 }>;
 ```
 
-Defined in: [account-kit/wallet-client/src/client/actions/listAccounts.ts:57](https://github.com/alchemyplatform/aa-sdk/blob/17aad1f572375d42a06c7e3238078a88a435d459/account-kit/wallet-client/src/client/actions/listAccounts.ts#L57)
+Defined in: [account-kit/wallet-client/src/client/actions/listAccounts.ts:57](https://github.com/alchemyplatform/aa-sdk/blob/27e36329c103b4660886c9508b86d0a2c5c6c47e/account-kit/wallet-client/src/client/actions/listAccounts.ts#L57)
 
 Lists all smart accounts for a given signer using the wallet API client.
 
@@ -31,14 +30,14 @@ Lists all smart accounts for a given signer using the wallet API client.
 // Fetch the first page of accounts
 const firstPage = await client.listAccounts({
   signerAddress: "0x123...",
-  limit: 10,
+  limit: 10
 });
 
 // If an 'after' cursor exists, use it to fetch the next page
 const nextPage = await client.listAccounts({
   signerAddress: "0x123...",
   limit: 10,
-  after: firstPage.meta.after,
+  after: firstPage.meta.after
 });
 ```
 
@@ -95,7 +94,6 @@ const nextPage = await client.listAccounts({
         Parameters for listing accounts
       </td>
     </tr>
-
   </tbody>
 </table>
 

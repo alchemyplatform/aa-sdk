@@ -10,30 +10,7 @@ layout: reference
 ## Call Signature
 
 ```ts
-function createMultisigModularAccountClient<TSigner>(
-  params,
-): Promise<
-  AlchemySmartAccountClient<
-    undefined | Chain,
-    MultisigModularAccount<TSigner>,
-    ExecutionActions<
-      MultisigModularAccount<TSigner>,
-      MultisigUserOperationContext,
-      keyof EntryPointRegistryBase<unknown>
-    > &
-      ManagementActions<
-        MultisigModularAccount<TSigner>,
-        MultisigUserOperationContext,
-        keyof EntryPointRegistryBase<unknown>
-      > &
-      ReadAndEncodeActions<MultisigModularAccount<TSigner>> &
-      object &
-      object &
-      PluginManagerActions<MultisigModularAccount<TSigner>> &
-      AccountLoupeActions<MultisigModularAccount<TSigner>>,
-    MultisigUserOperationContext
-  >
->;
+function createMultisigModularAccountClient<TSigner>(params): Promise<AlchemySmartAccountClient<undefined | Chain, MultisigModularAccount<TSigner>, ExecutionActions<MultisigModularAccount<TSigner>, MultisigUserOperationContext, keyof EntryPointRegistryBase<unknown>> & ManagementActions<MultisigModularAccount<TSigner>, MultisigUserOperationContext, keyof EntryPointRegistryBase<unknown>> & ReadAndEncodeActions<MultisigModularAccount<TSigner>> & object & object & PluginManagerActions<MultisigModularAccount<TSigner>> & AccountLoupeActions<MultisigModularAccount<TSigner>>, MultisigUserOperationContext>>;
 ```
 
 Defined in: account-kit/smart-contracts/dist/types/src/msca/client/client.d.ts:21
@@ -58,7 +35,6 @@ Defined in: account-kit/smart-contracts/dist/types/src/msca/client/client.d.ts:2
         `SmartAccountSigner`\<`any`>
       </td>
     </tr>
-
   </tbody>
 </table>
 
@@ -82,7 +58,6 @@ Defined in: account-kit/smart-contracts/dist/types/src/msca/client/client.d.ts:2
         [`AlchemyMultisigAccountClientConfig`](../type-aliases/AlchemyMultisigAccountClientConfig.mdx)\<`TSigner`>
       </td>
     </tr>
-
   </tbody>
 </table>
 
@@ -93,53 +68,23 @@ Defined in: account-kit/smart-contracts/dist/types/src/msca/client/client.d.ts:2
 ## Call Signature
 
 ```ts
-function createMultisigModularAccountClient<TTransport, TChain, TSigner>(
-  args,
-): Promise<
-  SmartAccountClient<
-    CustomTransport,
-    Chain,
-    MultisigModularAccount<TSigner>,
-    ExecutionActions<
-      MultisigModularAccount<TSigner>,
-      MultisigUserOperationContext,
-      keyof EntryPointRegistryBase<unknown>
-    > &
-      ManagementActions<
-        MultisigModularAccount<TSigner>,
-        MultisigUserOperationContext,
-        keyof EntryPointRegistryBase<unknown>
-      > &
-      ReadAndEncodeActions<MultisigModularAccount<TSigner>> &
-      object &
-      object &
-      PluginManagerActions<MultisigModularAccount<TSigner>> &
-      AccountLoupeActions<MultisigModularAccount<TSigner>>,
-    [
-      {
-        Method: "eth_sendUserOperation";
-        Parameters: [UserOperationRequest, `0x${string}`];
-        ReturnType: `0x${string}`;
-      },
-      {
-        Method: "eth_estimateUserOperationGas";
-        Parameters: [UserOperationRequest, `0x${string}`, RpcStateOverride?];
-        ReturnType: UserOperationEstimateGasResponse;
-      },
-      {
-        Method: "eth_getUserOperationReceipt";
-        Parameters: [`0x${string}`, ("latest" | "pending")?];
-        ReturnType: null | UserOperationReceipt;
-      },
-      {
-        Method: "eth_getUserOperationByHash";
-        Parameters: [`0x${string}`];
-        ReturnType: null | UserOperationResponse<EntryPointVersion>;
-      },
-    ],
-    MultisigUserOperationContext
-  >
->;
+function createMultisigModularAccountClient<TTransport, TChain, TSigner>(args): Promise<SmartAccountClient<CustomTransport, Chain, MultisigModularAccount<TSigner>, ExecutionActions<MultisigModularAccount<TSigner>, MultisigUserOperationContext, keyof EntryPointRegistryBase<unknown>> & ManagementActions<MultisigModularAccount<TSigner>, MultisigUserOperationContext, keyof EntryPointRegistryBase<unknown>> & ReadAndEncodeActions<MultisigModularAccount<TSigner>> & object & object & PluginManagerActions<MultisigModularAccount<TSigner>> & AccountLoupeActions<MultisigModularAccount<TSigner>>, [{
+  Method: "eth_sendUserOperation";
+  Parameters: [UserOperationRequest, `0x${string}`];
+  ReturnType: `0x${string}`;
+}, {
+  Method: "eth_estimateUserOperationGas";
+  Parameters: [UserOperationRequest, `0x${string}`, RpcStateOverride?];
+  ReturnType: UserOperationEstimateGasResponse;
+}, {
+  Method: "eth_getUserOperationReceipt";
+  Parameters: [`0x${string}`, ("latest" | "pending")?];
+  ReturnType: null | UserOperationReceipt;
+}, {
+  Method: "eth_getUserOperationByHash";
+  Parameters: [`0x${string}`];
+  ReturnType: null | UserOperationResponse<EntryPointVersion>;
+}], MultisigUserOperationContext>>;
 ```
 
 Defined in: account-kit/smart-contracts/dist/types/src/msca/client/client.d.ts:22
@@ -184,7 +129,6 @@ Defined in: account-kit/smart-contracts/dist/types/src/msca/client/client.d.ts:2
         `SmartAccountSigner`\<`any`>
       </td>
     </tr>
-
   </tbody>
 </table>
 
@@ -208,7 +152,6 @@ Defined in: account-kit/smart-contracts/dist/types/src/msca/client/client.d.ts:2
         `CreateMultisigModularAccountClientParams`\<`TTransport`, `TChain`, `TSigner`> & `NotType`\<`TTransport`, [`AlchemyTransport`](../type-aliases/AlchemyTransport.mdx)>
       </td>
     </tr>
-
   </tbody>
 </table>
 

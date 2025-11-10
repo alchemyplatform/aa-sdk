@@ -11,7 +11,7 @@ layout: reference
 function RNAlchemySigner(params): RNAlchemySignerSingleton;
 ```
 
-Defined in: [account-kit/rn-signer/src/signer.ts:80](https://github.com/alchemyplatform/aa-sdk/blob/17aad1f572375d42a06c7e3238078a88a435d459/account-kit/rn-signer/src/signer.ts#L80)
+Defined in: [account-kit/rn-signer/src/signer.ts:80](https://github.com/alchemyplatform/aa-sdk/blob/27e36329c103b4660886c9508b86d0a2c5c6c47e/account-kit/rn-signer/src/signer.ts#L80)
 
 Factory function to create or retrieve a singleton instance of RNAlchemySigner.
 
@@ -21,15 +21,15 @@ Factory function to create or retrieve a singleton instance of RNAlchemySigner.
 import { RNAlchemySigner } from "@account-kit/react-native-signer";
 
 const signer = RNAlchemySigner({
-  client: {
-    connection: {
-      apiKey: "YOUR_API_KEY",
-    },
-  },
-  // optional config to override default session manager configs
-  sessionConfig: {
-    expirationTimeMs: 1000 * 60 * 60, // 60 minutes
-  },
+ client: {
+   connection: {
+     apiKey: "YOUR_API_KEY"
+   },
+ },
+ // optional config to override default session manager configs
+ sessionConfig: {
+   expirationTimeMs: 1000 * 60 * 60 // 60 minutes
+ }
 });
 ```
 
@@ -114,7 +114,6 @@ const signer = RNAlchemySigner({
         ‐
       </td>
     </tr>
-
   </tbody>
 </table>
 

@@ -327,7 +327,7 @@ function prepareCalls<TAccount>(client, params): Promise<
 }>;
 ```
 
-Defined in: [account-kit/wallet-client/src/client/actions/prepareCalls.ts:57](https://github.com/alchemyplatform/aa-sdk/blob/17aad1f572375d42a06c7e3238078a88a435d459/account-kit/wallet-client/src/client/actions/prepareCalls.ts#L57)
+Defined in: [account-kit/wallet-client/src/client/actions/prepareCalls.ts:57](https://github.com/alchemyplatform/aa-sdk/blob/27e36329c103b4660886c9508b86d0a2c5c6c47e/account-kit/wallet-client/src/client/actions/prepareCalls.ts#L57)
 
 Prepares a set of contract calls for execution by building a user operation.
 Returns the built user operation and a signature request that needs to be signed
@@ -338,16 +338,14 @@ before submitting to sendPreparedCalls.
 ```ts
 // Prepare a sponsored user operation call
 const result = await client.prepareCalls({
-  calls: [
-    {
-      to: "0x1234...",
-      data: "0xabcdef...",
-      value: "0x0",
-    },
-  ],
+  calls: [{
+    to: "0x1234...",
+    data: "0xabcdef...",
+    value: "0x0"
+  }],
   capabilities: {
-    paymasterService: { policyId: "your-policy-id" },
-  },
+    paymasterService: { policyId: "your-policy-id" }
+  }
 });
 ```
 
@@ -371,7 +369,6 @@ const result = await client.prepareCalls({
         `undefined` | `` `0x${string}` ``
       </td>
     </tr>
-
   </tbody>
 </table>
 
@@ -414,7 +411,6 @@ const result = await client.prepareCalls({
         Parameters for preparing calls
       </td>
     </tr>
-
   </tbody>
 </table>
 
@@ -440,8 +436,8 @@ const result = await client.prepareCalls({
 `sponsored`: `boolean`;
 `tokenAddress`: `` `0x${string}` ``;
 };
-`signatureRequest?`: | \{
-`data`: | `string`
+`signatureRequest?`:   | \{
+`data`:   | `string`
 | \{
 `raw`: `` `0x${string}` ``;
 };
@@ -489,8 +485,8 @@ const result = await client.prepareCalls({
 `sponsored`: `boolean`;
 `tokenAddress`: `` `0x${string}` ``;
 };
-`signatureRequest?`: | \{
-`data`: | `string`
+`signatureRequest?`:   | \{
+`data`:   | `string`
 | \{
 `raw`: `` `0x${string}` ``;
 };
@@ -531,37 +527,37 @@ const result = await client.prepareCalls({
 `modifiedRequest`: \{
 `calls`: `object`\[];
 `capabilities?`: \{
-`eip7702Auth?`: | `true`
+`eip7702Auth?`:   | `true`
 | \{
 `account?`: `` `0x${string}` ``;
 `delegation`: `"ModularAccountV2"` | `"0x69007702764179f14F51cdce752f4f775d74E139"`;
 };
 `gasParamsOverride?`: \{
-`callGasLimit?`: | `` `0x${string}` ``
+`callGasLimit?`:   | `` `0x${string}` ``
 | \{
 `multiplier`: `number`;
 };
-`maxFeePerGas?`: | `` `0x${string}` ``
+`maxFeePerGas?`:   | `` `0x${string}` ``
 | \{
 `multiplier`: `number`;
 };
-`maxPriorityFeePerGas?`: | `` `0x${string}` ``
+`maxPriorityFeePerGas?`:   | `` `0x${string}` ``
 | \{
 `multiplier`: `number`;
 };
-`paymasterPostOpGasLimit?`: | `` `0x${string}` ``
+`paymasterPostOpGasLimit?`:   | `` `0x${string}` ``
 | \{
 `multiplier`: `number`;
 };
-`paymasterVerificationGasLimit?`: | `` `0x${string}` ``
+`paymasterVerificationGasLimit?`:   | `` `0x${string}` ``
 | \{
 `multiplier`: `number`;
 };
-`preVerificationGas?`: | `` `0x${string}` ``
+`preVerificationGas?`:   | `` `0x${string}` ``
 | \{
 `multiplier`: `number`;
 };
-`verificationGasLimit?`: | `` `0x${string}` ``
+`verificationGasLimit?`:   | `` `0x${string}` ``
 | \{
 `multiplier`: `number`;
 };
@@ -570,7 +566,7 @@ const result = await client.prepareCalls({
 `nonceKey`: `` `0x${string}` ``;
 };
 `paymasterService?`: (\{ policyId: string; } | \{ policyIds: string\[]; }) & \{ onlyEstimation?: boolean | undefined; erc20?: \{ maxTokenAmount?: \`0x$\{string}\` | undefined; tokenAddress: \`0x$\{string}\`; preOpSettings: \{ autoPermit: \{ ...; }; }; } | \{ ...; } | \{ ...; } | \{ ...; } | undefined; webhookData?: string | undefined; };
-`permissions?`: | \{
+`permissions?`:   | \{
 `context`: `` `0x${string}` ``;
 }
 | \{
@@ -580,8 +576,8 @@ const result = await client.prepareCalls({
 };
 `chainId`: `` `0x${string}` ``;
 `from`: `` `0x${string}` ``;
-`paymasterPermitSignature?`: | \{
-`data`: | `` `0x${string}` ``
+`paymasterPermitSignature?`:   | \{
+`data`:   | `` `0x${string}` ``
 | \{
 `r`: `` `0x${string}` ``;
 `s`: `` `0x${string}` ``;
@@ -595,7 +591,7 @@ const result = await client.prepareCalls({
 `type`: `"secp256k1"`;
 }
 | \{
-`data`: | `` `0x${string}` ``
+`data`:   | `` `0x${string}` ``
 | \{
 `r`: `` `0x${string}` ``;
 `s`: `` `0x${string}` ``;
@@ -648,8 +644,8 @@ const result = await client.prepareCalls({
 `sponsored`: `boolean`;
 `tokenAddress`: `` `0x${string}` ``;
 };
-`signatureRequest?`: | \{
-`data`: | `string`
+`signatureRequest?`:   | \{
+`data`:   | `string`
 | \{
 `raw`: `` `0x${(...)}` ``;
 };
@@ -697,8 +693,8 @@ const result = await client.prepareCalls({
 `sponsored`: `boolean`;
 `tokenAddress`: `` `0x${string}` ``;
 };
-`signatureRequest?`: | \{
-`data`: | `string`
+`signatureRequest?`:   | \{
+`data`:   | `string`
 | \{
 `raw`: `` `0x${(...)}` ``;
 };

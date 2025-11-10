@@ -10,29 +10,7 @@ layout: reference
 ## Call Signature
 
 ```ts
-function createMultiOwnerModularAccountClient<TSigner>(
-  params,
-): Promise<
-  AlchemySmartAccountClient<
-    undefined | Chain,
-    MultiOwnerModularAccount<TSigner>,
-    ExecutionActions<
-      MultiOwnerModularAccount<TSigner>,
-      undefined,
-      keyof EntryPointRegistryBase<unknown>
-    > &
-      ManagementActions<
-        MultiOwnerModularAccount<TSigner>,
-        undefined,
-        keyof EntryPointRegistryBase<unknown>
-      > &
-      ReadAndEncodeActions<MultiOwnerModularAccount<TSigner>> &
-      object &
-      object &
-      PluginManagerActions<MultiOwnerModularAccount<TSigner>> &
-      AccountLoupeActions<MultiOwnerModularAccount<TSigner>>
-  >
->;
+function createMultiOwnerModularAccountClient<TSigner>(params): Promise<AlchemySmartAccountClient<undefined | Chain, MultiOwnerModularAccount<TSigner>, ExecutionActions<MultiOwnerModularAccount<TSigner>, undefined, keyof EntryPointRegistryBase<unknown>> & ManagementActions<MultiOwnerModularAccount<TSigner>, undefined, keyof EntryPointRegistryBase<unknown>> & ReadAndEncodeActions<MultiOwnerModularAccount<TSigner>> & object & object & PluginManagerActions<MultiOwnerModularAccount<TSigner>> & AccountLoupeActions<MultiOwnerModularAccount<TSigner>>>>;
 ```
 
 Defined in: account-kit/smart-contracts/dist/types/src/msca/client/client.d.ts:17
@@ -57,7 +35,6 @@ Defined in: account-kit/smart-contracts/dist/types/src/msca/client/client.d.ts:1
         `SmartAccountSigner`\<`any`>
       </td>
     </tr>
-
   </tbody>
 </table>
 
@@ -81,7 +58,6 @@ Defined in: account-kit/smart-contracts/dist/types/src/msca/client/client.d.ts:1
         `Omit`\<[`CreateMultiOwnerModularAccountParams`](../type-aliases/CreateMultiOwnerModularAccountParams.mdx)\<[`HttpTransport`](../../../../aa-sdk/core/src/type-aliases/HttpTransport.mdx), `TSigner`>, `"transport"`> & `Omit`\<[`AlchemySmartAccountClientConfig`](../type-aliases/AlchemySmartAccountClientConfig.mdx)\<`Chain`, [`LightAccount`](../type-aliases/LightAccount.mdx)\<`TSigner`>>, `"account"`> & `object`
       </td>
     </tr>
-
   </tbody>
 </table>
 
@@ -92,30 +68,7 @@ Defined in: account-kit/smart-contracts/dist/types/src/msca/client/client.d.ts:1
 ## Call Signature
 
 ```ts
-function createMultiOwnerModularAccountClient<TTransport, TChain, TSigner>(
-  args,
-): Promise<
-  SmartAccountClient<
-    CustomTransport,
-    Chain,
-    MultiOwnerModularAccount<TSigner>,
-    ExecutionActions<
-      MultiOwnerModularAccount<TSigner>,
-      undefined,
-      keyof EntryPointRegistryBase<unknown>
-    > &
-      ManagementActions<
-        MultiOwnerModularAccount<TSigner>,
-        undefined,
-        keyof EntryPointRegistryBase<unknown>
-      > &
-      ReadAndEncodeActions<MultiOwnerModularAccount<TSigner>> &
-      object &
-      object &
-      PluginManagerActions<MultiOwnerModularAccount<TSigner>> &
-      AccountLoupeActions<MultiOwnerModularAccount<TSigner>>
-  >
->;
+function createMultiOwnerModularAccountClient<TTransport, TChain, TSigner>(args): Promise<SmartAccountClient<CustomTransport, Chain, MultiOwnerModularAccount<TSigner>, ExecutionActions<MultiOwnerModularAccount<TSigner>, undefined, keyof EntryPointRegistryBase<unknown>> & ManagementActions<MultiOwnerModularAccount<TSigner>, undefined, keyof EntryPointRegistryBase<unknown>> & ReadAndEncodeActions<MultiOwnerModularAccount<TSigner>> & object & object & PluginManagerActions<MultiOwnerModularAccount<TSigner>> & AccountLoupeActions<MultiOwnerModularAccount<TSigner>>>>;
 ```
 
 Defined in: account-kit/smart-contracts/dist/types/src/msca/client/client.d.ts:20
@@ -160,7 +113,6 @@ Defined in: account-kit/smart-contracts/dist/types/src/msca/client/client.d.ts:2
         `SmartAccountSigner`\<`any`>
       </td>
     </tr>
-
   </tbody>
 </table>
 
@@ -184,7 +136,6 @@ Defined in: account-kit/smart-contracts/dist/types/src/msca/client/client.d.ts:2
         `CreateMultiOwnerModularAccountClientParams`\<`TTransport`, `TChain`, `TSigner`> & `NotType`\<`TTransport`, [`AlchemyTransport`](../type-aliases/AlchemyTransport.mdx)>
       </td>
     </tr>
-
   </tbody>
 </table>
 

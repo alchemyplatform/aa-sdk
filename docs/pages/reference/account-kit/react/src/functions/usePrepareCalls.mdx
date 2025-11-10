@@ -11,7 +11,7 @@ layout: reference
 function usePrepareCalls(params): UsePrepareCallsResult;
 ```
 
-Defined in: [account-kit/react/src/hooks/usePrepareCalls.ts:88](https://github.com/alchemyplatform/aa-sdk/blob/17aad1f572375d42a06c7e3238078a88a435d459/account-kit/react/src/hooks/usePrepareCalls.ts#L88)
+Defined in: [account-kit/react/src/hooks/usePrepareCalls.ts:88](https://github.com/alchemyplatform/aa-sdk/blob/27e36329c103b4660886c9508b86d0a2c5c6c47e/account-kit/react/src/hooks/usePrepareCalls.ts#L88)
 
 Hook for preparing calls to a smart account.
 
@@ -23,18 +23,15 @@ It handles the preparation step of the Account Abstraction flow, but does not su
 ```ts twoslash
 import { usePrepareCalls } from "@account-kit/react";
 
-const { prepareCalls, prepareCallsAsync, isPreparingCalls, error } =
-  usePrepareCalls();
+const { prepareCalls, prepareCallsAsync, isPreparingCalls, error } = usePrepareCalls();
 
 // Prepare calls
 await prepareCallsAsync({
-  calls: [
-    {
-      to: "0x...",
-      data: "0x...",
-      value: "0x0",
-    },
-  ],
+  calls: [{
+    to: "0x...",
+    data: "0x...",
+    value: "0x0"
+  }]
 });
 ```
 
@@ -63,7 +60,6 @@ await prepareCallsAsync({
         Configuration parameters for the hook
       </td>
     </tr>
-
   </tbody>
 </table>
 
@@ -73,14 +69,14 @@ await prepareCallsAsync({
 
 An object containing:
 
-- `prepareCalls`: Function to prepare calls synchronously (returns void)
-- `prepareCallsAsync`: Async function to prepare calls (returns Promise)
-- `preparedCalls`: The result of the last successful call preparation
-- `isPreparingCalls`: Boolean indicating if calls are currently being prepared
-- `error`: Error from the last failed call preparation, if any
+* `prepareCalls`: Function to prepare calls synchronously (returns void)
+* `prepareCallsAsync`: Async function to prepare calls (returns Promise)
+* `preparedCalls`: The result of the last successful call preparation
+* `isPreparingCalls`: Boolean indicating if calls are currently being prepared
+* `error`: Error from the last failed call preparation, if any
 
 ## Description
 
-- This hook only works with smart accounts and does not support EOA wallets
-- The hook handles the preparation step of the Account Abstraction flow
-- Prepared calls must be signed, then can be used with `useSendPreparedCalls` to complete the execution
+* This hook only works with smart accounts and does not support EOA wallets
+* The hook handles the preparation step of the Account Abstraction flow
+* Prepared calls must be signed, then can be used with `useSendPreparedCalls` to complete the execution

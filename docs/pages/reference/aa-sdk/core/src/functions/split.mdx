@@ -11,7 +11,7 @@ layout: reference
 function split(params): CustomTransport;
 ```
 
-Defined in: [aa-sdk/core/src/transport/split.ts:43](https://github.com/alchemyplatform/aa-sdk/blob/17aad1f572375d42a06c7e3238078a88a435d459/aa-sdk/core/src/transport/split.ts#L43)
+Defined in: [aa-sdk/core/src/transport/split.ts:43](https://github.com/alchemyplatform/aa-sdk/blob/27e36329c103b4660886c9508b86d0a2c5c6c47e/aa-sdk/core/src/transport/split.ts#L43)
 
 The Split Transport allows you to split RPC traffic for specific methods across
 different RPC providers. This is done by specifying the methods you want handled
@@ -24,23 +24,21 @@ import { createPublicClient, http } from "viem";
 import { split } from "@aa-sdk/core";
 
 const bundlerMethods = [
-  "eth_sendUserOperation",
-  "eth_estimateUserOperationGas",
-  "eth_getUserOperationReceipt",
-  "eth_getUserOperationByHash",
-  "eth_supportedEntryPoints",
+ "eth_sendUserOperation",
+ "eth_estimateUserOperationGas",
+ "eth_getUserOperationReceipt",
+ "eth_getUserOperationByHash",
+ "eth_supportedEntryPoints"
 ];
 
 const clientWithSplit = createPublicClient({
-  transport: split({
-    overrides: [
-      {
-        methods: bundlerMethods,
-        transport: http(BUNDLER_RPC_URL),
-      },
-    ],
-    fallback: http(OTHER_RPC_URL),
-  }),
+ transport: split({
+     overrides: [{
+         methods: bundlerMethods,
+         transport: http(BUNDLER_RPC_URL)
+     }],
+     fallback: http(OTHER_RPC_URL)
+ }),
 });
 ```
 
@@ -69,7 +67,6 @@ const clientWithSplit = createPublicClient({
         split transport configuration containing the methods overrides and fallback transport
       </td>
     </tr>
-
   </tbody>
 </table>
 

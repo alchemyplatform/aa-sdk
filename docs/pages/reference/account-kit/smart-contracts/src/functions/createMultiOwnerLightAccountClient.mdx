@@ -15,12 +15,12 @@ Creates a multi-owner light account client using the provided parameters. It fir
 import { createMultiOwnerLightAccountClient } from "@account-kit/smart-contracts";
 import { LocalAccountSigner } from "@aa-sdk/core";
 import { sepolia } from "viem/chains";
-import { http, generatePrivateKey } from "viem";
+import { http, generatePrivateKey } from "viem"
 
 const account = await createMultiOwnerLightAccountClient({
-  chain: sepolia,
-  transport: http("RPC_URL"),
-  signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
+ chain: sepolia,
+ transport: http("RPC_URL"),
+ signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey())
 });
 ```
 
@@ -46,18 +46,10 @@ the configuration for creating the multi-owner light / alchemy account client wi
 ## Call Signature
 
 ```ts
-function createMultiOwnerLightAccountClient<TSigner>(
-  params,
-): Promise<
-  AlchemySmartAccountClient<
-    undefined | Chain,
-    MultiOwnerLightAccount<TSigner>,
-    MultiOwnerLightAccountClientActions<TSigner>
-  >
->;
+function createMultiOwnerLightAccountClient<TSigner>(params): Promise<AlchemySmartAccountClient<undefined | Chain, MultiOwnerLightAccount<TSigner>, MultiOwnerLightAccountClientActions<TSigner>>>;
 ```
 
-Defined in: [account-kit/smart-contracts/src/light-account/clients/multiOwnerLightAccount.ts:55](https://github.com/alchemyplatform/aa-sdk/blob/17aad1f572375d42a06c7e3238078a88a435d459/account-kit/smart-contracts/src/light-account/clients/multiOwnerLightAccount.ts#L55)
+Defined in: [account-kit/smart-contracts/src/light-account/clients/multiOwnerLightAccount.ts:55](https://github.com/alchemyplatform/aa-sdk/blob/27e36329c103b4660886c9508b86d0a2c5c6c47e/account-kit/smart-contracts/src/light-account/clients/multiOwnerLightAccount.ts#L55)
 
 ### Type Parameters
 
@@ -79,7 +71,6 @@ Defined in: [account-kit/smart-contracts/src/light-account/clients/multiOwnerLig
         `SmartAccountSigner`\<`any`>
       </td>
     </tr>
-
   </tbody>
 </table>
 
@@ -103,7 +94,6 @@ Defined in: [account-kit/smart-contracts/src/light-account/clients/multiOwnerLig
         `Omit`\<[`CreateMultiOwnerLightAccountParams`](../../../core/src/type-aliases/CreateMultiOwnerLightAccountParams.mdx)\<[`HttpTransport`](../../../../aa-sdk/core/src/type-aliases/HttpTransport.mdx), `TSigner`>, `"type"` | `"transport"`> & `Omit`\<[`AlchemySmartAccountClientConfig`](../../../core/src/type-aliases/AlchemySmartAccountClientConfig.mdx)\<`Chain`, [`MultiOwnerLightAccount`](../../../core/src/type-aliases/MultiOwnerLightAccount.mdx)\<`TSigner`>>, `"account"`> & `object`
       </td>
     </tr>
-
   </tbody>
 </table>
 
@@ -114,23 +104,10 @@ Defined in: [account-kit/smart-contracts/src/light-account/clients/multiOwnerLig
 ## Call Signature
 
 ```ts
-function createMultiOwnerLightAccountClient<TTransport, TChain, TSigner>(
-  args,
-): Promise<
-  SmartAccountClient<
-    CustomTransport,
-    Chain,
-    MultiOwnerLightAccount<TSigner>,
-    SmartAccountClientActions<Chain, SmartContractAccount> &
-      MultiOwnerLightAccountClientActions<
-        TSigner,
-        MultiOwnerLightAccount<TSigner>
-      >
-  >
->;
+function createMultiOwnerLightAccountClient<TTransport, TChain, TSigner>(args): Promise<SmartAccountClient<CustomTransport, Chain, MultiOwnerLightAccount<TSigner>, SmartAccountClientActions<Chain, SmartContractAccount> & MultiOwnerLightAccountClientActions<TSigner, MultiOwnerLightAccount<TSigner>>>>;
 ```
 
-Defined in: [account-kit/smart-contracts/src/light-account/clients/multiOwnerLightAccount.ts:69](https://github.com/alchemyplatform/aa-sdk/blob/17aad1f572375d42a06c7e3238078a88a435d459/account-kit/smart-contracts/src/light-account/clients/multiOwnerLightAccount.ts#L69)
+Defined in: [account-kit/smart-contracts/src/light-account/clients/multiOwnerLightAccount.ts:69](https://github.com/alchemyplatform/aa-sdk/blob/27e36329c103b4660886c9508b86d0a2c5c6c47e/account-kit/smart-contracts/src/light-account/clients/multiOwnerLightAccount.ts#L69)
 
 ### Type Parameters
 
@@ -172,7 +149,6 @@ Defined in: [account-kit/smart-contracts/src/light-account/clients/multiOwnerLig
         `SmartAccountSigner`\<`any`>
       </td>
     </tr>
-
   </tbody>
 </table>
 
@@ -196,7 +172,6 @@ Defined in: [account-kit/smart-contracts/src/light-account/clients/multiOwnerLig
         `object` & `Omit`\<[`CreateMultiOwnerLightAccountParams`](../../../core/src/type-aliases/CreateMultiOwnerLightAccountParams.mdx)\<`TTransport`, `TSigner`>, `"chain"` | `"transport"`> & `Omit`\<\{ `account?`: `SmartContractAccount`; `addBreadCrumb?`: \<`T`>(`crumb`) => `T`; `cacheTime?`: `number`; `chain?`: `Chain` | `TChain`; `customMiddleware?`: `ClientMiddlewareFn`\<`undefined` | `UserOperationContext`>; `dummyPaymasterAndData?`: `ClientMiddlewareFn`\<`undefined` | `UserOperationContext`>; `feeEstimator?`: `ClientMiddlewareFn`\<`undefined` | `UserOperationContext`>; `gasEstimator?`: `ClientMiddlewareFn`\<`undefined` | `UserOperationContext`>; `key?`: `string`; `name?`: `string`; `opts?`: \{ `feeOptions?`: \{ `callGasLimit?`: \{ `max?`: `number` | `bigint` | `` `0x${(...)}` ``; `min?`: `number` | `bigint` | `` `0x${(...)}` ``; `multiplier?`: `number`; }; `maxFeePerGas?`: \{ `max?`: `number` | `bigint` | `` `0x${(...)}` ``; `min?`: `number` | `bigint` | `` `0x${(...)}` ``; `multiplier?`: `number`; }; `maxPriorityFeePerGas?`: \{ `max?`: `number` | `bigint` | `` `0x${(...)}` ``; `min?`: `number` | `bigint` | `` `0x${(...)}` ``; `multiplier?`: `number`; }; `paymasterPostOpGasLimit?`: \{ `max?`: `number` | `bigint` | `` `0x${(...)}` ``; `min?`: `number` | `bigint` | `` `0x${(...)}` ``; `multiplier?`: `number`; }; `paymasterVerificationGasLimit?`: \{ `max?`: `number` | `bigint` | `` `0x${(...)}` ``; `min?`: `number` | `bigint` | `` `0x${(...)}` ``; `multiplier?`: `number`; }; `preVerificationGas?`: \{ `max?`: `number` | `bigint` | `` `0x${(...)}` ``; `min?`: `number` | `bigint` | `` `0x${(...)}` ``; `multiplier?`: `number`; }; `verificationGasLimit?`: \{ `max?`: `number` | `bigint` | `` `0x${(...)}` ``; `min?`: `number` | `bigint` | `` `0x${(...)}` ``; `multiplier?`: `number`; }; }; `txMaxRetries?`: `number`; `txRetryIntervalMs?`: `number`; `txRetryMultiplier?`: `number`; }; `paymasterAndData?`: `ClientMiddlewareFn`\<`undefined` | `UserOperationContext`>; `pollingInterval?`: `number`; `signUserOperation?`: `ClientMiddlewareFn`\<`undefined` | `UserOperationContext`>; `transport`: `TTransport`; `type?`: `string`; `userOperationSimulator?`: `ClientMiddlewareFn`\<`undefined` | `UserOperationContext`>; }, `"account"` | `"chain"` | `"transport"`> & `NotType`\<`TTransport`, [`AlchemyTransport`](../../../core/src/type-aliases/AlchemyTransport.mdx)>
       </td>
     </tr>
-
   </tbody>
 </table>
 

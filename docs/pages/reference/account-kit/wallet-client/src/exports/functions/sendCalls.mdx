@@ -9,15 +9,14 @@ layout: reference
 
 ```ts
 function sendCalls<TAccount>(
-  client,
-  signer,
-  params,
-): Promise<{
+   client, 
+   signer, 
+   params): Promise<{
   preparedCallIds: `0x${string}`[];
 }>;
 ```
 
-Defined in: [account-kit/wallet-client/src/client/actions/sendCalls.ts:53](https://github.com/alchemyplatform/aa-sdk/blob/17aad1f572375d42a06c7e3238078a88a435d459/account-kit/wallet-client/src/client/actions/sendCalls.ts#L53)
+Defined in: [account-kit/wallet-client/src/client/actions/sendCalls.ts:53](https://github.com/alchemyplatform/aa-sdk/blob/27e36329c103b4660886c9508b86d0a2c5c6c47e/account-kit/wallet-client/src/client/actions/sendCalls.ts#L53)
 
 Prepares, signs, and submits calls. This function internally calls `prepareCalls`, `signPreparedCalls`, and `sendPreparedCalls`.
 
@@ -30,16 +29,14 @@ from the user. It is recommended to use the `prepareCalls` action instead to man
 
 ```ts
 const result = await client.sendCalls({
-  calls: [
-    {
-      to: "0x1234...",
-      data: "0xabcdef...",
-      value: "0x0",
-    },
-  ],
+  calls: [{
+    to: "0x1234...",
+    data: "0xabcdef...",
+    value: "0x0"
+  }],
   capabilities: {
-    paymasterService: { policyId: "your-policy-id" },
-  },
+    paymasterService: { policyId: "your-policy-id" }
+  }
 });
 
 // The result contains the prepared call IDs
@@ -66,7 +63,6 @@ console.log(result.preparedCallIds);
         `undefined` | `` `0x${string}` ``
       </td>
     </tr>
-
   </tbody>
 </table>
 
@@ -123,7 +119,6 @@ console.log(result.preparedCallIds);
         Parameters for sending calls
       </td>
     </tr>
-
   </tbody>
 </table>
 

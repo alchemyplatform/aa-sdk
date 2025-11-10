@@ -48,7 +48,6 @@ export {
   riseTestnet,
   storyMainnet,
   storyAeneid,
-  celoAlfajores,
   celoMainnet,
   celoSepolia,
   teaSepolia,

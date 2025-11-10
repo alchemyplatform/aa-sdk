@@ -22,25 +22,20 @@ For switching chains, you can also use [createBundlerClient](https://www.alchemy
 ## Example
 
 ```tsx twoslash
-import React from "react";
+import React from 'react';
 import { useChain } from "@account-kit/react";
 // Assuming the chain sepolia is defined in your initial createConfig call
 import { sepolia } from "@account-kit/infra";
 
 function ComponentUsingChain() {
-  const { chain, setChain, isSettingChain } = useChain();
+ const { chain, setChain, isSettingChain } = useChain();
 
-  return (
-    <div>
-      <p>Current Chain: {chain.id}</p>
-      <button
-        onClick={() => setChain({ chain: sepolia })}
-        disabled={isSettingChain}
-      >
-        Set Chain
-      </button>
-    </div>
-  );
+ return (
+   <div>
+     <p>Current Chain: {chain.id}</p>
+     <button onClick={() => setChain({chain: sepolia})} disabled={isSettingChain}>Set Chain</button>
+   </div>
+ );
 }
 ```
 
@@ -69,7 +64,6 @@ function ComponentUsingChain() {
         optional properties which contain mutation arg overrides. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useChain.ts#L14)
       </td>
     </tr>
-
   </tbody>
 </table>
 

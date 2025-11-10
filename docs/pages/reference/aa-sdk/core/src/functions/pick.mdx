@@ -11,7 +11,7 @@ layout: reference
 function pick(obj, keys): object;
 ```
 
-Defined in: [aa-sdk/core/src/utils/index.ts:125](https://github.com/alchemyplatform/aa-sdk/blob/17aad1f572375d42a06c7e3238078a88a435d459/aa-sdk/core/src/utils/index.ts#L125)
+Defined in: [aa-sdk/core/src/utils/index.ts:125](https://github.com/alchemyplatform/aa-sdk/blob/27e36329c103b4660886c9508b86d0a2c5c6c47e/aa-sdk/core/src/utils/index.ts#L125)
 
 Picks the specified keys from an object and returns a new object containing only those key-value pairs.
 
@@ -20,13 +20,10 @@ Picks the specified keys from an object and returns a new object containing only
 ```ts
 import { pick } from "@aa-sdk/core";
 
-const picked = pick(
-  {
-    foo: "foo",
-    bar: "bar",
-  },
-  ["foo"],
-); // { foo: "foo" }
+const picked = pick({
+ foo: "foo",
+ bar: "bar",
+}, ["foo"]); // { foo: "foo" }
 ```
 
 ## Parameters
@@ -68,7 +65,6 @@ const picked = pick(
         A single key or an array of keys to pick from the object
       </td>
     </tr>
-
   </tbody>
 </table>
 

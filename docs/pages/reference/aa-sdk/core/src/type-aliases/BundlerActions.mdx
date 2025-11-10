@@ -11,7 +11,7 @@ layout: reference
 type BundlerActions = object;
 ```
 
-Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:54](https://github.com/alchemyplatform/aa-sdk/blob/17aad1f572375d42a06c7e3238078a88a435d459/aa-sdk/core/src/client/decorators/bundlerClient.ts#L54)
+Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:54](https://github.com/alchemyplatform/aa-sdk/blob/27e36329c103b4660886c9508b86d0a2c5c6c47e/aa-sdk/core/src/client/decorators/bundlerClient.ts#L54)
 
 ## Methods
 
@@ -19,14 +19,14 @@ Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:54](https://gith
 
 ```ts
 estimateUserOperationGas<TEntryPointVersion>(
-   request,
-   entryPoint,
+   request, 
+   entryPoint, 
    stateOverride?): Promise<UserOperationEstimateGasResponse<TEntryPointVersion>>;
 ```
 
-Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:63](https://github.com/alchemyplatform/aa-sdk/blob/17aad1f572375d42a06c7e3238078a88a435d459/aa-sdk/core/src/client/decorators/bundlerClient.ts#L63)
+Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:63](https://github.com/alchemyplatform/aa-sdk/blob/27e36329c103b4660886c9508b86d0a2c5c6c47e/aa-sdk/core/src/client/decorators/bundlerClient.ts#L63)
 
-calls `eth_estimateUserOperationGas` and returns the result
+calls `eth_estimateUserOperationGas` and  returns the result
 
 #### Type Parameters
 
@@ -48,7 +48,6 @@ calls `eth_estimateUserOperationGas` and returns the result
         keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase.mdx)\<`unknown`>
       </td>
     </tr>
-
   </tbody>
 </table>
 
@@ -105,7 +104,6 @@ calls `eth_estimateUserOperationGas` and returns the result
         the state override to use for the estimation
       </td>
     </tr>
-
   </tbody>
 </table>
 
@@ -115,7 +113,7 @@ calls `eth_estimateUserOperationGas` and returns the result
 
 the gas estimates for the given response
 
----
+***
 
 ### getSupportedEntryPoints()
 
@@ -123,7 +121,7 @@ the gas estimates for the given response
 getSupportedEntryPoints(): Promise<`0x${string}`[]>;
 ```
 
-Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:110](https://github.com/alchemyplatform/aa-sdk/blob/17aad1f572375d42a06c7e3238078a88a435d459/aa-sdk/core/src/client/decorators/bundlerClient.ts#L110)
+Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:110](https://github.com/alchemyplatform/aa-sdk/blob/27e36329c103b4660886c9508b86d0a2c5c6c47e/aa-sdk/core/src/client/decorators/bundlerClient.ts#L110)
 
 calls `eth_supportedEntryPoints` and returns the entry points the RPC supports
 
@@ -131,9 +129,9 @@ calls `eth_supportedEntryPoints` and returns the entry points the RPC supports
 
 `Promise`\<`` `0x${string}` ``\[]>
 
-- an array of the entrypoint addresses supported
+* an array of the entrypoint addresses supported
 
----
+***
 
 ### getUserOperationByHash()
 
@@ -143,7 +141,7 @@ getUserOperationByHash(hash): Promise<
   | UserOperationResponse<EntryPointVersion>>;
 ```
 
-Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:91](https://github.com/alchemyplatform/aa-sdk/blob/17aad1f572375d42a06c7e3238078a88a435d459/aa-sdk/core/src/client/decorators/bundlerClient.ts#L91)
+Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:91](https://github.com/alchemyplatform/aa-sdk/blob/27e36329c103b4660886c9508b86d0a2c5c6c47e/aa-sdk/core/src/client/decorators/bundlerClient.ts#L91)
 
 calls `eth_getUserOperationByHash` and returns the UserOperationResponse
 
@@ -172,7 +170,6 @@ calls `eth_getUserOperationByHash` and returns the UserOperationResponse
         the hash of the UserOperation to fetch
       </td>
     </tr>
-
   </tbody>
 </table>
 
@@ -182,9 +179,9 @@ calls `eth_getUserOperationByHash` and returns the UserOperationResponse
 | `null`
 | [`UserOperationResponse`](../interfaces/UserOperationResponse.mdx)\<`EntryPointVersion`>>
 
-- the user operation if found or null
+* the user operation if found or null
 
----
+***
 
 ### getUserOperationReceipt()
 
@@ -192,7 +189,7 @@ calls `eth_getUserOperationByHash` and returns the UserOperationResponse
 getUserOperationReceipt(hash, tag?): Promise<null | UserOperationReceipt>;
 ```
 
-Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:100](https://github.com/alchemyplatform/aa-sdk/blob/17aad1f572375d42a06c7e3238078a88a435d459/aa-sdk/core/src/client/decorators/bundlerClient.ts#L100)
+Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:100](https://github.com/alchemyplatform/aa-sdk/blob/27e36329c103b4660886c9508b86d0a2c5c6c47e/aa-sdk/core/src/client/decorators/bundlerClient.ts#L100)
 
 calls `eth_getUserOperationReceipt` and returns the UserOperationReceipt
 
@@ -235,7 +232,6 @@ calls `eth_getUserOperationReceipt` and returns the UserOperationReceipt
         if client want to get receipt for different block tag.
       </td>
     </tr>
-
   </tbody>
 </table>
 
@@ -243,9 +239,9 @@ calls `eth_getUserOperationReceipt` and returns the UserOperationReceipt
 
 `Promise`\<`null` | [`UserOperationReceipt`](../interfaces/UserOperationReceipt.mdx)>
 
-- a user operation receipt or null if not found
+* a user operation receipt or null if not found
 
----
+***
 
 ### sendRawUserOperation()
 
@@ -253,7 +249,7 @@ calls `eth_getUserOperationReceipt` and returns the UserOperationReceipt
 sendRawUserOperation<TEntryPointVersion>(request, entryPoint): Promise<`0x${string}`>;
 ```
 
-Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:78](https://github.com/alchemyplatform/aa-sdk/blob/17aad1f572375d42a06c7e3238078a88a435d459/aa-sdk/core/src/client/decorators/bundlerClient.ts#L78)
+Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:78](https://github.com/alchemyplatform/aa-sdk/blob/27e36329c103b4660886c9508b86d0a2c5c6c47e/aa-sdk/core/src/client/decorators/bundlerClient.ts#L78)
 
 calls `eth_sendUserOperation` and returns the hash of the sent UserOperation
 
@@ -277,7 +273,6 @@ calls `eth_sendUserOperation` and returns the hash of the sent UserOperation
         keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase.mdx)\<`unknown`>
       </td>
     </tr>
-
   </tbody>
 </table>
 
@@ -320,7 +315,6 @@ calls `eth_sendUserOperation` and returns the hash of the sent UserOperation
         the entry point address the op will be sent to
       </td>
     </tr>
-
   </tbody>
 </table>
 

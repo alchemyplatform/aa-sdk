@@ -42,9 +42,9 @@ import { SessionKeyPermissionsBuilder } from "@account-kit/smart-contracts";
 
 const builder = new SessionKeyPermissionsBuilder();
 builder.addContractAddressAccessEntry({
-  contractAddress: "0x1234",
-  isOnList: true,
-  checkSelectors: true,
+ contractAddress: "0x1234",
+ isOnList: true,
+ checkSelectors: true,
 });
 ```
 
@@ -73,7 +73,6 @@ builder.addContractAddressAccessEntry({
         the contract access entry to be added
       </td>
     </tr>
-
   </tbody>
 </table>
 
@@ -83,7 +82,7 @@ builder.addContractAddressAccessEntry({
 
 the instance of the current class for chaining
 
----
+***
 
 ### addContractFunctionAccessEntry()
 
@@ -102,9 +101,9 @@ import { SessionKeyPermissionsBuilder } from "@account-kit/smart-contracts";
 
 const builder = new SessionKeyPermissionsBuilder();
 builder.addContractAddressAccessEntry({
-  contractAddress: "0x1234",
-  methodSelector: "0x45678",
-  isOnList: true,
+ contractAddress: "0x1234",
+ methodSelector: "0x45678",
+ isOnList: true,
 });
 ```
 
@@ -133,7 +132,6 @@ builder.addContractAddressAccessEntry({
         The contract method entry to be added
       </td>
     </tr>
-
   </tbody>
 </table>
 
@@ -143,7 +141,7 @@ builder.addContractAddressAccessEntry({
 
 The instance of the class for method chaining
 
----
+***
 
 ### addErc20TokenSpendLimit()
 
@@ -162,9 +160,9 @@ import { SessionKeyPermissionsBuilder } from "@account-kit/smart-contracts";
 
 const builder = new SessionKeyPermissionsBuilder();
 builder.addErc20TokenSpendLimit({
-  tokenAddress: "0x1234",
-  spendLimit: 1000000000000000000n,
-  refreshInterval: 3600,
+ tokenAddress: "0x1234",
+ spendLimit: 1000000000000000000n,
+ refreshInterval: 3600,
 });
 ```
 
@@ -193,7 +191,6 @@ builder.addErc20TokenSpendLimit({
         The ERC20 token spend limit to be added
       </td>
     </tr>
-
   </tbody>
 </table>
 
@@ -203,7 +200,7 @@ builder.addErc20TokenSpendLimit({
 
 The updated object with the new ERC20 token spend limit
 
----
+***
 
 ### encode()
 
@@ -231,7 +228,7 @@ const encoded = builder.encode();
 
 An array of encoded hexadecimal strings representing the function calls for setting access control, permissions, and limits.
 
----
+***
 
 ### setContractAccessControlType()
 
@@ -277,7 +274,6 @@ builder.setContractAccessControlType(SessionKeyAccessListType.ALLOWLIST);
         The access control type for the session key
       </td>
     </tr>
-
   </tbody>
 </table>
 
@@ -287,7 +283,7 @@ builder.setContractAccessControlType(SessionKeyAccessListType.ALLOWLIST);
 
 The current instance for method chaining
 
----
+***
 
 ### setGasSpendLimit()
 
@@ -306,8 +302,8 @@ import { SessionKeyPermissionsBuilder } from "@account-kit/smart-contracts";
 
 const builder = new SessionKeyPermissionsBuilder();
 builder.setGasSpendLimit({
-  spendLimit: 1000000000000000000n,
-  refreshInterval: 3600,
+ spendLimit: 1000000000000000000n,
+ refreshInterval: 3600,
 });
 ```
 
@@ -336,7 +332,6 @@ builder.setGasSpendLimit({
         The gas spend limit to be set
       </td>
     </tr>
-
   </tbody>
 </table>
 
@@ -346,7 +341,7 @@ builder.setGasSpendLimit({
 
 The current instance for chaining
 
----
+***
 
 ### setNativeTokenSpendLimit()
 
@@ -365,8 +360,8 @@ import { SessionKeyPermissionsBuilder } from "@account-kit/smart-contracts";
 
 const builder = new SessionKeyPermissionsBuilder();
 builder.setNativeTokenSpendLimit({
-  spendLimit: 1000000000000000000n,
-  refreshInterval: 3600,
+ spendLimit: 1000000000000000000n,
+ refreshInterval: 3600,
 });
 ```
 
@@ -395,7 +390,6 @@ builder.setNativeTokenSpendLimit({
         The limit to set for native token spending
       </td>
     </tr>
-
   </tbody>
 </table>
 
@@ -405,7 +399,7 @@ builder.setNativeTokenSpendLimit({
 
 The instance for chaining
 
----
+***
 
 ### setRequiredPaymaster()
 
@@ -451,7 +445,6 @@ builder.setRequiredPaymaster("0x1234");
         the address of the paymaster to be set
       </td>
     </tr>
-
   </tbody>
 </table>
 
@@ -461,7 +454,7 @@ builder.setRequiredPaymaster("0x1234");
 
 the current instance for method chaining
 
----
+***
 
 ### setTimeRange()
 
@@ -480,8 +473,8 @@ import { SessionKeyPermissionsBuilder } from "@account-kit/smart-contracts";
 
 const builder = new SessionKeyPermissionsBuilder();
 builder.setTimeRange({
-  validFrom: Date.now(),
-  validUntil: Date.now() + 15 * 60 * 1000,
+ validFrom: Date.now(),
+ validUntil: Date.now() + (15 * 60 * 1000),
 });
 ```
 
@@ -510,7 +503,6 @@ builder.setTimeRange({
         The time range to be set
       </td>
     </tr>
-
   </tbody>
 </table>
 

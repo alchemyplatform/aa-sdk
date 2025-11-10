@@ -11,7 +11,7 @@ layout: reference
 const alchemyFeeEstimator: (transport) => ClientMiddlewareFn;
 ```
 
-Defined in: [account-kit/infra/src/middleware/feeEstimator.ts:32](https://github.com/alchemyplatform/aa-sdk/blob/17aad1f572375d42a06c7e3238078a88a435d459/account-kit/infra/src/middleware/feeEstimator.ts#L32)
+Defined in: [account-kit/infra/src/middleware/feeEstimator.ts:32](https://github.com/alchemyplatform/aa-sdk/blob/27e36329c103b4660886c9508b86d0a2c5c6c47e/account-kit/infra/src/middleware/feeEstimator.ts#L32)
 
 Function that estimates the transaction fees using Alchemy methods for a given client.
 It fetches the latest block and estimates the max priority fee per gas, applying any overrides or fee options provided.
@@ -23,13 +23,13 @@ import { alchemyFeeEstimator, alchemy } from "@account-kit/infra";
 import { createSmartAccountClient } from "@aa-sdk/core";
 
 const alchemyTransport = alchemy({
-  chain: sepolia,
-  apiKey: "your-api-key",
+ chain: sepolia,
+ apiKey: "your-api-key"
 });
 
 const client = createSmartAccountClient({
-  feeEstimator: alchemyFeeEstimator(alchemyTransport),
-  ...otherParams,
+ feeEstimator: alchemyFeeEstimator(alchemyTransport),
+ ...otherParams
 });
 ```
 
@@ -58,7 +58,6 @@ const client = createSmartAccountClient({
         An alchemy transport for making Alchemy specific RPC calls
       </td>
     </tr>
-
   </tbody>
 </table>
 
