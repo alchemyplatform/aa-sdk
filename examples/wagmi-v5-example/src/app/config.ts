@@ -12,7 +12,7 @@ const policyId =
   raise("NEXT_PUBLIC_PAYMASTER_POLICY_ID is not set");
 
 const transport = alchemyTransport({
-  apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY,
+  apiKey,
 });
 
 export const config = createConfig({
