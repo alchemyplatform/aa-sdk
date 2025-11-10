@@ -7,7 +7,9 @@ A complete solution for deploying v4 and v5 wallet docs simultaneously using **F
 ## 📦 Files Created
 
 ### Core Scripts
+
 1. **`docs/scripts/insert-docs-versioned.sh`** ⭐
+
    - Main script that handles dual-branch doc insertion
    - Copies v4 docs from `main` branch → `fern/wallets-v4/`
    - Copies v5 docs from `blake/merge-v4-and-v5` → `fern/wallets-v5/`
@@ -15,6 +17,7 @@ A complete solution for deploying v4 and v5 wallet docs simultaneously using **F
    - Updates all paths to reference versioned directories
 
 2. **`docs/scripts/docs-dev-versioned.sh`** 🛠️
+
    - Local development script with two modes:
      - Single mode: `./docs-dev-versioned.sh` (current branch only)
      - Dual mode: `./docs-dev-versioned.sh --dual` (both v4 and v5)
@@ -27,13 +30,16 @@ A complete solution for deploying v4 and v5 wallet docs simultaneously using **F
    - Checks branch structure and dependencies
 
 ### GitHub Actions
+
 4. **`.github/actions/setup-docs-versioned/action.yml`**
+
    - GHA composite action for CI/CD
    - Orchestrates checkout of both branches
    - Runs code snippet extraction on each independently
    - Calls `insert-docs-versioned.sh` with both source dirs
 
 5. **`.github/workflows/publish-fern-docs-versioned.yml.example`**
+
    - Example production deployment workflow
    - Ready to activate by removing `.example` extension
 
@@ -42,12 +48,15 @@ A complete solution for deploying v4 and v5 wallet docs simultaneously using **F
    - Ready to activate by removing `.example` extension
 
 ### Documentation
+
 7. **`docs/scripts/VERSIONED_DOCS_EXAMPLE.md`**
+
    - Shows the resulting docs.yml structure
    - Explains URL structure and directory layout
    - Documents the user experience
 
 8. **`docs/scripts/VERSIONED_DOCS_IMPLEMENTATION_GUIDE.md`** 📖
+
    - Comprehensive implementation and deployment guide
    - Step-by-step testing instructions
    - Configuration options
@@ -89,6 +98,7 @@ A complete solution for deploying v4 and v5 wallet docs simultaneously using **F
 ## 🚀 Quick Start
 
 ### Option 1: Test Locally (Single Version)
+
 ```bash
 cd /path/to/aa-sdk
 ./docs/scripts/docs-dev-versioned.sh
@@ -96,6 +106,7 @@ cd /path/to/aa-sdk
 ```
 
 ### Option 2: Test Locally (Both Versions)
+
 ```bash
 cd /path/to/aa-sdk
 git status  # Make sure you have no uncommitted changes
@@ -104,6 +115,7 @@ git status  # Make sure you have no uncommitted changes
 ```
 
 ### Option 3: Deploy to Preview
+
 ```bash
 # Activate the preview workflow
 mv .github/workflows/preview-fern-docs-versioned.yml.example \
@@ -118,6 +130,7 @@ git push
 ```
 
 ### Option 4: Deploy to Production
+
 See the full guide in `VERSIONED_DOCS_IMPLEMENTATION_GUIDE.md`
 
 ## 🎨 User Experience
@@ -147,6 +160,7 @@ When users visit the Wallets documentation:
 ## 🔧 Configuration
 
 ### Current Configuration
+
 - **v4 Branch**: `main`
 - **v5 Branch**: `blake/merge-v4-and-v5`
 - **Default Version**: v5
@@ -154,17 +168,21 @@ When users visit the Wallets documentation:
 - **v5 Slug**: `/v5`
 
 ### To Change Branches
+
 Edit `.github/actions/setup-docs-versioned/action.yml`:
+
 ```yaml
 inputs:
   v4-branch:
-    default: 'main'  # ← Change this
+    default: "main" # ← Change this
   v5-branch:
-    default: 'blake/merge-v4-and-v5'  # ← Change this
+    default: "blake/merge-v4-and-v5" # ← Change this
 ```
 
 ### To Change Default Version
+
 Edit `docs/scripts/insert-docs-versioned.sh` around line 90:
+
 ```bash
 - title: Account Kit v5
   default: true  # ← Swap true/false between v4 and v5
@@ -189,18 +207,23 @@ Before deploying to production, verify:
 ## 🐛 Common Issues & Solutions
 
 ### "wallets directory not found"
+
 → Using wrong script. Use `insert-docs-versioned.sh`, not `insert-docs.sh`
 
 ### "Region not found" errors
+
 → Code snippet regions missing in one branch. Check both v4 and v5 have the regions.
 
 ### Port 3020 already in use
+
 → Kill existing process: `lsof -ti:3020 | xargs kill -9`
 
 ### Images not loading
+
 → Check `fern/images/wallets/` exists and paths don't hardcode `/wallets/images/`
 
 ### Dual mode requires clean git state
+
 → Commit or stash changes before running `--dual` mode
 
 ## 🔗 Reference Links
@@ -211,17 +234,20 @@ Before deploying to production, verify:
 
 ## 📞 Next Steps
 
-1. **Read the implementation guide**: 
+1. **Read the implementation guide**:
+
    ```bash
    open docs/scripts/VERSIONED_DOCS_IMPLEMENTATION_GUIDE.md
    ```
 
 2. **Validate your setup**:
+
    ```bash
    ./docs/scripts/validate-versioned-setup.sh
    ```
 
 3. **Test locally**:
+
    ```bash
    ./docs/scripts/docs-dev-versioned.sh --dual
    ```
@@ -241,4 +267,3 @@ You now have a complete implementation for versioned v4/v5 docs using Fern's tab
 - 🚀 Deployable
 
 Good luck with your deployment! 🚀
-

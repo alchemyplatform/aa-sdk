@@ -11,7 +11,7 @@ After running `insert-docs-versioned.sh`, the `docs.yml` file will have a struct
 ```yaml
 navigation:
   # ... other tabs ...
-  
+
   - tab: wallets
     variants:
       - title: Account Kit v4
@@ -27,7 +27,7 @@ navigation:
           - section: SDK Reference
             contents:
               # ... v4 SDK reference pages ...
-      
+
       - title: Account Kit v5
         slug: v5
         default: true
@@ -94,4 +94,3 @@ The variant selector is provided automatically by Fern based on the `variants` c
 ✅ **Clear versioning** - Users can easily switch between versions
 ✅ **Easy cleanup** - When v4 is deprecated, just remove the v4 variant and directory
 ✅ **Single deployment** - Both versions deploy together from the same workflow
-

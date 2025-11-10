@@ -51,6 +51,7 @@ git status
 ```
 
 Visit http://localhost:3020 and verify:
+
 - ✅ Wallets tab shows a variant selector
 - ✅ Can switch between "Account Kit v4" and "Account Kit v5"
 - ✅ Both versions display correctly
@@ -61,12 +62,14 @@ Visit http://localhost:3020 and verify:
 Create a test PR from your `blake/merge-v4-and-v5` branch:
 
 1. Temporarily activate the preview workflow:
+
    ```bash
    mv .github/workflows/preview-fern-docs-versioned.yml.example \
       .github/workflows/preview-fern-docs-versioned.yml
    ```
 
 2. Commit and push:
+
    ```bash
    git add .github/workflows/preview-fern-docs-versioned.yml
    git commit -m "test: Enable versioned docs preview"
@@ -82,35 +85,39 @@ Create a test PR from your `blake/merge-v4-and-v5` branch:
 Once testing is complete:
 
 1. **Activate the versioned publish workflow:**
+
    ```bash
    mv .github/workflows/publish-fern-docs-versioned.yml.example \
       .github/workflows/publish-fern-docs-versioned.yml
    ```
 
 2. **Decide whether to keep or disable old workflows:**
-   
+
    Option A - Disable old workflows (recommended):
+
    ```bash
    mv .github/workflows/publish-fern-docs.yml \
       .github/workflows/publish-fern-docs.yml.disabled
    mv .github/workflows/preview-fern-docs.yml \
       .github/workflows/preview-fern-docs.yml.disabled
    ```
-   
+
    Option B - Delete old workflows:
+
    ```bash
    git rm .github/workflows/publish-fern-docs.yml
    git rm .github/workflows/preview-fern-docs.yml
    ```
 
 3. **Update the versioned workflow branch triggers:**
-   
+
    Edit `.github/workflows/publish-fern-docs-versioned.yml`:
+
    ```yaml
    on:
      push:
        branches:
-         - main  # Change from blake/merge-v4-and-v5 to main
+         - main # Change from blake/merge-v4-and-v5 to main
    ```
 
 4. **Merge to main:**
@@ -131,8 +138,8 @@ If your branch names change, update the workflow inputs:
   uses: ./.github/actions/setup-docs-versioned
   with:
     docs-github-token: ${{ github.token }}
-    v4-branch: main              # ← Change this
-    v5-branch: your-v5-branch    # ← Change this
+    v4-branch: main # ← Change this
+    v5-branch: your-v5-branch # ← Change this
 ```
 
 ### Changing Variant Titles
@@ -160,7 +167,7 @@ To make v4 the default instead of v5:
 - title: Account Kit v4
   slug: v4
   default: true     # ← Change from false to true
-  
+
 - title: Account Kit v5
   slug: v5
   default: false    # ← Change from true to false
@@ -171,6 +178,7 @@ To make v4 the default instead of v5:
 When you're ready to remove v4 docs entirely:
 
 1. **Update workflows** to use the old single-version setup:
+
    ```bash
    git mv .github/workflows/publish-fern-docs.yml.disabled \
           .github/workflows/publish-fern-docs.yml
@@ -178,6 +186,7 @@ When you're ready to remove v4 docs entirely:
    ```
 
 2. **Update setup-docs action** back to single version:
+
    ```yaml
    - name: Setup Docs
      uses: ./.github/actions/setup-docs
@@ -196,6 +205,7 @@ When you're ready to remove v4 docs entirely:
 **Cause**: The script is looking for a `wallets/` directory but finds `wallets-v4/` and `wallets-v5/`
 
 **Solution**: Make sure you're using the correct script:
+
 - For versioned: `insert-docs-versioned.sh`
 - For single version: `insert-docs.sh`
 
@@ -203,7 +213,8 @@ When you're ready to remove v4 docs entirely:
 
 **Cause**: Code snippet regions exist in one branch but not the other
 
-**Solution**: 
+**Solution**:
+
 1. Check which branch is failing: `git log --oneline --graph`
 2. Ensure the referenced code regions exist in both v4 and v5 branches
 3. Or update the docs to reference regions that exist in both versions
@@ -219,6 +230,7 @@ When you're ready to remove v4 docs entirely:
 **Cause**: Images paths weren't updated for the versioned directories
 
 **Solution**: The script should handle this automatically. If not, check that:
+
 1. Images were copied to `fern/images/wallets/`
 2. MDX files reference images with relative paths
 3. Image paths in docs don't hardcode `/wallets/images/`
@@ -226,6 +238,7 @@ When you're ready to remove v4 docs entirely:
 ### Issue: Local dev shows "Port 3020 already in use"
 
 **Solution**:
+
 ```bash
 # Find and kill the process
 lsof -ti:3020 | xargs kill -9
@@ -273,4 +286,3 @@ Before considering this complete, verify:
 - ✅ Images and assets load in both versions
 - ✅ Search works across both versions (Fern handles this)
 - ✅ URLs are clean (`.../wallets/v4/...` and `.../wallets/v5/...`)
-

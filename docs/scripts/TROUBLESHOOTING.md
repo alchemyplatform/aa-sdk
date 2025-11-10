@@ -38,6 +38,7 @@ cd /Users/blake.duncan/Documents/workspace/aa-sdk/docs-site
 ```
 
 This will show you:
+
 - Which files exist/are missing
 - Whether docs.yml is valid YAML
 - The structure of the generated docs.yml
@@ -58,6 +59,7 @@ The script now shows exactly where it fails:
 **Symptom**: `fern/wallets-v4/docs.yml not found`
 
 **Solution**:
+
 ```bash
 # Check if main branch exists
 git branch -a | grep main
@@ -74,6 +76,7 @@ git fetch origin main
 **Symptom**: `fern directory not found`
 
 **Solution**:
+
 ```bash
 # Update the submodule
 git submodule update --init --recursive --remote docs-site/
@@ -87,6 +90,7 @@ git submodule update --init --recursive --remote docs-site/
 **Symptom**: `docs.yml has YAML syntax errors`
 
 **Solution**:
+
 ```bash
 # Check the generated file
 cd docs-site
@@ -105,6 +109,7 @@ bash -x docs/scripts/insert-docs-versioned.sh aa-sdk /tmp/aa-sdk-v4/docs ./docs 
 **Symptom**: Script stops at "Updating paths for versioned directories"
 
 **Solution**:
+
 ```bash
 # Check Python3 is available
 python3 --version
@@ -130,6 +135,7 @@ TEST
 **Cause**: The variants structure doesn't match Fern's schema
 
 **Solution**:
+
 ```bash
 # Check Fern's documentation for variants
 open https://buildwithfern.com/learn/docs/configuration/tabs#tab-variants
@@ -194,21 +200,25 @@ python3 -c "import yaml; yaml.safe_load(open('fern/docs.yml'))"
 ## 💡 Pro Tips
 
 1. **Start simple**: Test with single-version mode first
+
    ```bash
    ./docs/scripts/docs-dev-versioned.sh  # No --dual flag
    ```
 
 2. **Check file permissions**: Make sure scripts are executable
+
    ```bash
    chmod +x docs/scripts/*.sh
    ```
 
 3. **Watch for network issues**: Submodule updates need network access
+
    ```bash
    git submodule update --init --recursive --remote docs-site/
    ```
 
 4. **Use PyYAML for validation**: Helps catch issues early
+
    ```bash
    pip install pyyaml
    ```
@@ -238,4 +248,3 @@ Once it works:
 4. ✅ Deploy to production
 
 Good luck! 🚀
-
