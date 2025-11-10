@@ -130,18 +130,34 @@ fi
 cat > fern/temp_wallets_variants.yml << 'EOF'
   - tab: wallets
     variants:
-      - title: Account Kit v4
+      - title: v4
         slug: v4
         default: false
         layout:
 EOF
 
 # Add v4 layout (remove the "layout:" line and adjust indentation)
-sed 's/^    layout://' fern/temp_v4_layout.yml | sed 's/^    /          /' >> fern/temp_wallets_variants.yml
+# Also add "collapsed: false" to top-level sections so they display expanded by default
+sed 's/^    layout://' fern/temp_v4_layout.yml | awk '
+  /^      - section:/ {
+    # This is a top-level section, print it and add collapsed: false
+    section_line = $0
+    # Read ahead to check what comes next
+    getline next_line
+    # Print the section line
+    print section_line
+    # Add collapsed: false at the right indent level (8 spaces to match other properties)
+    print "        collapsed: false"
+    # Print the next line (skip-slug, slug, or contents)
+    print next_line
+    next
+  }
+  { print }
+' | sed 's/^    /          /' >> fern/temp_wallets_variants.yml
 
 # Add v5 variant
 cat >> fern/temp_wallets_variants.yml << 'EOF'
-      - title: Account Kit v5
+      - title: v5
         slug: v5
         default: true
         layout:
@@ -245,9 +261,9 @@ except FileNotFoundError:
     exit(1)
 
 # Find the v4 variant section and v5 variant section
-# Replace paths in v4 section
-v4_pattern = r'(- title: Account Kit v4.*?)(- title: Account Kit v5)'
-v5_pattern = r'(- title: Account Kit v5.*?)(\n  - tab:|\Z)'
+# Replace paths in v4 section  
+v4_pattern = r'(- title: v4.*?)(- title: v5)'
+v5_pattern = r'(- title: v5.*?)(\n  - tab:|\Z)'
 
 def replace_v4_paths(match):
     v4_section = match.group(1)
