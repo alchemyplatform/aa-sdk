@@ -13,7 +13,7 @@ Error class representing a "Fetch Error" error, typically thrown when a fetch re
 
 ## Extends
 
-* [`BaseError`](BaseError.mdx)
+- [`BaseError`](BaseError.mdx)
 
 ## Constructors
 
@@ -21,8 +21,8 @@ Error class representing a "Fetch Error" error, typically thrown when a fetch re
 
 ```ts
 new FetchError(
-   route, 
-   method, 
+   route,
+   method,
    cause?): FetchError;
 ```
 
@@ -83,6 +83,7 @@ Initializes a new instance of the error message with a default message indicatin
         The cause of the error.
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -294,6 +295,7 @@ Initializes a new instance of the error message with a default message indicatin
         not capture any frames.
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -307,7 +309,7 @@ Initializes a new instance of the error message with a default message indicatin
 walk(): Error;
 ```
 
-Defined in: node\_modules/viem/\_types/errors/base.d.ts:26
+Defined in: node_modules/viem/\_types/errors/base.d.ts:26
 
 ##### Returns
 
@@ -323,7 +325,7 @@ Defined in: node\_modules/viem/\_types/errors/base.d.ts:26
 walk(fn): Error | null;
 ```
 
-Defined in: node\_modules/viem/\_types/errors/base.d.ts:27
+Defined in: node_modules/viem/\_types/errors/base.d.ts:27
 
 ##### Parameters
 
@@ -345,6 +347,7 @@ Defined in: node\_modules/viem/\_types/errors/base.d.ts:27
         (`err`) => `boolean`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -356,7 +359,7 @@ Defined in: node\_modules/viem/\_types/errors/base.d.ts:27
 
 [`BaseError`](BaseError.mdx).[`walk`](BaseError.mdx#walk)
 
-***
+---
 
 ### captureStackTrace()
 
@@ -364,7 +367,7 @@ Defined in: node\_modules/viem/\_types/errors/base.d.ts:27
 static captureStackTrace(targetObject, constructorOpt?): void;
 ```
 
-Defined in: node\_modules/@types/node/globals.d.ts:145
+Defined in: node_modules/@types/node/globals.d.ts:145
 
 Creates a `.stack` property on `targetObject`, which when accessed returns
 a string representing the location in the code at which
@@ -373,7 +376,7 @@ a string representing the location in the code at which
 ```js
 const myObject = {};
 Error.captureStackTrace(myObject);
-myObject.stack;  // Similar to `new Error().stack`
+myObject.stack; // Similar to `new Error().stack`
 ```
 
 The first line of the trace will be prefixed with
@@ -440,6 +443,7 @@ a();
         `Function`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -451,7 +455,7 @@ a();
 
 [`BaseError`](BaseError.mdx).[`captureStackTrace`](BaseError.mdx#capturestacktrace)
 
-***
+---
 
 ### prepareStackTrace()
 
@@ -459,7 +463,7 @@ a();
 static prepareStackTrace(err, stackTraces): any;
 ```
 
-Defined in: node\_modules/@types/node/globals.d.ts:149
+Defined in: node_modules/@types/node/globals.d.ts:149
 
 #### Parameters
 
@@ -491,6 +495,7 @@ Defined in: node\_modules/@types/node/globals.d.ts:149
         `CallSite`\[]
       </td>
     </tr>
+
   </tbody>
 </table>
 

@@ -6,6 +6,7 @@ import {
   sendPreparedCalls,
   type SendPreparedCallsResult,
 } from "./sendPreparedCalls.js";
+import { LOGGER } from "../logger.js";
 
 export type SendCallsParams<
   TAccount extends Address | undefined = Address | undefined,
@@ -46,15 +47,21 @@ export async function sendCalls<
   client: InnerWalletApiClient,
   params: SendCallsParams<TAccount>,
 ): Promise<SendCallsResult> {
+  LOGGER.info("sendCalls:start", {
+    calls: params.calls?.length,
+    hasCapabilities: !!params.capabilities,
+  });
   const calls = await prepareCalls(client, params);
 
   const signedCalls = await signPreparedCalls(client, calls);
 
-  return await sendPreparedCalls(client, {
+  const res = await sendPreparedCalls(client, {
     ...signedCalls,
     // The only capability that is supported in sendPreparedCalls is permissions.
     ...(params.capabilities?.permissions != null
       ? { capabilities: { permissions: params.capabilities.permissions } }
       : {}),
   });
+  LOGGER.info("sendCalls:done");
+  return res;
 }

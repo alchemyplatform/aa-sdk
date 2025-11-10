@@ -23,7 +23,7 @@ To update an email:
 
 To remove an email:
 
-* Call updateEmail() with `{ email: null }`
+- Call updateEmail() with `{ email: null }`
 
 ## Example
 
@@ -31,7 +31,7 @@ To remove an email:
 // Update email
 await sendVerificationCode(config, {
   contact: "newemail@example.com",
-  type: "email"
+  type: "email",
 });
 // User enters code from email
 await updateEmail(config, { verificationCode: "123456" });
@@ -79,6 +79,7 @@ await updateEmail(config, { email: null });
         Update email parameters
       </td>
     </tr>
+
   </tbody>
 </table>
 

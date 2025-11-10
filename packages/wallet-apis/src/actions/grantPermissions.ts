@@ -10,6 +10,7 @@ import type { InnerWalletApiClient } from "../types.ts";
 import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
 import { signSignatureRequest } from "./signSignatureRequest.js";
 import { AccountNotFoundError } from "@alchemy/common";
+import { LOGGER } from "../logger.js";
 import type { OptionalChainId } from "../types.ts";
 
 type RpcSchema = Extract<
@@ -96,9 +97,10 @@ export async function grantPermissions<
 ): Promise<GrantPermissionsResult> {
   const account = params.account ?? client.account?.address;
   if (!account) {
+    LOGGER.warn("grantPermissions:no-account");
     throw new AccountNotFoundError();
   }
-
+  LOGGER.debug("grantPermissions:start", { expirySec: params.expirySec });
   const { sessionId, signatureRequest } = await client.request({
     method: "wallet_createSession",
     params: [
@@ -111,12 +113,13 @@ export async function grantPermissions<
   });
 
   const signature = await signSignatureRequest(client, signatureRequest);
-
-  return {
+  const res = {
     context: concatHex([
       "0x00", // Remote mode.
       sessionId,
       signature.data,
     ]),
-  };
+  } as const;
+  LOGGER.debug("grantPermissions:done");
+  return res;
 }

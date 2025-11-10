@@ -1,6 +1,7 @@
 import { toHex, type Address, type IsUndefined, type Prettify } from "viem";
 import type { InnerWalletApiClient, OptionalChainId } from "../types.ts";
 import { AccountNotFoundError } from "@alchemy/common";
+import { LOGGER } from "../logger.js";
 import { mergeClientCapabilities } from "../utils/capabilities.js";
 import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
 
@@ -58,12 +59,17 @@ export async function prepareCalls<
 ): Promise<PrepareCallsResult> {
   const from = params.from ?? client.account?.address;
   if (!from) {
+    LOGGER.warn("prepareCalls:no-from", { hasClientAccount: !!client.account });
     throw new AccountNotFoundError();
   }
 
   const capabilities = mergeClientCapabilities(client, params.capabilities);
 
-  return await client.request({
+  LOGGER.debug("prepareCalls:start", {
+    callsCount: params.calls?.length,
+    hasCapabilities: !!params.capabilities,
+  });
+  const res = await client.request({
     method: "wallet_prepareCalls",
     params: [
       {
@@ -74,4 +80,6 @@ export async function prepareCalls<
       },
     ],
   });
+  LOGGER.debug("prepareCalls:done");
+  return res;
 }

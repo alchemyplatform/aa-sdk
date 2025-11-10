@@ -23,7 +23,7 @@ To update a phone number:
 
 To remove a phone number:
 
-* Call updatePhoneNumber() with `{ phoneNumber: null }`
+- Call updatePhoneNumber() with `{ phoneNumber: null }`
 
 ## Example
 
@@ -31,7 +31,7 @@ To remove a phone number:
 // Update phone number
 await sendVerificationCode(config, {
   contact: "+15551234567",
-  type: "phone"
+  type: "phone",
 });
 // User enters code from SMS
 await updatePhoneNumber(config, { verificationCode: "123456" });
@@ -79,6 +79,7 @@ await updatePhoneNumber(config, { phoneNumber: null });
         Update phone number parameters
       </td>
     </tr>
+
   </tbody>
 </table>
 
