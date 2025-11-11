@@ -31,12 +31,8 @@ describe("headersUpdate/addCrumb", () => {
       headers = headersUpdate(crumb)(headers);
     }
     const bc = headers[BREADCRUMB] ?? "";
-    expect(bc.startsWith("..."))
-      .toBe(true);
-    expect(bc.includes("L9-"))
-      .toBe(true); // keeps the latest crumb
-    expect(bc.includes("L0-"))
-      .toBe(false); // drops from the left
+    expect(bc.startsWith("...")).toBe(true);
+    expect(bc.includes("L9-")).toBe(true); // keeps the latest crumb
+    expect(bc.includes("L0-")).toBe(false); // drops from the left
   });
 });
-

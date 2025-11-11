@@ -61,9 +61,10 @@ export type AlchemyTransport<
  */
 export function isAlchemyTransport(
   transport: unknown,
-  chain: Chain,
+  chain: Chain | undefined,
 ): transport is AlchemyTransport {
   try {
+    if (!chain) return false;
     return (transport as any)({ chain }).config.type === "alchemyHttp";
   } catch {
     return false;

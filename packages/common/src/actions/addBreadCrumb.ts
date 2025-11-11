@@ -11,9 +11,8 @@ import { convertHeadersToObject } from "../utils/headers.js";
 // Internal helper to safely access Alchemy transport internals for header updates
 function getAlchemyTransportContext(client: Client) {
   if (!client?.transport || !client?.chain) return null;
-  if (!isAlchemyTransport(client.transport as any, client.chain as any))
-    return null;
-  const transport = client.transport as AlchemyTransport;
+  if (!isAlchemyTransport(client.transport, client.chain)) return null;
+  const transport = client.transport as unknown as AlchemyTransport;
   const instance = transport({ chain: client.chain });
   return {
     transport,
