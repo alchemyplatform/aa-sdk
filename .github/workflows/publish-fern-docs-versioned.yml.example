@@ -9,7 +9,14 @@ name: Publish Docs (Versioned)
 on:
   push:
     branches:
-      - blake/merge-v4-and-v5  # Change this to main when ready to deploy
+      - main  # v5 docs (post-launch)
+      - v4    # legacy v4 docs - allows updates to v4 to auto-deploy
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Reason for manual deploy'
+        required: false
+        default: 'Manual deployment'
 
 jobs:
   run:
