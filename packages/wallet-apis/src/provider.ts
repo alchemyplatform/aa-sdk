@@ -221,14 +221,10 @@ export const createEip1193Provider = (
         // api. We may want to change this behavior later depending on how we
         // handle request routing within the wagmi connector.
         default:
-          return requestWithBreadcrumb(
-            client as any,
-            `wallet-apis:${String(method)}`,
-            {
-              method: method as any,
-              params: params as any,
-            },
-          );
+          return requestWithBreadcrumb(client as any, {
+            method: method as any,
+            params: params as any,
+          });
       }
     } catch (err) {
       if (err instanceof ChainNotFoundError) {

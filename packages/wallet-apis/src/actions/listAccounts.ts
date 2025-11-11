@@ -53,19 +53,15 @@ export async function listAccounts(
 ): Promise<ListAccountsResult> {
   const signerAddress = params.signerAddress ?? client.owner.account.address;
   LOGGER.debug("listAccounts:start", { hasAfter: !!params.after });
-  const res = await requestWithBreadcrumb(
-    client as any,
-    "wallet-apis:wallet_listAccounts",
-    {
-      method: "wallet_listAccounts",
-      params: [
-        {
-          ...params,
-          signerAddress,
-        },
-      ],
-    },
-  );
+  const res = await requestWithBreadcrumb(client as any, {
+    method: "wallet_listAccounts",
+    params: [
+      {
+        ...params,
+        signerAddress,
+      },
+    ],
+  });
   LOGGER.debug("listAccounts:done", { count: res.accounts.length });
   return res;
 }

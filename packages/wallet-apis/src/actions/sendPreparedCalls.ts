@@ -55,21 +55,17 @@ export async function sendPreparedCalls(
   params: SendPreparedCallsParams,
 ): Promise<SendPreparedCallsResult> {
   LOGGER.debug("sendPreparedCalls:start", { type: params.type });
-  const res = await requestWithBreadcrumb(
-    client as any,
-    "wallet-apis:wallet_sendPreparedCalls",
-    {
-      method: "wallet_sendPreparedCalls",
-      params: [
-        params.type === "array"
-          ? params
-          : {
-              ...params,
-              chainId: params.chainId ?? toHex(client.chain.id),
-            },
-      ],
-    },
-  );
+  const res = await requestWithBreadcrumb(client as any, {
+    method: "wallet_sendPreparedCalls",
+    params: [
+      params.type === "array"
+        ? params
+        : {
+            ...params,
+            chainId: params.chainId ?? toHex(client.chain.id),
+          },
+    ],
+  });
   LOGGER.debug("sendPreparedCalls:done");
   return res;
 }

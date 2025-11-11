@@ -82,19 +82,15 @@ export async function requestQuoteV0<
     ? undefined
     : mergeClientCapabilities(client, params.capabilities);
 
-  return await requestWithBreadcrumb(
-    client as any,
-    "wallet-apis:wallet_requestQuote_v0",
-    {
-      method: "wallet_requestQuote_v0",
-      params: [
-        {
-          ...params,
-          chainId: params.chainId ?? toHex(client.chain.id),
-          from,
-          ...(capabilities && { capabilities }),
-        },
-      ],
-    },
-  );
+  return await requestWithBreadcrumb(client as any, {
+    method: "wallet_requestQuote_v0",
+    params: [
+      {
+        ...params,
+        chainId: params.chainId ?? toHex(client.chain.id),
+        from,
+        ...(capabilities && { capabilities }),
+      },
+    ],
+  });
 }

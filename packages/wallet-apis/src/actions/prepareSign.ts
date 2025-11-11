@@ -53,20 +53,16 @@ export async function prepareSign<
   }
 
   LOGGER.debug("prepareSign:start", { type: params.signatureRequest.type });
-  const res = await requestWithBreadcrumb(
-    client as any,
-    "wallet-apis:wallet_prepareSign",
-    {
-      method: "wallet_prepareSign",
-      params: [
-        {
-          ...params,
-          from,
-          chainId: params.chainId ?? toHex(client.chain.id),
-        },
-      ],
-    },
-  );
+  const res = await requestWithBreadcrumb(client as any, {
+    method: "wallet_prepareSign",
+    params: [
+      {
+        ...params,
+        from,
+        chainId: params.chainId ?? toHex(client.chain.id),
+      },
+    ],
+  });
   LOGGER.debug("prepareSign:done");
   return res;
 }

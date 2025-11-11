@@ -46,24 +46,20 @@ export const requestGasAndPaymasterAndData = async <
   ] = params;
 
   LOGGER.debug("requestGasAndPaymasterAndData", { policyId, entryPoint });
-  const response = await requestWithBreadcrumb(
-    client as any,
-    "aa-infra:alchemy_requestGasAndPaymasterAndData",
-    {
-      method: "alchemy_requestGasAndPaymasterAndData",
-      params: [
-        {
-          policyId,
-          entryPoint,
-          erc20Context,
-          dummySignature,
-          userOperation: formatUserOperationRequest(userOperation),
-          overrides:
-            overrides != null ? formatOverridesRequest(overrides) : undefined,
-        },
-      ] as const,
-    },
-  );
+  const response = await requestWithBreadcrumb(client as any, {
+    method: "alchemy_requestGasAndPaymasterAndData",
+    params: [
+      {
+        policyId,
+        entryPoint,
+        erc20Context,
+        dummySignature,
+        userOperation: formatUserOperationRequest(userOperation),
+        overrides:
+          overrides != null ? formatOverridesRequest(overrides) : undefined,
+      },
+    ] as const,
+  });
 
   const formatted = formatGasAndPaymasterResponse(response);
   LOGGER.debug("gas manager response", {

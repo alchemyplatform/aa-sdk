@@ -60,10 +60,14 @@ export type AlchemyTransport<
  * @returns {boolean} `true` if the transport is an Alchemy transport, otherwise `false`
  */
 export function isAlchemyTransport(
-  transport: Transport,
+  transport: unknown,
   chain: Chain,
 ): transport is AlchemyTransport {
-  return transport({ chain }).config.type === "alchemyHttp";
+  try {
+    return (transport as any)({ chain }).config.type === "alchemyHttp";
+  } catch {
+    return false;
+  }
 }
 
 /**

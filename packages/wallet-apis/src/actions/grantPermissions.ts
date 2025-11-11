@@ -104,7 +104,6 @@ export async function grantPermissions<
   LOGGER.debug("grantPermissions:start", { expirySec: params.expirySec });
   const { sessionId, signatureRequest } = await requestWithBreadcrumb(
     client as any,
-    "wallet-apis:wallet_createSession",
     {
       method: "wallet_createSession",
       params: [

@@ -54,16 +54,16 @@ export async function formatSign<
   }
 
   LOGGER.debug("formatSign:start");
-  const res = await requestWithBreadcrumb(
-    client as any,
-    "wallet-apis:wallet_formatSign",
-    {
-      method: "wallet_formatSign",
-      params: [
-        { ...params, from, chainId: params.chainId ?? toHex(client.chain.id) },
-      ],
-    },
-  );
+  const res = await requestWithBreadcrumb(client as any, {
+    method: "wallet_formatSign",
+    params: [
+      {
+        ...params,
+        from,
+        chainId: params.chainId ?? toHex(client.chain.id),
+      },
+    ],
+  });
   LOGGER.debug("formatSign:done");
   return res;
 }

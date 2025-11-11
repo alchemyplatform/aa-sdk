@@ -79,14 +79,10 @@ export async function alchemyEstimateFeesPerGas<
 }> {
   const [block, maxPriorityFeePerGasEstimate] = await Promise.all([
     getBlock(bundlerClient, { blockTag: "latest" }),
-    requestWithBreadcrumb(
-      bundlerClient as any,
-      "aa-infra:rundler_maxPriorityFeePerGas",
-      {
-        method: "rundler_maxPriorityFeePerGas",
-        params: [],
-      },
-    ),
+    requestWithBreadcrumb(bundlerClient as any, {
+      method: "rundler_maxPriorityFeePerGas",
+      params: [],
+    }),
   ]);
 
   const baseFeePerGas = block.baseFeePerGas;

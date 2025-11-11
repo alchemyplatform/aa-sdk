@@ -84,14 +84,10 @@ export async function requestAccount(
     };
   }
 
-  const resp = await requestWithBreadcrumb(
-    client as any,
-    "wallet-apis:wallet_requestAccount",
-    {
-      method: "wallet_requestAccount",
-      params: [args],
-    },
-  );
+  const resp = await requestWithBreadcrumb(client as any, {
+    method: "wallet_requestAccount",
+    params: [args],
+  });
 
   client.internal?.setAccount({
     address: resp.accountAddress,

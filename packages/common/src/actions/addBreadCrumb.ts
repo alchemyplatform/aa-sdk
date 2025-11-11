@@ -1,7 +1,26 @@
 import { createClient, type Client } from "viem";
 import { headersUpdate } from "../tracing/updateHeaders.js";
-import { alchemyTransport, isAlchemyTransport } from "../transport/alchemy.js";
+import {
+  alchemyTransport,
+  isAlchemyTransport,
+  type AlchemyTransport,
+  type AlchemyTransportConfig,
+} from "../transport/alchemy.js";
 import { convertHeadersToObject } from "../utils/headers.js";
+
+// Internal helper to safely access Alchemy transport internals for header updates
+function getAlchemyTransportContext(client: Client) {
+  if (!client?.transport || !client?.chain) return null;
+  if (!isAlchemyTransport(client.transport as any, client.chain as any))
+    return null;
+  const transport = client.transport as AlchemyTransport;
+  const instance = transport({ chain: client.chain });
+  return {
+    transport,
+    config: instance.value?.config as AlchemyTransportConfig | undefined,
+    headers: instance.value?.fetchOptions?.headers as HeadersInit | undefined,
+  } as const;
+}
 
 /**
  * Adds a tracing breadcrumb to outgoing requests for the provided client.
@@ -21,31 +40,27 @@ export function addBreadCrumb<TClient extends Client>(
 ): TClient {
   // Only apply when using the Alchemy transport; otherwise keep client unchanged.
   try {
-    if (!client?.transport || !client?.chain) return client;
-    if (!isAlchemyTransport(client.transport as any, client.chain))
-      return client;
+    const ctx = getAlchemyTransportContext(client);
+    if (!ctx?.config) return client;
 
-    const oldConfig = (client.transport as any).config;
-    const dynamicFetchOptions = (client.transport as any).fetchOptions;
-    const newTransport = alchemyTransport({ ...oldConfig });
+    const newTransport = alchemyTransport({ ...ctx.config });
     newTransport.updateHeaders(
-      headersUpdate(breadcrumb)(
-        convertHeadersToObject(dynamicFetchOptions?.headers),
-      ),
+      headersUpdate(breadcrumb)(convertHeadersToObject(ctx.headers)),
     );
 
     // Override only the request function so method typings remain intact.
     const wrappedRequest = ((args: Parameters<TClient["request"]>[0]) =>
       createClient({
-        ...(client as unknown as Record<string, unknown>),
-        transport: newTransport,
         chain: client.chain,
-      } as any).request(args as any)) as TClient["request"];
+        transport: newTransport,
+      }).request(
+        args as unknown as Parameters<Client["request"]>[0],
+      )) as TClient["request"];
 
     const wrapped = {
       ...(client as unknown as Record<string, unknown>),
       request: wrappedRequest,
-    } as unknown as TClient;
+    } as TClient;
     return wrapped;
   } catch {
     // On any unexpected shape, return original client to avoid breaking calls.
@@ -54,44 +69,30 @@ export function addBreadCrumb<TClient extends Client>(
 }
 
 /**
- * Performs a single request with a breadcrumb appended to headers, preserving
- * the client's exact request typing. If the client is not using the Alchemy
+ * Performs a single request with a breadcrumb appended to headers, deriving the
+ * breadcrumb from the request method. If the client is not using the Alchemy
  * transport, the request is sent as-is.
  *
  * @param {Client} client The client used to send the request.
- * @param {string} breadcrumb The breadcrumb label to append.
- * @param {object} req The exact request object for the client's `request` method.
+ * @param {object} req The request object for the client's `request` method.
  * @returns {Promise<unknown>} The result of the client's `request` call.
  */
-export function requestWithBreadcrumb<TClient extends Client>(
-  client: TClient,
-  breadcrumb: string,
-  req: Parameters<TClient["request"]>[0],
-): ReturnType<TClient["request"]> {
+export function requestWithBreadcrumb<
+  C extends {
+    request: (req: any) => any;
+  } & Partial<{ transport: unknown; chain: unknown }>,
+>(client: C, req: Parameters<C["request"]>[0]): ReturnType<C["request"]> {
+  const breadcrumb = (req as { method?: string })?.method ?? "";
   try {
-    if (!client?.transport || !client?.chain) {
-      return client.request(req as any) as ReturnType<TClient["request"]>;
-    }
-    if (!isAlchemyTransport(client.transport as any, client.chain)) {
-      return client.request(req as any) as ReturnType<TClient["request"]>;
-    }
+    const ctx = getAlchemyTransportContext(client as unknown as Client);
+    if (!ctx) return client.request(req);
 
-    const oldConfig = (client.transport as any).config;
-    const dynamicFetchOptions = (client.transport as any).fetchOptions;
-    const newTransport = alchemyTransport({ ...oldConfig });
-    newTransport.updateHeaders(
-      headersUpdate(breadcrumb)(
-        convertHeadersToObject(dynamicFetchOptions?.headers),
-      ),
+    const merged = headersUpdate(breadcrumb)(
+      convertHeadersToObject(ctx.headers),
     );
-
-    const temp = createClient({
-      ...(client as unknown as Record<string, unknown>),
-      transport: newTransport,
-      chain: client.chain,
-    } as any);
-    return temp.request(req as any) as ReturnType<TClient["request"]>;
+    ctx.transport.updateHeaders(merged);
+    return client.request(req) as ReturnType<C["request"]>;
   } catch {
-    return client.request(req as any) as ReturnType<TClient["request"]>;
+    return client.request(req) as ReturnType<C["request"]>;
   }
 }
