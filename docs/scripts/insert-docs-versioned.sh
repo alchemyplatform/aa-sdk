@@ -56,13 +56,24 @@ mkdir -p fern/wallets-v5
 cp -r "$V5_DOCS_PATH"/* fern/wallets-v5/
 
 # Copy specs and api-generators from v5 (assuming v5 is the canonical version for these)
-# You can adjust this logic if v4 specs should also be included
-cp -r fern/wallets-v5/specs/openrpc/* src/openrpc/alchemy
-cp -r fern/wallets-v5/specs/openapi/* src/openapi/
-cp -r fern/wallets-v5/api-generators/* fern/apis/
+# Create destination directories and guard against missing sources
+mkdir -p src/openrpc/alchemy src/openapi fern/apis
+
+if [ -d "fern/wallets-v5/specs/openrpc" ] && [ "$(ls -A fern/wallets-v5/specs/openrpc 2>/dev/null)" ]; then
+  cp -r fern/wallets-v5/specs/openrpc/* src/openrpc/alchemy/ 2>/dev/null || true
+fi
+
+if [ -d "fern/wallets-v5/specs/openapi" ] && [ "$(ls -A fern/wallets-v5/specs/openapi 2>/dev/null)" ]; then
+  cp -r fern/wallets-v5/specs/openapi/* src/openapi/ 2>/dev/null || true
+fi
+
+if [ -d "fern/wallets-v5/api-generators" ] && [ "$(ls -A fern/wallets-v5/api-generators 2>/dev/null)" ]; then
+  cp -r fern/wallets-v5/api-generators/* fern/apis/ 2>/dev/null || true
+fi
 
 # Move images to a shared location
 # Images from both versions go to the same place to avoid duplication
+# MDX files reference images via /images/wallets/... (absolute from fern root)
 mkdir -p fern/images/wallets
 if [ -d "fern/wallets-v4/images" ]; then
   cp -r fern/wallets-v4/images/* fern/images/wallets/ 2>/dev/null || true
@@ -72,6 +83,7 @@ if [ -d "fern/wallets-v5/images" ]; then
   cp -r fern/wallets-v5/images/* fern/images/wallets/ 2>/dev/null || true
   rm -rf fern/wallets-v5/images
 fi
+echo "📸 Moved images to shared location: fern/images/wallets/"
 
 # Create a backup of fern/docs.yml
 cp fern/docs.yml fern/docs.yml.bak
@@ -265,26 +277,20 @@ except FileNotFoundError:
 v4_pattern = r'(- title: v4.*?)(- title: v5)'
 v5_pattern = r'(- title: v5.*?)(\n  - tab:|\Z)'
 
+def rewrite_variant_paths(section, variant_prefix):
+    """Rewrite ANY path starting with 'wallets/' to use the variant prefix"""
+    # Single-line paths: path: wallets/...
+    section = re.sub(r'(?m)^(\s*path:\s*)wallets/', r'\1' + variant_prefix + '/', section)
+    # Multi-line/folded paths: path: >-\n    wallets/...
+    section = re.sub(r'(?ms)(path:\s*>-\s*\n)(\s*)wallets/', r'\1\2' + variant_prefix + '/', section)
+    return section
+
 def replace_v4_paths(match):
-    v4_section = match.group(1)
-    # Only replace paths that start with 'wallets/' (not already versioned)
-    # Handle both single-line and multi-line YAML paths
-    v4_section = re.sub(r'path: wallets/pages', 'path: wallets-v4/pages', v4_section)
-    v4_section = re.sub(r'path: wallets/shared', 'path: wallets-v4/shared', v4_section)
-    # Handle multi-line paths (path: >- followed by wallets/pages on next line)
-    v4_section = re.sub(r'(path: >-\s+)wallets/pages', r'\1wallets-v4/pages', v4_section)
-    v4_section = re.sub(r'(path: >-\s+)wallets/shared', r'\1wallets-v4/shared', v4_section)
+    v4_section = rewrite_variant_paths(match.group(1), 'wallets-v4')
     return v4_section + match.group(2)
 
 def replace_v5_paths(match):
-    v5_section = match.group(1)
-    # Only replace paths that start with 'wallets/' (not already versioned)
-    # Handle both single-line and multi-line YAML paths
-    v5_section = re.sub(r'path: wallets/pages', 'path: wallets-v5/pages', v5_section)
-    v5_section = re.sub(r'path: wallets/shared', 'path: wallets-v5/shared', v5_section)
-    # Handle multi-line paths (path: >- followed by wallets/pages on next line)
-    v5_section = re.sub(r'(path: >-\s+)wallets/pages', r'\1wallets-v5/pages', v5_section)
-    v5_section = re.sub(r'(path: >-\s+)wallets/shared', r'\1wallets-v5/shared', v5_section)
+    v5_section = rewrite_variant_paths(match.group(1), 'wallets-v5')
     return v5_section + match.group(2)
 
 # Apply replacements
@@ -307,18 +313,6 @@ if [ $? -ne 0 ]; then
     echo "❌ Failed to update paths"
     exit 1
 fi
-
-# Clean up temporary files
-rm -f fern/wallets-v4/temp_v4_nav.yml
-rm -f fern/wallets-v5/temp_v5_nav.yml
-rm -f fern/temp_v4_layout.yml
-rm -f fern/temp_v5_layout.yml
-rm -f fern/temp_wallets_variants.yml
-rm -f fern/temp_mdx_v4.yml
-rm -f fern/temp_mdx_v5.yml
-rm -f fern/temp_mdx_combined.yml
-rm -f fern/docs.yml.bak
-rm -f fern/docs.yml.bak.bak
 
 echo ""
 echo "🔍 Validating generated docs.yml..."
@@ -343,9 +337,20 @@ VALIDATE_SCRIPT
 
 if [ $? -ne 0 ]; then
     echo "❌ Generated docs.yml is invalid. Restoring backup..."
-    mv fern/docs.yml.bak fern/docs.yml
+    mv -f fern/docs.yml.bak fern/docs.yml
     exit 1
 fi
+
+# Validation succeeded - clean up temporary files
+rm -f fern/wallets-v4/temp_v4_nav.yml
+rm -f fern/wallets-v5/temp_v5_nav.yml
+rm -f fern/temp_v4_layout.yml
+rm -f fern/temp_v5_layout.yml
+rm -f fern/temp_wallets_variants.yml
+rm -f fern/temp_mdx_v4.yml
+rm -f fern/temp_mdx_v5.yml
+rm -f fern/temp_mdx_combined.yml
+rm -f fern/docs.yml.bak
 
 echo ""
 echo "✅ Successfully inserted versioned docs with tab variants!"

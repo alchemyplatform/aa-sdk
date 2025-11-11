@@ -2,17 +2,10 @@ name: 'Setup Docs (Versioned)'
 description: 'Sets up everything needed to generate docs with Fern CLI for both v4 and v5'
 
 inputs:
-  docs-github-token:
-    description: 'GitHub token for accessing the docs repository'
-    required: true
   v4-branch:
     description: 'Branch name for v4 docs'
     required: false
     default: 'main'
-  v5-branch:
-    description: 'Branch name for v5 docs'
-    required: false
-    default: 'blake/merge-v4-and-v5'
 
 runs:
   using: "composite"
@@ -23,21 +16,17 @@ runs:
         # Clean up any stale worktree references
         git worktree prune
         
-        # Remove existing directories if they exist
+        # Remove existing v4 worktree if it exists
         git worktree remove /tmp/aa-sdk-v4 --force 2>/dev/null || true
         rm -rf /tmp/aa-sdk-v4
-        rm -rf /tmp/aa-sdk-v5
         
-        # Create fresh directories
-        mkdir -p /tmp/aa-sdk-v4
-        mkdir -p /tmp/aa-sdk-v5
-        echo "✅ Created temporary directories for v4 and v5"
+        echo "✅ Cleaned up stale worktrees"
 
-    - name: Checkout v4 branch (main)
+    - name: Checkout v4 branch
       shell: bash
       run: |
         git fetch origin ${{ inputs.v4-branch }}
-        git worktree add /tmp/aa-sdk-v4 origin/${{ inputs.v4-branch }}
+        git worktree add -f /tmp/aa-sdk-v4 origin/${{ inputs.v4-branch }}
         echo "✅ Checked out ${{ inputs.v4-branch }} to /tmp/aa-sdk-v4"
 
     - name: Extract code snippets for v4
@@ -80,6 +69,5 @@ runs:
       run: |
         git worktree remove /tmp/aa-sdk-v4 --force 2>/dev/null || true
         rm -rf /tmp/aa-sdk-v4
-        rm -rf /tmp/aa-sdk-v5
         echo "✅ Cleaned up temporary directories"
 

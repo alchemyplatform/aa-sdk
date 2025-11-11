@@ -27,9 +27,7 @@ jobs:
       - name: Setup Versioned Docs
         uses: ./.github/actions/setup-docs-versioned
         with:
-          docs-github-token: ${{ github.token }}
           v4-branch: main
-          v5-branch: blake/merge-v4-and-v5
 
       - name: Generate Fern Docs
         id: publish

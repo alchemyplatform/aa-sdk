@@ -26,9 +26,7 @@ jobs:
       - name: Setup Versioned Docs
         uses: ./.github/actions/setup-docs-versioned
         with:
-          docs-github-token: ${{ github.token }}
           v4-branch: main
-          v5-branch: ${{ github.head_ref }}
 
       - name: Set Build Comment to In Progress
         uses: actions/github-script@v7
