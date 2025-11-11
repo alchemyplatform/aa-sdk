@@ -22,7 +22,6 @@ import {
   arbitrumNova,
   baseGoerli,
   beraChainBartio,
-  celoAlfajores,
   celoMainnet,
   gensynTestnet,
   goerli,
@@ -113,7 +112,6 @@ export const getAlchemyPaymasterAddress = (
         case inkMainnet.id:
         case arbitrumNova.id:
         case storyMainnet.id:
-        case celoAlfajores.id:
         case celoMainnet.id:
           return AlchemyPaymasterAddressV4;
         case polygonAmoy.id:
@@ -139,7 +137,6 @@ export const getAlchemyPaymasterAddress = (
     case "0.7.0":
       switch (chain.id) {
         case arbitrumNova.id:
-        case celoAlfajores.id:
         case celoMainnet.id:
         case gensynTestnet.id:
         case inkMainnet.id:
