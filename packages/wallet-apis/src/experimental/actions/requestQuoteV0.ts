@@ -9,6 +9,7 @@ import type { OptionalChainId, InnerWalletApiClient } from "../../types.ts";
 import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
 import { AccountNotFoundError } from "@alchemy/common";
 import { mergeClientCapabilities } from "../../utils/capabilities.js";
+import { requestWithBreadcrumb } from "@alchemy/common";
 
 type RpcSchema = Extract<
   WalletServerRpcSchemaType,
@@ -81,15 +82,19 @@ export async function requestQuoteV0<
     ? undefined
     : mergeClientCapabilities(client, params.capabilities);
 
-  return await client.request({
-    method: "wallet_requestQuote_v0",
-    params: [
-      {
-        ...params,
-        chainId: params.chainId ?? toHex(client.chain.id),
-        from,
-        ...(capabilities && { capabilities }),
-      },
-    ],
-  });
+  return await requestWithBreadcrumb(
+    client as any,
+    "wallet-apis:wallet_requestQuote_v0",
+    {
+      method: "wallet_requestQuote_v0",
+      params: [
+        {
+          ...params,
+          chainId: params.chainId ?? toHex(client.chain.id),
+          from,
+          ...(capabilities && { capabilities }),
+        },
+      ],
+    },
+  );
 }

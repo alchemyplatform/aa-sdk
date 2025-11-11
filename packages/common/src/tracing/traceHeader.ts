@@ -146,9 +146,15 @@ export class TraceHeader {
     const breadcrumbs = this.traceState.breadcrumbs
       ? `${this.traceState.breadcrumbs}-${eventName}`
       : eventName;
-    return new TraceHeader(this.traceId, this.parentId, this.traceFlags, {
-      ...this.traceState,
-      breadcrumbs,
-    });
+    // Rotate span (parentId) per event to represent a new step/span.
+    return new TraceHeader(
+      this.traceId,
+      generateRandomHexString(8),
+      this.traceFlags,
+      {
+        ...this.traceState,
+        breadcrumbs,
+      },
+    );
   }
 }

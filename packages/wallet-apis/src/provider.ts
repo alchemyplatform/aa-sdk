@@ -26,6 +26,7 @@ import {
 } from "./client.js";
 import type { CreationOptionsBySignerAddress } from "@alchemy/wallet-api-types";
 import { viemDecodeCapabilities } from "./utils/viemDecode.js";
+import { requestWithBreadcrumb } from "@alchemy/common";
 
 export type SmartWalletClient1193Methods = [
   ExtractRpcMethod<WalletRpcSchema, "eth_chainId">,
@@ -220,10 +221,14 @@ export const createEip1193Provider = (
         // api. We may want to change this behavior later depending on how we
         // handle request routing within the wagmi connector.
         default:
-          return client.request({
-            method: method as any,
-            params: params as any,
-          });
+          return requestWithBreadcrumb(
+            client as any,
+            `wallet-apis:${String(method)}`,
+            {
+              method: method as any,
+              params: params as any,
+            },
+          );
       }
     } catch (err) {
       if (err instanceof ChainNotFoundError) {

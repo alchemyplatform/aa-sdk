@@ -12,6 +12,7 @@ import { signSignatureRequest } from "./signSignatureRequest.js";
 import { AccountNotFoundError } from "@alchemy/common";
 import { LOGGER } from "../logger.js";
 import type { OptionalChainId } from "../types.ts";
+import { requestWithBreadcrumb } from "@alchemy/common";
 
 type RpcSchema = Extract<
   WalletServerRpcSchemaType,
@@ -101,16 +102,20 @@ export async function grantPermissions<
     throw new AccountNotFoundError();
   }
   LOGGER.debug("grantPermissions:start", { expirySec: params.expirySec });
-  const { sessionId, signatureRequest } = await client.request({
-    method: "wallet_createSession",
-    params: [
-      {
-        ...params,
-        account,
-        chainId: params.chainId ?? toHex(client.chain.id),
-      },
-    ],
-  });
+  const { sessionId, signatureRequest } = await requestWithBreadcrumb(
+    client as any,
+    "wallet-apis:wallet_createSession",
+    {
+      method: "wallet_createSession",
+      params: [
+        {
+          ...params,
+          account,
+          chainId: params.chainId ?? toHex(client.chain.id),
+        },
+      ],
+    },
+  );
 
   const signature = await signSignatureRequest(client, signatureRequest);
   const res = {

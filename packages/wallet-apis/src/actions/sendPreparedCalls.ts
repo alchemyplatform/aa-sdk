@@ -2,6 +2,7 @@ import { toHex, type Prettify } from "viem";
 import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
 import type { InnerWalletApiClient, OptionalChainId } from "../types.ts";
 import { LOGGER } from "../logger.js";
+import { requestWithBreadcrumb } from "@alchemy/common";
 
 type RpcSchema = Extract<
   WalletServerRpcSchemaType,
@@ -54,17 +55,21 @@ export async function sendPreparedCalls(
   params: SendPreparedCallsParams,
 ): Promise<SendPreparedCallsResult> {
   LOGGER.debug("sendPreparedCalls:start", { type: params.type });
-  const res = await client.request({
-    method: "wallet_sendPreparedCalls",
-    params: [
-      params.type === "array"
-        ? params
-        : {
-            ...params,
-            chainId: params.chainId ?? toHex(client.chain.id),
-          },
-    ],
-  });
+  const res = await requestWithBreadcrumb(
+    client as any,
+    "wallet-apis:wallet_sendPreparedCalls",
+    {
+      method: "wallet_sendPreparedCalls",
+      params: [
+        params.type === "array"
+          ? params
+          : {
+              ...params,
+              chainId: params.chainId ?? toHex(client.chain.id),
+            },
+      ],
+    },
+  );
   LOGGER.debug("sendPreparedCalls:done");
   return res;
 }
