@@ -1,0 +1,68 @@
+name: Generate Fern Docs Preview (Versioned)
+
+# This is an EXAMPLE workflow showing how to use the versioned docs setup for previews
+# To activate this:
+#   1. Test it thoroughly
+#   2. Rename this file to remove .example extension
+#   3. Disable or remove the old preview-fern-docs.yml
+
+on:
+  pull_request:
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout aa-sdk (PR branch)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Need full history for worktree
+
+      - name: Setup Versioned Docs
+        uses: ./.github/actions/setup-docs-versioned
+        with:
+          v4-branch: main
+
+      - name: Set Build Comment to In Progress
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const workspace = process.env.GITHUB_WORKSPACE;
+            const { updatePreviewComment } = await import(`${workspace}/docs-site/scripts/preview-comment.js`);
+
+            await updatePreviewComment({
+              github,
+              context,
+              status: 'building',
+            });
+
+      - name: Generate Fern Docs Preview
+        id: preview
+        uses: ./.github/actions/publish-fern
+        with:
+          github-token: ${{ github.token }}
+          fern-token: ${{ secrets.FERN_TOKEN }}
+          environment: docs-preview
+          ref: ${{ github.head_ref }}
+          preview: "true"
+
+      - name: Comment Preview URL in PR
+        uses: actions/github-script@v7
+        if: always()
+        with:
+          script: |
+            const workspace = process.env.GITHUB_WORKSPACE;
+            const { updatePreviewComment } = await import(`${workspace}/docs-site/scripts/preview-comment.js`);
+
+            await updatePreviewComment({
+              github,
+              context,
+              previewUrl: '${{ steps.preview.outputs.url }}',
+              status: '${{ steps.preview.outcome }}',
+            });
+

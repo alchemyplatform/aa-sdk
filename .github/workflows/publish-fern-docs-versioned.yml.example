@@ -1,0 +1,55 @@
+name: Publish Docs (Versioned)
+
+# This is an EXAMPLE workflow showing how to use the versioned docs setup
+# To activate this:
+#   1. Test it thoroughly
+#   2. Rename this file to remove .example extension
+#   3. Disable or remove the old publish-fern-docs.yml
+
+on:
+  push:
+    branches:
+      - main  # v5 docs (post-launch)
+      - v4    # legacy v4 docs - allows updates to v4 to auto-deploy
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Reason for manual deploy'
+        required: false
+        default: 'Manual deployment'
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    if: ${{ github.event_name == 'push' && github.run_number > 1 }}
+    steps:
+      - name: Checkout aa-sdk (current branch)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Need full history for worktree
+
+      - name: Setup Versioned Docs
+        uses: ./.github/actions/setup-docs-versioned
+        with:
+          v4-branch: main
+
+      - name: Generate Fern Docs
+        id: publish
+        uses: ./.github/actions/publish-fern
+        with:
+          github-token: ${{ github.token }}
+          fern-token: ${{ secrets.FERN_TOKEN }}
+          environment: docs-production
+          ref: ${{ github.ref }}
+
+      - name: Trigger GitHub Pages Deploy Workflow
+        run: |
+          curl -X POST \
+            -H "Authorization: Bearer ${{ secrets.DOCS_GH_PAGES_DEPLOY_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/alchemyplatform/docs/dispatches \
+            -d '{"event_type":"trigger-gh-pages-deploy","client_payload":{"source":"alchemyplatform/aa-sdk"}}'
+
