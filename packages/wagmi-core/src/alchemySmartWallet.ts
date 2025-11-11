@@ -18,7 +18,7 @@ import {
   type Client,
   createClient,
 } from "viem";
-import { createConnector, type CreateConnectorFn } from "wagmi";
+import { createConnector, type CreateConnectorFn } from "@wagmi/core";
 
 /** Options used to create the Alchemy Smart Wallet connector. */
 export type AlchemySmartWalletOptions = {
