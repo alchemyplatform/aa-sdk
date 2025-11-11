@@ -21,11 +21,11 @@ A custom [hook](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/
 import { useAddPasskey } from "@account-kit/react";
 
 const { addPasskey, isAddingPasskey, error } = useAddPasskey({
- // these are optional
- onSuccess: () => {
-   // do something on success
- },
- onError: (error) => console.error(error),
+  // these are optional
+  onSuccess: () => {
+    // do something on success
+  },
+  onError: (error) => console.error(error),
 });
 ```
 
@@ -54,6 +54,7 @@ const { addPasskey, isAddingPasskey, error } = useAddPasskey({
         Optional arguments for the mutation used for adding a passkey. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useAddPasskey.ts#L8)
       </td>
     </tr>
+
   </tbody>
 </table>
 

@@ -14,7 +14,7 @@ Implements the `SmartAccountAuthenticator` interface and handles various signer 
 
 ## Extended by
 
-* [`AlchemyWebSigner`](AlchemyWebSigner.mdx)
+- [`AlchemyWebSigner`](AlchemyWebSigner.mdx)
 
 ## Type Parameters
 
@@ -36,7 +36,7 @@ Implements the `SmartAccountAuthenticator` interface and handles various signer 
 
 ## Implements
 
-* `SmartAccountAuthenticator`\<`AuthParams`, [`User`](../type-aliases/User.mdx), `TClient`>
+- `SmartAccountAuthenticator`\<`AuthParams`, [`User`](../type-aliases/User.mdx), `TClient`>
 
 ## Constructors
 
@@ -77,6 +77,7 @@ registers listeners and initializes the session manager to manage session state.
         Object containing the client and session configuration
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -788,6 +789,7 @@ registers listeners and initializes the session manager to manage session state.
         If no user is authenticated
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -828,6 +830,7 @@ Handles OAuth authentication by augmenting the provided arguments with a type an
         Authentication parameters omitting the type, which will be set to "oauth"
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -837,7 +840,7 @@ Handles OAuth authentication by augmenting the provided arguments with a type an
 
 A promise that resolves to an `OauthProviderInfo` object containing provider information and the ID token.
 
-***
+---
 
 ### fetchConfig()
 
@@ -851,7 +854,7 @@ Defined in: [account-kit/signer/src/base.ts:1882](https://github.com/alchemyplat
 
 `Promise`\<`SignerConfig`>
 
-***
+---
 
 ### getAuthDetails()
 
@@ -871,14 +874,14 @@ try to authenticate
 import { AlchemyWebSigner } from "@account-kit/signer";
 
 const signer = new AlchemyWebSigner({
- client: {
-   connection: {
-     rpcUrl: "/api/rpc",
-   },
-   iframeConfig: {
-     iframeContainerId: "alchemy-signer-iframe-container",
-   },
- },
+  client: {
+    connection: {
+      rpcUrl: "/api/rpc",
+    },
+    iframeConfig: {
+      iframeContainerId: "alchemy-signer-iframe-container",
+    },
+  },
 });
 
 // throws if not logged in
@@ -898,10 +901,10 @@ if there is no user logged in
 #### Implementation of
 
 ```ts
-SmartAccountAuthenticator.getAuthDetails
+SmartAccountAuthenticator.getAuthDetails;
 ```
 
-***
+---
 
 ### getConfig()
 
@@ -919,7 +922,7 @@ Returns the signer configuration while fetching it if it's not already initializ
 
 A promise that resolves to the signer configuration
 
-***
+---
 
 ### getMfaStatus()
 
@@ -937,14 +940,14 @@ Gets the current MFA status
 import { AlchemyWebSigner } from "@account-kit/signer";
 
 const signer = new AlchemyWebSigner({
- client: {
-   connection: {
-     rpcUrl: "/api/rpc",
-   },
-   iframeConfig: {
-     iframeContainerId: "alchemy-signer-iframe-container",
-   },
- },
+  client: {
+    connection: {
+      rpcUrl: "/api/rpc",
+    },
+    iframeConfig: {
+      iframeContainerId: "alchemy-signer-iframe-container",
+    },
+  },
 });
 
 const mfaStatus = signer.getMfaStatus();
@@ -987,10 +990,11 @@ The current MFA status
         `boolean`
       </td>
     </tr>
+
   </tbody>
 </table>
 
-***
+---
 
 ### getUser()
 
@@ -1002,14 +1006,14 @@ Unauthenticated call to look up a user's organizationId by email or phone
 import { AlchemyWebSigner } from "@account-kit/signer";
 
 const signer = new AlchemyWebSigner({
- client: {
-   connection: {
-     rpcUrl: "/api/rpc",
-   },
-   iframeConfig: {
-     iframeContainerId: "alchemy-signer-iframe-container",
-   },
- },
+  client: {
+    connection: {
+      rpcUrl: "/api/rpc",
+    },
+    iframeConfig: {
+      iframeContainerId: "alchemy-signer-iframe-container",
+    },
+  },
 });
 
 const result = await signer.getUser({ type: "email", value: "foo@mail.com" });
@@ -1043,14 +1047,14 @@ Use getUser(\{ type: "email", value: email }) instead
 import { AlchemyWebSigner } from "@account-kit/signer";
 
 const signer = new AlchemyWebSigner({
- client: {
-   connection: {
-     rpcUrl: "/api/rpc",
-   },
-   iframeConfig: {
-     iframeContainerId: "alchemy-signer-iframe-container",
-   },
- },
+  client: {
+    connection: {
+      rpcUrl: "/api/rpc",
+    },
+    iframeConfig: {
+      iframeContainerId: "alchemy-signer-iframe-container",
+    },
+  },
 });
 
 const result = await signer.getUser("foo@mail.com");
@@ -1081,6 +1085,7 @@ const result = await signer.getUser("foo@mail.com");
         the email to lookup
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1114,14 +1119,14 @@ Unauthenticated call to look up a user's organizationId by email or phone
 import { AlchemyWebSigner } from "@account-kit/signer";
 
 const signer = new AlchemyWebSigner({
- client: {
-   connection: {
-     rpcUrl: "/api/rpc",
-   },
-   iframeConfig: {
-     iframeContainerId: "alchemy-signer-iframe-container",
-   },
- },
+  client: {
+    connection: {
+      rpcUrl: "/api/rpc",
+    },
+    iframeConfig: {
+      iframeContainerId: "alchemy-signer-iframe-container",
+    },
+  },
 });
 
 const result = await signer.getUser({ type: "email", value: "foo@mail.com" });
@@ -1147,6 +1152,7 @@ const result = await signer.getUser({ type: "email", value: "foo@mail.com" });
         `GetUserParams`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1160,7 +1166,7 @@ const result = await signer.getUser({ type: "email", value: "foo@mail.com" });
 
 the organization id for the user if they exist
 
-***
+---
 
 ### initConfig()
 
@@ -1174,7 +1180,7 @@ Defined in: [account-kit/signer/src/base.ts:1864](https://github.com/alchemyplat
 
 `Promise`\<`SignerConfig`>
 
-***
+---
 
 ### listAuthMethods()
 
@@ -1196,7 +1202,7 @@ A promise that resolves to an `AuthMethods` object containing the user's email, 
 
 Thrown if the user is not authenticated
 
-***
+---
 
 ### on()
 
@@ -1265,6 +1271,7 @@ Allows you to subscribe to events emitted by the signer
         the function to run when the event is emitted
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1280,7 +1287,7 @@ a function to remove the listener
 
 `void`
 
-***
+---
 
 ### preparePopupOauth()
 
@@ -1304,14 +1311,14 @@ been fetched at the time a user clicks a social login button.
 import { AlchemyWebSigner } from "@account-kit/signer";
 
 const signer = new AlchemyWebSigner({
- client: {
-   connection: {
-     rpcUrl: "/api/rpc",
-   },
-   iframeConfig: {
-     iframeContainerId: "alchemy-signer-iframe-container",
-   },
- },
+  client: {
+    connection: {
+      rpcUrl: "/api/rpc",
+    },
+    iframeConfig: {
+      iframeContainerId: "alchemy-signer-iframe-container",
+    },
+  },
 });
 
 await signer.preparePopupOauth();
@@ -1324,7 +1331,7 @@ await signer.preparePopupOauth();
 the config which must be loaded before
 using popup-based OAuth
 
-***
+---
 
 ### removeOauthProvider()
 
@@ -1361,6 +1368,7 @@ Removes an OAuth provider by its ID if the user is authenticated.
         The ID of the OAuth provider to be removed, as obtained from `listOauthProviders`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1374,7 +1382,7 @@ A promise indicating the result of the removal process
 
 Thrown if the user is not authenticated
 
-***
+---
 
 ### setEmail()
 
@@ -1427,6 +1435,7 @@ It is recommended to now use the email verification flow instead.
         The email to set for the user
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1477,6 +1486,7 @@ the code.
         An object containing the verification code
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1490,7 +1500,7 @@ A promise that resolves to the updated email address
 
 If the user is not authenticated
 
-***
+---
 
 ### toSolanaSigner()
 
@@ -1509,14 +1519,14 @@ This requires the signer to be authenticated first
 import { AlchemyWebSigner } from "@account-kit/signer";
 
 const signer = new AlchemyWebSigner({
- client: {
-   connection: {
-     rpcUrl: "/api/rpc",
-   },
-   iframeConfig: {
-     iframeContainerId: "alchemy-signer-iframe-container",
-   },
- },
+  client: {
+    connection: {
+      rpcUrl: "/api/rpc",
+    },
+    iframeConfig: {
+      iframeContainerId: "alchemy-signer-iframe-container",
+    },
+  },
 });
 
 const solanaSigner = signer.toSolanaSigner();
@@ -1528,7 +1538,7 @@ const solanaSigner = signer.toSolanaSigner();
 
 A new instance of `SolanaSigner`
 
-***
+---
 
 ### toViemAccount()
 
@@ -1547,14 +1557,14 @@ will let you use the signer as an EOA directly.
 import { AlchemyWebSigner } from "@account-kit/signer";
 
 const signer = new AlchemyWebSigner({
- client: {
-   connection: {
-     rpcUrl: "/api/rpc",
-   },
-   iframeConfig: {
-     iframeContainerId: "alchemy-signer-iframe-container",
-   },
- },
+  client: {
+    connection: {
+      rpcUrl: "/api/rpc",
+    },
+    iframeConfig: {
+      iframeContainerId: "alchemy-signer-iframe-container",
+    },
+  },
 });
 
 const account = signer.toViemAccount();
@@ -1674,6 +1684,7 @@ a LocalAccount object that can be used with viem's wallet client
         `"local"`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1681,7 +1692,7 @@ a LocalAccount object that can be used with viem's wallet client
 
 if your signer is not authenticated
 
-***
+---
 
 ### validateMultiFactors()
 
@@ -1701,20 +1712,20 @@ It completes the authentication process by validating the MFA factors and comple
 import { AlchemyWebSigner } from "@account-kit/signer";
 
 const signer = new AlchemyWebSigner({
- client: {
-   connection: {
-     rpcUrl: "/api/rpc",
-   },
-   iframeConfig: {
-     iframeContainerId: "alchemy-signer-iframe-container",
-   },
- },
+  client: {
+    connection: {
+      rpcUrl: "/api/rpc",
+    },
+    iframeConfig: {
+      iframeContainerId: "alchemy-signer-iframe-container",
+    },
+  },
 });
 
 // After MFA is required and user provides code
 const user = await signer.validateMultiFactors({
   multiFactorCode: "123456", // 6-digit code from authenticator app
-  multiFactorId: "factor-id"
+  multiFactorId: "factor-id",
 });
 ```
 
@@ -1743,6 +1754,7 @@ const user = await signer.validateMultiFactors({
         Parameters for validating MFA factors
       </td>
     </tr>
+
   </tbody>
 </table>
 

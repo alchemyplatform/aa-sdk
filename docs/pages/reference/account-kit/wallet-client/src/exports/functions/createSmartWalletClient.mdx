@@ -23,7 +23,8 @@ import { alchemy, arbitrumSepolia } from "@account-kit/infra";
 import { generatePrivateKey } from "viem/accounts";
 import { createSmartWalletClient } from "@account-kit/wallet-client";
 
-const signer = LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey());
+const signer =
+  LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey());
 const transport = alchemy({
   apiKey: "your-alchemy-api-key",
 });
@@ -54,6 +55,7 @@ const client = createSmartWalletClient({
         `undefined`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -82,6 +84,7 @@ const client = createSmartWalletClient({
         The parameters for creating the smart wallet client
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -89,4 +92,4 @@ const client = createSmartWalletClient({
 
 [`SmartWalletClient`](../type-aliases/SmartWalletClient.mdx)\<`TAccount`>
 
-* A viem-compatible client
+- A viem-compatible client

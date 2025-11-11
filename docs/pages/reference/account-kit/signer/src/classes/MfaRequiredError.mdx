@@ -11,7 +11,7 @@ Defined in: [account-kit/signer/src/errors.ts:27](https://github.com/alchemyplat
 
 ## Extends
 
-* `BaseError`
+- `BaseError`
 
 ## Constructors
 
@@ -43,6 +43,7 @@ Defined in: [account-kit/signer/src/errors.ts:31](https://github.com/alchemyplat
         `MfaFactor`\[]
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -53,7 +54,7 @@ Defined in: [account-kit/signer/src/errors.ts:31](https://github.com/alchemyplat
 #### Overrides
 
 ```ts
-BaseError.constructor
+BaseError.constructor;
 ```
 
 ## Properties
@@ -274,6 +275,7 @@ BaseError.constructor
         not capture any frames.
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -287,7 +289,7 @@ BaseError.constructor
 walk(): Error;
 ```
 
-Defined in: node\_modules/viem/\_types/errors/base.d.ts:26
+Defined in: node_modules/viem/\_types/errors/base.d.ts:26
 
 ##### Returns
 
@@ -296,7 +298,7 @@ Defined in: node\_modules/viem/\_types/errors/base.d.ts:26
 ##### Inherited from
 
 ```ts
-BaseError.walk
+BaseError.walk;
 ```
 
 #### Call Signature
@@ -305,7 +307,7 @@ BaseError.walk
 walk(fn): null | Error;
 ```
 
-Defined in: node\_modules/viem/\_types/errors/base.d.ts:27
+Defined in: node_modules/viem/\_types/errors/base.d.ts:27
 
 ##### Parameters
 
@@ -327,6 +329,7 @@ Defined in: node\_modules/viem/\_types/errors/base.d.ts:27
         (`err`) => `boolean`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -337,10 +340,10 @@ Defined in: node\_modules/viem/\_types/errors/base.d.ts:27
 ##### Inherited from
 
 ```ts
-BaseError.walk
+BaseError.walk;
 ```
 
-***
+---
 
 ### captureStackTrace()
 
@@ -348,7 +351,7 @@ BaseError.walk
 static captureStackTrace(targetObject, constructorOpt?): void;
 ```
 
-Defined in: node\_modules/@types/node/globals.d.ts:145
+Defined in: node_modules/@types/node/globals.d.ts:145
 
 Creates a `.stack` property on `targetObject`, which when accessed returns
 a string representing the location in the code at which
@@ -357,7 +360,7 @@ a string representing the location in the code at which
 ```js
 const myObject = {};
 Error.captureStackTrace(myObject);
-myObject.stack;  // Similar to `new Error().stack`
+myObject.stack; // Similar to `new Error().stack`
 ```
 
 The first line of the trace will be prefixed with
@@ -424,6 +427,7 @@ a();
         `Function`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -434,10 +438,10 @@ a();
 #### Inherited from
 
 ```ts
-BaseError.captureStackTrace
+BaseError.captureStackTrace;
 ```
 
-***
+---
 
 ### prepareStackTrace()
 
@@ -445,7 +449,7 @@ BaseError.captureStackTrace
 static prepareStackTrace(err, stackTraces): any;
 ```
 
-Defined in: node\_modules/@types/node/globals.d.ts:149
+Defined in: node_modules/@types/node/globals.d.ts:149
 
 #### Parameters
 
@@ -477,6 +481,7 @@ Defined in: node\_modules/@types/node/globals.d.ts:149
         `CallSite`\[]
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -491,5 +496,5 @@ https://v8.dev/docs/stack-trace-api#customizing-stack-traces
 #### Inherited from
 
 ```ts
-BaseError.prepareStackTrace
+BaseError.prepareStackTrace;
 ```

@@ -22,11 +22,11 @@ This will disconnect both EVM and Solana wallets.
 import { useLogout } from "@account-kit/react";
 
 const { logout, isLoggingOut, error } = useLogout({
- // these are optional
- onSuccess: () => {
-  // do something on success
- },
- onError: (error) => console.error(error),
+  // these are optional
+  onSuccess: () => {
+    // do something on success
+  },
+  onError: (error) => console.error(error),
 });
 ```
 
@@ -55,6 +55,7 @@ const { logout, isLoggingOut, error } = useLogout({
         optional arguments to customize the mutation behavior
       </td>
     </tr>
+
   </tbody>
 </table>
 

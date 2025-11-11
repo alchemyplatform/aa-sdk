@@ -20,11 +20,7 @@ A custom hook to send OTP verification codes to email or SMS for account verific
 ```ts twoslash
 import { useSendVerificationCode } from "@account-kit/react";
 
-const {
-  sendVerificationCode,
-  isSendingCode,
-  error
-} = useSendVerificationCode({
+const { sendVerificationCode, isSendingCode, error } = useSendVerificationCode({
   onSuccess: (data) => {
     console.log("OTP sent");
   },
@@ -34,13 +30,13 @@ const {
 // Send verification code to email
 sendVerificationCode({
   type: "email",
-  contact: "user@example.com"
+  contact: "user@example.com",
 });
 
 // Send verification code to SMS
 sendVerificationCodeAsync({
   type: "sms",
-  contact: "+1234567890"
+  contact: "+1234567890",
 });
 ```
 
@@ -69,6 +65,7 @@ sendVerificationCodeAsync({
         Optional arguments for the mutation
       </td>
     </tr>
+
   </tbody>
 </table>
 

@@ -22,7 +22,11 @@ It will poll until the calls reach the desired status or until a timeout occurs.
 import { useWaitForCallsStatus } from "@account-kit/react";
 
 function MyComponent() {
-  const { data: result, isLoading, error } = useWaitForCallsStatus({
+  const {
+    data: result,
+    isLoading,
+    error,
+  } = useWaitForCallsStatus({
     client: smartWalletClient,
     id: "0x1234...", // The call ID from sendPreparedCalls
     timeout: 30_000, // 30 second timeout
@@ -55,6 +59,7 @@ function MyComponent() {
         Parameters for the hook
       </td>
     </tr>
+
   </tbody>
 </table>
 

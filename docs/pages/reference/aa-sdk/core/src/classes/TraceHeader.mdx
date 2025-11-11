@@ -22,9 +22,9 @@ https://www.w3.org/TR/trace-context/
 
 ```ts
 new TraceHeader(
-   traceId, 
-   parentId, 
-   traceFlags, 
+   traceId,
+   parentId,
+   traceFlags,
    traceState): TraceHeader;
 ```
 
@@ -99,6 +99,7 @@ Initializes a new instance with the provided trace identifiers and state informa
         The trace state information for additional trace context
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -156,6 +157,7 @@ Initializes a new instance with the provided trace identifiers and state informa
         `Record`\<`string`, `string`>
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -207,10 +209,11 @@ The trace header in the format of a record, used in our http client
         `string`
       </td>
     </tr>
+
   </tbody>
 </table>
 
-***
+---
 
 ### withEvent()
 
@@ -251,6 +254,7 @@ trace parent gets updated as according to the docs
         The key of the new event
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -260,7 +264,7 @@ trace parent gets updated as according to the docs
 
 The new trace header
 
-***
+---
 
 ### default()
 
@@ -280,7 +284,7 @@ Creating a default trace id that is a random setup for both trace id and parent 
 
 A default trace header
 
-***
+---
 
 ### fromTraceHeader()
 
@@ -319,6 +323,7 @@ Should be able to consume a trace header from the headers of an http request
         The headers from the http request
       </td>
     </tr>
+
   </tbody>
 </table>
 

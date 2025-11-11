@@ -19,17 +19,17 @@ is enabled on the Account Provider
 ## Example
 
 ```tsx twoslash
-import React from 'react';
+import React from "react";
 import { useAuthModal } from "@account-kit/react";
 
 const ComponentWithAuthModal = () => {
- const { openAuthModal } = useAuthModal();
+  const { openAuthModal } = useAuthModal();
 
- return (
-   <div>
-     <button onClick={openAuthModal}>Login</button>
-   </div>
- );
+  return (
+    <div>
+      <button onClick={openAuthModal}>Login</button>
+    </div>
+  );
 };
 ```
 
@@ -77,5 +77,6 @@ an object containing methods for opening or closing the auth modal. [ref](https:
         () => `void`
       </td>
     </tr>
+
   </tbody>
 </table>

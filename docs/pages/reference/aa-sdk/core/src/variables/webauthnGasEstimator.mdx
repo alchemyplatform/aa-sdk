@@ -32,12 +32,16 @@ import {
 const credential = {
   id: "credential-id",
   publicKey: "0x...",
-}
+};
 
 async function createWebauthnAccountClient(
-  config: CreateModularAccountV2ClientParams
+  config: CreateModularAccountV2ClientParams,
 ): Promise<SmartAccountClient> {
-  const webauthnAccount = await createModularAccountV2({ ...config, mode: "webauthn", credential });
+  const webauthnAccount = await createModularAccountV2({
+    ...config,
+    mode: "webauthn",
+    credential,
+  });
 
   return createSmartAccountClient({
     account: webAuthnAccount,
@@ -72,6 +76,7 @@ async function createWebauthnAccountClient(
         Optional custom gas estimator function
       </td>
     </tr>
+
   </tbody>
 </table>
 

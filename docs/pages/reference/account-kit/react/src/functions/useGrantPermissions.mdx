@@ -24,10 +24,9 @@ import { useGrantPermissions, useSmartAccountClient } from "@account-kit/react";
 
 function PermissionsComponent() {
   const { client } = useSmartAccountClient({});
-  const {
-    grantPermissions,
-    isGrantingPermissions,
-  } = useGrantPermissions({ client });
+  const { grantPermissions, isGrantingPermissions } = useGrantPermissions({
+    client,
+  });
 
   const handleGrantPermissions = () => {
     grantPermissions({
@@ -44,10 +43,7 @@ function PermissionsComponent() {
   };
 
   return (
-    <button
-      onClick={handleGrantPermissions}
-      disabled={isGrantingPermissions}
-    >
+    <button onClick={handleGrantPermissions} disabled={isGrantingPermissions}>
       {isGrantingPermissions ? "Granting..." : "Grant Permissions"}
     </button>
   );
@@ -79,6 +75,7 @@ function PermissionsComponent() {
         Configuration object containing the smart account client
       </td>
     </tr>
+
   </tbody>
 </table>
 

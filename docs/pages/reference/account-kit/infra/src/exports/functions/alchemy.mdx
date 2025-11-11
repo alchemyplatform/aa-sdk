@@ -27,8 +27,8 @@ If the chain you're using is supported for both Bundler and Node RPCs, then you 
 import { alchemy } from "@account-kit/infra";
 
 const transport = alchemy({
- // NOTE: you can also pass in an rpcUrl or jwt here or rpcUrl and jwt
- apiKey: "your-api-key",
+  // NOTE: you can also pass in an rpcUrl or jwt here or rpcUrl and jwt
+  apiKey: "your-api-key",
 });
 ```
 
@@ -41,10 +41,10 @@ handles the Bundler and Paymaster RPCs for these chains.
 import { alchemy } from "@account-kit/infra";
 
 const transport = alchemy({
- alchemyConnection: {
-   apiKey: "your-api-key",
- },
- nodeRpcUrl: "https://zora.rpc.url",
+  alchemyConnection: {
+    apiKey: "your-api-key",
+  },
+  nodeRpcUrl: "https://zora.rpc.url",
 });
 ```
 
@@ -73,6 +73,7 @@ const transport = alchemy({
         The configuration object for the Alchemy transport.
       </td>
     </tr>
+
   </tbody>
 </table>
 

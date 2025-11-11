@@ -22,9 +22,12 @@ import { createAccount } from "@account-kit/core";
 // see createConfig for more information on how to create a config
 import { config } from "./config";
 
-const account = createAccount({
- type: "LightAccount",
-}, config);
+const account = createAccount(
+  {
+    type: "LightAccount",
+  },
+  config,
+);
 ```
 
 ## Type Parameters
@@ -84,6 +87,7 @@ const account = createAccount({
         The configuration object for Alchemy accounts
       </td>
     </tr>
+
   </tbody>
 </table>
 

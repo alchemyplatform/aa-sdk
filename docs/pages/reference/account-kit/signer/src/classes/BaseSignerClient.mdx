@@ -13,8 +13,8 @@ Base class for all Alchemy Signer clients
 
 ## Extended by
 
-* [`AlchemySignerWebClient`](AlchemySignerWebClient.mdx)
-* [`ServerSignerClient`](ServerSignerClient.mdx)
+- [`AlchemySignerWebClient`](AlchemySignerWebClient.mdx)
+- [`ServerSignerClient`](ServerSignerClient.mdx)
 
 ## Type Parameters
 
@@ -46,6 +46,7 @@ Base class for all Alchemy Signer clients
         `unknown`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -86,6 +87,7 @@ Create a new instance of the Alchemy Signer client
         the parameters required to create the client
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -143,6 +145,7 @@ Create a new instance of the Alchemy Signer client
         `TurnkeyClient`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -190,6 +193,7 @@ Defined in: [account-kit/signer/src/client/base.ts:133](https://github.com/alche
         `undefined` | [`User`](../type-aliases/User.mdx)
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -234,6 +238,7 @@ Initiates the setup of a new MFA factor for the current user. Mfa will need to b
         The parameters required to enable a new MFA factor
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -251,7 +256,7 @@ If no user is authenticated
 
 If an unsupported factor type is provided
 
-***
+---
 
 ### addOauthProvider()
 
@@ -288,6 +293,7 @@ Adds an OAuth provider for the authenticated user using the provided parameters.
         The parameters for adding an OAuth provider, including `providerName` and `oidcToken`.
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -301,7 +307,7 @@ A Promise that resolves when the OAuth provider is added.
 
 Throws if the user is not authenticated.
 
-***
+---
 
 ### addPasskey()
 
@@ -338,6 +344,7 @@ Handles the creation of authenticators using WebAuthn attestation and the provid
         The options used to create the WebAuthn attestation
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -351,7 +358,7 @@ A promise that resolves to an array of authenticator IDs
 
 If the user is not authenticated
 
-***
+---
 
 ### completeAuthWithBundle()
 
@@ -441,6 +448,7 @@ Defined in: [account-kit/signer/src/client/base.ts:235](https://github.com/alche
         `string`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -448,7 +456,7 @@ Defined in: [account-kit/signer/src/client/base.ts:235](https://github.com/alche
 
 `Promise`\<[`User`](../type-aliases/User.mdx)>
 
-***
+---
 
 ### createAccount()
 
@@ -485,6 +493,7 @@ Authenticates the user by either email or passkey account creation flow. Emits e
         The parameters for creating an account, including the type (email or passkey) and additional details.
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -494,7 +503,7 @@ Authenticates the user by either email or passkey account creation flow. Emits e
 
 A promise that resolves with the response object containing the account creation result.
 
-***
+---
 
 ### disconnect()
 
@@ -508,9 +517,9 @@ Defined in: [account-kit/signer/src/client/base.ts:260](https://github.com/alche
 
 `Promise`\<`void`>
 
-***
+---
 
-### experimental\_addToMultiOwner()
+### experimental_addToMultiOwner()
 
 ```ts
 experimental_addToMultiOwner(orgId, members): Promise<void>;
@@ -559,6 +568,7 @@ This will add additional members to an existing multi-sig account
         the addresses of the members to add
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -566,9 +576,9 @@ This will add additional members to an existing multi-sig account
 
 `Promise`\<`void`>
 
-***
+---
 
-### experimental\_createApiKey()
+### experimental_createApiKey()
 
 ```ts
 experimental_createApiKey(params): Promise<void>;
@@ -604,6 +614,7 @@ Creates an API key that can take any action on behalf of the current user.
         Parameters for creating the API key.
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -615,9 +626,9 @@ Creates an API key that can take any action on behalf of the current user.
 
 If there is no authenticated user or the API key creation fails.
 
-***
+---
 
-### experimental\_createMultiOwner()
+### experimental_createMultiOwner()
 
 ```ts
 experimental_createMultiOwner(additionalMembers): Promise<{
@@ -656,6 +667,7 @@ This will create a multi-owner account with the current user and additional spec
         members to add, aside from the currently authenticated user
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -669,9 +681,9 @@ This will create a multi-owner account with the current user and additional spec
 
 created multi-owner account
 
-***
+---
 
-### experimental\_deleteFromMultiOwner()
+### experimental_deleteFromMultiOwner()
 
 ```ts
 experimental_deleteFromMultiOwner(orgId, members): Promise<void>;
@@ -720,6 +732,7 @@ This will remove members from an existing multi-sig account
         the addresses of the members to remove
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -727,14 +740,14 @@ This will remove members from an existing multi-sig account
 
 `Promise`\<`void`>
 
-***
+---
 
-### experimental\_multiOwnerSignRawMessage()
+### experimental_multiOwnerSignRawMessage()
 
 ```ts
 experimental_multiOwnerSignRawMessage(
-   msg, 
-   orgId, 
+   msg,
+   orgId,
    orgAddress): Promise<`0x${string}`>;
 ```
 
@@ -797,6 +810,7 @@ that result here.
         address of the multi-owner org to sign on behalf of
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -806,7 +820,7 @@ that result here.
 
 the signature over the raw hex
 
-***
+---
 
 ### exportWallet()
 
@@ -836,6 +850,7 @@ Defined in: [account-kit/signer/src/client/base.ts:262](https://github.com/alche
         `TExportWalletParams`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -843,7 +858,7 @@ Defined in: [account-kit/signer/src/client/base.ts:262](https://github.com/alche
 
 `Promise`\<`TExportWalletOutput`>
 
-***
+---
 
 ### getMfaFactors()
 
@@ -869,7 +884,7 @@ A promise that resolves to an array of configured MFA factors
 
 If no user is authenticated
 
-***
+---
 
 ### getOauthConfig()
 
@@ -883,7 +898,7 @@ Defined in: [account-kit/signer/src/client/base.ts:268](https://github.com/alche
 
 `Promise`\<[`OauthConfig`](../type-aliases/OauthConfig.mdx)>
 
-***
+---
 
 ### getOauthNonce()
 
@@ -920,6 +935,7 @@ Turnkey requires the nonce in the id token to be in this format.
         key from a Turnkey iframe
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -929,7 +945,7 @@ Turnkey requires the nonce in the id token to be in this format.
 
 nonce to be used in OIDC
 
-***
+---
 
 ### getOauthProviderUrl()
 
@@ -994,6 +1010,7 @@ const oauthProviderUrl = getOauthProviderUrl({
         Required. The Oauth provider's auth parameters
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1003,7 +1020,7 @@ const oauthProviderUrl = getOauthProviderUrl({
 
 returns the Oauth provider's url
 
-***
+---
 
 ### getPasskeyStatus()
 
@@ -1029,7 +1046,7 @@ A promise that resolves to an object containing the passkey status
 
 If the user is not authenticated
 
-***
+---
 
 ### getUser()
 
@@ -1047,7 +1064,7 @@ Returns the current user or null if no user is set.
 
 the current user object or null if no user is available
 
-***
+---
 
 ### getWebAuthnAttestation()
 
@@ -1097,6 +1114,7 @@ Defined in: [account-kit/signer/src/client/base.ts:270](https://github.com/alche
         `string`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1104,7 +1122,7 @@ Defined in: [account-kit/signer/src/client/base.ts:270](https://github.com/alche
 
 `Promise`\<[`GetWebAuthnAttestationResult`](../type-aliases/GetWebAuthnAttestationResult.mdx)>
 
-***
+---
 
 ### initEmailAuth()
 
@@ -1138,6 +1156,7 @@ Defined in: [account-kit/signer/src/client/base.ts:227](https://github.com/alche
         `Omit`\<[`EmailAuthParams`](../type-aliases/EmailAuthParams.mdx), `"targetPublicKey"`>
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1149,7 +1168,7 @@ Defined in: [account-kit/signer/src/client/base.ts:227](https://github.com/alche
 `otpId?`: `string`;
 }>
 
-***
+---
 
 ### initOauth()
 
@@ -1167,7 +1186,7 @@ Asynchronously fetches and sets the OAuth configuration.
 
 A promise that resolves to the OAuth configuration
 
-***
+---
 
 ### initOtp()
 
@@ -1220,6 +1239,7 @@ Initiates an OTP (One-Time Password) verification process for a user contact.
         The email address or phone number to send the OTP to
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1235,7 +1255,7 @@ A promise that resolves to an object containing the OTP ID
 
 When no user is currently authenticated
 
-***
+---
 
 ### initSessionStamper()
 
@@ -1251,7 +1271,7 @@ Initializes the session stamper and returns its public key.
 
 `Promise`\<`string`>
 
-***
+---
 
 ### initSmsAuth()
 
@@ -1284,6 +1304,7 @@ Defined in: [account-kit/signer/src/client/base.ts:231](https://github.com/alche
         `Omit`\<[`SmsAuthParams`](../type-aliases/SmsAuthParams.mdx), `"targetPublicKey"`>
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1294,7 +1315,7 @@ Defined in: [account-kit/signer/src/client/base.ts:231](https://github.com/alche
 `otpId?`: `string`;
 }>
 
-***
+---
 
 ### initWebauthnStamper()
 
@@ -1334,6 +1355,7 @@ Defined in: [account-kit/signer/src/client/base.ts:280](https://github.com/alche
         | `undefined` | [`CredentialCreationOptionOverrides`](../type-aliases/CredentialCreationOptionOverrides.mdx)
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1341,7 +1363,7 @@ Defined in: [account-kit/signer/src/client/base.ts:280](https://github.com/alche
 
 `Promise`\<`void`>
 
-***
+---
 
 ### listAuthMethods()
 
@@ -1363,7 +1385,7 @@ A promise that resolves to the list of authentication methods
 
 If the user is not authenticated
 
-***
+---
 
 ### lookupUserByAccessKey()
 
@@ -1402,6 +1424,7 @@ Looks up information based on an access key.
         The access key parameters
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1413,7 +1436,7 @@ Looks up information based on an access key.
 
 The result of the lookup request
 
-***
+---
 
 ### lookupUserByEmail()
 
@@ -1452,6 +1475,7 @@ Looks up information based on an email address.
         the email address to look up
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1463,7 +1487,7 @@ Looks up information based on an email address.
 
 the result of the lookup request
 
-***
+---
 
 ### lookupUserByPhone()
 
@@ -1502,6 +1526,7 @@ Looks up information based on a phone number.
         the phone number to look up
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1513,7 +1538,7 @@ Looks up information based on a phone number.
 
 the result of the lookup request
 
-***
+---
 
 ### lookupUserWithPasskey()
 
@@ -1555,6 +1580,7 @@ Asynchronously handles the authentication process using WebAuthn Stamper. If a u
         An optional user object to authenticate
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1564,7 +1590,7 @@ Asynchronously handles the authentication process using WebAuthn Stamper. If a u
 
 A promise that resolves to the authenticated user object
 
-***
+---
 
 ### oauthWithPopup()
 
@@ -1597,6 +1623,7 @@ Defined in: [account-kit/signer/src/client/base.ts:248](https://github.com/alche
         `any`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1607,7 +1634,7 @@ Defined in: [account-kit/signer/src/client/base.ts:248](https://github.com/alche
 | [`AuthLinkingPrompt`](../type-aliases/AuthLinkingPrompt.mdx)
 | [`IdTokenOnly`](../type-aliases/IdTokenOnly.mdx)>
 
-***
+---
 
 ### oauthWithRedirect()
 
@@ -1639,6 +1666,7 @@ Defined in: [account-kit/signer/src/client/base.ts:244](https://github.com/alche
         `any`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1648,7 +1676,7 @@ Defined in: [account-kit/signer/src/client/base.ts:244](https://github.com/alche
 | [`User`](../type-aliases/User.mdx)
 | [`IdTokenOnly`](../type-aliases/IdTokenOnly.mdx)>
 
-***
+---
 
 ### on()
 
@@ -1717,6 +1745,7 @@ Listen to events emitted by the client
         the callback function to execute when an event is fired
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1732,14 +1761,14 @@ a function that will remove the listener when called
 
 `any`
 
-***
+---
 
 ### pollActivityCompletion()
 
 ```ts
 protected pollActivityCompletion<T>(
-   activity, 
-   organizationId, 
+   activity,
+   organizationId,
    resultKey): Promise<NonNullable<object[T]>>;
 ```
 
@@ -14058,6 +14087,7 @@ Defined in: [account-kit/signer/src/client/base.ts:1436](https://github.com/alch
         ‐
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -14065,7 +14095,7 @@ Defined in: [account-kit/signer/src/client/base.ts:1436](https://github.com/alch
 
 `Promise`\<`NonNullable`\<`object`\[`T`]>>
 
-***
+---
 
 ### removeEmail()
 
@@ -14087,7 +14117,7 @@ A promise that resolves when the email is removed
 
 If the user is not authenticated
 
-***
+---
 
 ### removeMfa()
 
@@ -14126,6 +14156,7 @@ Removes existing MFA factors by ID.
         The parameters specifying which factors to disable
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -14141,7 +14172,7 @@ A promise that resolves to the updated list of MFA factors
 
 If no user is authenticated
 
-***
+---
 
 ### removeOauthProvider()
 
@@ -14178,6 +14209,7 @@ Deletes a specified OAuth provider for the authenticated user.
         The ID of the provider to be deleted
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -14189,7 +14221,7 @@ Deletes a specified OAuth provider for the authenticated user.
 
 If the user is not authenticated
 
-***
+---
 
 ### removePasskey()
 
@@ -14226,6 +14258,7 @@ Removes a passkey authenticator from the user's account.
         The ID of the authenticator to remove.
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -14239,7 +14272,7 @@ A promise that resolves when the authenticator is removed.
 
 If the user is not authenticated.
 
-***
+---
 
 ### removePhoneNumber()
 
@@ -14261,7 +14294,7 @@ A promise that resolves when the phone number is removed
 
 If the user is not authenticated
 
-***
+---
 
 ### request()
 
@@ -14359,6 +14392,7 @@ Not intended to be used directly, use the specific methods instead on the client
         The request body containing the data to be sent
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -14368,7 +14402,7 @@ Not intended to be used directly, use the specific methods instead on the client
 
 A promise that resolves to the response from the signer
 
-***
+---
 
 ### setEmail()
 
@@ -14421,6 +14455,7 @@ Recommended to use the email verification flow instead.
         The email to set for the user
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -14443,7 +14478,7 @@ setEmail(otp): Promise<string>;
 Defined in: [account-kit/signer/src/client/base.ts:328](https://github.com/alchemyplatform/aa-sdk/blob/27e36329c103b4660886c9508b86d0a2c5c6c47e/account-kit/signer/src/client/base.ts#L328)
 
 Sets the email for the authenticated user, allowing them to login with that
-email.  Must be called after calling `initOtp` with the email.
+email. Must be called after calling `initOtp` with the email.
 
 ##### Parameters
 
@@ -14470,6 +14505,7 @@ email.  Must be called after calling `initOtp` with the email.
         The OTP verification object including the OTP ID and OTP code
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -14483,7 +14519,7 @@ A promise that resolves to the updated email
 
 If the user is not authenticated
 
-***
+---
 
 ### setPhoneNumber()
 
@@ -14521,6 +14557,7 @@ phone number. Must be called after calling `initOtp` with the phone number.
         The OTP object including the OTP ID and OTP code
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -14534,7 +14571,7 @@ A promise that resolves when the phone number is set
 
 If the user is not authenticated
 
-***
+---
 
 ### setStamper()
 
@@ -14571,6 +14608,7 @@ Sets the stamper of the TurnkeyClient.
         the stamper function to set for the TurnkeyClient
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -14578,7 +14616,7 @@ Sets the stamper of the TurnkeyClient.
 
 `void`
 
-***
+---
 
 ### signRawMessage()
 
@@ -14640,6 +14678,7 @@ that result here.
         specify if signing should happen for solana or ethereum
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -14649,7 +14688,7 @@ that result here.
 
 the signature over the raw hex
 
-***
+---
 
 ### stampGetOrganization()
 
@@ -14671,7 +14710,7 @@ a promise that resolves to the "getOrganization" information for the logged in u
 
 if no user is authenticated
 
-***
+---
 
 ### stampWhoami()
 
@@ -14696,7 +14735,7 @@ a promise that resolves to the "whoami" information for the logged in user
 
 if no organization ID is provided
 
-***
+---
 
 ### submitJwt()
 
@@ -14726,6 +14765,7 @@ Defined in: [account-kit/signer/src/client/base.ts:256](https://github.com/alche
         `Omit`\<[`JwtParams`](../type-aliases/JwtParams.mdx), `"targetPublicKey"`>
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -14733,7 +14773,7 @@ Defined in: [account-kit/signer/src/client/base.ts:256](https://github.com/alche
 
 `Promise`\<[`JwtResponse`](../type-aliases/JwtResponse.mdx)>
 
-***
+---
 
 ### submitOtpCode()
 
@@ -14763,6 +14803,7 @@ Defined in: [account-kit/signer/src/client/base.ts:252](https://github.com/alche
         `Omit`\<[`OtpParams`](../type-aliases/OtpParams.mdx), `"targetPublicKey"`>
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -14770,7 +14811,7 @@ Defined in: [account-kit/signer/src/client/base.ts:252](https://github.com/alche
 
 `Promise`\<[`SubmitOtpCodeResponse`](../type-aliases/SubmitOtpCodeResponse.mdx)>
 
-***
+---
 
 ### targetPublicKey()
 
@@ -14784,7 +14825,7 @@ Defined in: [account-kit/signer/src/client/base.ts:266](https://github.com/alche
 
 `Promise`\<`string`>
 
-***
+---
 
 ### validateMultiFactors()
 
@@ -14823,6 +14864,7 @@ Validates multiple MFA factors using the provided encrypted payload and MFA code
         The validation parameters
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -14838,7 +14880,7 @@ A promise that resolves to an object containing the credential bundle
 
 If no credential bundle is returned from the server
 
-***
+---
 
 ### verifyMfa()
 
@@ -14877,6 +14919,7 @@ Verifies a newly created MFA factor to complete the setup process.
         The parameters required to verify the MFA factor
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -14892,14 +14935,14 @@ A promise that resolves to the updated list of MFA factors
 
 If no user is authenticated
 
-***
+---
 
 ### whoami()
 
 ```ts
 whoami(
-   orgId?, 
-   idToken?, 
+   orgId?,
+   idToken?,
    accessToken?): Promise<User>;
 ```
 
@@ -14960,6 +15003,7 @@ Retrieves the current user or fetches the user information if not already availa
         an access token which if provided will be added to the user
       </td>
     </tr>
+
   </tbody>
 </table>
 

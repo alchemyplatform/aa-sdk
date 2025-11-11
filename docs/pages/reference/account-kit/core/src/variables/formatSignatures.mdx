@@ -14,9 +14,9 @@ const formatSignatures: (signatures, usingMaxValues?) => `0x${string}`;
 Defined in: account-kit/smart-contracts/dist/types/src/msca/plugins/multisig/utils/formatSignatures.d.ts:12
 
 Formats a collection of Signature objects into a single aggregated signature.
-The format is in the form of EOA\_SIGS | CONTRACT\_SIG\_DATAS. The signatures are ordered
+The format is in the form of EOA_SIGS | CONTRACT_SIG_DATAS. The signatures are ordered
 by signer address. The EOA SIGS contain the 65 signautre data for EOA signers and 65 bytes containing SIGNER | OFFSET | V for contract signers.
-The OFFSET is used to fetch the signature data from the CONTRACT\_SIG\_DATAS.
+The OFFSET is used to fetch the signature data from the CONTRACT_SIG_DATAS.
 
 ## Parameters
 
@@ -57,6 +57,7 @@ The OFFSET is used to fetch the signature data from the CONTRACT\_SIG\_DATAS.
         a boolean indicating wether or not the UserOperation is using the UPPER\_LIMIT for the gas and fee values
       </td>
     </tr>
+
   </tbody>
 </table>
 

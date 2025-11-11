@@ -14,7 +14,7 @@ Alchemy's signer service.
 
 ## Extends
 
-* [`BaseSignerClient`](BaseSignerClient.mdx)\<[`ExportWalletParams`](../type-aliases/ExportWalletParams.mdx), [`ExportWalletOutput`](../type-aliases/ExportWalletOutput.mdx)>
+- [`BaseSignerClient`](BaseSignerClient.mdx)\<[`ExportWalletParams`](../type-aliases/ExportWalletParams.mdx), [`ExportWalletOutput`](../type-aliases/ExportWalletOutput.mdx)>
 
 ## Constructors
 
@@ -34,12 +34,12 @@ Initializes a new instance with the given parameters, setting up the connection,
 import { AlchemySignerWebClient } from "@account-kit/signer";
 
 const client = new AlchemySignerWebClient({
- connection: {
-   apiKey: "your-api-key",
- },
- iframeConfig: {
-  iframeContainerId: "signer-iframe-container",
- },
+  connection: {
+    apiKey: "your-api-key",
+  },
+  iframeConfig: {
+    iframeContainerId: "signer-iframe-container",
+  },
 });
 ```
 
@@ -180,6 +180,7 @@ const client = new AlchemySignerWebClient({
         The relying party ID, defaulting to the current hostname if not provided
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -281,6 +282,7 @@ const client = new AlchemySignerWebClient({
         `TurnkeyClient`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -328,6 +330,7 @@ Defined in: [account-kit/signer/src/client/base.ts:133](https://github.com/alche
         `undefined` | [`User`](../type-aliases/User.mdx)
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -376,6 +379,7 @@ Initiates the setup of a new MFA factor for the current user. Mfa will need to b
         The parameters required to enable a new MFA factor
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -397,7 +401,7 @@ If an unsupported factor type is provided
 
 [`BaseSignerClient`](BaseSignerClient.mdx).[`addMfa`](BaseSignerClient.mdx#addmfa)
 
-***
+---
 
 ### addOauthProvider()
 
@@ -434,6 +438,7 @@ Adds an OAuth provider for the authenticated user using the provided parameters.
         The parameters for adding an OAuth provider, including `providerName` and `oidcToken`.
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -451,7 +456,7 @@ Throws if the user is not authenticated.
 
 [`BaseSignerClient`](BaseSignerClient.mdx).[`addOauthProvider`](BaseSignerClient.mdx#addoauthprovider)
 
-***
+---
 
 ### addPasskey()
 
@@ -488,6 +493,7 @@ Handles the creation of authenticators using WebAuthn attestation and the provid
         The options used to create the WebAuthn attestation
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -505,7 +511,7 @@ If the user is not authenticated
 
 [`BaseSignerClient`](BaseSignerClient.mdx).[`addPasskey`](BaseSignerClient.mdx#addpasskey)
 
-***
+---
 
 ### completeAuthWithBundle()
 
@@ -525,15 +531,19 @@ during the process.
 import { AlchemySignerWebClient } from "@account-kit/signer";
 
 const client = new AlchemySignerWebClient({
- connection: {
-   apiKey: "your-api-key",
- },
- iframeConfig: {
-  iframeContainerId: "signer-iframe-container",
- },
+  connection: {
+    apiKey: "your-api-key",
+  },
+  iframeConfig: {
+    iframeContainerId: "signer-iframe-container",
+  },
 });
 
-const account = await client.completeAuthWithBundle({ orgId: "user-org-id", bundle: "bundle-from-email", connectedEventName: "connectedEmail" });
+const account = await client.completeAuthWithBundle({
+  orgId: "user-org-id",
+  bundle: "bundle-from-email",
+  connectedEventName: "connectedEmail",
+});
 ```
 
 #### Parameters
@@ -648,6 +658,7 @@ const account = await client.completeAuthWithBundle({ orgId: "user-org-id", bund
         ‐
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -662,7 +673,7 @@ information
 
 [`BaseSignerClient`](BaseSignerClient.mdx).[`completeAuthWithBundle`](BaseSignerClient.mdx#completeauthwithbundle)
 
-***
+---
 
 ### createAccount()
 
@@ -699,6 +710,7 @@ Authenticates the user by either email or passkey account creation flow. Emits e
         The parameters for creating an account, including the type (email or passkey) and additional details.
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -712,7 +724,7 @@ A promise that resolves with the response object containing the account creation
 
 [`BaseSignerClient`](BaseSignerClient.mdx).[`createAccount`](BaseSignerClient.mdx#createaccount)
 
-***
+---
 
 ### disconnect()
 
@@ -730,12 +742,12 @@ Asynchronous function that clears the user and resets the iframe stamper.
 import { AlchemySignerWebClient } from "@account-kit/signer";
 
 const client = new AlchemySignerWebClient({
- connection: {
-   apiKey: "your-api-key",
- },
- iframeConfig: {
-  iframeContainerId: "signer-iframe-container",
- },
+  connection: {
+    apiKey: "your-api-key",
+  },
+  iframeConfig: {
+    iframeContainerId: "signer-iframe-container",
+  },
 });
 
 const account = await client.disconnect();
@@ -749,9 +761,9 @@ const account = await client.disconnect();
 
 [`BaseSignerClient`](BaseSignerClient.mdx).[`disconnect`](BaseSignerClient.mdx#disconnect)
 
-***
+---
 
-### experimental\_addToMultiOwner()
+### experimental_addToMultiOwner()
 
 ```ts
 experimental_addToMultiOwner(orgId, members): Promise<void>;
@@ -800,6 +812,7 @@ This will add additional members to an existing multi-sig account
         the addresses of the members to add
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -811,9 +824,9 @@ This will add additional members to an existing multi-sig account
 
 [`BaseSignerClient`](BaseSignerClient.mdx).[`experimental_addToMultiOwner`](BaseSignerClient.mdx#experimental_addtomultiowner)
 
-***
+---
 
-### experimental\_createApiKey()
+### experimental_createApiKey()
 
 ```ts
 experimental_createApiKey(params): Promise<void>;
@@ -849,6 +862,7 @@ Creates an API key that can take any action on behalf of the current user.
         Parameters for creating the API key.
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -864,9 +878,9 @@ If there is no authenticated user or the API key creation fails.
 
 [`BaseSignerClient`](BaseSignerClient.mdx).[`experimental_createApiKey`](BaseSignerClient.mdx#experimental_createapikey)
 
-***
+---
 
-### experimental\_createMultiOwner()
+### experimental_createMultiOwner()
 
 ```ts
 experimental_createMultiOwner(additionalMembers): Promise<{
@@ -905,6 +919,7 @@ This will create a multi-owner account with the current user and additional spec
         members to add, aside from the currently authenticated user
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -922,9 +937,9 @@ created multi-owner account
 
 [`BaseSignerClient`](BaseSignerClient.mdx).[`experimental_createMultiOwner`](BaseSignerClient.mdx#experimental_createmultiowner)
 
-***
+---
 
-### experimental\_deleteFromMultiOwner()
+### experimental_deleteFromMultiOwner()
 
 ```ts
 experimental_deleteFromMultiOwner(orgId, members): Promise<void>;
@@ -973,6 +988,7 @@ This will remove members from an existing multi-sig account
         the addresses of the members to remove
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -984,14 +1000,14 @@ This will remove members from an existing multi-sig account
 
 [`BaseSignerClient`](BaseSignerClient.mdx).[`experimental_deleteFromMultiOwner`](BaseSignerClient.mdx#experimental_deletefrommultiowner)
 
-***
+---
 
-### experimental\_multiOwnerSignRawMessage()
+### experimental_multiOwnerSignRawMessage()
 
 ```ts
 experimental_multiOwnerSignRawMessage(
-   msg, 
-   orgId, 
+   msg,
+   orgId,
    orgAddress): Promise<`0x${string}`>;
 ```
 
@@ -1054,6 +1070,7 @@ that result here.
         address of the multi-owner org to sign on behalf of
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1067,7 +1084,7 @@ the signature over the raw hex
 
 [`BaseSignerClient`](BaseSignerClient.mdx).[`experimental_multiOwnerSignRawMessage`](BaseSignerClient.mdx#experimental_multiownersignrawmessage)
 
-***
+---
 
 ### exportWallet()
 
@@ -1086,16 +1103,16 @@ The export can be based on a seed phrase or a private key.
 import { AlchemySignerWebClient } from "@account-kit/signer";
 
 const client = new AlchemySignerWebClient({
- connection: {
-   apiKey: "your-api-key",
- },
- iframeConfig: {
-  iframeContainerId: "signer-iframe-container",
- },
+  connection: {
+    apiKey: "your-api-key",
+  },
+  iframeConfig: {
+    iframeContainerId: "signer-iframe-container",
+  },
 });
 
 const account = await client.exportWallet({
- iframeContainerId: "export-iframe-container",
+  iframeContainerId: "export-iframe-container",
 });
 ```
 
@@ -1124,6 +1141,7 @@ const account = await client.exportWallet({
         The parameters for exporting the wallet
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1137,7 +1155,7 @@ A promise that resolves when the export process is complete
 
 [`BaseSignerClient`](BaseSignerClient.mdx).[`exportWallet`](BaseSignerClient.mdx#exportwallet)
 
-***
+---
 
 ### exportWalletInner()
 
@@ -1147,7 +1165,7 @@ protected exportWalletInner(params): Promise<boolean>;
 
 Defined in: [account-kit/signer/src/client/index.ts:427](https://github.com/alchemyplatform/aa-sdk/blob/27e36329c103b4660886c9508b86d0a2c5c6c47e/account-kit/signer/src/client/index.ts#L427)
 
-Exports wallet credentials based on the specified type, either as a SEED\_PHRASE or PRIVATE\_KEY.
+Exports wallet credentials based on the specified type, either as a SEED_PHRASE or PRIVATE_KEY.
 
 #### Parameters
 
@@ -1202,6 +1220,7 @@ Exports wallet credentials based on the specified type, either as a SEED\_PHRASE
         The stamper used for exporting the wallet
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1211,7 +1230,7 @@ Exports wallet credentials based on the specified type, either as a SEED\_PHRASE
 
 A promise that resolves to true if the export is successful
 
-***
+---
 
 ### getMfaFactors()
 
@@ -1241,7 +1260,7 @@ If no user is authenticated
 
 [`BaseSignerClient`](BaseSignerClient.mdx).[`getMfaFactors`](BaseSignerClient.mdx#getmfafactors)
 
-***
+---
 
 ### getOauthConfig()
 
@@ -1259,7 +1278,7 @@ Defined in: [account-kit/signer/src/client/index.ts:730](https://github.com/alch
 
 [`BaseSignerClient`](BaseSignerClient.mdx).[`getOauthConfig`](BaseSignerClient.mdx#getoauthconfig)
 
-***
+---
 
 ### getOauthNonce()
 
@@ -1296,6 +1315,7 @@ Turnkey requires the nonce in the id token to be in this format.
         key from a Turnkey iframe
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1309,7 +1329,7 @@ nonce to be used in OIDC
 
 [`BaseSignerClient`](BaseSignerClient.mdx).[`getOauthNonce`](BaseSignerClient.mdx#getoauthnonce)
 
-***
+---
 
 ### getOauthProviderUrl()
 
@@ -1374,6 +1394,7 @@ const oauthProviderUrl = getOauthProviderUrl({
         Required. The Oauth provider's auth parameters
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1387,7 +1408,7 @@ returns the Oauth provider's url
 
 [`BaseSignerClient`](BaseSignerClient.mdx).[`getOauthProviderUrl`](BaseSignerClient.mdx#getoauthproviderurl)
 
-***
+---
 
 ### getPasskeyStatus()
 
@@ -1417,7 +1438,7 @@ If the user is not authenticated
 
 [`BaseSignerClient`](BaseSignerClient.mdx).[`getPasskeyStatus`](BaseSignerClient.mdx#getpasskeystatus)
 
-***
+---
 
 ### getUser()
 
@@ -1439,7 +1460,7 @@ the current user object or null if no user is available
 
 [`BaseSignerClient`](BaseSignerClient.mdx).[`getUser`](BaseSignerClient.mdx#getuser)
 
-***
+---
 
 ### getWebAuthnAttestation()
 
@@ -1489,6 +1510,7 @@ Defined in: [account-kit/signer/src/client/index.ts:675](https://github.com/alch
         `string`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1500,7 +1522,7 @@ Defined in: [account-kit/signer/src/client/index.ts:675](https://github.com/alch
 
 [`BaseSignerClient`](BaseSignerClient.mdx).[`getWebAuthnAttestation`](BaseSignerClient.mdx#getwebauthnattestation)
 
-***
+---
 
 ### initEmailAuth()
 
@@ -1523,12 +1545,12 @@ This method sends an email to the user to complete their login
 import { AlchemySignerWebClient } from "@account-kit/signer";
 
 const client = new AlchemySignerWebClient({
- connection: {
-   apiKey: "your-api-key",
- },
- iframeConfig: {
-  iframeContainerId: "signer-iframe-container",
- },
+  connection: {
+    apiKey: "your-api-key",
+  },
+  iframeConfig: {
+    iframeContainerId: "signer-iframe-container",
+  },
 });
 
 const account = await client.initEmailAuth({ email: "you@mail.com" });
@@ -1559,6 +1581,7 @@ const account = await client.initEmailAuth({ email: "you@mail.com" });
         The parameters for email authentication, excluding the target public key
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1576,7 +1599,7 @@ The response from the authentication request
 
 [`BaseSignerClient`](BaseSignerClient.mdx).[`initEmailAuth`](BaseSignerClient.mdx#initemailauth)
 
-***
+---
 
 ### initOauth()
 
@@ -1598,7 +1621,7 @@ A promise that resolves to the OAuth configuration
 
 [`BaseSignerClient`](BaseSignerClient.mdx).[`initOauth`](BaseSignerClient.mdx#initoauth)
 
-***
+---
 
 ### initOtp()
 
@@ -1651,6 +1674,7 @@ Initiates an OTP (One-Time Password) verification process for a user contact.
         The email address or phone number to send the OTP to
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1670,7 +1694,7 @@ When no user is currently authenticated
 
 [`BaseSignerClient`](BaseSignerClient.mdx).[`initOtp`](BaseSignerClient.mdx#initotp)
 
-***
+---
 
 ### initSessionStamper()
 
@@ -1690,7 +1714,7 @@ Initializes the session stamper and returns its public key.
 
 [`BaseSignerClient`](BaseSignerClient.mdx).[`initSessionStamper`](BaseSignerClient.mdx#initsessionstamper)
 
-***
+---
 
 ### initSmsAuth()
 
@@ -1713,12 +1737,12 @@ This method sends a text message to the user to complete their login
 import { AlchemySignerWebClient } from "@account-kit/signer";
 
 const client = new AlchemySignerWebClient({
- connection: {
-   apiKey: "your-api-key",
- },
- iframeConfig: {
-  iframeContainerId: "signer-iframe-container",
- },
+  connection: {
+    apiKey: "your-api-key",
+  },
+  iframeConfig: {
+    iframeContainerId: "signer-iframe-container",
+  },
 });
 
 const account = await client.initSmsAuth({ phone: "+1234567890" });
@@ -1749,6 +1773,7 @@ const account = await client.initSmsAuth({ phone: "+1234567890" });
         The parameters for sms authentication, excluding the target public key
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1766,7 +1791,7 @@ The response from the authentication request
 
 [`BaseSignerClient`](BaseSignerClient.mdx).[`initSmsAuth`](BaseSignerClient.mdx#initsmsauth)
 
-***
+---
 
 ### initWebauthnStamper()
 
@@ -1796,6 +1821,7 @@ Defined in: [account-kit/signer/src/client/index.ts:765](https://github.com/alch
         `undefined` | [`User`](../type-aliases/User.mdx)
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1807,7 +1833,7 @@ Defined in: [account-kit/signer/src/client/index.ts:765](https://github.com/alch
 
 [`BaseSignerClient`](BaseSignerClient.mdx).[`initWebauthnStamper`](BaseSignerClient.mdx#initwebauthnstamper)
 
-***
+---
 
 ### listAuthMethods()
 
@@ -1833,7 +1859,7 @@ If the user is not authenticated
 
 [`BaseSignerClient`](BaseSignerClient.mdx).[`listAuthMethods`](BaseSignerClient.mdx#listauthmethods)
 
-***
+---
 
 ### lookupUserByAccessKey()
 
@@ -1872,6 +1898,7 @@ Looks up information based on an access key.
         The access key parameters
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1887,7 +1914,7 @@ The result of the lookup request
 
 [`BaseSignerClient`](BaseSignerClient.mdx).[`lookupUserByAccessKey`](BaseSignerClient.mdx#lookupuserbyaccesskey)
 
-***
+---
 
 ### lookupUserByEmail()
 
@@ -1926,6 +1953,7 @@ Looks up information based on an email address.
         the email address to look up
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1941,7 +1969,7 @@ the result of the lookup request
 
 [`BaseSignerClient`](BaseSignerClient.mdx).[`lookupUserByEmail`](BaseSignerClient.mdx#lookupuserbyemail)
 
-***
+---
 
 ### lookupUserByPhone()
 
@@ -1980,6 +2008,7 @@ Looks up information based on a phone number.
         the phone number to look up
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1995,7 +2024,7 @@ the result of the lookup request
 
 [`BaseSignerClient`](BaseSignerClient.mdx).[`lookupUserByPhone`](BaseSignerClient.mdx#lookupuserbyphone)
 
-***
+---
 
 ### lookupUserWithPasskey()
 
@@ -2037,6 +2066,7 @@ Asynchronously handles the authentication process using WebAuthn Stamper. If a u
         An optional user object to authenticate
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -2050,7 +2080,7 @@ A promise that resolves to the authenticated user object
 
 [`BaseSignerClient`](BaseSignerClient.mdx).[`lookupUserWithPasskey`](BaseSignerClient.mdx#lookupuserwithpasskey)
 
-***
+---
 
 ### oauthWithPopup()
 
@@ -2071,18 +2101,18 @@ Initiates an OAuth authentication flow in a popup window and returns the authent
 import { AlchemySignerWebClient } from "@account-kit/signer";
 
 const client = new AlchemySignerWebClient({
- connection: {
-   apiKey: "your-api-key",
- },
- iframeConfig: {
-  iframeContainerId: "signer-iframe-container",
- },
+  connection: {
+    apiKey: "your-api-key",
+  },
+  iframeConfig: {
+    iframeContainerId: "signer-iframe-container",
+  },
 });
 
 const user = await client.oauthWithPopup({
- type: "oauth",
- authProviderId: "google",
- mode: "popup"
+  type: "oauth",
+  authProviderId: "google",
+  mode: "popup",
 });
 ```
 
@@ -2111,6 +2141,7 @@ const user = await client.oauthWithPopup({
         The authentication parameters specifying OAuth type and popup mode
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -2127,7 +2158,7 @@ A promise that resolves to a `User` object containing the authenticated user inf
 
 [`BaseSignerClient`](BaseSignerClient.mdx).[`oauthWithPopup`](BaseSignerClient.mdx#oauthwithpopup)
 
-***
+---
 
 ### oauthWithRedirect()
 
@@ -2147,12 +2178,12 @@ Redirects the user to the OAuth provider URL based on the provided arguments. Th
 import { AlchemySignerWebClient } from "@account-kit/signer";
 
 const client = new AlchemySignerWebClient({
- connection: {
-   apiKey: "your-api-key",
- },
- iframeConfig: {
-  iframeContainerId: "signer-iframe-container",
- },
+  connection: {
+    apiKey: "your-api-key",
+  },
+  iframeConfig: {
+    iframeContainerId: "signer-iframe-container",
+  },
 });
 
 await client.oauthWithRedirect({
@@ -2188,6 +2219,7 @@ await client.oauthWithRedirect({
         The arguments required to obtain the OAuth provider URL
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -2203,7 +2235,7 @@ A promise that will never resolve, only reject if the redirection fails
 
 [`BaseSignerClient`](BaseSignerClient.mdx).[`oauthWithRedirect`](BaseSignerClient.mdx#oauthwithredirect)
 
-***
+---
 
 ### on()
 
@@ -2272,6 +2304,7 @@ Listen to events emitted by the client
         the callback function to execute when an event is fired
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -2291,14 +2324,14 @@ a function that will remove the listener when called
 
 [`BaseSignerClient`](BaseSignerClient.mdx).[`on`](BaseSignerClient.mdx#on)
 
-***
+---
 
 ### pollActivityCompletion()
 
 ```ts
 protected pollActivityCompletion<T>(
-   activity, 
-   organizationId, 
+   activity,
+   organizationId,
    resultKey): Promise<NonNullable<object[T]>>;
 ```
 
@@ -14617,6 +14650,7 @@ Defined in: [account-kit/signer/src/client/base.ts:1436](https://github.com/alch
         ‐
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -14628,7 +14662,7 @@ Defined in: [account-kit/signer/src/client/base.ts:1436](https://github.com/alch
 
 [`BaseSignerClient`](BaseSignerClient.mdx).[`pollActivityCompletion`](BaseSignerClient.mdx#pollactivitycompletion)
 
-***
+---
 
 ### removeEmail()
 
@@ -14654,7 +14688,7 @@ If the user is not authenticated
 
 [`BaseSignerClient`](BaseSignerClient.mdx).[`removeEmail`](BaseSignerClient.mdx#removeemail)
 
-***
+---
 
 ### removeMfa()
 
@@ -14693,6 +14727,7 @@ Removes existing MFA factors by ID.
         The parameters specifying which factors to disable
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -14712,7 +14747,7 @@ If no user is authenticated
 
 [`BaseSignerClient`](BaseSignerClient.mdx).[`removeMfa`](BaseSignerClient.mdx#removemfa)
 
-***
+---
 
 ### removeOauthProvider()
 
@@ -14749,6 +14784,7 @@ Deletes a specified OAuth provider for the authenticated user.
         The ID of the provider to be deleted
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -14764,7 +14800,7 @@ If the user is not authenticated
 
 [`BaseSignerClient`](BaseSignerClient.mdx).[`removeOauthProvider`](BaseSignerClient.mdx#removeoauthprovider)
 
-***
+---
 
 ### removePasskey()
 
@@ -14801,6 +14837,7 @@ Removes a passkey authenticator from the user's account.
         The ID of the authenticator to remove.
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -14818,7 +14855,7 @@ If the user is not authenticated.
 
 [`BaseSignerClient`](BaseSignerClient.mdx).[`removePasskey`](BaseSignerClient.mdx#removepasskey)
 
-***
+---
 
 ### removePhoneNumber()
 
@@ -14844,7 +14881,7 @@ If the user is not authenticated
 
 [`BaseSignerClient`](BaseSignerClient.mdx).[`removePhoneNumber`](BaseSignerClient.mdx#removephonenumber)
 
-***
+---
 
 ### request()
 
@@ -14942,6 +14979,7 @@ Not intended to be used directly, use the specific methods instead on the client
         The request body containing the data to be sent
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -14955,7 +14993,7 @@ A promise that resolves to the response from the signer
 
 [`BaseSignerClient`](BaseSignerClient.mdx).[`request`](BaseSignerClient.mdx#request)
 
-***
+---
 
 ### setEmail()
 
@@ -15008,6 +15046,7 @@ Recommended to use the email verification flow instead.
         The email to set for the user
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -15034,7 +15073,7 @@ setEmail(otp): Promise<string>;
 Defined in: [account-kit/signer/src/client/base.ts:328](https://github.com/alchemyplatform/aa-sdk/blob/27e36329c103b4660886c9508b86d0a2c5c6c47e/account-kit/signer/src/client/base.ts#L328)
 
 Sets the email for the authenticated user, allowing them to login with that
-email.  Must be called after calling `initOtp` with the email.
+email. Must be called after calling `initOtp` with the email.
 
 ##### Parameters
 
@@ -15061,6 +15100,7 @@ email.  Must be called after calling `initOtp` with the email.
         The OTP verification object including the OTP ID and OTP code
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -15078,7 +15118,7 @@ If the user is not authenticated
 
 [`BaseSignerClient`](BaseSignerClient.mdx).[`setEmail`](BaseSignerClient.mdx#setemail)
 
-***
+---
 
 ### setPhoneNumber()
 
@@ -15116,6 +15156,7 @@ phone number. Must be called after calling `initOtp` with the phone number.
         The OTP object including the OTP ID and OTP code
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -15133,7 +15174,7 @@ If the user is not authenticated
 
 [`BaseSignerClient`](BaseSignerClient.mdx).[`setPhoneNumber`](BaseSignerClient.mdx#setphonenumber)
 
-***
+---
 
 ### setStamper()
 
@@ -15170,6 +15211,7 @@ Sets the stamper of the TurnkeyClient.
         the stamper function to set for the TurnkeyClient
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -15181,7 +15223,7 @@ Sets the stamper of the TurnkeyClient.
 
 [`BaseSignerClient`](BaseSignerClient.mdx).[`setStamper`](BaseSignerClient.mdx#setstamper)
 
-***
+---
 
 ### signRawMessage()
 
@@ -15243,6 +15285,7 @@ that result here.
         specify if signing should happen for solana or ethereum
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -15256,7 +15299,7 @@ the signature over the raw hex
 
 [`BaseSignerClient`](BaseSignerClient.mdx).[`signRawMessage`](BaseSignerClient.mdx#signrawmessage)
 
-***
+---
 
 ### stampGetOrganization()
 
@@ -15282,7 +15325,7 @@ if no user is authenticated
 
 [`BaseSignerClient`](BaseSignerClient.mdx).[`stampGetOrganization`](BaseSignerClient.mdx#stampgetorganization)
 
-***
+---
 
 ### stampWhoami()
 
@@ -15311,7 +15354,7 @@ if no organization ID is provided
 
 [`BaseSignerClient`](BaseSignerClient.mdx).[`stampWhoami`](BaseSignerClient.mdx#stampwhoami)
 
-***
+---
 
 ### submitJwt()
 
@@ -15329,12 +15372,12 @@ Authenticates using a custom issued JWT
 import { AlchemySignerWebClient } from "@account-kit/signer";
 
 const client = new AlchemySignerWebClient({
- connection: {
-   apiKey: "your-api-key",
- },
- iframeConfig: {
-  iframeContainerId: "signer-iframe-container",
- },
+  connection: {
+    apiKey: "your-api-key",
+  },
+  iframeConfig: {
+    iframeContainerId: "signer-iframe-container",
+  },
 });
 
 const account = await client.submitJwt({
@@ -15368,6 +15411,7 @@ const account = await client.submitJwt({
         The parameters for the JWT request, excluding the target public key.
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -15381,7 +15425,7 @@ A promise that resolves to an object containing the credential bundle.
 
 [`BaseSignerClient`](BaseSignerClient.mdx).[`submitJwt`](BaseSignerClient.mdx#submitjwt)
 
-***
+---
 
 ### submitOtpCode()
 
@@ -15399,12 +15443,12 @@ Authenticates using an OTP code which was previously received via email.
 import { AlchemySignerWebClient } from "@account-kit/signer";
 
 const client = new AlchemySignerWebClient({
- connection: {
-   apiKey: "your-api-key",
- },
- iframeConfig: {
-  iframeContainerId: "signer-iframe-container",
- },
+  connection: {
+    apiKey: "your-api-key",
+  },
+  iframeConfig: {
+    iframeContainerId: "signer-iframe-container",
+  },
 });
 
 const account = await client.submitOtpCode({
@@ -15439,6 +15483,7 @@ const account = await client.submitOtpCode({
         The parameters for the OTP request, excluding the target public key.
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -15452,7 +15497,7 @@ A promise that resolves to an object containing the credential bundle.
 
 [`BaseSignerClient`](BaseSignerClient.mdx).[`submitOtpCode`](BaseSignerClient.mdx#submitotpcode)
 
-***
+---
 
 ### targetPublicKey()
 
@@ -15470,12 +15515,12 @@ Initializes the iframe stamper and returns its public key.
 import { AlchemySignerWebClient } from "@account-kit/signer";
 
 const client = new AlchemySignerWebClient({
- connection: {
-   apiKey: "your-api-key",
- },
- iframeConfig: {
-  iframeContainerId: "signer-iframe-container",
- },
+  connection: {
+    apiKey: "your-api-key",
+  },
+  iframeConfig: {
+    iframeContainerId: "signer-iframe-container",
+  },
 });
 
 const publicKey = await client.targetPublicKey();
@@ -15491,7 +15536,7 @@ A promise that resolves with the target public key when the iframe stamper is su
 
 [`BaseSignerClient`](BaseSignerClient.mdx).[`targetPublicKey`](BaseSignerClient.mdx#targetpublickey)
 
-***
+---
 
 ### validateMultiFactors()
 
@@ -15530,6 +15575,7 @@ Validates multiple MFA factors using the provided encrypted payload and MFA code
         The validation parameters
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -15549,7 +15595,7 @@ If no credential bundle is returned from the server
 
 [`BaseSignerClient`](BaseSignerClient.mdx).[`validateMultiFactors`](BaseSignerClient.mdx#validatemultifactors)
 
-***
+---
 
 ### verifyMfa()
 
@@ -15588,6 +15634,7 @@ Verifies a newly created MFA factor to complete the setup process.
         The parameters required to verify the MFA factor
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -15607,14 +15654,14 @@ If no user is authenticated
 
 [`BaseSignerClient`](BaseSignerClient.mdx).[`verifyMfa`](BaseSignerClient.mdx#verifymfa)
 
-***
+---
 
 ### whoami()
 
 ```ts
 whoami(
-   orgId?, 
-   idToken?, 
+   orgId?,
+   idToken?,
    accessToken?): Promise<User>;
 ```
 
@@ -15675,6 +15722,7 @@ Retrieves the current user or fetches the user information if not already availa
         an access token which if provided will be added to the user
       </td>
     </tr>
+
   </tbody>
 </table>
 

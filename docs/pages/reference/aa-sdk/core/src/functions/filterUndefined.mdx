@@ -21,9 +21,9 @@ Filters out properties with undefined or null values from the provided object.
 import { filterUndefined } from "@aa-sdk/core";
 
 const result = filterUndefined({
- foo: undefined,
- bar: null,
- baz: "baz",
+  foo: undefined,
+  bar: null,
+  baz: "baz",
 }); // { baz: "baz" }
 ```
 
@@ -70,6 +70,7 @@ const result = filterUndefined({
         the object from which to remove properties with undefined or null values
       </td>
     </tr>
+
   </tbody>
 </table>
 

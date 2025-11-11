@@ -20,13 +20,14 @@ A custom hook to handle removing an OAuth provider from an already authenticated
 ```ts twoslash
 import { useRemoveOauthProvider } from "@account-kit/react";
 
-const { removeOauthProvider, isRemovingOauthProvider, error } = useRemoveOauthProvider({
- // these are optional
- onSuccess: () => {
-   // do something on success
- },
- onError: (error) => console.error(error),
-});
+const { removeOauthProvider, isRemovingOauthProvider, error } =
+  useRemoveOauthProvider({
+    // these are optional
+    onSuccess: () => {
+      // do something on success
+    },
+    onError: (error) => console.error(error),
+  });
 ```
 
 ## Parameters
@@ -54,6 +55,7 @@ const { removeOauthProvider, isRemovingOauthProvider, error } = useRemoveOauthPr
         Optional arguments for the mutation used for removing an OAuth provider.
       </td>
     </tr>
+
   </tbody>
 </table>
 

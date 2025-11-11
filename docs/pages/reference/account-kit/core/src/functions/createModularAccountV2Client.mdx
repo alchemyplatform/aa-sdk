@@ -10,7 +10,9 @@ layout: reference
 ## Call Signature
 
 ```ts
-function createModularAccountV2Client<TChain, TSigner>(args): Promise<AlchemySmartAccountClient<TChain, ModularAccountV2<TSigner>>>;
+function createModularAccountV2Client<TChain, TSigner>(
+  args,
+): Promise<AlchemySmartAccountClient<TChain, ModularAccountV2<TSigner>>>;
 ```
 
 Defined in: account-kit/smart-contracts/dist/types/src/ma-v2/client/client.d.ts:20
@@ -45,6 +47,7 @@ Defined in: account-kit/smart-contracts/dist/types/src/ma-v2/client/client.d.ts:
         `SmartAccountSigner`\<`any`>
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -68,6 +71,7 @@ Defined in: account-kit/smart-contracts/dist/types/src/ma-v2/client/client.d.ts:
         [`CreateModularAccountV2AlchemyClientParams`](../type-aliases/CreateModularAccountV2AlchemyClientParams.mdx)\<[`AlchemyTransport`](../type-aliases/AlchemyTransport.mdx), `TChain`, `TSigner`>
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -78,7 +82,9 @@ Defined in: account-kit/smart-contracts/dist/types/src/ma-v2/client/client.d.ts:
 ## Call Signature
 
 ```ts
-function createModularAccountV2Client<TTransport, TChain, TSigner>(args): Promise<ModularAccountV2Client<TSigner, TChain, TTransport>>;
+function createModularAccountV2Client<TTransport, TChain, TSigner>(
+  args,
+): Promise<ModularAccountV2Client<TSigner, TChain, TTransport>>;
 ```
 
 Defined in: account-kit/smart-contracts/dist/types/src/ma-v2/client/client.d.ts:21
@@ -123,6 +129,7 @@ Defined in: account-kit/smart-contracts/dist/types/src/ma-v2/client/client.d.ts:
         `SmartAccountSigner`\<`any`>
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -146,6 +153,7 @@ Defined in: account-kit/smart-contracts/dist/types/src/ma-v2/client/client.d.ts:
         [`CreateModularAccountV2ClientParams`](../type-aliases/CreateModularAccountV2ClientParams.mdx)\<`TTransport`, `TChain`, `TSigner`>
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -156,7 +164,9 @@ Defined in: account-kit/smart-contracts/dist/types/src/ma-v2/client/client.d.ts:
 ## Call Signature
 
 ```ts
-function createModularAccountV2Client<TTransport, TChain>(args): Promise<WebauthnModularAccountV2Client<TChain, TTransport>>;
+function createModularAccountV2Client<TTransport, TChain>(
+  args,
+): Promise<WebauthnModularAccountV2Client<TChain, TTransport>>;
 ```
 
 Defined in: account-kit/smart-contracts/dist/types/src/ma-v2/client/client.d.ts:22
@@ -191,6 +201,7 @@ Defined in: account-kit/smart-contracts/dist/types/src/ma-v2/client/client.d.ts:
         `Chain`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -214,6 +225,7 @@ Defined in: account-kit/smart-contracts/dist/types/src/ma-v2/client/client.d.ts:
         [`CreateWebauthnModularAccountV2ClientParams`](../type-aliases/CreateWebauthnModularAccountV2ClientParams.mdx)\<`TTransport`, `TChain`>
       </td>
     </tr>
+
   </tbody>
 </table>
 

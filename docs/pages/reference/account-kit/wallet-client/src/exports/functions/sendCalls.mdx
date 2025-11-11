@@ -9,9 +9,10 @@ layout: reference
 
 ```ts
 function sendCalls<TAccount>(
-   client, 
-   signer, 
-   params): Promise<{
+  client,
+  signer,
+  params,
+): Promise<{
   preparedCallIds: `0x${string}`[];
 }>;
 ```
@@ -29,14 +30,16 @@ from the user. It is recommended to use the `prepareCalls` action instead to man
 
 ```ts
 const result = await client.sendCalls({
-  calls: [{
-    to: "0x1234...",
-    data: "0xabcdef...",
-    value: "0x0"
-  }],
+  calls: [
+    {
+      to: "0x1234...",
+      data: "0xabcdef...",
+      value: "0x0",
+    },
+  ],
   capabilities: {
-    paymasterService: { policyId: "your-policy-id" }
-  }
+    paymasterService: { policyId: "your-policy-id" },
+  },
 });
 
 // The result contains the prepared call IDs
@@ -63,6 +66,7 @@ console.log(result.preparedCallIds);
         `undefined` | `` `0x${string}` ``
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -119,6 +123,7 @@ console.log(result.preparedCallIds);
         Parameters for sending calls
       </td>
     </tr>
+
   </tbody>
 </table>
 

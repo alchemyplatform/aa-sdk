@@ -15,7 +15,7 @@ Primarily intended to be used server-side.
 
 ## Implements
 
-* `SmartAccountSigner`
+- `SmartAccountSigner`
 
 ## Constructors
 
@@ -54,6 +54,7 @@ Creates an instance of AlchemyServerSigner.
         The underlying signer client
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -100,6 +101,7 @@ Creates an instance of AlchemyServerSigner.
         `"alchemy-server-signer"`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -128,10 +130,10 @@ If the user cannot be retrieved from the signer client
 #### Implementation of
 
 ```ts
-SmartAccountSigner.getAddress
+SmartAccountSigner.getAddress;
 ```
 
-***
+---
 
 ### signAuthorization()
 
@@ -168,6 +170,7 @@ Signs an authorization using the inner client.
         The unsigned authorization to sign
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -180,10 +183,10 @@ The signed authorization
 #### Implementation of
 
 ```ts
-SmartAccountSigner.signAuthorization
+SmartAccountSigner.signAuthorization;
 ```
 
-***
+---
 
 ### signMessage()
 
@@ -220,6 +223,7 @@ Signs a message using the inner client.
         The message to sign
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -232,10 +236,10 @@ The signed message
 #### Implementation of
 
 ```ts
-SmartAccountSigner.signMessage
+SmartAccountSigner.signMessage;
 ```
 
-***
+---
 
 ### signTypedData()
 
@@ -484,6 +488,7 @@ Signs typed data using the inner client.
         keyof `TTypedData`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -512,6 +517,7 @@ Signs typed data using the inner client.
         The typed data to sign
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -524,10 +530,10 @@ The signed typed data
 #### Implementation of
 
 ```ts
-SmartAccountSigner.signTypedData
+SmartAccountSigner.signTypedData;
 ```
 
-***
+---
 
 ### toSolanaSigner()
 

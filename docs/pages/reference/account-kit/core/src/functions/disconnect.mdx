@@ -22,8 +22,8 @@ import { disconnect, createConfig } from "@account-kit/core";
 import { sepolia } from "@account-kit/infra";
 
 const config = createConfig({
- chain: sepolia,
- apiKey: "your-api-key",
+  chain: sepolia,
+  apiKey: "your-api-key",
 });
 
 await disconnect(config);
@@ -54,6 +54,7 @@ await disconnect(config);
         The configuration containing the store to be cleared
       </td>
     </tr>
+
   </tbody>
 </table>
 

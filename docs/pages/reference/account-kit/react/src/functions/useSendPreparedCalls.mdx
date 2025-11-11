@@ -23,13 +23,18 @@ It handles the signing and sending of prepared calls, but does not support EOA w
 ```ts twoslash
 import { useSendPreparedCalls } from "@account-kit/react";
 
-const { sendPreparedCalls, sendPreparedCallsAsync, isSendingPreparedCalls, error } = useSendPreparedCalls();
+const {
+  sendPreparedCalls,
+  sendPreparedCallsAsync,
+  isSendingPreparedCalls,
+  error,
+} = useSendPreparedCalls();
 
 // Send prepared calls
 await sendPreparedCallsAsync({
   preparedCalls: [
     // prepared call objects
-  ]
+  ],
 });
 ```
 
@@ -58,6 +63,7 @@ await sendPreparedCallsAsync({
         Configuration parameters for the hook
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -67,14 +73,14 @@ await sendPreparedCallsAsync({
 
 An object containing:
 
-* `sendPreparedCalls`: Function to send prepared calls synchronously (returns void)
-* `sendPreparedCallsAsync`: Async function to send prepared calls (returns Promise)
-* `sendPreparedCallsResult`: The result of the last successful prepared call execution
-* `isSendingPreparedCalls`: Boolean indicating if prepared calls are currently being sent
-* `error`: Error from the last failed prepared call execution, if any
+- `sendPreparedCalls`: Function to send prepared calls synchronously (returns void)
+- `sendPreparedCallsAsync`: Async function to send prepared calls (returns Promise)
+- `sendPreparedCallsResult`: The result of the last successful prepared call execution
+- `isSendingPreparedCalls`: Boolean indicating if prepared calls are currently being sent
+- `error`: Error from the last failed prepared call execution, if any
 
 ## Description
 
-* This hook only works with smart accounts and does not support EOA wallets
-* The hook handles the signing and sending of prepared calls
-* The returned result contains the prepared call IDs
+- This hook only works with smart accounts and does not support EOA wallets
+- The hook handles the signing and sending of prepared calls
+- The returned result contains the prepared call IDs

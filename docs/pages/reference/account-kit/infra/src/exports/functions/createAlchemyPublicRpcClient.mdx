@@ -22,10 +22,10 @@ import { createAlchemyPublicRpcClient, alchemy } from "@account-kit/infra";
 import { sepolia } from "@account-kit/infra";
 
 const client = createAlchemyPublicRpcClient({
- transport: alchemy({
-   apiKey: "ALCHEMY_API_KEY"
- }),
- chain: sepolia,
+  transport: alchemy({
+    apiKey: "ALCHEMY_API_KEY",
+  }),
+  chain: sepolia,
 });
 ```
 
@@ -82,6 +82,7 @@ const client = createAlchemyPublicRpcClient({
         ‐
       </td>
     </tr>
+
   </tbody>
 </table>
 

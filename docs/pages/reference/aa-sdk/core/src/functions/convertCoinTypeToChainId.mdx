@@ -18,7 +18,10 @@ Converts a coin type to a chain ID based on predefined mappings. This function f
 ## Example
 
 ```ts
-import { convertChainIdToCoinType, convertCoinTypeToChainId } from "@aa-sdk/core";
+import {
+  convertChainIdToCoinType,
+  convertCoinTypeToChainId,
+} from "@aa-sdk/core";
 import { sepolia } from "viem/chains";
 
 const coinType = convertChainIdToCoinType(sepolia.id);
@@ -50,6 +53,7 @@ const chainId = convertCoinTypeToChainId(coinType);
         the coin type to be converted to a chain ID
       </td>
     </tr>
+
   </tbody>
 </table>
 

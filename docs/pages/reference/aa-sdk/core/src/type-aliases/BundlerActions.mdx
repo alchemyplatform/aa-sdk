@@ -19,14 +19,14 @@ Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:54](https://gith
 
 ```ts
 estimateUserOperationGas<TEntryPointVersion>(
-   request, 
-   entryPoint, 
+   request,
+   entryPoint,
    stateOverride?): Promise<UserOperationEstimateGasResponse<TEntryPointVersion>>;
 ```
 
 Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:63](https://github.com/alchemyplatform/aa-sdk/blob/27e36329c103b4660886c9508b86d0a2c5c6c47e/aa-sdk/core/src/client/decorators/bundlerClient.ts#L63)
 
-calls `eth_estimateUserOperationGas` and  returns the result
+calls `eth_estimateUserOperationGas` and returns the result
 
 #### Type Parameters
 
@@ -48,6 +48,7 @@ calls `eth_estimateUserOperationGas` and  returns the result
         keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase.mdx)\<`unknown`>
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -104,6 +105,7 @@ calls `eth_estimateUserOperationGas` and  returns the result
         the state override to use for the estimation
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -113,7 +115,7 @@ calls `eth_estimateUserOperationGas` and  returns the result
 
 the gas estimates for the given response
 
-***
+---
 
 ### getSupportedEntryPoints()
 
@@ -129,9 +131,9 @@ calls `eth_supportedEntryPoints` and returns the entry points the RPC supports
 
 `Promise`\<`` `0x${string}` ``\[]>
 
-* an array of the entrypoint addresses supported
+- an array of the entrypoint addresses supported
 
-***
+---
 
 ### getUserOperationByHash()
 
@@ -170,6 +172,7 @@ calls `eth_getUserOperationByHash` and returns the UserOperationResponse
         the hash of the UserOperation to fetch
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -179,9 +182,9 @@ calls `eth_getUserOperationByHash` and returns the UserOperationResponse
 | `null`
 | [`UserOperationResponse`](../interfaces/UserOperationResponse.mdx)\<`EntryPointVersion`>>
 
-* the user operation if found or null
+- the user operation if found or null
 
-***
+---
 
 ### getUserOperationReceipt()
 
@@ -232,6 +235,7 @@ calls `eth_getUserOperationReceipt` and returns the UserOperationReceipt
         if client want to get receipt for different block tag.
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -239,9 +243,9 @@ calls `eth_getUserOperationReceipt` and returns the UserOperationReceipt
 
 `Promise`\<`null` | [`UserOperationReceipt`](../interfaces/UserOperationReceipt.mdx)>
 
-* a user operation receipt or null if not found
+- a user operation receipt or null if not found
 
-***
+---
 
 ### sendRawUserOperation()
 
@@ -273,6 +277,7 @@ calls `eth_sendUserOperation` and returns the hash of the sent UserOperation
         keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase.mdx)\<`unknown`>
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -315,6 +320,7 @@ calls `eth_sendUserOperation` and returns the hash of the sent UserOperation
         the entry point address the op will be sent to
       </td>
     </tr>
+
   </tbody>
 </table>
 

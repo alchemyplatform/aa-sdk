@@ -49,6 +49,7 @@ Constructor for the SolanaSigner class which is a wrapper around the alchemy cli
         This is the client that will be used to sign the transaction, and we are just having functions on top of it.
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -86,6 +87,7 @@ Constructor for the SolanaSigner class which is a wrapper around the alchemy cli
         `BaseSignerClient`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -126,6 +128,7 @@ Adds a signature of the client user to a transaction
         The transaction to add the signature to
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -135,14 +138,14 @@ Adds a signature of the client user to a transaction
 
 The transaction with the signature added
 
-***
+---
 
 ### addSponsorship()
 
 ```ts
 addSponsorship(
-   instructions, 
-   connection, 
+   instructions,
+   connection,
    policyId?): Promise<VersionedTransaction>;
 ```
 
@@ -203,6 +206,7 @@ Adds sponsorship to a transaction. Used to have a party like Alchemy pay for the
         The policy ID to add sponsorship to
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -212,7 +216,7 @@ Adds sponsorship to a transaction. Used to have a party like Alchemy pay for the
 
 The transaction with sponsorship added
 
-***
+---
 
 ### createTransaction()
 
@@ -234,8 +238,8 @@ The version of the transaction
 
 ```ts
 createTransaction(
-   instructions, 
-   connection, 
+   instructions,
+   connection,
    version?): Promise<VersionedTransaction>;
 ```
 
@@ -281,6 +285,7 @@ Defined in: [account-kit/signer/src/solanaSigner.ts:92](https://github.com/alche
         `"versioned"`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -292,8 +297,8 @@ Defined in: [account-kit/signer/src/solanaSigner.ts:92](https://github.com/alche
 
 ```ts
 createTransaction(
-   instructions, 
-   connection, 
+   instructions,
+   connection,
    version?): Promise<Transaction>;
 ```
 
@@ -339,6 +344,7 @@ Defined in: [account-kit/signer/src/solanaSigner.ts:97](https://github.com/alche
         `"legacy"`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -384,6 +390,7 @@ Defined in: [account-kit/signer/src/solanaSigner.ts:102](https://github.com/alch
         `Connection`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -391,7 +398,7 @@ Defined in: [account-kit/signer/src/solanaSigner.ts:102](https://github.com/alch
 
 `Promise`\<`VersionedTransaction`>
 
-***
+---
 
 ### signMessage()
 
@@ -428,6 +435,7 @@ Signs a message
         The message to sign
       </td>
     </tr>
+
   </tbody>
 </table>
 

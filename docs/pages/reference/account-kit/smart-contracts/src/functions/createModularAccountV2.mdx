@@ -28,10 +28,10 @@ const chain = sepolia;
 const transport = alchemy({ rpcUrl: RPC_URL });
 
 const modularAccountV2 = await createModularAccountV2({
- mode: "default", // or "7702"
- chain,
- signer,
- transport,
+  mode: "default", // or "7702"
+  chain,
+  signer,
+  transport,
 });
 ```
 
@@ -42,7 +42,9 @@ Configuration parameters for creating a Modular Account V2.
 ## Call Signature
 
 ```ts
-function createModularAccountV2<TTransport, TSigner>(config): Promise<ModularAccountV2<TSigner>>;
+function createModularAccountV2<TTransport, TSigner>(
+  config,
+): Promise<ModularAccountV2<TSigner>>;
 ```
 
 Defined in: [account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts:87](https://github.com/alchemyplatform/aa-sdk/blob/27e36329c103b4660886c9508b86d0a2c5c6c47e/account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts#L87)
@@ -77,6 +79,7 @@ Defined in: [account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts:8
         `SmartAccountSigner`\<`any`>
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -100,6 +103,7 @@ Defined in: [account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts:8
         [`CreateModularAccountV2Params`](../type-aliases/CreateModularAccountV2Params.mdx)\<`TTransport`, `TSigner`>
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -110,7 +114,9 @@ Defined in: [account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts:8
 ## Call Signature
 
 ```ts
-function createModularAccountV2<TTransport>(config): Promise<WebauthnModularAccountV2>;
+function createModularAccountV2<TTransport>(
+  config,
+): Promise<WebauthnModularAccountV2>;
 ```
 
 Defined in: [account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts:94](https://github.com/alchemyplatform/aa-sdk/blob/27e36329c103b4660886c9508b86d0a2c5c6c47e/account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts#L94)
@@ -135,6 +141,7 @@ Defined in: [account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts:9
         `Transport`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -158,6 +165,7 @@ Defined in: [account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts:9
         [`CreateWebauthnModularAccountV2Params`](../type-aliases/CreateWebauthnModularAccountV2Params.mdx)\<`TTransport`>
       </td>
     </tr>
+
   </tbody>
 </table>
 

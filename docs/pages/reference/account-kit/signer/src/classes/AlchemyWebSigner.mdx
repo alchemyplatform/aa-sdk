@@ -13,7 +13,7 @@ A SmartAccountSigner that can be used with any SmartContractAccount
 
 ## Extends
 
-* [`BaseAlchemySigner`](BaseAlchemySigner.mdx)\<[`AlchemySignerWebClient`](AlchemySignerWebClient.mdx)>
+- [`BaseAlchemySigner`](BaseAlchemySigner.mdx)\<[`AlchemySignerWebClient`](AlchemySignerWebClient.mdx)>
 
 ## Constructors
 
@@ -33,14 +33,14 @@ Initializes an instance with the provided Alchemy signer parameters after parsin
 import { AlchemyWebSigner } from "@account-kit/signer";
 
 const signer = new AlchemyWebSigner({
- client: {
-   connection: {
-     rpcUrl: "/api/rpc",
-   },
-   iframeConfig: {
-     iframeContainerId: "alchemy-signer-iframe-container",
-   },
- },
+  client: {
+    connection: {
+      rpcUrl: "/api/rpc",
+    },
+    iframeConfig: {
+      iframeContainerId: "alchemy-signer-iframe-container",
+    },
+  },
 });
 ```
 
@@ -139,6 +139,7 @@ const signer = new AlchemyWebSigner({
         ‐
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -854,6 +855,7 @@ const signer = new AlchemyWebSigner({
         If no user is authenticated
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -894,6 +896,7 @@ Handles OAuth authentication by augmenting the provided arguments with a type an
         Authentication parameters omitting the type, which will be set to "oauth"
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -907,7 +910,7 @@ A promise that resolves to an `OauthProviderInfo` object containing provider inf
 
 [`BaseAlchemySigner`](BaseAlchemySigner.mdx).[`addOauthProvider`](BaseAlchemySigner.mdx#addoauthprovider)
 
-***
+---
 
 ### fetchConfig()
 
@@ -925,7 +928,7 @@ Defined in: [account-kit/signer/src/base.ts:1882](https://github.com/alchemyplat
 
 [`BaseAlchemySigner`](BaseAlchemySigner.mdx).[`fetchConfig`](BaseAlchemySigner.mdx#fetchconfig)
 
-***
+---
 
 ### getAuthDetails()
 
@@ -945,14 +948,14 @@ try to authenticate
 import { AlchemyWebSigner } from "@account-kit/signer";
 
 const signer = new AlchemyWebSigner({
- client: {
-   connection: {
-     rpcUrl: "/api/rpc",
-   },
-   iframeConfig: {
-     iframeContainerId: "alchemy-signer-iframe-container",
-   },
- },
+  client: {
+    connection: {
+      rpcUrl: "/api/rpc",
+    },
+    iframeConfig: {
+      iframeContainerId: "alchemy-signer-iframe-container",
+    },
+  },
 });
 
 // throws if not logged in
@@ -973,7 +976,7 @@ if there is no user logged in
 
 [`BaseAlchemySigner`](BaseAlchemySigner.mdx).[`getAuthDetails`](BaseAlchemySigner.mdx#getauthdetails)
 
-***
+---
 
 ### getConfig()
 
@@ -995,7 +998,7 @@ A promise that resolves to the signer configuration
 
 [`BaseAlchemySigner`](BaseAlchemySigner.mdx).[`getConfig`](BaseAlchemySigner.mdx#getconfig)
 
-***
+---
 
 ### getMfaStatus()
 
@@ -1013,14 +1016,14 @@ Gets the current MFA status
 import { AlchemyWebSigner } from "@account-kit/signer";
 
 const signer = new AlchemyWebSigner({
- client: {
-   connection: {
-     rpcUrl: "/api/rpc",
-   },
-   iframeConfig: {
-     iframeContainerId: "alchemy-signer-iframe-container",
-   },
- },
+  client: {
+    connection: {
+      rpcUrl: "/api/rpc",
+    },
+    iframeConfig: {
+      iframeContainerId: "alchemy-signer-iframe-container",
+    },
+  },
 });
 
 const mfaStatus = signer.getMfaStatus();
@@ -1063,6 +1066,7 @@ The current MFA status
         `boolean`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1070,7 +1074,7 @@ The current MFA status
 
 [`BaseAlchemySigner`](BaseAlchemySigner.mdx).[`getMfaStatus`](BaseAlchemySigner.mdx#getmfastatus)
 
-***
+---
 
 ### getUser()
 
@@ -1082,14 +1086,14 @@ Unauthenticated call to look up a user's organizationId by email or phone
 import { AlchemyWebSigner } from "@account-kit/signer";
 
 const signer = new AlchemyWebSigner({
- client: {
-   connection: {
-     rpcUrl: "/api/rpc",
-   },
-   iframeConfig: {
-     iframeContainerId: "alchemy-signer-iframe-container",
-   },
- },
+  client: {
+    connection: {
+      rpcUrl: "/api/rpc",
+    },
+    iframeConfig: {
+      iframeContainerId: "alchemy-signer-iframe-container",
+    },
+  },
 });
 
 const result = await signer.getUser({ type: "email", value: "foo@mail.com" });
@@ -1123,14 +1127,14 @@ Use getUser(\{ type: "email", value: email }) instead
 import { AlchemyWebSigner } from "@account-kit/signer";
 
 const signer = new AlchemyWebSigner({
- client: {
-   connection: {
-     rpcUrl: "/api/rpc",
-   },
-   iframeConfig: {
-     iframeContainerId: "alchemy-signer-iframe-container",
-   },
- },
+  client: {
+    connection: {
+      rpcUrl: "/api/rpc",
+    },
+    iframeConfig: {
+      iframeContainerId: "alchemy-signer-iframe-container",
+    },
+  },
 });
 
 const result = await signer.getUser("foo@mail.com");
@@ -1161,6 +1165,7 @@ const result = await signer.getUser("foo@mail.com");
         the email to lookup
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1198,14 +1203,14 @@ Unauthenticated call to look up a user's organizationId by email or phone
 import { AlchemyWebSigner } from "@account-kit/signer";
 
 const signer = new AlchemyWebSigner({
- client: {
-   connection: {
-     rpcUrl: "/api/rpc",
-   },
-   iframeConfig: {
-     iframeContainerId: "alchemy-signer-iframe-container",
-   },
- },
+  client: {
+    connection: {
+      rpcUrl: "/api/rpc",
+    },
+    iframeConfig: {
+      iframeContainerId: "alchemy-signer-iframe-container",
+    },
+  },
 });
 
 const result = await signer.getUser({ type: "email", value: "foo@mail.com" });
@@ -1231,6 +1236,7 @@ const result = await signer.getUser({ type: "email", value: "foo@mail.com" });
         `GetUserParams`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1248,7 +1254,7 @@ the organization id for the user if they exist
 
 [`BaseAlchemySigner`](BaseAlchemySigner.mdx).[`getUser`](BaseAlchemySigner.mdx#getuser)
 
-***
+---
 
 ### initConfig()
 
@@ -1266,7 +1272,7 @@ Defined in: [account-kit/signer/src/base.ts:1864](https://github.com/alchemyplat
 
 [`BaseAlchemySigner`](BaseAlchemySigner.mdx).[`initConfig`](BaseAlchemySigner.mdx#initconfig)
 
-***
+---
 
 ### listAuthMethods()
 
@@ -1292,7 +1298,7 @@ Thrown if the user is not authenticated
 
 [`BaseAlchemySigner`](BaseAlchemySigner.mdx).[`listAuthMethods`](BaseAlchemySigner.mdx#listauthmethods)
 
-***
+---
 
 ### on()
 
@@ -1361,6 +1367,7 @@ Allows you to subscribe to events emitted by the signer
         the function to run when the event is emitted
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1380,7 +1387,7 @@ a function to remove the listener
 
 [`BaseAlchemySigner`](BaseAlchemySigner.mdx).[`on`](BaseAlchemySigner.mdx#on)
 
-***
+---
 
 ### preparePopupOauth()
 
@@ -1404,14 +1411,14 @@ been fetched at the time a user clicks a social login button.
 import { AlchemyWebSigner } from "@account-kit/signer";
 
 const signer = new AlchemyWebSigner({
- client: {
-   connection: {
-     rpcUrl: "/api/rpc",
-   },
-   iframeConfig: {
-     iframeContainerId: "alchemy-signer-iframe-container",
-   },
- },
+  client: {
+    connection: {
+      rpcUrl: "/api/rpc",
+    },
+    iframeConfig: {
+      iframeContainerId: "alchemy-signer-iframe-container",
+    },
+  },
 });
 
 await signer.preparePopupOauth();
@@ -1428,7 +1435,7 @@ using popup-based OAuth
 
 [`BaseAlchemySigner`](BaseAlchemySigner.mdx).[`preparePopupOauth`](BaseAlchemySigner.mdx#preparepopupoauth)
 
-***
+---
 
 ### removeOauthProvider()
 
@@ -1465,6 +1472,7 @@ Removes an OAuth provider by its ID if the user is authenticated.
         The ID of the OAuth provider to be removed, as obtained from `listOauthProviders`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1482,7 +1490,7 @@ Thrown if the user is not authenticated
 
 [`BaseAlchemySigner`](BaseAlchemySigner.mdx).[`removeOauthProvider`](BaseAlchemySigner.mdx#removeoauthprovider)
 
-***
+---
 
 ### setEmail()
 
@@ -1535,6 +1543,7 @@ It is recommended to now use the email verification flow instead.
         The email to set for the user
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1589,6 +1598,7 @@ the code.
         An object containing the verification code
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1606,7 +1616,7 @@ If the user is not authenticated
 
 [`BaseAlchemySigner`](BaseAlchemySigner.mdx).[`setEmail`](BaseAlchemySigner.mdx#setemail)
 
-***
+---
 
 ### toSolanaSigner()
 
@@ -1625,14 +1635,14 @@ This requires the signer to be authenticated first
 import { AlchemyWebSigner } from "@account-kit/signer";
 
 const signer = new AlchemyWebSigner({
- client: {
-   connection: {
-     rpcUrl: "/api/rpc",
-   },
-   iframeConfig: {
-     iframeContainerId: "alchemy-signer-iframe-container",
-   },
- },
+  client: {
+    connection: {
+      rpcUrl: "/api/rpc",
+    },
+    iframeConfig: {
+      iframeContainerId: "alchemy-signer-iframe-container",
+    },
+  },
 });
 
 const solanaSigner = signer.toSolanaSigner();
@@ -1648,7 +1658,7 @@ A new instance of `SolanaSigner`
 
 [`BaseAlchemySigner`](BaseAlchemySigner.mdx).[`toSolanaSigner`](BaseAlchemySigner.mdx#tosolanasigner)
 
-***
+---
 
 ### toViemAccount()
 
@@ -1667,14 +1677,14 @@ will let you use the signer as an EOA directly.
 import { AlchemyWebSigner } from "@account-kit/signer";
 
 const signer = new AlchemyWebSigner({
- client: {
-   connection: {
-     rpcUrl: "/api/rpc",
-   },
-   iframeConfig: {
-     iframeContainerId: "alchemy-signer-iframe-container",
-   },
- },
+  client: {
+    connection: {
+      rpcUrl: "/api/rpc",
+    },
+    iframeConfig: {
+      iframeContainerId: "alchemy-signer-iframe-container",
+    },
+  },
 });
 
 const account = signer.toViemAccount();
@@ -1794,6 +1804,7 @@ a LocalAccount object that can be used with viem's wallet client
         `"local"`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1805,7 +1816,7 @@ if your signer is not authenticated
 
 [`BaseAlchemySigner`](BaseAlchemySigner.mdx).[`toViemAccount`](BaseAlchemySigner.mdx#toviemaccount)
 
-***
+---
 
 ### validateMultiFactors()
 
@@ -1825,20 +1836,20 @@ It completes the authentication process by validating the MFA factors and comple
 import { AlchemyWebSigner } from "@account-kit/signer";
 
 const signer = new AlchemyWebSigner({
- client: {
-   connection: {
-     rpcUrl: "/api/rpc",
-   },
-   iframeConfig: {
-     iframeContainerId: "alchemy-signer-iframe-container",
-   },
- },
+  client: {
+    connection: {
+      rpcUrl: "/api/rpc",
+    },
+    iframeConfig: {
+      iframeContainerId: "alchemy-signer-iframe-container",
+    },
+  },
 });
 
 // After MFA is required and user provides code
 const user = await signer.validateMultiFactors({
   multiFactorCode: "123456", // 6-digit code from authenticator app
-  multiFactorId: "factor-id"
+  multiFactorId: "factor-id",
 });
 ```
 
@@ -1867,6 +1878,7 @@ const user = await signer.validateMultiFactors({
         Parameters for validating MFA factors
       </td>
     </tr>
+
   </tbody>
 </table>
 

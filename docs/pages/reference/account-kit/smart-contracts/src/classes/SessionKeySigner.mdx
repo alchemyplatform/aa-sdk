@@ -15,7 +15,7 @@ it in the storage.
 
 ## Implements
 
-* `SmartAccountSigner`\<`LocalAccountSigner`\<`PrivateKeyAccount`>>
+- `SmartAccountSigner`\<`LocalAccountSigner`\<`PrivateKeyAccount`>>
 
 ## Constructors
 
@@ -90,6 +90,7 @@ const signer = new SessionKeySigner();
         ‐
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -182,6 +183,7 @@ const signer = new SessionKeySigner();
         ```
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -212,7 +214,7 @@ const newSessionKey = signer.generateNewKey();
 
 The public address of the new key.
 
-***
+---
 
 ### signTypedData()
 
@@ -230,13 +232,15 @@ Signs the provided typed data using the inner signer.
 import { SessionKeySigner } from "@account-kit/smart-contracts";
 
 const signer = new SessionKeySigner();
-console.log(await signer.signTypedData({
- types: {
-   "Message": [{ name: "content", type: "string" }]
- },
- primaryType: "Message",
- message: { content: "Hello" },
-}));
+console.log(
+  await signer.signTypedData({
+    types: {
+      Message: [{ name: "content", type: "string" }],
+    },
+    primaryType: "Message",
+    message: { content: "Hello" },
+  }),
+);
 ```
 
 #### Type Parameters
@@ -487,6 +491,7 @@ console.log(await signer.signTypedData({
         The primary type of the typed data.
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -515,6 +520,7 @@ console.log(await signer.signTypedData({
         The parameters containing the typed data definition and primary type.
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -527,5 +533,5 @@ A promise that resolves to the signed typed data as a string.
 #### Implementation of
 
 ```ts
-SmartAccountSigner.signTypedData
+SmartAccountSigner.signTypedData;
 ```

@@ -11,7 +11,7 @@ Defined in: [account-kit/rn-signer/src/client.ts:67](https://github.com/alchemyp
 
 ## Extends
 
-* `BaseSignerClient`\<[`ExportWalletParams`](../type-aliases/ExportWalletParams.mdx), `string`>
+- `BaseSignerClient`\<[`ExportWalletParams`](../type-aliases/ExportWalletParams.mdx), `string`>
 
 ## Constructors
 
@@ -83,6 +83,7 @@ Defined in: [account-kit/rn-signer/src/client.ts:79](https://github.com/alchemyp
         `string`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -802,6 +803,7 @@ BaseSignerClient<
         if no organization ID is provided when there is no current user
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -849,6 +851,7 @@ Defined in: account-kit/signer/dist/types/client/base.d.ts:44
         `undefined` | `User`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -859,7 +862,7 @@ Defined in: account-kit/signer/dist/types/client/base.d.ts:44
 #### Inherited from
 
 ```ts
-BaseSignerClient.user
+BaseSignerClient.user;
 ```
 
 ## Methods
@@ -952,6 +955,7 @@ Defined in: [account-kit/rn-signer/src/client.ts:182](https://github.com/alchemy
         `string`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -962,10 +966,10 @@ Defined in: [account-kit/rn-signer/src/client.ts:182](https://github.com/alchemy
 #### Overrides
 
 ```ts
-BaseSignerClient.completeAuthWithBundle
+BaseSignerClient.completeAuthWithBundle;
 ```
 
-***
+---
 
 ### createAccount()
 
@@ -1002,6 +1006,7 @@ Authenticates the user by either email or passkey account creation flow. Emits e
         The parameters for creating an account, including the type (email or passkey) and additional details.
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1014,10 +1019,10 @@ A promise that resolves with the response object containing the account creation
 #### Inherited from
 
 ```ts
-BaseSignerClient.createAccount
+BaseSignerClient.createAccount;
 ```
 
-***
+---
 
 ### disconnect()
 
@@ -1034,10 +1039,10 @@ Defined in: [account-kit/rn-signer/src/client.ts:296](https://github.com/alchemy
 #### Overrides
 
 ```ts
-BaseSignerClient.disconnect
+BaseSignerClient.disconnect;
 ```
 
-***
+---
 
 ### exportWallet()
 
@@ -1074,6 +1079,7 @@ Exports the wallet and returns the decrypted private key or seed phrase.
         exportWallet parameters
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1090,10 +1096,10 @@ If the user is not authenticated or export fails
 #### Overrides
 
 ```ts
-BaseSignerClient.exportWallet
+BaseSignerClient.exportWallet;
 ```
 
-***
+---
 
 ### getOauthConfig()
 
@@ -1110,10 +1116,10 @@ Defined in: [account-kit/rn-signer/src/client.ts:464](https://github.com/alchemy
 #### Overrides
 
 ```ts
-BaseSignerClient.getOauthConfig
+BaseSignerClient.getOauthConfig;
 ```
 
-***
+---
 
 ### getWebAuthnAttestation()
 
@@ -1163,6 +1169,7 @@ Defined in: [account-kit/rn-signer/src/client.ts:433](https://github.com/alchemy
         `string`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1173,10 +1180,10 @@ Defined in: [account-kit/rn-signer/src/client.ts:433](https://github.com/alchemy
 #### Overrides
 
 ```ts
-BaseSignerClient.getWebAuthnAttestation
+BaseSignerClient.getWebAuthnAttestation;
 ```
 
-***
+---
 
 ### initEmailAuth()
 
@@ -1210,6 +1217,7 @@ Defined in: [account-kit/rn-signer/src/client.ts:130](https://github.com/alchemy
         `Omit`\<`EmailAuthParams`, `"targetPublicKey"`>
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1224,10 +1232,10 @@ Defined in: [account-kit/rn-signer/src/client.ts:130](https://github.com/alchemy
 #### Overrides
 
 ```ts
-BaseSignerClient.initEmailAuth
+BaseSignerClient.initEmailAuth;
 ```
 
-***
+---
 
 ### initSessionStamper()
 
@@ -1246,10 +1254,10 @@ Initializes the session stamper and returns its public key.
 #### Overrides
 
 ```ts
-BaseSignerClient.initSessionStamper
+BaseSignerClient.initSessionStamper;
 ```
 
-***
+---
 
 ### initSmsAuth()
 
@@ -1282,6 +1290,7 @@ Defined in: [account-kit/rn-signer/src/client.ts:155](https://github.com/alchemy
         `Omit`\<`SmsAuthParams`, `"targetPublicKey"`>
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1295,10 +1304,10 @@ Defined in: [account-kit/rn-signer/src/client.ts:155](https://github.com/alchemy
 #### Overrides
 
 ```ts
-BaseSignerClient.initSmsAuth
+BaseSignerClient.initSmsAuth;
 ```
 
-***
+---
 
 ### initWebauthnStamper()
 
@@ -1338,6 +1347,7 @@ Defined in: [account-kit/rn-signer/src/client.ts:495](https://github.com/alchemy
         `CredentialCreationOptionOverrides`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1348,10 +1358,10 @@ Defined in: [account-kit/rn-signer/src/client.ts:495](https://github.com/alchemy
 #### Overrides
 
 ```ts
-BaseSignerClient.initWebauthnStamper
+BaseSignerClient.initWebauthnStamper;
 ```
 
-***
+---
 
 ### oauthWithPopup()
 
@@ -1381,6 +1391,7 @@ Defined in: [account-kit/rn-signer/src/client.ts:290](https://github.com/alchemy
         `any`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1391,10 +1402,10 @@ Defined in: [account-kit/rn-signer/src/client.ts:290](https://github.com/alchemy
 #### Overrides
 
 ```ts
-BaseSignerClient.oauthWithPopup
+BaseSignerClient.oauthWithPopup;
 ```
 
-***
+---
 
 ### oauthWithRedirect()
 
@@ -1424,6 +1435,7 @@ Defined in: [account-kit/rn-signer/src/client.ts:216](https://github.com/alchemy
         `any`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1434,10 +1446,10 @@ Defined in: [account-kit/rn-signer/src/client.ts:216](https://github.com/alchemy
 #### Overrides
 
 ```ts
-BaseSignerClient.oauthWithRedirect
+BaseSignerClient.oauthWithRedirect;
 ```
 
-***
+---
 
 ### setEmail()
 
@@ -1484,6 +1496,7 @@ Recommended to use the email verification flow instead.
         The email to set for the user
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1500,7 +1513,7 @@ If the user is not authenticated
 ##### Inherited from
 
 ```ts
-BaseSignerClient.setEmail
+BaseSignerClient.setEmail;
 ```
 
 #### Call Signature
@@ -1512,7 +1525,7 @@ setEmail(otp): Promise<string>;
 Defined in: account-kit/signer/dist/types/client/base.d.ts:125
 
 Sets the email for the authenticated user, allowing them to login with that
-email.  Must be called after calling `initOtp` with the email.
+email. Must be called after calling `initOtp` with the email.
 
 ##### Parameters
 
@@ -1539,6 +1552,7 @@ email.  Must be called after calling `initOtp` with the email.
         The OTP verification object including the OTP ID and OTP code
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1555,10 +1569,10 @@ If the user is not authenticated
 ##### Inherited from
 
 ```ts
-BaseSignerClient.setEmail
+BaseSignerClient.setEmail;
 ```
 
-***
+---
 
 ### setStamper()
 
@@ -1595,6 +1609,7 @@ Sets the stamper of the TurnkeyClient.
         the stamper function to set for the TurnkeyClient
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1605,10 +1620,10 @@ Sets the stamper of the TurnkeyClient.
 #### Inherited from
 
 ```ts
-BaseSignerClient.setStamper
+BaseSignerClient.setStamper;
 ```
 
-***
+---
 
 ### submitJwt()
 
@@ -1638,6 +1653,7 @@ Defined in: [account-kit/rn-signer/src/client.ts:168](https://github.com/alchemy
         `Omit`\<`JwtParams`, `"targetPublicKey"`>
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1648,10 +1664,10 @@ Defined in: [account-kit/rn-signer/src/client.ts:168](https://github.com/alchemy
 #### Overrides
 
 ```ts
-BaseSignerClient.submitJwt
+BaseSignerClient.submitJwt;
 ```
 
-***
+---
 
 ### submitOtpCode()
 
@@ -1681,6 +1697,7 @@ Defined in: [account-kit/rn-signer/src/client.ts:93](https://github.com/alchemyp
         `Omit`\<`OtpParams`, `"targetPublicKey"`>
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1691,10 +1708,10 @@ Defined in: [account-kit/rn-signer/src/client.ts:93](https://github.com/alchemyp
 #### Overrides
 
 ```ts
-BaseSignerClient.submitOtpCode
+BaseSignerClient.submitOtpCode;
 ```
 
-***
+---
 
 ### targetPublicKey()
 
@@ -1711,5 +1728,5 @@ Defined in: [account-kit/rn-signer/src/client.ts:429](https://github.com/alchemy
 #### Overrides
 
 ```ts
-BaseSignerClient.targetPublicKey
+BaseSignerClient.targetPublicKey;
 ```

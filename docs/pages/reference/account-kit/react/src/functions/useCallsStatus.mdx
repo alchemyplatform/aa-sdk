@@ -24,13 +24,17 @@ The status indicates whether the batch of calls has been processed, confirmed, o
 import { useCallsStatus } from "@account-kit/react";
 
 function MyComponent() {
-  const { data: callsStatus, isLoading, error } = useCallsStatus({
+  const {
+    data: callsStatus,
+    isLoading,
+    error,
+  } = useCallsStatus({
     client: smartWalletClient,
     callId: "0x1234...", // The call ID from sendPreparedCalls
     queryOptions: {
       // Refetch every 2 sec while pending.
-      refetchInterval: (q) => q.state.data?.status === 100 ? 2000 : false,
-    }
+      refetchInterval: (q) => (q.state.data?.status === 100 ? 2000 : false),
+    },
   });
 }
 ```
@@ -60,6 +64,7 @@ function MyComponent() {
         Parameters for the hook
       </td>
     </tr>
+
   </tbody>
 </table>
 

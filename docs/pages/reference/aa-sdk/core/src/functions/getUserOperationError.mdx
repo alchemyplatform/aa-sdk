@@ -9,9 +9,10 @@ layout: reference
 
 ```ts
 function getUserOperationError<TTransport, TChain, TAccount>(
-   client, 
-   request, 
-   entryPoint): Promise<void>;
+  client,
+  request,
+  entryPoint,
+): Promise<void>;
 ```
 
 Defined in: [aa-sdk/core/src/actions/smartAccount/getUserOperationError.ts:28](https://github.com/alchemyplatform/aa-sdk/blob/27e36329c103b4660886c9508b86d0a2c5c6c47e/aa-sdk/core/src/actions/smartAccount/getUserOperationError.ts#L28)
@@ -61,6 +62,7 @@ Retrieves the error message from an entrypoint for a User Operation.
         | [`SmartContractAccount`](../type-aliases/SmartContractAccount.mdx)
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -117,6 +119,7 @@ Retrieves the error message from an entrypoint for a User Operation.
         the entrypoint instance to send the uo to
       </td>
     </tr>
+
   </tbody>
 </table>
 

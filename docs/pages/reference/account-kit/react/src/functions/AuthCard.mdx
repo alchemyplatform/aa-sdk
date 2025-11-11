@@ -22,13 +22,11 @@ and options based on the config passed to the AlchemyAccountProvider
 import { AuthCard, useAlchemyAccountContext } from "@account-kit/react";
 
 function ComponentWithAuthCard() {
- // assumes you've passed in a UI config to the Account Provider
- // you can also directly set the properties on the AuthCard component
- const { uiConfig } = useAlchemyAccountContext();
+  // assumes you've passed in a UI config to the Account Provider
+  // you can also directly set the properties on the AuthCard component
+  const { uiConfig } = useAlchemyAccountContext();
 
- return (
-   <AuthCard { ...uiConfig!.auth } />
- );
+  return <AuthCard {...uiConfig!.auth} />;
 }
 ```
 
@@ -57,6 +55,7 @@ function ComponentWithAuthCard() {
         Card Props
       </td>
     </tr>
+
   </tbody>
 </table>
 

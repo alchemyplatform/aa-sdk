@@ -22,9 +22,12 @@ import { getAccount } from "@account-kit/core";
 // see createConfig for more information on how to create a config
 import { config } from "./config";
 
-const { account, status } = getAccount({
- type: "LightAccount"
-}, config)
+const { account, status } = getAccount(
+  {
+    type: "LightAccount",
+  },
+  config,
+);
 ```
 
 ## Type Parameters
@@ -84,6 +87,7 @@ const { account, status } = getAccount({
         The configuration containing the client store
       </td>
     </tr>
+
   </tbody>
 </table>
 

@@ -11,7 +11,7 @@ Defined in: [account-kit/rn-signer/src/signer.ts:22](https://github.com/alchemyp
 
 ## Extends
 
-* `BaseAlchemySigner`\<[`RNSignerClient`](RNSignerClient.mdx)>
+- `BaseAlchemySigner`\<[`RNSignerClient`](RNSignerClient.mdx)>
 
 ## Properties
 
@@ -925,6 +925,7 @@ Defined in: [account-kit/rn-signer/src/signer.ts:22](https://github.com/alchemyp
         If no user is authenticated
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -956,14 +957,14 @@ Use getUser(\{ type: "email", value: email }) instead
 import { AlchemyWebSigner } from "@account-kit/signer";
 
 const signer = new AlchemyWebSigner({
- client: {
-   connection: {
-     rpcUrl: "/api/rpc",
-   },
-   iframeConfig: {
-     iframeContainerId: "alchemy-signer-iframe-container",
-   },
- },
+  client: {
+    connection: {
+      rpcUrl: "/api/rpc",
+    },
+    iframeConfig: {
+      iframeContainerId: "alchemy-signer-iframe-container",
+    },
+  },
 });
 
 const result = await signer.getUser("foo@mail.com");
@@ -994,6 +995,7 @@ const result = await signer.getUser("foo@mail.com");
         the email to lookup
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1010,7 +1012,7 @@ the organization id for the user if they exist
 ##### Inherited from
 
 ```ts
-BaseAlchemySigner.getUser
+BaseAlchemySigner.getUser;
 ```
 
 #### Call Signature
@@ -1033,14 +1035,14 @@ Unauthenticated call to look up a user's organizationId by email or phone
 import { AlchemyWebSigner } from "@account-kit/signer";
 
 const signer = new AlchemyWebSigner({
- client: {
-   connection: {
-     rpcUrl: "/api/rpc",
-   },
-   iframeConfig: {
-     iframeContainerId: "alchemy-signer-iframe-container",
-   },
- },
+  client: {
+    connection: {
+      rpcUrl: "/api/rpc",
+    },
+    iframeConfig: {
+      iframeContainerId: "alchemy-signer-iframe-container",
+    },
+  },
 });
 
 const result = await signer.getUser({ type: "email", value: "foo@mail.com" });
@@ -1066,6 +1068,7 @@ const result = await signer.getUser({ type: "email", value: "foo@mail.com" });
         `GetUserParams`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1082,10 +1085,10 @@ the organization id for the user if they exist
 ##### Inherited from
 
 ```ts
-BaseAlchemySigner.getUser
+BaseAlchemySigner.getUser;
 ```
 
-***
+---
 
 ### setEmail()
 
@@ -1132,6 +1135,7 @@ It is recommended to now use the email verification flow instead.
         The email to set for the user
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1148,7 +1152,7 @@ If the user is not authenticated
 ##### Inherited from
 
 ```ts
-BaseAlchemySigner.setEmail
+BaseAlchemySigner.setEmail;
 ```
 
 #### Call Signature
@@ -1188,6 +1192,7 @@ the code.
         An object containing the verification code
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1204,10 +1209,10 @@ If the user is not authenticated
 ##### Inherited from
 
 ```ts
-BaseAlchemySigner.setEmail
+BaseAlchemySigner.setEmail;
 ```
 
-***
+---
 
 ### validateMultiFactors()
 
@@ -1227,20 +1232,20 @@ It completes the authentication process by validating the MFA factors and comple
 import { AlchemyWebSigner } from "@account-kit/signer";
 
 const signer = new AlchemyWebSigner({
- client: {
-   connection: {
-     rpcUrl: "/api/rpc",
-   },
-   iframeConfig: {
-     iframeContainerId: "alchemy-signer-iframe-container",
-   },
- },
+  client: {
+    connection: {
+      rpcUrl: "/api/rpc",
+    },
+    iframeConfig: {
+      iframeContainerId: "alchemy-signer-iframe-container",
+    },
+  },
 });
 
 // After MFA is required and user provides code
 const user = await signer.validateMultiFactors({
   multiFactorCode: "123456", // 6-digit code from authenticator app
-  multiFactorId: "factor-id"
+  multiFactorId: "factor-id",
 });
 ```
 
@@ -1269,6 +1274,7 @@ const user = await signer.validateMultiFactors({
         Parameters for validating MFA factors
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1285,10 +1291,10 @@ If there is no pending MFA context or if orgId is not found
 #### Inherited from
 
 ```ts
-BaseAlchemySigner.validateMultiFactors
+BaseAlchemySigner.validateMultiFactors;
 ```
 
-***
+---
 
 ### getInstance()
 
@@ -1358,6 +1364,7 @@ Defined in: [account-kit/rn-signer/src/signer.ts:49](https://github.com/alchemyp
         `string`
       </td>
     </tr>
+
   </tbody>
 </table>
 

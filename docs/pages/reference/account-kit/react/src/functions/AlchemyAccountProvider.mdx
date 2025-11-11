@@ -23,20 +23,20 @@ import { sepolia } from "@account-kit/infra";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const config = createConfig({
- apiKey: "your-api-key",
- chain: sepolia,
+  apiKey: "your-api-key",
+  chain: sepolia,
 });
 
 const queryClient = new QueryClient();
 
 function App({ children }: React.PropsWithChildren) {
- return (
-   <QueryClientProvider queryClient={queryClient}>
-     <AlchemyAccountProvider config={config} queryClient={queryClient}>
-       {children}
-     </AlchemyAccountProvider>
-   </QueryClientProvider>
- );
+  return (
+    <QueryClientProvider queryClient={queryClient}>
+      <AlchemyAccountProvider config={config} queryClient={queryClient}>
+        {children}
+      </AlchemyAccountProvider>
+    </QueryClientProvider>
+  );
 }
 ```
 
@@ -65,6 +65,7 @@ function App({ children }: React.PropsWithChildren) {
         alchemy accounts provider props
       </td>
     </tr>
+
   </tbody>
 </table>
 

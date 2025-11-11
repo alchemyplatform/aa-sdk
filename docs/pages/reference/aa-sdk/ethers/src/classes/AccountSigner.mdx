@@ -13,7 +13,7 @@ Implementation of the ethers Signer interface to use with Smart Contract Account
 
 ## Extends
 
-* `Signer`
+- `Signer`
 
 ## Type Parameters
 
@@ -45,6 +45,7 @@ Implementation of the ethers Signer interface to use with Smart Contract Account
         `GetEntryPointFromAccount`\<`TAccount`>
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -70,9 +71,9 @@ import { createLightAccount } from "@account-kit/smart-contracts";
 import { http } from "viem";
 
 const account = await createLightAccount({
- transport: http("https://rpc.testnet.aepps.com"),
- chain: sepolia,
- signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey())
+  transport: http("https://rpc.testnet.aepps.com"),
+  chain: sepolia,
+  signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
 });
 
 const provider = new EthersProviderAdapter();
@@ -118,6 +119,7 @@ const signer = new AccountSigner(provider, account);
         the smart contract account that will be used to sign user ops and send them
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -128,7 +130,7 @@ const signer = new AccountSigner(provider, account);
 #### Overrides
 
 ```ts
-Signer.constructor
+Signer.constructor;
 ```
 
 ## Properties
@@ -212,6 +214,7 @@ Signer.constructor
         ‐
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -223,7 +226,7 @@ Signer.constructor
 _checkProvider(operation?): void;
 ```
 
-Defined in: node\_modules/@ethersproject/abstract-signer/lib/index.d.ts:42
+Defined in: node_modules/@ethersproject/abstract-signer/lib/index.d.ts:42
 
 #### Parameters
 
@@ -245,6 +248,7 @@ Defined in: node\_modules/@ethersproject/abstract-signer/lib/index.d.ts:42
         `string`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -255,10 +259,10 @@ Defined in: node\_modules/@ethersproject/abstract-signer/lib/index.d.ts:42
 #### Inherited from
 
 ```ts
-Signer._checkProvider
+Signer._checkProvider;
 ```
 
-***
+---
 
 ### call()
 
@@ -266,7 +270,7 @@ Signer._checkProvider
 call(transaction, blockTag?): Promise<string>;
 ```
 
-Defined in: node\_modules/@ethersproject/abstract-signer/lib/index.d.ts:34
+Defined in: node_modules/@ethersproject/abstract-signer/lib/index.d.ts:34
 
 #### Parameters
 
@@ -298,6 +302,7 @@ Defined in: node\_modules/@ethersproject/abstract-signer/lib/index.d.ts:34
         `BlockTag`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -308,10 +313,10 @@ Defined in: node\_modules/@ethersproject/abstract-signer/lib/index.d.ts:34
 #### Inherited from
 
 ```ts
-Signer.call
+Signer.call;
 ```
 
-***
+---
 
 ### checkTransaction()
 
@@ -319,7 +324,7 @@ Signer.call
 checkTransaction(transaction): Deferrable<TransactionRequest>;
 ```
 
-Defined in: node\_modules/@ethersproject/abstract-signer/lib/index.d.ts:40
+Defined in: node_modules/@ethersproject/abstract-signer/lib/index.d.ts:40
 
 #### Parameters
 
@@ -341,6 +346,7 @@ Defined in: node\_modules/@ethersproject/abstract-signer/lib/index.d.ts:40
         `Deferrable`\<`TransactionRequest`>
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -351,10 +357,10 @@ Defined in: node\_modules/@ethersproject/abstract-signer/lib/index.d.ts:40
 #### Inherited from
 
 ```ts
-Signer.checkTransaction
+Signer.checkTransaction;
 ```
 
-***
+---
 
 ### connect()
 
@@ -378,9 +384,9 @@ import { createLightAccount } from "@account-kit/smart-contracts";
 import { http } from "viem";
 
 const account = await createLightAccount({
- transport: http("https://rpc.testnet.aepps.com"),
- chain: sepolia,
- signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey())
+  transport: http("https://rpc.testnet.aepps.com"),
+  chain: sepolia,
+  signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
 });
 
 const provider = new EthersProviderAdapter();
@@ -414,6 +420,7 @@ signer.connect(provider);
         the provider to be set for the account signer
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -426,10 +433,10 @@ the updated account signer instance
 #### Overrides
 
 ```ts
-Signer.connect
+Signer.connect;
 ```
 
-***
+---
 
 ### estimateGas()
 
@@ -437,7 +444,7 @@ Signer.connect
 estimateGas(transaction): Promise<BigNumber>;
 ```
 
-Defined in: node\_modules/@ethersproject/abstract-signer/lib/index.d.ts:33
+Defined in: node_modules/@ethersproject/abstract-signer/lib/index.d.ts:33
 
 #### Parameters
 
@@ -459,6 +466,7 @@ Defined in: node\_modules/@ethersproject/abstract-signer/lib/index.d.ts:33
         `Deferrable`\<`TransactionRequest`>
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -469,10 +477,10 @@ Defined in: node\_modules/@ethersproject/abstract-signer/lib/index.d.ts:33
 #### Inherited from
 
 ```ts
-Signer.estimateGas
+Signer.estimateGas;
 ```
 
-***
+---
 
 ### getAddress()
 
@@ -494,9 +502,9 @@ import { createLightAccount } from "@account-kit/smart-contracts";
 import { http } from "viem";
 
 const account = await createLightAccount({
- transport: http("https://rpc.testnet.aepps.com"),
- chain: sepolia,
- signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey())
+  transport: http("https://rpc.testnet.aepps.com"),
+  chain: sepolia,
+  signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
 });
 
 const provider = new EthersProviderAdapter();
@@ -518,10 +526,10 @@ if the account is not found
 #### Overrides
 
 ```ts
-Signer.getAddress
+Signer.getAddress;
 ```
 
-***
+---
 
 ### getBalance()
 
@@ -529,7 +537,7 @@ Signer.getAddress
 getBalance(blockTag?): Promise<BigNumber>;
 ```
 
-Defined in: node\_modules/@ethersproject/abstract-signer/lib/index.d.ts:31
+Defined in: node_modules/@ethersproject/abstract-signer/lib/index.d.ts:31
 
 #### Parameters
 
@@ -551,6 +559,7 @@ Defined in: node\_modules/@ethersproject/abstract-signer/lib/index.d.ts:31
         `BlockTag`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -561,10 +570,10 @@ Defined in: node\_modules/@ethersproject/abstract-signer/lib/index.d.ts:31
 #### Inherited from
 
 ```ts
-Signer.getBalance
+Signer.getBalance;
 ```
 
-***
+---
 
 ### getBundlerClient()
 
@@ -586,9 +595,9 @@ import { createLightAccount } from "@account-kit/smart-contracts";
 import { http } from "viem";
 
 const account = await createLightAccount({
- transport: http("https://rpc.testnet.aepps.com"),
- chain: sepolia,
- signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey())
+  transport: http("https://rpc.testnet.aepps.com"),
+  chain: sepolia,
+  signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
 });
 
 const provider = new EthersProviderAdapter();
@@ -603,7 +612,7 @@ const bundler = signer.getBundlerClient();
 
 The BundlerClient instance
 
-***
+---
 
 ### getChainId()
 
@@ -611,7 +620,7 @@ The BundlerClient instance
 getChainId(): Promise<number>;
 ```
 
-Defined in: node\_modules/@ethersproject/abstract-signer/lib/index.d.ts:36
+Defined in: node_modules/@ethersproject/abstract-signer/lib/index.d.ts:36
 
 #### Returns
 
@@ -620,10 +629,10 @@ Defined in: node\_modules/@ethersproject/abstract-signer/lib/index.d.ts:36
 #### Inherited from
 
 ```ts
-Signer.getChainId
+Signer.getChainId;
 ```
 
-***
+---
 
 ### getFeeData()
 
@@ -631,7 +640,7 @@ Signer.getChainId
 getFeeData(): Promise<FeeData>;
 ```
 
-Defined in: node\_modules/@ethersproject/abstract-signer/lib/index.d.ts:38
+Defined in: node_modules/@ethersproject/abstract-signer/lib/index.d.ts:38
 
 #### Returns
 
@@ -640,10 +649,10 @@ Defined in: node\_modules/@ethersproject/abstract-signer/lib/index.d.ts:38
 #### Inherited from
 
 ```ts
-Signer.getFeeData
+Signer.getFeeData;
 ```
 
-***
+---
 
 ### getGasPrice()
 
@@ -651,7 +660,7 @@ Signer.getFeeData
 getGasPrice(): Promise<BigNumber>;
 ```
 
-Defined in: node\_modules/@ethersproject/abstract-signer/lib/index.d.ts:37
+Defined in: node_modules/@ethersproject/abstract-signer/lib/index.d.ts:37
 
 #### Returns
 
@@ -660,10 +669,10 @@ Defined in: node\_modules/@ethersproject/abstract-signer/lib/index.d.ts:37
 #### Inherited from
 
 ```ts
-Signer.getGasPrice
+Signer.getGasPrice;
 ```
 
-***
+---
 
 ### getTransactionCount()
 
@@ -671,7 +680,7 @@ Signer.getGasPrice
 getTransactionCount(blockTag?): Promise<number>;
 ```
 
-Defined in: node\_modules/@ethersproject/abstract-signer/lib/index.d.ts:32
+Defined in: node_modules/@ethersproject/abstract-signer/lib/index.d.ts:32
 
 #### Parameters
 
@@ -693,6 +702,7 @@ Defined in: node\_modules/@ethersproject/abstract-signer/lib/index.d.ts:32
         `BlockTag`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -703,10 +713,10 @@ Defined in: node\_modules/@ethersproject/abstract-signer/lib/index.d.ts:32
 #### Inherited from
 
 ```ts
-Signer.getTransactionCount
+Signer.getTransactionCount;
 ```
 
-***
+---
 
 ### populateTransaction()
 
@@ -714,7 +724,7 @@ Signer.getTransactionCount
 populateTransaction(transaction): Promise<TransactionRequest>;
 ```
 
-Defined in: node\_modules/@ethersproject/abstract-signer/lib/index.d.ts:41
+Defined in: node_modules/@ethersproject/abstract-signer/lib/index.d.ts:41
 
 #### Parameters
 
@@ -736,6 +746,7 @@ Defined in: node\_modules/@ethersproject/abstract-signer/lib/index.d.ts:41
         `Deferrable`\<`TransactionRequest`>
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -746,10 +757,10 @@ Defined in: node\_modules/@ethersproject/abstract-signer/lib/index.d.ts:41
 #### Inherited from
 
 ```ts
-Signer.populateTransaction
+Signer.populateTransaction;
 ```
 
-***
+---
 
 ### resolveName()
 
@@ -757,7 +768,7 @@ Signer.populateTransaction
 resolveName(name): Promise<string>;
 ```
 
-Defined in: node\_modules/@ethersproject/abstract-signer/lib/index.d.ts:39
+Defined in: node_modules/@ethersproject/abstract-signer/lib/index.d.ts:39
 
 #### Parameters
 
@@ -779,6 +790,7 @@ Defined in: node\_modules/@ethersproject/abstract-signer/lib/index.d.ts:39
         `string`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -789,10 +801,10 @@ Defined in: node\_modules/@ethersproject/abstract-signer/lib/index.d.ts:39
 #### Inherited from
 
 ```ts
-Signer.resolveName
+Signer.resolveName;
 ```
 
-***
+---
 
 ### sendTransaction()
 
@@ -814,18 +826,18 @@ import { createLightAccount } from "@account-kit/smart-contracts";
 import { http } from "viem";
 
 const account = await createLightAccount({
- transport: http("https://rpc.testnet.aepps.com"),
- chain: sepolia,
- signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey())
+  transport: http("https://rpc.testnet.aepps.com"),
+  chain: sepolia,
+  signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
 });
 
 const provider = new EthersProviderAdapter();
 const signer = new AccountSigner(provider, account);
 
 const tx = await signer.sendTransaction({
- to: "0x1234567890123456789012345678901234567890",
- value: "0x0",
- data: "0x",
+  to: "0x1234567890123456789012345678901234567890",
+  value: "0x0",
+  data: "0x",
 });
 ```
 
@@ -854,6 +866,7 @@ const tx = await signer.sendTransaction({
         the transaction request to be sent
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -870,10 +883,10 @@ if the account is not found in the provider
 #### Overrides
 
 ```ts
-Signer.sendTransaction
+Signer.sendTransaction;
 ```
 
-***
+---
 
 ### signMessage()
 
@@ -895,9 +908,9 @@ import { createLightAccount } from "@account-kit/smart-contracts";
 import { http } from "viem";
 
 const account = await createLightAccount({
- transport: http("https://rpc.testnet.aepps.com"),
- chain: sepolia,
- signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey())
+  transport: http("https://rpc.testnet.aepps.com"),
+  chain: sepolia,
+  signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
 });
 
 const provider = new EthersProviderAdapter();
@@ -931,6 +944,7 @@ const message = await signer.signMessage("hello");
         the message to be signed
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -947,10 +961,10 @@ if the account is not found
 #### Overrides
 
 ```ts
-Signer.signMessage
+Signer.signMessage;
 ```
 
-***
+---
 
 ### signTransaction()
 
@@ -987,6 +1001,7 @@ Throws an error indicating that transaction signing is not supported and advises
         The transaction request
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1001,10 +1016,10 @@ Will always throw an error indicating transaction signing is unsupported
 #### Overrides
 
 ```ts
-Signer.signTransaction
+Signer.signTransaction;
 ```
 
-***
+---
 
 ### isSigner()
 
@@ -1012,7 +1027,7 @@ Signer.signTransaction
 static isSigner(value): value is Signer;
 ```
 
-Defined in: node\_modules/@ethersproject/abstract-signer/lib/index.d.ts:43
+Defined in: node_modules/@ethersproject/abstract-signer/lib/index.d.ts:43
 
 #### Parameters
 
@@ -1034,6 +1049,7 @@ Defined in: node\_modules/@ethersproject/abstract-signer/lib/index.d.ts:43
         `any`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1044,5 +1060,5 @@ Defined in: node\_modules/@ethersproject/abstract-signer/lib/index.d.ts:43
 #### Inherited from
 
 ```ts
-Signer.isSigner
+Signer.isSigner;
 ```

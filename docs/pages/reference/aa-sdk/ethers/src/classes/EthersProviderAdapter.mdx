@@ -13,7 +13,7 @@ Lightweight Adapter for SmtAccountProvider to enable Signer Creation
 
 ## Extends
 
-* `JsonRpcProvider`
+- `JsonRpcProvider`
 
 ## Constructors
 
@@ -36,15 +36,15 @@ import { sepolia } from "@account-kit/infra";
 import { createLightAccount } from "@account-kit/smart-contracts";
 
 const account = await createLightAccount({
- transport: http("https://rpc.testnet.aepps.com"),
- chain: sepolia,
- signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey())
+  transport: http("https://rpc.testnet.aepps.com"),
+  chain: sepolia,
+  signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
 });
 
 const provider = new EthersProviderAdapter({
- account,
- chain: sepolia,
- rpcProvider: "https://eth-sepolia.g.alchemy.com/v2/your-api-key"
+  account,
+  chain: sepolia,
+  rpcProvider: "https://eth-sepolia.g.alchemy.com/v2/your-api-key",
 });
 ```
 
@@ -73,6 +73,7 @@ const provider = new EthersProviderAdapter({
         The options for setting up the ethers provider adapter
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -83,7 +84,7 @@ const provider = new EthersProviderAdapter({
 #### Overrides
 
 ```ts
-JsonRpcProvider.constructor
+JsonRpcProvider.constructor;
 ```
 
 ## Properties
@@ -326,6 +327,7 @@ JsonRpcProvider.constructor
         `Formatter`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -339,7 +341,7 @@ JsonRpcProvider.constructor
 get _cache(): Record<string, Promise<any>>;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/json-rpc-provider.d.ts:33
+Defined in: node_modules/@ethersproject/providers/lib/json-rpc-provider.d.ts:33
 
 ##### Returns
 
@@ -348,10 +350,10 @@ Defined in: node\_modules/@ethersproject/providers/lib/json-rpc-provider.d.ts:33
 #### Inherited from
 
 ```ts
-JsonRpcProvider._cache
+JsonRpcProvider._cache;
 ```
 
-***
+---
 
 ### blockNumber
 
@@ -361,7 +363,7 @@ JsonRpcProvider._cache
 get blockNumber(): number;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:101
+Defined in: node_modules/@ethersproject/providers/lib/base-provider.d.ts:101
 
 ##### Returns
 
@@ -370,10 +372,10 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:101
 #### Inherited from
 
 ```ts
-JsonRpcProvider.blockNumber
+JsonRpcProvider.blockNumber;
 ```
 
-***
+---
 
 ### network
 
@@ -383,7 +385,7 @@ JsonRpcProvider.blockNumber
 get network(): Network;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:98
+Defined in: node_modules/@ethersproject/providers/lib/base-provider.d.ts:98
 
 ##### Returns
 
@@ -392,10 +394,10 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:98
 #### Inherited from
 
 ```ts
-JsonRpcProvider.network
+JsonRpcProvider.network;
 ```
 
-***
+---
 
 ### polling
 
@@ -405,7 +407,7 @@ JsonRpcProvider.network
 get polling(): boolean;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:102
+Defined in: node_modules/@ethersproject/providers/lib/base-provider.d.ts:102
 
 ##### Returns
 
@@ -417,7 +419,7 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:102
 set polling(value): void;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:103
+Defined in: node_modules/@ethersproject/providers/lib/base-provider.d.ts:103
 
 ##### Parameters
 
@@ -439,6 +441,7 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:103
         `boolean`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -449,10 +452,10 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:103
 #### Inherited from
 
 ```ts
-JsonRpcProvider.polling
+JsonRpcProvider.polling;
 ```
 
-***
+---
 
 ### pollingInterval
 
@@ -462,7 +465,7 @@ JsonRpcProvider.polling
 get pollingInterval(): number;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:104
+Defined in: node_modules/@ethersproject/providers/lib/base-provider.d.ts:104
 
 ##### Returns
 
@@ -474,7 +477,7 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:104
 set pollingInterval(value): void;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:105
+Defined in: node_modules/@ethersproject/providers/lib/base-provider.d.ts:105
 
 ##### Parameters
 
@@ -496,6 +499,7 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:105
         `number`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -506,10 +510,10 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:105
 #### Inherited from
 
 ```ts
-JsonRpcProvider.pollingInterval
+JsonRpcProvider.pollingInterval;
 ```
 
-***
+---
 
 ### ready
 
@@ -519,7 +523,7 @@ JsonRpcProvider.pollingInterval
 get ready(): Promise<Network>;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:91
+Defined in: node_modules/@ethersproject/providers/lib/base-provider.d.ts:91
 
 ##### Returns
 
@@ -528,7 +532,7 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:91
 #### Inherited from
 
 ```ts
-JsonRpcProvider.ready
+JsonRpcProvider.ready;
 ```
 
 ## Methods
@@ -537,12 +541,12 @@ JsonRpcProvider.ready
 
 ```ts
 _addEventListener(
-   eventName, 
-   listener, 
+   eventName,
+   listener,
    once): this;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:147
+Defined in: node_modules/@ethersproject/providers/lib/base-provider.d.ts:147
 
 #### Parameters
 
@@ -584,6 +588,7 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:147
         `boolean`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -594,21 +599,21 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:147
 #### Inherited from
 
 ```ts
-JsonRpcProvider._addEventListener
+JsonRpcProvider._addEventListener;
 ```
 
-***
+---
 
 ### \_call()
 
 ```ts
 _call(
-   transaction, 
-   blockTag, 
+   transaction,
+   blockTag,
    attempt): Promise<string>;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:127
+Defined in: node_modules/@ethersproject/providers/lib/base-provider.d.ts:127
 
 #### Parameters
 
@@ -650,6 +655,7 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:127
         `number`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -660,10 +666,10 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:127
 #### Inherited from
 
 ```ts
-JsonRpcProvider._call
+JsonRpcProvider._call;
 ```
 
-***
+---
 
 ### \_getAddress()
 
@@ -671,7 +677,7 @@ JsonRpcProvider._call
 _getAddress(addressOrName): Promise<string>;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:130
+Defined in: node_modules/@ethersproject/providers/lib/base-provider.d.ts:130
 
 #### Parameters
 
@@ -693,6 +699,7 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:130
         `string` | `Promise`\<`string`>
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -703,10 +710,10 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:130
 #### Inherited from
 
 ```ts
-JsonRpcProvider._getAddress
+JsonRpcProvider._getAddress;
 ```
 
-***
+---
 
 ### \_getBlock()
 
@@ -714,7 +721,7 @@ JsonRpcProvider._getAddress
 _getBlock(blockHashOrBlockTag, includeTransactions?): Promise<Block | BlockWithTransactions>;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:131
+Defined in: node_modules/@ethersproject/providers/lib/base-provider.d.ts:131
 
 #### Parameters
 
@@ -746,6 +753,7 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:131
         `boolean`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -756,10 +764,10 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:131
 #### Inherited from
 
 ```ts
-JsonRpcProvider._getBlock
+JsonRpcProvider._getBlock;
 ```
 
-***
+---
 
 ### \_getBlockTag()
 
@@ -767,7 +775,7 @@ JsonRpcProvider._getBlock
 _getBlockTag(blockTag): Promise<BlockTag>;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:138
+Defined in: node_modules/@ethersproject/providers/lib/base-provider.d.ts:138
 
 #### Parameters
 
@@ -789,6 +797,7 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:138
         `BlockTag` | `Promise`\<`BlockTag`>
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -799,10 +808,10 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:138
 #### Inherited from
 
 ```ts
-JsonRpcProvider._getBlockTag
+JsonRpcProvider._getBlockTag;
 ```
 
-***
+---
 
 ### \_getFastBlockNumber()
 
@@ -810,7 +819,7 @@ JsonRpcProvider._getBlockTag
 _getFastBlockNumber(): Promise<number>;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:106
+Defined in: node_modules/@ethersproject/providers/lib/base-provider.d.ts:106
 
 #### Returns
 
@@ -819,10 +828,10 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:106
 #### Inherited from
 
 ```ts
-JsonRpcProvider._getFastBlockNumber
+JsonRpcProvider._getFastBlockNumber;
 ```
 
-***
+---
 
 ### \_getFilter()
 
@@ -830,7 +839,7 @@ JsonRpcProvider._getFastBlockNumber
 _getFilter(filter): Promise<Filter | FilterByBlockHash>;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:126
+Defined in: node_modules/@ethersproject/providers/lib/base-provider.d.ts:126
 
 #### Parameters
 
@@ -852,6 +861,7 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:126
         | `Filter` | `FilterByBlockHash` | `Promise`\<`Filter` | `FilterByBlockHash`>
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -862,10 +872,10 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:126
 #### Inherited from
 
 ```ts
-JsonRpcProvider._getFilter
+JsonRpcProvider._getFilter;
 ```
 
-***
+---
 
 ### \_getInternalBlockNumber()
 
@@ -873,7 +883,7 @@ JsonRpcProvider._getFilter
 _getInternalBlockNumber(maxAge): Promise<number>;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:95
+Defined in: node_modules/@ethersproject/providers/lib/base-provider.d.ts:95
 
 #### Parameters
 
@@ -895,6 +905,7 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:95
         `number`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -905,10 +916,10 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:95
 #### Inherited from
 
 ```ts
-JsonRpcProvider._getInternalBlockNumber
+JsonRpcProvider._getInternalBlockNumber;
 ```
 
-***
+---
 
 ### \_getResolver()
 
@@ -916,7 +927,7 @@ JsonRpcProvider._getInternalBlockNumber
 _getResolver(name, operation?): Promise<string>;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:140
+Defined in: node_modules/@ethersproject/providers/lib/base-provider.d.ts:140
 
 #### Parameters
 
@@ -948,6 +959,7 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:140
         `string`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -958,10 +970,10 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:140
 #### Inherited from
 
 ```ts
-JsonRpcProvider._getResolver
+JsonRpcProvider._getResolver;
 ```
 
-***
+---
 
 ### \_getTransactionRequest()
 
@@ -969,7 +981,7 @@ JsonRpcProvider._getResolver
 _getTransactionRequest(transaction): Promise<Transaction>;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:125
+Defined in: node_modules/@ethersproject/providers/lib/base-provider.d.ts:125
 
 #### Parameters
 
@@ -991,6 +1003,7 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:125
         `Deferrable`\<`TransactionRequest`>
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1001,10 +1014,10 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:125
 #### Inherited from
 
 ```ts
-JsonRpcProvider._getTransactionRequest
+JsonRpcProvider._getTransactionRequest;
 ```
 
-***
+---
 
 ### \_ready()
 
@@ -1012,7 +1025,7 @@ JsonRpcProvider._getTransactionRequest
 _ready(): Promise<Network>;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:90
+Defined in: node_modules/@ethersproject/providers/lib/base-provider.d.ts:90
 
 #### Returns
 
@@ -1021,10 +1034,10 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:90
 #### Inherited from
 
 ```ts
-JsonRpcProvider._ready
+JsonRpcProvider._ready;
 ```
 
-***
+---
 
 ### \_setFastBlockNumber()
 
@@ -1032,7 +1045,7 @@ JsonRpcProvider._ready
 _setFastBlockNumber(blockNumber): void;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:107
+Defined in: node_modules/@ethersproject/providers/lib/base-provider.d.ts:107
 
 #### Parameters
 
@@ -1054,6 +1067,7 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:107
         `number`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1064,10 +1078,10 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:107
 #### Inherited from
 
 ```ts
-JsonRpcProvider._setFastBlockNumber
+JsonRpcProvider._setFastBlockNumber;
 ```
 
-***
+---
 
 ### \_startEvent()
 
@@ -1075,7 +1089,7 @@ JsonRpcProvider._setFastBlockNumber
 _startEvent(event): void;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/json-rpc-provider.d.ts:44
+Defined in: node_modules/@ethersproject/providers/lib/json-rpc-provider.d.ts:44
 
 #### Parameters
 
@@ -1097,6 +1111,7 @@ Defined in: node\_modules/@ethersproject/providers/lib/json-rpc-provider.d.ts:44
         `Event`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1107,10 +1122,10 @@ Defined in: node\_modules/@ethersproject/providers/lib/json-rpc-provider.d.ts:44
 #### Inherited from
 
 ```ts
-JsonRpcProvider._startEvent
+JsonRpcProvider._startEvent;
 ```
 
-***
+---
 
 ### \_startPending()
 
@@ -1118,7 +1133,7 @@ JsonRpcProvider._startEvent
 _startPending(): void;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/json-rpc-provider.d.ts:45
+Defined in: node_modules/@ethersproject/providers/lib/json-rpc-provider.d.ts:45
 
 #### Returns
 
@@ -1127,10 +1142,10 @@ Defined in: node\_modules/@ethersproject/providers/lib/json-rpc-provider.d.ts:45
 #### Inherited from
 
 ```ts
-JsonRpcProvider._startPending
+JsonRpcProvider._startPending;
 ```
 
-***
+---
 
 ### \_stopEvent()
 
@@ -1138,7 +1153,7 @@ JsonRpcProvider._startPending
 _stopEvent(event): void;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/json-rpc-provider.d.ts:46
+Defined in: node_modules/@ethersproject/providers/lib/json-rpc-provider.d.ts:46
 
 #### Parameters
 
@@ -1160,6 +1175,7 @@ Defined in: node\_modules/@ethersproject/providers/lib/json-rpc-provider.d.ts:46
         `Event`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1170,10 +1186,10 @@ Defined in: node\_modules/@ethersproject/providers/lib/json-rpc-provider.d.ts:46
 #### Inherited from
 
 ```ts
-JsonRpcProvider._stopEvent
+JsonRpcProvider._stopEvent;
 ```
 
-***
+---
 
 ### \_uncachedDetectNetwork()
 
@@ -1181,7 +1197,7 @@ JsonRpcProvider._stopEvent
 _uncachedDetectNetwork(): Promise<Network>;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/json-rpc-provider.d.ts:37
+Defined in: node_modules/@ethersproject/providers/lib/json-rpc-provider.d.ts:37
 
 #### Returns
 
@@ -1190,22 +1206,22 @@ Defined in: node\_modules/@ethersproject/providers/lib/json-rpc-provider.d.ts:37
 #### Inherited from
 
 ```ts
-JsonRpcProvider._uncachedDetectNetwork
+JsonRpcProvider._uncachedDetectNetwork;
 ```
 
-***
+---
 
 ### \_waitForTransaction()
 
 ```ts
 _waitForTransaction(
-   transactionHash, 
-   confirmations, 
-   timeout, 
+   transactionHash,
+   confirmations,
+   timeout,
    replaceable): Promise<TransactionReceipt>;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:109
+Defined in: node_modules/@ethersproject/providers/lib/base-provider.d.ts:109
 
 #### Parameters
 
@@ -1317,6 +1333,7 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:109
         `BigNumber`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1327,21 +1344,21 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:109
 #### Inherited from
 
 ```ts
-JsonRpcProvider._waitForTransaction
+JsonRpcProvider._waitForTransaction;
 ```
 
-***
+---
 
 ### \_wrapTransaction()
 
 ```ts
 _wrapTransaction(
-   tx, 
-   hash?, 
+   tx,
+   hash?,
    startBlock?): TransactionResponse;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:123
+Defined in: node_modules/@ethersproject/providers/lib/base-provider.d.ts:123
 
 #### Parameters
 
@@ -1383,6 +1400,7 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:123
         `number`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1393,10 +1411,10 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:123
 #### Inherited from
 
 ```ts
-JsonRpcProvider._wrapTransaction
+JsonRpcProvider._wrapTransaction;
 ```
 
-***
+---
 
 ### addListener()
 
@@ -1404,7 +1422,7 @@ JsonRpcProvider._wrapTransaction
 addListener(eventName, listener): Provider;
 ```
 
-Defined in: node\_modules/@ethersproject/abstract-provider/lib/index.d.ts:149
+Defined in: node_modules/@ethersproject/abstract-provider/lib/index.d.ts:149
 
 #### Parameters
 
@@ -1436,6 +1454,7 @@ Defined in: node\_modules/@ethersproject/abstract-provider/lib/index.d.ts:149
         `Listener`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1446,10 +1465,10 @@ Defined in: node\_modules/@ethersproject/abstract-provider/lib/index.d.ts:149
 #### Inherited from
 
 ```ts
-JsonRpcProvider.addListener
+JsonRpcProvider.addListener;
 ```
 
-***
+---
 
 ### call()
 
@@ -1457,7 +1476,7 @@ JsonRpcProvider.addListener
 call(transaction, blockTag?): Promise<string>;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:128
+Defined in: node_modules/@ethersproject/providers/lib/base-provider.d.ts:128
 
 #### Parameters
 
@@ -1489,6 +1508,7 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:128
         `BlockTag` | `Promise`\<`BlockTag`>
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1499,21 +1519,21 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:128
 #### Inherited from
 
 ```ts
-JsonRpcProvider.call
+JsonRpcProvider.call;
 ```
 
-***
+---
 
 ### ccipReadFetch()
 
 ```ts
 ccipReadFetch(
-   tx, 
-   calldata, 
+   tx,
+   calldata,
    urls): Promise<null | string>;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:94
+Defined in: node_modules/@ethersproject/providers/lib/base-provider.d.ts:94
 
 #### Parameters
 
@@ -1555,6 +1575,7 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:94
         `string`\[]
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1565,10 +1586,10 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:94
 #### Inherited from
 
 ```ts
-JsonRpcProvider.ccipReadFetch
+JsonRpcProvider.ccipReadFetch;
 ```
 
-***
+---
 
 ### connectToAccount()
 
@@ -1623,6 +1644,7 @@ Connects the Provider to an Account and returns a Signer
         the account to connect to
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1632,7 +1654,7 @@ Connects the Provider to an Account and returns a Signer
 
 an AccountSigner that can be used to sign and send user operations
 
-***
+---
 
 ### detectNetwork()
 
@@ -1640,7 +1662,7 @@ an AccountSigner that can be used to sign and send user operations
 detectNetwork(): Promise<Network>;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/json-rpc-provider.d.ts:36
+Defined in: node_modules/@ethersproject/providers/lib/json-rpc-provider.d.ts:36
 
 #### Returns
 
@@ -1649,10 +1671,10 @@ Defined in: node\_modules/@ethersproject/providers/lib/json-rpc-provider.d.ts:36
 #### Inherited from
 
 ```ts
-JsonRpcProvider.detectNetwork
+JsonRpcProvider.detectNetwork;
 ```
 
-***
+---
 
 ### emit()
 
@@ -1660,7 +1682,7 @@ JsonRpcProvider.detectNetwork
 emit(eventName, ...args): boolean;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:150
+Defined in: node_modules/@ethersproject/providers/lib/base-provider.d.ts:150
 
 #### Parameters
 
@@ -1692,6 +1714,7 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:150
         `any`\[]
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1702,10 +1725,10 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:150
 #### Inherited from
 
 ```ts
-JsonRpcProvider.emit
+JsonRpcProvider.emit;
 ```
 
-***
+---
 
 ### estimateGas()
 
@@ -1713,7 +1736,7 @@ JsonRpcProvider.emit
 estimateGas(transaction): Promise<BigNumber>;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:129
+Defined in: node_modules/@ethersproject/providers/lib/base-provider.d.ts:129
 
 #### Parameters
 
@@ -1735,6 +1758,7 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:129
         `Deferrable`\<`TransactionRequest`>
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1745,10 +1769,10 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:129
 #### Inherited from
 
 ```ts
-JsonRpcProvider.estimateGas
+JsonRpcProvider.estimateGas;
 ```
 
-***
+---
 
 ### getAvatar()
 
@@ -1756,7 +1780,7 @@ JsonRpcProvider.estimateGas
 getAvatar(nameOrAddress): Promise<null | string>;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:143
+Defined in: node_modules/@ethersproject/providers/lib/base-provider.d.ts:143
 
 #### Parameters
 
@@ -1778,6 +1802,7 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:143
         `string`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1788,10 +1813,10 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:143
 #### Inherited from
 
 ```ts
-JsonRpcProvider.getAvatar
+JsonRpcProvider.getAvatar;
 ```
 
-***
+---
 
 ### getBalance()
 
@@ -1799,7 +1824,7 @@ JsonRpcProvider.getAvatar
 getBalance(addressOrName, blockTag?): Promise<BigNumber>;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:119
+Defined in: node_modules/@ethersproject/providers/lib/base-provider.d.ts:119
 
 #### Parameters
 
@@ -1831,6 +1856,7 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:119
         `BlockTag` | `Promise`\<`BlockTag`>
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1841,10 +1867,10 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:119
 #### Inherited from
 
 ```ts
-JsonRpcProvider.getBalance
+JsonRpcProvider.getBalance;
 ```
 
-***
+---
 
 ### getBlock()
 
@@ -1852,7 +1878,7 @@ JsonRpcProvider.getBalance
 getBlock(blockHashOrBlockTag): Promise<Block>;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:132
+Defined in: node_modules/@ethersproject/providers/lib/base-provider.d.ts:132
 
 #### Parameters
 
@@ -1874,6 +1900,7 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:132
         `BlockTag` | `Promise`\<`BlockTag`>
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1884,10 +1911,10 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:132
 #### Inherited from
 
 ```ts
-JsonRpcProvider.getBlock
+JsonRpcProvider.getBlock;
 ```
 
-***
+---
 
 ### getBlockNumber()
 
@@ -1895,7 +1922,7 @@ JsonRpcProvider.getBlock
 getBlockNumber(): Promise<number>;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:117
+Defined in: node_modules/@ethersproject/providers/lib/base-provider.d.ts:117
 
 #### Returns
 
@@ -1904,10 +1931,10 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:117
 #### Inherited from
 
 ```ts
-JsonRpcProvider.getBlockNumber
+JsonRpcProvider.getBlockNumber;
 ```
 
-***
+---
 
 ### getBlockWithTransactions()
 
@@ -1915,7 +1942,7 @@ JsonRpcProvider.getBlockNumber
 getBlockWithTransactions(blockHashOrBlockTag): Promise<BlockWithTransactions>;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:133
+Defined in: node_modules/@ethersproject/providers/lib/base-provider.d.ts:133
 
 #### Parameters
 
@@ -1937,6 +1964,7 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:133
         `BlockTag` | `Promise`\<`BlockTag`>
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -1947,10 +1975,10 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:133
 #### Inherited from
 
 ```ts
-JsonRpcProvider.getBlockWithTransactions
+JsonRpcProvider.getBlockWithTransactions;
 ```
 
-***
+---
 
 ### getBundlerClient()
 
@@ -1971,15 +1999,15 @@ import { sepolia } from "@account-kit/infra";
 import { createLightAccount } from "@account-kit/smart-contracts";
 
 const account = await createLightAccount({
- transport: http("https://rpc.testnet.aepps.com"),
- chain: sepolia,
- signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey())
+  transport: http("https://rpc.testnet.aepps.com"),
+  chain: sepolia,
+  signer: LocalAccountSigner.privateKeyToAccountSigner(generatePrivateKey()),
 });
 
 const provider = new EthersProviderAdapter({
- account,
- chain: sepolia,
- rpcProvider: "https://eth-sepolia.g.alchemy.com/v2/your-api-key"
+  account,
+  chain: sepolia,
+  rpcProvider: "https://eth-sepolia.g.alchemy.com/v2/your-api-key",
 });
 
 const bundlerClient = provider.getBundlerClient();
@@ -1991,7 +2019,7 @@ const bundlerClient = provider.getBundlerClient();
 
 A bundler client configured with the existing account provider.
 
-***
+---
 
 ### getCode()
 
@@ -1999,7 +2027,7 @@ A bundler client configured with the existing account provider.
 getCode(addressOrName, blockTag?): Promise<string>;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:121
+Defined in: node_modules/@ethersproject/providers/lib/base-provider.d.ts:121
 
 #### Parameters
 
@@ -2031,6 +2059,7 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:121
         `BlockTag` | `Promise`\<`BlockTag`>
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -2041,10 +2070,10 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:121
 #### Inherited from
 
 ```ts
-JsonRpcProvider.getCode
+JsonRpcProvider.getCode;
 ```
 
-***
+---
 
 ### getEtherPrice()
 
@@ -2052,7 +2081,7 @@ JsonRpcProvider.getCode
 getEtherPrice(): Promise<number>;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:137
+Defined in: node_modules/@ethersproject/providers/lib/base-provider.d.ts:137
 
 #### Returns
 
@@ -2061,10 +2090,10 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:137
 #### Inherited from
 
 ```ts
-JsonRpcProvider.getEtherPrice
+JsonRpcProvider.getEtherPrice;
 ```
 
-***
+---
 
 ### getFeeData()
 
@@ -2072,7 +2101,7 @@ JsonRpcProvider.getEtherPrice
 getFeeData(): Promise<FeeData>;
 ```
 
-Defined in: node\_modules/@ethersproject/abstract-provider/lib/index.d.ts:127
+Defined in: node_modules/@ethersproject/abstract-provider/lib/index.d.ts:127
 
 #### Returns
 
@@ -2081,10 +2110,10 @@ Defined in: node\_modules/@ethersproject/abstract-provider/lib/index.d.ts:127
 #### Inherited from
 
 ```ts
-JsonRpcProvider.getFeeData
+JsonRpcProvider.getFeeData;
 ```
 
-***
+---
 
 ### getGasPrice()
 
@@ -2092,7 +2121,7 @@ JsonRpcProvider.getFeeData
 getGasPrice(): Promise<BigNumber>;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:118
+Defined in: node_modules/@ethersproject/providers/lib/base-provider.d.ts:118
 
 #### Returns
 
@@ -2101,10 +2130,10 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:118
 #### Inherited from
 
 ```ts
-JsonRpcProvider.getGasPrice
+JsonRpcProvider.getGasPrice;
 ```
 
-***
+---
 
 ### getLogs()
 
@@ -2112,7 +2141,7 @@ JsonRpcProvider.getGasPrice
 getLogs(filter): Promise<Log[]>;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:136
+Defined in: node_modules/@ethersproject/providers/lib/base-provider.d.ts:136
 
 #### Parameters
 
@@ -2134,6 +2163,7 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:136
         | `Filter` | `FilterByBlockHash` | `Promise`\<`Filter` | `FilterByBlockHash`>
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -2144,10 +2174,10 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:136
 #### Inherited from
 
 ```ts
-JsonRpcProvider.getLogs
+JsonRpcProvider.getLogs;
 ```
 
-***
+---
 
 ### getNetwork()
 
@@ -2155,7 +2185,7 @@ JsonRpcProvider.getLogs
 getNetwork(): Promise<Network>;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:100
+Defined in: node_modules/@ethersproject/providers/lib/base-provider.d.ts:100
 
 #### Returns
 
@@ -2164,10 +2194,10 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:100
 #### Inherited from
 
 ```ts
-JsonRpcProvider.getNetwork
+JsonRpcProvider.getNetwork;
 ```
 
-***
+---
 
 ### getResolver()
 
@@ -2175,7 +2205,7 @@ JsonRpcProvider.getNetwork
 getResolver(name): Promise<null | Resolver>;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:139
+Defined in: node_modules/@ethersproject/providers/lib/base-provider.d.ts:139
 
 #### Parameters
 
@@ -2197,6 +2227,7 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:139
         `string`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -2207,10 +2238,10 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:139
 #### Inherited from
 
 ```ts
-JsonRpcProvider.getResolver
+JsonRpcProvider.getResolver;
 ```
 
-***
+---
 
 ### getSigner()
 
@@ -2218,7 +2249,7 @@ JsonRpcProvider.getResolver
 getSigner(addressOrIndex?): JsonRpcSigner;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/json-rpc-provider.d.ts:38
+Defined in: node_modules/@ethersproject/providers/lib/json-rpc-provider.d.ts:38
 
 #### Parameters
 
@@ -2240,6 +2271,7 @@ Defined in: node\_modules/@ethersproject/providers/lib/json-rpc-provider.d.ts:38
         `string` | `number`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -2250,21 +2282,21 @@ Defined in: node\_modules/@ethersproject/providers/lib/json-rpc-provider.d.ts:38
 #### Inherited from
 
 ```ts
-JsonRpcProvider.getSigner
+JsonRpcProvider.getSigner;
 ```
 
-***
+---
 
 ### getStorageAt()
 
 ```ts
 getStorageAt(
-   addressOrName, 
-   position, 
+   addressOrName,
+   position,
    blockTag?): Promise<string>;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:122
+Defined in: node_modules/@ethersproject/providers/lib/base-provider.d.ts:122
 
 #### Parameters
 
@@ -2306,6 +2338,7 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:122
         `BlockTag` | `Promise`\<`BlockTag`>
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -2316,10 +2349,10 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:122
 #### Inherited from
 
 ```ts
-JsonRpcProvider.getStorageAt
+JsonRpcProvider.getStorageAt;
 ```
 
-***
+---
 
 ### getTransaction()
 
@@ -2327,7 +2360,7 @@ JsonRpcProvider.getStorageAt
 getTransaction(transactionHash): Promise<TransactionResponse>;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:134
+Defined in: node_modules/@ethersproject/providers/lib/base-provider.d.ts:134
 
 #### Parameters
 
@@ -2349,6 +2382,7 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:134
         `string` | `Promise`\<`string`>
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -2359,10 +2393,10 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:134
 #### Inherited from
 
 ```ts
-JsonRpcProvider.getTransaction
+JsonRpcProvider.getTransaction;
 ```
 
-***
+---
 
 ### getTransactionCount()
 
@@ -2370,7 +2404,7 @@ JsonRpcProvider.getTransaction
 getTransactionCount(addressOrName, blockTag?): Promise<number>;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:120
+Defined in: node_modules/@ethersproject/providers/lib/base-provider.d.ts:120
 
 #### Parameters
 
@@ -2402,6 +2436,7 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:120
         `BlockTag` | `Promise`\<`BlockTag`>
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -2412,10 +2447,10 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:120
 #### Inherited from
 
 ```ts
-JsonRpcProvider.getTransactionCount
+JsonRpcProvider.getTransactionCount;
 ```
 
-***
+---
 
 ### getTransactionReceipt()
 
@@ -2423,7 +2458,7 @@ JsonRpcProvider.getTransactionCount
 getTransactionReceipt(transactionHash): Promise<TransactionReceipt>;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:135
+Defined in: node_modules/@ethersproject/providers/lib/base-provider.d.ts:135
 
 #### Parameters
 
@@ -2445,6 +2480,7 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:135
         `string` | `Promise`\<`string`>
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -2455,10 +2491,10 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:135
 #### Inherited from
 
 ```ts
-JsonRpcProvider.getTransactionReceipt
+JsonRpcProvider.getTransactionReceipt;
 ```
 
-***
+---
 
 ### getUncheckedSigner()
 
@@ -2466,7 +2502,7 @@ JsonRpcProvider.getTransactionReceipt
 getUncheckedSigner(addressOrIndex?): UncheckedJsonRpcSigner;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/json-rpc-provider.d.ts:39
+Defined in: node_modules/@ethersproject/providers/lib/json-rpc-provider.d.ts:39
 
 #### Parameters
 
@@ -2488,6 +2524,7 @@ Defined in: node\_modules/@ethersproject/providers/lib/json-rpc-provider.d.ts:39
         `string` | `number`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -2498,10 +2535,10 @@ Defined in: node\_modules/@ethersproject/providers/lib/json-rpc-provider.d.ts:39
 #### Inherited from
 
 ```ts
-JsonRpcProvider.getUncheckedSigner
+JsonRpcProvider.getUncheckedSigner;
 ```
 
-***
+---
 
 ### listAccounts()
 
@@ -2509,7 +2546,7 @@ JsonRpcProvider.getUncheckedSigner
 listAccounts(): Promise<string[]>;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/json-rpc-provider.d.ts:40
+Defined in: node_modules/@ethersproject/providers/lib/json-rpc-provider.d.ts:40
 
 #### Returns
 
@@ -2518,10 +2555,10 @@ Defined in: node\_modules/@ethersproject/providers/lib/json-rpc-provider.d.ts:40
 #### Inherited from
 
 ```ts
-JsonRpcProvider.listAccounts
+JsonRpcProvider.listAccounts;
 ```
 
-***
+---
 
 ### listenerCount()
 
@@ -2529,7 +2566,7 @@ JsonRpcProvider.listAccounts
 listenerCount(eventName?): number;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:151
+Defined in: node_modules/@ethersproject/providers/lib/base-provider.d.ts:151
 
 #### Parameters
 
@@ -2551,6 +2588,7 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:151
         `EventType`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -2561,10 +2599,10 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:151
 #### Inherited from
 
 ```ts
-JsonRpcProvider.listenerCount
+JsonRpcProvider.listenerCount;
 ```
 
-***
+---
 
 ### listeners()
 
@@ -2572,7 +2610,7 @@ JsonRpcProvider.listenerCount
 listeners(eventName?): Listener[];
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:152
+Defined in: node_modules/@ethersproject/providers/lib/base-provider.d.ts:152
 
 #### Parameters
 
@@ -2594,6 +2632,7 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:152
         `EventType`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -2604,10 +2643,10 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:152
 #### Inherited from
 
 ```ts
-JsonRpcProvider.listeners
+JsonRpcProvider.listeners;
 ```
 
-***
+---
 
 ### lookupAddress()
 
@@ -2615,7 +2654,7 @@ JsonRpcProvider.listeners
 lookupAddress(address): Promise<null | string>;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:142
+Defined in: node_modules/@ethersproject/providers/lib/base-provider.d.ts:142
 
 #### Parameters
 
@@ -2637,6 +2676,7 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:142
         `string` | `Promise`\<`string`>
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -2647,10 +2687,10 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:142
 #### Inherited from
 
 ```ts
-JsonRpcProvider.lookupAddress
+JsonRpcProvider.lookupAddress;
 ```
 
-***
+---
 
 ### off()
 
@@ -2658,7 +2698,7 @@ JsonRpcProvider.lookupAddress
 off(eventName, listener?): this;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:153
+Defined in: node_modules/@ethersproject/providers/lib/base-provider.d.ts:153
 
 #### Parameters
 
@@ -2690,6 +2730,7 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:153
         `Listener`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -2700,10 +2741,10 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:153
 #### Inherited from
 
 ```ts
-JsonRpcProvider.off
+JsonRpcProvider.off;
 ```
 
-***
+---
 
 ### on()
 
@@ -2711,7 +2752,7 @@ JsonRpcProvider.off
 on(eventName, listener): this;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:148
+Defined in: node_modules/@ethersproject/providers/lib/base-provider.d.ts:148
 
 #### Parameters
 
@@ -2743,6 +2784,7 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:148
         `Listener`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -2753,10 +2795,10 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:148
 #### Inherited from
 
 ```ts
-JsonRpcProvider.on
+JsonRpcProvider.on;
 ```
 
-***
+---
 
 ### once()
 
@@ -2764,7 +2806,7 @@ JsonRpcProvider.on
 once(eventName, listener): this;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:149
+Defined in: node_modules/@ethersproject/providers/lib/base-provider.d.ts:149
 
 #### Parameters
 
@@ -2796,6 +2838,7 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:149
         `Listener`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -2806,10 +2849,10 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:149
 #### Inherited from
 
 ```ts
-JsonRpcProvider.once
+JsonRpcProvider.once;
 ```
 
-***
+---
 
 ### perform()
 
@@ -2817,7 +2860,7 @@ JsonRpcProvider.once
 perform(method, params): Promise<any>;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/json-rpc-provider.d.ts:43
+Defined in: node_modules/@ethersproject/providers/lib/json-rpc-provider.d.ts:43
 
 #### Parameters
 
@@ -2849,6 +2892,7 @@ Defined in: node\_modules/@ethersproject/providers/lib/json-rpc-provider.d.ts:43
         `any`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -2859,10 +2903,10 @@ Defined in: node\_modules/@ethersproject/providers/lib/json-rpc-provider.d.ts:43
 #### Inherited from
 
 ```ts
-JsonRpcProvider.perform
+JsonRpcProvider.perform;
 ```
 
-***
+---
 
 ### poll()
 
@@ -2870,7 +2914,7 @@ JsonRpcProvider.perform
 poll(): Promise<void>;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:96
+Defined in: node_modules/@ethersproject/providers/lib/base-provider.d.ts:96
 
 #### Returns
 
@@ -2879,10 +2923,10 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:96
 #### Inherited from
 
 ```ts
-JsonRpcProvider.poll
+JsonRpcProvider.poll;
 ```
 
-***
+---
 
 ### prepareRequest()
 
@@ -2890,7 +2934,7 @@ JsonRpcProvider.poll
 prepareRequest(method, params): [string, any[]];
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/json-rpc-provider.d.ts:42
+Defined in: node_modules/@ethersproject/providers/lib/json-rpc-provider.d.ts:42
 
 #### Parameters
 
@@ -2922,6 +2966,7 @@ Defined in: node\_modules/@ethersproject/providers/lib/json-rpc-provider.d.ts:42
         `any`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -2932,10 +2977,10 @@ Defined in: node\_modules/@ethersproject/providers/lib/json-rpc-provider.d.ts:42
 #### Inherited from
 
 ```ts
-JsonRpcProvider.prepareRequest
+JsonRpcProvider.prepareRequest;
 ```
 
-***
+---
 
 ### removeAllListeners()
 
@@ -2943,7 +2988,7 @@ JsonRpcProvider.prepareRequest
 removeAllListeners(eventName?): this;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:154
+Defined in: node_modules/@ethersproject/providers/lib/base-provider.d.ts:154
 
 #### Parameters
 
@@ -2965,6 +3010,7 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:154
         `EventType`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -2975,10 +3021,10 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:154
 #### Inherited from
 
 ```ts
-JsonRpcProvider.removeAllListeners
+JsonRpcProvider.removeAllListeners;
 ```
 
-***
+---
 
 ### removeListener()
 
@@ -2986,7 +3032,7 @@ JsonRpcProvider.removeAllListeners
 removeListener(eventName, listener): Provider;
 ```
 
-Defined in: node\_modules/@ethersproject/abstract-provider/lib/index.d.ts:150
+Defined in: node_modules/@ethersproject/abstract-provider/lib/index.d.ts:150
 
 #### Parameters
 
@@ -3018,6 +3064,7 @@ Defined in: node\_modules/@ethersproject/abstract-provider/lib/index.d.ts:150
         `Listener`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -3028,10 +3075,10 @@ Defined in: node\_modules/@ethersproject/abstract-provider/lib/index.d.ts:150
 #### Inherited from
 
 ```ts
-JsonRpcProvider.removeListener
+JsonRpcProvider.removeListener;
 ```
 
-***
+---
 
 ### resetEventsBlock()
 
@@ -3039,7 +3086,7 @@ JsonRpcProvider.removeListener
 resetEventsBlock(blockNumber): void;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:97
+Defined in: node_modules/@ethersproject/providers/lib/base-provider.d.ts:97
 
 #### Parameters
 
@@ -3061,6 +3108,7 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:97
         `number`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -3071,10 +3119,10 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:97
 #### Inherited from
 
 ```ts
-JsonRpcProvider.resetEventsBlock
+JsonRpcProvider.resetEventsBlock;
 ```
 
-***
+---
 
 ### resolveName()
 
@@ -3082,7 +3130,7 @@ JsonRpcProvider.resetEventsBlock
 resolveName(name): Promise<null | string>;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:141
+Defined in: node_modules/@ethersproject/providers/lib/base-provider.d.ts:141
 
 #### Parameters
 
@@ -3104,6 +3152,7 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:141
         `string` | `Promise`\<`string`>
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -3114,10 +3163,10 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:141
 #### Inherited from
 
 ```ts
-JsonRpcProvider.resolveName
+JsonRpcProvider.resolveName;
 ```
 
-***
+---
 
 ### send()
 
@@ -3169,6 +3218,7 @@ compliant request method
         the params required by the RPC method
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -3181,10 +3231,10 @@ the result of the RPC call
 #### Overrides
 
 ```ts
-JsonRpcProvider.send
+JsonRpcProvider.send;
 ```
 
-***
+---
 
 ### sendTransaction()
 
@@ -3192,7 +3242,7 @@ JsonRpcProvider.send
 sendTransaction(signedTransaction): Promise<TransactionResponse>;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:124
+Defined in: node_modules/@ethersproject/providers/lib/base-provider.d.ts:124
 
 #### Parameters
 
@@ -3214,6 +3264,7 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:124
         `string` | `Promise`\<`string`>
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -3224,21 +3275,21 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:124
 #### Inherited from
 
 ```ts
-JsonRpcProvider.sendTransaction
+JsonRpcProvider.sendTransaction;
 ```
 
-***
+---
 
 ### waitForTransaction()
 
 ```ts
 waitForTransaction(
-   transactionHash, 
-   confirmations?, 
+   transactionHash,
+   confirmations?,
    timeout?): Promise<TransactionReceipt>;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:108
+Defined in: node_modules/@ethersproject/providers/lib/base-provider.d.ts:108
 
 #### Parameters
 
@@ -3280,6 +3331,7 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:108
         `number`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -3290,10 +3342,10 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:108
 #### Inherited from
 
 ```ts
-JsonRpcProvider.waitForTransaction
+JsonRpcProvider.waitForTransaction;
 ```
 
-***
+---
 
 ### defaultUrl()
 
@@ -3301,7 +3353,7 @@ JsonRpcProvider.waitForTransaction
 static defaultUrl(): string;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/json-rpc-provider.d.ts:35
+Defined in: node_modules/@ethersproject/providers/lib/json-rpc-provider.d.ts:35
 
 #### Returns
 
@@ -3310,10 +3362,10 @@ Defined in: node\_modules/@ethersproject/providers/lib/json-rpc-provider.d.ts:35
 #### Inherited from
 
 ```ts
-JsonRpcProvider.defaultUrl
+JsonRpcProvider.defaultUrl;
 ```
 
-***
+---
 
 ### fromEthersProvider()
 
@@ -3364,6 +3416,7 @@ Creates an instance of EthersProviderAdapter from an ethers.js JsonRpcProvider.
         the chain to connect to
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -3373,7 +3426,7 @@ Creates an instance of EthersProviderAdapter from an ethers.js JsonRpcProvider.
 
 an instance of EthersProviderAdapter
 
-***
+---
 
 ### getFormatter()
 
@@ -3381,7 +3434,7 @@ an instance of EthersProviderAdapter
 static getFormatter(): Formatter;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:92
+Defined in: node_modules/@ethersproject/providers/lib/base-provider.d.ts:92
 
 #### Returns
 
@@ -3390,10 +3443,10 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:92
 #### Inherited from
 
 ```ts
-JsonRpcProvider.getFormatter
+JsonRpcProvider.getFormatter;
 ```
 
-***
+---
 
 ### getNetwork()
 
@@ -3401,7 +3454,7 @@ JsonRpcProvider.getFormatter
 static getNetwork(network): Network;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:93
+Defined in: node_modules/@ethersproject/providers/lib/base-provider.d.ts:93
 
 #### Parameters
 
@@ -3423,6 +3476,7 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:93
         `Networkish`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -3433,10 +3487,10 @@ Defined in: node\_modules/@ethersproject/providers/lib/base-provider.d.ts:93
 #### Inherited from
 
 ```ts
-JsonRpcProvider.getNetwork
+JsonRpcProvider.getNetwork;
 ```
 
-***
+---
 
 ### hexlifyTransaction()
 
@@ -3444,7 +3498,7 @@ JsonRpcProvider.getNetwork
 static hexlifyTransaction(transaction, allowExtra?): object;
 ```
 
-Defined in: node\_modules/@ethersproject/providers/lib/json-rpc-provider.d.ts:47
+Defined in: node_modules/@ethersproject/providers/lib/json-rpc-provider.d.ts:47
 
 #### Parameters
 
@@ -3476,6 +3530,7 @@ Defined in: node\_modules/@ethersproject/providers/lib/json-rpc-provider.d.ts:47
         \{ \[`key`: `string`]: `boolean`; }
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -3486,10 +3541,10 @@ Defined in: node\_modules/@ethersproject/providers/lib/json-rpc-provider.d.ts:47
 #### Inherited from
 
 ```ts
-JsonRpcProvider.hexlifyTransaction
+JsonRpcProvider.hexlifyTransaction;
 ```
 
-***
+---
 
 ### isProvider()
 
@@ -3497,7 +3552,7 @@ JsonRpcProvider.hexlifyTransaction
 static isProvider(value): value is Provider;
 ```
 
-Defined in: node\_modules/@ethersproject/abstract-provider/lib/index.d.ts:154
+Defined in: node_modules/@ethersproject/abstract-provider/lib/index.d.ts:154
 
 #### Parameters
 
@@ -3519,6 +3574,7 @@ Defined in: node\_modules/@ethersproject/abstract-provider/lib/index.d.ts:154
         `any`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -3529,5 +3585,5 @@ Defined in: node\_modules/@ethersproject/abstract-provider/lib/index.d.ts:154
 #### Inherited from
 
 ```ts
-JsonRpcProvider.isProvider
+JsonRpcProvider.isProvider;
 ```

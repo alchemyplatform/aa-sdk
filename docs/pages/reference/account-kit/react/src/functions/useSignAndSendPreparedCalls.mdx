@@ -23,13 +23,18 @@ It handles both the signing and sending of prepared calls in a single operation,
 ```ts twoslash
 import { useSignAndSendPreparedCalls } from "@account-kit/react";
 
-const { signAndSendPreparedCalls, signAndSendPreparedCallsAsync, isSigningAndSendingPreparedCalls, error } = useSignAndSendPreparedCalls();
+const {
+  signAndSendPreparedCalls,
+  signAndSendPreparedCallsAsync,
+  isSigningAndSendingPreparedCalls,
+  error,
+} = useSignAndSendPreparedCalls();
 
 // Sign and send prepared calls
 await signAndSendPreparedCallsAsync({
   preparedCalls: [
     // unsigned prepared call objects
-  ]
+  ],
 });
 ```
 
@@ -58,6 +63,7 @@ await signAndSendPreparedCallsAsync({
         Configuration parameters for the hook
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -67,14 +73,14 @@ await signAndSendPreparedCallsAsync({
 
 An object containing:
 
-* `signAndSendPreparedCalls`: Function to sign and send prepared calls synchronously (returns void)
-* `signAndSendPreparedCallsAsync`: Async function to sign and send prepared calls (returns Promise)
-* `signAndSendPreparedCallsResult`: The result of the last successful prepared call execution
-* `isSigningAndSendingPreparedCalls`: Boolean indicating if prepared calls are currently being signed and sent
-* `error`: Error from the last failed prepared call execution, if any
+- `signAndSendPreparedCalls`: Function to sign and send prepared calls synchronously (returns void)
+- `signAndSendPreparedCallsAsync`: Async function to sign and send prepared calls (returns Promise)
+- `signAndSendPreparedCallsResult`: The result of the last successful prepared call execution
+- `isSigningAndSendingPreparedCalls`: Boolean indicating if prepared calls are currently being signed and sent
+- `error`: Error from the last failed prepared call execution, if any
 
 ## Description
 
-* This hook only works with smart accounts and does not support EOA wallets
-* The hook handles both signing and sending of prepared calls in a single operation
-* The returned result contains the prepared call IDs
+- This hook only works with smart accounts and does not support EOA wallets
+- The hook handles both signing and sending of prepared calls in a single operation
+- The returned result contains the prepared call IDs

@@ -21,9 +21,9 @@ Retrieves the account address. Uses a provided `accountAddress` if available; ot
 import { getEntryPoint, getAccountAddress } from "@aa-sdk/core";
 
 const accountAddress = await getAccountAddress({
- client,
- entryPoint: getEntryPoint(chain),
- getAccountInitCode: async () => "0x{factoryAddress}{factoryCallData}",
+  client,
+  entryPoint: getEntryPoint(chain),
+  getAccountInitCode: async () => "0x{factoryAddress}{factoryCallData}",
 });
 ```
 
@@ -52,6 +52,7 @@ const accountAddress = await getAccountAddress({
         The configuration object
       </td>
     </tr>
+
   </tbody>
 </table>
 

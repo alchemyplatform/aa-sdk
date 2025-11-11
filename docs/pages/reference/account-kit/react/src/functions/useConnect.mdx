@@ -24,11 +24,11 @@ Useful if you wnat to connect to an EOA.
 import { useConnect } from "@account-kit/react";
 
 const { connectors, connect } = useConnect({
- // these are optional
- onSuccess: () => {
-  // do something on success
- },
- onError: (error) => console.error(error),
+  // these are optional
+  onSuccess: () => {
+    // do something on success
+  },
+  onError: (error) => console.error(error),
 });
 ```
 
@@ -197,6 +197,7 @@ const { connectors, connect } = useConnect({
         ‐
       </td>
     </tr>
+
   </tbody>
 </table>
 

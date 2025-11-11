@@ -18,11 +18,11 @@ Creates a new server signer.
 ## Example
 
 ```ts
- const signer = await createServerSigner({
+const signer = await createServerSigner({
   auth: { accessKey },
   connection: {
     apiKey: "alchemy-api-key",
-  }
+  },
 });
 
 console.log("Signer address:", await signer.getAddress());
@@ -53,6 +53,7 @@ console.log("Signer address:", await signer.getAddress());
         Parameters
       </td>
     </tr>
+
   </tbody>
 </table>
 
