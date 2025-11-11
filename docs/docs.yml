@@ -76,7 +76,7 @@ navigation:
                 slug: recipes/onramp-funds
                 path: wallets/pages/recipes/onramp-funds.mdx
               - page: Session Keys with Smart Wallets
-                slug: recipes/session-keys-app
+                slug: recipes/wallet-session-keys-app
                 path: wallets/pages/recipes/wallet-session-keys-app.mdx
               - page: Hyperliquid Transactions
                 slug: recipes/hyperliquid-wallets
