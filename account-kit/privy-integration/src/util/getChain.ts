@@ -39,7 +39,6 @@ import {
   riseTestnet,
   storyMainnet,
   storyAeneid,
-  celoAlfajores,
   celoMainnet,
   teaSepolia,
   bobaSepolia,
@@ -128,8 +127,6 @@ export function getChain(chainId: number) {
       return storyMainnet;
     case storyAeneid.id:
       return storyAeneid;
-    case celoAlfajores.id:
-      return celoAlfajores;
     case celoMainnet.id:
       return celoMainnet;
     case teaSepolia.id:
