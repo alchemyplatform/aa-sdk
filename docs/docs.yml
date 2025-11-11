@@ -76,8 +76,8 @@ navigation:
                 slug: recipes/onramp-funds
                 path: wallets/pages/recipes/onramp-funds.mdx
               - page: Session Keys with Smart Wallets
-                slug: recipes/session-keys-with-smart-wallets
-                path: wallets/pages/recipes/wallet-session-keys.mdx
+                slug: recipes/session-keys-app
+                path: wallets/pages/recipes/wallet-session-keys-app.mdx
               - page: Hyperliquid Transactions
                 slug: recipes/hyperliquid-wallets
                 path: wallets/pages/recipes/hyperliquid-wallets.mdx
@@ -90,16 +90,11 @@ navigation:
               - page: Multi-chain setup
                 slug: recipes/multi-chain-setup
                 path: wallets/pages/recipes/multi-chain-setup.mdx
+              - page: Social Payments and Defi
+                slug: recipes/social-payments-and-defi
+                path: wallets/pages/recipes/social-payments-and-defi.mdx
               - link: Multi-chain Balances
                 href: https://www.alchemy.com/docs/how-to-get-crosschain-token-balances
-              - section: Sample apps
-                contents:
-                  - page: Social Payments and Defi
-                    slug: recipes/sample-apps/social-payments-and-defi
-                    path: wallets/pages/recipes/sample-apps/social-payments-and-defi.mdx
-                  - page: Session Keys App
-                    slug: recipes/sample-apps/session-keys-app
-                    path: wallets/pages/recipes/sample-apps/wallet-session-keys-app.mdx
           - page: Supported Chains
             path: wallets/pages/overview/supported-chains.mdx
 
