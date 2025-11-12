@@ -1,6 +1,5 @@
 import { toHex, type Address, type IsUndefined, type Prettify } from "viem";
 import type { InnerWalletApiClient, OptionalChainId } from "../types.ts";
-import { requestWithBreadcrumb } from "@alchemy/common";
 import { AccountNotFoundError } from "@alchemy/common";
 import { LOGGER } from "../logger.js";
 import { mergeClientCapabilities } from "../utils/capabilities.js";
@@ -70,7 +69,7 @@ export async function prepareCalls<
     callsCount: params.calls?.length,
     hasCapabilities: !!params.capabilities,
   });
-  const res = await requestWithBreadcrumb(client as any, {
+  const res = await client.request({
     method: "wallet_prepareCalls",
     params: [
       {

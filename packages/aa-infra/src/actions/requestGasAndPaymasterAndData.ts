@@ -11,7 +11,6 @@ import {
   formatOverridesRequest,
 } from "./utils.js";
 import { LOGGER } from "../logger.js";
-import { requestWithBreadcrumb } from "@alchemy/common";
 
 /**
  * Requests gas estimation and paymaster data from the Alchemy Gas Manager API for a user operation.
@@ -46,7 +45,7 @@ export const requestGasAndPaymasterAndData = async <
   ] = params;
 
   LOGGER.debug("requestGasAndPaymasterAndData", { policyId, entryPoint });
-  const response = await requestWithBreadcrumb(client as any, {
+  const response = await client.request({
     method: "alchemy_requestGasAndPaymasterAndData",
     params: [
       {

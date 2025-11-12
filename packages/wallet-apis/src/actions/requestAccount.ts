@@ -3,7 +3,6 @@ import type { Prettify, UnionOmit } from "viem";
 import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
 import deepEqual from "deep-equal";
 import type { InnerWalletApiClient, OptionalSignerAddress } from "../types";
-import { requestWithBreadcrumb } from "@alchemy/common";
 import { LOGGER } from "../logger.js";
 
 type RpcSchema = Extract<
@@ -84,7 +83,7 @@ export async function requestAccount(
     };
   }
 
-  const resp = await requestWithBreadcrumb(client as any, {
+  const resp = await client.request({
     method: "wallet_requestAccount",
     params: [args],
   });

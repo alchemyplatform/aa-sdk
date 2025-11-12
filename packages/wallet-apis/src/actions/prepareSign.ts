@@ -1,7 +1,6 @@
 import type { InnerWalletApiClient, OptionalChainId } from "../types.ts";
 import { toHex, type Address, type IsUndefined, type Prettify } from "viem";
 import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
-import { requestWithBreadcrumb } from "@alchemy/common";
 import { AccountNotFoundError } from "@alchemy/common";
 import { LOGGER } from "../logger.js";
 
@@ -53,7 +52,7 @@ export async function prepareSign<
   }
 
   LOGGER.debug("prepareSign:start", { type: params.signatureRequest.type });
-  const res = await requestWithBreadcrumb(client as any, {
+  const res = await client.request({
     method: "wallet_prepareSign",
     params: [
       {

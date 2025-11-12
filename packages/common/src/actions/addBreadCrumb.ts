@@ -93,45 +93,5 @@ export function addBreadCrumb<TClient extends Client>(
   }
 }
 
-/**
- * Performs a single request with a breadcrumb appended to headers, deriving the
- * breadcrumb from the request method. If the client is not using the Alchemy
- * transport, the request is sent as-is.
- *
- * @param {Client} client The client used to send the request.
- * @param {object} req The request object for the client's `request` method.
- * @returns {Promise<unknown>} The result of the client's `request` call.
- */
-export function requestWithBreadcrumb<
-  C extends {
-    request: (req: any) => any;
-  } & Partial<{ transport: unknown; chain: unknown }>,
->(client: C, req: Parameters<C["request"]>[0]): ReturnType<C["request"]> {
-  const breadcrumb = (req as { method?: string })?.method ?? "";
-  try {
-    const ctx = getAlchemyTransportContext(client as unknown as Client);
-    if (!ctx) return client.request(req);
-
-    // Build merged headers and create a fresh transport to avoid shared-state races.
-    const merged = headersUpdate(breadcrumb)(
-      convertHeadersToObject(ctx.headers),
-    );
-    const newTransport = alchemyTransport({
-      ...(ctx.config || {}),
-      fetchOptions: {
-        ...(ctx.config?.fetchOptions || {}),
-        headers: merged,
-      },
-    });
-
-    const tempClient = createClient({
-      chain: (client as any).chain,
-      transport: newTransport,
-    });
-
-    return tempClient.request(req as any) as ReturnType<C["request"]>;
-  } catch {
-    // Generic fallback to avoid breaking calls from unexpected shapes or breadcrumbs.
-    return client.request(req) as ReturnType<C["request"]>;
-  }
-}
+// requestWithBreadcrumb has been removed. Breadcrumbs are injected by the
+// Alchemy transport per request.

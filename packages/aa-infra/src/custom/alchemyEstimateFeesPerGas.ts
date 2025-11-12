@@ -14,7 +14,6 @@ import type {
 } from "viem/account-abstraction";
 import { BaseError, bigIntMultiply } from "@alchemy/common";
 import type { RundlerRpcSchema } from "../schema.js";
-import { requestWithBreadcrumb } from "@alchemy/common";
 
 export const alchemyRpcSchema = rpcSchema<RundlerRpcSchema>();
 
@@ -79,7 +78,8 @@ export async function alchemyEstimateFeesPerGas<
 }> {
   const [block, maxPriorityFeePerGasEstimate] = await Promise.all([
     getBlock(bundlerClient, { blockTag: "latest" }),
-    requestWithBreadcrumb(bundlerClient as any, {
+    bundlerClient.request({
+      // @ts-expect-error - Method belongs to RundlerRpcSchema
       method: "rundler_maxPriorityFeePerGas",
       params: [],
     }),

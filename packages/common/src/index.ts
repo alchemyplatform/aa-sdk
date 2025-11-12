@@ -46,10 +46,7 @@ export { MethodUnsupportedError } from "./errors/MethodUnsupportedError.js";
 
 // actions
 export type * from "./actions/addBreadCrumb.js";
-export {
-  addBreadCrumb,
-  requestWithBreadcrumb,
-} from "./actions/addBreadCrumb.js";
+export { addBreadCrumb } from "./actions/addBreadCrumb.js";
 
 // chains (convenience exports for Alchemy-supported chains)
 export * from "./chains.js";

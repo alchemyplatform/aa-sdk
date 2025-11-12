@@ -15,6 +15,7 @@ import {
   convertHeadersToObject,
   withAlchemyHeaders,
 } from "../utils/headers.js";
+import { headersUpdate } from "../tracing/updateHeaders.js";
 
 /**
  * Configuration options for the Alchemy transport.
@@ -247,11 +248,37 @@ export function alchemyTransport<
       retryCount: 0,
     });
 
+    const innerRequest = innerTransport(opts).request;
+
+    // Wrap request to attach per-request breadcrumb headers in a race-safe way.
+    const requestWithBreadcrumbs: typeof innerRequest = async (params: any) => {
+      try {
+        const method = (params as { method?: string })?.method ?? "";
+        const base = convertHeadersToObject(fetchOptions.headers);
+        const merged = headersUpdate(method)(base);
+
+        // Create a fresh inner transport for this request with merged headers.
+        const perRequestTransport = http(rpcUrl, {
+          ...httpTransportConfig,
+          fetchOptions: {
+            ...fetchOptions,
+            headers: merged,
+          },
+          retryCount: 0,
+        });
+
+        return perRequestTransport(opts).request(params);
+      } catch {
+        // On any unexpected shape, fall back to the original request.
+        return innerRequest(params);
+      }
+    };
+
     return createTransport(
       {
         key: "alchemyHttp",
         name: "Alchemy HTTP Transport",
-        request: innerTransport(opts).request,
+        request: requestWithBreadcrumbs,
         retryCount: retryCount ?? opts?.retryCount,
         retryDelay,
         type: "alchemyHttp",
