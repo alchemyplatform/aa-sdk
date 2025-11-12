@@ -59,6 +59,14 @@ export type AlchemyTransport<
  * @param {Chain} chain Chain for the transport to run its function to return the transport config
  * @returns {boolean} `true` if the transport is an Alchemy transport, otherwise `false`
  */
+/**
+ * A type guard for the transport to determine if it is an Alchemy transport.
+ * Used in cases where we would like to do switching depending on the transport.
+ *
+ * @param {Transport | unknown} transport The transport function to check.
+ * @param {Chain | undefined} chain Chain for the transport to run its function to return the transport config
+ * @returns {boolean} `true` if the transport is an Alchemy transport, otherwise `false`
+ */
 export function isAlchemyTransport(
   transport: unknown,
   chain: Chain | undefined,
@@ -66,6 +74,28 @@ export function isAlchemyTransport(
   try {
     if (!chain) return false;
     return (transport as any)({ chain }).config.type === "alchemyHttp";
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * A type guard for a viem transport instance/config object (the object returned
+ * by invoking a transport function) to determine if it represents an Alchemy
+ * transport. This is useful when a client stores the instantiated transport
+ * object rather than the callable transport function.
+ *
+ * @param {unknown} transportConfig The transport instance/config object to check
+ * @returns {boolean} `true` if the underlying transport type is `alchemyHttp`, otherwise `false`
+ */
+export function isAlchemyTransportConfig(
+  transportConfig: unknown,
+): transportConfig is {
+  config: { type: "alchemyHttp" };
+  value?: { fetchOptions?: { headers?: HeadersInit } };
+} {
+  try {
+    return (transportConfig as any)?.config?.type === "alchemyHttp";
   } catch {
     return false;
   }

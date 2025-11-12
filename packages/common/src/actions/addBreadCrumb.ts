@@ -3,22 +3,48 @@ import { headersUpdate } from "../tracing/updateHeaders.js";
 import {
   alchemyTransport,
   isAlchemyTransport,
+  isAlchemyTransportConfig,
   type AlchemyTransport,
   type AlchemyTransportConfig,
 } from "../transport/alchemy.js";
 import { convertHeadersToObject } from "../utils/headers.js";
 
 // Internal helper to safely access Alchemy transport internals for header updates
-function getAlchemyTransportContext(client: Client) {
-  if (!client?.transport || !client?.chain) return null;
-  if (!isAlchemyTransport(client.transport, client.chain)) return null;
-  const transport = client.transport as unknown as AlchemyTransport;
-  const instance = transport({ chain: client.chain });
-  return {
-    transport,
-    config: instance.value?.config as AlchemyTransportConfig | undefined,
-    headers: instance.value?.fetchOptions?.headers as HeadersInit | undefined,
-  } as const;
+function getAlchemyTransportContext(client: Client | any) {
+  const chain = client?.chain;
+  const t = client?.transport;
+  if (!t || !chain) return null;
+
+  // Case 1: callable transport
+  if (typeof t === "function") {
+    if (!isAlchemyTransport(t, chain)) return null;
+    const transport = t as unknown as AlchemyTransport;
+    const instance = transport({ chain });
+    return {
+      config: instance.value?.config as AlchemyTransportConfig | undefined,
+      headers: instance.value?.fetchOptions?.headers as HeadersInit | undefined,
+      updateHeaders: (h: HeadersInit) => transport.updateHeaders(h),
+    } as const;
+  }
+
+  // Case 2: transport instance/config stored on client
+  if (isAlchemyTransportConfig(t)) {
+    const headers = t?.value?.fetchOptions?.headers as HeadersInit | undefined;
+    const cfg = (t as any)?.value?.config as AlchemyTransportConfig | undefined;
+    return {
+      config: cfg,
+      headers,
+      updateHeaders: (h: HeadersInit) => {
+        const current = convertHeadersToObject(headers);
+        const merged = { ...current, ...convertHeadersToObject(h) };
+        if (t?.value?.fetchOptions) {
+          t.value.fetchOptions.headers = merged;
+        }
+      },
+    } as const;
+  }
+
+  return null;
 }
 
 /**
@@ -86,12 +112,26 @@ export function requestWithBreadcrumb<
     const ctx = getAlchemyTransportContext(client as unknown as Client);
     if (!ctx) return client.request(req);
 
+    // Build merged headers and create a fresh transport to avoid shared-state races.
     const merged = headersUpdate(breadcrumb)(
       convertHeadersToObject(ctx.headers),
     );
-    ctx.transport.updateHeaders(merged);
-    return client.request(req) as ReturnType<C["request"]>;
+    const newTransport = alchemyTransport({
+      ...(ctx.config || {}),
+      fetchOptions: {
+        ...(ctx.config?.fetchOptions || {}),
+        headers: merged,
+      },
+    });
+
+    const tempClient = createClient({
+      chain: (client as any).chain,
+      transport: newTransport,
+    });
+
+    return tempClient.request(req as any) as ReturnType<C["request"]>;
   } catch {
+    // Generic fallback to avoid breaking calls from unexpected shapes or breadcrumbs.
     return client.request(req) as ReturnType<C["request"]>;
   }
 }
