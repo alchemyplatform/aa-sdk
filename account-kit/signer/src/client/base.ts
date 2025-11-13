@@ -7,6 +7,7 @@ import {
   recoverPublicKey,
   serializeSignature,
   sha256,
+  toHex,
   type Address,
   type Hex,
 } from "viem";
@@ -15,6 +16,7 @@ import {
   OAuthProvidersError,
   UnsupportedFeatureError,
 } from "../errors.js";
+import { decryptExportBundle } from "@turnkey/crypto";
 import { getDefaultProviderCustomization } from "../oauth.js";
 import type { OauthMode } from "../signer.js";
 import { base64UrlEncode } from "../utils/base64UrlEncode.js";
@@ -58,12 +60,24 @@ import type {
 import { VERSION } from "../version.js";
 import { secp256k1 } from "@noble/curves/secp256k1";
 import { Point } from "@noble/secp256k1";
+import { p256 } from "@noble/curves/p256";
 
 export interface BaseSignerClientParams {
   stamper: TurnkeyClient["stamper"];
   connection: ConnectionConfig;
   rootOrgId?: string;
   rpId?: string;
+}
+
+export interface ExportPrivateKeyParams {
+  type: "SOLANA" | "ETHEREUM";
+  client?: TurnkeyClient;
+  orgId?: string;
+}
+
+export interface MultiOwnerExportPrivateKeyParams {
+  type: "SOLANA" | "ETHEREUM";
+  orgId: string;
 }
 
 export type ExportWalletStamper = TurnkeyClient["stamper"] & {
@@ -1490,5 +1504,75 @@ export abstract class BaseSignerClient<
    */
   protected getOauthNonce = (turnkeyPublicKey: string): string => {
     return sha256(new TextEncoder().encode(turnkeyPublicKey)).slice(2);
+  };
+
+  /**
+   * Exports a private key for a given account
+   *
+   * @param {ExportPrivateKeyParams} opts the parameters for the export
+   * @returns {Promise<string>} the private key
+   */
+  public exportPrivateKey = async (
+    opts: ExportPrivateKeyParams,
+  ): Promise<string> => {
+    if (!this.user) {
+      throw new NotAuthenticatedError();
+    }
+
+    const targetAddressFormat =
+      opts.type === "ETHEREUM"
+        ? "ADDRESS_FORMAT_ETHEREUM"
+        : "ADDRESS_FORMAT_SOLANA";
+    const keyFormat = opts.type === "ETHEREUM" ? "HEXADECIMAL" : "SOLANA";
+    const turnkeyClient = opts.client ?? this.turnkeyClient;
+    const organizationId = opts.orgId ?? this.user.orgId;
+
+    const wallets = await turnkeyClient.getWalletAccounts({ organizationId });
+    const account = wallets.accounts.find(
+      (account) => account.addressFormat === targetAddressFormat,
+    );
+    if (!account?.address) {
+      throw new Error("Failed to find account: " + opts.type);
+    }
+    const targetPrivateKey = p256.utils.randomPrivateKey();
+    const targetPublicKey = p256.getPublicKey(targetPrivateKey, false);
+    const exported = await turnkeyClient.exportWalletAccount({
+      organizationId,
+      type: "ACTIVITY_TYPE_EXPORT_WALLET_ACCOUNT",
+      timestampMs: Date.now().toString(),
+      parameters: {
+        address: account.address,
+        targetPublicKey: toHex(targetPublicKey).slice(2),
+      },
+    });
+    const { exportBundle } =
+      exported?.activity.result.exportWalletAccountResult || {};
+
+    if (!exportBundle) throw new Error("No export bundle found");
+    const decrypted = await decryptExportBundle({
+      exportBundle,
+      embeddedKey: toHex(targetPrivateKey).slice(2),
+      organizationId,
+      returnMnemonic: false,
+      keyFormat,
+    });
+
+    return decrypted;
+  };
+
+  /**
+   * Exports a private key for a given account in a multi-owner org
+   *
+   * @param {MultiOwnerExportPrivateKeyParams} opts the parameters for the export
+   * @returns {Promise<string>} the private key
+   */
+  public experimental_multiOwnerExportPrivateKey = async (
+    opts: MultiOwnerExportPrivateKeyParams,
+  ): Promise<string> => {
+    return this.exportPrivateKey({
+      type: opts.type,
+      client: this.experimental_createMultiOwnerTurnkeyClient(),
+      orgId: opts.orgId,
+    });
   };
 }
