@@ -1,141 +1,82 @@
 ---
-title: Gas sponsorship
+title: Gasless transactions
 description: Sponsor gas fees for your users
 slug: wallets/transactions/sponsor-gas/overview
 ---
 
-# Gasless transactions
-
-Gas fees are a significant barrier to entry for new users. With gas sponsorship, you can eliminate this friction by covering transaction costs for your users.
-
-**Gas sponsorship enables:**
+Gas fees are a significant barrier to entry for new users. With gas sponsorship, you can eliminate this friction by covering gas costs for your users.
 
 - **Seamless onboarding** — New users transact immediately without buying crypto
-- **Web2-like UX** — Hide blockchain complexity completely
 - **Higher conversion** — Remove the #1 barrier to user adoption
 - **Smart cost control** — Enable flexible spending policies
 
-<Callout intent="info">
-  Existing embedded wallets can leverage gas sponsorship by using EIP-7702.
-  Bring your existing embedded EOA wallets and upgrade to smart wallets to
-  enable gasless transactions. Learn more about
-  [EIP-7702](/wallets/transactions/using-eip-7702).
-</Callout>
+## Get Started
 
-## Sponsorship Options
+Start sponsoring gas in minutes:
 
-<CardGroup cols={3}>
-  <Card 
-    title="Full Sponsorship" 
+1. **Create a policy** in your Alchemy dashboard and configure sponsorship rules
+2. **Send sponsored transactions** using your policy ID
+
+No need to manage crypto or pre-fund accounts. Alchemy fronts the gas for your users' transactions—you pay the equivalent USD amount.
+
+Get started [here](/wallets/transactions/sponsor-gas)!
+
+## Sponsorship options
+
+<CardGroup cols={2}>
+  <Card
+    title="Full Sponsorship"
     icon="fa-solid fa-bolt"
-    href="/gas-sponsorship/full-sponsorship"
+    href="wallets/transactions/sponsor-gas"
   >
-    Cover all gas fees. Best for onboarding and growth.
+    Cover all gas fees. Best for onboarding and growth
   </Card>
-
-{" "}
-
-<Card
-  title="Conditional Sponsorship"
-  icon="fa-solid fa-shield-halved"
-  href="/gas-sponsorship/conditional-sponsorship"
->
-  Set spending limits and rules to control costs.
-</Card>
-
-  <Card 
-    title="ERC-20 Payments" 
-    icon="fa-solid fa-coins"
-    href="/gas-sponsorship/erc20-payments"
+  <Card
+    title="Conditional Sponsorship"
+    icon="fa-solid fa-shield-halved"
+    href="wallets/transactions/sponsor-gas"
   >
-    Let users pay gas with USDC, USDT, or any token.
+    Set spending limits and rules to control costs
+  </Card>
+  <Card
+    title="ERC-20 Payments"
+    icon="fa-solid fa-coins"
+    href="/wallets/transactions/pay-gas-with-any-token"
+  >
+    Let users pay gas with USDC, USDT, or any token
+  </Card>
+  <Card
+    title="Solana Sponsorship"
+    icon="fa-solid fa-layer-group"
+    href="/wallets/transactions/solana/sponsor-gas-solana"
+  >
+    Sponsor transaction fees on Solana
   </Card>
 </CardGroup>
 
-### Full Sponsorship
+### Easy management
 
-**Sponsor all transaction fees.**
-
-- Cover 100% of gas costs for your users
-- No complexity — enable and deploy immediately
-
-[Learn more about Full Sponsorship →](/gas-sponsorship/full-sponsorship)
-
----
-
-### Conditional Sponsorship & Policies
-
-**Control costs while maintaining a sponsored experience.**
-Set spending limits, rate limits, and custom approval logic to make sponsorship sustainable at scale.
-
-**Configuration options:**
-
-- **Dashboard policies** — Configure rules visually through the Alchemy dashboard
-- **REST API policies** — Manage policies programmatically for dynamic control
-- **Webhook policies** — Implement fully custom approval logic with real-time decision making
-
-[Learn more about Conditional Sponsorship →](/gas-sponsorship/conditional-sponsorship)
-
----
-
-### Pay with ERC-20 Tokens
-
-**Let users pay gas fees using stablecoins** instead of requiring native tokens like ETH. Users spend USDC, USDT, or any ERC-20 token they already hold.
-
-- Users contribute without holding native tokens
-- Combine sponsorship benefits with user responsibility
-
-[Learn more about ERC-20 Payments →](/gas-sponsorship/erc20-payments)
-
----
-
-### Solana Sponsorship
-
-**Extend the same seamless experience to Solana.** Sponsor transaction fees on Solana to provide frictionless onboarding across all chains your app supports.
-
-[Learn more about Solana Sponsorship →](/gas-sponsorship/solana-sponsorship)
-
-## Cost Management Tools
-
-Track and optimize your sponsorship spending in real-time through the Alchemy dashboard.
+Track and optimize your sponsorship spending in real-time through the Alchemy dashboard and APIs.
 
 <CardGroup cols={3}>
+  <Card title="Zero Crypto Management" icon="fa-solid fa-hand-holding-dollar">
+    No need to pre-fund wallets or manage tokens. We front the gas for you and
+    bill in USD.
+  </Card>
   <Card title="Real-time Analytics" icon="fa-solid fa-chart-line">
     Monitor spending as transactions happen with live dashboards
   </Card>
-
-{" "}
-
-<Card title="Budget Alerts" icon="fa-solid fa-bell">
-  Get notified when approaching spending thresholds
-</Card>
-
-  <Card title="Per-User Breakdown" icon="fa-solid fa-users">
-    Understand cost attribution and identify optimization opportunities
+  <Card title="Flexible Limits & Alerts" icon="fa-solid fa-bell">
+    Get notified when approaching limits and pre-deposit to scale up instantly
+  </Card>
+  <Card
+    title="Admin APIs"
+    icon="fa-solid fa-code"
+    href="/wallets/low-level-infra/gas-manager/policy-management/api-endpoints"
+  >
+    Programmatically manage policies, retrieve stats, and monitor sponsorships
+    via APIs
   </Card>
 </CardGroup>
 
-## Compatible Wallet Types
-
-Gas sponsorship works seamlessly with most embedded wallet solutions:
-
-**ERC-4337 Smart Accounts**  
-Native support for gas sponsorship via account abstraction and paymasters. Smart accounts provide the most flexibility for sponsorship policies.
-
-**EOAs with EIP-7702**  
-Upgrade standard externally-owned accounts to support sponsorship capabilities. Provides sponsorship benefits while maintaining EOA compatibility.
-
-<Callout intent="success">
-  **Quick Start:** Enable gas sponsorship in your Alchemy dashboard, select your
-  sponsorship mode, and integrate with your embedded wallet—users never think
-  about gas fees again.
-</Callout>
-
-## Get Started
-
-1. **Enable gas sponsorship** in your Alchemy dashboard
-2. **Choose your approach** — full, conditional, or ERC-20 payment mode
-3. **Configure policies**
-4. **Integrate** with your embedded wallet implementation
-
-Users can now transact without worrying about gas fees.
+[Start Building →](/wallets/transactions/sponsor-gas)
