@@ -78,6 +78,10 @@ export const paymasterTransport = (
                 dummySignature: Hex;
                 userOperation: UserOperationRequest;
                 overrides?: UserOperationOverrides;
+                erc20Context?: {
+                  tokenAddress: Address;
+                  maxTokenAmount?: string;
+                };
               },
             ];
           const isPMv7 =

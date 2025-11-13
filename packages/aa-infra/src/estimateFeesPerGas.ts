@@ -1,31 +1,21 @@
 import { getBlock } from "viem/actions";
 import {
-  fromHex,
   type Client,
   isHex,
   type Transport,
   type Chain,
   type Account,
+  hexToBigInt,
 } from "viem";
 import type {
   UserOperationRequest,
   SmartAccount,
 } from "viem/account-abstraction";
-import { BaseError, bigIntMultiply } from "@alchemy/common";
-import type { RundlerRpcSchema } from "./schema";
+import { bigIntMultiply } from "@alchemy/common";
+import type { RundlerRpcSchema } from "./schema.js";
+import { InvalidHexValueError } from "./errors.js";
 
-/**
- * Error thrown when an invalid hex value is encountered during fee estimation.
- */
-export class InvalidHexValueError extends BaseError {
-  override name = "InvalidHexValueError";
-
-  constructor(value: unknown) {
-    super(`Invalid hex value: ${value}`);
-  }
-}
-
-// Extend viem's Client with a typed rundler RPC method.
+// Extend client with Rundler rpc schema.
 export type RundlerClient<
   transport extends Transport = Transport,
   chain extends Chain | undefined = Chain | undefined,
@@ -73,8 +63,8 @@ export async function estimateFeesPerGas<
   maxFeePerGas: bigint;
   maxPriorityFeePerGas: bigint;
 }> {
-  const [block, maxPriorityFeePerGasEstimate] = await Promise.all([
-    getBlock(bundlerClient, { blockTag: "latest" }),
+  const [block, maxPriorityFeePerGasHex] = await Promise.all([
+    getBlock(bundlerClient, { blockTag: "latest" }), // This is technically hitting the node rpc, not rundler.
     bundlerClient.request({
       method: "rundler_maxPriorityFeePerGas",
       params: [],
@@ -82,16 +72,16 @@ export async function estimateFeesPerGas<
   ]);
 
   const baseFeePerGas = block.baseFeePerGas;
-  if (baseFeePerGas == null) throw new Error("baseFeePerGas is null");
-  if (maxPriorityFeePerGasEstimate == null)
+  if (baseFeePerGas == null) {
+    throw new Error("baseFeePerGas is null");
+  }
+  if (maxPriorityFeePerGasHex == null) {
     throw new Error("rundler_maxPriorityFeePerGas returned null or undefined");
-
-  // With RpcUserOperation typing, this should always be a hex string
-  const maxPriorityFeePerGas = isHex(maxPriorityFeePerGasEstimate)
-    ? fromHex(maxPriorityFeePerGasEstimate, "bigint")
-    : (() => {
-        throw new InvalidHexValueError(maxPriorityFeePerGasEstimate);
-      })();
+  }
+  if (!isHex(maxPriorityFeePerGasHex)) {
+    throw new InvalidHexValueError(maxPriorityFeePerGasHex);
+  }
+  const maxPriorityFeePerGas = hexToBigInt(maxPriorityFeePerGasHex);
 
   return {
     maxPriorityFeePerGas,
