@@ -114,6 +114,7 @@ navigation:
               - page: EIP-7702 transactions
                 path: wallets/pages/transactions/using-eip-7702/index.mdx
           - section: Sponsor gas
+            path: wallets/pages/transactions/sponsor-gas/overview.mdx
             collapsed: true
             contents:
               - page: Full sponsorship
