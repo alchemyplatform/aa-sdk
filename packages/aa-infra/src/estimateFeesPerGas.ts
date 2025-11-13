@@ -2,7 +2,6 @@ import { getBlock } from "viem/actions";
 import {
   fromHex,
   type Client,
-  rpcSchema,
   isHex,
   type Transport,
   type Chain,
@@ -13,9 +12,7 @@ import type {
   SmartAccount,
 } from "viem/account-abstraction";
 import { BaseError, bigIntMultiply } from "@alchemy/common";
-import type { RundlerRpcSchema } from "../schema.js";
-
-export const alchemyRpcSchema = rpcSchema<RundlerRpcSchema>();
+import type { RundlerRpcSchema } from "./schema";
 
 /**
  * Error thrown when an invalid hex value is encountered during fee estimation.
@@ -29,7 +26,7 @@ export class InvalidHexValueError extends BaseError {
 }
 
 // Extend viem's Client with a typed rundler RPC method.
-export type PriorityFeeClient<
+export type RundlerClient<
   transport extends Transport = Transport,
   chain extends Chain | undefined = Chain | undefined,
   account extends Account | undefined = Account | undefined,
@@ -44,7 +41,7 @@ export type PriorityFeeClient<
  *
  * It then returns `maxFeePerGas = baseFee * 1.5 + priority` (aligns with viem default).
  *
- * @param {PriorityFeeClient} bundlerClient Bundler client with the rundler RPC method.
+ * @param {RundlerClient} bundlerClient Bundler client with the rundler RPC method.
  * @returns {Promise<{maxFeePerGas: bigint, maxPriorityFeePerGas: bigint}>} Estimated fee values.
  *
  * @example
@@ -60,7 +57,7 @@ export type PriorityFeeClient<
  * });
  * ```
  */
-export async function alchemyEstimateFeesPerGas<
+export async function estimateFeesPerGas<
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends Account | undefined = Account | undefined,
@@ -69,7 +66,7 @@ export async function alchemyEstimateFeesPerGas<
   account: _account,
   userOperation: _userOperation,
 }: {
-  bundlerClient: PriorityFeeClient<TTransport, TChain, TAccount>;
+  bundlerClient: RundlerClient<TTransport, TChain, TAccount>;
   account?: SmartAccount;
   userOperation?: UserOperationRequest;
 }): Promise<{

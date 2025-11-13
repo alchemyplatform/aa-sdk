@@ -1,10 +1,7 @@
 import { createBundlerClient } from "viem/account-abstraction";
 import type { Chain, Transport } from "viem";
 import type { SmartAccount } from "viem/account-abstraction";
-import {
-  alchemyEstimateFeesPerGas,
-  alchemyRpcSchema,
-} from "./custom/alchemyEstimateFeesPerGas.js";
+import { estimateFeesPerGas } from "./estimateFeesPerGas.js";
 
 /**
  * Create a viem Bundler Client pre-configured for Alchemy Bundler.
@@ -47,9 +44,9 @@ export function createAlchemyBundlerClient<
     account,
     chain,
     transport,
-    rpcSchema: alchemyRpcSchema,
+    // rpcSchema, // TODO(jh): do we need this?
     userOperation: {
-      estimateFeesPerGas: alchemyEstimateFeesPerGas,
+      estimateFeesPerGas,
     },
   });
 }

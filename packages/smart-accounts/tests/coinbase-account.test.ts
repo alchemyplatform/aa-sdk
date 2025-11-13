@@ -2,19 +2,20 @@ import {
   toCoinbaseSmartAccount,
   createBundlerClient,
   bundlerActions,
+  createPaymasterClient,
 } from "viem/account-abstraction";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
-import { alchemyGasManagerHooks } from "@alchemy/aa-infra";
-import { getBlockNumber, setBalance, getBalance } from "viem/actions";
-import { parseEther, custom, publicActions } from "viem";
+import { getBlockNumber, setBalance } from "viem/actions";
+import { parseEther, custom, publicActions, zeroAddress } from "viem";
 import { describe, it, expect, beforeAll } from "vitest";
-import { local070Instance } from "~test/instances.js";
+import { local060Instance } from "~test/instances.js";
+import { estimateFeesPerGas } from "@alchemy/aa-infra";
 
 describe("Viem AA - Coinbase Smart Account", () => {
-  let client: ReturnType<typeof local070Instance.getClient>;
+  let client: ReturnType<typeof local060Instance.getClient>; // TODO(jh): need to test EP 0.6.0 vs 7.0.0 w/ paymaster
 
   beforeAll(async () => {
-    client = local070Instance.getClient();
+    client = local060Instance.getClient();
     const blockNumber = await getBlockNumber(client);
     expect(blockNumber).toBeGreaterThan(0n);
   }, 30_000);
@@ -25,6 +26,7 @@ describe("Viem AA - Coinbase Smart Account", () => {
     const account = await toCoinbaseSmartAccount({
       client,
       owners: [owner],
+      version: "1",
     });
 
     expect(account).toBeDefined();
@@ -33,7 +35,7 @@ describe("Viem AA - Coinbase Smart Account", () => {
   });
 
   it(
-    "should send a user operation (ETH transfer)",
+    "should send a user operation using paymaster",
     { retry: 3, timeout: 60_000 },
     async () => {
       const owner = privateKeyToAccount(generatePrivateKey());
@@ -41,27 +43,24 @@ describe("Viem AA - Coinbase Smart Account", () => {
       const account = await toCoinbaseSmartAccount({
         client,
         owners: [owner],
+        version: "1",
       });
 
-      // Create a bundler client that uses the optimized Alchemy gas manager
+      const paymasterClient = createPaymasterClient({
+        transport: custom(client),
+      });
+
       const bundlerClient = createBundlerClient({
         account,
-        chain: local070Instance.chain,
+        chain: local060Instance.chain,
         transport: custom(client),
-        ...alchemyGasManagerHooks("test-policy"),
-      });
-
-      // Fund the account
-      await setBalance(client, {
-        address: account.address,
-        value: parseEther("2.0"),
-      });
-
-      const recipient = "0x000000000000000000000000000000000000dEaD";
-      const amount = parseEther("0.1");
-
-      const initialBalance = await getBalance(client, {
-        address: recipient,
+        paymaster: paymasterClient,
+        paymasterContext: {
+          policyId: "test-policy", // TODO(jh): will this work ok w/ our test instance setup?
+        },
+        userOperation: {
+          estimateFeesPerGas,
+        },
       });
 
       // Send the user operation
@@ -69,8 +68,8 @@ describe("Viem AA - Coinbase Smart Account", () => {
         account,
         calls: [
           {
-            to: recipient,
-            value: amount,
+            to: zeroAddress,
+            value: 0n,
             data: "0x",
           },
         ],
@@ -88,12 +87,6 @@ describe("Viem AA - Coinbase Smart Account", () => {
       expect(receipt).toBeDefined();
       expect(receipt.success).toBe(true);
 
-      const finalBalance = await getBalance(client, {
-        address: recipient,
-      });
-
-      expect(finalBalance).toBe(initialBalance + amount);
-
       // Account should be deployed after the first user operation
       expect(await account.isDeployed()).toBe(true);
     },
@@ -108,13 +101,13 @@ describe("Viem AA - Coinbase Smart Account", () => {
       const account = await toCoinbaseSmartAccount({
         client,
         owners: [owner],
+        version: "1",
       });
 
       const bundlerClient = createBundlerClient({
         account,
-        chain: local070Instance.chain,
+        chain: local060Instance.chain,
         transport: custom(client),
-        ...alchemyGasManagerHooks("test-policy"),
       }).extend(bundlerActions);
 
       // Fund and deploy the account
@@ -166,6 +159,7 @@ describe("Viem AA - Coinbase Smart Account", () => {
       const account = await toCoinbaseSmartAccount({
         client,
         owners: [owner],
+        version: "1",
       });
 
       // Create a public client for verification
