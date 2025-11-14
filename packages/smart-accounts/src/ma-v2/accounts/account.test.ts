@@ -32,7 +32,7 @@ import {
   createPaymasterClient,
 } from "viem/account-abstraction";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
-import { setBalance } from "viem/actions";
+import { getBalance, setBalance } from "viem/actions";
 import { parsePublicKey } from "webauthn-p256";
 import { local070Instance } from "~test/instances.js";
 import { paymaster070 } from "~test/paymaster/paymaster070.js";
@@ -117,6 +117,40 @@ describe("MA v2 Account Tests", async () => {
     await expect(getTargetBalance()).resolves.toEqual(
       startingAddressBalance + sendAmount,
     );
+  });
+
+  it("sends a sponsored UO", { retry: 3, timeout: 30_000 }, async () => {
+    const provider = await givenConnectedProvider({
+      signer: owner,
+      paymaster: true,
+    });
+
+    const startingBalance = parseEther("20");
+
+    await setBalance(instance.getClient(), {
+      address: provider.account.address,
+      value: startingBalance,
+    });
+
+    const hash = await provider.sendUserOperation({
+      calls: [
+        {
+          to: target,
+          value: sendAmount,
+          data: "0x",
+        },
+      ],
+    });
+
+    await provider.waitForUserOperationReceipt({
+      hash,
+      timeout: 30_000,
+    });
+
+    // Confirms that the sender didn't pay any gas fees.
+    await expect(
+      getBalance(client, { address: provider.account.address }),
+    ).resolves.toEqual(startingBalance - sendAmount);
   });
 
   it(
