@@ -5,7 +5,6 @@ import {
   publicActions,
   type Address,
   type Chain,
-  type Hex,
   type JsonRpcAccount,
   type LocalAccount,
   type OneOf,
@@ -286,7 +285,7 @@ describe.sequential("MultiOwner Light Account Tests", () => {
         : undefined,
       paymasterContext: paymaster
         ? {
-            policyId: "FAKE_POLICY_ID" as Hex,
+            policyId: "FAKE_POLICY_ID",
           }
         : undefined,
       userOperation: {
