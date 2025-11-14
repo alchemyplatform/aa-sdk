@@ -334,7 +334,7 @@ describe("MultiOwner Light Account Tests", () => {
             transport: custom(instance.getClient()),
           })
         : paymasterMiddleware === "erc7677"
-          ? erc7677Middleware()
+          ? erc7677Middleware({ context: { policyId: "FAKE_POLICY_ID" } })
           : {}),
     });
 });

@@ -1,27 +1,28 @@
 import {
   createWalletClient,
   custom,
-  fromHex,
   parseEther,
   publicActions,
   type Address,
   type Chain,
-  type Hex,
   type JsonRpcAccount,
   type LocalAccount,
   type OneOf,
   type Transport,
   type WalletClient,
 } from "viem";
-import { createBundlerClient } from "viem/account-abstraction";
+import {
+  createBundlerClient,
+  createPaymasterClient,
+} from "viem/account-abstraction";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
-import { getBlock, setBalance } from "viem/actions";
+import { setBalance } from "viem/actions";
 import { accounts, poolId } from "~test/constants.js";
 import { local070Instance } from "~test/instances.js";
 import { multiOwnerLightAccountActions } from "../decorators/multiOwner.js";
 import type { LightAccountVersion } from "../registry.js";
 import { toMultiOwnerLightAccount } from "./multi-owner-account.js";
-import { bigIntMultiply } from "../../utils.js";
+import { estimateFeesPerGas } from "@alchemy/aa-infra";
 
 // Run sequentially to avoid interference across tests sharing anvil/rundler state
 describe.sequential("MultiOwner Light Account Tests", () => {
@@ -112,7 +113,7 @@ describe.sequential("MultiOwner Light Account Tests", () => {
   it("should successfully execute with erc-7677 paymaster", async () => {
     const provider = await givenConnectedProvider({
       signer,
-      usePaymaster: true,
+      paymaster: true,
     });
 
     const hash = await provider.sendUserOperation({
@@ -255,14 +256,14 @@ describe.sequential("MultiOwner Light Account Tests", () => {
   const givenConnectedProvider = async ({
     signer,
     accountAddress,
-    usePaymaster = false,
+    paymaster,
     owners,
     salt: _salt,
   }: {
     signer: WalletClient<Transport, Chain, JsonRpcAccount | LocalAccount>;
     version?: LightAccountVersion<"MultiOwnerLightAccount">;
     accountAddress?: Address;
-    usePaymaster?: boolean;
+    paymaster?: boolean;
     owners?: OneOf<JsonRpcAccount | LocalAccount>[];
     salt?: bigint;
   }) => {
@@ -277,35 +278,18 @@ describe.sequential("MultiOwner Light Account Tests", () => {
       account,
       transport: custom(client.transport),
       chain: client.chain,
-      paymaster: usePaymaster ? true : undefined,
-      userOperation: {
-        // TODO(v5): move this to the common package so it can be reused
-        estimateFeesPerGas: async ({ bundlerClient }) => {
-          let [block, maxPriorityFeePerGasEstimate] = await Promise.all([
-            getBlock(bundlerClient, { blockTag: "latest" }),
-            // it is a fair assumption that if someone is using this Alchemy Middleware, then they are using Alchemy RPC
-            bundlerClient.request({
-              // @ts-expect-error - TODO(v5): fix this
-              method: "rundler_maxPriorityFeePerGas",
-              params: [],
-            }),
-          ]);
-
-          const baseFeePerGas = block.baseFeePerGas;
-          if (baseFeePerGas == null) {
-            throw new Error("baseFeePerGas is null");
+      paymaster: paymaster
+        ? createPaymasterClient({
+            transport: custom(client.transport),
+          })
+        : undefined,
+      paymasterContext: paymaster
+        ? {
+            policyId: "FAKE_POLICY_ID",
           }
-
-          return {
-            maxPriorityFeePerGas: fromHex(
-              maxPriorityFeePerGasEstimate as Hex,
-              "bigint",
-            ),
-            maxFeePerGas:
-              bigIntMultiply(baseFeePerGas, 1.5) +
-              BigInt(maxPriorityFeePerGasEstimate as Hex),
-          };
-        },
+        : undefined,
+      userOperation: {
+        estimateFeesPerGas,
       },
     }).extend(multiOwnerLightAccountActions);
   };

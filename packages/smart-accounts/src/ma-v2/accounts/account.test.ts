@@ -29,9 +29,10 @@ import {
   createWebAuthnCredential,
   toWebAuthnAccount,
   type WebAuthnAccount,
+  createPaymasterClient,
 } from "viem/account-abstraction";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
-import { setBalance } from "viem/actions";
+import { getBalance, setBalance } from "viem/actions";
 import { parsePublicKey } from "webauthn-p256";
 import { local070Instance } from "~test/instances.js";
 import { paymaster070 } from "~test/paymaster/paymaster070.js";
@@ -53,7 +54,8 @@ import { NativeTokenLimitModule } from "../modules/native-token-limit-module/mod
 import { TimeRangeModule } from "../modules/time-range-module/module.js";
 import { getMAV2UpgradeToData } from "../utils/account.js";
 import { packAccountGasLimits, packPaymasterData } from "../../utils.js";
-import { alchemyEstimateFeesPerGas } from "@alchemy/aa-infra";
+import { estimateFeesPerGas } from "@alchemy/aa-infra";
+import * as WebAuthnP256 from "ox/WebAuthnP256";
 
 // Note: These tests maintain a shared state to not break the local-running rundler by desyncing the chain.
 describe("MA v2 Account Tests", async () => {
@@ -115,6 +117,40 @@ describe("MA v2 Account Tests", async () => {
     await expect(getTargetBalance()).resolves.toEqual(
       startingAddressBalance + sendAmount,
     );
+  });
+
+  it("sends a sponsored UO", { retry: 3, timeout: 30_000 }, async () => {
+    const provider = await givenConnectedProvider({
+      signer: owner,
+      paymaster: true,
+    });
+
+    const startingBalance = parseEther("20");
+
+    await setBalance(instance.getClient(), {
+      address: provider.account.address,
+      value: startingBalance,
+    });
+
+    const hash = await provider.sendUserOperation({
+      calls: [
+        {
+          to: target,
+          value: sendAmount,
+          data: "0x",
+        },
+      ],
+    });
+
+    await provider.waitForUserOperationReceipt({
+      hash,
+      timeout: 30_000,
+    });
+
+    // Confirms that the sender didn't pay any gas fees.
+    await expect(
+      getBalance(client, { address: provider.account.address }),
+    ).resolves.toEqual(startingBalance - sendAmount);
   });
 
   it(
@@ -1033,7 +1069,7 @@ describe("MA v2 Account Tests", async () => {
     const provider = (
       await givenConnectedProvider({
         signer: owner,
-        paymasterMiddleware: "erc7677",
+        paymaster: true,
       })
     ).extend(installValidationActions);
 
@@ -1084,7 +1120,7 @@ describe("MA v2 Account Tests", async () => {
       await givenConnectedProvider({
         signer: sessionKey,
         accountAddress: provider.account.address,
-        paymasterMiddleware: "erc7677",
+        paymaster: true,
         signerEntity: { entityId: 1, isGlobalValidation: true },
       })
     ).extend(installValidationActions);
@@ -1129,7 +1165,7 @@ describe("MA v2 Account Tests", async () => {
     const provider = (
       await givenConnectedProvider({
         signer: owner,
-        paymasterMiddleware: "erc7677",
+        paymaster: true,
       })
     ).extend(installValidationActions);
 
@@ -1889,7 +1925,7 @@ describe("MA v2 Account Tests", async () => {
       transport: custom(instance.getClient()),
       chain: instance.chain,
       userOperation: {
-        estimateFeesPerGas: alchemyEstimateFeesPerGas,
+        estimateFeesPerGas,
       },
     });
 
@@ -2013,7 +2049,7 @@ describe("MA v2 Account Tests", async () => {
       user: { name: "test", displayName: "test" },
     });
 
-    const getFn = (opts: CredentialRequestOptions | undefined) =>
+    const getFn: WebAuthnP256.sign.Options["getFn"] = (opts) =>
       webauthnDevice.get(opts, "localhost");
 
     return { credential, getFn, rpId: "localhost" };
@@ -2023,7 +2059,7 @@ describe("MA v2 Account Tests", async () => {
     signer,
     signerEntity,
     accountAddress,
-    paymasterMiddleware,
+    paymaster,
     factoryArgs,
     deferredAction,
     mode,
@@ -2031,7 +2067,7 @@ describe("MA v2 Account Tests", async () => {
     signer: LocalAccount | WebAuthnAccount;
     signerEntity?: { entityId: number; isGlobalValidation: boolean };
     accountAddress?: Address;
-    paymasterMiddleware?: "erc7677";
+    paymaster?: boolean;
     factoryArgs?: { factory?: Address; factoryData?: Hex };
     deferredAction?: Hex;
     mode?: "default" | "7702";
@@ -2053,9 +2089,14 @@ describe("MA v2 Account Tests", async () => {
       account,
       transport: custom(instance.getClient()),
       chain: instance.chain,
-      paymaster: paymasterMiddleware === "erc7677" ? true : undefined,
+      paymaster: paymaster
+        ? createPaymasterClient({
+            transport: custom(instance.getClient()),
+          })
+        : undefined,
+      paymasterContext: paymaster ? { policyId: "test-policy" } : undefined,
       userOperation: {
-        estimateFeesPerGas: alchemyEstimateFeesPerGas,
+        estimateFeesPerGas,
       },
     });
   };
