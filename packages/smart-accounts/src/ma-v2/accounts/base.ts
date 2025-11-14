@@ -268,12 +268,6 @@ export async function toModularAccountV2Base<
   const prepareSignature = async (
     request: SignatureRequest,
   ): Promise<Extract<SignatureRequest, { type: "eth_signTypedData_v4" }>> => {
-    if (owner.type === "webAuthn") {
-      throw new BaseError(
-        "`prepareSignature` not supported by WebAuthn signer",
-      );
-    }
-
     const isDeferredAction =
       request.type === "eth_signTypedData_v4" &&
       request.data?.primaryType === "DeferredAction" &&
@@ -295,12 +289,17 @@ export async function toModularAccountV2Base<
       data: toReplaySafeTypedData({
         chainId: client.chain.id,
         hash,
-        ...(entityId === DEFAULT_OWNER_ENTITY_ID
-          ? { address: accountAddress }
-          : {
-              address: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
+        ...(owner.type === "webAuthn"
+          ? {
+              address: DefaultModuleAddress.WEBAUTHN_VALIDATION,
               salt: concatHex([`0x${"00".repeat(12)}`, accountAddress]),
-            }),
+            }
+          : entityId === DEFAULT_OWNER_ENTITY_ID
+            ? { address: accountAddress }
+            : {
+                address: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
+                salt: concatHex([`0x${"00".repeat(12)}`, accountAddress]),
+              }),
       }),
     };
   };
@@ -366,28 +365,21 @@ export async function toModularAccountV2Base<
     },
 
     async signMessage({ message }) {
-      if (owner.type === "webAuthn") {
-        const hash = hashTypedData(
-          toReplaySafeTypedData({
-            chainId: client.chain.id,
-            address: DefaultModuleAddress.WEBAUTHN_VALIDATION,
-            hash: hashMessage(message),
-            salt: concatHex([`0x${"00".repeat(12)}`, accountAddress]),
-          }),
-        );
-        const validationSignature = toWebAuthnSignature(
-          await owner.sign({ hash }),
-        );
-        return pack1271Signature({
-          validationSignature,
-          entityId,
-        });
-      }
-
       const { data } = await prepareSignature({
         type: "personal_sign",
         data: message,
       });
+
+      if (owner.type === "webAuthn") {
+        const validationSignature = toWebAuthnSignature(
+          await owner.sign({ hash: hashTypedData(data) }),
+        );
+        return pack1271Signature({
+          validationSignature,
+          entityId,
+          isWebAuthn: true,
+        });
+      }
 
       const action = getAction(client, signTypedData, "signTypedData");
 
@@ -407,30 +399,23 @@ export async function toModularAccountV2Base<
         "verifyingContract" in td.domain &&
         td.domain.verifyingContract === accountAddress;
 
-      if (owner.type === "webAuthn") {
-        const hash = hashTypedData(
-          toReplaySafeTypedData({
-            chainId: client.chain.id,
-            address: DefaultModuleAddress.WEBAUTHN_VALIDATION,
-            hash: hashTypedData(td),
-            salt: concatHex([`0x${"00".repeat(12)}`, accountAddress]),
-          }),
-        );
-        const validationSignature = toWebAuthnSignature(
-          await owner.sign({ hash }),
-        );
-        return isDeferredAction
-          ? pack1271Signature({
-              validationSignature,
-              entityId,
-            })
-          : validationSignature;
-      }
-
       const { data } = await prepareSignature({
         type: "eth_signTypedData_v4",
         data: td as TypedDataDefinition, // TODO: Try harder to satisfy this w/o casting.
       });
+
+      if (owner.type === "webAuthn") {
+        const validationSignature = toWebAuthnSignature(
+          await owner.sign({ hash: hashTypedData(data) }),
+        );
+        return isDeferredAction
+          ? validationSignature
+          : pack1271Signature({
+              validationSignature,
+              entityId,
+              isWebAuthn: true,
+            });
+      }
 
       const action = getAction(client, signTypedData, "signTypedData");
 

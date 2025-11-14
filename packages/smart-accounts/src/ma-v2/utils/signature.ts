@@ -31,6 +31,7 @@ export const packUOSignature = ({
 export type Pack1271SignatureParams = {
   validationSignature: Hex;
   entityId: number;
+  isWebAuthn?: boolean;
 };
 
 /**
@@ -42,12 +43,13 @@ export type Pack1271SignatureParams = {
 export const pack1271Signature = ({
   validationSignature,
   entityId,
+  isWebAuthn,
 }: Pack1271SignatureParams): Hex => {
   return concatHex([
     "0x00",
     toHex(entityId, { size: 4 }),
     "0xFF",
-    SignaturePrefix.EOA,
+    ...(!isWebAuthn ? [SignaturePrefix.EOA] : []),
     validationSignature,
   ]);
 };

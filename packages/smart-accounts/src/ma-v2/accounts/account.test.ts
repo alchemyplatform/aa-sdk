@@ -54,6 +54,7 @@ import { TimeRangeModule } from "../modules/time-range-module/module.js";
 import { getMAV2UpgradeToData } from "../utils/account.js";
 import { packAccountGasLimits, packPaymasterData } from "../../utils.js";
 import { alchemyEstimateFeesPerGas } from "@alchemy/aa-infra";
+import type { WebAuthnP256 } from "ox";
 
 // Note: These tests maintain a shared state to not break the local-running rundler by desyncing the chain.
 describe("MA v2 Account Tests", async () => {
@@ -214,97 +215,116 @@ describe("MA v2 Account Tests", async () => {
     });
   });
 
-  // TODO(v5): debug these webauthn signing methods (they didn't work in v4 tests either).
-  // it(
-  //   "successfully sign and validate a message, for WebAuthn account",
-  //   async () => {
-  //     const credential = await givenWebauthnCredential();
+  it("successfully sign and validate a message with EIP-1271 using WebAuthn account", async () => {
+    const credential = await givenWebauthnCredential();
 
-  //     const provider = await givenConnectedProvider({
-  //       signer: toWebAuthnAccount(credential),
-  //     });
+    const provider = await givenConnectedProvider({
+      signer: toWebAuthnAccount(credential),
+    });
 
-  //     await setBalance(instance.getClient(), {
-  //       address: provider.account.address,
-  //       value: parseEther("2"),
-  //     });
+    const accountContract = getContract({
+      address: provider.account.address,
+      abi: semiModularAccountBytecodeAbi,
+      client,
+    });
 
-  //     const message = "0xdecafbad";
+    await setBalance(instance.getClient(), {
+      address: provider.account.address,
+      value: parseEther("2"),
+    });
 
-  //     const signature = await provider.account.signMessage({ message });
+    // Deploy the account first by sending a simple UO.
+    const hash = await provider.sendUserOperation({
+      calls: [{ to: zeroAddress, data: "0x" }],
+    });
+    await provider.waitForUserOperationReceipt({ hash, timeout: 30_000 });
 
-  //     const publicClient = instance.getClient().extend(publicActions);
+    const message = "0xdecafbad";
 
-  //     const isValid = await publicClient.verifyMessage({
-  //       message,
-  //       address: provider.account.address,
-  //       signature,
-  //     });
+    // WebAuthn signMessage automatically wraps the message in EIP-712
+    // ReplaySafeHash format and returns a properly formatted signature.
+    const signature = await provider.account.signMessage({ message });
 
-  //     expect(isValid).toBe(true);
-  //   },
-  // );
+    // Validate against the original message hash.
+    // The WebAuthn validation module will wrap it in ReplaySafeHash internally.
+    const validationResult = await accountContract.read.isValidSignature([
+      hashMessage(message),
+      signature,
+    ]);
 
-  // TODO(v5): debug these webauthn signing methods (they didn't work in v4 tests either).
-  // it(
-  //   "successfully sign and validate typed data, for WebAuthn account",
-  //   async () => {
-  //     const credential = await givenWebauthnCredential();
+    expect(validationResult).toEqual(VALID_1271_SIG_MAGIC_BYTES);
+  });
 
-  //     const provider = await givenConnectedProvider({
-  //       signer: toWebAuthnAccount(credential),
-  //     });
+  // TODO(jh): debug these webauthn signing methods (recently fixed in v4).
+  it("successfully sign and validate typed data with EIP-1271 using WebAuthn account", async () => {
+    const credential = await givenWebauthnCredential();
 
-  //     await setBalance(instance.getClient(), {
-  //       address: provider.account.address,
-  //       value: parseEther("2"),
-  //     });
+    const provider = await givenConnectedProvider({
+      signer: toWebAuthnAccount(credential),
+    });
 
-  //     const typedData = {
-  //       domain: {
-  //         name: "Ether Mail",
-  //         version: "1",
-  //         chainId: 1,
-  //         verifyingContract: "0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC",
-  //       },
-  //       types: {
-  //         Person: [
-  //           { name: "name", type: "string" },
-  //           { name: "wallet", type: "address" },
-  //         ],
-  //         Mail: [
-  //           { name: "from", type: "Person" },
-  //           { name: "to", type: "Person" },
-  //           { name: "contents", type: "string" },
-  //         ],
-  //       },
-  //       primaryType: "Mail",
-  //       message: {
-  //         from: {
-  //           name: "Cow",
-  //           wallet: "0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826",
-  //         },
-  //         to: {
-  //           name: "Bob",
-  //           wallet: "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
-  //         },
-  //         contents: "Hello, Bob!",
-  //       },
-  //     } as const;
+    const accountContract = getContract({
+      address: provider.account.address,
+      abi: semiModularAccountBytecodeAbi,
+      client,
+    });
 
-  //     const signature = await provider.account.signTypedData(typedData);
+    await setBalance(instance.getClient(), {
+      address: provider.account.address,
+      value: parseEther("2"),
+    });
 
-  //     const publicClient = instance.getClient().extend(publicActions);
+    // Deploy the account first by sending a simple UO.
+    const hash = await provider.sendUserOperation({
+      calls: [{ to: zeroAddress, data: "0x" }],
+    });
+    await provider.waitForUserOperationReceipt({ hash, timeout: 30_000 });
 
-  //     const isValid = await publicClient.verifyTypedData({
-  //       ...typedData,
-  //       address: provider.account.address,
-  //       signature,
-  //     });
+    const typedData = {
+      domain: {
+        name: "Ether Mail",
+        version: "1",
+        chainId: 1,
+        verifyingContract: "0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC",
+      },
+      types: {
+        Person: [
+          { name: "name", type: "string" },
+          { name: "wallet", type: "address" },
+        ],
+        Mail: [
+          { name: "from", type: "Person" },
+          { name: "to", type: "Person" },
+          { name: "contents", type: "string" },
+        ],
+      },
+      primaryType: "Mail",
+      message: {
+        from: {
+          name: "Cow",
+          wallet: "0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826",
+        },
+        to: {
+          name: "Bob",
+          wallet: "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
+        },
+        contents: "Hello, Bob!",
+      },
+    } as const;
 
-  //     expect(isValid).toBe(true);
-  //   },
-  // );
+    // WebAuthn signTypedData automatically wraps the typed data in EIP-712
+    // ReplaySafeHash format and returns a properly formatted signature.
+    const signature = await provider.account.signTypedData(typedData);
+
+    // Validate against the original typed data hash.
+    // The WebAuthn validation module will wrap it in ReplaySafeHash internally.
+    const validationResult = await accountContract.read.isValidSignature([
+      hashTypedData(typedData),
+      signature,
+    ]);
+
+    expect(validationResult).toEqual(VALID_1271_SIG_MAGIC_BYTES);
+  });
 
   it(
     "successfully sign and validate a message, for native and single signer validation",
@@ -2013,7 +2033,7 @@ describe("MA v2 Account Tests", async () => {
       user: { name: "test", displayName: "test" },
     });
 
-    const getFn = (opts: CredentialRequestOptions | undefined) =>
+    const getFn: WebAuthnP256.sign.Options["getFn"] = (opts) =>
       webauthnDevice.get(opts, "localhost");
 
     return { credential, getFn, rpId: "localhost" };
