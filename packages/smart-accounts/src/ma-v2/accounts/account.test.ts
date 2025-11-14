@@ -55,6 +55,7 @@ import { getMAV2UpgradeToData } from "../utils/account.js";
 import { packAccountGasLimits, packPaymasterData } from "../../utils.js";
 import { alchemyEstimateFeesPerGas } from "@alchemy/aa-infra";
 import type { WebAuthnP256 } from "ox";
+import { toWebAuthnSignature } from "../utils/signature.js";
 
 // Note: These tests maintain a shared state to not break the local-running rundler by desyncing the chain.
 describe("MA v2 Account Tests", async () => {
@@ -504,6 +505,172 @@ describe("MA v2 Account Tests", async () => {
           sessionKeySignature,
         ]),
       ).resolves.toEqual(VALID_1271_SIG_MAGIC_BYTES);
+    },
+  );
+
+  it(
+    "should expose prepare and format functions that work for sma-b",
+    { retry: 3, timeout: 30_000 },
+    async () => {
+      const provider = await givenConnectedProvider({ signer: owner });
+
+      await setBalance(instance.getClient(), {
+        address: provider.account.address,
+        value: parseEther("2"),
+      });
+
+      const accountContract = getContract({
+        address: provider.account.address,
+        abi: semiModularAccountBytecodeAbi,
+        client,
+      });
+
+      // Deploy the account first by sending a simple UO.
+      const hash = await provider.sendUserOperation({
+        calls: [{ to: zeroAddress, data: "0x" }],
+      });
+      await provider.waitForUserOperationReceipt({ hash, timeout: 30_000 });
+
+      const message = "hello world";
+
+      const { type, data } = await provider.account.prepareSignature({
+        type: "personal_sign",
+        data: message,
+      });
+
+      const ownerSig = await (type === "personal_sign"
+        ? owner.signMessage({ message: data })
+        : owner.signTypedData(data));
+
+      const signature = await provider.account.formatSignature(ownerSig);
+
+      const validationResult = await accountContract.read.isValidSignature([
+        hashMessage(message),
+        signature,
+      ]);
+
+      expect(validationResult).toEqual(VALID_1271_SIG_MAGIC_BYTES);
+    },
+  );
+
+  it(
+    "should expose prepare and format functions that work for 7702",
+    { retry: 3, timeout: 30_000 },
+    async () => {
+      const provider = await givenConnectedProvider({
+        signer: owner,
+        mode: "7702",
+      });
+
+      await setBalance(instance.getClient(), {
+        address: provider.account.address,
+        value: parseEther("2"),
+      });
+
+      const accountContract = getContract({
+        address: provider.account.address,
+        abi: semiModularAccountBytecodeAbi,
+        client,
+      });
+
+      const walletClient = createWalletClient({
+        account: owner,
+        transport: custom(instance.getClient()),
+        chain: instance.chain,
+      });
+
+      const preparedAuthorization = provider.account.authorization
+        ? await walletClient.prepareAuthorization(
+            provider.account.authorization,
+          )
+        : undefined;
+
+      const signedAuthorization = preparedAuthorization
+        ? await walletClient.signAuthorization(preparedAuthorization)
+        : undefined;
+
+      // Deploy the account first by sending a simple UO.
+      const hash = await provider.sendUserOperation({
+        calls: [{ to: zeroAddress, data: "0x" }],
+        authorization: signedAuthorization,
+      });
+      await provider.waitForUserOperationReceipt({ hash, timeout: 30_000 });
+
+      const message = "hello world";
+
+      const { type, data } = await provider.account.prepareSignature({
+        type: "personal_sign",
+        data: message,
+      });
+
+      const ownerSig = await (type === "personal_sign"
+        ? owner.signMessage({ message: data })
+        : owner.signTypedData(data));
+
+      const signature = await provider.account.formatSignature(ownerSig);
+
+      // Validate the signature using EIP-1271
+      const validationResult = await accountContract.read.isValidSignature([
+        hashMessage(message),
+        signature,
+      ]);
+
+      expect(validationResult).toEqual(VALID_1271_SIG_MAGIC_BYTES);
+    },
+  );
+
+  it(
+    "should expose prepare and format functions that work using WebAuthn",
+    { retry: 3, timeout: 30_000 },
+    async () => {
+      const credential = await givenWebauthnCredential();
+
+      const provider = await givenConnectedProvider({
+        signer: toWebAuthnAccount(credential),
+      });
+
+      await setBalance(instance.getClient(), {
+        address: provider.account.address,
+        value: parseEther("2"),
+      });
+
+      const accountContract = getContract({
+        address: provider.account.address,
+        abi: semiModularAccountBytecodeAbi,
+        client,
+      });
+
+      // Deploy the account first by sending a simple UO.
+      const hash = await provider.sendUserOperation({
+        calls: [{ to: zeroAddress, data: "0x" }],
+      });
+      await provider.waitForUserOperationReceipt({ hash, timeout: 30_000 });
+
+      const message = "hello world";
+
+      const { type, data } = await provider.account.prepareSignature({
+        type: "personal_sign",
+        data: message,
+      });
+
+      if (type !== "eth_signTypedData_v4") {
+        throw new Error("Unexpected signature request type");
+      }
+
+      const webAuthnAccount = toWebAuthnAccount(credential);
+      const ownerSig = toWebAuthnSignature(
+        await webAuthnAccount.sign({ hash: hashTypedData(data) }),
+      );
+
+      const signature = await provider.account.formatSignature(ownerSig);
+
+      // Validate the signature using EIP-1271
+      const validationResult = await accountContract.read.isValidSignature([
+        hashMessage(message),
+        signature,
+      ]);
+
+      expect(validationResult).toEqual(VALID_1271_SIG_MAGIC_BYTES);
     },
   );
 
