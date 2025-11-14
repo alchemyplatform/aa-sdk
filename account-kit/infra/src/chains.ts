@@ -806,3 +806,27 @@ export const edgeMainnet: Chain = defineChain({
   },
   testnet: false,
 });
+
+export const worldl3devnet: Chain = defineChain({
+  id: 48011,
+  name: "WorldL3 Devnet",
+  nativeCurrency: { name: "eth", symbol: "eth", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://worldl3-devnet.g.alchemy.com/v2"],
+    },
+    public: {
+      http: ["https://worldl3-devnet.g.alchemy.com/v2"],
+    },
+    alchemy: {
+      http: ["https://worldl3-devnet.g.alchemy.com/v2"],
+    },
+  },
+  blockExplorers: {
+    default: {
+      name: "Block Explorer",
+      url: "https://worldl3-devnet.blockscout.com/",
+    },
+  },
+  testnet: true,
+});
