@@ -49,7 +49,7 @@ export const pack1271Signature = ({
     "0x00",
     toHex(entityId, { size: 4 }),
     "0xFF",
-    ...(!isWebAuthn ? [SignaturePrefix.EOA] : []),
+    ...(isWebAuthn ? [] : [SignaturePrefix.EOA]),
     validationSignature,
   ]);
 };

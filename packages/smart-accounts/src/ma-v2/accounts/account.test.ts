@@ -255,7 +255,6 @@ describe("MA v2 Account Tests", async () => {
     expect(validationResult).toEqual(VALID_1271_SIG_MAGIC_BYTES);
   });
 
-  // TODO(jh): debug these webauthn signing methods (recently fixed in v4).
   it("successfully sign and validate typed data with EIP-1271 using WebAuthn account", async () => {
     const credential = await givenWebauthnCredential();
 
