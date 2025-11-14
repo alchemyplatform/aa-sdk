@@ -34,7 +34,7 @@ import {
   signMessage,
   signTypedData,
 } from "viem/actions";
-import { assertNever, BaseError } from "@alchemy/common";
+import { assertNever } from "@alchemy/common";
 import {
   SignaturePrefix,
   type ExecutionDataView,
@@ -305,12 +305,10 @@ export async function toModularAccountV2Base<
   };
 
   const formatSignature = async (signature: Hex): Promise<Hex> => {
-    if (owner.type === "webAuthn") {
-      throw new BaseError("`formatSignature` not supported by WebAuthn signer");
-    }
     return pack1271Signature({
       validationSignature: signature,
       entityId,
+      isWebAuthn: owner.type === "webAuthn",
     });
   };
 
@@ -374,11 +372,7 @@ export async function toModularAccountV2Base<
         const validationSignature = toWebAuthnSignature(
           await owner.sign({ hash: hashTypedData(data) }),
         );
-        return pack1271Signature({
-          validationSignature,
-          entityId,
-          isWebAuthn: true,
-        });
+        return formatSignature(validationSignature);
       }
 
       const action = getAction(client, signTypedData, "signTypedData");
@@ -410,11 +404,7 @@ export async function toModularAccountV2Base<
         );
         return isDeferredAction
           ? validationSignature
-          : pack1271Signature({
-              validationSignature,
-              entityId,
-              isWebAuthn: true,
-            });
+          : formatSignature(validationSignature);
       }
 
       const action = getAction(client, signTypedData, "signTypedData");
