@@ -83,8 +83,8 @@ When working with Wallet APIs, you may encounter various errors. Here are some c
 ```
 
 <Info>
-  The nonce in the user operation is invalid. This usually happens if trying to
-  reuse an old nonce. Please follow [these
+  The nonce used is invalid. This usually happens if trying to reuse an old
+  nonce. Please follow [these
   recommendations](https://www.alchemy.com/support/how-to-resolve-entrypoint-aaxx-errors).
 </Info>
 
@@ -117,9 +117,9 @@ When working with Wallet APIs, you may encounter various errors. Here are some c
 ```
 
 <Info>
-  The user operation was rejected because it contains an invalid signature from
-  the sender. Be sure that you are correctly signing the signature request(s).
-  Refer to the [Wallet API
+  The call was rejected because it contains an invalid signature from the
+  sender. Be sure that you are correctly signing the signature request(s). Refer
+  to the [Wallet API
   quickstart](/docs/wallets/smart-wallet-quickstart/api#3-sign-the-userop) for
   more info.
 </Info>
@@ -136,7 +136,7 @@ When working with Wallet APIs, you may encounter various errors. Here are some c
 
 <Info>
   The sender's balance is too low to cover gas fees. This normally happens when
-  you mistakenly forget to include your Paymaster Policy ID. See [gas
+  you mistakenly forget to include your Gas Sponsorship Policy ID. See [gas
   sponsorship
   docs](https://www.alchemy.com/docs/wallets/transactions/sponsor-gas) for more
   info.
