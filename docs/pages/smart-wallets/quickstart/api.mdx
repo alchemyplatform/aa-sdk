@@ -150,7 +150,7 @@ This will return the array of prepared call IDs!
 
 ### 5. Check The Calls Status
 
-Now you can simply call `wallet_getCallsStatus` to check the status of the calls.
+Now you can simply call `wallet_getCallsStatus` to check the status of the calls. A “pending” state (1xx status codes) is expected for some time before the transition to “confirmed,” so this endpoint should be polled while the status is pending. If the call does not progress, refer to the [retry guide](/wallets/transactions/retry-transactions).
 
 ```bash
 curl --request POST \
