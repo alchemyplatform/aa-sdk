@@ -43,7 +43,12 @@ import {
 } from "../types.js";
 import { modularAccountAbi } from "../abis/modularAccountAbi.js";
 import type { SignatureRequest } from "../../types.js";
-import { decodeFunctionData, getAction, sliceHex } from "viem/utils";
+import {
+  decodeFunctionData,
+  getAction,
+  isAddressEqual,
+  sliceHex,
+} from "viem/utils";
 import {
   DEFAULT_OWNER_ENTITY_ID,
   DefaultModuleAddress,
@@ -329,6 +334,17 @@ export async function toModularAccountV2Base<
     async encodeCalls(calls) {
       if (calls.length === 1) {
         const call = calls[0];
+
+        if (isAddressEqual(call.to, accountAddress)) {
+          // If the call is to the account itself, we need to avoid wrapping it in an `execute` call.
+
+          if (call.data === undefined) {
+            throw new BaseError("Data is required for an account self-call.");
+          }
+
+          return encodeCallData(call.data);
+        }
+
         return encodeCallData(
           encodeFunctionData({
             abi: modularAccountAbi,
@@ -354,6 +370,7 @@ export async function toModularAccountV2Base<
     },
 
     async decodeCalls(data) {
+      // Inverse of `encodeCalls`.
       // Trim the EXECUTE_USER_OP_SELECTOR if it is present.
       if (
         data.toLowerCase().startsWith(EXECUTE_USER_OP_SELECTOR.toLowerCase())
@@ -384,6 +401,7 @@ export async function toModularAccountV2Base<
         }));
       }
 
+      // If the data is not for an `execute` or `executeBatch` call, we treat it as a single call to the account itself.
       return [
         {
           to: accountAddress,
