@@ -139,10 +139,6 @@ methods:
         - Worldchain
         - Arbitrum
       </Note>
-
-      <Note title="Want to get push notifications for mined userOperations?">
-        Follow [this guide](/docs/how-to-use-custom-webhooks-to-get-push-notifications-for-mined-user-operations) to learn how to use Custom Webhooks and get real time alerts and receipts for mined userOperations.
-      </Note>
     params:
       - name: userOpHash
         required: true
