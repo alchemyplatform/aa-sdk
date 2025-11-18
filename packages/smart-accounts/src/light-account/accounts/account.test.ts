@@ -154,7 +154,37 @@ describe("Light Account Tests", () => {
   );
 
   it.each(versions)(
-    "should correctly encode batch transaction data",
+    "should correctly encode and decode asingle call transaction data",
+    async (version) => {
+      const provider = await givenConnectedProvider({ signerAccount, version });
+      const data = [
+        {
+          to: "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
+          data: "0xdeadbeef",
+        },
+      ] satisfies Call[];
+
+      const encoded = await provider.account.encodeCalls(data);
+
+      expect(encoded).toBe(
+        "0xb61d27f6000000000000000000000000deadbeefdeadbeefdeadbeefdeadbeefdeadbeef000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000004deadbeef00000000000000000000000000000000000000000000000000000000",
+      );
+
+      expect(provider.account.decodeCalls).toBeDefined();
+
+      const decoded = await provider.account.decodeCalls!(encoded);
+
+      expect(decoded.length).toEqual(data.length);
+      expect(decoded[0].to.toLowerCase()).toEqual(data[0].to.toLowerCase());
+      expect(decoded[0].value).toBe(0n);
+      expect(decoded[0].data?.toLowerCase()).toEqual(
+        data[0].data?.toLowerCase(),
+      );
+    },
+  );
+
+  it.each(versions)(
+    "should correctly encode and decode batch transaction data",
     async (version) => {
       const provider = await givenConnectedProvider({ signerAccount, version });
       const data = [
@@ -168,8 +198,26 @@ describe("Light Account Tests", () => {
         },
       ] satisfies Call[];
 
-      expect(await provider.account.encodeCalls(data)).toBe(
+      const encoded = await provider.account.encodeCalls(data);
+
+      expect(encoded).toBe(
         "0x47e1da2a000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000001200000000000000000000000000000000000000000000000000000000000000002000000000000000000000000deadbeefdeadbeefdeadbeefdeadbeefdeadbeef0000000000000000000000008ba1f109551bd432803012645ac136ddd64dba720000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000004deadbeef000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004cafebabe00000000000000000000000000000000000000000000000000000000",
+      );
+
+      expect(provider.account.decodeCalls).toBeDefined();
+
+      const decoded = await provider.account.decodeCalls!(encoded);
+
+      expect(decoded.length).toEqual(data.length);
+      expect(decoded[0].to.toLowerCase()).toEqual(data[0].to.toLowerCase());
+      expect(decoded[0].value).toBe(0n);
+      expect(decoded[0].data?.toLowerCase()).toEqual(
+        data[0].data?.toLowerCase(),
+      );
+      expect(decoded[1].to.toLowerCase()).toEqual(data[1].to.toLowerCase());
+      expect(decoded[1].value).toBe(0n);
+      expect(decoded[1].data?.toLowerCase()).toEqual(
+        data[1].data?.toLowerCase(),
       );
     },
   );

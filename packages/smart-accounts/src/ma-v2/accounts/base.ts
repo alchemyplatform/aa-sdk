@@ -43,7 +43,7 @@ import {
 } from "../types.js";
 import { modularAccountAbi } from "../abis/modularAccountAbi.js";
 import type { SignatureRequest } from "../../types.js";
-import { getAction } from "viem/utils";
+import { decodeFunctionData, getAction, sliceHex } from "viem/utils";
 import {
   DEFAULT_OWNER_ENTITY_ID,
   DefaultModuleAddress,
@@ -351,6 +351,45 @@ export async function toModularAccountV2Base<
           ],
         }),
       );
+    },
+
+    async decodeCalls(data) {
+      // Trim the EXECUTE_USER_OP_SELECTOR if it is present.
+      if (
+        data.toLowerCase().startsWith(EXECUTE_USER_OP_SELECTOR.toLowerCase())
+      ) {
+        data = sliceHex(data, 4);
+      }
+
+      const decoded = decodeFunctionData({
+        abi: modularAccountAbi,
+        data,
+      });
+
+      if (decoded.functionName === "execute") {
+        return [
+          {
+            to: decoded.args[0],
+            value: decoded.args[1],
+            data: decoded.args[2],
+          },
+        ];
+      }
+
+      if (decoded.functionName === "executeBatch") {
+        return decoded.args[0].map((call) => ({
+          to: call.target,
+          value: call.value,
+          data: call.data,
+        }));
+      }
+
+      return [
+        {
+          to: accountAddress,
+          data,
+        },
+      ];
     },
 
     async getStubSignature() {
