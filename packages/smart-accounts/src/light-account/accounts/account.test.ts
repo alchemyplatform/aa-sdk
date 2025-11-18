@@ -154,7 +154,7 @@ describe("Light Account Tests", () => {
   );
 
   it.each(versions)(
-    "should correctly encode and decode asingle call transaction data",
+    "should correctly encode and decode a single call transaction",
     async (version) => {
       const provider = await givenConnectedProvider({ signerAccount, version });
       const data = [

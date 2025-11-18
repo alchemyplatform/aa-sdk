@@ -23,7 +23,7 @@ export function encodeCallsLA(calls: readonly Call[]): Hex {
       accum[0].push(curr.to);
       accum[1].push(curr.value ?? 0n);
       accum[2].push(curr.data ?? "0x");
-      accum[3] = accum[3] || curr.value !== 0n;
+      accum[3] = accum[3] || (curr.value ?? 0n) !== 0n;
       return accum;
     },
     [[], [], [], false] as [Address[], bigint[], Hex[], boolean],
