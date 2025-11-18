@@ -46,8 +46,8 @@ export function decodeCallsLA(data: Hex, accountAddress: Address): Call[] {
     return [
       {
         to: decoded.args[0],
-        value: decoded.args[1],
         data: decoded.args[2],
+        ...(decoded.args[1] !== undefined ? { value: decoded.args[1] } : {}),
       },
     ];
   }
