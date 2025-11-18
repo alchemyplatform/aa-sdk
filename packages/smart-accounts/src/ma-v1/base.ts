@@ -1,5 +1,4 @@
 import {
-  type Abi,
   type Address,
   type Chain,
   type Client,
@@ -7,6 +6,9 @@ import {
   type JsonRpcAccount,
   type LocalAccount,
   type Transport,
+  type Hash,
+  type TypedDataDefinition,
+  encodeFunctionData,
 } from "viem";
 import {
   entryPoint06Abi,
@@ -14,8 +16,12 @@ import {
   type SmartAccount,
   type SmartAccountImplementation,
   entryPoint06Address,
+  getUserOperationHash,
 } from "viem/account-abstraction";
 import type { SignatureRequest } from "../types.js";
+import { IStandardExecutorAbi } from "./abis/IStandardExecutor.js";
+import { signMessage, signTypedData } from "viem/actions";
+import { getAction, hashMessage, hashTypedData } from "viem/utils";
 
 export type BaseMaV1AccountImplementation = SmartAccountImplementation<
   typeof entryPoint06Abi,
@@ -24,7 +30,6 @@ export type BaseMaV1AccountImplementation = SmartAccountImplementation<
     source: "ModularAccountV1";
     prepareSignature: (request: SignatureRequest) => Promise<SignatureRequest>;
     formatSignature: (signature: Hex) => Promise<Hex>;
-    // TODO(jh): maybe want things like encodeCallData and getExecutionData?
   },
   false
 >;
@@ -35,23 +40,26 @@ export type ToModularAccountV1BaseParams<
   TTransport extends Transport = Transport,
 > = {
   client: Client<TTransport, Chain, JsonRpcAccount | LocalAccount | undefined>;
-  abi: Abi;
   accountAddress: Address;
-  owner: JsonRpcAccount | LocalAccount; // TODO(jh): is this ok for multi-owner? seem okay in LA?
+  owner: JsonRpcAccount | LocalAccount;
   getFactoryArgs: () => Promise<{
     factory?: Address | undefined;
     factoryData?: Hex | undefined;
   }>;
+  get712Wrapper: (msg: Hash) => Promise<TypedDataDefinition>;
+  type: "MultiOwnerModularAccountV1"; // Currently no SDK v5 support for "MultiSigModularAccountV1".
 };
 
+// TODO(jh): write tests for this.
 export async function toModularAccountV1Base<
   TTransport extends Transport = Transport,
 >({
   client,
-  abi,
   accountAddress,
   owner,
   getFactoryArgs,
+  get712Wrapper,
+  type,
 }: ToModularAccountV1BaseParams<TTransport>): Promise<ModularAccountV1Base> {
   const entryPoint = {
     abi: entryPoint06Abi,
@@ -62,11 +70,19 @@ export async function toModularAccountV1Base<
   const prepareSignature = async (
     params: SignatureRequest,
   ): Promise<SignatureRequest> => {
-    throw new Error("Not implemented"); // TODO(jh): impl
+    const data = await get712Wrapper(
+      params.type === "personal_sign"
+        ? hashMessage(params.data)
+        : hashTypedData(params.data),
+    );
+    return {
+      type: "eth_signTypedData_v4",
+      data,
+    };
   };
 
   const formatSignature = async (signature: Hex): Promise<Hex> => {
-    throw new Error("Not implemented"); // TODO(jh): impl
+    return signature;
   };
 
   return await toSmartAccount({
@@ -79,7 +95,30 @@ export async function toModularAccountV1Base<
     },
 
     async encodeCalls(calls) {
-      throw new Error("Not implemented"); // TODO(jh): impl
+      if (!calls.length) {
+        throw new Error("No calls to encode");
+      }
+
+      if (calls.length === 1) {
+        const call = calls[0];
+        return encodeFunctionData({
+          abi: IStandardExecutorAbi,
+          functionName: "execute",
+          args: [call.to, call.value ?? 0n, call.data ?? "0x"],
+        });
+      }
+
+      return encodeFunctionData({
+        abi: IStandardExecutorAbi,
+        functionName: "executeBatch",
+        args: [
+          calls.map((call) => ({
+            target: call.to,
+            value: call.value ?? 0n,
+            data: call.data ?? "0x",
+          })),
+        ],
+      });
     },
 
     async getStubSignature() {
@@ -87,22 +126,60 @@ export async function toModularAccountV1Base<
     },
 
     async signMessage({ message }) {
-      throw new Error("Not implemented"); // TODO(jh): impl
+      const signMessageAction = getAction(client, signMessage, "signMessage");
+      const signTypedDataAction = getAction(
+        client,
+        signTypedData,
+        "signTypedData",
+      );
+      const { type, data } = await prepareSignature({
+        type: "personal_sign",
+        data: message,
+      });
+      return type === "personal_sign"
+        ? signMessageAction({ account: owner, message: data })
+        : signTypedDataAction({ ...data, account: owner });
     },
 
     async signTypedData(params) {
-      throw new Error("Not implemented"); // TODO(jh): impl
+      const signMessageAction = getAction(client, signMessage, "signMessage");
+      const signTypedDataAction = getAction(
+        client,
+        signTypedData,
+        "signTypedData",
+      );
+      const { type, data } = await prepareSignature({
+        type: "eth_signTypedData_v4",
+        data: params as TypedDataDefinition, // TODO(v5): try harder to avoid this cast?
+      });
+      return type === "personal_sign"
+        ? signMessageAction({ account: owner, message: data })
+        : signTypedDataAction({ ...data, account: owner });
     },
 
     async signUserOperation(parameters) {
-      throw new Error("Not implemented"); // TODO(jh): impl
+      const { chainId = client.chain.id, ...userOperation } = parameters;
+      const userOpHash = getUserOperationHash({
+        chainId,
+        entryPointAddress: entryPoint.address,
+        entryPointVersion: entryPoint.version,
+        userOperation: {
+          ...userOperation,
+          sender: accountAddress,
+        },
+      });
+
+      const signMessageAction = getAction(client, signMessage, "signMessage");
+      return signMessageAction({
+        account: owner,
+        message: userOpHash,
+      });
     },
 
     extend: {
-      source: "ModularAccountV1" as const,
+      source: type,
       prepareSignature,
       formatSignature,
-      // TODO(jh): if you add anything above, be sure to add it here too.
     },
   });
 }

@@ -21,7 +21,6 @@ export type MultiOwnerModularAccountV1Actions<
 function isMultiOwnerModularAccountV1(
   account: SmartAccount,
 ): account is MultiOwnerModularAccountV1 {
-  // TODO(jh): prob need to set this source in `multi-owner-account.ts` !!!!
   return "source" in account && account.source === "MultiOwnerModularAccountV1";
 }
 

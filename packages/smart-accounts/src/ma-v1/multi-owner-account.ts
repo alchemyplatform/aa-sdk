@@ -8,14 +8,21 @@ import {
   type LocalAccount,
   type OneOf,
   type Transport,
+  encodeFunctionData,
+  type Hash,
+  type TypedDataDefinition,
 } from "viem";
-import { MultiOwnerLightAccountAbi } from "../abis/MultiOwnerLightAccountAbi.js";
-import { predictMultiOwnerLightAccountAddress } from "../predictAddress.js";
 import { toModularAccountV1Base, type ModularAccountV1Base } from "./base.js";
-import { lowerAddress } from "@alchemy/common";
+import { lowerAddress, BaseError } from "@alchemy/common";
+import { DefaultAddress, DefaultPluginAddress } from "./utils/account.js";
+import { MultiOwnerModularAccountFactoryAbi } from "./abis/MultiOwnerModularAccountFactory.js";
+import { predictMultiOwnerModularAccountV1Address } from "./predictAddress.js";
+import { MultiOwnerPluginExecutionFunctionAbi } from "./abis/MultiOwnerPluginExecutionFunction.js";
+import { readContract } from "viem/actions";
+import { getAction } from "viem/utils";
+import { MultiOwnerPluginAbi } from "./abis/MultiOwnerPlugin.js";
 
 export type MultiOwnerModularAccountV1 = ModularAccountV1Base & {
-  // TODO(jh): does MAv1 use these?
   encodeUpdateOwners: (
     ownersToAdd: Address[],
     ownersToRemove: Address[],
@@ -29,9 +36,9 @@ export type ToMultiOwnerModularAccountV1Params = {
   salt?: bigint;
   accountAddress?: Address;
   factoryAddress?: Address;
-  // TODO(jh): maybe we actually should have a subtype const here for MAv1 like LA?
 };
 
+// TODO(jh): write tests for this.
 /**
  * Creates a multi-owner MAv1 account.
  *
@@ -43,7 +50,7 @@ export async function toMultiOwnerModularAccountV1({
   salt = 0n,
   owners = [],
   accountAddress: accountAddress_,
-  factoryAddress = "0xTODO", // TODO(jh): add MAv1 multi-owner factory address
+  factoryAddress = DefaultAddress.MULTI_OWNER_MAV1_FACTORY,
 }: ToMultiOwnerModularAccountV1Params): Promise<MultiOwnerModularAccountV1> {
   const signer = owners[0];
 
@@ -59,35 +66,98 @@ export async function toMultiOwnerModularAccountV1({
 
   const accountAddress =
     accountAddress_ ??
-    // TODO(jh): impl prediction func for MAv1
-    predictMultiOwnerLightAccountAddress({
+    predictMultiOwnerModularAccountV1Address({
       factoryAddress,
       salt,
       ownerAddresses: sortedOwners,
     });
 
   const getFactoryArgs = async () => {
-    throw new Error("Not implemented yet"); // TODO(jh): impl
+    const factoryData = encodeFunctionData({
+      abi: MultiOwnerModularAccountFactoryAbi,
+      functionName: "createAccount",
+      args: [salt, sortedOwners],
+    });
+
+    return {
+      factory: factoryAddress,
+      factoryData,
+    };
+  };
+
+  const get712Wrapper = async (msg: Hash): Promise<TypedDataDefinition> => {
+    const readContractAction = getAction(client, readContract, "readContract");
+
+    const [, name, version, chainId, verifyingContract, salt] =
+      await readContractAction({
+        abi: MultiOwnerPluginAbi,
+        address: DefaultPluginAddress.MULTI_OWNER,
+        functionName: "eip712Domain",
+        account: accountAddress,
+      });
+
+    return {
+      domain: {
+        chainId: Number(chainId),
+        name,
+        salt,
+        verifyingContract,
+        version,
+      },
+      types: {
+        AlchemyModularAccountMessage: [{ name: "message", type: "bytes" }],
+      },
+      message: {
+        message: msg,
+      },
+      primaryType: "AlchemyModularAccountMessage",
+    };
   };
 
   const baseAccount = await toModularAccountV1Base({
     client,
     owner: signer,
-    abi: MultiOwnerLightAccountAbi, // TODO(jh): change to MAv1 multi-owner ABI
     accountAddress,
     getFactoryArgs,
-    // type: "MultiOwnerModularAccountV1", // TODO(jh): maybe we actually should have a subtype here for MAv1 like LA?
+    type: "MultiOwnerModularAccountV1",
+    get712Wrapper,
   });
 
   return {
     ...baseAccount,
 
     encodeUpdateOwners: (ownersToAdd: Address[], ownersToRemove: Address[]) => {
-      throw new Error("Not implemented yet"); // TODO(jh): impl
+      return encodeFunctionData({
+        abi: MultiOwnerPluginExecutionFunctionAbi,
+        functionName: "updateOwners",
+        args: [ownersToAdd, ownersToRemove],
+      });
     },
 
     async getOwnerAddresses(): Promise<readonly Address[]> {
-      throw new Error("Not implemented yet"); // TODO(jh): impl
+      const readContractAction = getAction(
+        client,
+        readContract,
+        "readContract",
+      );
+      const ownersOnChain = await readContractAction({
+        address: DefaultPluginAddress.MULTI_OWNER,
+        abi: MultiOwnerPluginAbi,
+        functionName: "ownersOf",
+        args: [accountAddress],
+      });
+
+      if (
+        !ownersOnChain
+          .map((it) => lowerAddress(it))
+          .includes(lowerAddress(signer.address))
+      ) {
+        throw new BaseError(
+          "on-chain owners does not include the current signer",
+        );
+      }
+
+      return ownersOnChain;
     },
   };
 }
