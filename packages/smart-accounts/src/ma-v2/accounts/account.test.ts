@@ -22,6 +22,8 @@ import {
   type TestActions,
   parseAbi,
   createPublicClient,
+  serializeErc6492Signature,
+  serializeErc8010Signature,
 } from "viem";
 import {
   createBundlerClient,
@@ -56,6 +58,7 @@ import { packAccountGasLimits, packPaymasterData } from "../../utils.js";
 import { alchemyEstimateFeesPerGas } from "@alchemy/aa-infra";
 import type { WebAuthnP256 } from "ox";
 import { toWebAuthnSignature } from "../utils/signature.js";
+import { raise } from "@alchemy/common";
 
 // Note: These tests maintain a shared state to not break the local-running rundler by desyncing the chain.
 describe("MA v2 Account Tests", async () => {
@@ -495,7 +498,21 @@ describe("MA v2 Account Tests", async () => {
         ? owner.signMessage({ message: data })
         : owner.signTypedData(data));
 
-      const signature = await provider.account.formatSignature(ownerSig);
+      // Viem's AA stack automatically serializes 6492 signatures whenever `SmartContractAccount.signMessage` is called,
+      // so we need to do that check separately when using prepare/format sign.
+      const [formattedSig, { factory, factoryData }] = await Promise.all([
+        provider.account.formatSignature(ownerSig),
+        provider.account.getFactoryArgs(),
+      ]);
+
+      const signature =
+        factory && factoryData
+          ? serializeErc6492Signature({
+              address: factory,
+              data: factoryData,
+              signature: formattedSig,
+            })
+          : formattedSig;
 
       const publicClient = createPublicClient({
         chain: instance.chain,
@@ -514,6 +531,11 @@ describe("MA v2 Account Tests", async () => {
     "should expose prepare and format functions that work for 7702",
     { retry: 3, timeout: 30_000 },
     async () => {
+      const publicClient = createPublicClient({
+        chain: instance.chain,
+        transport: custom(instance.getClient()),
+      });
+
       const provider = await givenConnectedProvider({
         signer: owner,
         mode: "7702",
@@ -530,12 +552,31 @@ describe("MA v2 Account Tests", async () => {
         ? owner.signMessage({ message: data })
         : owner.signTypedData(data));
 
-      const signature = await provider.account.formatSignature(ownerSig);
+      const [formattedSig, ownerNonce] = await Promise.all([
+        provider.account.formatSignature(ownerSig),
+        await publicClient.getTransactionCount({
+          address: owner.address,
+          blockTag: "latest",
+        }),
+      ]);
 
-      const publicClient = createPublicClient({
-        chain: instance.chain,
-        transport: custom(instance.getClient()),
-      });
+      const authorization = provider.account.authorization
+        ? await owner.signAuthorization?.({
+            ...provider.account.authorization,
+            chainId: provider.chain.id,
+            nonce: ownerNonce,
+          })
+        : raise("Owner is unable to sign authorization");
+
+      // For an undelegated 7702 account, we must serialize an ERC-8010 signature instead of 6492.
+      const signature = authorization
+        ? serializeErc8010Signature({
+            address: owner.address,
+            authorization,
+            signature: formattedSig,
+          })
+        : formattedSig;
+
       const isValid = await publicClient.verifyMessage({
         address: provider.account.address,
         message,
@@ -571,7 +612,21 @@ describe("MA v2 Account Tests", async () => {
         await webAuthnAccount.sign({ hash: hashTypedData(data) }),
       );
 
-      const signature = await provider.account.formatSignature(ownerSig);
+      // Viem's AA stack automatically serializes 6492 signatures whenever `SmartContractAccount.signMessage` is called,
+      // so we need to do that check separately when using prepare/format sign.
+      const [formattedSig, { factory, factoryData }] = await Promise.all([
+        provider.account.formatSignature(ownerSig),
+        provider.account.getFactoryArgs(),
+      ]);
+
+      const signature =
+        factory && factoryData
+          ? serializeErc6492Signature({
+              address: factory,
+              data: factoryData,
+              signature: formattedSig,
+            })
+          : formattedSig;
 
       const publicClient = createPublicClient({
         chain: instance.chain,

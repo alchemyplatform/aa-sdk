@@ -29,9 +29,9 @@ export const packUOSignature = ({
 
 // TODO(v4): direct call validation 1271
 export type Pack1271SignatureParams = {
-  validationSignature: Hex;
   entityId: number;
-  isWebAuthn?: boolean;
+  validationSignaturePrefix: SignaturePrefix | null;
+  validationSignature: Hex;
 };
 
 /**
@@ -41,15 +41,15 @@ export type Pack1271SignatureParams = {
  * @returns {Hex} The packed 1271 signature.
  */
 export const pack1271Signature = ({
-  validationSignature,
   entityId,
-  isWebAuthn,
+  validationSignaturePrefix,
+  validationSignature,
 }: Pack1271SignatureParams): Hex => {
   return concatHex([
     "0x00",
     toHex(entityId, { size: 4 }),
     "0xFF",
-    ...(isWebAuthn ? [] : [SignaturePrefix.EOA]),
+    ...(validationSignaturePrefix ? [validationSignaturePrefix] : []),
     validationSignature,
   ]);
 };

@@ -306,9 +306,10 @@ export async function toModularAccountV2Base<
 
   const formatSignature = async (signature: Hex): Promise<Hex> => {
     return pack1271Signature({
-      validationSignature: signature,
       entityId,
-      isWebAuthn: owner.type === "webAuthn",
+      validationSignaturePrefix:
+        owner.type === "webAuthn" ? null : SignaturePrefix.EOA,
+      validationSignature: signature,
     });
   };
 
@@ -395,7 +396,7 @@ export async function toModularAccountV2Base<
 
       const { data } = await prepareSignature({
         type: "eth_signTypedData_v4",
-        data: td as TypedDataDefinition, // TODO: Try harder to satisfy this w/o casting.
+        data: td as TypedDataDefinition, // TODO(v5): Try harder to satisfy this w/o casting.
       });
 
       if (owner.type === "webAuthn") {
