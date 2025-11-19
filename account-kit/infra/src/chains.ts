@@ -830,3 +830,27 @@ export const worldl3devnet: Chain = defineChain({
   },
   testnet: true,
 });
+
+export const stableMainnet: Chain = defineChain({
+  id: 988,
+  name: "Stable Mainnet",
+  nativeCurrency: { name: "gUSDT", symbol: "gUSDT", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://stable-mainnet.g.alchemy.com/v2"],
+    },
+    public: {
+      http: ["https://stable-mainnet.g.alchemy.com/v2"],
+    },
+    alchemy: {
+      http: ["https://stable-mainnet.g.alchemy.com/v2"],
+    },
+  },
+  blockExplorers: {
+    default: {
+      name: "Block Explorer",
+      url: "https://stablescan.xyz/",
+    },
+  },
+  testnet: false,
+});
