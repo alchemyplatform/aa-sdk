@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.79.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.78.0...v4.79.0) (2025-11-19)
+
+### Features
+
+- add worldl3-devnet ([#2251](https://github.com/alchemyplatform/aa-sdk/issues/2251)) ([bbab618](https://github.com/alchemyplatform/aa-sdk/commit/bbab618dc7dc6b77354ab5b944ad3ae5d11ec5b5))
+- adds celo sepolia ([#2239](https://github.com/alchemyplatform/aa-sdk/issues/2239)) ([11d46d1](https://github.com/alchemyplatform/aa-sdk/commit/11d46d1a54ec2faf191d007beb3b92ec72839d06))
+- adds edge mainnet ([#2241](https://github.com/alchemyplatform/aa-sdk/issues/2241)) ([27e3632](https://github.com/alchemyplatform/aa-sdk/commit/27e36329c103b4660886c9508b86d0a2c5c6c47e))
+- **stable:** add stable mainnet ([#2259](https://github.com/alchemyplatform/aa-sdk/issues/2259)) ([f713157](https://github.com/alchemyplatform/aa-sdk/commit/f713157b4db575f7662bc2c6e814286997430f3b))
+
 # [4.78.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.77.1...v4.78.0) (2025-11-05)
 
 ### Features
