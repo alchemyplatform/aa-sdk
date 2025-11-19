@@ -176,7 +176,7 @@ describe("Light Account Tests", () => {
 
       expect(decoded.length).toEqual(data.length);
       expect(decoded[0].to.toLowerCase()).toEqual(data[0].to.toLowerCase());
-      expect(decoded[0].value);
+      expect(decoded[0].value).toBe(0n);
       expect(decoded[0].data?.toLowerCase()).toEqual(
         data[0].data?.toLowerCase(),
       );
