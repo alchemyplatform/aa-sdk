@@ -43,7 +43,12 @@ import {
 } from "../types.js";
 import { modularAccountAbi } from "../abis/modularAccountAbi.js";
 import type { SignatureRequest } from "../../types.js";
-import { getAction } from "viem/utils";
+import {
+  decodeFunctionData,
+  getAction,
+  isAddressEqual,
+  sliceHex,
+} from "viem/utils";
 import {
   DEFAULT_OWNER_ENTITY_ID,
   DefaultModuleAddress,
@@ -329,6 +334,17 @@ export async function toModularAccountV2Base<
     async encodeCalls(calls) {
       if (calls.length === 1) {
         const call = calls[0];
+
+        if (isAddressEqual(call.to, accountAddress)) {
+          // If the call is to the account itself, we need to avoid wrapping it in an `execute` call.
+
+          if (call.data === undefined) {
+            throw new BaseError("Data is required for an account self-call.");
+          }
+
+          return encodeCallData(call.data);
+        }
+
         return encodeCallData(
           encodeFunctionData({
             abi: modularAccountAbi,
@@ -351,6 +367,47 @@ export async function toModularAccountV2Base<
           ],
         }),
       );
+    },
+
+    async decodeCalls(data) {
+      // Inverse of `encodeCalls`.
+      // Trim the EXECUTE_USER_OP_SELECTOR if it is present.
+      const trimmedData = data
+        .toLowerCase()
+        .startsWith(EXECUTE_USER_OP_SELECTOR.toLowerCase())
+        ? sliceHex(data, 4)
+        : data;
+
+      const decoded = decodeFunctionData({
+        abi: modularAccountAbi,
+        data: trimmedData,
+      });
+
+      if (decoded.functionName === "execute") {
+        return [
+          {
+            to: decoded.args[0],
+            value: decoded.args[1],
+            data: decoded.args[2],
+          },
+        ];
+      }
+
+      if (decoded.functionName === "executeBatch") {
+        return decoded.args[0].map((call) => ({
+          to: call.target,
+          value: call.value,
+          data: call.data,
+        }));
+      }
+
+      // If the data is not for an `execute` or `executeBatch` call, we treat it as a single call to the account itself.
+      return [
+        {
+          to: accountAddress,
+          data,
+        },
+      ];
     },
 
     async getStubSignature() {
