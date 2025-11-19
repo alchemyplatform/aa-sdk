@@ -30,6 +30,10 @@ import type {
 } from "../registry.js";
 import { EIP1967_PROXY_IMPL_STORAGE_SLOT } from "../utils.js";
 import { AccountVersionRegistry } from "../registry.js";
+import {
+  encodeCallsLA as encodeCalls,
+  decodeCallsLA as decodeCalls,
+} from "./calldataCodec.js";
 import { BaseError, lowerAddress } from "@alchemy/common";
 import type {
   SignatureRequest,
@@ -230,30 +234,11 @@ export async function toLightAccountBase<
     },
 
     async encodeCalls(calls) {
-      if (calls.length === 1) {
-        const call = calls[0];
-        return encodeFunctionData({
-          abi,
-          functionName: "execute",
-          args: [call.to, call.value ?? 0n, call.data ?? "0x"],
-        });
-      }
+      return encodeCalls(calls);
+    },
 
-      const [targets, values, datas] = calls.reduce(
-        (accum, curr) => {
-          accum[0].push(curr.to);
-          accum[1].push(curr.value ?? 0n);
-          accum[2].push(curr.data ?? "0x");
-          return accum;
-        },
-        [[], [], []] as [Address[], bigint[], Hex[]],
-      );
-
-      return encodeFunctionData({
-        abi,
-        functionName: "executeBatch",
-        args: [targets, values, datas],
-      });
+    async decodeCalls(data) {
+      return decodeCalls(data, accountAddress);
     },
 
     async getStubSignature() {
