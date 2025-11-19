@@ -10,6 +10,7 @@ import {
   type Address,
   type Client,
   type Hex,
+  type TestClient,
 } from "viem";
 import {
   getCode,
@@ -59,7 +60,7 @@ export const toPaymaster = (args: ToPaymasterArgs): Paymaster => {
     },
     async deployPaymasterContract(client) {
       // give the owner some ether
-      await setBalance(client, {
+      await setBalance(client as TestClient, {
         address: accounts.paymasterOwner.address,
         value: parseEther("10"),
       });
@@ -111,7 +112,7 @@ export const toPaymaster = (args: ToPaymasterArgs): Paymaster => {
         address: proxyAddress,
       });
 
-      await setBalance(client, {
+      await setBalance(client as TestClient, {
         address: proxyAddress,
         value: parseEther("5"),
       });

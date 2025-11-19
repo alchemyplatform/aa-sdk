@@ -7,7 +7,10 @@ import {
   type Call,
   type LocalAccount,
 } from "viem";
-import { createBundlerClient } from "viem/account-abstraction";
+import {
+  createBundlerClient,
+  createPaymasterClient,
+} from "viem/account-abstraction";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import { setBalance } from "viem/actions";
 import { accounts } from "~test/constants.js";
@@ -16,7 +19,7 @@ import { singleOwnerLightAccountActions } from "../decorators/singleOwner.js";
 import type { LightAccountVersion } from "../registry.js";
 import { AccountVersionRegistry } from "../registry.js";
 import { toLightAccount } from "./account.js";
-import { alchemyEstimateFeesPerGas } from "@alchemy/aa-infra";
+import { estimateFeesPerGas } from "@alchemy/aa-infra";
 
 const versions = Object.keys(
   AccountVersionRegistry.LightAccount,
@@ -347,7 +350,7 @@ describe("Light Account Tests", () => {
   it("should successfully execute with paymaster info using erc-7677 middleware", async () => {
     const provider = await givenConnectedProvider({
       signerAccount,
-      usePaymaster: true,
+      paymaster: true,
     });
 
     await setBalance(instance.getClient(), {
@@ -439,12 +442,12 @@ describe("Light Account Tests", () => {
     version = "v1.1.0",
     accountAddress,
     signerAccount,
-    usePaymaster = false,
+    paymaster,
   }: {
     signerAccount: LocalAccount;
     version?: LightAccountVersion<"LightAccount">;
     accountAddress?: Address;
-    usePaymaster?: boolean;
+    paymaster?: boolean;
   }) => {
     const account = await toLightAccount({
       client: createWalletClient({
@@ -461,9 +464,14 @@ describe("Light Account Tests", () => {
       account,
       transport: custom(client.transport),
       chain: client.chain,
-      paymaster: usePaymaster ? true : undefined,
+      paymaster: paymaster
+        ? createPaymasterClient({
+            transport: custom(client.transport),
+          })
+        : undefined,
+      paymasterContext: paymaster ? { policyId: "test-policy" } : undefined,
       userOperation: {
-        estimateFeesPerGas: alchemyEstimateFeesPerGas,
+        estimateFeesPerGas,
       },
     }).extend((client) => singleOwnerLightAccountActions(client));
   };

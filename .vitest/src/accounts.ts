@@ -10,6 +10,7 @@ import {
   type Chain,
   type Client,
   type PublicClient,
+  type TestClient,
   type Transport,
 } from "viem";
 import { setBalance } from "viem/actions";
@@ -52,7 +53,7 @@ export async function resetBalance<
     await client.waitForUserOperationTransaction({ hash });
   }
 
-  await setBalance(testClient, {
+  await setBalance(testClient as TestClient, {
     address: client.account.address,
     value: 0n,
   });
