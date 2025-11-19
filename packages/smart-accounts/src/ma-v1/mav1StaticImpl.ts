@@ -34,9 +34,7 @@ export const multiOwnerLightAccountStaticImplV2_0_0: StaticSmartAccountImplement
       args: [factoryArgs.salt, factoryArgs.owners],
     });
   },
-  accountImplementation: lowerAddress(
-    "0xTODO", // TODO(jh): where does this come from?
-  ),
+  accountImplementation: lowerAddress(DefaultAddress.IMPLEMENTATION_ADDRESS),
   factoryAddress: lowerAddress(DefaultAddress.MULTI_OWNER_MAV1_FACTORY),
   predictAccountAddress: (args) => {
     return predictMultiOwnerModularAccountV1Address({
