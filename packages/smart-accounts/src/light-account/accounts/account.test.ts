@@ -184,6 +184,37 @@ describe("Light Account Tests", () => {
   );
 
   it.each(versions)(
+    "should correctly encode and decode a single call transaction with value",
+    async (version) => {
+      const provider = await givenConnectedProvider({ signerAccount, version });
+      const data = [
+        {
+          to: "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
+          data: "0xdeadbeef",
+          value: parseEther("1"),
+        },
+      ] satisfies Call[];
+
+      const encoded = await provider.account.encodeCalls(data);
+
+      expect(encoded).toBe(
+        "0xb61d27f6000000000000000000000000deadbeefdeadbeefdeadbeefdeadbeefdeadbeef0000000000000000000000000000000000000000000000000de0b6b3a764000000000000000000000000000000000000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000004deadbeef00000000000000000000000000000000000000000000000000000000",
+      );
+
+      expect(provider.account.decodeCalls).toBeDefined();
+
+      const decoded = await provider.account.decodeCalls!(encoded);
+
+      expect(decoded.length).toEqual(data.length);
+      expect(decoded[0].to.toLowerCase()).toEqual(data[0].to.toLowerCase());
+      expect(decoded[0].value).toBe(parseEther("1"));
+      expect(decoded[0].data?.toLowerCase()).toEqual(
+        data[0].data?.toLowerCase(),
+      );
+    },
+  );
+
+  it.each(versions)(
     "should correctly encode and decode batch transaction data",
     async (version) => {
       const provider = await givenConnectedProvider({ signerAccount, version });

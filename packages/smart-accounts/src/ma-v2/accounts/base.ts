@@ -372,15 +372,15 @@ export async function toModularAccountV2Base<
     async decodeCalls(data) {
       // Inverse of `encodeCalls`.
       // Trim the EXECUTE_USER_OP_SELECTOR if it is present.
-      if (
-        data.toLowerCase().startsWith(EXECUTE_USER_OP_SELECTOR.toLowerCase())
-      ) {
-        data = sliceHex(data, 4);
-      }
+      const trimmedData = data
+        .toLowerCase()
+        .startsWith(EXECUTE_USER_OP_SELECTOR.toLowerCase())
+        ? sliceHex(data, 4)
+        : data;
 
       const decoded = decodeFunctionData({
         abi: modularAccountAbi,
-        data,
+        data: trimmedData,
       });
 
       if (decoded.functionName === "execute") {
