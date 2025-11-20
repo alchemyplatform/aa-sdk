@@ -23,6 +23,8 @@ import {
   type TestActions,
   parseAbi,
   createPublicClient,
+  serializeErc6492Signature,
+  serializeErc8010Signature,
 } from "viem";
 import {
   createBundlerClient,
@@ -56,6 +58,8 @@ import { TimeRangeModule } from "../modules/time-range-module/module.js";
 import { getMAV2UpgradeToData } from "../utils/account.js";
 import { packAccountGasLimits, packPaymasterData } from "../../utils.js";
 import { estimateFeesPerGas } from "@alchemy/aa-infra";
+import { toWebAuthnSignature } from "../utils/signature.js";
+import { raise } from "@alchemy/common";
 import * as WebAuthnP256 from "ox/WebAuthnP256";
 import { EXECUTE_USER_OP_SELECTOR } from "../utils/account.js";
 
@@ -357,97 +361,85 @@ describe("MA v2 Account Tests", async () => {
     });
   });
 
-  // TODO(v5): debug these webauthn signing methods (they didn't work in v4 tests either).
-  // it(
-  //   "successfully sign and validate a message, for WebAuthn account",
-  //   async () => {
-  //     const credential = await givenWebauthnCredential();
+  it("successfully sign and validate a message with EIP-1271 using WebAuthn account", async () => {
+    const credential = await givenWebauthnCredential();
 
-  //     const provider = await givenConnectedProvider({
-  //       signer: toWebAuthnAccount(credential),
-  //     });
+    const provider = await givenConnectedProvider({
+      signer: toWebAuthnAccount(credential),
+    });
 
-  //     await setBalance(instance.getClient(), {
-  //       address: provider.account.address,
-  //       value: parseEther("2"),
-  //     });
+    const message = "0xdecafbad";
 
-  //     const message = "0xdecafbad";
+    // WebAuthn signMessage automatically wraps the message in EIP-712
+    // ReplaySafeHash format and returns a properly formatted signature.
+    const signature = await provider.account.signMessage({ message });
 
-  //     const signature = await provider.account.signMessage({ message });
+    const publicClient = createPublicClient({
+      chain: instance.chain,
+      transport: custom(instance.getClient()),
+    });
+    const isValid = await publicClient.verifyMessage({
+      address: provider.account.address,
+      message,
+      signature,
+    });
+    expect(isValid).toBe(true);
+  });
 
-  //     const publicClient = instance.getClient().extend(publicActions);
+  it("successfully sign and validate typed data with EIP-1271 using WebAuthn account", async () => {
+    const credential = await givenWebauthnCredential();
 
-  //     const isValid = await publicClient.verifyMessage({
-  //       message,
-  //       address: provider.account.address,
-  //       signature,
-  //     });
+    const provider = await givenConnectedProvider({
+      signer: toWebAuthnAccount(credential),
+    });
 
-  //     expect(isValid).toBe(true);
-  //   },
-  // );
+    const typedData = {
+      domain: {
+        name: "Ether Mail",
+        version: "1",
+        chainId: 1,
+        verifyingContract: "0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC",
+      },
+      types: {
+        Person: [
+          { name: "name", type: "string" },
+          { name: "wallet", type: "address" },
+        ],
+        Mail: [
+          { name: "from", type: "Person" },
+          { name: "to", type: "Person" },
+          { name: "contents", type: "string" },
+        ],
+      },
+      primaryType: "Mail",
+      message: {
+        from: {
+          name: "Cow",
+          wallet: "0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826",
+        },
+        to: {
+          name: "Bob",
+          wallet: "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
+        },
+        contents: "Hello, Bob!",
+      },
+    } as const;
 
-  // TODO(v5): debug these webauthn signing methods (they didn't work in v4 tests either).
-  // it(
-  //   "successfully sign and validate typed data, for WebAuthn account",
-  //   async () => {
-  //     const credential = await givenWebauthnCredential();
+    // WebAuthn signTypedData automatically wraps the typed data in EIP-712
+    // ReplaySafeHash format and returns a properly formatted signature.
+    const signature = await provider.account.signTypedData(typedData);
 
-  //     const provider = await givenConnectedProvider({
-  //       signer: toWebAuthnAccount(credential),
-  //     });
-
-  //     await setBalance(instance.getClient(), {
-  //       address: provider.account.address,
-  //       value: parseEther("2"),
-  //     });
-
-  //     const typedData = {
-  //       domain: {
-  //         name: "Ether Mail",
-  //         version: "1",
-  //         chainId: 1,
-  //         verifyingContract: "0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC",
-  //       },
-  //       types: {
-  //         Person: [
-  //           { name: "name", type: "string" },
-  //           { name: "wallet", type: "address" },
-  //         ],
-  //         Mail: [
-  //           { name: "from", type: "Person" },
-  //           { name: "to", type: "Person" },
-  //           { name: "contents", type: "string" },
-  //         ],
-  //       },
-  //       primaryType: "Mail",
-  //       message: {
-  //         from: {
-  //           name: "Cow",
-  //           wallet: "0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826",
-  //         },
-  //         to: {
-  //           name: "Bob",
-  //           wallet: "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
-  //         },
-  //         contents: "Hello, Bob!",
-  //       },
-  //     } as const;
-
-  //     const signature = await provider.account.signTypedData(typedData);
-
-  //     const publicClient = instance.getClient().extend(publicActions);
-
-  //     const isValid = await publicClient.verifyTypedData({
-  //       ...typedData,
-  //       address: provider.account.address,
-  //       signature,
-  //     });
-
-  //     expect(isValid).toBe(true);
-  //   },
-  // );
+    const publicClient = createPublicClient({
+      chain: instance.chain,
+      transport: custom(instance.getClient()),
+    });
+    const isValid = await publicClient.verifyTypedData({
+      ...typedData,
+      address: provider.account.address,
+      signature,
+    });
+    expect(isValid).toBe(true);
+  });
 
   it(
     "successfully sign and validate a message, for native and single signer validation",
@@ -628,6 +620,166 @@ describe("MA v2 Account Tests", async () => {
           sessionKeySignature,
         ]),
       ).resolves.toEqual(VALID_1271_SIG_MAGIC_BYTES);
+    },
+  );
+
+  it(
+    "should expose prepare and format functions that work for sma-b",
+    { retry: 3, timeout: 30_000 },
+    async () => {
+      const provider = await givenConnectedProvider({ signer: owner });
+
+      const message = "hello world";
+
+      const { type, data } = await provider.account.prepareSignature({
+        type: "personal_sign",
+        data: message,
+      });
+
+      const ownerSig = await (type === "personal_sign"
+        ? owner.signMessage({ message: data })
+        : owner.signTypedData(data));
+
+      // Viem's AA stack automatically serializes 6492 signatures whenever `SmartContractAccount.signMessage` is called,
+      // so we need to do that check separately when using prepare/format sign.
+      const [formattedSig, { factory, factoryData }] = await Promise.all([
+        provider.account.formatSignature(ownerSig),
+        provider.account.getFactoryArgs(),
+      ]);
+
+      const signature =
+        factory && factoryData
+          ? serializeErc6492Signature({
+              address: factory,
+              data: factoryData,
+              signature: formattedSig,
+            })
+          : formattedSig;
+
+      const publicClient = createPublicClient({
+        chain: instance.chain,
+        transport: custom(instance.getClient()),
+      });
+      const isValid = await publicClient.verifyMessage({
+        address: provider.account.address,
+        message,
+        signature,
+      });
+      expect(isValid).toBe(true);
+    },
+  );
+
+  it(
+    "should expose prepare and format functions that work for 7702",
+    { retry: 3, timeout: 30_000 },
+    async () => {
+      const publicClient = createPublicClient({
+        chain: instance.chain,
+        transport: custom(instance.getClient()),
+      });
+
+      const provider = await givenConnectedProvider({
+        signer: owner,
+        mode: "7702",
+      });
+
+      const message = "hello world";
+
+      const { type, data } = await provider.account.prepareSignature({
+        type: "personal_sign",
+        data: message,
+      });
+
+      const ownerSig = await (type === "personal_sign"
+        ? owner.signMessage({ message: data })
+        : owner.signTypedData(data));
+
+      const [formattedSig, ownerNonce] = await Promise.all([
+        provider.account.formatSignature(ownerSig),
+        await publicClient.getTransactionCount({
+          address: owner.address,
+          blockTag: "latest",
+        }),
+      ]);
+
+      const authorization = provider.account.authorization
+        ? await owner.signAuthorization?.({
+            ...provider.account.authorization,
+            chainId: provider.chain.id,
+            nonce: ownerNonce,
+          })
+        : raise("Owner is unable to sign authorization");
+
+      // For an undelegated 7702 account, we must serialize an ERC-8010 signature instead of 6492.
+      const signature = authorization
+        ? serializeErc8010Signature({
+            address: owner.address,
+            authorization,
+            signature: formattedSig,
+          })
+        : formattedSig;
+
+      const isValid = await publicClient.verifyMessage({
+        address: provider.account.address,
+        message,
+        signature,
+      });
+      expect(isValid).toBe(true);
+    },
+  );
+
+  it(
+    "should expose prepare and format functions that work using WebAuthn",
+    { retry: 3, timeout: 30_000 },
+    async () => {
+      const credential = await givenWebauthnCredential();
+
+      const provider = await givenConnectedProvider({
+        signer: toWebAuthnAccount(credential),
+      });
+
+      const message = "hello world";
+
+      const { type, data } = await provider.account.prepareSignature({
+        type: "personal_sign",
+        data: message,
+      });
+
+      if (type !== "eth_signTypedData_v4") {
+        throw new Error("Unexpected signature request type");
+      }
+
+      const webAuthnAccount = toWebAuthnAccount(credential);
+      const ownerSig = toWebAuthnSignature(
+        await webAuthnAccount.sign({ hash: hashTypedData(data) }),
+      );
+
+      // Viem's AA stack automatically serializes 6492 signatures whenever `SmartContractAccount.signMessage` is called,
+      // so we need to do that check separately when using prepare/format sign.
+      const [formattedSig, { factory, factoryData }] = await Promise.all([
+        provider.account.formatSignature(ownerSig),
+        provider.account.getFactoryArgs(),
+      ]);
+
+      const signature =
+        factory && factoryData
+          ? serializeErc6492Signature({
+              address: factory,
+              data: factoryData,
+              signature: formattedSig,
+            })
+          : formattedSig;
+
+      const publicClient = createPublicClient({
+        chain: instance.chain,
+        transport: custom(instance.getClient()),
+      });
+      const isValid = await publicClient.verifyMessage({
+        address: provider.account.address,
+        message,
+        signature,
+      });
+      expect(isValid).toBe(true);
     },
   );
 
