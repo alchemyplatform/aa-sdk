@@ -34,7 +34,7 @@ import {
   signMessage,
   signTypedData,
 } from "viem/actions";
-import { assertNever } from "@alchemy/common";
+import { assertNever, BaseError } from "@alchemy/common";
 import {
   SignaturePrefix,
   type ExecutionDataView,
