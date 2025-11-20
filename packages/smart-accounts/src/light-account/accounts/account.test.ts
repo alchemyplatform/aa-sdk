@@ -7,7 +7,10 @@ import {
   type Call,
   type LocalAccount,
 } from "viem";
-import { createBundlerClient } from "viem/account-abstraction";
+import {
+  createBundlerClient,
+  createPaymasterClient,
+} from "viem/account-abstraction";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import { setBalance } from "viem/actions";
 import { accounts } from "~test/constants.js";
@@ -16,7 +19,7 @@ import { singleOwnerLightAccountActions } from "../decorators/singleOwner.js";
 import type { LightAccountVersion } from "../registry.js";
 import { AccountVersionRegistry } from "../registry.js";
 import { toLightAccount } from "./account.js";
-import { alchemyEstimateFeesPerGas } from "@alchemy/aa-infra";
+import { estimateFeesPerGas } from "@alchemy/aa-infra";
 
 const versions = Object.keys(
   AccountVersionRegistry.LightAccount,
@@ -154,7 +157,68 @@ describe("Light Account Tests", () => {
   );
 
   it.each(versions)(
-    "should correctly encode batch transaction data",
+    "should correctly encode and decode a single call transaction",
+    async (version) => {
+      const provider = await givenConnectedProvider({ signerAccount, version });
+      const data = [
+        {
+          to: "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
+          data: "0xdeadbeef",
+        },
+      ] satisfies Call[];
+
+      const encoded = await provider.account.encodeCalls(data);
+
+      expect(encoded).toBe(
+        "0xb61d27f6000000000000000000000000deadbeefdeadbeefdeadbeefdeadbeefdeadbeef000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000004deadbeef00000000000000000000000000000000000000000000000000000000",
+      );
+
+      expect(provider.account.decodeCalls).toBeDefined();
+
+      const decoded = await provider.account.decodeCalls!(encoded);
+
+      expect(decoded.length).toEqual(data.length);
+      expect(decoded[0].to.toLowerCase()).toEqual(data[0].to.toLowerCase());
+      expect(decoded[0].value).toBe(0n);
+      expect(decoded[0].data?.toLowerCase()).toEqual(
+        data[0].data?.toLowerCase(),
+      );
+    },
+  );
+
+  it.each(versions)(
+    "should correctly encode and decode a single call transaction with value",
+    async (version) => {
+      const provider = await givenConnectedProvider({ signerAccount, version });
+      const data = [
+        {
+          to: "0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
+          data: "0xdeadbeef",
+          value: parseEther("1"),
+        },
+      ] satisfies Call[];
+
+      const encoded = await provider.account.encodeCalls(data);
+
+      expect(encoded).toBe(
+        "0xb61d27f6000000000000000000000000deadbeefdeadbeefdeadbeefdeadbeefdeadbeef0000000000000000000000000000000000000000000000000de0b6b3a764000000000000000000000000000000000000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000004deadbeef00000000000000000000000000000000000000000000000000000000",
+      );
+
+      expect(provider.account.decodeCalls).toBeDefined();
+
+      const decoded = await provider.account.decodeCalls!(encoded);
+
+      expect(decoded.length).toEqual(data.length);
+      expect(decoded[0].to.toLowerCase()).toEqual(data[0].to.toLowerCase());
+      expect(decoded[0].value).toBe(parseEther("1"));
+      expect(decoded[0].data?.toLowerCase()).toEqual(
+        data[0].data?.toLowerCase(),
+      );
+    },
+  );
+
+  it.each(versions)(
+    "should correctly encode and decode batch transaction data",
     async (version) => {
       const provider = await givenConnectedProvider({ signerAccount, version });
       const data = [
@@ -168,8 +232,26 @@ describe("Light Account Tests", () => {
         },
       ] satisfies Call[];
 
-      expect(await provider.account.encodeCalls(data)).toBe(
-        "0x47e1da2a000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000001200000000000000000000000000000000000000000000000000000000000000002000000000000000000000000deadbeefdeadbeefdeadbeefdeadbeefdeadbeef0000000000000000000000008ba1f109551bd432803012645ac136ddd64dba720000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000004deadbeef000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004cafebabe00000000000000000000000000000000000000000000000000000000",
+      const encoded = await provider.account.encodeCalls(data);
+
+      expect(encoded).toBe(
+        "0x18dfb3c7000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000a00000000000000000000000000000000000000000000000000000000000000002000000000000000000000000deadbeefdeadbeefdeadbeefdeadbeefdeadbeef0000000000000000000000008ba1f109551bd432803012645ac136ddd64dba720000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000004deadbeef000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004cafebabe00000000000000000000000000000000000000000000000000000000",
+      );
+
+      expect(provider.account.decodeCalls).toBeDefined();
+
+      const decoded = await provider.account.decodeCalls!(encoded);
+
+      expect(decoded.length).toEqual(data.length);
+      expect(decoded[0].to.toLowerCase()).toEqual(data[0].to.toLowerCase());
+      expect(decoded[0].value).toBeUndefined();
+      expect(decoded[0].data?.toLowerCase()).toEqual(
+        data[0].data?.toLowerCase(),
+      );
+      expect(decoded[1].to.toLowerCase()).toEqual(data[1].to.toLowerCase());
+      expect(decoded[1].value).toBeUndefined();
+      expect(decoded[1].data?.toLowerCase()).toEqual(
+        data[1].data?.toLowerCase(),
       );
     },
   );
@@ -268,7 +350,7 @@ describe("Light Account Tests", () => {
   it("should successfully execute with paymaster info using erc-7677 middleware", async () => {
     const provider = await givenConnectedProvider({
       signerAccount,
-      usePaymaster: true,
+      paymaster: true,
     });
 
     await setBalance(instance.getClient(), {
@@ -360,12 +442,12 @@ describe("Light Account Tests", () => {
     version = "v1.1.0",
     accountAddress,
     signerAccount,
-    usePaymaster = false,
+    paymaster,
   }: {
     signerAccount: LocalAccount;
     version?: LightAccountVersion<"LightAccount">;
     accountAddress?: Address;
-    usePaymaster?: boolean;
+    paymaster?: boolean;
   }) => {
     const account = await toLightAccount({
       client: createWalletClient({
@@ -382,9 +464,14 @@ describe("Light Account Tests", () => {
       account,
       transport: custom(client.transport),
       chain: client.chain,
-      paymaster: usePaymaster ? true : undefined,
+      paymaster: paymaster
+        ? createPaymasterClient({
+            transport: custom(client.transport),
+          })
+        : undefined,
+      paymasterContext: paymaster ? { policyId: "test-policy" } : undefined,
       userOperation: {
-        estimateFeesPerGas: alchemyEstimateFeesPerGas,
+        estimateFeesPerGas,
       },
     }).extend((client) => singleOwnerLightAccountActions(client));
   };

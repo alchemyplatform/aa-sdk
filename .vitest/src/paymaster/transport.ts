@@ -23,12 +23,16 @@ export const paymasterTransport = (
   custom({
     request: async (args) => {
       if (args.method === "pm_getPaymasterStubData") {
-        const [, entrypoint] = args.params as [
+        const [, entrypoint, , context] = args.params as [
           UserOperationRequest,
           Address,
           Hex,
-          Record<string, any>,
+          { policyId?: string | string[] },
         ];
+
+        if (!context.policyId?.length) {
+          throw new Error("policyId is required for paymaster sponsorship");
+        }
 
         try {
           if (
@@ -44,12 +48,16 @@ export const paymasterTransport = (
           throw e;
         }
       } else if (args.method === "pm_getPaymasterData") {
-        const [uo, entrypoint] = args.params as [
+        const [uo, entrypoint, , context] = args.params as [
           UserOperationRequest,
           Address,
           Hex,
-          Record<string, any>,
+          { policyId?: string | string[] },
         ];
+
+        if (!context.policyId?.length) {
+          throw new Error("policyId is required for paymaster sponsorship");
+        }
 
         try {
           if (
@@ -78,6 +86,10 @@ export const paymasterTransport = (
                 dummySignature: Hex;
                 userOperation: UserOperationRequest;
                 overrides?: UserOperationOverrides;
+                erc20Context?: {
+                  tokenAddress: Address;
+                  maxTokenAmount?: string;
+                };
               },
             ];
           const isPMv7 =

@@ -1,35 +1,22 @@
 import { getBlock } from "viem/actions";
 import {
-  fromHex,
   type Client,
-  rpcSchema,
   isHex,
   type Transport,
   type Chain,
   type Account,
+  hexToBigInt,
 } from "viem";
 import type {
   UserOperationRequest,
   SmartAccount,
 } from "viem/account-abstraction";
-import { BaseError, bigIntMultiply } from "@alchemy/common";
-import type { RundlerRpcSchema } from "../schema.js";
+import { bigIntMultiply } from "@alchemy/common";
+import type { RundlerRpcSchema } from "./schema.js";
+import { InvalidHexValueError } from "./errors.js";
 
-export const alchemyRpcSchema = rpcSchema<RundlerRpcSchema>();
-
-/**
- * Error thrown when an invalid hex value is encountered during fee estimation.
- */
-export class InvalidHexValueError extends BaseError {
-  override name = "InvalidHexValueError";
-
-  constructor(value: unknown) {
-    super(`Invalid hex value: ${value}`);
-  }
-}
-
-// Extend viem's Client with a typed rundler RPC method.
-export type PriorityFeeClient<
+// Extend client with Rundler rpc schema.
+export type RundlerClient<
   transport extends Transport = Transport,
   chain extends Chain | undefined = Chain | undefined,
   account extends Account | undefined = Account | undefined,
@@ -44,7 +31,7 @@ export type PriorityFeeClient<
  *
  * It then returns `maxFeePerGas = baseFee * 1.5 + priority` (aligns with viem default).
  *
- * @param {PriorityFeeClient} bundlerClient Bundler client with the rundler RPC method.
+ * @param {RundlerClient} bundlerClient Bundler client with the rundler RPC method.
  * @returns {Promise<{maxFeePerGas: bigint, maxPriorityFeePerGas: bigint}>} Estimated fee values.
  *
  * @example
@@ -60,7 +47,7 @@ export type PriorityFeeClient<
  * });
  * ```
  */
-export async function alchemyEstimateFeesPerGas<
+export async function estimateFeesPerGas<
   TTransport extends Transport = Transport,
   TChain extends Chain | undefined = Chain | undefined,
   TAccount extends Account | undefined = Account | undefined,
@@ -69,15 +56,15 @@ export async function alchemyEstimateFeesPerGas<
   account: _account,
   userOperation: _userOperation,
 }: {
-  bundlerClient: PriorityFeeClient<TTransport, TChain, TAccount>;
+  bundlerClient: RundlerClient<TTransport, TChain, TAccount>;
   account?: SmartAccount;
   userOperation?: UserOperationRequest;
 }): Promise<{
   maxFeePerGas: bigint;
   maxPriorityFeePerGas: bigint;
 }> {
-  const [block, maxPriorityFeePerGasEstimate] = await Promise.all([
-    getBlock(bundlerClient, { blockTag: "latest" }),
+  const [block, maxPriorityFeePerGasHex] = await Promise.all([
+    getBlock(bundlerClient, { blockTag: "latest" }), // This is technically hitting the node rpc, not rundler.
     bundlerClient.request({
       method: "rundler_maxPriorityFeePerGas",
       params: [],
@@ -85,16 +72,16 @@ export async function alchemyEstimateFeesPerGas<
   ]);
 
   const baseFeePerGas = block.baseFeePerGas;
-  if (baseFeePerGas == null) throw new Error("baseFeePerGas is null");
-  if (maxPriorityFeePerGasEstimate == null)
+  if (baseFeePerGas == null) {
+    throw new Error("baseFeePerGas is null");
+  }
+  if (maxPriorityFeePerGasHex == null) {
     throw new Error("rundler_maxPriorityFeePerGas returned null or undefined");
-
-  // With RpcUserOperation typing, this should always be a hex string
-  const maxPriorityFeePerGas = isHex(maxPriorityFeePerGasEstimate)
-    ? fromHex(maxPriorityFeePerGasEstimate, "bigint")
-    : (() => {
-        throw new InvalidHexValueError(maxPriorityFeePerGasEstimate);
-      })();
+  }
+  if (!isHex(maxPriorityFeePerGasHex)) {
+    throw new InvalidHexValueError(maxPriorityFeePerGasHex);
+  }
+  const maxPriorityFeePerGas = hexToBigInt(maxPriorityFeePerGasHex);
 
   return {
     maxPriorityFeePerGas,

@@ -2,6 +2,7 @@ import {
   createWalletClient,
   custom,
   parseEther,
+  type Call,
   publicActions,
   testActions,
   type Address,
@@ -29,9 +30,10 @@ import {
   createWebAuthnCredential,
   toWebAuthnAccount,
   type WebAuthnAccount,
+  createPaymasterClient,
 } from "viem/account-abstraction";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
-import { setBalance } from "viem/actions";
+import { getBalance, setBalance } from "viem/actions";
 import { parsePublicKey } from "webauthn-p256";
 import { local070Instance } from "~test/instances.js";
 import { paymaster070 } from "~test/paymaster/paymaster070.js";
@@ -53,7 +55,9 @@ import { NativeTokenLimitModule } from "../modules/native-token-limit-module/mod
 import { TimeRangeModule } from "../modules/time-range-module/module.js";
 import { getMAV2UpgradeToData } from "../utils/account.js";
 import { packAccountGasLimits, packPaymasterData } from "../../utils.js";
-import { alchemyEstimateFeesPerGas } from "@alchemy/aa-infra";
+import { estimateFeesPerGas } from "@alchemy/aa-infra";
+import * as WebAuthnP256 from "ox/WebAuthnP256";
+import { EXECUTE_USER_OP_SELECTOR } from "../utils/account.js";
 
 // Note: These tests maintain a shared state to not break the local-running rundler by desyncing the chain.
 describe("MA v2 Account Tests", async () => {
@@ -74,7 +78,7 @@ describe("MA v2 Account Tests", async () => {
   let owner: LocalAccount;
   let sessionKey: LocalAccount;
 
-  const target = "0x000000000000000000000000000000000000dEaD";
+  const target = "0x000000000000000000000000000000000000dEaD" as Address;
   const sendAmount = parseEther("1");
 
   const getTargetBalance = async (): Promise<bigint> =>
@@ -85,6 +89,111 @@ describe("MA v2 Account Tests", async () => {
   beforeEach(async () => {
     owner = privateKeyToAccount(generatePrivateKey());
     sessionKey = privateKeyToAccount(generatePrivateKey());
+  });
+
+  it("should correctly encode and decode a single call transaction data", async () => {
+    const provider = await givenConnectedProvider({ signer: owner });
+    const data = [
+      {
+        to: target,
+        data: "0xdeadbeef" as Hex,
+      },
+    ] satisfies Call[];
+
+    const encoded = await provider.account.encodeCalls(data);
+
+    expect(encoded).toBe(
+      "0xb61d27f6000000000000000000000000000000000000000000000000000000000000dead000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000004deadbeef00000000000000000000000000000000000000000000000000000000",
+    );
+
+    expect(provider.account.decodeCalls).toBeDefined();
+
+    const decoded = await provider.account.decodeCalls!(encoded);
+
+    // Test again, with `executeUserOp` selector prepended.
+    const encodedWithSelector = concatHex([EXECUTE_USER_OP_SELECTOR, encoded]);
+    const decodedWithSelector =
+      await provider.account.decodeCalls!(encodedWithSelector);
+
+    expect(decodedWithSelector).toEqual(decoded);
+
+    expect(decoded.length).toEqual(data.length);
+    expect(decoded[0].to.toLowerCase()).toEqual(data[0].to.toLowerCase());
+    expect(decoded[0].value).toBe(0n);
+    expect(decoded[0].data?.toLowerCase()).toEqual(data[0].data?.toLowerCase());
+  });
+
+  it("should correctly encode and decode a single call transaction with value", async () => {
+    const provider = await givenConnectedProvider({ signer: owner });
+    const data = [
+      {
+        to: target,
+        data: "0xdeadbeef" as Hex,
+        value: parseEther("1"),
+      },
+    ] satisfies Call[];
+
+    const encoded = await provider.account.encodeCalls(data);
+
+    expect(encoded).toBe(
+      "0xb61d27f6000000000000000000000000000000000000000000000000000000000000dead0000000000000000000000000000000000000000000000000de0b6b3a764000000000000000000000000000000000000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000004deadbeef00000000000000000000000000000000000000000000000000000000",
+    );
+
+    expect(provider.account.decodeCalls).toBeDefined();
+
+    const decoded = await provider.account.decodeCalls!(encoded);
+
+    // Test again, with `executeUserOp` selector prepended.
+    const encodedWithSelector = concatHex([EXECUTE_USER_OP_SELECTOR, encoded]);
+    const decodedWithSelector =
+      await provider.account.decodeCalls!(encodedWithSelector);
+
+    expect(decodedWithSelector).toEqual(decoded);
+
+    expect(decoded.length).toEqual(data.length);
+    expect(decoded[0].to.toLowerCase()).toEqual(data[0].to.toLowerCase());
+    expect(decoded[0].value).toBe(parseEther("1"));
+    expect(decoded[0].data?.toLowerCase()).toEqual(data[0].data?.toLowerCase());
+  });
+
+  it("should correctly encode and decode a batch call transaction data", async () => {
+    const provider = await givenConnectedProvider({ signer: owner });
+    const data = [
+      {
+        to: target,
+        data: "0xdeadbeef" as Hex,
+      },
+      {
+        to: target,
+        value: parseEther("1"),
+        data: "0xcafebabe" as Hex,
+      },
+    ] satisfies Call[];
+
+    const encoded = await provider.account.encodeCalls(data);
+
+    expect(encoded).toBe(
+      "0x34fcd5be00000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000e0000000000000000000000000000000000000000000000000000000000000dead000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000004deadbeef00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000dead0000000000000000000000000000000000000000000000000de0b6b3a764000000000000000000000000000000000000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000004cafebabe00000000000000000000000000000000000000000000000000000000",
+    );
+
+    expect(provider.account.decodeCalls).toBeDefined();
+
+    const decoded = await provider.account.decodeCalls!(encoded);
+
+    // Test again, with `executeUserOp` selector prepended.
+    const encodedWithSelector = concatHex([EXECUTE_USER_OP_SELECTOR, encoded]);
+    const decodedWithSelector =
+      await provider.account.decodeCalls!(encodedWithSelector);
+
+    expect(decodedWithSelector).toEqual(decoded);
+
+    expect(decoded.length).toEqual(data.length);
+    expect(decoded[0].to.toLowerCase()).toEqual(data[0].to.toLowerCase());
+    expect(decoded[0].value).toBe(0n);
+    expect(decoded[0].data?.toLowerCase()).toEqual(data[0].data?.toLowerCase());
+    expect(decoded[1].to.toLowerCase()).toEqual(data[1].to.toLowerCase());
+    expect(decoded[1].value).toBe(parseEther("1"));
+    expect(decoded[1].data?.toLowerCase()).toEqual(data[1].data?.toLowerCase());
   });
 
   it("sends a simple UO", { retry: 3, timeout: 30_000 }, async () => {
@@ -115,6 +224,40 @@ describe("MA v2 Account Tests", async () => {
     await expect(getTargetBalance()).resolves.toEqual(
       startingAddressBalance + sendAmount,
     );
+  });
+
+  it("sends a sponsored UO", { retry: 3, timeout: 30_000 }, async () => {
+    const provider = await givenConnectedProvider({
+      signer: owner,
+      paymaster: true,
+    });
+
+    const startingBalance = parseEther("20");
+
+    await setBalance(instance.getClient(), {
+      address: provider.account.address,
+      value: startingBalance,
+    });
+
+    const hash = await provider.sendUserOperation({
+      calls: [
+        {
+          to: target,
+          value: sendAmount,
+          data: "0x",
+        },
+      ],
+    });
+
+    await provider.waitForUserOperationReceipt({
+      hash,
+      timeout: 30_000,
+    });
+
+    // Confirms that the sender didn't pay any gas fees.
+    await expect(
+      getBalance(client, { address: provider.account.address }),
+    ).resolves.toEqual(startingBalance - sendAmount);
   });
 
   it(
@@ -1033,7 +1176,7 @@ describe("MA v2 Account Tests", async () => {
     const provider = (
       await givenConnectedProvider({
         signer: owner,
-        paymasterMiddleware: "erc7677",
+        paymaster: true,
       })
     ).extend(installValidationActions);
 
@@ -1084,7 +1227,7 @@ describe("MA v2 Account Tests", async () => {
       await givenConnectedProvider({
         signer: sessionKey,
         accountAddress: provider.account.address,
-        paymasterMiddleware: "erc7677",
+        paymaster: true,
         signerEntity: { entityId: 1, isGlobalValidation: true },
       })
     ).extend(installValidationActions);
@@ -1129,7 +1272,7 @@ describe("MA v2 Account Tests", async () => {
     const provider = (
       await givenConnectedProvider({
         signer: owner,
-        paymasterMiddleware: "erc7677",
+        paymaster: true,
       })
     ).extend(installValidationActions);
 
@@ -1889,7 +2032,7 @@ describe("MA v2 Account Tests", async () => {
       transport: custom(instance.getClient()),
       chain: instance.chain,
       userOperation: {
-        estimateFeesPerGas: alchemyEstimateFeesPerGas,
+        estimateFeesPerGas,
       },
     });
 
@@ -2013,7 +2156,7 @@ describe("MA v2 Account Tests", async () => {
       user: { name: "test", displayName: "test" },
     });
 
-    const getFn = (opts: CredentialRequestOptions | undefined) =>
+    const getFn: WebAuthnP256.sign.Options["getFn"] = (opts) =>
       webauthnDevice.get(opts, "localhost");
 
     return { credential, getFn, rpId: "localhost" };
@@ -2023,7 +2166,7 @@ describe("MA v2 Account Tests", async () => {
     signer,
     signerEntity,
     accountAddress,
-    paymasterMiddleware,
+    paymaster,
     factoryArgs,
     deferredAction,
     mode,
@@ -2031,7 +2174,7 @@ describe("MA v2 Account Tests", async () => {
     signer: LocalAccount | WebAuthnAccount;
     signerEntity?: { entityId: number; isGlobalValidation: boolean };
     accountAddress?: Address;
-    paymasterMiddleware?: "erc7677";
+    paymaster?: boolean;
     factoryArgs?: { factory?: Address; factoryData?: Hex };
     deferredAction?: Hex;
     mode?: "default" | "7702";
@@ -2053,9 +2196,14 @@ describe("MA v2 Account Tests", async () => {
       account,
       transport: custom(instance.getClient()),
       chain: instance.chain,
-      paymaster: paymasterMiddleware === "erc7677" ? true : undefined,
+      paymaster: paymaster
+        ? createPaymasterClient({
+            transport: custom(instance.getClient()),
+          })
+        : undefined,
+      paymasterContext: paymaster ? { policyId: "test-policy" } : undefined,
       userOperation: {
-        estimateFeesPerGas: alchemyEstimateFeesPerGas,
+        estimateFeesPerGas,
       },
     });
   };

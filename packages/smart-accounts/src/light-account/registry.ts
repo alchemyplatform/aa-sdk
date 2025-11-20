@@ -37,6 +37,15 @@ export type LightAccountVersion<TAccountType extends LightAccountType> =
 export type GetLightAccountType<TAccount extends LightAccountBase> =
   TAccount["source"] extends LightAccountType ? TAccount["source"] : never;
 
+export type LightAccountAbi<
+  TAccountType extends LightAccountType,
+  TAccountVersion extends LightAccountVersion<TAccountType>,
+> = TAccountVersion extends keyof (typeof AccountVersionRegistry)[TAccountType]
+  ? (typeof AccountVersionRegistry)[TAccountType][TAccountVersion] extends StaticSmartAccountImplementation
+    ? (typeof AccountVersionRegistry)[TAccountType][TAccountVersion]["accountAbi"]
+    : never
+  : never;
+
 /**
  * Infers the EntryPoint details as a type, given the account type and version.
  */
