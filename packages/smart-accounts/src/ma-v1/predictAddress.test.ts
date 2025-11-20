@@ -6,7 +6,7 @@ import {
   type LocalAccount,
 } from "viem";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
-import { entryPoint07Address, entryPoint07Abi } from "viem/account-abstraction";
+import { entryPoint06Address, entryPoint06Abi } from "viem/account-abstraction";
 import { local060Instance } from "~test/instances.js";
 import { toMultiOwnerModularAccountV1 } from "./accounts/multi-owner-account.js";
 import { predictMultiOwnerModularAccountV1Address } from "./predictAddress.js";
@@ -48,8 +48,8 @@ describe("MAv1 Counterfactual Address Tests", () => {
       // Compute the address using the EntryPoint's getSenderAddress function
       const entryPointComputedAddress = await getAccountAddressViaEntryPoint({
         client: instanceV060.getClient(),
-        entryPointAddress: entryPoint07Address,
-        entryPointAbi: entryPoint07Abi,
+        entryPointAddress: entryPoint06Address,
+        entryPointAbi: entryPoint06Abi,
         getAccountInitCode: async () => {
           return concatHex([
             (await multiOwnerAccountV1.getFactoryArgs()).factory!,
