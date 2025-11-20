@@ -6,7 +6,7 @@ import {
   concatHex,
   type Hex,
 } from "viem";
-import { DefaultAddress } from "./utils/account.js";
+import { DefaultMaV1Address } from "./account.js";
 import { BaseError } from "@alchemy/common";
 
 export type PredictMultiOwnerModularAccountV1AddressParams = {
@@ -40,7 +40,7 @@ export type PredictMultiOwnerModularAccountV1AddressParams = {
 export const predictMultiOwnerModularAccountV1Address = ({
   salt,
   ownerAddresses,
-  factoryAddress = DefaultAddress.MULTI_OWNER_MAV1_FACTORY,
+  factoryAddress = DefaultMaV1Address.MULTI_OWNER_MAV1_FACTORY,
 }: PredictMultiOwnerModularAccountV1AddressParams): Address => {
   if (ownerAddresses.length === 0) {
     throw new BaseError("Owners array cannot be empty");
@@ -52,7 +52,7 @@ export const predictMultiOwnerModularAccountV1Address = ({
   const combinedSalt = getCombinedSalt(salt, ownerAddresses);
 
   const initCodeHash = getERC1967ProxyInitCodeHash(
-    DefaultAddress.IMPLEMENTATION_ADDRESS,
+    DefaultMaV1Address.IMPLEMENTATION_ADDRESS,
   );
 
   return getContractAddress({

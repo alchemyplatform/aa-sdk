@@ -24,7 +24,7 @@ import {
 } from "viem/account-abstraction";
 import { estimateFeesPerGas } from "@alchemy/aa-infra";
 import { toMultiOwnerModularAccountV1 } from "./multi-owner-account.js";
-import { multiOwnerModularAccountV1Actions } from "./decorators/multiOwner.js";
+import { multiOwnerModularAccountV1Actions } from "../decorators/multiOwner.js";
 import { setBalance } from "viem/actions";
 
 // Note: These tests maintain a shared state to not break the local-running rundler by desyncing the chain.

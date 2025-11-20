@@ -4,7 +4,7 @@ import { lowerAddress } from "@alchemy/common";
 import type { StaticSmartAccountImplementation } from "../types";
 import { MultiOwnerModularAccountFactoryAbi } from "./abis/MultiOwnerModularAccountFactory.js";
 import { UpgradeableModularAccountAbi } from "./abis/UpgradeableModularAccount.js";
-import { DefaultAddress } from "./utils/account.js";
+import { DefaultMaV1Address } from "./account.js";
 import { predictMultiOwnerModularAccountV1Address } from "./predictAddress.js";
 
 export type MultiOwnerModularAccountV1FactoryArgs = {
@@ -12,7 +12,12 @@ export type MultiOwnerModularAccountV1FactoryArgs = {
   salt: bigint;
 };
 
-export const multiOwnerLightAccountStaticImplV2_0_0: StaticSmartAccountImplementation<
+/**
+ * Static implementation logic for ModularAccountV1.
+ *
+ * TODO(v5): update JSDoc format when doc-gen supports structs or records.
+ */
+export const multiOwnerModularAccountStaticImpl: StaticSmartAccountImplementation<
   false,
   "0.6",
   MultiOwnerModularAccountV1FactoryArgs,
@@ -34,13 +39,15 @@ export const multiOwnerLightAccountStaticImplV2_0_0: StaticSmartAccountImplement
       args: [factoryArgs.salt, factoryArgs.owners],
     });
   },
-  accountImplementation: lowerAddress(DefaultAddress.IMPLEMENTATION_ADDRESS),
-  factoryAddress: lowerAddress(DefaultAddress.MULTI_OWNER_MAV1_FACTORY),
+  accountImplementation: lowerAddress(
+    DefaultMaV1Address.IMPLEMENTATION_ADDRESS,
+  ),
+  factoryAddress: lowerAddress(DefaultMaV1Address.MULTI_OWNER_MAV1_FACTORY),
   predictAccountAddress: (args) => {
     return predictMultiOwnerModularAccountV1Address({
       salt: args.salt,
       ownerAddresses: args.owners,
-      factoryAddress: DefaultAddress.MULTI_OWNER_MAV1_FACTORY,
+      factoryAddress: DefaultMaV1Address.MULTI_OWNER_MAV1_FACTORY,
     });
   },
 };

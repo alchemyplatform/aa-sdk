@@ -8,9 +8,9 @@ import {
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import { entryPoint07Address, entryPoint07Abi } from "viem/account-abstraction";
 import { local060Instance } from "~test/instances.js";
-import { toMultiOwnerModularAccountV1 } from "./multi-owner-account.js";
+import { toMultiOwnerModularAccountV1 } from "./accounts/multi-owner-account.js";
 import { predictMultiOwnerModularAccountV1Address } from "./predictAddress.js";
-import { DefaultAddress } from "./utils/account.js";
+import { DefaultMaV1Address } from "./account.js";
 import { getAccountAddressViaEntryPoint } from "../test-utils/getAccountAddressViaEntryPoint.js";
 
 describe("MAv1 Counterfactual Address Tests", () => {
@@ -73,7 +73,7 @@ describe("MAv1 Counterfactual Address Tests", () => {
         });
 
       const locallyComputedAddress = predictMultiOwnerModularAccountV1Address({
-        factoryAddress: DefaultAddress.MULTI_OWNER_MAV1_FACTORY,
+        factoryAddress: DefaultMaV1Address.MULTI_OWNER_MAV1_FACTORY,
         salt,
         ownerAddresses: owners_,
       });

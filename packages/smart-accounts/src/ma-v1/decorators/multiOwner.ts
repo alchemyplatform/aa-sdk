@@ -3,7 +3,7 @@ import { sendUserOperation, type SmartAccount } from "viem/account-abstraction";
 import { getAction } from "viem/utils";
 import type { GetAccountParameter } from "../../types.js";
 import { AccountNotFoundError } from "@alchemy/common";
-import type { MultiOwnerModularAccountV1 } from "../multi-owner-account.js";
+import type { MultiOwnerModularAccountV1 } from "../accounts/multi-owner-account.js";
 
 export type MultiOwnerModularAccountV1Actions<
   TAccount extends MultiOwnerModularAccountV1 | undefined =

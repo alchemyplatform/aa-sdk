@@ -14,13 +14,13 @@ import {
 } from "viem";
 import { toModularAccountV1Base, type ModularAccountV1Base } from "./base.js";
 import { lowerAddress, BaseError } from "@alchemy/common";
-import { DefaultAddress, DefaultPluginAddress } from "./utils/account.js";
-import { MultiOwnerModularAccountFactoryAbi } from "./abis/MultiOwnerModularAccountFactory.js";
-import { predictMultiOwnerModularAccountV1Address } from "./predictAddress.js";
-import { MultiOwnerPluginExecutionFunctionAbi } from "./abis/MultiOwnerPluginExecutionFunction.js";
+import { DefaultMaV1Address, DefaultMaV1PluginAddress } from "../account.js";
+import { MultiOwnerModularAccountFactoryAbi } from "../abis/MultiOwnerModularAccountFactory.js";
+import { predictMultiOwnerModularAccountV1Address } from "../predictAddress.js";
+import { MultiOwnerPluginExecutionFunctionAbi } from "../abis/MultiOwnerPluginExecutionFunction.js";
 import { readContract } from "viem/actions";
 import { getAction } from "viem/utils";
-import { MultiOwnerPluginAbi } from "./abis/MultiOwnerPlugin.js";
+import { MultiOwnerPluginAbi } from "../abis/MultiOwnerPlugin.js";
 
 export type MultiOwnerModularAccountV1 = ModularAccountV1Base & {
   encodeUpdateOwners: (
@@ -49,7 +49,7 @@ export async function toMultiOwnerModularAccountV1({
   salt = 0n,
   owners = [],
   accountAddress: accountAddress_,
-  factoryAddress = DefaultAddress.MULTI_OWNER_MAV1_FACTORY,
+  factoryAddress = DefaultMaV1Address.MULTI_OWNER_MAV1_FACTORY,
 }: ToMultiOwnerModularAccountV1Params): Promise<MultiOwnerModularAccountV1> {
   const signer = owners[0];
 
@@ -90,7 +90,7 @@ export async function toMultiOwnerModularAccountV1({
     const [, name, version, chainId, verifyingContract, salt] =
       await readContractAction({
         abi: MultiOwnerPluginAbi,
-        address: DefaultPluginAddress.MULTI_OWNER,
+        address: DefaultMaV1PluginAddress.MULTI_OWNER,
         functionName: "eip712Domain",
         account: accountAddress,
       });
@@ -140,7 +140,7 @@ export async function toMultiOwnerModularAccountV1({
         "readContract",
       );
       const ownersOnChain = await readContractAction({
-        address: DefaultPluginAddress.MULTI_OWNER,
+        address: DefaultMaV1PluginAddress.MULTI_OWNER,
         abi: MultiOwnerPluginAbi,
         functionName: "ownersOf",
         args: [accountAddress],

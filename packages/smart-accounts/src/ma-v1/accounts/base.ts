@@ -18,8 +18,8 @@ import {
   entryPoint06Address,
   getUserOperationHash,
 } from "viem/account-abstraction";
-import type { SignatureRequest } from "../types.js";
-import { IStandardExecutorAbi } from "./abis/IStandardExecutor.js";
+import type { SignatureRequest } from "../../types.js";
+import { IStandardExecutorAbi } from "../abis/IStandardExecutor.js";
 import { signMessage, signTypedData } from "viem/actions";
 import {
   decodeFunctionData,
@@ -59,6 +59,12 @@ export type ToModularAccountV1BaseParams<
   type: MaV1AccountType;
 };
 
+/**
+ * Creates a ModularAccountV1Base instance.
+ *
+ * @param {ToModularAccountV1BaseParams<TTransport>} params The parameters for creating a ModularAccountV1Base instance
+ * @returns {Promise<ModularAccountV1Base>} A promise that resolves to a ModularAccountV1Base instance
+ */
 export async function toModularAccountV1Base<
   TTransport extends Transport = Transport,
 >({
