@@ -38,7 +38,6 @@ export type ToMultiOwnerModularAccountV1Params = {
   factoryAddress?: Address;
 };
 
-// TODO(jh): write tests for this.
 /**
  * Creates a multi-owner MAv1 account.
  *

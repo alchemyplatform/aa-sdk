@@ -21,7 +21,14 @@ import {
 import type { SignatureRequest } from "../types.js";
 import { IStandardExecutorAbi } from "./abis/IStandardExecutor.js";
 import { signMessage, signTypedData } from "viem/actions";
-import { getAction, hashMessage, hashTypedData } from "viem/utils";
+import {
+  decodeFunctionData,
+  getAction,
+  hashMessage,
+  hashTypedData,
+  isAddressEqual,
+} from "viem/utils";
+import { BaseError } from "@alchemy/common";
 
 type MaV1AccountType = "MultiOwnerModularAccountV1"; // Currently no SDK v5 support for "MultiSigModularAccountV1".
 
@@ -98,11 +105,22 @@ export async function toModularAccountV1Base<
 
     async encodeCalls(calls) {
       if (!calls.length) {
-        throw new Error("No calls to encode");
+        throw new BaseError("No calls to encode.");
       }
 
       if (calls.length === 1) {
         const call = calls[0];
+
+        if (isAddressEqual(call.to, accountAddress)) {
+          // If the call is to the account itself, we need to avoid wrapping it in an `execute` call.
+
+          if (call.data == null) {
+            throw new BaseError("Data is required for an account self-call.");
+          }
+
+          return call.data;
+        }
+
         return encodeFunctionData({
           abi: IStandardExecutorAbi,
           functionName: "execute",
@@ -121,6 +139,40 @@ export async function toModularAccountV1Base<
           })),
         ],
       });
+    },
+
+    // Inverse of `encodeCalls`.
+    async decodeCalls(data) {
+      const decoded = decodeFunctionData({
+        abi: IStandardExecutorAbi,
+        data,
+      });
+
+      if (decoded.functionName === "execute") {
+        return [
+          {
+            to: decoded.args[0],
+            value: decoded.args[1],
+            data: decoded.args[2],
+          },
+        ];
+      }
+
+      if (decoded.functionName === "executeBatch") {
+        return decoded.args[0].map((call) => ({
+          to: call.target,
+          value: call.value,
+          data: call.data,
+        }));
+      }
+
+      // If the data is not for an `execute` or `executeBatch` call, we treat it as a single call to the account itself.
+      return [
+        {
+          to: accountAddress,
+          data,
+        },
+      ];
     },
 
     async getStubSignature() {
@@ -174,7 +226,9 @@ export async function toModularAccountV1Base<
       const signMessageAction = getAction(client, signMessage, "signMessage");
       return signMessageAction({
         account: owner,
-        message: userOpHash,
+        message: {
+          raw: userOpHash,
+        },
       });
     },
 
