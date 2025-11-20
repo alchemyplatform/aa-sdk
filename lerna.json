@@ -4,10 +4,7 @@
   "npmClient": "yarn",
   "conventionalCommits": true,
   "changelog": true,
-  "packages": [
-    "account-kit/*",
-    "aa-sdk/*"
-  ],
+  "packages": ["account-kit/*", "aa-sdk/*"],
   "command": {
     "version": {
       "message": "chore(release): publish %s [skip-ci]",
