@@ -23,11 +23,13 @@ import { IStandardExecutorAbi } from "./abis/IStandardExecutor.js";
 import { signMessage, signTypedData } from "viem/actions";
 import { getAction, hashMessage, hashTypedData } from "viem/utils";
 
+type MaV1AccountType = "MultiOwnerModularAccountV1"; // Currently no SDK v5 support for "MultiSigModularAccountV1".
+
 export type BaseMaV1AccountImplementation = SmartAccountImplementation<
   typeof entryPoint06Abi,
   "0.6",
   {
-    source: "ModularAccountV1";
+    source: MaV1AccountType;
     prepareSignature: (request: SignatureRequest) => Promise<SignatureRequest>;
     formatSignature: (signature: Hex) => Promise<Hex>;
   },
@@ -47,7 +49,7 @@ export type ToModularAccountV1BaseParams<
     factoryData?: Hex | undefined;
   }>;
   get712Wrapper: (msg: Hash) => Promise<TypedDataDefinition>;
-  type: "MultiOwnerModularAccountV1"; // Currently no SDK v5 support for "MultiSigModularAccountV1".
+  type: MaV1AccountType;
 };
 
 // TODO(jh): write tests for this.
