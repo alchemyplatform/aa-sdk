@@ -1,0 +1,163 @@
+name: Publish V5 Alpha Packages
+
+# workflow dispatch requires a maintainer to go to the Actions tab and manually trigger the workflow
+on:
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: "Publish packages (leave unchecked for dry-run)"
+        required: true
+        default: false
+        type: boolean
+
+# Sets permissions of the GITHUB_TOKEN
+permissions:
+  contents: write
+  packages: write
+
+# Allow only one concurrent publish
+concurrency:
+  group: publish-v5-alpha
+  cancel-in-progress: false
+
+jobs:
+  publish_v5_alpha:
+    name: Build and Publish V5 Alpha
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ensure correct branch
+        if: ${{ github.ref != 'refs/heads/moldy/v5-base' }}
+        run: |
+          echo "❌ ERROR: This workflow must be run from moldy/v5-base branch"
+          echo "Current branch: ${{ github.ref }}"
+          exit 1
+
+      - name: "Checkout files"
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.ALCHEMY_BOT_PAT }}
+          fetch-depth: "0"
+          submodules: "recursive"
+
+      - name: Free up disk space
+        run: |
+          echo "Disk space before cleanup:"
+          df -h
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /opt/ghc
+          sudo rm -rf /opt/hostedtoolcache/CodeQL
+          sudo docker image prune --all --force
+          echo "Disk space after cleanup:"
+          df -h
+
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          use-android-cache: false
+
+      - name: Set Github User Details
+        run: |
+          git config --global user.name "Alchemy Bot"
+          git config --global user.email "alchemy-bot@alchemy.com"
+
+      - name: Set NPM Permissions
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
+
+      - name: Build V5 Packages
+        run: yarn build:libs
+
+      # Swap to v5 lerna config temporarily
+      - name: Setup V5 Lerna Config
+        run: |
+          mv lerna.json lerna-v4.json.tmp
+          mv lerna-v5.json lerna.json
+
+      # Dry run to see what would be published
+      - name: Dry Run - Show what would be published
+        if: ${{ inputs.publish == false }}
+        shell: bash
+        run: |
+          echo "=== DRY RUN MODE - No packages will be published ==="
+          npx lerna changed --long --json
+          echo ""
+          echo "Next version would be:"
+          npx lerna version prerelease --preid alpha --no-push --no-git-tag-version --yes --dry-run || true
+          echo ""
+          echo "=== To actually publish, re-run with 'publish' checkbox checked ==="
+
+      # Lerna publish will compute versions, update package.json files, and publish to npm (no git operations)
+      - name: Publish V5 Alpha using Lerna
+        if: ${{ inputs.publish }}
+        shell: bash
+        run: |
+          set +e  # Don't exit on error
+          npx lerna publish prerelease \
+            --preid alpha \
+            --dist-tag alpha \
+            --force-publish \
+            --no-private \
+            --no-verify-access \
+            --no-push \
+            --no-git-tag-version \
+            --yes
+          LERNA_EXIT=$?
+          set -e  # Re-enable exit on error
+
+          if [ $LERNA_EXIT -ne 0 ]; then
+            echo "⚠️  Lerna publish exited with code $LERNA_EXIT"
+            echo "This may mean there are no changes to publish"
+            echo "lerna_published=false" >> $GITHUB_ENV
+          else
+            echo "✓ Lerna publish completed successfully"
+            echo "lerna_published=true" >> $GITHUB_ENV
+          fi
+
+      # Restore original lerna config
+      - name: Restore Original Lerna Config
+        if: ${{ inputs.publish }}
+        run: |
+          mv lerna.json lerna-v5.json
+          mv lerna-v4.json.tmp lerna.json
+
+      # Create git commit and tags with correct configs
+      - name: Commit and Tag Changes
+        if: ${{ inputs.publish && env.lerna_published == 'true' }}
+        shell: bash
+        run: |
+          # Get the new version from lerna-v5.json (which lerna just updated)
+          NEW_VERSION=$(node -p "require('./lerna-v5.json').version")
+          echo "Published version: $NEW_VERSION"
+
+          # Stage all changes (package.json files + both lerna configs)
+          git add packages/*/package.json lerna.json lerna-v5.json
+
+          # Check if there are actually changes to commit
+          if git diff --staged --quiet; then
+            echo "No changes to commit - lerna found nothing to publish"
+            echo "has_changes=false" >> $GITHUB_ENV
+          else
+            # Create commit
+            git commit -m "chore(v5): publish alpha version $NEW_VERSION [skip ci]"
+
+            # Create single tag for the release (all packages share same version)
+            TAG_NAME="v$NEW_VERSION"
+            echo "Creating tag: $TAG_NAME"
+            git tag -a "$TAG_NAME" -m "v$NEW_VERSION"
+
+            echo "has_changes=true" >> $GITHUB_ENV
+          fi
+
+      # Push commit and tags
+      - name: Push Changes
+        if: ${{ inputs.publish && env.lerna_published == 'true' && env.has_changes == 'true' }}
+        run: git push --follow-tags
+
+      # Restore original lerna config (safety net for dry-run or failures)
+      - name: Restore Original Lerna Config (Cleanup)
+        if: always() && hashFiles('lerna-v4.json.tmp') != ''
+        run: |
+          mv lerna.json lerna-v5.json 2>/dev/null || true
+          mv lerna-v4.json.tmp lerna.json
+          echo "Restored original lerna.json"

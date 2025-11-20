@@ -51,8 +51,7 @@
     "prepare": "husky install",
     "docs:dev": "./docs/scripts/docs-dev.sh",
     "docs:sdk": "yarn build && typedoc && tsx scripts/generate-typedoc-yaml.ts",
-    "version": "yarn build:libs",
-    "publish:v5": "./scripts/publish-v5-alpha.sh"
+    "version": "yarn build:libs"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.6.3",

@@ -1,0 +1,25 @@
+{
+  "$schema": "node_modules/lerna/schemas/lerna-schema.json",
+  "version": "0.0.0",
+  "npmClient": "yarn",
+  "packages": [
+    "packages/aa-infra",
+    "packages/alchemy",
+    "packages/common",
+    "packages/smart-accounts"
+  ],
+  "command": {
+    "version": {
+      "message": "chore(v5): publish alpha version %s [skip ci]",
+      "allowBranch": "moldy/v5-base",
+      "forcePublish": true,
+      "conventionalCommits": false,
+      "preid": "alpha"
+    },
+    "publish": {
+      "allowBranch": "moldy/v5-base",
+      "distTag": "alpha",
+      "access": "public"
+    }
+  }
+}
