@@ -32,7 +32,10 @@ export type MultiOwnerModularAccountV1 = ModularAccountV1Base & {
 
 export type ToMultiOwnerModularAccountV1Params = {
   client: Client<Transport, Chain, JsonRpcAccount | LocalAccount | undefined>;
-  owners: OneOf<JsonRpcAccount | LocalAccount>[];
+  owners: [
+    OneOf<JsonRpcAccount | LocalAccount>,
+    ...OneOf<JsonRpcAccount | LocalAccount>[],
+  ];
   salt?: bigint;
   accountAddress?: Address;
   factoryAddress?: Address;
@@ -47,7 +50,7 @@ export type ToMultiOwnerModularAccountV1Params = {
 export async function toMultiOwnerModularAccountV1({
   client,
   salt = 0n,
-  owners = [],
+  owners,
   accountAddress: accountAddress_,
   factoryAddress = DefaultMaV1Address.MULTI_OWNER_MAV1_FACTORY,
 }: ToMultiOwnerModularAccountV1Params): Promise<MultiOwnerModularAccountV1> {

@@ -45,6 +45,8 @@ describe("MAv1 Counterfactual Address Tests", () => {
         accountAddress: undefined,
       });
 
+      console.log({ multiOwnerAccountV1: multiOwnerAccountV1.address });
+
       // Compute the address using the EntryPoint's getSenderAddress function
       const entryPointComputedAddress = await getAccountAddressViaEntryPoint({
         client: instanceV060.getClient(),
@@ -56,6 +58,10 @@ describe("MAv1 Counterfactual Address Tests", () => {
             (await multiOwnerAccountV1.getFactoryArgs()).factoryData!,
           ]);
         },
+      });
+
+      console.log({
+        ep: entryPointComputedAddress,
       });
 
       // Then, compute the address using the predictMultiOwnerModularAccountV1Address function.
