@@ -30,7 +30,7 @@ export const multiOwnerModularAccountStaticImpl: StaticSmartAccountImplementatio
     address: entryPoint06Address,
     version: "0.6",
   },
-  accountAbi: UpgradeableModularAccountAbi, // TODO(jh): is this the correct abi?
+  accountAbi: UpgradeableModularAccountAbi,
   factoryAbi: MultiOwnerModularAccountFactoryAbi,
   getFactoryData: (factoryArgs: MultiOwnerModularAccountV1FactoryArgs) => {
     return encodeFunctionData({
