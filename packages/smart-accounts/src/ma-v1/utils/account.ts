@@ -17,5 +17,3 @@ export const DefaultPluginAddress = {
   MULTI_SIG: "0x000000000000A53f64b7bcf4Cd59624943C43Fc7",
   SESSION_KEY: "0x0000003E0000a96de4058e1E02a62FaaeCf23d8d",
 } satisfies Record<string, Address>;
-
-// TODO(jh): add any other consts or utils here as needed.

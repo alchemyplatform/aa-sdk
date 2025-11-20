@@ -59,7 +59,6 @@ export type ToModularAccountV1BaseParams<
   type: MaV1AccountType;
 };
 
-// TODO(jh): write tests for this.
 export async function toModularAccountV1Base<
   TTransport extends Transport = Transport,
 >({

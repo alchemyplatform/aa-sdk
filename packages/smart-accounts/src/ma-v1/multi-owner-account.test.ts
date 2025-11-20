@@ -1,21 +1,20 @@
 import { local060Instance } from "~test/instances.js";
 import {
   publicActions,
-  TestActions,
+  type TestActions,
   testActions,
-  LocalAccount,
-  Address,
-  Hex,
+  type LocalAccount,
+  type Address,
+  type Hex,
   custom,
   createPublicClient,
-  JsonRpcAccount,
-  OneOf,
+  type JsonRpcAccount,
+  type OneOf,
   isAddress,
   parseEther,
   zeroAddress,
   hexToBigInt,
-  Call,
-  concatHex,
+  type Call,
   serializeErc6492Signature,
 } from "viem";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
@@ -27,7 +26,6 @@ import { estimateFeesPerGas } from "@alchemy/aa-infra";
 import { toMultiOwnerModularAccountV1 } from "./multi-owner-account.js";
 import { multiOwnerModularAccountV1Actions } from "./decorators/multiOwner.js";
 import { setBalance } from "viem/actions";
-import { EXECUTE_USER_OP_SELECTOR } from "../ma-v2/utils/account.js";
 
 // Note: These tests maintain a shared state to not break the local-running rundler by desyncing the chain.
 describe("MA v1 Account Tests", async () => {

@@ -16,7 +16,27 @@ export type PredictMultiOwnerModularAccountV1AddressParams = {
   factoryAddress?: Address;
 };
 
-// TODO(jh): add jsdoc.
+/**
+ * Predicts the address of a MultiOwnerModularAccountV1 smart account before deployment.
+ *
+ * This function uses CREATE2 to deterministically compute the account address based on the factory address,
+ * salt, and owner addresses. The predicted address will match the actual deployed address if the same
+ * parameters are used during deployment.
+ *
+ * @param {PredictMultiOwnerModularAccountV1AddressParams} params The parameters for predicting the account address
+ * @param {bigint} params.salt A unique value used to generate different account addresses for the same set of owners
+ * @param {Address[]} params.ownerAddresses Array of owner addresses that will control the account. Must be deduplicated, sorted in ascending order, and include the signer address. Cannot be empty and must contain at most 100 addresses.
+ * @param {Address} [params.factoryAddress] The factory contract address that will deploy the account. Defaults to the standard MultiOwnerModularAccountV1 factory address.
+ * @returns {Address} The predicted address where the account will be deployed
+ *
+ * @example
+ * ```ts
+ * const predictedAddress = predictMultiOwnerModularAccountV1Address({
+ *   salt: 0n,
+ *   ownerAddresses: ["0x1234...", "0x5678..."]
+ * });
+ * ```
+ */
 export const predictMultiOwnerModularAccountV1Address = ({
   salt,
   ownerAddresses,

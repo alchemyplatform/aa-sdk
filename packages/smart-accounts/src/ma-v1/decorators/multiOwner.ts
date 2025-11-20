@@ -24,8 +24,6 @@ function isMultiOwnerModularAccountV1(
   return "source" in account && account.source === "MultiOwnerModularAccountV1";
 }
 
-// TODO(jh): do we even want this really? it's impossible to use
-// within wallet server... should we just use `encodeUpdateOwners` directly?
 /**
  * Generates client actions for a multi-owner MAv1 account, including the ability to update owners.
  *
