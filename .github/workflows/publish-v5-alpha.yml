@@ -153,28 +153,3 @@ jobs:
       - name: Push Changes
         if: ${{ inputs.publish && env.lerna_published == 'true' && env.has_changes == 'true' }}
         run: git push --follow-tags
-
-      # Restore original lerna config (safety net for dry-run or failures)
-      - name: Restore Original Lerna Config (Cleanup)
-        if: always() && hashFiles('lerna-v4.json.tmp') != ''
-        run: |
-          if [ -f lerna-v4.json.tmp ] && [ ! -f lerna.json ]; then
-            # Backup exists, original missing → restore it
-            mv lerna.json lerna-v5.json 2>/dev/null || true
-            mv lerna-v4.json.tmp lerna.json
-            echo "Restored original lerna.json"
-          elif [ -f lerna-v4.json.tmp ] && [ -f lerna.json ]; then
-            # Both exist → check if we need to restore
-            if [ -f lerna-v5.json ]; then
-              # Already restored, just remove temp
-              rm lerna-v4.json.tmp
-              echo "Original lerna.json already restored, removed temp file"
-            else
-              # Need to swap back
-              mv lerna.json lerna-v5.json
-              mv lerna-v4.json.tmp lerna.json
-              echo "Restored original lerna.json"
-            fi
-          else
-            echo "Original lerna.json already in place"
-          fi
