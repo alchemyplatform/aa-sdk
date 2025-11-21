@@ -59,26 +59,13 @@ echo -e "${GREEN}✓ Build complete${NC}\n"
 echo -e "${BLUE}Setting up V5 lerna config...${NC}"
 if [ -f lerna-v4.json.tmp ]; then
   echo -e "${RED}❌ ERROR: lerna-v4.json.tmp already exists${NC}"
-  echo -e "Previous publish may have been interrupted. Please restore manually:"
-  echo -e "  mv lerna.json lerna-v5.json"
-  echo -e "  mv lerna-v4.json.tmp lerna.json"
+  echo -e "Previous publish may have been interrupted. Please restore manually."
   exit 1
 fi
 
 mv lerna.json lerna-v4.json.tmp
 mv lerna-v5.json lerna.json
 echo -e "${GREEN}✓ V5 lerna config active${NC}\n"
-
-# Cleanup function to restore lerna config on exit
-cleanup() {
-  if [ -f lerna-v4.json.tmp ]; then
-    echo -e "\n${BLUE}Restoring original lerna config...${NC}"
-    mv lerna.json lerna-v5.json
-    mv lerna-v4.json.tmp lerna.json
-    echo -e "${GREEN}✓ Original lerna config restored${NC}"
-  fi
-}
-trap cleanup EXIT
 
 if [ "$PUBLISH_MODE" = "dry-run" ]; then
   echo -e "${YELLOW}=== DRY RUN MODE - No packages will be published ===${NC}\n"
@@ -105,7 +92,6 @@ read -p "Version: " NEW_VERSION
 # Validate version starts with "0.0.0-alpha."
 if [[ ! "$NEW_VERSION" =~ ^0\.0\.0-alpha\. ]]; then
   echo -e "${RED}❌ ERROR: Version must start with '0.0.0-alpha.' (e.g., 0.0.0-alpha.0)${NC}"
-  cleanup
   exit 1
 fi
 
@@ -116,23 +102,31 @@ read -p "Do you want to continue? (y/n) " -n 1 -r
 echo
 if [[ ! $REPLY =~ ^[Yy]$ ]]; then
   echo -e "${YELLOW}Publish cancelled${NC}"
-  cleanup
   exit 0
 fi
 
 # Temporarily update versions for publishing (without committing)
 echo -e "${BLUE}Temporarily updating package versions for publishing...${NC}"
 
-# Update lerna-v5.json temporarily
+# Update lerna.json (currently pointing to v5 config) temporarily
 node -e "
   const fs = require('fs');
-  const lerna = JSON.parse(fs.readFileSync('lerna-v5.json', 'utf8'));
+  const lerna = JSON.parse(fs.readFileSync('lerna.json', 'utf8'));
   lerna.version = '$NEW_VERSION';
-  fs.writeFileSync('lerna-v5.json', JSON.stringify(lerna, null, 2) + '\n');
+  fs.writeFileSync('lerna.json', JSON.stringify(lerna, null, 2) + '\n');
 "
 
 # Use lerna version to update all package.json files temporarily
-npx lerna version $NEW_VERSION --no-push --no-git-tag-version --yes --force-publish > /dev/null 2>&1
+echo -e "${BLUE}Updating package.json files...${NC}"
+set +e  # Don't exit on lerna errors
+npx lerna version $NEW_VERSION --no-push --no-git-tag-version --yes --force-publish --exact --no-private
+LERNA_VERSION_EXIT=$?
+set -e
+
+if [ $LERNA_VERSION_EXIT -ne 0 ]; then
+  echo -e "${RED}❌ Failed to update package versions${NC}"
+  exit $LERNA_VERSION_EXIT
+fi
 
 echo -e "${GREEN}✓ Versions updated${NC}\n"
 
@@ -144,23 +138,25 @@ npx lerna publish from-package \
   --dist-tag alpha \
   --access restricted \
   --no-verify-access \
+  --no-private \
+  --no-push \
+  --no-git-tag-version \
+  --force-publish \
   --yes
 LERNA_EXIT=$?
 set -e  # Re-enable exit on error
-
-# Restore all changes (don't commit version bumps)
-echo -e "\n${BLUE}Restoring repository to original state...${NC}"
-git checkout -- packages/*/package.json lerna-v5.json lerna.json
-
-# Restore original lerna config
-cleanup
-trap - EXIT
 
 if [ $LERNA_EXIT -ne 0 ]; then
   echo -e "${RED}❌ Lerna publish failed with code $LERNA_EXIT${NC}"
   exit $LERNA_EXIT
 fi
 
+# Restore lerna config files
+echo -e "\n${BLUE}Restoring lerna config...${NC}"
+git checkout HEAD -- lerna.json lerna-v5.json
+rm -f lerna-v4.json.tmp
+echo -e "${GREEN}✓ Lerna config restored${NC}"
+
 echo -e "\n${GREEN}✓✓✓ V5 Alpha publish complete! ✓✓✓${NC}"
-echo -e "${GREEN}Published version $NEW_VERSION to npm${NC}"
+echo -e "${GREEN}Published version $NEW_VERSION to npm (private, alpha tag)${NC}"
 echo -e "${YELLOW}(No version changes committed to repo)${NC}"
