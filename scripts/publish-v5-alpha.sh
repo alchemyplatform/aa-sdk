@@ -136,7 +136,6 @@ echo -e "${YELLOW}⚠️  PUBLISHING TO NPM AS PRIVATE PACKAGES...${NC}\n"
 set +e  # Don't exit on error
 npx lerna publish from-package \
   --dist-tag alpha \
-  --access restricted \
   --no-verify-access \
   --no-private \
   --no-push \
