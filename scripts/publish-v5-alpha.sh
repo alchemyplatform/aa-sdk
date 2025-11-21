@@ -86,7 +86,7 @@ if [ "$PUBLISH_MODE" != "publish" ]; then
 fi
 
 # Prompt for new version
-echo -e "${YELLOW}Enter the new alpha version to publish (must include 'alpha'):${NC}"
+echo -e "${YELLOW}Enter the new alpha version to publish (must begin with '0.0.0-alpha.0'):${NC}"
 read -p "Version: " NEW_VERSION
 
 # Validate version starts with "0.0.0-alpha."
@@ -109,11 +109,11 @@ fi
 echo -e "${BLUE}Temporarily updating package versions for publishing...${NC}"
 
 # Update lerna.json (currently pointing to v5 config) temporarily
-node -e "
-  const fs = require('fs');
-  const lerna = JSON.parse(fs.readFileSync('lerna.json', 'utf8'));
-  lerna.version = '$NEW_VERSION';
-  fs.writeFileSync('lerna.json', JSON.stringify(lerna, null, 2) + '\n');
+node -e "\
+  const fs = require('fs');\
+  const lerna = JSON.parse(fs.readFileSync('lerna.json', 'utf8'));\
+  lerna.version = '$NEW_VERSION';\
+  fs.writeFileSync('lerna.json', JSON.stringify(lerna, null, 2) + '\n');\
 "
 
 # Use lerna version to update all package.json files temporarily
