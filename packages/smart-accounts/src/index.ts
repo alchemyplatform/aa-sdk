@@ -38,6 +38,26 @@ export {
   multiOwnerLightAccountStaticImplV2_0_0,
 } from "./light-account/lightAccountStaticImpl.js";
 
+// ModularAccountV1
+export type * from "./ma-v1/accounts/base.js";
+export { toModularAccountV1Base } from "./ma-v1/accounts/base.js";
+
+export type * from "./ma-v1/accounts/multi-owner-account.js";
+export { toMultiOwnerModularAccountV1 } from "./ma-v1/accounts/multi-owner-account.js";
+
+export type * from "./ma-v1/decorators/multiOwner.js";
+export { multiOwnerModularAccountV1Actions } from "./ma-v1/decorators/multiOwner.js";
+
+export type * from "./ma-v1/predictAddress.js";
+export { predictMultiOwnerModularAccountV1Address } from "./ma-v1/predictAddress.js";
+
+export { multiOwnerModularAccountStaticImpl } from "./ma-v1/mav1StaticImpl.js";
+
+export {
+  DefaultMaV1Address,
+  DefaultMaV1PluginAddress,
+} from "./ma-v1/account.js";
+
 // ModularAccountV2
 export type * from "./ma-v2/accounts/account.js";
 export { toModularAccountV2 } from "./ma-v2/accounts/account.js";
@@ -58,7 +78,7 @@ export {
 } from "./ma-v2/mav2StaticImpl.js";
 export type * from "./ma-v2/mav2StaticImpl.js";
 
-// Modules.
+// Modules
 export { AllowlistModule } from "./ma-v2/modules/allowlist-module/module.js";
 export { NativeTokenLimitModule } from "./ma-v2/modules/native-token-limit-module/module.js";
 export { PaymasterGuardModule } from "./ma-v2/modules/paymaster-guard-module/module.js";
@@ -109,7 +129,7 @@ export {
   toWebAuthnSignature,
 } from "./ma-v2/utils/signature.js";
 
-// Errors.
+// Errors
 export { EntityIdOverrideError } from "./errors/EntityIdOverrideError.js";
 export { InvalidDeferredActionNonceError } from "./errors/InvalidDeferredActionNonceError.js";
 export { InvalidEntityIdError } from "./errors/InvalidEntityIdError.js";

@@ -4,6 +4,8 @@ export type Never<T> = T extends object
     }
   : never;
 
+export type NonEmptyArray<T> = [T, ...T[]];
+
 export type ExtractRpcMethod<
   T extends readonly {
     Method: string;
