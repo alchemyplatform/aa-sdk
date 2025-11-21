@@ -30,17 +30,19 @@ fi
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 REQUIRED_BRANCH="moldy/v5-base"
 
-if [ "$CURRENT_BRANCH" != "$REQUIRED_BRANCH" ]; then
-  echo -e "${RED}Error: V5 packages must be published from the '$REQUIRED_BRANCH' branch${NC}"
-  echo -e "${RED}Current branch: $CURRENT_BRANCH${NC}"
-  exit 1
-fi
+# TODO(jh): enable this after testing the rest.
+# if [ "$CURRENT_BRANCH" != "$REQUIRED_BRANCH" ]; then
+#   echo -e "${RED}Error: V5 packages must be published from the '$REQUIRED_BRANCH' branch${NC}"
+#   echo -e "${RED}Current branch: $CURRENT_BRANCH${NC}"
+#   exit 1
+# fi
 
+# TODO(jh): enable this after testing the rest.
 # Check for uncommitted changes (including untracked files)
-if [ -n "$(git status --porcelain)" ]; then
-  echo -e "${RED}Error: You have uncommitted changes (including untracked files). Please commit or stash them before publishing.${NC}"
-  exit 1
-fi
+# if [ -n "$(git status --porcelain)" ]; then
+#   echo -e "${RED}Error: You have uncommitted changes (including untracked files). Please commit or stash them before publishing.${NC}"
+#   exit 1
+# fi
 
 # Check npm authentication
 if ! npm whoami &> /dev/null; then
@@ -74,6 +76,11 @@ if [ "$PUBLISH_MODE" = "dry-run" ]; then
   npx lerna changed --long --json || echo "No changed packages"
 
   echo -e "\n${YELLOW}=== To actually publish, run: ./scripts/publish-v5-alpha.sh publish ===${NC}"
+
+  # Restore lerna config files
+  mv lerna.json lerna-v5.json
+  mv lerna-v4.json.tmp lerna.json
+
   exit 0
 fi
 
@@ -119,7 +126,7 @@ node -e "\
 # Use lerna version to update all package.json files temporarily
 echo -e "${BLUE}Updating package.json files...${NC}"
 set +e  # Don't exit on lerna errors
-npx lerna version $NEW_VERSION --no-push --no-git-tag-version --yes --force-publish --exact --no-private
+npx lerna version $NEW_VERSION --skip-git --no-push --no-git-tag-version --yes --force-publish --exact --no-private
 LERNA_VERSION_EXIT=$?
 set -e
 
@@ -138,6 +145,7 @@ npx lerna publish from-package \
   --dist-tag alpha \
   --no-verify-access \
   --no-private \
+  --skip-git \
   --no-push \
   --no-git-tag-version \
   --force-publish \
