@@ -276,7 +276,7 @@ export async function toLightAccountBase<
               ...data,
               account: owner,
             })
-          : await signMessageAction({ account: owner, message });
+          : await signMessageAction({ account: owner, message: data });
 
       return formatSignature(sig);
     },
