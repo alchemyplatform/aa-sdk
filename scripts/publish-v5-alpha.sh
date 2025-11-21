@@ -126,7 +126,7 @@ node -e "\
 # Use lerna version to update all package.json files temporarily
 echo -e "${BLUE}Updating package.json files...${NC}"
 set +e  # Don't exit on lerna errors
-npx lerna version $NEW_VERSION --skip-git --no-push --no-git-tag-version --yes --force-publish --exact --no-private
+npx lerna version $NEW_VERSION --no-push --no-git-tag-version --yes --force-publish --exact --no-private
 LERNA_VERSION_EXIT=$?
 set -e
 
@@ -145,7 +145,6 @@ npx lerna publish from-package \
   --dist-tag alpha \
   --no-verify-access \
   --no-private \
-  --skip-git \
   --no-push \
   --no-git-tag-version \
   --force-publish \
