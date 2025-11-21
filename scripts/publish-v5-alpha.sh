@@ -151,11 +151,11 @@ if [ $LERNA_EXIT -ne 0 ]; then
   exit $LERNA_EXIT
 fi
 
-# Restore lerna config files
-echo -e "\n${BLUE}Restoring lerna config...${NC}"
-git checkout HEAD -- lerna.json lerna-v5.json
+# Restore all modified files (lerna configs and package.json files)
+echo -e "\n${BLUE}Restoring repository state...${NC}"
+git checkout HEAD -- .
 rm -f lerna-v4.json.tmp
-echo -e "${GREEN}✓ Lerna config restored${NC}"
+echo -e "${GREEN}✓ Repository restored${NC}"
 
 echo -e "\n${GREEN}✓✓✓ V5 Alpha publish complete! ✓✓✓${NC}"
 echo -e "${GREEN}Published version $NEW_VERSION to npm (private, alpha tag)${NC}"
