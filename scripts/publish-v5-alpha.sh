@@ -86,9 +86,6 @@ if [ "$PUBLISH_MODE" = "dry-run" ]; then
   echo -e "${BLUE}Changed packages:${NC}"
   npx lerna changed --long --json || echo "No changed packages"
 
-  echo -e "\n${BLUE}Next version would be:${NC}"
-  npx lerna version prerelease --preid alpha --no-push --no-git-tag-version --yes --dry-run || true
-
   echo -e "\n${YELLOW}=== To actually publish, run: ./scripts/publish-v5-alpha.sh publish ===${NC}"
   exit 0
 fi
@@ -101,14 +98,20 @@ if [ "$PUBLISH_MODE" != "publish" ]; then
   exit 1
 fi
 
-# Get the next version that will be published
-NEXT_VERSION=$(npx lerna version prerelease --preid alpha --no-push --no-git-tag-version --yes --dry-run 2>&1 | grep -oP "(?<==> ).*(?= \(currently)" | head -1 || echo "unknown")
+# Prompt for new version
+echo -e "${YELLOW}Enter the new alpha version to publish (must include 'alpha'):${NC}"
+read -p "Version: " NEW_VERSION
 
-# Prompt for confirmation
-echo -e "${YELLOW}⚠️  Ready to publish V5 alpha packages${NC}"
-if [ "$NEXT_VERSION" != "unknown" ]; then
-  echo -e "${BLUE}Next version: ${GREEN}$NEXT_VERSION${NC}"
+# Validate version starts with "0.0.0-alpha."
+if [[ ! "$NEW_VERSION" =~ ^0\.0\.0-alpha\. ]]; then
+  echo -e "${RED}❌ ERROR: Version must start with '0.0.0-alpha.' (e.g., 0.0.0-alpha.0)${NC}"
+  cleanup
+  exit 1
 fi
+
+# Confirm publishing
+echo -e "\n${YELLOW}⚠️  Ready to publish V5 alpha packages${NC}"
+echo -e "${BLUE}New version: ${GREEN}$NEW_VERSION${NC}"
 read -p "Do you want to continue? (y/n) " -n 1 -r
 echo
 if [[ ! $REPLY =~ ^[Yy]$ ]]; then
@@ -117,63 +120,47 @@ if [[ ! $REPLY =~ ^[Yy]$ ]]; then
   exit 0
 fi
 
+# Temporarily update versions for publishing (without committing)
+echo -e "${BLUE}Temporarily updating package versions for publishing...${NC}"
+
+# Update lerna-v5.json temporarily
+node -e "
+  const fs = require('fs');
+  const lerna = JSON.parse(fs.readFileSync('lerna-v5.json', 'utf8'));
+  lerna.version = '$NEW_VERSION';
+  fs.writeFileSync('lerna-v5.json', JSON.stringify(lerna, null, 2) + '\n');
+"
+
+# Use lerna version to update all package.json files temporarily
+npx lerna version $NEW_VERSION --no-push --no-git-tag-version --yes --force-publish > /dev/null 2>&1
+
+echo -e "${GREEN}✓ Versions updated${NC}\n"
+
 # Actually publish
-echo -e "${YELLOW}⚠️  PUBLISHING TO NPM...${NC}\n"
+echo -e "${YELLOW}⚠️  PUBLISHING TO NPM AS PRIVATE PACKAGES...${NC}\n"
 
 set +e  # Don't exit on error
-npx lerna publish prerelease \
-  --preid alpha \
+npx lerna publish from-package \
   --dist-tag alpha \
-  --force-publish \
-  --no-private \
+  --access restricted \
   --no-verify-access \
-  --no-push \
-  --no-git-tag-version \
   --yes
 LERNA_EXIT=$?
 set -e  # Re-enable exit on error
 
+# Restore all changes (don't commit version bumps)
+echo -e "\n${BLUE}Restoring repository to original state...${NC}"
+git checkout -- packages/*/package.json lerna-v5.json lerna.json
+
+# Restore original lerna config
+cleanup
+trap - EXIT
+
 if [ $LERNA_EXIT -ne 0 ]; then
-  echo -e "\n${YELLOW}⚠️  Lerna publish exited with code $LERNA_EXIT${NC}"
-  echo -e "This may mean there are no changes to publish"
+  echo -e "${RED}❌ Lerna publish failed with code $LERNA_EXIT${NC}"
   exit $LERNA_EXIT
 fi
 
-echo -e "\n${GREEN}✓ Lerna publish completed successfully${NC}\n"
-
-# Restore original lerna config before committing
-cleanup
-trap - EXIT  # Remove the trap since we're doing cleanup manually
-
-# Get the new version from lerna-v5.json
-NEW_VERSION=$(node -p "require('./lerna-v5.json').version")
-echo -e "${BLUE}Published version: ${GREEN}$NEW_VERSION${NC}\n"
-
-# Stage all changes (package.json files + both lerna configs)
-git add packages/*/package.json lerna.json lerna-v5.json
-
-# Check if there are actually changes to commit
-if [ -z "$(git diff --cached --name-only)" ]; then
-  echo -e "${YELLOW}No changes to commit - lerna found nothing to publish${NC}"
-  exit 0
-fi
-
-# Create commit
-echo -e "${BLUE}Creating commit...${NC}"
-git commit -m "chore(v5): publish alpha version $NEW_VERSION [skip ci]"
-
-echo -e "\n${GREEN}✓ Commit created${NC}\n"
-
-# Prompt to push changes
-read -p "Push changes to remote? (y/n) " -n 1 -r
-echo
-if [[ $REPLY =~ ^[Yy]$ ]]; then
-  echo -e "${BLUE}Pushing changes to remote...${NC}"
-  git push
-  echo -e "\n${GREEN}✓✓✓ V5 Alpha publish complete! ✓✓✓${NC}"
-  echo -e "${GREEN}Published version $NEW_VERSION${NC}"
-else
-  echo -e "\n${GREEN}✓ V5 Alpha packages published to npm${NC}"
-  echo -e "${GREEN}Published version $NEW_VERSION${NC}"
-  echo -e "${YELLOW}Don't forget to push your changes: git push${NC}"
-fi
+echo -e "\n${GREEN}✓✓✓ V5 Alpha publish complete! ✓✓✓${NC}"
+echo -e "${GREEN}Published version $NEW_VERSION to npm${NC}"
+echo -e "${YELLOW}(No version changes committed to repo)${NC}"
