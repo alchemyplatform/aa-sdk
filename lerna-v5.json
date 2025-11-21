@@ -4,7 +4,6 @@
   "npmClient": "yarn",
   "packages": [
     "packages/aa-infra",
-    "packages/alchemy",
     "packages/common",
     "packages/smart-accounts"
   ],
