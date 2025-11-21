@@ -13,7 +13,7 @@ import {
   type TypedDataDefinition,
 } from "viem";
 import { toModularAccountV1Base, type ModularAccountV1Base } from "./base.js";
-import { lowerAddress, BaseError, type NonEmptyArray } from "@alchemy/common";
+import { lowerAddress, BaseError } from "@alchemy/common";
 import { DefaultMaV1Address, DefaultMaV1PluginAddress } from "../account.js";
 import { MultiOwnerModularAccountFactoryAbi } from "../abis/MultiOwnerModularAccountFactory.js";
 import { predictMultiOwnerModularAccountV1Address } from "../predictAddress.js";
@@ -32,7 +32,7 @@ export type MultiOwnerModularAccountV1 = ModularAccountV1Base & {
 
 export type ToMultiOwnerModularAccountV1Params = {
   client: Client<Transport, Chain, JsonRpcAccount | LocalAccount | undefined>;
-  owners: NonEmptyArray<OneOf<JsonRpcAccount | LocalAccount>>;
+  owners: [OneOf<JsonRpcAccount | LocalAccount>, ...{ address: Address }[]];
   salt?: bigint;
   accountAddress?: Address;
   factoryAddress?: Address;
