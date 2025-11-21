@@ -126,7 +126,7 @@ node -e "\
 # Use lerna version to update all package.json files temporarily
 echo -e "${BLUE}Updating package.json files...${NC}"
 set +e  # Don't exit on lerna errors
-npx lerna version $NEW_VERSION --no-push --no-git-tag-version --yes --force-publish --exact --no-private
+npx lerna version $NEW_VERSION --no-push --no-git-tag-version --yes --force-publish --exact --no-private --ignore-scripts
 LERNA_VERSION_EXIT=$?
 set -e
 
@@ -137,18 +137,17 @@ fi
 
 echo -e "${GREEN}✓ Versions updated${NC}\n"
 
+# Commit changes temporarily (lerna publish requires clean working tree)
+echo -e "${BLUE}Creating temporary commit...${NC}"
+git add -A
+git commit -m "chore: temp commit for v5 alpha publish (will be reverted)" --no-verify
+echo -e "${GREEN}✓ Temporary commit created${NC}\n"
+
 # Actually publish
 echo -e "${YELLOW}⚠️  PUBLISHING TO NPM AS PRIVATE PACKAGES...${NC}\n"
 
 set +e  # Don't exit on error
-npx lerna publish from-package \
-  --dist-tag alpha \
-  --no-verify-access \
-  --no-private \
-  --no-push \
-  --no-git-tag-version \
-  --force-publish \
-  --yes
+npx lerna publish from-package --dist-tag alpha --no-verify-access --ignore-scripts
 LERNA_EXIT=$?
 set -e  # Re-enable exit on error
 
@@ -157,11 +156,11 @@ if [ $LERNA_EXIT -ne 0 ]; then
   exit $LERNA_EXIT
 fi
 
-# Restore all modified files (lerna configs and package.json files)
+# Restore repository state by removing the temporary commit
 echo -e "\n${BLUE}Restoring repository state...${NC}"
-git checkout HEAD -- .
+git reset --hard HEAD~1
 rm -f lerna-v4.json.tmp
-echo -e "${GREEN}✓ Repository restored${NC}"
+echo -e "${GREEN}✓ Repository restored (temporary commit removed)${NC}"
 
 echo -e "\n${GREEN}✓✓✓ V5 Alpha publish complete! ✓✓✓${NC}"
 echo -e "${GREEN}Published version $NEW_VERSION to npm (private, alpha tag)${NC}"
