@@ -30,19 +30,17 @@ fi
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 REQUIRED_BRANCH="moldy/v5-base"
 
-# TODO(jh): enable this after testing the rest.
-# if [ "$CURRENT_BRANCH" != "$REQUIRED_BRANCH" ]; then
-#   echo -e "${RED}Error: V5 packages must be published from the '$REQUIRED_BRANCH' branch${NC}"
-#   echo -e "${RED}Current branch: $CURRENT_BRANCH${NC}"
-#   exit 1
-# fi
+if [ "$CURRENT_BRANCH" != "$REQUIRED_BRANCH" ]; then
+  echo -e "${RED}Error: V5 packages must be published from the '$REQUIRED_BRANCH' branch${NC}"
+  echo -e "${RED}Current branch: $CURRENT_BRANCH${NC}"
+  exit 1
+fi
 
-# TODO(jh): enable this after testing the rest.
 # Check for uncommitted changes (including untracked files)
-# if [ -n "$(git status --porcelain)" ]; then
-#   echo -e "${RED}Error: You have uncommitted changes (including untracked files). Please commit or stash them before publishing.${NC}"
-#   exit 1
-# fi
+if [ -n "$(git status --porcelain)" ]; then
+  echo -e "${RED}Error: You have uncommitted changes (including untracked files). Please commit or stash them before publishing.${NC}"
+  exit 1
+fi
 
 # Check npm authentication
 if ! npm whoami &> /dev/null; then

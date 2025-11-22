@@ -12,11 +12,13 @@
       "message": "chore(v5): publish alpha version %s [skip ci]",
       "forcePublish": true,
       "conventionalCommits": false,
-      "preid": "alpha"
+      "preid": "alpha",
+      "allowBranch": "moldy/v5-base"
     },
     "publish": {
       "distTag": "alpha",
-      "access": "public"
+      "access": "public",
+      "allowBranch": "moldy/v5-base"
     }
   }
 }
