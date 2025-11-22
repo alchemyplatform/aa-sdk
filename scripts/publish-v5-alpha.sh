@@ -97,17 +97,10 @@ read -p "Version: " NEW_VERSION
 # Validate version starts with "0.0.0-alpha."
 if [[ ! "$NEW_VERSION" =~ ^0\.0\.0-alpha\. ]]; then
   echo -e "${RED}❌ ERROR: Version must start with '0.0.0-alpha.' (e.g., 0.0.0-alpha.0)${NC}"
+  # Restore lerna config files
+  mv lerna.json lerna-v5.json
+  mv lerna-v4.json.tmp lerna.json
   exit 1
-fi
-
-# Confirm publishing
-echo -e "\n${YELLOW}⚠️  Ready to publish V5 alpha packages${NC}"
-echo -e "${BLUE}New version: ${GREEN}$NEW_VERSION${NC}"
-read -p "Do you want to continue? (y/n) " -n 1 -r
-echo
-if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-  echo -e "${YELLOW}Publish cancelled${NC}"
-  exit 0
 fi
 
 # Temporarily update versions for publishing (without committing)
@@ -130,6 +123,10 @@ set -e
 
 if [ $LERNA_VERSION_EXIT -ne 0 ]; then
   echo -e "${RED}❌ Failed to update package versions${NC}"
+  # Restore lerna config files and any modified files
+  git checkout HEAD -- .
+  mv lerna.json lerna-v5.json
+  mv lerna-v4.json.tmp lerna.json
   exit $LERNA_VERSION_EXIT
 fi
 
