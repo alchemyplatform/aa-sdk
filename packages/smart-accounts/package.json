@@ -48,7 +48,7 @@
     "viem": "^2.32.0"
   },
   "publishConfig": {
-    "access": "restricted",
+    "access": "public",
     "registry": "https://registry.npmjs.org/"
   },
   "repository": {

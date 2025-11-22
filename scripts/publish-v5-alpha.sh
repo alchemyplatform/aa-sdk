@@ -144,17 +144,12 @@ git commit -m "chore: temp commit for v5 alpha publish (will be reverted)" --no-
 echo -e "${GREEN}✓ Temporary commit created${NC}\n"
 
 # Actually publish
-echo -e "${YELLOW}⚠️  PUBLISHING TO NPM AS PRIVATE PACKAGES...${NC}\n"
+echo -e "${YELLOW}⚠️  PUBLISHING TO NPM...${NC}\n"
 
 set +e  # Don't exit on error
-npx lerna publish from-package --dist-tag alpha --no-verify-access --ignore-scripts
+npx lerna publish from-package --dist-tag alpha --ignore-scripts
 LERNA_EXIT=$?
 set -e  # Re-enable exit on error
-
-if [ $LERNA_EXIT -ne 0 ]; then
-  echo -e "${RED}❌ Lerna publish failed with code $LERNA_EXIT${NC}"
-  exit $LERNA_EXIT
-fi
 
 # Restore repository state by removing the temporary commit
 echo -e "\n${BLUE}Restoring repository state...${NC}"
@@ -162,6 +157,11 @@ git reset --hard HEAD~1
 rm -f lerna-v4.json.tmp
 echo -e "${GREEN}✓ Repository restored (temporary commit removed)${NC}"
 
+if [ $LERNA_EXIT -ne 0 ]; then
+  echo -e "${RED}❌ Lerna publish failed with code $LERNA_EXIT${NC}"
+  exit $LERNA_EXIT
+fi
+
 echo -e "\n${GREEN}✓✓✓ V5 Alpha publish complete! ✓✓✓${NC}"
-echo -e "${GREEN}Published version $NEW_VERSION to npm (private, alpha tag)${NC}"
+echo -e "${GREEN}Published version $NEW_VERSION to npm (with alpha tag)${NC}"
 echo -e "${YELLOW}(No version changes committed to repo)${NC}"
