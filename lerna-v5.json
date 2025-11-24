@@ -4,22 +4,21 @@
   "npmClient": "yarn",
   "packages": [
     "packages/aa-infra",
-    "packages/alchemy",
     "packages/common",
     "packages/smart-accounts"
   ],
   "command": {
     "version": {
       "message": "chore(v5): publish alpha version %s [skip ci]",
-      "allowBranch": "moldy/v5-base",
       "forcePublish": true,
       "conventionalCommits": false,
-      "preid": "alpha"
+      "preid": "alpha",
+      "allowBranch": "moldy/v5-base"
     },
     "publish": {
-      "allowBranch": "moldy/v5-base",
       "distTag": "alpha",
-      "access": "public"
+      "access": "public",
+      "allowBranch": "moldy/v5-base"
     }
   }
 }
