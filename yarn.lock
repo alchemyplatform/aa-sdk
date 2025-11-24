@@ -7,7 +7,7 @@
   resolved "https://registry.yarnpkg.com/@0no-co/graphql.web/-/graphql.web-1.1.2.tgz#9af8deaf3f236c1c6ee99cc5349051475e5dcc83"
   integrity sha512-N2NGsU5FLBhT8NZ+3l2YrzZSHITjNXNuDhC4iDiikv0IujaJ0Xc6xIxQZ/Ek3Cb+rgPjnLHYyJm11tInuJn+cw==
 
-"@aa-sdk/core@*", "@aa-sdk/core@^4.0.0-alpha.8", "@aa-sdk/core@^4.17.0", "@aa-sdk/core@^4.66.1":
+"@aa-sdk/core@^4.0.0-alpha.8", "@aa-sdk/core@^4.17.0", "@aa-sdk/core@^4.66.1":
   version "4.66.1"
   resolved "https://registry.yarnpkg.com/@aa-sdk/core/-/core-4.66.1.tgz#2150c75e07422347b35a71ec546bae29c3805343"
   integrity sha512-jThjq5d+sU4AlkdD1whODO/d9Q1nTk20rmAnaltmyThmJdkDBeVMdL53NyVoVIs7Ibk+bRdSiIqg9bAcVXjEsg==
@@ -34,7 +34,7 @@
   optionalDependencies:
     alchemy-sdk "^3.0.0"
 
-"@account-kit/infra@*", "@account-kit/infra@^4.16.0", "@account-kit/infra@^4.17.0", "@account-kit/infra@^4.66.1":
+"@account-kit/infra@^4.16.0", "@account-kit/infra@^4.17.0", "@account-kit/infra@^4.66.1":
   version "4.66.1"
   resolved "https://registry.yarnpkg.com/@account-kit/infra/-/infra-4.66.1.tgz#b1ffb2ae0bc243f805456f053e625591a3259fbb"
   integrity sha512-A/nHzdbkVFGNuhZ80uPfYCUmAFTMaOlwHkMSYNHimZm5KospqqHdp/8X0/zfkiFT2FYnZdkwlF+Ovl91pJQaDA==

@@ -47,8 +47,6 @@
     "typescript-template": "*"
   },
   "dependencies": {
-    "@aa-sdk/core": "*",
-    "@account-kit/infra": "*",
     "viem": "^2.32.0"
   },
   "publishConfig": {
