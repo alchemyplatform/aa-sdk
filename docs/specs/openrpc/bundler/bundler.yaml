@@ -55,6 +55,8 @@ servers:
     name: Polygon Mainnet
   - url: https://polygon-amoy.g.alchemy.com/v2
     name: Polygon Amoy
+  - url: https://monad-mainnet.g.alchemy.com/v2
+    name: Monad Mainnet
   - url: https://monad-testnet.g.alchemy.com/v2
     name: Monad Testnet
   - url: https://opbnb-mainnet.g.alchemy.com/v2
