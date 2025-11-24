@@ -55,6 +55,7 @@ export {
   bobaMainnet,
   edgeMainnet,
   stableMainnet,
+  mythosMainnet,
 } from "../chains.js";
 export type * from "../client/decorators/smartAccount.js";
 export { alchemyActions } from "../client/decorators/smartAccount.js";
