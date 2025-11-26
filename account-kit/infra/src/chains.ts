@@ -854,3 +854,27 @@ export const stableMainnet: Chain = defineChain({
   },
   testnet: false,
 });
+
+export const mythosMainnet: Chain = defineChain({
+  id: 42018,
+  name: "Mythos Mainnet",
+  nativeCurrency: { name: "eth", symbol: "eth", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://mythos-mainnet.g.alchemy.com/v2"],
+    },
+    public: {
+      http: ["https://mythos-mainnet.g.alchemy.com/v2"],
+    },
+    alchemy: {
+      http: ["https://mythos-mainnet.g.alchemy.com/v2"],
+    },
+  },
+  blockExplorers: {
+    default: {
+      name: "Block Explorer",
+      url: "https://mythos-mainnet.explorer.alchemy.com/",
+    },
+  },
+  testnet: false,
+});
