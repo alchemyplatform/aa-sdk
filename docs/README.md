@@ -43,18 +43,25 @@ To add new pages to navigation:
 To add new images:
 
 1. **Upload to Cloudinary**:
+
    - Sign-in to Cloudinary through Okta.
    - Folder structure: `docs/aa-sdk/images/[subdirectory]/`
    - Use descriptive, kebab-case filenames (e.g., `auth0-config.png`)
    - Set `overwrite: true` if replacing an existing asset
 
 2. **Reference in Markdown**:
+
    ```markdown
    ![Alt text](https://alchemyapi-res.cloudinary.com/image/upload/v{version}/docs/aa-sdk/images/your-image.png)
    ```
+
    Or using HTML:
+
    ```html
-   <img src="https://alchemyapi-res.cloudinary.com/image/upload/v{version}/docs/aa-sdk/images/your-image.png" alt="Description" />
+   <img
+     src="https://alchemyapi-res.cloudinary.com/image/upload/v{version}/docs/aa-sdk/images/your-image.png"
+     alt="Description"
+   />
    ```
 
 3. **Best Practices**:

@@ -8,7 +8,10 @@ You can use Auth0 to integrate an auth provider other than the ones listed in th
 
 First, create an account or log in to an existing account on [auth0.com](http://auth0.com). In the Auth0 dashboard, select “Authentication → Social” in the sidebar, then “Create Social Connection,” and choose the provider you want:
 
-<img src="https://alchemyapi-res.cloudinary.com/image/upload/v1764187288/docs/aa-sdk/images/auth0-provider.png" alt="Auth0 provider list" />
+<img
+  src="https://alchemyapi-res.cloudinary.com/image/upload/v1764187288/docs/aa-sdk/images/auth0-provider.png"
+  alt="Auth0 provider list"
+/>
 
 You have the option of using Auth0’s dev keys for GitHub or adding your own. If you want to add your own credentials, click the link that says “How to obtain a Client ID” and follow the directions.
 
@@ -23,7 +26,10 @@ Also on this page, note the “Name” field containing “github”. This will 
 
 Once you confirm on this page, you’ll be taken to a page where you can choose which of your Auth0 apps will use this login method. Enable it for the app of your choice, which may just be “Default App” if this is a newly created Auth0 account:
 
-<img src="https://alchemyapi-res.cloudinary.com/image/upload/v1764187286/docs/aa-sdk/images/auth0-app.png" alt="Auth0 app selection page" />
+<img
+  src="https://alchemyapi-res.cloudinary.com/image/upload/v1764187286/docs/aa-sdk/images/auth0-app.png"
+  alt="Auth0 app selection page"
+/>
 
 Finally, we need to add your Auth0 credentials to the Alchemy dashboard. To find them, go to “Applications → Applications” in the sidebar and select an application for which you enabled your auth method in the previous step. Take note of the "Domain", "Client ID", and "Client Secret" fields:
 
