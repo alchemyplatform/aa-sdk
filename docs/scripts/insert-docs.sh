@@ -33,11 +33,6 @@ cp -r fern/wallets/specs/openrpc/* src/openrpc/alchemy
 cp -r fern/wallets/specs/openapi/* src/openapi/
 cp -r fern/wallets/api-generators/* fern/apis/
 
-# Move images to the correct place in docs-site
-mkdir -p fern/images/wallets
-cp -r fern/wallets/images/* fern/images/wallets/
-rm -rf fern/wallets/images
-
 # Create a backup of fern/docs.yml in case of error during insert
 cp fern/docs.yml fern/docs.yml.bak
 
