@@ -269,7 +269,7 @@ describe.sequential("MultiOwner Light Account Tests", () => {
   }) => {
     const account = await toMultiOwnerLightAccount({
       client: signer,
-      accountAddress,
+      accountAddress: accountAddress,
       salt: _salt ?? salt++,
       owners: [signer.account, ...(owners ?? [])],
     });
