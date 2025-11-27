@@ -7,7 +7,7 @@ import { WaitForUserOperationError } from "../../errors/useroperation.js";
 import { buildUserOperationFromTxs } from "./buildUserOperationFromTxs.js";
 import { _sendUserOperation } from "./internal/sendUserOperation.js";
 import type { SendTransactionsParameters, UserOperationContext } from "./types";
-import { waitForUserOperationTransaction } from "./waitForUserOperationTransacation.js";
+import { waitForUserOperationTransaction } from "./waitForUserOperationTransaction.js";
 import { clientHeaderTrack } from "../../index.js";
 
 /**
