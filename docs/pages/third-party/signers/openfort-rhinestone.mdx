@@ -1,0 +1,423 @@
+---
+title: "Openfort"
+description: "Integrate Openfort signers with Rhinestone smart accounts."
+---
+
+## Overview
+
+Openfort provides embedded wallet infrastructure that enables seamless user authentication and wallet management with built-in Shield security. This guide shows you how to integrate Openfort signers with Rhinestone smart accounts to create a secure, cross-chain wallet experience.
+
+**How it works:** Openfort handles user authentication and embedded wallet creation with Shield security, providing wagmi-compatible clients. We use wagmi hooks to access these clients and pass them to Rhinestone's SDK, which wraps them with cross-chain capabilities.
+
+## Prerequisites
+
+- An Openfort account
+- Openfort publishable key
+- Shield publishable key
+- React application setup
+
+## Installation
+
+Install the required dependencies:
+
+```bash
+npm install @openfort/react @tanstack/react-query @rhinestone/sdk viem wagmi
+```
+
+## Setup Openfort Provider
+
+First, set up the Openfort provider with wagmi and React Query in your React application:
+
+```tsx
+import { OpenfortProvider, getDefaultConfig, AccountTypeEnum, AuthProvider } from '@openfort/react'
+import { WagmiProvider, createConfig } from 'wagmi'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { sepolia } from 'viem/chains'
+
+// Configure wagmi
+const wagmiConfig = createConfig(
+  getDefaultConfig({
+    appName: 'My App',
+    chains: [sepolia],
+    ssr: true
+  })
+)
+
+// Create query client
+const queryClient = new QueryClient()
+
+function App() {
+  return (
+    <WagmiProvider config={wagmiConfig}>
+      <QueryClientProvider client={queryClient}>
+        <OpenfortProvider
+          publishableKey={process.env.NEXT_PUBLIC_OPENFORT_PUBLISHABLE_KEY}
+          walletConfig={{
+            shieldPublishableKey: process.env.NEXT_PUBLIC_SHIELD_PUBLISHABLE_KEY,
+            accountType: AccountTypeEnum.EOA
+          }}
+          uiConfig={{
+            authProviders: [
+              AuthProvider.EMAIL,
+              AuthProvider.GOOGLE,
+              AuthProvider.GUEST
+            ]
+          }}
+        >
+          {/* Your app components */}
+        </OpenfortProvider>
+      </QueryClientProvider>
+    </WagmiProvider>
+  )
+}
+```
+
+## Create an Openfort Integration Hook
+
+Create a production-ready hook that integrates Openfort wallets with Rhinestone accounts. This demonstrates the core pattern: **get the wallet client from Openfort's embedded wallet, then pass it to Rhinestone**.
+
+<Note>Openfort provides embedded wallets with Shield security that can be accessed via a viem-compatible provider.</Note>
+
+```tsx
+import { useState, useEffect } from 'react'
+import { useUser, useWallets, useOpenfort } from '@openfort/react'
+import { createWalletClient, custom } from 'viem'
+import { sepolia } from 'viem/chains'
+import { RhinestoneSDK, walletClientToAccount } from '@rhinestone/sdk'
+
+interface OpenfortWalletState {
+  rhinestoneAccount: any | null
+  address: string | null
+  isLoading: boolean
+  error: string | null
+  isAuthenticated: boolean
+}
+
+export function useOpenfortWallet(): OpenfortWalletState & {
+  reconnect: () => Promise<void>
+} {
+  const { isAuthenticated } = useUser()
+  const { wallets } = useWallets()
+  const { client } = useOpenfort()
+  const [state, setState] = useState<OpenfortWalletState>({
+    rhinestoneAccount: null,
+    address: null,
+    isLoading: false,
+    error: null,
+    isAuthenticated: false,
+  })
+
+  const initializeAccount = async () => {
+    if (!isAuthenticated || !wallets || wallets.length === 0) {
+      setState(prev => ({
+        ...prev,
+        rhinestoneAccount: null,
+        address: null,
+        isAuthenticated: false,
+        error: null,
+      }))
+      return
+    }
+
+    setState(prev => ({ ...prev, isLoading: true, error: null }))
+
+    try {
+      // Get Ethereum provider from Openfort's embedded wallet
+      const ethereumProvider = await client.embeddedWallet.getEthereumProvider()
+
+      // Create wallet client with viem
+      const walletClient = createWalletClient({
+        chain: sepolia,
+        transport: custom(ethereumProvider)
+      })
+
+      // Get signer address from Openfort wallet
+      const signerAddress = wallets[0].address
+
+      // Wrap wallet client for Rhinestone compatibility
+      const wrappedWalletClient = walletClientToAccount(walletClient)
+
+      const apiKey = process.env.NEXT_PUBLIC_RHINESTONE_API_KEY
+      if (!apiKey) {
+        throw new Error('NEXT_PUBLIC_RHINESTONE_API_KEY is not configured')
+      }
+
+      // Create Rhinestone account using Openfort's wallet client
+      const rhinestone = new RhinestoneSDK({
+        apiKey,
+      })
+      const account = await rhinestone.createAccount({
+        owners: {
+          type: "ecdsa",
+          accounts: [wrappedWalletClient],
+        },
+      })
+
+      setState(prev => ({
+        ...prev,
+        rhinestoneAccount: account,
+        address: signerAddress,
+        isAuthenticated: true,
+        isLoading: false,
+      }))
+    } catch (error) {
+      console.error('Failed to initialize Rhinestone account:', error)
+      setState(prev => ({
+        ...prev,
+        error: error instanceof Error ? error.message : 'Failed to initialize account',
+        isLoading: false,
+        isAuthenticated: false,
+      }))
+    }
+  }
+
+  useEffect(() => {
+    initializeAccount()
+  }, [isAuthenticated, wallets])
+
+  return {
+    ...state,
+    reconnect: initializeAccount,
+  }
+}
+```
+
+## Usage
+
+### Basic Component Integration
+
+Use the enhanced hook in your React components with Openfort's pre-built authentication UI:
+
+```tsx
+import { useOpenfortWallet } from './hooks/useOpenfortWallet'
+import { OpenfortButton } from '@openfort/react'
+
+function WalletDashboard() {
+  const {
+    rhinestoneAccount,
+    address,
+    isLoading,
+    error,
+    isAuthenticated,
+    reconnect
+  } = useOpenfortWallet()
+
+  // Handle loading state
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center p-8">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <span className="ml-2">Setting up your wallet...</span>
+      </div>
+    )
+  }
+
+  // Handle error state
+  if (error) {
+    return (
+      <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+        <h3 className="text-red-800 font-medium">Wallet Setup Error</h3>
+        <p className="text-red-600 text-sm mt-1">{error}</p>
+        <button
+          onClick={reconnect}
+          className="mt-2 px-3 py-1 bg-red-600 text-white rounded text-sm hover:bg-red-700"
+        >
+          Try Again
+        </button>
+      </div>
+    )
+  }
+
+  // Handle disconnected state - use OpenfortButton for auth
+  if (!isAuthenticated || !rhinestoneAccount) {
+    return (
+      <div className="text-center p-8">
+        <h2 className="text-xl font-semibold text-gray-900 mb-4">
+          Connect Your Wallet
+        </h2>
+        <p className="text-gray-600 mb-6">
+          Connect with Openfort to access cross-chain functionality
+        </p>
+        <OpenfortButton />
+      </div>
+    )
+  }
+
+  // Connected state
+  return (
+    <div className="bg-green-50 border border-green-200 rounded-lg p-6">
+      <h2 className="text-lg font-semibold text-green-900 mb-2">
+        Wallet Connected
+      </h2>
+      <div className="space-y-2 text-sm">
+        <p><strong>EOA Address:</strong> {address}</p>
+        <p><strong>Smart Account:</strong> {rhinestoneAccount.getAddress()}</p>
+        <p className="text-green-700">Ready for cross-chain transactions!</p>
+      </div>
+      <div className="mt-4">
+        <OpenfortButton />
+      </div>
+    </div>
+  )
+}
+```
+
+### Cross-Chain Transactions
+
+Send transactions using the Openfort-connected wallet with proper error handling:
+
+```tsx
+import { useState } from 'react'
+import { encodeFunctionData, parseUnits } from 'viem'
+import { erc20Abi } from 'viem/chains'
+import { baseSepolia, arbitrumSepolia } from 'viem/chains'
+
+function CrossChainTransfer({ rhinestoneAccount }) {
+  const [isTransacting, setIsTransacting] = useState(false)
+  const [txResult, setTxResult] = useState(null)
+  const [error, setError] = useState(null)
+
+  const handleCrossChainTransfer = async () => {
+    if (!rhinestoneAccount) return
+
+    setIsTransacting(true)
+    setError(null)
+    setTxResult(null)
+
+    try {
+      const transaction = await rhinestoneAccount.sendTransaction({
+        sourceChains: [baseSepolia],
+        targetChain: arbitrumSepolia,
+        calls: [
+          {
+            to: "USDC", // This resolves to the USDC address on the target chain
+            data: encodeFunctionData({
+              abi: erc20Abi,
+              functionName: "transfer",
+              args: ["0xrecipient", parseUnits("10", 6)],
+            }),
+          },
+        ],
+        tokenRequests: [
+          {
+            address: "USDC",
+            amount: parseUnits("10", 6),
+          },
+        ],
+      })
+
+      // Wait for transaction execution
+      const result = await rhinestoneAccount.waitForExecution(transaction)
+
+      setTxResult({
+        id: transaction.id,
+        hash: result.transactionHash,
+        status: 'success',
+      })
+    } catch (err) {
+      console.error('Transaction failed:', err)
+      setError(err instanceof Error ? err.message : 'Transaction failed')
+    } finally {
+      setIsTransacting(false)
+    }
+  }
+
+  return (
+    <div className="space-y-4">
+      <button
+        onClick={handleCrossChainTransfer}
+        disabled={isTransacting || !rhinestoneAccount}
+        className="px-4 py-2 bg-blue-600 text-white rounded disabled:opacity-50"
+      >
+        {isTransacting ? 'Sending...' : 'Send 10 USDC (Base → Arbitrum)'}
+      </button>
+
+      {error && (
+        <div className="text-red-600 text-sm">
+          Error: {error}
+        </div>
+      )}
+
+      {txResult && (
+        <div className="text-green-600 text-sm">
+          Transaction successful!
+          <a
+            href={`https://arbiscan.io/tx/${txResult.hash}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline ml-1"
+          >
+            View on Arbiscan
+          </a>
+        </div>
+      )}
+    </div>
+  )
+}
+```
+
+## The Integration Pattern
+
+All embedded signer integrations follow the same pattern:
+
+1. **Provider Setup**: Configure the embedded wallet provider (Openfort, Dynamic, Privy, etc.)
+2. **Get Wallet Client**: Use the provider's SDK to access the authenticated wallet and create a viem wallet client
+3. **Pass to Rhinestone**: Create a Rhinestone account using the wallet client as a signer
+4. **Use Cross-Chain Features**: The resulting account has all of Rhinestone's capabilities
+
+This pattern means you can easily switch between providers or support multiple providers in the same app.
+
+## Authentication Methods
+
+Openfort supports multiple authentication methods out of the box:
+
+- **Email**: Users can sign in with their email address
+- **Social**: Google and other OAuth providers
+- **Guest**: Anonymous authentication for quick onboarding
+
+The `<OpenfortButton />` component automatically handles the authentication flow with all configured methods.
+
+## Shield Security
+
+Openfort's Shield provides additional security for embedded wallets:
+
+- **Key Management**: Secure key storage and recovery
+- **Transaction Protection**: Advanced fraud detection
+- **Recovery Options**: User-friendly account recovery flows
+
+Configure Shield in your `OpenfortProvider` with the `shieldPublishableKey`.
+
+## Environment Variables
+
+Make sure to set the following environment variables:
+
+```bash
+NEXT_PUBLIC_OPENFORT_PUBLISHABLE_KEY=your_openfort_publishable_key
+NEXT_PUBLIC_SHIELD_PUBLISHABLE_KEY=your_shield_publishable_key
+NEXT_PUBLIC_RHINESTONE_API_KEY=your_rhinestone_api_key
+```
+
+## Complete Example
+
+Try the full integration in our example repository:
+
+```bash
+git clone https://github.com/rhinestonewtf/e2e-examples.git
+cd e2e-examples/openfort
+npm install && npm run dev
+```
+
+The example demonstrates:
+- Openfort authentication with Shield security
+- Embedded wallet creation and management
+- Rhinestone smart account integration
+- Cross-chain transactions
+- Error handling and best practices
+
+## Next Steps
+
+- **See it in action**: [Openfort + Rhinestone Example](https://github.com/rhinestonewtf/e2e-examples/tree/main/openfort)
+- Learn more about [Openfort's embedded wallets](https://www.openfort.io/docs/products/embedded-wallet/react)
+- Explore [Shield security features](https://www.openfort.io/docs/products/embedded-wallet/shield)
+- Explore [chain abstraction](../../chain-abstraction/unified-balance) capabilities
+- Check out [creating an account](../create-account) for more details
