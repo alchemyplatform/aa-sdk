@@ -149,7 +149,7 @@ Upgrade existing Openfort wallets to Smart Wallets to enable gasless transaction
                 await client.embeddedWallet.getEthereumProvider()
 
               const walletClient = createWalletClient({
-                chain: sepolia,
+                chain: sepolia, // Use viem chain for wallet client
                 transport: custom(ethereumProvider)
               })
 
@@ -202,6 +202,8 @@ Upgrade existing Openfort wallets to Smart Wallets to enable gasless transaction
     ### 4. Send Gasless Transactions
 
     ```tsx
+    import { parseEther, toHex } from "viem"
+
     async function sendTransaction(smartWalletClient, walletAddress: string) {
       // Send a single gasless transaction with EIP-7702
       const result = await smartWalletClient.sendCalls({
@@ -209,7 +211,7 @@ Upgrade existing Openfort wallets to Smart Wallets to enable gasless transaction
         calls: [
           {
             to: "0x0000000000000000000000000000000000000000",
-            value: "0x0",
+            value: toHex(parseEther("0.001")), // Convert ETH amount to hex string
             data: "0x",
           },
         ],
@@ -272,13 +274,15 @@ Upgrade existing Openfort wallets to Smart Wallets to enable gasless transaction
     Wait for the transaction to be confirmed onchain:
 
     ```tsx
+    import { parseEther, toHex } from "viem"
+
     async function sendAndWaitForTransaction(smartWalletClient, walletAddress: string) {
       const result = await smartWalletClient.sendCalls({
         from: walletAddress,
         calls: [
           {
             to: "0x0000000000000000000000000000000000000000",
-            value: "0x0",
+            value: toHex(parseEther("0.001")), // Convert ETH amount to hex string
             data: "0x",
           },
         ],
@@ -312,8 +316,8 @@ Upgrade existing Openfort wallets to Smart Wallets to enable gasless transaction
     ```tsx
     import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
     import { useEffect, useState } from 'react'
-    import { WalletClient, createWalletClient, custom } from 'viem'
-    import { sepolia } from 'viem/chains'
+    import { WalletClient, createWalletClient, custom, parseEther, toHex } from 'viem'
+    import { sepolia as viemSepolia } from 'viem/chains'
     import { WagmiProvider, createConfig } from 'wagmi'
     import {
       AccountTypeEnum,
@@ -327,7 +331,7 @@ Upgrade existing Openfort wallets to Smart Wallets to enable gasless transaction
       RecoveryMethod
     } from '@openfort/react'
     import { WalletClientSigner } from "@aa-sdk/core"
-    import { alchemy } from "@account-kit/infra"
+    import { alchemy, sepolia } from "@account-kit/infra"
     import { createSmartWalletClient } from "@account-kit/wallet-client"
 
     const OPENFORT_PUBLISHABLE_KEY = process.env.NEXT_PUBLIC_OPENFORT_PUBLISHABLE_KEY
@@ -388,7 +392,7 @@ Upgrade existing Openfort wallets to Smart Wallets to enable gasless transaction
           // Create Smart Wallet client
           const smartWalletSigner = new WalletClientSigner(provider, "openfort-wallet")
           const smartWalletClient = createSmartWalletClient({
-            chain: sepolia,
+            chain: sepolia, // Use sepolia from @account-kit/infra for Smart Wallet client
             transport: alchemy({ apiKey: ALCHEMY_API_KEY }),
             signer: smartWalletSigner,
             policyId: ALCHEMY_GAS_POLICY_ID,
@@ -400,7 +404,7 @@ Upgrade existing Openfort wallets to Smart Wallets to enable gasless transaction
             calls: [
               {
                 to: "0x0000000000000000000000000000000000000000",
-                value: "0x0",
+                value: toHex(parseEther("0.001")), // Convert ETH amount to hex string
                 data: "0x",
               },
             ],
@@ -541,7 +545,7 @@ Upgrade existing Openfort wallets to Smart Wallets to enable gasless transaction
       // Create a viem wallet client
       const walletClient = createWalletClient({
         account: walletAddress,
-        chain: sepolia,
+        chain: sepolia, // Can use sepolia from @account-kit/infra or viem/chains
         transport: custom(ethereumProvider),
       })
 
@@ -550,7 +554,7 @@ Upgrade existing Openfort wallets to Smart Wallets to enable gasless transaction
 
       // Create and return the Smart Wallet client
       return createSmartWalletClient({
-        chain: sepolia,
+        chain: sepolia, // Must use sepolia from @account-kit/infra for Smart Wallet client
         transport: alchemy({ apiKey: ALCHEMY_API_KEY }),
         signer,
         policyId: ALCHEMY_GAS_POLICY_ID,
@@ -563,6 +567,8 @@ Upgrade existing Openfort wallets to Smart Wallets to enable gasless transaction
     Send gasless transactions using EIP-7702 to upgrade the Openfort wallet to a smart wallet:
 
     ```ts twoslash
+    import { parseEther, toHex } from "viem"
+
     const PLAYER_ID = "your-player-id"
     const WALLET_ADDRESS = "0x..."
 
@@ -581,7 +587,7 @@ Upgrade existing Openfort wallets to Smart Wallets to enable gasless transaction
         calls: [
           {
             to: "0x0000000000000000000000000000000000000000",
-            value: "0x0",
+            value: toHex(parseEther("0.001")), // Convert ETH amount to hex string
             data: "0x",
           },
         ],
@@ -602,6 +608,8 @@ Upgrade existing Openfort wallets to Smart Wallets to enable gasless transaction
     Wait for the transaction to be confirmed onchain:
 
     ```ts twoslash
+    import { parseEther, toHex } from "viem"
+
     async function sendAndWaitForTransaction() {
       const client = await createOpenfortSmartWalletClient({
         playerId: PLAYER_ID,
@@ -613,7 +621,7 @@ Upgrade existing Openfort wallets to Smart Wallets to enable gasless transaction
         calls: [
           {
             to: "0x0000000000000000000000000000000000000000",
-            value: "0x0",
+            value: toHex(parseEther("0.001")), // Convert ETH amount to hex string
             data: "0x",
           },
         ],
@@ -645,12 +653,14 @@ Upgrade existing Openfort wallets to Smart Wallets to enable gasless transaction
     Send multiple transactions in a single batch:
 
     ```ts twoslash
+    import { parseEther, toHex } from "viem"
+
     const result = await client.sendCalls({
       from: WALLET_ADDRESS,
       calls: [
-        { to: "0x...", data: "0x...", value: "0x0" },
-        { to: "0x...", data: "0x...", value: "0x0" },
-        { to: "0x...", data: "0x...", value: "0x0" },
+        { to: "0x...", data: "0x...", value: toHex(parseEther("0.001")) },
+        { to: "0x...", data: "0x...", value: toHex(parseEther("0.002")) },
+        { to: "0x...", data: "0x...", value: toHex(parseEther("0.003")) },
       ],
       capabilities: {
         eip7702Auth: true,
