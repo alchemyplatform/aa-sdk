@@ -32,7 +32,7 @@ export type MultiOwnerLightAccount = LightAccountBase<
 
 export type ToMultiOwnerLightAccountParams = {
   client: Client<Transport, Chain, JsonRpcAccount | LocalAccount | undefined>;
-  owners: OneOf<JsonRpcAccount | LocalAccount>[];
+  owners: [OneOf<JsonRpcAccount | LocalAccount>, ...{ address: Address }[]];
   salt?: bigint;
   accountAddress?: Address;
   factoryAddress?: Address;
@@ -47,7 +47,7 @@ export type ToMultiOwnerLightAccountParams = {
 export async function toMultiOwnerLightAccount({
   client,
   salt = 0n,
-  owners = [],
+  owners,
   accountAddress: accountAddress_,
   factoryAddress = AccountVersionRegistry.MultiOwnerLightAccount["v2.0.0"]
     .factoryAddress,
