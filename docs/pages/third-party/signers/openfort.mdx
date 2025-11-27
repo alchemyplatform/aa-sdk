@@ -1,0 +1,672 @@
+---
+title: Openfort
+description: Use Openfort with Alchemy Smart Wallets for EIP-7702, sponsorship, swaps, and batching
+slug: wallets/third-party/signers/openfort
+---
+
+Upgrade existing Openfort wallets to Smart Wallets to enable gasless transactions, batching, token swaps, and more in under 10 minutes. Keep Openfort for authentication and wallet management, no wallet migration needed. Add our battle-tested transaction infrastructure using EIP-7702 to upgrade your wallets to Smart Wallets:
+
+- [#1 gas abstraction infrastructure](https://www.bundlebear.com/erc4337-bundlers/all) on the market
+- [370M+](https://www.bundlebear.com/erc4337-paymasters/all) sponsored transactions
+- 99.9% SLAs
+- Trusted by Worldcoin, JP Morgan, Gensyn, and more
+
+<Tip>
+  Don't have social login or a wallet set up yet? Start with the
+  <a href="/wallets/quickstart">Smart Wallet Quickstart</a> to create one in
+  minutes.
+</Tip>
+
+<Tabs>
+  <Tab title="React">
+    ## Setup
+
+    Follow these steps to integrate Openfort with Smart Wallets.
+
+    ### Installation
+
+    ```bash
+    npm install @openfort/react @tanstack/react-query wagmi viem
+    # or
+    yarn add @openfort/react @tanstack/react-query wagmi viem
+    # or
+    pnpm add @openfort/react @tanstack/react-query wagmi viem
+    ```
+
+    ### Prerequisites: Get your keys (API key, Policy ID, Openfort credentials)
+
+    - Alchemy API Key:
+      - Go to the [Alchemy Dashboard](https://dashboard.alchemy.com/)
+      - Create or select an app and copy the API key
+    - Gas sponsorship Policy ID (Gas Manager):
+      - Create a gas sponsorship policy in the [dashboard](https://dashboard.alchemy.com/services/gas-manager/configuration) and copy its Policy ID
+    - Openfort Credentials:
+      - Go to the [Openfort Dashboard](https://dashboard.openfort.io/)
+      - Create or select an app and copy the Publishable Key
+      - Enable Shield and copy the Shield Publishable Key
+
+    <Warning>
+      Both the Smart Wallets configuration and the gas sponsorship policy must be
+      linked to the application behind your Alchemy API key for sponsorship to work.
+    </Warning>
+
+    ### 1. Setup Openfort Provider
+
+    ```tsx
+    import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+    import { WagmiProvider, createConfig } from 'wagmi'
+    import { sepolia } from 'viem/chains'
+    import {
+      AccountTypeEnum,
+      AuthProvider,
+      OpenfortProvider,
+      getDefaultConfig,
+      RecoveryMethod
+    } from '@openfort/react'
+
+    const OPENFORT_PUBLISHABLE_KEY = process.env.NEXT_PUBLIC_OPENFORT_PUBLISHABLE_KEY
+    const SHIELD_PUBLISHABLE_KEY = process.env.NEXT_PUBLIC_SHIELD_PUBLISHABLE_KEY
+
+    const wagmiConfig = createConfig(
+      getDefaultConfig({
+        appName: 'Smart Wallet App',
+        chains: [sepolia],
+        ssr: true
+      })
+    )
+
+    const queryClient = new QueryClient()
+
+    const customTheme = {
+      '--ck-connectbutton-background': '#12ff80',
+      '--ck-connectbutton-color': '#000000',
+      '--ck-connectbutton-hover-background': '#18dc74'
+    }
+
+    function App() {
+      return (
+        <WagmiProvider config={wagmiConfig}>
+          <QueryClientProvider client={queryClient}>
+            <OpenfortProvider
+              publishableKey={OPENFORT_PUBLISHABLE_KEY}
+              walletConfig={{
+                shieldPublishableKey: SHIELD_PUBLISHABLE_KEY,
+                accountType: AccountTypeEnum.EOA
+              }}
+              uiConfig={{
+                customTheme: customTheme,
+                authProviders: [
+                  AuthProvider.EMAIL,
+                  AuthProvider.GOOGLE,
+                  AuthProvider.GUEST
+                ],
+                walletRecovery: {
+                  defaultMethod: RecoveryMethod.PASSWORD,
+                  allowedMethods: [
+                    RecoveryMethod.PASSWORD,
+                    RecoveryMethod.PASSKEY
+                  ]
+                }
+              }}
+            >
+              <YourApp />
+            </OpenfortProvider>
+          </QueryClientProvider>
+        </WagmiProvider>
+      )
+    }
+    ```
+
+    Props for `OpenfortProvider`:
+
+    - `publishableKey` (required) - Your Openfort publishable key
+    - `walletConfig` (required) - Wallet configuration including Shield key and account type
+    - `uiConfig` (optional) - UI customization including theme and auth providers
+
+    ### 2. Get Ethereum Provider and Create Wallet Client
+
+    ```tsx
+    import { useEffect, useState } from 'react'
+    import { WalletClient, createWalletClient, custom } from 'viem'
+    import { sepolia } from 'viem/chains'
+    import { useUser, useWallets, useOpenfort } from '@openfort/react'
+
+    function OpenfortApp() {
+      const { isAuthenticated } = useUser()
+      const { wallets } = useWallets()
+      const { client } = useOpenfort()
+      const [provider, setProvider] = useState<WalletClient | null>(null)
+      const [signer, setSigner] = useState<string | null>(null)
+
+      useEffect(() => {
+        const init = async () => {
+          if (isAuthenticated && wallets.length > 0) {
+            try {
+              setSigner(wallets[0].address)
+
+              // Get the Ethereum provider from Openfort client
+              const ethereumProvider =
+                await client.embeddedWallet.getEthereumProvider()
+
+              const walletClient = createWalletClient({
+                chain: sepolia,
+                transport: custom(ethereumProvider)
+              })
+
+              setProvider(walletClient)
+            } catch (error) {
+              console.error('Error initializing wallet:', error)
+            }
+          } else {
+            setProvider(null)
+            setSigner(null)
+          }
+        }
+        init()
+      }, [isAuthenticated, wallets, client])
+
+      return (
+        <div>
+          <pre>{signer || 'Not connected'}</pre>
+        </div>
+      )
+    }
+    ```
+
+    ### 3. Create Smart Wallet Client
+
+    Once you have the Openfort wallet client, integrate it with Alchemy Smart Wallets:
+
+    ```tsx
+    import { WalletClientSigner } from "@aa-sdk/core"
+    import { alchemy, sepolia } from "@account-kit/infra"
+    import { createSmartWalletClient } from "@account-kit/wallet-client"
+
+    const ALCHEMY_API_KEY = "your-alchemy-api-key"
+    const ALCHEMY_GAS_POLICY_ID = "your-gas-policy-id"
+
+    async function createOpenfortSmartWalletClient(walletClient: WalletClient) {
+      // Create signer from Openfort wallet client
+      const signer = new WalletClientSigner(walletClient, "openfort-wallet")
+
+      // Create and return the Smart Wallet client
+      return createSmartWalletClient({
+        chain: sepolia,
+        transport: alchemy({ apiKey: ALCHEMY_API_KEY }),
+        signer,
+        policyId: ALCHEMY_GAS_POLICY_ID,
+      })
+    }
+    ```
+
+    ### 4. Send Gasless Transactions
+
+    ```tsx
+    async function sendTransaction(smartWalletClient, walletAddress: string) {
+      // Send a single gasless transaction with EIP-7702
+      const result = await smartWalletClient.sendCalls({
+        from: walletAddress,
+        calls: [
+          {
+            to: "0x0000000000000000000000000000000000000000",
+            value: "0x0",
+            data: "0x",
+          },
+        ],
+        capabilities: {
+          eip7702Auth: true,
+          paymasterService: {
+            policyId: ALCHEMY_GAS_POLICY_ID,
+          },
+        },
+      })
+
+      console.log("Transaction sent:", result.preparedCallIds[0])
+    }
+    ```
+
+    Control sponsorship per call:
+
+    ```tsx
+    // With sponsorship (default)
+    await smartWalletClient.sendCalls({
+      from: walletAddress,
+      calls: [{ to: "0x...", data: "0x..." }],
+      capabilities: {
+        eip7702Auth: true,
+        paymasterService: { policyId: ALCHEMY_GAS_POLICY_ID },
+      },
+    })
+
+    // Without sponsorship
+    await smartWalletClient.sendCalls({
+      from: walletAddress,
+      calls: [{ to: "0x...", data: "0x..." }],
+      capabilities: { eip7702Auth: true },
+    })
+    ```
+
+    ### 5. Batch Multiple Transactions
+
+    Send multiple transactions in a single batch:
+
+    ```tsx
+    const result = await smartWalletClient.sendCalls({
+      from: walletAddress,
+      calls: [
+        { to: "0x...", data: "0x...", value: "0x0" },
+        { to: "0x...", data: "0x...", value: "0x0" },
+        { to: "0x...", data: "0x...", value: "0x0" },
+      ],
+      capabilities: {
+        eip7702Auth: true,
+        paymasterService: {
+          policyId: ALCHEMY_GAS_POLICY_ID,
+        },
+      },
+    })
+    ```
+
+    ### 6. Wait for Transaction Confirmation
+
+    Wait for the transaction to be confirmed onchain:
+
+    ```tsx
+    async function sendAndWaitForTransaction(smartWalletClient, walletAddress: string) {
+      const result = await smartWalletClient.sendCalls({
+        from: walletAddress,
+        calls: [
+          {
+            to: "0x0000000000000000000000000000000000000000",
+            value: "0x0",
+            data: "0x",
+          },
+        ],
+        capabilities: {
+          eip7702Auth: true,
+          paymasterService: {
+            policyId: ALCHEMY_GAS_POLICY_ID,
+          },
+        },
+      })
+
+      console.log("Waiting for confirmation...")
+
+      // Wait for the transaction to be confirmed
+      const txStatus = await smartWalletClient.waitForCallsStatus({
+        id: result.preparedCallIds[0],
+        timeout: 60_000, // 60 seconds
+      })
+
+      const txnHash = txStatus.receipts?.[0]?.transactionHash
+
+      console.log("Transaction confirmed!")
+      console.log("Transaction hash:", txnHash)
+    }
+    ```
+
+    ### Complete Example
+
+    Here's a complete example combining all the pieces:
+
+    ```tsx
+    import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+    import { useEffect, useState } from 'react'
+    import { WalletClient, createWalletClient, custom } from 'viem'
+    import { sepolia } from 'viem/chains'
+    import { WagmiProvider, createConfig } from 'wagmi'
+    import {
+      AccountTypeEnum,
+      AuthProvider,
+      OpenfortProvider,
+      OpenfortButton,
+      useUser,
+      useWallets,
+      useOpenfort,
+      getDefaultConfig,
+      RecoveryMethod
+    } from '@openfort/react'
+    import { WalletClientSigner } from "@aa-sdk/core"
+    import { alchemy } from "@account-kit/infra"
+    import { createSmartWalletClient } from "@account-kit/wallet-client"
+
+    const OPENFORT_PUBLISHABLE_KEY = process.env.NEXT_PUBLIC_OPENFORT_PUBLISHABLE_KEY
+    const SHIELD_PUBLISHABLE_KEY = process.env.NEXT_PUBLIC_SHIELD_PUBLISHABLE_KEY
+    const ALCHEMY_API_KEY = process.env.NEXT_PUBLIC_ALCHEMY_API_KEY
+    const ALCHEMY_GAS_POLICY_ID = process.env.NEXT_PUBLIC_ALCHEMY_GAS_POLICY_ID
+
+    const wagmiConfig = createConfig(
+      getDefaultConfig({
+        appName: 'Smart Wallet App',
+        chains: [sepolia],
+        ssr: true
+      })
+    )
+
+    const queryClient = new QueryClient()
+
+    function OpenfortApp() {
+      const { isAuthenticated } = useUser()
+      const { wallets } = useWallets()
+      const { client } = useOpenfort()
+      const [provider, setProvider] = useState<WalletClient | null>(null)
+      const [signer, setSigner] = useState<string | null>(null)
+
+      useEffect(() => {
+        const init = async () => {
+          if (isAuthenticated && wallets.length > 0) {
+            try {
+              setSigner(wallets[0].address)
+
+              const ethereumProvider =
+                await client.embeddedWallet.getEthereumProvider()
+
+              const walletClient = createWalletClient({
+                chain: sepolia,
+                transport: custom(ethereumProvider)
+              })
+
+              setProvider(walletClient)
+            } catch (error) {
+              console.error('Error initializing wallet:', error)
+            }
+          } else {
+            setProvider(null)
+            setSigner(null)
+          }
+        }
+        init()
+      }, [isAuthenticated, wallets, client])
+
+      const handleSendTransaction = async () => {
+        if (!provider || !signer) {
+          console.error('Wallet not initialized')
+          return
+        }
+
+        try {
+          // Create Smart Wallet client
+          const smartWalletSigner = new WalletClientSigner(provider, "openfort-wallet")
+          const smartWalletClient = createSmartWalletClient({
+            chain: sepolia,
+            transport: alchemy({ apiKey: ALCHEMY_API_KEY }),
+            signer: smartWalletSigner,
+            policyId: ALCHEMY_GAS_POLICY_ID,
+          })
+
+          // Send gasless transaction
+          const result = await smartWalletClient.sendCalls({
+            from: signer,
+            calls: [
+              {
+                to: "0x0000000000000000000000000000000000000000",
+                value: "0x0",
+                data: "0x",
+              },
+            ],
+            capabilities: {
+              eip7702Auth: true,
+              paymasterService: {
+                policyId: ALCHEMY_GAS_POLICY_ID,
+              },
+            },
+          })
+
+          console.log("Transaction sent:", result.preparedCallIds[0])
+        } catch (error) {
+          console.error('Transaction error:', error)
+        }
+      }
+
+      return (
+        <div>
+          <pre>{signer || 'Not connected'}</pre>
+          <OpenfortButton label="Connect" />
+          {isAuthenticated && (
+            <button onClick={handleSendTransaction}>
+              Send Gasless Transaction
+            </button>
+          )}
+        </div>
+      )
+    }
+
+    export default function App() {
+      if (!OPENFORT_PUBLISHABLE_KEY || !SHIELD_PUBLISHABLE_KEY) {
+        return <div>Openfort not configured</div>
+      }
+
+      return (
+        <WagmiProvider config={wagmiConfig}>
+          <QueryClientProvider client={queryClient}>
+            <OpenfortProvider
+              publishableKey={OPENFORT_PUBLISHABLE_KEY}
+              walletConfig={{
+                shieldPublishableKey: SHIELD_PUBLISHABLE_KEY,
+                accountType: AccountTypeEnum.EOA
+              }}
+              uiConfig={{
+                authProviders: [
+                  AuthProvider.EMAIL,
+                  AuthProvider.GOOGLE,
+                  AuthProvider.GUEST
+                ],
+                walletRecovery: {
+                  defaultMethod: RecoveryMethod.PASSWORD,
+                  allowedMethods: [
+                    RecoveryMethod.PASSWORD,
+                    RecoveryMethod.PASSKEY
+                  ]
+                }
+              }}
+            >
+              <OpenfortApp />
+            </OpenfortProvider>
+          </QueryClientProvider>
+        </WagmiProvider>
+      )
+    }
+    ```
+
+    ### Notes
+
+    - **Authentication**: Openfort supports multiple authentication providers including email, Google, and guest mode
+    - **Recovery Methods**: Configure wallet recovery using password or passkey
+    - **EIP-7702**: Uses EIP-7702 to delegate the Openfort wallet to a smart account. No deployment needed, funds stay at the wallet address.
+    - **Account Types**: Support for both EOA (Externally Owned Account) and embedded wallets
+    - The integration works seamlessly with Openfort's Shield technology for enhanced security
+
+  </Tab>
+  <Tab title="JavaScript">
+    ## Setup
+
+    Use Openfort's SDK with Smart Wallets infrastructure in a server environment.
+
+    ### Installation
+
+    ```bash
+    npm install @openfort/openfort-js @account-kit/wallet-client @account-kit/infra @aa-sdk/core viem
+    # or
+    yarn add @openfort/openfort-js @account-kit/wallet-client @account-kit/infra @aa-sdk/core viem
+    # or
+    pnpm add @openfort/openfort-js @account-kit/wallet-client @account-kit/infra @aa-sdk/core viem
+    ```
+
+    ### Prerequisites: Get your keys
+
+    - Alchemy API Key:
+      - Go to the [Alchemy Dashboard](https://dashboard.alchemy.com/)
+      - Create or select an app and copy the API key
+    - Gas sponsorship Policy ID (Gas Manager):
+      - Create a gas sponsorship policy in the [dashboard](https://dashboard.alchemy.com/services/gas-manager/configuration) and copy its Policy ID
+    - Openfort Credentials:
+      - Go to the [Openfort Dashboard](https://dashboard.openfort.io/)
+      - Create or select an app and copy the API Key (for server-side usage)
+      - Enable Shield and copy the Shield Publishable Key
+
+    <Warning>
+      Both the Smart Wallets configuration and the gas sponsorship policy must be
+      linked to the application behind your Alchemy API key for sponsorship to work.
+    </Warning>
+
+    ### Create Smart Wallet Client from Openfort
+
+    Create a helper function that converts an Openfort wallet into an Alchemy Smart Wallet client:
+
+    ```ts twoslash
+    import Openfort from "@openfort/openfort-js"
+    import { WalletClientSigner } from "@aa-sdk/core"
+    import { alchemy, sepolia } from "@account-kit/infra"
+    import { createSmartWalletClient } from "@account-kit/wallet-client"
+    import { createWalletClient, custom } from "viem"
+
+    const ALCHEMY_API_KEY = "your-alchemy-api-key"
+    const ALCHEMY_GAS_POLICY_ID = "your-gas-policy-id"
+    const OPENFORT_API_KEY = "your-openfort-api-key"
+
+    async function createOpenfortSmartWalletClient({
+      playerId,
+      walletAddress,
+    }) {
+      // Initialize Openfort SDK
+      const openfort = new Openfort({
+        apiKey: OPENFORT_API_KEY,
+      })
+
+      // Get the Ethereum provider from Openfort
+      const ethereumProvider = await openfort.getEthereumProvider({
+        playerId,
+      })
+
+      // Create a viem wallet client
+      const walletClient = createWalletClient({
+        account: walletAddress,
+        chain: sepolia,
+        transport: custom(ethereumProvider),
+      })
+
+      // Wrap it in a WalletClientSigner for Account Kit
+      const signer = new WalletClientSigner(walletClient, "openfort-wallet")
+
+      // Create and return the Smart Wallet client
+      return createSmartWalletClient({
+        chain: sepolia,
+        transport: alchemy({ apiKey: ALCHEMY_API_KEY }),
+        signer,
+        policyId: ALCHEMY_GAS_POLICY_ID,
+      })
+    }
+    ```
+
+    ### Send Transactions with EIP-7702
+
+    Send gasless transactions using EIP-7702 to upgrade the Openfort wallet to a smart wallet:
+
+    ```ts twoslash
+    const PLAYER_ID = "your-player-id"
+    const WALLET_ADDRESS = "0x..."
+
+    async function sendTransaction() {
+      console.log("Wallet address:", WALLET_ADDRESS)
+
+      // Create Smart Wallet client from Openfort wallet
+      const client = await createOpenfortSmartWalletClient({
+        playerId: PLAYER_ID,
+        walletAddress: WALLET_ADDRESS,
+      })
+
+      // Send a gasless transaction with EIP-7702
+      const result = await client.sendCalls({
+        from: WALLET_ADDRESS,
+        calls: [
+          {
+            to: "0x0000000000000000000000000000000000000000",
+            value: "0x0",
+            data: "0x",
+          },
+        ],
+        capabilities: {
+          eip7702Auth: true,
+          paymasterService: {
+            policyId: ALCHEMY_GAS_POLICY_ID,
+          },
+        },
+      })
+
+      console.log("Transaction sent:", result.preparedCallIds[0])
+    }
+    ```
+
+    ### Wait for Transaction Confirmation
+
+    Wait for the transaction to be confirmed onchain:
+
+    ```ts twoslash
+    async function sendAndWaitForTransaction() {
+      const client = await createOpenfortSmartWalletClient({
+        playerId: PLAYER_ID,
+        walletAddress: WALLET_ADDRESS,
+      })
+
+      const result = await client.sendCalls({
+        from: WALLET_ADDRESS,
+        calls: [
+          {
+            to: "0x0000000000000000000000000000000000000000",
+            value: "0x0",
+            data: "0x",
+          },
+        ],
+        capabilities: {
+          eip7702Auth: true,
+          paymasterService: {
+            policyId: ALCHEMY_GAS_POLICY_ID,
+          },
+        },
+      })
+
+      console.log("Waiting for confirmation...")
+
+      // Wait for the transaction to be confirmed
+      const txStatus = await client.waitForCallsStatus({
+        id: result.preparedCallIds[0],
+        timeout: 60_000, // 60 seconds
+      })
+
+      const txnHash = txStatus.receipts?.[0]?.transactionHash
+
+      console.log("Transaction confirmed!")
+      console.log("Transaction hash:", txnHash)
+    }
+    ```
+
+    ### Batch Multiple Transactions
+
+    Send multiple transactions in a single batch:
+
+    ```ts twoslash
+    const result = await client.sendCalls({
+      from: WALLET_ADDRESS,
+      calls: [
+        { to: "0x...", data: "0x...", value: "0x0" },
+        { to: "0x...", data: "0x...", value: "0x0" },
+        { to: "0x...", data: "0x...", value: "0x0" },
+      ],
+      capabilities: {
+        eip7702Auth: true,
+        paymasterService: {
+          policyId: ALCHEMY_GAS_POLICY_ID,
+        },
+      },
+    })
+    ```
+
+    ### Notes
+
+    - **EIP-7702**: The examples above use EIP-7702 to upgrade the wallet to a smart wallet at transaction time without migration or separate deployment
+    - **Gas Sponsorship**: Use `paymasterService` with your policy ID for gasless transactions
+    - **Player Management**: Openfort uses a player-based system for managing users and their wallets
+    - **Server-Side**: This example uses Openfort's server-side SDK which is designed for backend environments. However, the `@account-kit` packages (`@account-kit/wallet-client`, `@account-kit/infra`, etc.) can be used in any JavaScript environment including browsers, React Native, and Node.js
+
+  </Tab>
+</Tabs>
