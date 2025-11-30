@@ -1,0 +1,73 @@
+<div class="wallet-connect-container">
+  <h3>Connect External Wallet</h3>
+  
+  @if (connection) {
+    <div class="connected-wallet">
+      <div class="wallet-info">
+        <span class="wallet-icon">{{ getWalletIcon(connection.connector.toLowerCase()) }}</span>
+        <div class="wallet-details">
+          <p class="wallet-name">{{ getWalletName(connection.connector.toLowerCase()) }}</p>
+          <p class="wallet-address">{{ connection.address }}</p>
+          <p class="chain-info">Chain ID: {{ connection.chainId }}</p>
+        </div>
+      </div>
+      <button 
+        class="disconnect-btn" 
+        (click)="disconnectWallet()"
+        [disabled]="isConnecting"
+      >
+        Disconnect
+      </button>
+    </div>
+  } @else {
+    <div class="wallet-options">
+      <button 
+        class="wallet-btn metamask"
+        (click)="connectWallet('metamask')"
+        [disabled]="isConnecting"
+      >
+        <span class="wallet-icon">{{ getWalletIcon('metamask') }}</span>
+        <span class="wallet-name">{{ getWalletName('metamask') }}</span>
+        @if (isConnecting && connectingWallet === 'metamask') {
+          <span class="connecting">Connecting...</span>
+        }
+      </button>
+
+      <button 
+        class="wallet-btn coinbase"
+        (click)="connectWallet('coinbase')"
+        [disabled]="isConnecting"
+      >
+        <span class="wallet-icon">{{ getWalletIcon('coinbase') }}</span>
+        <span class="wallet-name">{{ getWalletName('coinbase') }}</span>
+        @if (isConnecting && connectingWallet === 'coinbase') {
+          <span class="connecting">Connecting...</span>
+        }
+      </button>
+
+      <button 
+        class="wallet-btn walletconnect"
+        (click)="connectWallet('walletconnect')"
+        [disabled]="isConnecting"
+      >
+        <span class="wallet-icon">{{ getWalletIcon('walletconnect') }}</span>
+        <span class="wallet-name">{{ getWalletName('walletconnect') }}</span>
+        @if (isConnecting && connectingWallet === 'walletconnect') {
+          <span class="connecting">Connecting...</span>
+        }
+      </button>
+
+      <button 
+        class="wallet-btn injected"
+        (click)="connectWallet('injected')"
+        [disabled]="isConnecting"
+      >
+        <span class="wallet-icon">{{ getWalletIcon('injected') }}</span>
+        <span class="wallet-name">{{ getWalletName('injected') }}</span>
+        @if (isConnecting && connectingWallet === 'injected') {
+          <span class="connecting">Connecting...</span>
+        }
+      </button>
+    </div>
+  }
+</div>
