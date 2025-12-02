@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.80.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.79.0...v4.80.0) (2025-12-02)
+
+### Bug Fixes
+
+- **chains:** expose worldl3devnet ([#2274](https://github.com/alchemyplatform/aa-sdk/issues/2274)) ([a85d0a4](https://github.com/alchemyplatform/aa-sdk/commit/a85d0a4e0300c7aa4b13b62e537815e31db322b4))
+
+### Features
+
+- **mythos:** add mythos mainnet ([#2265](https://github.com/alchemyplatform/aa-sdk/issues/2265)) ([2a53ac2](https://github.com/alchemyplatform/aa-sdk/commit/2a53ac2a4c7d820c66d764ea3f5dedafb605518c))
+
 # [4.79.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.78.0...v4.79.0) (2025-11-19)
 
 ### Bug Fixes
