@@ -56,6 +56,7 @@ export {
   edgeMainnet,
   stableMainnet,
   mythosMainnet,
+  worldl3devnet,
 } from "../chains.js";
 export type * from "../client/decorators/smartAccount.js";
 export { alchemyActions } from "../client/decorators/smartAccount.js";
