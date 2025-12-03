@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.81.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.80.0...v4.81.0) (2025-12-03)
+
+### Features
+
+- **monad:** add monad mainnet ([#2014](https://github.com/alchemyplatform/aa-sdk/issues/2014)) ([323612b](https://github.com/alchemyplatform/aa-sdk/commit/323612be774d7d93a8fc945539c1cd45001ed6cc))
+
 # [4.80.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.79.0...v4.80.0) (2025-12-02)
 
 ### Bug Fixes
