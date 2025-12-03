@@ -525,6 +525,30 @@ export const monadTestnet: Chain = defineChain({
   testnet: true,
 });
 
+export const monadMainnet: Chain = defineChain({
+  id: 143,
+  name: "Monad Mainnet",
+  nativeCurrency: { name: "Monad", symbol: "MON", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://monad-mainnet.g.alchemy.com/v2"],
+    },
+    public: {
+      http: ["https://monad-mainnet.g.alchemy.com/v2"],
+    },
+    alchemy: {
+      http: ["https://monad-mainnet.g.alchemy.com/v2"],
+    },
+  },
+  blockExplorers: {
+    default: {
+      name: "Block Explorer",
+      url: "https://mainnet-beta.monvision.io",
+    },
+  },
+  testnet: false,
+});
+
 export const mekong: Chain = defineChain({
   id: 7078815900,
   name: "Mekong Pectra Devnet",
