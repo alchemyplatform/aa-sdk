@@ -164,7 +164,7 @@ When writing or editing documentation for Alchemy Smart Wallets, follow these co
 **Link Strategy**:
 
 - **Link to existing docs** instead of repeating content
-- **Use relative links**: `/wallets/...` not full URLs
+- **Use relative links**: All relative links should begin with `/wallets/...` instead of full URLs (`https://www.alchemy.com/docs/wallets/...`)
 - **Ensure no broken or circular references**
 
 ---
@@ -249,6 +249,51 @@ Ensure you are using aa-sdk version 3.x or later...
 - ❌ **Avoid full URLs**: `[https://www.alchemy.com/docs/...]`
 - ✅ **Include alt text** for all images
 - ✅ **Verify no broken links**
+
+### 🖼️ Images and Assets
+
+**All documentation assets are hosted on Cloudinary**
+
+**Adding New Images**:
+
+1. **Upload to Cloudinary**:
+
+   - Sign-in to Cloudinary through Okta.
+   - Folder structure: `docs/aa-sdk/images/[subdirectory]/`
+   - Use the Cloudinary dashboard or API (can get credentials for API through dashboard)
+   - Set `overwrite: true` to replace existing assets if updating existing ones.
+
+2. **Reference in Documentation**:
+
+   ```markdown
+   ![Alt text](https://alchemyapi-res.cloudinary.com/image/upload/v{version}/docs/aa-sdk/images/your-image.png)
+   ```
+
+   Or for HTML:
+
+   ```html
+   <img
+     src="https://alchemyapi-res.cloudinary.com/image/upload/v{version}/docs/aa-sdk/images/your-image.png"
+     alt="Description"
+   />
+   ```
+
+3. **Best Practices**:
+   - ✅ Use descriptive filenames (e.g., `auth0-config.png` not `image1.png`)
+   - ✅ Optimize images before upload (compress PNGs, use appropriate quality for JPEGs)
+   - ✅ Use kebab-case for filenames
+   - ✅ Always include alt text for accessibility
+   - ❌ Don't commit local image files to the repository
+
+**Folder Structure on Cloudinary**:
+
+```
+docs/aa-sdk/
+├── images/              # Main documentation images
+│   ├── getting-started/ # Quickstart and setup images
+│   └── ...
+└── shared/              # Shared assets referenced across multiple docs
+```
 
 ---
 

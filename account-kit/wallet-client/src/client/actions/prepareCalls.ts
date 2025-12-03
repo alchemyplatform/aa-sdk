@@ -1,9 +1,18 @@
 import { AccountNotFoundError } from "@aa-sdk/core";
 import { toHex, type Address, type IsUndefined } from "viem";
 import type { InnerWalletApiClient } from "../../types.ts";
-import type { Static } from "@sinclair/typebox";
-import { wallet_prepareCalls } from "@alchemy/wallet-api-types/rpc";
+import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
 import { metrics } from "../../metrics.js";
+import { mergeClientCapabilities } from "../../internal/capabilities.js";
+
+type RpcSchema = Extract<
+  WalletServerRpcSchemaType,
+  {
+    Request: {
+      method: "wallet_prepareCalls";
+    };
+  }
+>;
 
 export type GetAccountParam<TAccount> =
   IsUndefined<TAccount> extends true
@@ -12,17 +21,10 @@ export type GetAccountParam<TAccount> =
 
 export type PrepareCallsParams<
   TAccount extends Address | undefined = Address | undefined,
-> = Omit<
-  Static<
-    (typeof wallet_prepareCalls)["properties"]["Request"]["properties"]["params"]
-  >[0],
-  "from" | "chainId"
-> &
+> = Omit<RpcSchema["Request"]["params"][0], "from" | "chainId"> &
   (IsUndefined<TAccount> extends true ? { from: Address } : { from?: never });
 
-export type PrepareCallsResult = Static<
-  typeof wallet_prepareCalls
->["ReturnType"];
+export type PrepareCallsResult = RpcSchema["ReturnType"];
 
 /**
  * Prepares a set of contract calls for execution by building a user operation.
@@ -33,7 +35,7 @@ export type PrepareCallsResult = Static<
  * @param {PrepareCallsParams<TAccount>} params - Parameters for preparing calls
  * @param {Array<{to: Address, data?: Hex, value?: Hex}>} params.calls - Array of contract calls to execute
  * @param {Address} [params.from] - The address to execute the calls from (required if the client wasn't initialized with an account)
- * @param {object} [params.capabilities] - Optional capabilities to include with the request
+ * @param {object} [params.capabilities] - Optional capabilities to include with the request. See [API documentation](/wallets/api-reference/smart-wallets/wallet-api-endpoints/wallet-api-endpoints/wallet-prepare-calls#request.body.prepareCallsRequest.capabilities) for details.
  * @returns {Promise<PrepareCallsResult>} A Promise that resolves to the prepared calls result containing
  * the user operation data and signature request
  *
@@ -67,12 +69,7 @@ export async function prepareCalls<
     throw new AccountNotFoundError();
   }
 
-  if (client.policyIds && !params.capabilities?.paymasterService) {
-    params.capabilities = {
-      ...params.capabilities,
-      paymasterService: { policyIds: client.policyIds },
-    };
-  }
+  const capabilities = mergeClientCapabilities(client, params.capabilities);
 
   return await client.request({
     method: "wallet_prepareCalls",
@@ -81,6 +78,7 @@ export async function prepareCalls<
         ...params,
         chainId: toHex(client.chain.id),
         from,
+        capabilities,
       },
     ],
   });

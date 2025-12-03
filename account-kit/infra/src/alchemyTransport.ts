@@ -53,6 +53,7 @@ const chainAgnosticMethods = [
   "wallet_listAccounts",
   "wallet_createSession",
   "wallet_getCallsStatus",
+  "wallet_requestQuote_v0",
 ];
 
 export type AlchemyTransportConfig = (
@@ -84,7 +85,7 @@ export type AlchemyTransport = AlchemyTransportBase & {
 /**
  * A type guard for the transport to determine if it is an Alchemy transport.
  * Used in cases where we would like to do switching depending on the transport, where there used
- * to be two clients for a alchemy and a non alchemy, and with this switch we don't need the two seperate clients. *
+ * to be two clients for an alchemy and a non-alchemy, and with this switch we don't need the two seperate clients. *
  *
  * @param {Transport} transport The transport to check
  * @param {Chain} chain Chain for the transport to run its function to return the transport config

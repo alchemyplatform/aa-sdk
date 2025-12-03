@@ -1,7 +1,7 @@
 ---
 title: Session Keys
 subtitle: Learn how to use session keys with Wallet APIs
-url: https://docs.alchemy.com/reference/wallet-apis-session-keys
+url: https://alchemy.com/docs/reference/wallet-apis-session-keys
 slug: reference/wallet-apis-session-keys
 ---
 
@@ -11,7 +11,7 @@ To use this guide, you'll need:
 
 - An account you can sign with (e.g. an [Alchemy Signer](/docs/wallets/signer/what-is-a-signer#alchemy-signer) or an EOA)
 - An Alchemy API key
-- A [gas manager policy ID](/docs/wallets/transactions/sponsor-gas/sponsor-gas-evm) if sponsoring gas
+- A [gas manager policy ID](/docs/wallets/transactions/sponsor-gas) if sponsoring gas
 
 <Tip title="Don't have an API key?" icon="star">
   Start using the Alchemy Wallets API today! [Get started for
@@ -70,7 +70,7 @@ This permission allows transfer of native tokens (like Ether) from the account.
 
 ### ERC20 Token Transfer
 
-This permission allows transfer or approval of erc20 tokens from the account. Both transfers and approvals count towards the limit.
+This permission allows transfer or approval of ERC-20 tokens from the account. The specified allowance represents the total cumulative spend limit for all transfers and approvals (it is not a per-operation allowance).
 
 ```ts
 {

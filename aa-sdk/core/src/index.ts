@@ -95,6 +95,7 @@ export {
 } from "./errors/useroperation.js";
 export * from "./client/addBreadcrumb.js";
 export { LogLevel, Logger } from "./logger.js";
+export type * from "./middleware/types.js";
 export { middlewareActions } from "./middleware/actions.js";
 export { default7702UserOpSigner } from "./middleware/defaults/7702signer.js";
 export { default7702GasEstimator } from "./middleware/defaults/7702gasEstimator.js";
@@ -106,7 +107,7 @@ export { defaultUserOpSigner } from "./middleware/defaults/userOpSigner.js";
 export type * from "./middleware/erc7677middleware.js";
 export { erc7677Middleware } from "./middleware/erc7677middleware.js";
 export { noopMiddleware } from "./middleware/noopMiddleware.js";
-export type * from "./middleware/types.js";
+export type * from "./middleware/actions.js";
 export { LocalAccountSigner } from "./signer/local-account.js";
 export { SignerSchema, isSigner } from "./signer/schema.js";
 export type {
@@ -150,6 +151,7 @@ export {
   pick,
   resolveProperties,
   takeBytes,
+  unpackSignRawMessageBytes,
   toRecord,
 } from "./utils/index.js";
 export { getUserOperationError } from "./actions/smartAccount/getUserOperationError.js";

@@ -7,6 +7,15 @@ import type {
 import type { Hex } from "viem";
 import type { AuthParams } from "../signer";
 
+// [!region VerificationOtp]
+export type VerificationOtp = {
+  /** The OTP ID returned from initOtp */
+  id: string;
+  /** The OTP code received by the user */
+  code: string;
+};
+// [!endregion VerificationOtp]
+
 export type CredentialCreationOptionOverrides = {
   publicKey?: Partial<CredentialCreationOptions["publicKey"]>;
 } & Pick<CredentialCreationOptions, "signal">;
@@ -14,6 +23,7 @@ export type CredentialCreationOptionOverrides = {
 // [!region User]
 export type User = {
   email?: string;
+  phone?: string;
   orgId: string;
   userId: string;
   address: Address;
@@ -54,6 +64,11 @@ export type CreateAccountParams =
       type: "passkey";
       username: string;
       creationOpts?: CredentialCreationOptionOverrides;
+    }
+  | {
+      type: "accessKey";
+      publicKey: string;
+      accountId?: string;
     };
 
 export type EmailType = "magicLink" | "otp";
@@ -71,6 +86,13 @@ export type EmailAuthParams = {
 export type SmsAuthParams = {
   phone: string;
   targetPublicKey: string;
+};
+
+export type AccessKeyAuthParamsPublicKeyOnly = {
+  accessKey: {
+    publicKey: string;
+    accountId?: string;
+  };
 };
 
 export type OauthParams = Extract<AuthParams, { type: "oauth" }> & {
@@ -163,7 +185,8 @@ export type SignerEndpoints = [
             challenge: string;
             attestation: Awaited<ReturnType<typeof getWebAuthnAttestation>>;
           };
-        };
+        }
+      | AccessKeyAuthParamsPublicKeyOnly;
     Response: SignupResponse;
   },
   {
@@ -192,9 +215,33 @@ export type SignerEndpoints = [
     Body: {
       email?: string;
       phone?: string;
+      accessKey?: {
+        publicKey: string;
+        accountId?: string;
+      };
     };
     Response: {
       orgId: string | null;
+    };
+  },
+  {
+    Route: "/v1/init-otp";
+    Body: {
+      contact: string;
+      otpType: "OTP_TYPE_SMS" | "OTP_TYPE_EMAIL";
+    };
+    Response: {
+      otpId: string;
+    };
+  },
+  {
+    Route: "/v1/verify-otp";
+    Body: {
+      otpId: string;
+      otpCode: string;
+    };
+    Response: {
+      verificationToken: string;
     };
   },
   {
@@ -208,6 +255,13 @@ export type SignerEndpoints = [
   },
   {
     Route: "/v1/update-email-auth";
+    Body: {
+      stampedRequest: TSignedRequest;
+    };
+    Response: void;
+  },
+  {
+    Route: "/v1/update-phone-auth";
     Body: {
       stampedRequest: TSignedRequest;
     };
@@ -512,6 +566,7 @@ export type AddOauthProviderParams = {
 
 export type AuthMethods = {
   email?: string;
+  phone?: string;
   oauthProviders: OauthProviderInfo[];
   passkeys: PasskeyInfo[];
 };

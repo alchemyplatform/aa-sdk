@@ -3,6 +3,163 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.80.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.79.0...v4.80.0) (2025-12-02)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+# [4.79.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.78.0...v4.79.0) (2025-11-19)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+# [4.78.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.77.1...v4.78.0) (2025-11-05)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+## [4.77.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.77.0...v4.77.1) (2025-10-31)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+# [4.77.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.76.0...v4.77.0) (2025-10-31)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+# [4.76.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.75.4...v4.76.0) (2025-10-28)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+## [4.75.4](https://github.com/alchemyplatform/aa-sdk/compare/v4.75.3...v4.75.4) (2025-10-27)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+## [4.75.3](https://github.com/alchemyplatform/aa-sdk/compare/v4.75.2...v4.75.3) (2025-10-27)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+## [4.75.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.75.1...v4.75.2) (2025-10-24)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+## [4.75.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.75.0...v4.75.1) (2025-10-24)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+# [4.75.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.74.0...v4.75.0) (2025-10-24)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+# [4.74.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.73.0...v4.74.0) (2025-10-21)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+# [4.73.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.72.0...v4.73.0) (2025-10-17)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+# [4.72.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.71.1...v4.72.0) (2025-10-16)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+## [4.71.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.71.0...v4.71.1) (2025-10-16)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+# [4.71.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.70.1...v4.71.0) (2025-10-15)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+## [4.70.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.70.0...v4.70.1) (2025-10-14)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+# [4.70.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.69.0...v4.70.0) (2025-10-13)
+
+### Bug Fixes
+
+- use wallet apis to wait for call status in useSendUserOperation ([#2162](https://github.com/alchemyplatform/aa-sdk/issues/2162)) ([958378d](https://github.com/alchemyplatform/aa-sdk/commit/958378de001ecda7cb50b2aaacd8fc0e9e75d423))
+
+# [4.69.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.68.0...v4.69.0) (2025-10-13)
+
+### Features
+
+- add batching to useAlchemySendTransaction ([#2176](https://github.com/alchemyplatform/aa-sdk/issues/2176)) ([c75f99d](https://github.com/alchemyplatform/aa-sdk/commit/c75f99d7d41a1be818819986b73d3d344741789d))
+
+# [4.68.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.67.0...v4.68.0) (2025-10-09)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+# [4.67.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.66.4...v4.67.0) (2025-10-06)
+
+### Bug Fixes
+
+- reduce rpc calls when using 7702 ([#2155](https://github.com/alchemyplatform/aa-sdk/issues/2155)) ([280ee4b](https://github.com/alchemyplatform/aa-sdk/commit/280ee4bc5f71a3f57492424df526f4313ad5afb1))
+
+## [4.66.4](https://github.com/alchemyplatform/aa-sdk/compare/v4.66.3...v4.66.4) (2025-10-01)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+## [4.66.3](https://github.com/alchemyplatform/aa-sdk/compare/v4.66.2...v4.66.3) (2025-10-01)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+## [4.66.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.66.1...v4.66.2) (2025-09-30)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+## [4.66.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.66.0...v4.66.1) (2025-09-29)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+# [4.66.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.65.0...v4.66.0) (2025-09-29)
+
+### Features
+
+- add signAuthorization method to WalletClientSigner ([#2128](https://github.com/alchemyplatform/aa-sdk/issues/2128)) ([fb8ea39](https://github.com/alchemyplatform/aa-sdk/commit/fb8ea3995b8a9fa04d9e4ecd4f154e6b68258633))
+- replace doc-gen with typedoc ([#2092](https://github.com/alchemyplatform/aa-sdk/issues/2092)) ([6fd935d](https://github.com/alchemyplatform/aa-sdk/commit/6fd935db9677ed34eefabdeae741a881737c6d08))
+
+# [4.65.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.64.0...v4.65.0) (2025-09-23)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+# [4.64.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.63.2...v4.64.0) (2025-09-19)
+
+### Bug Fixes
+
+- address race condition between preview env and link check ([#2082](https://github.com/alchemyplatform/aa-sdk/issues/2082)) ([72df7e6](https://github.com/alchemyplatform/aa-sdk/commit/72df7e628fbb7ce28ab66ddbab148171cbf00f84))
+
+### Features
+
+- server signing ([#2043](https://github.com/alchemyplatform/aa-sdk/issues/2043)) ([8797f63](https://github.com/alchemyplatform/aa-sdk/commit/8797f6342a8934dbe57c5e029599d02d56ce8145))
+
+## [4.63.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.63.1...v4.63.2) (2025-09-16)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+## [4.63.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.63.0...v4.63.1) (2025-09-15)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+# [4.63.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.62.2...v4.63.0) (2025-09-15)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+## [4.62.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.62.1...v4.62.2) (2025-09-12)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+## [4.62.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.62.0...v4.62.1) (2025-09-11)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+# [4.62.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.61.0...v4.62.0) (2025-09-06)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+# [4.61.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.60.1...v4.61.0) (2025-09-05)
+
+### Features
+
+- **flashblock:** add tag to eth_getUserOperationReceipt ([#2005](https://github.com/alchemyplatform/aa-sdk/issues/2005)) ([f099aea](https://github.com/alchemyplatform/aa-sdk/commit/f099aea0b5524d65604b5775002aded147b40f97))
+
 ## [4.60.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.60.0...v4.60.1) (2025-09-03)
 
 **Note:** Version bump only for package @aa-sdk/core

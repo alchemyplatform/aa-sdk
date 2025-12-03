@@ -1,0 +1,32 @@
+<Info>Required SDK version: ^v4.59.1</Info>
+
+Use the [`useSignMessage`](/wallets/reference/account-kit/react/hooks/useSignMessage) hook to sign text messages with your Smart Wallet.
+
+<CodeBlocks>
+
+```tsx title="signTextMessage.tsx"
+import { useSignMessage, useSmartAccountClient } from "@account-kit/react";
+
+export default function SignTextMessage() {
+  const { client } = useSmartAccountClient({});
+  const { signMessageAsync } = useSignMessage({
+    client,
+  });
+
+  const handleSignTextMessage = async () => {
+    const signature = await signMessageAsync({
+      message: "Hello, world!",
+    });
+
+    console.log("Signature:", signature);
+  };
+
+  return (
+    <div>
+      <button onClick={handleSignTextMessage}>Sign Text Message</button>
+    </div>
+  );
+}
+```
+
+</CodeBlocks>

@@ -1,0 +1,220 @@
+If you have an existing custom signer or another third-party embedded wallet provider, you can upgrade your embedded EOAs to smart wallets by connecting your existing signer.
+This will allow you to use EIP-7702 to get features like gas sponsorship, batching, and more.
+
+<Warning>
+  **Requirement:** Your signer or embedded wallet provider must support signing
+  EIP-7702 authorizations in order to delegate to a smart account.
+</Warning>
+
+To bring your own signer, you create a `SmartAccountSigner` that implements `signAuthorization`. See the details for the interface requirements [here](/wallets/resources/types#smartaccountsigner).
+
+For example, you can upgrade an existing Privy embedded EOA by extending a Wallet Client to use the `sign7702Authorization` action exposed by Privy.
+See full example code [here](https://github.com/alchemyplatform/alchemy-wallets-7702-thirdparty-example).
+
+The bulk of the logic happens in [`use-embedded-smart-wallet.ts`](https://github.com/alchemyplatform/alchemy-wallets-7702-thirdparty-example/blob/main/hooks/use-smart-embedded-wallet.ts).
+In this react hook, a Privy embedded wallet is wrapped in a `WalletClientSigner` that supports `signAuthorization`.
+This signer is then passed to `createSmartWalletClient` to construct a client for sending transactions.
+
+<CodeBlocks>
+
+```ts twoslash title="use-smart-embedded-wallet.ts"
+import { Address, Authorization, createWalletClient, custom } from "viem";
+import { useSign7702Authorization } from "@privy-io/react-auth";
+import { AuthorizationRequest, WalletClientSigner } from "@aa-sdk/core";
+import { sepolia, alchemy } from "@account-kit/infra";
+import { useEffect, useState } from "react";
+import {
+  createSmartWalletClient,
+  SmartWalletClient,
+} from "@account-kit/wallet-client";
+import { ConnectedWallet as PrivyWallet } from "@privy-io/react-auth";
+
+/\*_ Creates an Alchemy Smart Wallet client for an embedded Privy wallet using EIP-7702. _/;
+export const useSmartEmbeddedWallet = ({
+  embeddedWallet,
+}: {
+  embeddedWallet: PrivyWallet;
+}) => {
+  const { signAuthorization } = useSign7702Authorization();
+  const [client, setClient] = useState<SmartWalletClient>();
+
+  useEffect(() => {
+    const apiKey = process.env.NEXT_PUBLIC_ALCHEMY_API_KEY;
+    if (!apiKey) {
+      throw new Error("Missing NEXT_PUBLIC_ALCHEMY_API_KEY");
+    }
+    (async () => {
+      const provider = await embeddedWallet.getEthereumProvider();
+
+      const baseSigner = new WalletClientSigner(
+        createWalletClient({
+          account: embeddedWallet.address as Address,
+          chain: sepolia,
+          transport: custom(provider),
+        }),
+        "privy",
+      );
+
+      const signer = {
+        ...baseSigner,
+        signAuthorization: async (
+          unsignedAuth: AuthorizationRequest<number>,
+        ): Promise<Authorization<number, true>> => {
+          const signature = await signAuthorization({
+            ...unsignedAuth,
+            contractAddress:
+              unsignedAuth.address ?? unsignedAuth.contractAddress,
+          });
+
+          return {
+            ...unsignedAuth,
+            ...signature,
+          };
+        },
+      };
+
+      const client = createSmartWalletClient({
+        chain: sepolia,
+        transport: alchemy({
+          apiKey,
+        }),
+        signer,
+        policyId: process.env.NEXT_PUBLIC_ALCHEMY_POLICY_ID,
+      });
+
+      setClient(client);
+    })();
+  }, [embeddedWallet, signAuthorization]);
+
+  return { client };
+};
+```
+
+</CodeBlocks>
+
+When using the `SmartWalletClient` you must set the `eip7702Auth` capability to `true`, as shown in [`smart-wallet-demo.tsx`](https://github.com/alchemyplatform/alchemy-wallets-7702-thirdparty-example/blob/main/components/smart-wallet-demo.tsx)
+
+<CodeBlocks>
+
+```tsx twoslash title="smart-wallet-demo.tsx" focus={11, 27-30}
+import { ConnectedWallet as PrivyWallet } from "@privy-io/react-auth";
+import { useSmartEmbeddedWallet } from "../hooks/use-smart-embedded-wallet";
+import { useCallback, useState } from "react";
+import type { Address, Hex } from "viem";
+
+export const SmartWalletDemo = ({
+  embeddedWallet,
+}: {
+  embeddedWallet: PrivyWallet;
+}) => {
+  const { client } = useSmartEmbeddedWallet({ embeddedWallet });
+
+  const [status, setStatus] = useState<
+    | { status: "idle" | "error" | "sending" }
+    | { status: "success"; txHash: Hex }
+  >({ status: "idle" });
+
+  const delegateAndSend = useCallback(async () => {
+    if (!client) {
+      return;
+    }
+
+    setStatus({ status: "sending" });
+    try {
+      const {
+        preparedCallIds: [callId],
+      } = await client.sendCalls({
+        capabilities: {
+          eip7702Auth: true,
+        },
+        from: embeddedWallet.address as Address,
+        calls: [
+          {
+            to: "0x0000000000000000000000000000000000000000",
+            data: "0x",
+          },
+        ],
+      });
+      if (!callId) {
+        throw new Error("Missing call id");
+      }
+
+      const { receipts } = await client.waitForCallsStatus({ id: callId });
+      if (!receipts?.length) {
+        throw new Error("Missing transaction receipts");
+      }
+      const [receipt] = receipts;
+      if (receipt?.status !== "success") {
+        throw new Error("Transaction failed");
+      }
+      setStatus({ status: "success", txHash: receipt.transactionHash });
+    } catch (err) {
+      console.error("Transaction failed:", err);
+      setStatus({ status: "error" });
+    }
+  }, [client, embeddedWallet]);
+
+  return (
+    <div className="flex flex-col gap-4">
+      <div>
+        <h2 className="text-lg font-semibold text-gray-900">
+          Embedded EOA Address
+        </h2>
+        <p className="text-gray-600 font-mono break-all">
+          {embeddedWallet.address}
+        </p>
+      </div>
+      <button
+        onClick={delegateAndSend}
+        disabled={!client || status.status === "sending"}
+        className={`w-full py-3 px-4 rounded-lg font-semibold text-white transition-colors ${
+          status.status === "sending"
+            ? "bg-indigo-400 cursor-not-allowed"
+            : "bg-indigo-600 hover:bg-indigo-700"
+        }`}
+      >
+        {status.status === "sending"
+          ? "Sending..."
+          : "Upgrade & Send Sponsored Transaction"}
+      </button>
+      {status.status === "success" && (
+        <section className="bg-green-50 rounded-xl shadow-lg p-6 border border-green-200">
+          <h2 className="text-lg font-semibold text-green-900 mb-4">
+            Congrats! Sponsored transaction successful!
+          </h2>
+          <p className="text-green-700 mb-4">
+            You've successfully upgraded your EOA to a smart account and sent
+            your first sponsored transaction.{" "}
+            <a
+              href="https://www.alchemy.com/docs/wallets/transactions/using-eip-7702"
+              className="text-indigo-600 hover:underline"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Keep building
+            </a>
+            .
+          </p>
+          <p className="text-green-700">
+            <strong>Transaction Hash:</strong>{" "}
+            <span className="font-mono break-all">{status.txHash}</span>
+          </p>
+        </section>
+      )}
+      {status.status === "error" && (
+        <section className="bg-red-50 rounded-xl shadow-lg p-6 border border-red-200">
+          <h2 className="text-lg font-semibold text-red-900 mb-4">
+            Transaction Failed
+          </h2>
+          <p className="text-red-700">
+            There was an error sending your sponsored transaction. Please try
+            again.
+          </p>
+        </section>
+      )}
+    </div>
+  );
+};
+```
+
+</CodeBlocks>

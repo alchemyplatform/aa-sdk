@@ -3,6 +3,158 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.80.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.79.0...v4.80.0) (2025-12-02)
+
+**Note:** Version bump only for package @account-kit/signer
+
+# [4.79.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.78.0...v4.79.0) (2025-11-19)
+
+**Note:** Version bump only for package @account-kit/signer
+
+# [4.78.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.77.1...v4.78.0) (2025-11-05)
+
+**Note:** Version bump only for package @account-kit/signer
+
+## [4.77.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.77.0...v4.77.1) (2025-10-31)
+
+**Note:** Version bump only for package @account-kit/signer
+
+# [4.77.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.76.0...v4.77.0) (2025-10-31)
+
+**Note:** Version bump only for package @account-kit/signer
+
+# [4.76.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.75.4...v4.76.0) (2025-10-28)
+
+**Note:** Version bump only for package @account-kit/signer
+
+## [4.75.4](https://github.com/alchemyplatform/aa-sdk/compare/v4.75.3...v4.75.4) (2025-10-27)
+
+**Note:** Version bump only for package @account-kit/signer
+
+## [4.75.3](https://github.com/alchemyplatform/aa-sdk/compare/v4.75.2...v4.75.3) (2025-10-27)
+
+**Note:** Version bump only for package @account-kit/signer
+
+## [4.75.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.75.1...v4.75.2) (2025-10-24)
+
+**Note:** Version bump only for package @account-kit/signer
+
+## [4.75.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.75.0...v4.75.1) (2025-10-24)
+
+**Note:** Version bump only for package @account-kit/signer
+
+# [4.75.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.74.0...v4.75.0) (2025-10-24)
+
+**Note:** Version bump only for package @account-kit/signer
+
+# [4.74.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.73.0...v4.74.0) (2025-10-21)
+
+**Note:** Version bump only for package @account-kit/signer
+
+# [4.73.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.72.0...v4.73.0) (2025-10-17)
+
+**Note:** Version bump only for package @account-kit/signer
+
+# [4.72.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.71.1...v4.72.0) (2025-10-16)
+
+**Note:** Version bump only for package @account-kit/signer
+
+## [4.71.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.71.0...v4.71.1) (2025-10-16)
+
+**Note:** Version bump only for package @account-kit/signer
+
+# [4.71.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.70.1...v4.71.0) (2025-10-15)
+
+**Note:** Version bump only for package @account-kit/signer
+
+## [4.70.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.70.0...v4.70.1) (2025-10-14)
+
+**Note:** Version bump only for package @account-kit/signer
+
+# [4.70.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.69.0...v4.70.0) (2025-10-13)
+
+**Note:** Version bump only for package @account-kit/signer
+
+# [4.69.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.68.0...v4.69.0) (2025-10-13)
+
+### Features
+
+- add batching to useAlchemySendTransaction ([#2176](https://github.com/alchemyplatform/aa-sdk/issues/2176)) ([c75f99d](https://github.com/alchemyplatform/aa-sdk/commit/c75f99d7d41a1be818819986b73d3d344741789d))
+
+# [4.68.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.67.0...v4.68.0) (2025-10-09)
+
+**Note:** Version bump only for package @account-kit/signer
+
+# [4.67.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.66.4...v4.67.0) (2025-10-06)
+
+**Note:** Version bump only for package @account-kit/signer
+
+## [4.66.4](https://github.com/alchemyplatform/aa-sdk/compare/v4.66.3...v4.66.4) (2025-10-01)
+
+**Note:** Version bump only for package @account-kit/signer
+
+## [4.66.3](https://github.com/alchemyplatform/aa-sdk/compare/v4.66.2...v4.66.3) (2025-10-01)
+
+**Note:** Version bump only for package @account-kit/signer
+
+## [4.66.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.66.1...v4.66.2) (2025-09-30)
+
+**Note:** Version bump only for package @account-kit/signer
+
+## [4.66.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.66.0...v4.66.1) (2025-09-29)
+
+**Note:** Version bump only for package @account-kit/signer
+
+# [4.66.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.65.0...v4.66.0) (2025-09-29)
+
+### Features
+
+- replace doc-gen with typedoc ([#2092](https://github.com/alchemyplatform/aa-sdk/issues/2092)) ([6fd935d](https://github.com/alchemyplatform/aa-sdk/commit/6fd935db9677ed34eefabdeae741a881737c6d08))
+
+# [4.65.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.64.0...v4.65.0) (2025-09-23)
+
+**Note:** Version bump only for package @account-kit/signer
+
+# [4.64.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.63.2...v4.64.0) (2025-09-19)
+
+### Features
+
+- server signing ([#2043](https://github.com/alchemyplatform/aa-sdk/issues/2043)) ([8797f63](https://github.com/alchemyplatform/aa-sdk/commit/8797f6342a8934dbe57c5e029599d02d56ce8145))
+
+## [4.63.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.63.1...v4.63.2) (2025-09-16)
+
+**Note:** Version bump only for package @account-kit/signer
+
+## [4.63.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.63.0...v4.63.1) (2025-09-15)
+
+**Note:** Version bump only for package @account-kit/signer
+
+# [4.63.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.62.2...v4.63.0) (2025-09-15)
+
+**Note:** Version bump only for package @account-kit/signer
+
+## [4.62.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.62.1...v4.62.2) (2025-09-12)
+
+**Note:** Version bump only for package @account-kit/signer
+
+## [4.62.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.62.0...v4.62.1) (2025-09-11)
+
+### Bug Fixes
+
+- add userTagIds to legacy stampUpdateUser request ([#2027](https://github.com/alchemyplatform/aa-sdk/issues/2027)) ([4baa660](https://github.com/alchemyplatform/aa-sdk/commit/4baa66052c1968340353375241edf2b8f3928225))
+
+# [4.62.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.61.0...v4.62.0) (2025-09-06)
+
+### Features
+
+- signer email/sms verification ([#1964](https://github.com/alchemyplatform/aa-sdk/issues/1964)) ([07d3bff](https://github.com/alchemyplatform/aa-sdk/commit/07d3bff1578c4f043c871da5edcab8feeb8cb105))
+
+# [4.61.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.60.1...v4.61.0) (2025-09-05)
+
+### Features
+
+- export wallet ([#1858](https://github.com/alchemyplatform/aa-sdk/issues/1858)) ([bc856e1](https://github.com/alchemyplatform/aa-sdk/commit/bc856e1bcc8138cb22db296ffd81e90c43eda9f9))
+
 ## [4.60.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.60.0...v4.60.1) (2025-09-03)
 
 **Note:** Version bump only for package @account-kit/signer

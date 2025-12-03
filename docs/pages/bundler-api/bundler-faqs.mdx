@@ -2,7 +2,7 @@
 title: FAQs
 description: Frequently asked questions about the Bundler
 subtitle: Frequently asked questions about the Bundler
-url: https://docs.alchemy.com/reference/bundler-faqs
+url: https://alchemy.com/docs/reference/bundler-faqs
 slug: reference/bundler-faqs
 ---
 
@@ -14,10 +14,6 @@ To understand the status of a userOp you can use the `eth_getUserOperationByHash
 
 1. **The userOp is still pending**: This is the most common scenario and typically means *the fees are too low*. In this case, you should drop and replace the userOp with higher fees.
 2. **The userOp has been dropped**: The most common (but rare) reason is that they paymaster signature has expired. However, this should rarely happen if you set a reasonable sponsorship expiry time, unless there is a significant delay in sending the userOp after the paymaster signs it.
-
-### How can I get push notifications for mined userOps?
-
-Follow the guide on [using custom webhooks to get real time alerts and receipts for mined `userOperations`](/docs/how-to-use-custom-webhooks-to-get-push-notifications-for-mined-user-operations).
 
 ### How do I get my userOp unstuck from the mempool?
 
@@ -83,10 +79,10 @@ What revertData contains:
 To debug these errors, you should:
 
 - Isolate the first 4 bytes of `revertData`.
-- Paste into a signatures DB (e.g. [openchain.xyz/signatures](https://openchain.xyz/signatures)).
+- Paste into a signatures DB (e.g. [4byte.sourcify.dev](https://4byte.sourcify.dev)).
   - If it matches a known error, you’ll see the standard signature.
   - If not, it's a **custom error** - check the contract's ABI or source for error declarations.
-- Decode any arguments (using a tool like [openchain.xyz/tools/abi](https://openchain.xyz/tools/abi) or your ABI).
+- Decode any arguments (using a tool like [calldata.swiss-knife.xyz](https://calldata.swiss-knife.xyz/decoder) or your ABI).
 - Map the error back to the contract source code to understand under what conditions it reverts.
 
 ## Parallel nonces
@@ -160,11 +156,11 @@ This check is intended to prevent user operations from taking up gas limit space
 
 ### How do we determine fee values to give your userOp the best chance of landing on chain?
 
-- [alchemy_requestGasAndPaymasterAndData](/reference/alchemy-requestgasandpaymasteranddata) is on opinionated endpoint that tries to set fee values that give your userOps a high chance of landing on-chain. It's likely that we're over-estimating here a bit, but this is intentional in order to land your UOs faster!
+- [alchemy_requestGasAndPaymasterAndData](/wallets/api-reference/gas-manager-admin-api/gas-abstraction-api-endpoints/alchemy-request-gas-and-paymaster-and-data) is on opinionated endpoint that tries to set fee values that give your userOps a high chance of landing on-chain. It's likely that we're over-estimating here a bit, but this is intentional in order to land your UOs faster!
 
 - We encourage you to try out different fee percentages and determine what works best for you as a balance between cost and chance/time to mine.
 
-- For [alchemy_requestGasAndPaymasterAndData](/reference/alchemy-requestgasandpaymasteranddata) we offer the ability to override our fee estimates with the `feeOverride` parameters.
+- For [alchemy_requestGasAndPaymasterAndData](/wallets/api-reference/gas-manager-admin-api/gas-abstraction-api-endpoints/alchemy-request-gas-and-paymaster-and-data) we offer the ability to override our fee estimates with the `feeOverride` parameters.
 
   - We default to increasing baseFee by 50% and priorityFee by 5%.
   - **Note**: The feeOverride parameters don't include preVerificationGas (PVG). The method will always increase the estimated PVG by 5% to give the UO a better chance to mine if the L1 /L2 fee ratio changes. If you would like to modify this value, its recommended you use [alchemy_requestPaymasterAndData](/reference/alchemy-requestpaymasteranddata) instead.

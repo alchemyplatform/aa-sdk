@@ -294,7 +294,7 @@ slug: wallets/react/mfa/setup-mfa
 
     ## Setting up Multi-Factor Authentication
 
-    - Prerequesit: Your user is already logged in with at least one authentication factor (e.g. [email OTP](/wallets/signer/authentication/email-otp), [email magic-link](/wallets/signer/authentication/email-magic-link)).
+    - Prerequesit: Your user is already logged in with at least one authentication factor (e.g. [email OTP](/wallets/authentication/login-methods/email-otp), [email magic-link](/wallets/authentication/email-magic-link)).
 
     ### 1. Add a new TOTP factor
 
@@ -302,7 +302,7 @@ slug: wallets/react/mfa/setup-mfa
 
     <CodeBlocks>
 
-    ```ts twoslash example.ts
+    ```ts example.ts
     import { signer } from "./signer";
 
     const { multiFactors } = await signer.addMFA({
@@ -326,7 +326,7 @@ slug: wallets/react/mfa/setup-mfa
 
     <CodeBlocks>
 
-    ```ts twoslash example.ts
+    ```ts example.ts
     import { signer } from "./signer";
 
     await signer.verifyMfa({
@@ -345,7 +345,7 @@ slug: wallets/react/mfa/setup-mfa
 
     <CodeBlocks>
 
-    ```ts twoslash example.ts
+    ```ts example.ts
     import { signer } from "./signer";
 
     await signer.removeMfa({
@@ -361,7 +361,7 @@ slug: wallets/react/mfa/setup-mfa
 
     <CodeBlocks>
 
-    ```ts twoslash example.ts
+    ```ts example.ts
     import { signer } from "./signer";
 
     const { multiFactors } = await signer.getMfaFactors();
@@ -377,7 +377,7 @@ slug: wallets/react/mfa/setup-mfa
 
     <CodeBlocks>
 
-    ```ts twoslash example.ts
+    ```ts example.ts
     import { signer } from "./signer";
 
     signer.authenticate({
@@ -395,7 +395,7 @@ slug: wallets/react/mfa/setup-mfa
 
     <CodeBlocks>
 
-    ```ts twoslash example.ts
+    ```ts example.ts
     import { signer } from "./signer";
 
     signer.authenticate({
@@ -412,7 +412,7 @@ slug: wallets/react/mfa/setup-mfa
 
     <CodeBlocks>
 
-    ```ts twoslash example.ts
+    ```ts example.ts
     import { signer } from "./signer";
 
     const user = await signer?.validateMultiFactors({
@@ -430,7 +430,7 @@ slug: wallets/react/mfa/setup-mfa
 
     <CodeBlocks>
 
-    ```ts twoslash example.ts
+    ```ts example.ts
     import { MfaRequiredError } from "@account-kit/signer";
     import { signer } from "./signer";
 
@@ -493,7 +493,7 @@ slug: wallets/react/mfa/setup-mfa
 
     <CodeBlocks>
 
-    ```ts twoslash example.ts
+    ```ts example.ts
     import { signer } from "./signer";
 
     await signer.authenticate({

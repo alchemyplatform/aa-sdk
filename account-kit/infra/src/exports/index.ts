@@ -12,6 +12,8 @@ export {
   base,
   baseGoerli,
   baseSepolia,
+  bsc,
+  bscTestnet,
   defineAlchemyChain,
   fraxtal,
   fraxtalSepolia,
@@ -47,11 +49,15 @@ export {
   riseTestnet,
   storyMainnet,
   storyAeneid,
-  celoAlfajores,
   celoMainnet,
+  celoSepolia,
   teaSepolia,
   bobaSepolia,
   bobaMainnet,
+  edgeMainnet,
+  stableMainnet,
+  mythosMainnet,
+  worldl3devnet,
 } from "../chains.js";
 export type * from "../client/decorators/smartAccount.js";
 export { alchemyActions } from "../client/decorators/smartAccount.js";

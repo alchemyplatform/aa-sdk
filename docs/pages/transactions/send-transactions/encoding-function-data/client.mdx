@@ -1,0 +1,64 @@
+In JavaScript, you can use [Viem](https://viem.sh/docs/contract/encodeFunctionData) to encode function call data.
+
+<CodeBlocks>
+
+```ts title="sendCalls.ts" focus={9-13}
+import { encodeFunctionData } from "viem";
+import { client } from "./client.ts";
+import { exampleAbi } from "./abi.ts";
+
+await client.sendCalls({
+  calls: [
+    {
+      to: "0x0000000000000000000000000000000000000000",
+      data: encodeFunctionData({
+        abi: exampleAbi,
+        functionName: "mintTo",
+        args: [client.account!.address],
+      }),
+    },
+  ],
+});
+```
+
+```ts title="abi.ts"
+export const exampleAbi = [
+  {
+    inputs: [{ name: "recipient", type: "address" }],
+    name: "mintTo",
+    outputs: [{ name: "", type: "uint256" }],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+] as const;
+```
+
+```ts title="client.ts"
+import { LocalAccountSigner } from "@aa-sdk/core";
+import { alchemy, sepolia } from "@account-kit/infra";
+import {
+  createSmartWalletClient,
+  type SmartWalletClientParams,
+} from "@account-kit/wallet-client";
+
+const clientParams: SmartWalletClientParams = {
+  transport: alchemy({
+    apiKey: "your-alchemy-api-key",
+  }),
+  chain: sepolia,
+  signer: LocalAccountSigner.privateKeyToAccountSigner(
+    "0x-your-wallet-private-key",
+  ),
+};
+
+const clientWithoutAccount = createSmartWalletClient(clientParams);
+
+const account = await clientWithoutAccount.requestAccount();
+
+export const client = createSmartWalletClient({
+  ...clientParams,
+  account: account.address,
+});
+```
+
+</CodeBlocks>

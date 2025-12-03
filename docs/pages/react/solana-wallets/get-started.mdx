@@ -2,7 +2,6 @@
 title: Getting started with Solana Smart Wallets
 description: Learn how to use Smart Wallets on Solana
 text: Getting started with Solana Smart Wallets
-link: /react/solana-wallets/get-started
 slug: wallets/react/solana-wallets/get-started
 ---
 
@@ -12,12 +11,31 @@ slug: wallets/react/solana-wallets/get-started
   integrating.
 </Warning>
 
-<video
-  src="/images/wallets/solana-example.mp4"
-  playsinline
-  autoplay
-  controls
-></video>
+<div
+  style={{
+    position: "relative",
+    paddingBottom: "56.25%",
+    height: 0,
+    overflow: "hidden",
+    maxWidth: "100%",
+  }}
+>
+  <iframe
+    style={{
+      position: "absolute",
+      top: 0,
+      left: 0,
+      width: "100%",
+      height: "100%",
+    }}
+    src="https://www.youtube.com/embed/1EdF2GPf3Kc?si=jwlQpXye_lLscIY1"
+    title="YouTube video player"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
+    referrerpolicy="strict-origin-when-cross-origin"
+    allowfullscreen
+  />
+</div>
 
 We support Smart Wallets on Solana, enabling developers to create embedded wallets, sign transactions, sponsor gas, and batch transactions on Solana. Create both EVM and Solana wallets with social login and use those wallets alongside existing Solana libraries like `@solana/web3.js` to build seamless, gas-less user experiences!
 
@@ -108,8 +126,8 @@ function MyComponent() {
 
 ## Using the `useSolanaTransaction` hook
 
-If you want to connect to a user’s Solana Wallet and send transactions, you should use the [`useSolanaTransaction`](/docs/wallets/react/solana-wallets/sign-and-send-solana#sending-solana-transactions-with-usesolanatransaction) hook. This hook also exposes the Solana wallet address through the `signer.address` parameter.
+If you want to connect to a user’s Solana Wallet and send transactions, you should use the [`useSolanaTransaction`](/wallets/reference/account-kit/react/hooks/useSolanaTransaction) hook. This hook also exposes the Solana wallet address through the `signer.address` parameter.
 
 ## Not using React hooks?
 
-If you're not using React, use lower level libraries to convert your Alchemy signer instance into a Solana-compatible signer using the `SolanaSigner` class. [See Signer Solana docs](/docs/wallets/signer/solana-wallets/get-started).
+If you're not using React, use lower level libraries to convert your Alchemy signer instance into a Solana-compatible signer using the `SolanaSigner` class. [See Signer Solana docs](/wallets/react/solana-wallets/get-started).

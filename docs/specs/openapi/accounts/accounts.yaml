@@ -333,7 +333,7 @@ paths:
                     **Required OIDC Claims:**
                     - `iss` (Issuer): The identity of the OIDC provider. Should be the same as issuer URL specified in your /.well-known/openid-configuration, for example see the [Google OpenID configuration](https://accounts.google.com/.well-known/openid-configuration)
                     - `sub` (Subject): A unique identifier that identifies the user with this auth provider.
-                    - `aud` (Audience): A unique identifier for the project that can be found on the [Alchemy Dashboard](https://dashboard.alchemy.com/accounts/config/create).
+                    - `aud` (Audience): A unique identifier for the project that can be found on the [Alchemy Dashboard](https://dashboard.alchemy.com/apps/latest/services/smart-wallets).
                     - `exp` (Expiration): Token expiration time as Unix timestamp
                     - `iat` (Issued At): Token issuance time as Unix timestamp
                     - `nonce` (Nonce): toHex(sha256(targetPublicKey)) without the leading 0x
@@ -509,10 +509,9 @@ paths:
 components:
   securitySchemes:
     apiKey:
-      type: apiKey
-      name: Authorization
-      in: header
-      description: An API key that will be supplied in a named header.
+      type: http
+      scheme: bearer
+      description: Bearer token authentication. Use 'Bearer <apiKey>' as the value.
       x-default: "Bearer API_KEY"
   schemas:
     email:

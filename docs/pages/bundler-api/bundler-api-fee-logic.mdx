@@ -2,7 +2,7 @@
 title: Bundler API Fee Logic
 description: Fee logic for Bundler API ( eth_sendUserOperation )
 subtitle: Fee logic for Bundler API ( eth_sendUserOperation )
-url: https://docs.alchemy.com/reference/bundler-api-fee-logic
+url: https://alchemy.com/docs/reference/bundler-api-fee-logic
 slug: reference/bundler-api-fee-logic
 ---
 
@@ -65,11 +65,11 @@ You can deploy a smart contract account in two ways:
 
 ### How do we determine fee values to give your UO the best chance of landing on chain?
 
-- [alchemy_requestGasAndPaymasterAndData](/reference/alchemy-requestgasandpaymasteranddata) is on opinionated endpoint that tries to set fee values that give your user operations a high chance of landing on-chain. Its likely that we're over-estimating here a bit, but this is intentional in order to land your UOs faster!
+- [alchemy_requestGasAndPaymasterAndData](/wallets/api-reference/gas-manager-admin-api/gas-abstraction-api-endpoints/alchemy-request-gas-and-paymaster-and-data) is an opinionated endpoint that tries to set fee values that give your user operations a high chance of landing on-chain. Its likely that we're over-estimating here a bit, but this is intentional in order to land your UOs faster!
 
 - We encourage you to try out different fee percentages and determine what works best for you as a balance between cost and chance/time to mine.
 
-- For [alchemy_requestGasAndPaymasterAndData](/reference/alchemy-requestgasandpaymasteranddata) we offer the ability to override our fee estimates with the `feeOverride` parameters.
+- For [alchemy_requestGasAndPaymasterAndData](/wallets/api-reference/gas-manager-admin-api/gas-abstraction-api-endpoints/alchemy-request-gas-and-paymaster-and-data) we offer the ability to override our fee estimates with the `feeOverride` parameters.
 
   - We default to increasing baseFee by 50% and priorityFee by 5%.
   - **Note**: The feeOverride parameters don't include preVerificationGas (PVG) . The method will always increase the estimated PVG by 5% to give the UO a better chance to mine if the L1 /L2 fee ratio changes. If you would like to modify this value, its recommended you use [alchemy_requestPaymasterAndData](/reference/alchemy-requestpaymasteranddata) instead.

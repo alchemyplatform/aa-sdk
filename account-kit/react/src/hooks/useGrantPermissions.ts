@@ -57,7 +57,7 @@ export type UseGrantPermissionsResult = {
  * Returns an error if called with an EOA wallet connection.
  *
  * @example
- * ```tsx
+ * ```tsx twoslash
  * import { useGrantPermissions, useSmartAccountClient } from "@account-kit/react";
  *
  * function PermissionsComponent() {

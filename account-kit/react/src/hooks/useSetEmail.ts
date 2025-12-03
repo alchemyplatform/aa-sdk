@@ -13,32 +13,64 @@ import { useUser } from "./useUser.js";
 import type { AuthMethods } from "@account-kit/signer";
 import { getListAuthMethodsQueryKey } from "./useListAuthMethods.js";
 
-export type UseSetEmailMutationArgs = BaseHookMutationArgs<void, string>;
+export type SetEmailParams =
+  | string // deprecated
+  | {
+      verificationCode: string;
+    };
+
+export type UseSetEmailMutationArgs = BaseHookMutationArgs<
+  void,
+  SetEmailParams
+>;
 
 export type UseSetEmailResult = {
-  setEmail: UseMutateFunction<void, Error, string, unknown>;
-  setEmailAsync: UseMutateAsyncFunction<void, Error, string, unknown>;
+  setEmail: UseMutateFunction<void, Error, SetEmailParams, unknown>;
+  setEmailAsync: UseMutateAsyncFunction<void, Error, SetEmailParams, unknown>;
   isSettingEmail: boolean;
   error: Error | null;
 };
 
 /**
- * A custom hook to handle setting an email for an already authenticated account, which includes executing a mutation with optional parameters.
+ * A custom hook to set an email address for an already authenticated account.
  *
- * @param {UseSetEmailMutationArgs} [mutationArgs] Optional arguments for the mutation used for setting an email.
- * @returns {UseSetEmailResult} An object containing the `setEmail` function, `setEmailAsync` for async execution, a boolean `isSettingEmail` to track the mutation status, and any error encountered.
+ * **Note:** You should first use the `useSendVerificationCode` hook to send
+ * a verification code to the email address before calling this hook.
+ *
+ * @param {UseSetEmailMutationArgs} [mutationArgs] Optional arguments for the setEmail mutation
+ * @returns {UseSetEmailResult} An object containing functions and state for setting the email
  *
  * @example
  * ```ts twoslash
- * import { useSetEmail } from "@account-kit/react";
+ * import { useSetEmail, useSendVerificationCode } from "@account-kit/react";
  *
- * const { setEmail, isSettingEmail, error } = useSetEmail({
- *  // these are optional
- *  onSuccess: () => {
- *    // do something on success
- *  },
- *  onError: (error) => console.error(error),
+ * // First, send verification code
+ * const { sendVerificationCode } = useSendVerificationCode();
+ *
+ * const {
+ *   setEmail,
+ *   isSettingEmail,
+ *   error
+ * } = useSetEmail({
+ *   onSuccess: () => {
+ *     // do something when email is successfully set
+ *   },
+ *   onError: (error) => console.error(error),
  * });
+ *
+ * // Step 1: Send verification code to email
+ * await sendVerificationCode({
+ *   type: "email",
+ *   contact: "user@example.com"
+ * });
+ *
+ * // Step 2: Update email using verification code
+ * setEmail({
+ *   verificationCode: "123456" // code user received
+ * });
+ *
+ * // DEPRECATED: Use with just email string (for backward compatibility)
+ * setEmail("user@example.com");
  * ```
  */
 export function useSetEmail(
@@ -55,16 +87,32 @@ export function useSetEmail(
     error,
   } = useMutation(
     {
-      mutationFn: async (params: string) => {
-        await signer!.setEmail(params);
-        queryClient.setQueryData(
-          getListAuthMethodsQueryKey(user),
-          (authMethods?: AuthMethods): AuthMethods | undefined =>
-            authMethods && {
-              ...authMethods,
-              email: params,
-            },
-        );
+      mutationFn: async (input: SetEmailParams) => {
+        if (typeof input === "string") {
+          // Backward compatibility: just email string
+          await signer!.setEmail(input);
+          queryClient.setQueryData(
+            getListAuthMethodsQueryKey(user),
+            (authMethods?: AuthMethods): AuthMethods | undefined =>
+              authMethods && {
+                ...authMethods,
+                email: input,
+              },
+          );
+        } else {
+          // New OTP-based approach
+          const email = await signer!.setEmail({
+            verificationCode: input.verificationCode,
+          });
+          queryClient.setQueryData(
+            getListAuthMethodsQueryKey(user),
+            (authMethods?: AuthMethods): AuthMethods | undefined =>
+              authMethods && {
+                ...authMethods,
+                email,
+              },
+          );
+        }
       },
       ...mutationArgs,
     },

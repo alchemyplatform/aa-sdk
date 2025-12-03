@@ -11,7 +11,6 @@ aa-sdk/
 ├── docs/                # This project
 │   ├── docs.yml         # The main configuration file that defines the documentation structure and sidebar navigation
 │   ├── pages/           # Contains the documentation markdown files
-│   ├── images/          # Contains images used in the documentation
 │   ├── components/      # Contains all the custom React components used in markdown
 |   ├── specs/           # Contains OpenRPC and OpenAPI spec definitions which are dereferenced during build
 |   └── api-generators/  # Contains generators.yaml files used by Fern to reference API specs
@@ -39,19 +38,46 @@ To add new pages to navigation:
 
 ### Images
 
+**All documentation images are hosted on Cloudinary** for optimal performance and CDN delivery.
+
 To add new images:
 
-- Place image files in the `images/` directory
-- Use descriptive filenames
-- Reference images from the `images/` directory in markdown using `images/wallets/filename.png`
-- You may use [markdown syntax or `img` tags](https://buildwithfern.com/learn/docs/content/write-markdown#images)
+1. **Upload to Cloudinary**:
+
+   - Sign-in to Cloudinary through Okta.
+   - Folder structure: `docs/aa-sdk/images/[subdirectory]/`
+   - Use descriptive, kebab-case filenames (e.g., `auth0-config.png`)
+   - Set `overwrite: true` if replacing an existing asset
+
+2. **Reference in Markdown**:
+
+   ```markdown
+   ![Alt text](https://alchemyapi-res.cloudinary.com/image/upload/v{version}/docs/aa-sdk/images/your-image.png)
+   ```
+
+   Or using HTML:
+
+   ```html
+   <img
+     src="https://alchemyapi-res.cloudinary.com/image/upload/v{version}/docs/aa-sdk/images/your-image.png"
+     alt="Description"
+   />
+   ```
+
+3. **Best Practices**:
+   - ✅ Always include descriptive alt text for accessibility
+   - ✅ Optimize images before upload (compress PNGs, use appropriate JPEG quality)
+   - ✅ Use consistent naming conventions
+   - ❌ Don't commit local image files to the repository
+
+For detailed guidelines, see the [Images and Assets section in CONTRIBUTING.md](./CONTRIBUTING.md#-images-and-assets)
 
 ### SDK References
 
-SDK References are automatically generated from relevant projects within the monorepo via the `docs-gen` package. Both the markdown files and the sidebar structure in `docs/docs.yml` are generated and should **not** be edited manually. In the root, to generate references from code you can run:
+SDK References are automatically generated from relevant projects within the monorepo. Both the markdown files within `docs/pages/reference` and the docs navigation structure in `docs/docs.yml` are generated and should **not** be edited manually. In the root, to generate references from code you can run:
 
 ```shell
-yarn fern:gen
+yarn docs:sdk
 ```
 
 ### Injected Code Snippets
@@ -89,5 +115,6 @@ Documentation changes are automatically published to [alchemy.com/docs](https://
 
 - The `scripts/insert-docs.sh` script is run during local and during CI/CD from both [aa-sdk](https://github.com/alchemyplatform/aa-sdk/) and [docs](https://github.com/alchemyplatform/docs) repos. It handles:
   - Inserting Smart Wallets documentation configuration into the main docs site config
-  - Moving images and API specs to the correct locations in the main docs repo
+  - Moving API specs to the correct locations in the main docs repo
 - Documentation is built and published using [Fern CLI](https://buildwithfern.com/learn/cli-reference/overview#setting-up-docs)
+- All documentation images are hosted on Cloudinary CDN at `alchemyapi-res.cloudinary.com`

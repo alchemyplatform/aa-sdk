@@ -35,7 +35,7 @@ The base `modularAccountClient` and `AlchemymodularAccountClient`, only include 
 
 <CodeBlocks>
 
-```ts twoslash example.ts
+```ts example.ts
 import { modularAccountClient } from "./client";
 import { sessionKeyPluginActions } from "@account-kit/smart-contracts";
 
@@ -52,7 +52,7 @@ Before you can start using session keys, you need to check whether the user’s 
 
 <CodeBlocks>
 
-```ts twoslash example.ts
+```ts example.ts
 import { modularAccountClient } from "./client.js";
 import {
   accountLoupeActions,
@@ -84,7 +84,7 @@ If the Session Key Plugin is not yet installed, you need to install it before it
 
 <CodeBlocks>
 
-```ts example.ts twoslash
+```ts example.ts
 import { modularAccountClient } from "./client";
 import {
   accountLoupeActions,
@@ -138,13 +138,11 @@ if (!isPluginInstalled) {
 
 Session keys are powerful because of permissions that limit what actions they can take. When you add a session key, you should also specify the initial permissions that apply over the key.
 
-See the [Supported Permissions](/wallets/smart-contracts/other-accounts/modular-account/session-keys/supported-permissions#using-the-permissionsbuilder) page for more information on how to used the permissions builder.
-
 Let's use the permission builder to build a set of permissions that sets a spend limit:
 
 <CodeBlocks>
 
-```ts example.ts twoslash
+```ts example.ts
 import { modularAccountClient } from "./client";
 import {
   accountLoupeActions,
@@ -187,7 +185,7 @@ Session keys can be added either during installation, or using the `addSessionKe
 
 <CodeBlocks>
 
-```ts add-session-key.ts twoslash
+```ts add-session-key.ts
 import { SessionKeyPermissionsBuilder } from "@account-kit/smart-contracts";
 import { keccak256 } from "viem";
 import { client } from "./base-client";
@@ -210,7 +208,7 @@ Session keys can be removed using the `removeSessionKey` function.
 
 <CodeBlocks>
 
-```ts remove-session-key.ts twoslash
+```ts remove-session-key.ts
 import { client } from "./base-client";
 
 const result = await client.removeSessionKey({
@@ -228,7 +226,7 @@ Session key permissions can be edited after creation using the `updateKeyPermiss
 
 <CodeBlocks>
 
-```ts update-session-key.ts twoslash
+```ts update-session-key.ts
 import { SessionKeyPermissionsBuilder } from "@account-kit/smart-contracts";
 import { client } from "./base-client";
 
@@ -255,7 +253,7 @@ If the key is no longer available, but there exists a tag identifying a previous
 
 <CodeBlocks>
 
-```ts rotate-session-key.ts twoslash
+```ts rotate-session-key.ts
 import { client } from "./base-client.js";
 
 const result = await client.rotateSessionKey({

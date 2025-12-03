@@ -1,6 +1,6 @@
 "use client";
 
-import { clientHeaderTrack } from "@aa-sdk/core";
+import { clientHeaderTrack, BaseError } from "@aa-sdk/core";
 import type { waitForCallsStatus } from "@account-kit/wallet-client";
 import { useQuery, type UseQueryResult } from "@tanstack/react-query";
 import { ClientUndefinedHookError } from "../errors.js";
@@ -9,10 +9,12 @@ import { ReactLogger } from "../metrics.js";
 import type { WaitForCallsStatusParameters } from "viem/actions";
 import type { UseSmartAccountClientResult } from "./useSmartAccountClient.js";
 import { useSmartWalletClient } from "./useSmartWalletClient.js";
+import type { Hex } from "viem";
 
 export interface UseWaitForCallsStatusParams
-  extends WaitForCallsStatusParameters {
+  extends Omit<WaitForCallsStatusParameters, "id"> {
   client: UseSmartAccountClientResult["client"] | undefined;
+  id: Hex | undefined;
 }
 
 type QueryResult = Awaited<ReturnType<typeof waitForCallsStatus>>;
@@ -24,7 +26,7 @@ export type UseWaitForCallsStatusResult = UseQueryResult<QueryResult>;
  * It will poll until the calls reach the desired status or until a timeout occurs.
  *
  * @example
- * ```tsx
+ * ```tsx twoslash
  * import { useWaitForCallsStatus } from "@account-kit/react";
  *
  * function MyComponent() {
@@ -43,6 +45,7 @@ export type UseWaitForCallsStatusResult = UseQueryResult<QueryResult>;
  */
 export function useWaitForCallsStatus({
   client,
+  id,
   ...params
 }: UseWaitForCallsStatusParams): UseWaitForCallsStatusResult {
   const { queryClient } = useAlchemyAccountContext();
@@ -52,12 +55,15 @@ export function useWaitForCallsStatus({
 
   return useQuery<QueryResult>(
     {
-      queryKey: ["useWaitForCallsStatus", params.id],
+      queryKey: ["useWaitForCallsStatus", id],
       queryFn: ReactLogger.profiled(
         "useWaitForCallsStatus",
         async (): Promise<QueryResult> => {
           if (!smartWalletClient) {
             throw new ClientUndefinedHookError("useWaitForCallsStatus");
+          }
+          if (!id) {
+            throw new BaseError("Expected callId to be defined");
           }
 
           const _smartWalletClient = clientHeaderTrack(
@@ -65,10 +71,13 @@ export function useWaitForCallsStatus({
             "reactUseWaitForCallsStatus",
           );
 
-          return await _smartWalletClient.waitForCallsStatus(params);
+          return await _smartWalletClient.waitForCallsStatus({
+            ...params,
+            id,
+          });
         },
       ),
-      enabled: !!client,
+      enabled: !!(client && smartWalletClient && id),
     },
     queryClient,
   );

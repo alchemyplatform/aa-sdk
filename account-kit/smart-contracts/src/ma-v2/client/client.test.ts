@@ -31,6 +31,7 @@ import {
   getDefaultTimeRangeModuleAddress,
   getDefaultWebauthnValidationModuleAddress,
   installValidationActions,
+  modularAccountAbi,
   NativeTokenLimitModule,
   PaymasterGuardModule,
   PermissionBuilder,
@@ -57,6 +58,7 @@ import {
   testActions,
   toHex,
   zeroAddress,
+  zeroHash,
   type ContractFunctionName,
   type TestActions,
 } from "viem";
@@ -250,33 +252,132 @@ describe("MA v2 Tests", async () => {
       });
   });
 
-  it.fails(
-    "successfully sign + validate a message, for WebAuthn account",
-    async () => {
-      const { provider } = await givenWebAuthnProvider();
+  it("successfully sign and validate a message with EIP-1271 using WebAuthn account", async () => {
+    const { provider } = await givenWebAuthnProvider();
 
-      await setBalance(instance.getClient(), {
-        address: provider.getAddress(),
-        value: parseEther("2"),
+    await setBalance(instance.getClient(), {
+      address: provider.getAddress(),
+      value: parseEther("2"),
+    });
+
+    const accountContract = getContract({
+      address: provider.getAddress(),
+      abi: semiModularAccountBytecodeAbi,
+      client,
+    });
+
+    // Deploy the account first by sending a simple UO
+    const deployResult = await provider.sendUserOperation({
+      uo: {
+        target: target,
+        value: 0n,
+        data: "0x",
+      },
+    });
+
+    await provider
+      .waitForUserOperationTransaction(deployResult)
+      .catch(async () => {
+        const dropAndReplaceResult = await provider.dropAndReplaceUserOperation(
+          {
+            uoToDrop: deployResult.request,
+          },
+        );
+        await provider.waitForUserOperationTransaction(dropAndReplaceResult);
       });
 
-      const message = "0xdeadbeef";
+    const message = "testmessage";
 
-      let signature = await provider.signMessage({ message });
+    // WebAuthn signMessage automatically wraps the message in EIP-712 ReplaySafeHash format
+    // and returns a properly formatted signature
+    const signature = await provider.signMessage({ message });
 
-      const publicClient = instance.getClient().extend(publicActions);
+    // Validate against the original message hash
+    // The WebAuthn validation module will wrap it in ReplaySafeHash internally
+    await expect(
+      accountContract.read.isValidSignature([hashMessage(message), signature]),
+    ).resolves.toEqual(isValidSigSuccess);
+  });
 
-      // TODO: should be using verifyTypedData here
-      const isValid = await publicClient.verifyMessage({
-        // TODO: this is gonna fail until the message can be formatted since the actual message is EIP-712
-        message,
-        address: provider.getAddress(),
+  it("successfully sign and validate typed data with EIP-1271 using WebAuthn account", async () => {
+    const { provider } = await givenWebAuthnProvider();
+
+    await setBalance(instance.getClient(), {
+      address: provider.getAddress(),
+      value: parseEther("2"),
+    });
+
+    const accountContract = getContract({
+      address: provider.getAddress(),
+      abi: semiModularAccountBytecodeAbi,
+      client,
+    });
+
+    // Deploy the account first by sending a simple UO
+    const deployResult = await provider.sendUserOperation({
+      uo: {
+        target: target,
+        value: 0n,
+        data: "0x",
+      },
+    });
+
+    await provider
+      .waitForUserOperationTransaction(deployResult)
+      .catch(async () => {
+        const dropAndReplaceResult = await provider.dropAndReplaceUserOperation(
+          {
+            uoToDrop: deployResult.request,
+          },
+        );
+        await provider.waitForUserOperationTransaction(dropAndReplaceResult);
+      });
+
+    const typedData = {
+      domain: {
+        name: "Ether Mail",
+        version: "1",
+        chainId: 1,
+        verifyingContract: "0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC",
+      },
+      types: {
+        Person: [
+          { name: "name", type: "string" },
+          { name: "wallet", type: "address" },
+        ],
+        Mail: [
+          { name: "from", type: "Person" },
+          { name: "to", type: "Person" },
+          { name: "contents", type: "string" },
+        ],
+      },
+      primaryType: "Mail",
+      message: {
+        from: {
+          name: "Cow",
+          wallet: "0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826",
+        },
+        to: {
+          name: "Bob",
+          wallet: "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
+        },
+        contents: "Hello, Bob!",
+      },
+    } as const;
+
+    // WebAuthn signTypedData automatically wraps the typed data in EIP-712 ReplaySafeHash format
+    // and returns a properly formatted signature
+    const signature = await provider.signTypedData({ typedData });
+
+    // Validate against the original typed data hash
+    // The WebAuthn validation module will wrap it in ReplaySafeHash internally
+    await expect(
+      accountContract.read.isValidSignature([
+        hashTypedData(typedData),
         signature,
-      });
-
-      expect(isValid).toBe(true);
-    },
-  );
+      ]),
+    ).resolves.toEqual(isValidSigSuccess);
+  });
 
   it("successfully sign + validate a message, for native and single signer validation", async () => {
     const provider = (await givenConnectedProvider({ signer })).extend(
@@ -1871,6 +1972,49 @@ describe("MA v2 Tests", async () => {
         ).resolves.toEqual(nonce);
       }
     }
+  });
+
+  it("correctly encodes self-call data", async () => {
+    const client = await givenConnectedProvider({ signer });
+    await setBalance(instance.getClient(), {
+      address: client.getAddress(),
+      value: parseEther("20"),
+    });
+
+    // Normally, a self-call would be encoded as uo: `0x{string}`.
+    // But, we also want to ensure that formatting this as a self-call, with `target` and `data` as arguments, works.
+
+    // We want to call a valid selector on the account contract itself, and `performCreate` is a valid selector.
+    // Argument content:
+    // - 60 push1
+    // - 20 immediate value for push1, used as length of return data
+    // - 3d returndatasize, pushes 00 to stack for offset of return data
+    // - f3 return, consumes the stack values and returns `0x00` (memory uninitialized) as contract code, which will immediately stop.
+
+    const result = await client.sendUserOperation({
+      uo: {
+        target: client.getAddress(),
+        data: encodeFunctionData({
+          abi: modularAccountAbi,
+          functionName: "performCreate",
+          args: [0n, "0x60203df3", false, zeroHash],
+        }),
+      },
+    });
+
+    const txnHash = await client
+      .waitForUserOperationTransaction(result)
+      .catch(async () => {
+        const dropAndReplaceResult = await client.dropAndReplaceUserOperation({
+          uoToDrop: result.request,
+        });
+        return await client.waitForUserOperationTransaction(
+          dropAndReplaceResult,
+        );
+      });
+
+    const txn = await client.getTransactionReceipt({ hash: txnHash });
+    expect(txn?.status).toEqual("success");
   });
 
   it("upgrade from a lightaccount", async () => {

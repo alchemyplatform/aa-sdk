@@ -45,7 +45,11 @@ export async function disconnect(config: AlchemyAccountsConfig): Promise<void> {
 // Function to clear the Wallet Connect store to prevent
 // Persistence of Wallet Connect connection state on error.
 const clearWalletConnectStore = () => {
-  if (typeof window === "undefined") {
+  if (
+    typeof window === "undefined" ||
+    // indexedDB is not available + wallet connect is not used in react native
+    typeof window.indexedDB === "undefined"
+  ) {
     return;
   }
 

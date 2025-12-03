@@ -1,24 +1,32 @@
-import type { SmartAccountSigner, SmartContractAccount } from "@aa-sdk/core";
+import {
+  InvalidSignerTypeError,
+  type SmartContractAccount,
+} from "@aa-sdk/core";
 import {
   createModularAccountV2,
   createLightAccount,
   createMultiOwnerLightAccount,
   createMultiOwnerModularAccount,
 } from "@account-kit/smart-contracts";
-import { concatHex, type Chain, type Transport, type Address } from "viem";
-import type { StaticDecode } from "@sinclair/typebox";
-import { SerializedInitcode } from "@alchemy/wallet-api-types";
+import {
+  concatHex,
+  type Chain,
+  type Transport,
+  type Address,
+  isAddressEqual,
+} from "viem";
+import type { SerializedInitcode } from "@alchemy/wallet-api-types";
 import { InternalError, InvalidRequestError } from "ox/RpcResponse";
-import { assertNever } from "../utils.js";
-import { getAccountTypeForDelegationAddress7702 } from "@alchemy/wallet-api-types/capabilities";
+import { assertNever, isWebAuthnSigner } from "../utils.js";
 import { metrics } from "../metrics.js";
+import type { SmartWalletSigner } from "../client/index.js";
 
 type CreateAccountParams = {
   chain: Chain;
   transport: Transport;
-  signer: SmartAccountSigner;
+  signer: SmartWalletSigner;
   accountAddress: Address;
-  counterfactualInfo?: StaticDecode<typeof SerializedInitcode>; // undefined for 7702 accounts
+  counterfactualInfo?: SerializedInitcode; // undefined for 7702 accounts
   delegation?: Address; // for 7702 accounts
 };
 
@@ -44,17 +52,20 @@ type CreateAccountParams = {
 export async function createAccount(
   params: CreateAccountParams,
 ): Promise<SmartContractAccount> {
-  const { counterfactualInfo: ci, ...accountParams } = params;
+  const { counterfactualInfo: ci, signer, ...accountParams } = params;
 
   if (params.delegation) {
-    const accountType = getAccountTypeForDelegationAddress7702(
-      params.delegation,
-    );
-    if (accountType !== "ModularAccountV2") {
+    if (!isAddressEqual(params.delegation, MAV2_7702_DELEGATION_ADDRESS)) {
       throw new Error("7702 mode currently only supports ModularAccountV2");
     }
+
+    if (isWebAuthnSigner(signer)) {
+      throw new InvalidSignerTypeError("WebAuthn");
+    }
+
     return createModularAccountV2({
       ...accountParams,
+      signer,
       mode: "7702",
     });
   }
@@ -81,45 +92,68 @@ export async function createAccount(
     },
   });
 
+  // WebAuthn accounts must use a different signer type, so they are handled separately.
+  if (factoryType === "MAv2.0.0-ma-webauthn") {
+    if (!isWebAuthnSigner(signer)) {
+      throw new InvalidSignerTypeError(signer.signerType);
+    }
+
+    return createModularAccountV2({
+      ...commonParams,
+      ...signer,
+      mode: "webauthn",
+    });
+  }
+
+  if (isWebAuthnSigner(signer)) {
+    throw new InvalidSignerTypeError("WebAuthn");
+  }
+
   // Return the account created based on the factory type
   switch (factoryType) {
     case "MAv2.0.0-sma-b":
       return createModularAccountV2({
         ...commonParams,
+        signer,
         mode: "default",
       });
     case "LightAccountV2.0.0":
       return createLightAccount({
         ...commonParams,
+        signer,
         version: "v2.0.0",
       });
     case "LightAccountV1.0.1":
       return createLightAccount({
         ...commonParams,
+        signer,
         version: "v1.0.1",
       });
     case "LightAccountV1.0.2":
       return createLightAccount({
         ...commonParams,
+        signer,
         version: "v1.0.2",
       });
     case "LightAccountV1.1.0":
       return createLightAccount({
         ...commonParams,
+        signer,
         version: "v1.1.0",
       });
     case "MAv1.0.0-MultiOwner":
       return createMultiOwnerModularAccount({
         ...commonParams,
+        signer,
       });
     case "LightAccountV2.0.0-MultiOwner":
       return createMultiOwnerLightAccount({
         ...commonParams,
         version: "v2.0.0",
+        signer,
       });
     case "MAv1.0.0-MultiSig":
     case "MAv2.0.0-ma-ssv":
-    case "MAv2.0.0-ma-webauthn":
     case "unknown":
     case undefined:
       throw new InvalidRequestError({
@@ -129,3 +163,6 @@ export async function createAccount(
       return assertNever(factoryType, "Unsupported factory type");
   }
 }
+
+const MAV2_7702_DELEGATION_ADDRESS =
+  "0x69007702764179f14F51cdce752f4f775d74E139";

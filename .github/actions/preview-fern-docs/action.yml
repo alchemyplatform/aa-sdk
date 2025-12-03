@@ -1,0 +1,73 @@
+name: 'Generate Fern Docs Preview'
+description: 'Generates a Fern documentation preview and comments the URL in a PR'
+
+inputs:
+  github-token:
+    description: 'GitHub token for creating deployments and comments'
+    required: true
+  fern-token:
+    description: 'Fern API token for publishing docs'
+    required: true
+  ref:
+    description: 'Git ref to create deployment for (usually github.head_ref for PRs)'
+    required: true
+  environment:
+    description: 'Deployment environment name'
+    required: false
+    default: 'docs-preview'
+
+outputs:
+  preview-url:
+    description: 'The URL where the preview documentation was published'
+    value: ${{ steps.generate-preview.outputs.url }}
+  status:
+    description: 'The outcome of the preview generation (success, failure, etc.)'
+    value: ${{ steps.generate-preview.outcome }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Setup Docs
+      uses: ./.github/actions/setup-docs
+      with:
+        docs-github-token: ${{ inputs.github-token }}
+
+    - name: Set Build Comment to In Progress
+      uses: actions/github-script@v7
+      with:
+        github-token: ${{ inputs.github-token }}
+        script: |
+          const workspace = process.env.GITHUB_WORKSPACE;
+          const { updatePreviewComment } = await import(`${workspace}/docs-site/scripts/preview-comment.js`);
+
+          await updatePreviewComment({
+            github,
+            context,
+            status: 'building',
+          });
+
+    - name: Generate Fern Docs Preview
+      id: generate-preview
+      uses: ./.github/actions/publish-fern
+      with:
+        github-token: ${{ inputs.github-token }}
+        fern-token: ${{ inputs.fern-token }}
+        environment: ${{ inputs.environment }}
+        ref: ${{ inputs.ref }}
+        preview: "true"
+
+    - name: Comment Preview URL in PR
+      uses: actions/github-script@v7
+      if: always()
+      with:
+        github-token: ${{ inputs.github-token }}
+        script: |
+          const workspace = process.env.GITHUB_WORKSPACE;
+          const { updatePreviewComment } = await import(`${workspace}/docs-site/scripts/preview-comment.js`);
+
+          await updatePreviewComment({
+            github,
+            context,
+            previewUrl: '${{ steps.generate-preview.outputs.url }}',
+            status: '${{ steps.generate-preview.outcome }}',
+          });

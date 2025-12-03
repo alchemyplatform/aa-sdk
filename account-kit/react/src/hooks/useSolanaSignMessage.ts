@@ -47,15 +47,17 @@ export type UseSolanaSignMessageParams = {
  * connected Solana wallets, falling back to the internal signer when not connected.
  *
  * @example
- * ```ts
+ * ```ts twoslash
+ * import { useSolanaSignMessage } from "@account-kit/react";
+ *
  * const {
  *   isPending: isSigningMessage,
  *   mutate: signHello,
  *   data: signature,
  *   reset,
- * } = useSolanaSignMessage({
- * });
- * mutate({ message: "Hello" });
+ * } = useSolanaSignMessage({});
+ *
+ * signHello({ message: "Hello" });
  * ```
  * @param {UseSolanaSignMessageParams} opts - Options for the hook to get setup.
  * @returns {SolanaSignedMessage} This should be hook mutations plus a few more. Used to get the end result of the signing and the callbacks.

@@ -11,6 +11,11 @@ import type {
 } from "./client/types.js";
 import { SessionManagerParamsSchema } from "./session/manager.js";
 
+export type AccessKeyAuthParams = {
+  accessKey: string;
+  accountId?: string;
+};
+
 export type AuthParams =
   | {
       type: "email";
@@ -64,7 +69,8 @@ export type AuthParams =
       type: "otp";
       otpCode: string;
       multiFactors?: VerifyMfaParams[];
-    };
+    }
+  | ({ type: "accessKey" } & AccessKeyAuthParams);
 
 export type OauthProviderConfig =
   | {

@@ -83,9 +83,12 @@ Your JWTs must contain these claims:
 
 ### 4. Audience Claim
 
-The `aud` claim must be set to your Alchemy-provided audience ID. You can obtain the audience claim from your Smart Wallet configuration in the [Alchemy Dashboard](https://dashboard.alchemy.com/accounts/config/create).
+The `aud` claim must be set to your Alchemy-provided audience ID. You can obtain the audience claim from your Smart Wallet settings in the [Alchemy Dashboard](https://dashboard.alchemy.com/apps/latest/services/smart-wallets).
 
-<img src="/images/wallets/bring-your-own-auth.png" alt="Audience Claim" />
+<img
+  src="https://alchemyapi-res.cloudinary.com/image/upload/v1764187289/docs/aa-sdk/images/bring-your-own-auth.png"
+  alt="Audience Claim"
+/>
 
 ## Implementation Guide
 
@@ -221,6 +224,10 @@ The `aud` claim must be set to your Alchemy-provided audience ID. You can obtain
     The `address` returned is the EOA signer address. To get the actual smart contract wallet address, call the `getAddress()` method on your smart account implementation using this signer address.
     </Info>
 
+    <Tip>
+      For setting up an account config, see the [Signer Quickstart](/wallets/signer/quickstart).
+    </Tip>
+
   </Tab>
 </Tabs>
 
@@ -274,8 +281,8 @@ Use [jwt.io](https://jwt.io/) to decode and validate your JWT structure before i
 
 ### Sending a User Operation
 
-Once your users have been authenticated, you can start [sending user operations](/wallets/transactions/send/send-user-operations).
+Once your users have been authenticated, you can start [sending transactions](/wallets/transactions/send-transactions).
 
 ### Sponsor Gas for a User Operation
 
-Start [sponsoring gas fees](/wallets/transactions/sponsor-gas/sponsor-gas) for transactions via the Gas Manager.
+Start [sponsoring gas fees](/wallets/transactions/sponsor-gas) for transactions via the Gas Manager.

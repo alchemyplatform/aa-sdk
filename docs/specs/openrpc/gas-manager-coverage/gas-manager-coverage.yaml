@@ -11,6 +11,14 @@ servers:
     name: Ethereum Mainnet
   - url: https://eth-sepolia.g.alchemy.com/v2
     name: Ethereum Sepolia
+  - url: https://anime-mainnet.g.alchemy.com/v2
+    name: Anime Mainnet
+  - url: https://anime-sepolia.g.alchemy.com/v2
+    name: Anime Sepolia
+  - url: https://apechain-mainnet.g.alchemy.com/v2
+    name: ApeChain Mainnet
+  - url: https://apechain-curtis.g.alchemy.com/v2
+    name: ApeChain Curtis
   - url: https://arb-mainnet.g.alchemy.com/v2
     name: Arbitrum Mainnet
   - url: https://arb-sepolia.g.alchemy.com/v2
@@ -29,14 +37,16 @@ servers:
     name: BNB Smart Chain Testnet
   - url: https://celo-mainnet.g.alchemy.com/v2
     name: Celo Mainnet
-  - url: https://celo-alfajores.g.alchemy.com/v2
-    name: Celo Alfajores
+  - url: https://celo-sepolia.g.alchemy.com/v2
+    name: Celo Sepolia
   - url: https://frax-mainnet.g.alchemy.com/v2
     name: Frax Mainnet
   - url: https://gensyn-testnet.g.alchemy.com/v2
     name: Gensyn Testnet
   - url: https://hyperliquid-mainnet.g.alchemy.com/v2
     name: Hyperliquid Mainnet
+  - url: https://hyperliquid-testnet.g.alchemy.com/v2
+    name: Hyperliquid Testnet
   - url: https://ink-mainnet.g.alchemy.com/v2
     name: Ink Mainnet
   - url: https://ink-sepolia.g.alchemy.com/v2
@@ -45,6 +55,8 @@ servers:
     name: Polygon Mainnet
   - url: https://polygon-amoy.g.alchemy.com/v2
     name: Polygon Amoy
+  - url: https://monad-mainnet.g.alchemy.com/v2
+    name: Monad Mainnet
   - url: https://monad-testnet.g.alchemy.com/v2
     name: Monad Testnet
   - url: https://opbnb-mainnet.g.alchemy.com/v2
@@ -55,10 +67,16 @@ servers:
     name: OP Mainnet Mainnet
   - url: https://opt-sepolia.g.alchemy.com/v2
     name: OP Mainnet Sepolia
+  - url: https://plasma-mainnet.g.alchemy.com/v2
+    name: Plasma Mainnet
+  - url: https://plasma-testnet.g.alchemy.com/v2
+    name: Plasma Testnet
   - url: https://polynomial-mainnet.g.alchemy.com/v2
     name: Polynomial Mainnet
   - url: https://polynomial-sepolia.g.alchemy.com/v2
     name: Polynomial Sepolia
+  - url: https://rise-testnet.g.alchemy.com/v2
+    name: Rise Testnet
   - url: https://shape-mainnet.g.alchemy.com/v2
     name: Shape Mainnet
   - url: https://shape-sepolia.g.alchemy.com/v2
@@ -71,8 +89,12 @@ servers:
     name: Soneium Mainnet
   - url: https://soneium-minato.g.alchemy.com/v2
     name: Soneium Minato
-  - url: https://tea-sepolia.g.alchemy.com/v2
-    name: Tea Sepolia
+  - url: https://stable-testnet.g.alchemy.com/v2
+    name: Stable Testnet
+  - url: https://story-mainnet.g.alchemy.com/v2
+    name: Story Mainnet
+  - url: https://story-aeneid.g.alchemy.com/v2
+    name: Story Aeneid
   - url: https://unichain-mainnet.g.alchemy.com/v2
     name: Unichain Mainnet
   - url: https://unichain-sepolia.g.alchemy.com/v2
@@ -578,9 +600,6 @@ methods:
             erc20Context:
               $ref: "../_shared_wallets/components.yaml#/components/schemas/erc20Context"
               description: "Erc20 context, required to enable users to pay gas with ERC-20 tokens."
-            webhookData:
-              type: "string"
-              description: "Additional data you can include in the request, such as proof of humanity, if you have enabled custom rules in your Gas Manager policy."
     result:
       name: "Response"
       description: "The response object may be one of two types:"

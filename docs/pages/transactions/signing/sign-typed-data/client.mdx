@@ -1,0 +1,67 @@
+<Info>Required SDK version: ^v4.59.1</Info>
+
+See the [`signTypedData` SDK
+reference](/docs/wallets/reference/account-kit/wallet-client/functions/signTypedData)
+for full descriptions of the parameters used in the following example.
+
+<CodeBlocks>
+
+```ts title="signTypedData.ts"
+import { client } from "./client";
+
+// Sign typed data
+const typedData = {
+  domain: {
+    name: "MyDApp",
+    version: "1",
+    chainId: 1,
+    verifyingContract: "0x...",
+  },
+  types: {
+    Auth: [
+      { name: "user", type: "address" },
+      { name: "nonce", type: "uint256" },
+      { name: "timestamp", type: "uint256" },
+    ],
+  },
+  primaryType: "Auth",
+  message: {
+    user: "0x...", // wallet address
+    nonce: 12345,
+    timestamp: Date.now(),
+  },
+} as const;
+
+const signature = await client.signTypedData(typedData);
+
+console.log("Typed data signature:", signature);
+```
+
+```ts title="client.ts"
+import "dotenv/config";
+import type { Hex } from "viem";
+import { LocalAccountSigner } from "@aa-sdk/core";
+import { alchemy, sepolia } from "@account-kit/infra";
+import { createSmartWalletClient } from "@account-kit/wallet-client";
+
+const clientParams = {
+  transport: alchemy({
+    apiKey: process.env.ALCHEMY_API_KEY!,
+  }),
+  chain: sepolia,
+  signer: LocalAccountSigner.privateKeyToAccountSigner(
+    process.env.PRIVATE_KEY! as Hex,
+  ),
+};
+
+const clientWithoutAccount = createSmartWalletClient(clientParams);
+
+const account = await clientWithoutAccount.requestAccount();
+
+export const client = createSmartWalletClient({
+  ...clientParams,
+  account: account.address,
+});
+```
+
+</CodeBlocks>
