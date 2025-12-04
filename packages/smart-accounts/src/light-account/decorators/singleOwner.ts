@@ -16,7 +16,9 @@ export type LightAccountActions<
 };
 
 function isLightAccount(account: SmartAccount): account is LightAccount {
-  return "source" in account && account.source === "LightAccount";
+  return (
+    "smartAccountType" in account && account.smartAccountType === "LightAccount"
+  );
 }
 
 /**

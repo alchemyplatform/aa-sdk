@@ -1,3 +1,5 @@
+export type * from "./types.js";
+
 // LightAccount
 export type * from "./light-account/accounts/account.js";
 export { toLightAccount } from "./light-account/accounts/account.js";

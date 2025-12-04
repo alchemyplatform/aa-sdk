@@ -35,7 +35,9 @@ export type LightAccountVersion<TAccountType extends LightAccountType> =
   keyof (typeof AccountVersionRegistry)[TAccountType];
 
 export type GetLightAccountType<TAccount extends LightAccountBase> =
-  TAccount["source"] extends LightAccountType ? TAccount["source"] : never;
+  TAccount["smartAccountType"] extends LightAccountType
+    ? TAccount["smartAccountType"]
+    : never;
 
 export type LightAccountAbi<
   TAccountType extends LightAccountType,

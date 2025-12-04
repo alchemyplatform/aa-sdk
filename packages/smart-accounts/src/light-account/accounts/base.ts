@@ -59,7 +59,7 @@ export type BaseLightAccountImplementation<
   >["version"],
   {
     getLightAccountVersion: () => TLightAccountVersion;
-    source: TLightAccountType;
+    smartAccountType: TLightAccountType;
     encodeUpgradeToAndCall: (params: {
       upgradeToAddress: Address;
       upgradeToInitData: Hex;
@@ -330,7 +330,7 @@ export async function toLightAccountBase<
     },
 
     extend: {
-      source: type,
+      smartAccountType: type,
       getLightAccountVersion: () => version,
       encodeUpgradeToAndCall,
       prepareSignature,

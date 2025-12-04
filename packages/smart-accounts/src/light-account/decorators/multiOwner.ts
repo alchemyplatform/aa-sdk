@@ -21,7 +21,10 @@ export type MultiOwnerLightAccountActions<
 function isMultiOwnerLightAccount(
   account: SmartAccount,
 ): account is MultiOwnerLightAccount {
-  return "source" in account && account.source === "MultiOwnerLightAccount";
+  return (
+    "smartAccountType" in account &&
+    account.smartAccountType === "MultiOwnerLightAccount"
+  );
 }
 
 /**

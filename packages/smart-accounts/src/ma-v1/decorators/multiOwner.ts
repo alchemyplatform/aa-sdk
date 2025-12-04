@@ -21,7 +21,10 @@ export type MultiOwnerModularAccountV1Actions<
 function isMultiOwnerModularAccountV1(
   account: SmartAccount,
 ): account is MultiOwnerModularAccountV1 {
-  return "source" in account && account.source === "MultiOwnerModularAccountV1";
+  return (
+    "smartAccountType" in account &&
+    account.smartAccountType === "MultiOwnerModularAccountV1"
+  );
 }
 
 /**

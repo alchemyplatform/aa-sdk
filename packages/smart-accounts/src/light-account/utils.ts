@@ -61,7 +61,7 @@ export async function getLightAccountImplAddress<
     throw new ChainNotFoundError();
   }
   const version = account.getLightAccountVersion();
-  const type = account.source;
+  const type = account.smartAccountType;
 
   const expectedImplAddresses = Object.values(AccountVersionRegistry[type]).map(
     (x) => x.accountImplementation,
