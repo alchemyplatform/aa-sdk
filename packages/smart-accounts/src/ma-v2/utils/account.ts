@@ -133,5 +133,8 @@ export function serializeModuleEntity(config: ModuleEntity): Hex {
 export function isModularAccountV2(
   account: SmartAccount,
 ): account is ModularAccountV2Base {
-  return "source" in account && account.source === "ModularAccountV2";
+  return (
+    "smartAccountType" in account &&
+    account.smartAccountType === "ModularAccountV2"
+  );
 }
