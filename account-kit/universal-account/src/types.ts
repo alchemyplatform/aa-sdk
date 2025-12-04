@@ -258,27 +258,27 @@ export interface IUniversalAccount {
   getPrimaryAssets(): Promise<PrimaryAssets>;
   /** Create a transfer transaction */
   createTransferTransaction(
-    params: TransferTransactionParams
+    params: TransferTransactionParams,
   ): Promise<UniversalTransaction>;
   /** Create a universal transaction */
   createUniversalTransaction(
-    params: UniversalTransactionParams
+    params: UniversalTransactionParams,
   ): Promise<UniversalTransaction>;
   /** Create a buy/swap transaction */
   createBuyTransaction(
-    params: BuyTransactionParams
+    params: BuyTransactionParams,
   ): Promise<UniversalTransaction>;
   /** Create a sell transaction */
   createSellTransaction(
-    params: SellTransactionParams
+    params: SellTransactionParams,
   ): Promise<UniversalTransaction>;
   /** Create a convert transaction */
   createConvertTransaction(
-    params: ConvertTransactionParams
+    params: ConvertTransactionParams,
   ): Promise<UniversalTransaction>;
   /** Send a signed transaction */
   sendTransaction(
     transaction: UniversalTransaction,
-    signature: string
+    signature: string,
   ): Promise<TransactionResult>;
 }

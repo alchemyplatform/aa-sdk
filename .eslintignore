@@ -9,6 +9,8 @@ site/.vitepress/cache/**/*
 /examples/ui-demo/contracts
 /examples/ui-demo/.next/*
 
+account-kit/universal-account/examples/*
+
 **/.turbo/*
 account-kit/rn-signer/lib/*
 account-kit/java/*

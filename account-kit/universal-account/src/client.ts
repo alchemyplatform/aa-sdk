@@ -49,6 +49,12 @@ export class UniversalAccountClient implements IUniversalAccount {
   private ua: any;
   private _ownerAddress: Address;
 
+  /**
+   * Creates a new UniversalAccountClient instance
+   *
+   * @param {any} ua - The underlying Particle Universal Account instance
+   * @param {Address} ownerAddress - The EOA address that owns this Universal Account
+   */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   constructor(ua: any, ownerAddress: Address) {
     this.ua = ua;
@@ -126,14 +132,15 @@ export class UniversalAccountClient implements IUniversalAccount {
         price: asset.price,
         amount: asset.amount,
         amountInUSD: asset.amountInUSD,
-        chainAggregation: asset.chainAggregation?.map((chain: any) => ({
-          chainId: chain.token?.chainId ?? chain.chainId,
-          address: chain.token?.address ?? chain.address,
-          amount: chain.amount,
-          amountInUSD: chain.amountInUSD,
-          rawAmount: chain.rawAmount,
-          decimals: chain.token?.decimals ?? chain.decimals,
-        })) ?? [],
+        chainAggregation:
+          asset.chainAggregation?.map((chain: any) => ({
+            chainId: chain.token?.chainId ?? chain.chainId,
+            address: chain.token?.address ?? chain.address,
+            amount: chain.amount,
+            amountInUSD: chain.amountInUSD,
+            rawAmount: chain.rawAmount,
+            decimals: chain.token?.decimals ?? chain.decimals,
+          })) ?? [],
       })),
       totalAmountInUSD: assets.totalAmountInUSD,
     };
@@ -164,7 +171,7 @@ export class UniversalAccountClient implements IUniversalAccount {
    * ```
    */
   async createTransferTransaction(
-    params: TransferTransactionParams
+    params: TransferTransactionParams,
   ): Promise<UniversalTransaction> {
     const tx = await this.ua.createTransferTransaction({
       token: {
@@ -202,7 +209,7 @@ export class UniversalAccountClient implements IUniversalAccount {
    * ```
    */
   async createUniversalTransaction(
-    params: UniversalTransactionParams
+    params: UniversalTransactionParams,
   ): Promise<UniversalTransaction> {
     const tx = await this.ua.createUniversalTransaction({
       chainId: params.chainId,
@@ -241,7 +248,7 @@ export class UniversalAccountClient implements IUniversalAccount {
    * ```
    */
   async createBuyTransaction(
-    params: BuyTransactionParams
+    params: BuyTransactionParams,
   ): Promise<UniversalTransaction> {
     const tx = await this.ua.createBuyTransaction({
       token: {
@@ -275,7 +282,7 @@ export class UniversalAccountClient implements IUniversalAccount {
    * ```
    */
   async createSellTransaction(
-    params: SellTransactionParams
+    params: SellTransactionParams,
   ): Promise<UniversalTransaction> {
     const tx = await this.ua.createSellTransaction({
       token: {
@@ -306,7 +313,7 @@ export class UniversalAccountClient implements IUniversalAccount {
    * ```
    */
   async createConvertTransaction(
-    params: ConvertTransactionParams
+    params: ConvertTransactionParams,
   ): Promise<UniversalTransaction> {
     const tx = await this.ua.createConvertTransaction({
       expectToken: {
@@ -335,15 +342,12 @@ export class UniversalAccountClient implements IUniversalAccount {
    */
   async sendTransaction(
     transaction: UniversalTransaction,
-    signature: string
+    signature: string,
   ): Promise<TransactionResult> {
     // We need to pass the original transaction object from the SDK
     // The transaction parameter here is our mapped type, but we stored
     // the original in a way that sendTransaction can use it
-    const result = await this.ua.sendTransaction(
-      transaction as any,
-      signature
-    );
+    const result = await this.ua.sendTransaction(transaction as any, signature);
 
     return {
       transactionId: result.transactionId,
@@ -390,8 +394,10 @@ export class UniversalAccountClient implements IUniversalAccount {
         name: tx.smartAccountOptions?.name ?? "",
         version: tx.smartAccountOptions?.version ?? "",
         ownerAddress: tx.smartAccountOptions?.ownerAddress as Address,
-        smartAccountAddress: tx.smartAccountOptions?.smartAccountAddress as Address,
-        solanaSmartAccountAddress: tx.smartAccountOptions?.solanaSmartAccountAddress,
+        smartAccountAddress: tx.smartAccountOptions
+          ?.smartAccountAddress as Address,
+        solanaSmartAccountAddress:
+          tx.smartAccountOptions?.solanaSmartAccountAddress,
         senderAddress: tx.smartAccountOptions?.senderAddress as Address,
         senderSolanaAddress: tx.smartAccountOptions?.senderSolanaAddress,
       },
@@ -425,7 +431,7 @@ export class UniversalAccountClient implements IUniversalAccount {
  * ```
  */
 export async function createUniversalAccountClient(
-  params: CreateUniversalAccountClientParams
+  params: CreateUniversalAccountClientParams,
 ): Promise<UniversalAccountClient> {
   // Dynamic import to avoid bundling issues - users must install the peer dependency
   const { UniversalAccount } = await import(

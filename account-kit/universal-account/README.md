@@ -27,9 +27,11 @@ npm install @account-kit/universal-account
 You'll need credentials from both dashboards:
 
 **Alchemy** (for authentication):
+
 - Get your API key from [Alchemy Dashboard](https://dashboard.alchemy.com)
 
 **Particle Network** (for Universal Accounts):
+
 1. Sign up at [Particle Dashboard](https://dashboard.particle.network/)
 2. Create a project and web application
 3. Copy your **Project ID**, **Client Key**, and **App ID**
@@ -59,6 +61,7 @@ When integrating Alchemy Account Kit with Universal Accounts, it's important to 
 ```
 
 **Key Concept**: Alchemy's SCA and Universal Account's smart accounts are **different**!
+
 - Use Alchemy for authentication and getting the EOA
 - Use Universal Accounts for cross-chain operations
 
@@ -122,13 +125,13 @@ import { useUser, useSigner } from "@account-kit/react";
 function MyComponent() {
   const user = useUser();
   const signer = useSigner();
-  
+
   // ✅ CORRECT: Use EOA for Universal Accounts
   const eoaAddress = user?.address as `0x${string}` | undefined;
-  
+
   // ❌ WRONG: Don't use SCA for Universal Accounts
   // const { address } = useAccount({ type: "LightAccount" });
-  
+
   return <UniversalAccountDemo ownerAddress={eoaAddress} />;
 }
 ```
@@ -139,19 +142,22 @@ The `useUniversalAccount` hook auto-initializes when you pass the EOA address:
 
 ```tsx
 import { useUser, useSigner } from "@account-kit/react";
-import { useUniversalAccount, useUnifiedBalance } from "@account-kit/universal-account";
+import {
+  useUniversalAccount,
+  useUnifiedBalance,
+} from "@account-kit/universal-account";
 
 function Dashboard() {
   const user = useUser();
   const eoaAddress = user?.address as `0x${string}` | undefined;
 
   // Universal Account auto-initializes with the EOA address
-  const { 
-    address,        // Universal Account EVM address
-    solanaAddress,  // Universal Account Solana address
-    isReady, 
+  const {
+    address, // Universal Account EVM address
+    solanaAddress, // Universal Account Solana address
+    isReady,
     isInitializing,
-    error 
+    error,
   } = useUniversalAccount(eoaAddress);
 
   // Get unified balance across all chains
@@ -166,14 +172,14 @@ function Dashboard() {
       <h2>Universal Account</h2>
       <p>EVM Address: {address}</p>
       <p>Solana Address: {solanaAddress}</p>
-      
+
       <h3>Unified Balance: ${totalBalanceUSD?.toFixed(2)}</h3>
       {assets?.map((asset) => (
         <div key={asset.tokenType}>
           {asset.tokenType}: {asset.amount} (${asset.amountInUSD.toFixed(2)})
         </div>
       ))}
-      
+
       <button onClick={refetch} disabled={isLoading}>
         {isLoading ? "Loading..." : "Refresh Balance"}
       </button>
@@ -193,7 +199,7 @@ import { toBytes, encodeFunctionData } from "viem";
 
 function MintNFT() {
   const signer = useSigner();
-  
+
   const { sendUniversal, isLoading, error, lastResult } = useSendTransaction({
     signMessage: async (message: string) => {
       if (!signer) throw new Error("Signer not available");
@@ -223,7 +229,10 @@ function MintNFT() {
     });
 
     console.log("Transaction ID:", result.transactionId);
-    console.log("View on UniversalX:", `https://universalx.app/activity/details?id=${result.transactionId}`);
+    console.log(
+      "View on UniversalX:",
+      `https://universalx.app/activity/details?id=${result.transactionId}`,
+    );
   };
 
   return (
@@ -232,7 +241,9 @@ function MintNFT() {
         {isLoading ? "Minting..." : "Mint NFT on Avalanche"}
       </button>
       {lastResult && (
-        <a href={`https://universalx.app/activity/details?id=${lastResult.transactionId}`}>
+        <a
+          href={`https://universalx.app/activity/details?id=${lastResult.transactionId}`}
+        >
           View Transaction
         </a>
       )}
@@ -251,35 +262,39 @@ function MintNFT() {
 The package exports helpful constants for chain IDs and token types:
 
 ```typescript
-import { CHAIN_ID, TOKEN_TYPE, NATIVE_TOKEN_ADDRESS } from "@account-kit/universal-account";
+import {
+  CHAIN_ID,
+  TOKEN_TYPE,
+  NATIVE_TOKEN_ADDRESS,
+} from "@account-kit/universal-account";
 
 // Use chain IDs
 const tx = await sendUniversal({
-  chainId: CHAIN_ID.AVALANCHE,  // 43114
+  chainId: CHAIN_ID.AVALANCHE, // 43114
   // ...
 });
 
 // Available chains:
-CHAIN_ID.ETHEREUM    // 1
-CHAIN_ID.BNB_CHAIN   // 56
-CHAIN_ID.BASE        // 8453
-CHAIN_ID.ARBITRUM    // 42161
-CHAIN_ID.AVALANCHE   // 43114
-CHAIN_ID.OPTIMISM    // 10
-CHAIN_ID.POLYGON     // 137
-CHAIN_ID.LINEA       // 59144
-CHAIN_ID.BERACHAIN   // 80094
-CHAIN_ID.SOLANA      // 101
+CHAIN_ID.ETHEREUM; // 1
+CHAIN_ID.BNB_CHAIN; // 56
+CHAIN_ID.BASE; // 8453
+CHAIN_ID.ARBITRUM; // 42161
+CHAIN_ID.AVALANCHE; // 43114
+CHAIN_ID.OPTIMISM; // 10
+CHAIN_ID.POLYGON; // 137
+CHAIN_ID.LINEA; // 59144
+CHAIN_ID.BERACHAIN; // 80094
+CHAIN_ID.SOLANA; // 101
 // ... and more
 
 // Token types for expectTokens
-TOKEN_TYPE.ETH
-TOKEN_TYPE.USDC
-TOKEN_TYPE.USDT
-TOKEN_TYPE.SOL
+TOKEN_TYPE.ETH;
+TOKEN_TYPE.USDC;
+TOKEN_TYPE.USDT;
+TOKEN_TYPE.SOL;
 
 // Native token address (for ETH, AVAX, etc.)
-NATIVE_TOKEN_ADDRESS  // "0x0000000000000000000000000000000000000000"
+NATIVE_TOKEN_ADDRESS; // "0x0000000000000000000000000000000000000000"
 ```
 
 ---
@@ -332,10 +347,11 @@ Initialize and manage a Universal Account. Auto-initializes when `ownerAddress` 
 | `disconnect` | `() => void` | Reset the Universal Account |
 
 **Example:**
+
 ```tsx
 const user = useUser();
 const { address, solanaAddress, isReady, error } = useUniversalAccount(
-  user?.address as `0x${string}`
+  user?.address as `0x${string}`,
 );
 ```
 
@@ -361,13 +377,15 @@ Fetch the unified balance across all chains. Automatically fetches when the Univ
 | `refetch` | `() => void` | Manually refresh balance |
 
 **Asset Structure:**
+
 ```typescript
 interface AssetInfo {
-  tokenType: string;      // e.g., "USDT", "ETH"
-  price: number;          // Current price in USD
-  amount: string;         // Total amount across chains
-  amountInUSD: number;    // Total value in USD
-  chainAggregation: {     // Breakdown by chain
+  tokenType: string; // e.g., "USDT", "ETH"
+  price: number; // Current price in USD
+  amount: string; // Total amount across chains
+  amountInUSD: number; // Total value in USD
+  chainAggregation: {
+    // Breakdown by chain
     chainId: number;
     address: string;
     amount: string;
@@ -377,6 +395,7 @@ interface AssetInfo {
 ```
 
 **Example:**
+
 ```tsx
 const { totalBalanceUSD, assets, refetch, isLoading } = useUnifiedBalance({
   refetchInterval: 30000, // Refresh every 30 seconds
@@ -410,20 +429,24 @@ Send Universal Account transactions with automatic signing flow. Supports all tr
 **Transaction Types:**
 
 ##### `sendTransfer` - Token Transfer
+
 Send tokens to any address across chains.
+
 ```typescript
 await sendTransfer({
   token: {
-    chainId: 42161,     // Arbitrum
+    chainId: 42161, // Arbitrum
     address: "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9", // USDT
   },
-  amount: "10",         // Human-readable amount
-  receiver: "0x...",    // Recipient address
+  amount: "10", // Human-readable amount
+  receiver: "0x...", // Recipient address
 });
 ```
 
 ##### `sendUniversal` - Custom Contract Interaction
+
 Execute any contract call with automatic liquidity routing.
+
 ```typescript
 await sendUniversal({
   chainId: 8453,        // Base
@@ -439,40 +462,47 @@ await sendUniversal({
 ```
 
 ##### `sendBuy` - Buy/Swap Token
+
 Buy a token using USD value from your primary assets.
+
 ```typescript
 await sendBuy({
   token: {
-    chainId: 42161,     // Arbitrum
+    chainId: 42161, // Arbitrum
     address: "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9", // USDT
   },
-  amountInUSD: "10",    // Spend $10 worth of primary assets
+  amountInUSD: "10", // Spend $10 worth of primary assets
 });
 ```
 
 ##### `sendSell` - Sell Token
+
 Sell a token back into primary assets.
+
 ```typescript
 await sendSell({
   token: {
-    chainId: 42161,     // Arbitrum
+    chainId: 42161, // Arbitrum
     address: "0x912CE59144191C1204E64559FE8253a0e49E6548", // ARB
   },
-  amount: "0.1",        // Sell 0.1 ARB
+  amount: "0.1", // Sell 0.1 ARB
 });
 ```
 
 ##### `sendConvert` - Convert Primary Assets
+
 Convert between primary assets on a specific chain.
+
 ```typescript
 await sendConvert({
   expectToken: { type: "USDC", amount: "1" },
-  chainId: 42161,       // Arbitrum
+  chainId: 42161, // Arbitrum
 });
 ```
 
 **Solana Support:**
 All transaction types work with Solana. Use chain ID for Solana mainnet and the appropriate token addresses:
+
 ```typescript
 // Buy SOL or Solana tokens
 await sendBuy({
@@ -485,6 +515,7 @@ await sendBuy({
 ```
 
 **Full Example:**
+
 ```tsx
 const signer = useSigner();
 
@@ -498,13 +529,15 @@ const { sendTransfer, sendBuy, sendUniversal, isLoading } = useSendTransaction({
 await sendUniversal({
   chainId: 43114,
   expectTokens: [],
-  transactions: [{
-    to: "0xdea7bF60E53CD578e3526F36eC431795f7EEbFe6",
-    data: encodeFunctionData({
-      abi: [{ type: "function", name: "mint", inputs: [], outputs: [] }],
-      functionName: "mint",
-    }),
-  }],
+  transactions: [
+    {
+      to: "0xdea7bF60E53CD578e3526F36eC431795f7EEbFe6",
+      data: encodeFunctionData({
+        abi: [{ type: "function", name: "mint", inputs: [], outputs: [] }],
+        functionName: "mint",
+      }),
+    },
+  ],
 });
 ```
 
@@ -581,6 +614,7 @@ console.log("Explorer:", client.getExplorerUrl(result.transactionId));
 ## Supported Chains
 
 Universal Accounts support 15+ EVM chains and Solana:
+
 - Ethereum, Base, Arbitrum, Optimism, Polygon
 - Avalanche, BNB Chain, Fantom, Gnosis
 - And more...
@@ -590,6 +624,7 @@ See the [full list of supported chains](https://developers.particle.network/univ
 ## Fees
 
 Universal Account transactions may include:
+
 - **Gas fees**: Standard network fees on the destination chain
 - **LP fee**: 0.2% for cross-chain transactions
 - **Service fee**: 1% on transaction volume

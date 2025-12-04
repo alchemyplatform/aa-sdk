@@ -1,6 +1,6 @@
 {
   "name": "@account-kit/universal-account",
-  "version": "4.79.0",
+  "version": "4.80.0",
   "description": "Universal Account integration for Account Kit - enabling chain abstraction with Particle Network",
   "author": "Alchemy",
   "license": "MIT",
@@ -39,8 +39,8 @@
     "test:run": "vitest run --passWithNoTests"
   },
   "dependencies": {
-    "@account-kit/infra": "^4.79.0",
-    "@account-kit/signer": "^4.79.0",
+    "@account-kit/infra": "^4.80.0",
+    "@account-kit/signer": "^4.80.0",
     "@particle-network/universal-account-sdk": "^1.0.0"
   },
   "peerDependencies": {

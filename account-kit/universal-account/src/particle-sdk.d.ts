@@ -109,14 +109,14 @@ declare module "@particle-network/universal-account-sdk" {
     getSmartAccountOptions(): Promise<SmartAccountOptions>;
     getPrimaryAssets(): Promise<PrimaryAssets>;
     createTransferTransaction(
-      params: TransferTransactionParams
+      params: TransferTransactionParams,
     ): Promise<UniversalTransaction>;
     createUniversalTransaction(
-      params: UniversalTransactionParams
+      params: UniversalTransactionParams,
     ): Promise<UniversalTransaction>;
     sendTransaction(
       transaction: UniversalTransaction,
-      signature: string
+      signature: string,
     ): Promise<TransactionResult>;
   }
 
