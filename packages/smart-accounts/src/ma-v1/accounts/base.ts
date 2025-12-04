@@ -36,7 +36,7 @@ export type BaseMaV1AccountImplementation = SmartAccountImplementation<
   typeof entryPoint06Abi,
   "0.6",
   {
-    source: MaV1AccountType;
+    smartAccountType: MaV1AccountType;
     prepareSignature: (request: SignatureRequest) => Promise<SignatureRequest>;
     formatSignature: (signature: Hex) => Promise<Hex>;
   },
@@ -237,7 +237,7 @@ export async function toModularAccountV1Base<
     },
 
     extend: {
-      source: type,
+      smartAccountType: type,
       prepareSignature,
       formatSignature,
     },

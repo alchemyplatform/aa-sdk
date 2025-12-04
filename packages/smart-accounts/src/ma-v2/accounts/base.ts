@@ -81,7 +81,7 @@ export type BaseModularAccountV2Implementation = SmartAccountImplementation<
   typeof entryPoint07Abi,
   "0.7",
   {
-    source: "ModularAccountV2";
+    smartAccountType: "ModularAccountV2";
     signerEntity: SignerEntity;
     encodeCallData: (callData: Hex) => Promise<Hex>;
     getExecutionData: (selector: Hex) => Promise<ExecutionDataView>;
@@ -554,7 +554,7 @@ export async function toModularAccountV2Base<
     },
 
     extend: {
-      source: "ModularAccountV2" as const,
+      smartAccountType: "ModularAccountV2" as const,
       signerEntity: {
         entityId,
         isGlobalValidation,
