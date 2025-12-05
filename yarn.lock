@@ -4875,10 +4875,10 @@
   dependencies:
     "@particle-network/auth" "^1.3.1"
 
-"@particle-network/universal-account-sdk@^1.0.0":
-  version "1.0.10"
-  resolved "https://registry.yarnpkg.com/@particle-network/universal-account-sdk/-/universal-account-sdk-1.0.10.tgz#205ec4760fb0ebf87fca3cd3b07a249e10621cc9"
-  integrity sha512-xd1yaEBpeMl9QWRWq1h2yxwKFEae4pYPVsomnpLqZmY1XSqKRRCspdmVeGFgKHz6SaoowWTrmqkh+daP6SjAGQ==
+"@particle-network/universal-account-sdk@^1.0.12":
+  version "1.0.12"
+  resolved "https://registry.yarnpkg.com/@particle-network/universal-account-sdk/-/universal-account-sdk-1.0.12.tgz#fbb1173629477ec34456624d53cd2095c86f7503"
+  integrity sha512-H9ws7mjpXx6K0MxbmQ8OK+j9Gn836Ns5ExQP9Bt8k6cmPKIgQM6IK6aR5bifKZaMUTthHFZpWU3jGRwa4wypyg==
   dependencies:
     "@coral-xyz/anchor" "^0.30.1"
     "@noble/hashes" "^1.7.1"

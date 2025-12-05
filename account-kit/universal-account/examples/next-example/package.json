@@ -12,11 +12,11 @@
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "next": "15.5.2",
-    "@account-kit/react": "^4.79.0",
-    "@account-kit/infra": "^4.79.0",
-    "@account-kit/core": "^4.79.0",
+    "@account-kit/react": "^4.80.0",
+    "@account-kit/infra": "^4.80.0",
+    "@account-kit/core": "^4.80.0",
     "@tanstack/react-query": "^5.62.0",
-    "@particle-network/universal-account-sdk": "^1.0.10",
+    "@particle-network/universal-account-sdk": "^1.0.12",
     "viem": "^2.29.2"
   },
   "devDependencies": {

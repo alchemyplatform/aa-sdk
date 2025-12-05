@@ -124,6 +124,8 @@ navigation:
             path: wallets/pages/transactions/swap-tokens/index.mdx
           - page: "[NEW] Cross-chain swaps"
             path: wallets/pages/transactions/cross-chain-swap-tokens/index.mdx
+          - page: "[NEW] Universal Accounts"
+            path: wallets/pages/third-party/universal-accounts.mdx
           - page: Send parallel transactions
             path: wallets/pages/transactions/send-parallel-transactions/index.mdx
           - page: Retry transactions

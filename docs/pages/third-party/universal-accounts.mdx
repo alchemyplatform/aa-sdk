@@ -1,0 +1,279 @@
+---
+title: Universal Accounts
+description: Enable chain abstraction with Particle Network Universal Accounts
+slug: wallets/third-party/universal-accounts
+---
+
+Universal Accounts provide a single account, balance, and interaction point across all supported chains (EVM + Solana). This integration brings [Particle Network's Universal Accounts](https://developers.particle.network/universal-accounts/cha/overview) into Smart Wallets.
+
+## Key features
+
+- **Unified balance**: View and use assets across all chains as a single balance
+- **Cross-chain transactions**: Send transactions to any chain without manual bridging
+- **Universal gas**: Pay gas fees with any supported token
+- **Solana support**: Interact with both EVM chains and Solana
+
+## Prerequisites
+
+You need credentials from both dashboards:
+
+**Alchemy** (for authentication):
+
+- Get your API key from [Alchemy Dashboard](https://dashboard.alchemy.com)
+
+**Particle Network** (for Universal Accounts):
+
+1. Sign up at [Particle Dashboard](https://dashboard.particle.network/)
+2. Create a project and web application
+3. Copy your **Project ID**, **Client Key**, and **App ID**
+
+## Installation
+
+```bash
+npm install @account-kit/universal-account
+# or
+yarn add @account-kit/universal-account
+```
+
+## Architecture
+
+When integrating Smart Wallets with Universal Accounts, understand the different account types:
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    Smart Wallets (Alchemy)                      │
+├─────────────────────────────────────────────────────────────────┤
+│  useUser()     → user.address = EOA (Externally Owned Account) │
+│  useAccount()  → address = SCA (Smart Contract Account)        │
+│  useSigner()   → Signs messages with the EOA                   │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              │ EOA address (user.address)
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                  Universal Accounts                             │
+├─────────────────────────────────────────────────────────────────┤
+│  Owner: EOA from Alchemy (user.address)                        │
+│  Creates: Multi-chain smart accounts (EVM + Solana)            │
+│  Provides: Unified balance, cross-chain transactions           │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+<Warning>
+  Use the EOA address from `useUser().address` for Universal Accounts, not the
+  smart account address from `useAccount()`. These are different account types.
+</Warning>
+
+## Quick start
+
+Find a full demo app in the [examples](https://github.com/alchemyplatform/aa-sdk/tree/main/account-kit/universal-account/examples) directory.
+
+### 1. Set up providers
+
+Wrap your app with both `AlchemyAccountProvider` and `UniversalAccountProvider`:
+
+```tsx twoslash
+// @noErrors
+// providers.tsx
+"use client";
+
+import { AlchemyAccountProvider } from "@account-kit/react";
+import { UniversalAccountProvider } from "@account-kit/universal-account";
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
+
+// Your Alchemy config
+const config = {
+  // ... your alchemy config
+};
+
+const universalAccountConfig = {
+  projectId: process.env.NEXT_PUBLIC_PARTICLE_PROJECT_ID!,
+  clientKey: process.env.NEXT_PUBLIC_PARTICLE_CLIENT_KEY!,
+  appId: process.env.NEXT_PUBLIC_PARTICLE_APP_ID!,
+};
+
+export function Providers({ children }: { children: React.ReactNode }) {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <AlchemyAccountProvider config={config} queryClient={queryClient}>
+        <UniversalAccountProvider config={universalAccountConfig}>
+          {children}
+        </UniversalAccountProvider>
+      </AlchemyAccountProvider>
+    </QueryClientProvider>
+  );
+}
+```
+
+### 2. Initialize Universal Account
+
+Use the `useUniversalAccount` hook with the EOA address:
+
+```tsx twoslash
+// @noErrors
+import { useUser } from "@account-kit/react";
+import {
+  useUniversalAccount,
+  useUnifiedBalance,
+} from "@account-kit/universal-account";
+
+function Dashboard() {
+  const user = useUser();
+  const eoaAddress = user?.address as `0x${string}` | undefined;
+
+  // Universal Account auto-initializes with the EOA address
+  const {
+    address, // Universal Account EVM address
+    solanaAddress, // Universal Account Solana address
+    isReady,
+    isInitializing,
+    error,
+  } = useUniversalAccount(eoaAddress);
+
+  // Get unified balance across all chains
+  const { totalBalanceUSD, assets, isLoading, refetch } = useUnifiedBalance();
+
+  if (isInitializing) return <div>Initializing Universal Account...</div>;
+  if (error) return <div>Error: {error.message}</div>;
+  if (!isReady) return null;
+
+  return (
+    <div>
+      <h2>Universal Account</h2>
+      <p>EVM Address: {address}</p>
+      <p>Solana Address: {solanaAddress}</p>
+      <h3>Unified Balance: ${totalBalanceUSD?.toFixed(2)}</h3>
+    </div>
+  );
+}
+```
+
+### 3. Send transactions
+
+Use `useSendTransaction` to send cross-chain transactions:
+
+```tsx twoslash
+// @noErrors
+import { useSigner } from "@account-kit/react";
+import { useSendTransaction } from "@account-kit/universal-account";
+import { toBytes, encodeFunctionData } from "viem";
+
+function MintNFT() {
+  const signer = useSigner();
+
+  const { sendUniversal, isLoading, error, lastResult } = useSendTransaction({
+    signMessage: async (message: string) => {
+      if (!signer) throw new Error("Signer not available");
+      return await signer.signMessage({ raw: toBytes(message) });
+    },
+  });
+
+  const handleMint = async () => {
+    const NFT_CONTRACT = "0xdea7bF60E53CD578e3526F36eC431795f7EEbFe6";
+    const AVALANCHE_CHAIN_ID = 43114;
+
+    const mintData = encodeFunctionData({
+      abi: [{ type: "function", name: "mint", inputs: [], outputs: [] }],
+      functionName: "mint",
+    });
+
+    const result = await sendUniversal({
+      chainId: AVALANCHE_CHAIN_ID,
+      expectTokens: [],
+      transactions: [{ to: NFT_CONTRACT, data: mintData }],
+    });
+
+    console.log("Transaction ID:", result.transactionId);
+  };
+
+  return (
+    <button onClick={handleMint} disabled={isLoading || !signer}>
+      {isLoading ? "Minting..." : "Mint NFT on Avalanche"}
+    </button>
+  );
+}
+```
+
+## Transaction types
+
+The `useSendTransaction` hook provides methods for different transaction types:
+
+### Transfer tokens
+
+```tsx twoslash
+// @noErrors
+const { sendTransfer } = useSendTransaction({ signMessage });
+
+await sendTransfer({
+  token: {
+    chainId: 42161, // Arbitrum
+    address: "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9", // USDT
+  },
+  amount: "10",
+  receiver: "0x...",
+});
+```
+
+### Buy tokens
+
+Convert USD value from your primary assets into a target token:
+
+```tsx twoslash
+// @noErrors
+const { sendBuy } = useSendTransaction({ signMessage });
+
+await sendBuy({
+  token: {
+    chainId: 42161,
+    address: "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9",
+  },
+  amountInUSD: "10", // Buy $10 worth
+});
+```
+
+### Sell tokens
+
+Sell a token back into primary assets:
+
+```tsx twoslash
+// @noErrors
+const { sendSell } = useSendTransaction({ signMessage });
+
+await sendSell({
+  token: {
+    chainId: 42161,
+    address: "0x912CE59144191C1204E64559FE8253a0e49E6548", // ARB
+  },
+  amount: "0.1",
+});
+```
+
+## Supported chains
+
+Universal Accounts support 15+ EVM chains and Solana:
+
+- Ethereum, Base, Arbitrum, Optimism, Polygon
+- Avalanche, BNB Chain, Linea, Berachain
+- Solana
+- And more...
+
+See the [full list of supported chains](https://developers.particle.network/universal-accounts/cha/chains).
+
+## Fees
+
+Universal Account transactions may include:
+
+- **Gas fees**: Standard network fees on the destination chain
+- **LP fee**: 0.2% for cross-chain transactions
+- **Service fee**: 1% on transaction volume
+
+Fees are automatically calculated and shown in the transaction preview.
+
+## Resources
+
+- [Particle Network Documentation](https://developers.particle.network/universal-accounts/cha/overview)
+- [Universal Accounts SDK Reference](https://developers.particle.network/universal-accounts/ua-reference/desktop/web)
+- [Supported Chains & Primary Assets](https://developers.particle.network/universal-accounts/cha/chains)
+- [UniversalX Explorer](https://universalx.app)
