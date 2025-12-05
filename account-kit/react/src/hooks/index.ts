@@ -20,6 +20,7 @@ export * from "./useRemoveEmail.js";
 export * from "./useRemoveOauthProvider.js";
 export * from "./useRemovePasskey.js";
 export * from "./useResizeObserver.js";
+export * from "./useSendCalls.js";
 export * from "./useSendUserOperation.js";
 export * from "./useSendVerificationCode.js";
 export * from "./useSetEmail.js";
