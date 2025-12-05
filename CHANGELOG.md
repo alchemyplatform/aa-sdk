@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.81.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.81.0...v4.81.1) (2025-12-05)
+
+### Bug Fixes
+
+- session config expiration time should never be restored ([#2283](https://github.com/alchemyplatform/aa-sdk/issues/2283)) ([69999e6](https://github.com/alchemyplatform/aa-sdk/commit/69999e6295fe9588c73e9c5a9417f1c7df732f2f))
+
 # [4.81.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.80.0...v4.81.0) (2025-12-03)
 
 ### Features
