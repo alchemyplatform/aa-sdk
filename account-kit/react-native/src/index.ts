@@ -19,6 +19,7 @@ export {
   useRemoveEmail,
   useRemoveOauthProvider,
   useRemovePasskey,
+  useSendCalls,
   useSendUserOperation,
   useSendVerificationCode,
   useSetEmail,
