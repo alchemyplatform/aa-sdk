@@ -36,6 +36,7 @@ export type ToMultiOwnerModularAccountV1Params = {
   salt?: bigint;
   accountAddress?: Address;
   factoryAddress?: Address;
+  factoryData?: Hex;
 };
 
 /**
@@ -50,6 +51,7 @@ export async function toMultiOwnerModularAccountV1({
   owners,
   accountAddress: accountAddress_,
   factoryAddress = DefaultMaV1Address.MULTI_OWNER_MAV1_FACTORY,
+  factoryData: factoryData_,
 }: ToMultiOwnerModularAccountV1Params): Promise<MultiOwnerModularAccountV1> {
   const signer = owners[0];
 
@@ -72,11 +74,13 @@ export async function toMultiOwnerModularAccountV1({
     });
 
   const getFactoryArgs = async () => {
-    const factoryData = encodeFunctionData({
-      abi: MultiOwnerModularAccountFactoryAbi,
-      functionName: "createAccount",
-      args: [salt, sortedOwners],
-    });
+    const factoryData =
+      factoryData_ ??
+      encodeFunctionData({
+        abi: MultiOwnerModularAccountFactoryAbi,
+        functionName: "createAccount",
+        args: [salt, sortedOwners],
+      });
 
     return {
       factory: factoryAddress,

@@ -36,6 +36,7 @@ export type ToMultiOwnerLightAccountParams = {
   salt?: bigint;
   accountAddress?: Address;
   factoryAddress?: Address;
+  factoryData?: Hex;
 };
 
 /**
@@ -51,6 +52,7 @@ export async function toMultiOwnerLightAccount({
   accountAddress: accountAddress_,
   factoryAddress = AccountVersionRegistry.MultiOwnerLightAccount["v2.0.0"]
     .factoryAddress,
+  factoryData: factoryData_,
 }: ToMultiOwnerLightAccountParams): Promise<MultiOwnerLightAccount> {
   const signer = owners[0];
 
@@ -73,11 +75,13 @@ export async function toMultiOwnerLightAccount({
     });
 
   const getFactoryArgs = async () => {
-    const factoryData = encodeFunctionData({
-      abi: MultiOwnerLightAccountFactoryAbi,
-      functionName: "createAccount",
-      args: [sortedOwners, salt],
-    });
+    const factoryData =
+      factoryData_ ??
+      encodeFunctionData({
+        abi: MultiOwnerLightAccountFactoryAbi,
+        functionName: "createAccount",
+        args: [sortedOwners, salt],
+      });
 
     return {
       factory: factoryAddress,
