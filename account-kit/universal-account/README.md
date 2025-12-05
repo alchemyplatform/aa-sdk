@@ -631,13 +631,47 @@ Universal Account transactions may include:
 
 Fees are automatically calculated and shown in the transaction preview via `feeQuotes`.
 
+## Testing
+
+### Run Tests
+
+```bash
+# Run all tests
+yarn test
+
+# Run tests once (CI mode)
+yarn test:run
+```
+
+### Test Coverage
+
+The package includes two types of testing:
+
+**Unit Tests** (`src/__tests__/`)
+
+- `constants.test.ts` - Verifies exported chain IDs, token types, and constants
+- `client.test.ts` - Tests the `UniversalAccountClient` wrapper logic using mocks
+
+Unit tests verify that:
+
+- Parameters are correctly passed to the underlying Particle SDK
+- Responses are correctly mapped to our TypeScript types
+- The client API behaves as expected
+
+**Integration Testing** (`examples/next-example/`)
+
+For full integration testing with real SDK calls, use the demo app:
+
+```bash
+cd examples/next-example
+yarn install
+yarn dev
+```
+
+This tests the complete flow: authentication → Universal Account initialization → balance fetching → transaction signing.
+
 ## Resources
 
 - [Particle Network Documentation](https://developers.particle.network/universal-accounts/cha/overview)
 - [Universal Accounts SDK Reference](https://developers.particle.network/universal-accounts/ua-reference/desktop/web)
 - [Supported Chains & Primary Assets](https://developers.particle.network/universal-accounts/cha/chains)
-- [UniversalX Explorer](https://universalx.app)
-
-## License
-
-MIT

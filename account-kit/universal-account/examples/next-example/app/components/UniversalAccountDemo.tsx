@@ -96,6 +96,8 @@ export function UniversalAccountDemo({
     // sendBuy,       // For buying tokens
     // sendSell,      // For selling tokens
     // sendConvert,   // For converting assets
+    // Check Particle docs for more details
+    // https://developers.particle.network/universal-accounts/ua-reference/desktop/web#sending-a-transfer-transaction
     isLoading: isSending,
   } = useSendTransaction({
     // This function signs the transaction hash with the Alchemy signer

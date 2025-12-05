@@ -41,7 +41,7 @@
   "dependencies": {
     "@account-kit/infra": "^4.80.0",
     "@account-kit/signer": "^4.80.0",
-    "@particle-network/universal-account-sdk": "^1.0.0"
+    "@particle-network/universal-account-sdk": "^1.0.12"
   },
   "peerDependencies": {
     "react": ">=18.0.0",
