@@ -17,7 +17,7 @@ navigation:
             slug: /
             path: wallets/pages/index.mdx
           - page: Quickstart
-            path: wallets/pages/react/getting-started/quickstart-at-top.mdx
+            path: wallets/pages/smart-wallets/quickstart/sdk.mdx
           - section: Get Started
             contents:
               - section: React
@@ -102,17 +102,36 @@ navigation:
         contents:
           - page: Overview
             path: wallets/pages/transactions/overview.mdx
-          - page: Send transactions
-            path: wallets/pages/transactions/send-transactions/index.mdx
-          - page: Using EIP-7702
-            path: wallets/pages/transactions/using-eip-7702/index.mdx
-          - page: Send batch transactions
-            path: wallets/pages/transactions/send-batch-transactions/index.mdx
-          - page: Sponsor gas
-            path: wallets/pages/transactions/sponsor-gas/index.mdx
-          - page: Pay gas with any token
-            path: wallets/pages/transactions/pay-gas-with-any-token/index.mdx
-          - section: Session Keys
+          - section: Send transactions
+            collapsed: true
+            contents:
+              - page: Single transactions
+                path: wallets/pages/transactions/send-transactions/index.mdx
+              - page: Batch transactions
+                path: wallets/pages/transactions/send-batch-transactions/index.mdx
+              - page: Parallel transactions
+                path: wallets/pages/transactions/send-parallel-transactions/index.mdx
+              - page: EIP-7702 transactions
+                path: wallets/pages/transactions/using-eip-7702/index.mdx
+          - section: Sponsor gas
+            path: wallets/pages/transactions/sponsor-gas/overview.mdx
+            collapsed: true
+            contents:
+              - page: Full sponsorship
+                path: wallets/pages/transactions/sponsor-gas/index.mdx
+              - page: Solana sponsorship
+                path: wallets/pages/transactions/solana/sponsor-gas-solana.mdx
+              - page: Pay gas with any token
+                path: wallets/pages/transactions/pay-gas-with-any-token/index.mdx
+          - section: Swap tokens
+            collapsed: true
+            contents:
+              - page: Same-chain swaps
+                path: wallets/pages/transactions/swap-tokens/index.mdx
+              - page: Cross-chain swaps
+                path: wallets/pages/transactions/cross-chain-swap-tokens/index.mdx
+          - section: Grant session keys
+            collapsed: true
             contents:
               - page: Overview
                 path: wallets/pages/smart-wallets/session-keys/index.mdx
@@ -120,17 +139,10 @@ navigation:
                 path: wallets/pages/smart-wallets/session-keys/sdk.mdx
               - page: Using API
                 path: wallets/pages/smart-wallets/session-keys/api.mdx
-          - page: "[NEW] Same-chain swaps"
-            path: wallets/pages/transactions/swap-tokens/index.mdx
-          - page: "[NEW] Cross-chain swaps"
-            path: wallets/pages/transactions/cross-chain-swap-tokens/index.mdx
-          - page: Send parallel transactions
-            path: wallets/pages/transactions/send-parallel-transactions/index.mdx
           - page: Retry transactions
             path: wallets/pages/transactions/retry-transactions/index.mdx
-          - page: Sponsor gas on Solana
-            path: wallets/pages/transactions/solana/sponsor-gas-solana.mdx
-          - section: Signing
+          - section: Sign
+            collapsed: true
             contents:
               - page: Sign messages
                 path: wallets/pages/transactions/signing/sign-messages/index.mdx
@@ -138,13 +150,105 @@ navigation:
                 path: wallets/pages/transactions/signing/sign-typed-data/index.mdx
           - page: Configure client
             path: wallets/pages/concepts/smart-account-client.mdx
+
+      - section: Wallet integration
+        contents:
+          - page: Overview
+            path: wallets/pages/authentication/overview.mdx
+          - section: Embedded wallets
+            collapsed: true
+            contents:
+              - section: Login methods
+                collapsed: true
+                contents:
+                  - page: Email OTP
+                    path: wallets/pages/authentication/login-methods/email-otp.mdx
+                  - page: Email magic-link
+                    path: wallets/pages/authentication/login-methods/email-magic-link.mdx
+                  - page: Social login
+                    path: wallets/pages/authentication/login-methods/social-login.mdx
+                  - page: Custom social providers
+                    path: wallets/pages/react/login-methods/social-providers.mdx
+                  - page: Bring your own authentication
+                    path: wallets/pages/authentication/login-methods/bring-your-own-auth.mdx
+                  - page: Passkey signup
+                    path: wallets/pages/authentication/login-methods/passkey-signup.mdx
+                  - page: Passkey login
+                    path: wallets/pages/react/login-methods/passkey-login.mdx
+                  - page: Add passkey
+                    path: wallets/pages/react/add-passkey.mdx
+                  - page: SMS login
+                    path: wallets/pages/authentication/login-methods/sms-login.mdx
+                  - page: "On-chain passkeys"
+                    path: wallets/pages/react/login-methods/onchain-passkeys.mdx
+                  - page: Adding and removing login methods
+                    path: wallets/pages/react/login-methods/adding-and-removing-login-methods.mdx
+              - section: UI components
+                collapsed: true
+                contents:
+                  - page: Using UI components
+                    path: wallets/pages/react/ui-components.mdx
+                  - page: Theme & branding
+                    path: wallets/pages/react/customization/theme.mdx
+                  - page: Tailwind setup
+                    path: wallets/pages/react/customization/tailwind-setup.mdx
+              - section: Whitelabel
+                collapsed: true
+                contents:
+                  - page: React hooks
+                    path: wallets/pages/react/react-hooks.mdx
+                  - page: Other JS initialization
+                    path: wallets/pages/signer/quickstart.mdx
+              - section: Connectors
+                collapsed: true
+                contents:
+                  - page: Connect external wallets
+                    path: wallets/pages/react/login-methods/eoa-login.mdx
+                  - page: Customize
+                    path: wallets/pages/react/connectors/customization.mdx
+              - section: MFA
+                collapsed: true
+                contents:
+                  - page: Set up MFA
+                    path: wallets/pages/react/mfa/setup-mfa.mdx
+                  - page: Email OTP
+                    path: wallets/pages/react/mfa/email-otp.mdx
+                  - page: Email magic-link
+                    path: wallets/pages/react/mfa/email-magic-link.mdx
+                  - page: Social login
+                    path: wallets/pages/react/mfa/social-login.mdx
+              - page: Solana wallets
+                path: wallets/pages/react/solana-wallets/get-started.mdx
+              - page: Server wallets
+                path: wallets/pages/signer/authentication/server-wallets.mdx
+              - section: Account management
+                contents:
+                  - page: Pregenerate wallets
+                    path: wallets/pages/react/pregenerate-wallets.mdx
+                  - page: User sessions
+                    path: wallets/pages/signer/user-sessions.mdx
+                  - page: Manage account ownership
+                    path: wallets/pages/smart-contracts/modular-account-v2/managing-ownership.mdx
+                  - page: Export private key
+                    path: wallets/pages/signer/export-private-key.mdx
+          - section: Third-party signers
+            contents:
+              - page: Privy
+                path: wallets/pages/third-party/signers/privy.mdx
+              - page: Turnkey
+                path: wallets/pages/third-party/signers/turnkey.mdx
+              - page: Custom integration
+                path: wallets/pages/third-party/signers/custom-integration.mdx
+          - page: What is a signer?
+            path: wallets/pages/authentication/what-is-a-signer.mdx
+
       - section: Low-Level Infra
         contents:
           - page: Overview
             path: wallets/pages/low-level-infra/overview.mdx
           - page: Quickstart
             path: wallets/pages/low-level-infra/quickstart.mdx
-          - section: Gas Manager
+          - section: Gas Manager API
             contents:
               - section: Policy Management
                 contents:
@@ -162,7 +266,7 @@ navigation:
                         path: wallets/pages/low-level-infra/gas-manager/gas-sponsorship/using-sdk/conditional-gas-sponsorship.mdx
                       - page: Pay Gas with Any ERC20 Token
                         path: wallets/pages/low-level-infra/gas-manager/gas-sponsorship/using-sdk/pay-gas-with-any-erc20-token.mdx
-          - section: Bundler
+          - section: Bundler API
             path: wallets/pages/low-level-infra/bundler/overview.mdx
             contents:
               - page: API Endpoints
@@ -183,7 +287,6 @@ navigation:
                     path: wallets/pages/smart-contracts/modular-account-v2/getting-started.mdx
                   - page: Upgrading to MAv2
                     path: wallets/pages/smart-contracts/modular-account-v2/upgrading-to-MAv2.mdx
-
               - section: Light Account
                 contents:
                   - page: Overview
@@ -198,105 +301,6 @@ navigation:
                 path: wallets/pages/third-party/smart-contracts.mdx
               - page: Deployed addresses
                 path: wallets/pages/smart-contracts/deployed-addresses.mdx
-
-      - section: Authentication
-        contents:
-          - page: Overview
-            path: wallets/pages/authentication/overview.mdx
-          - section: Login methods
-            contents:
-              - page: Email OTP
-                path: wallets/pages/authentication/login-methods/email-otp.mdx
-              - page: Email magic-link
-                path: wallets/pages/authentication/login-methods/email-magic-link.mdx
-              - page: Social login
-                path: wallets/pages/authentication/login-methods/social-login.mdx
-              - page: Custom social providers
-                path: wallets/pages/react/login-methods/social-providers.mdx
-              - page: Bring your own authentication
-                path: wallets/pages/authentication/login-methods/bring-your-own-auth.mdx
-              - page: Passkey signup
-                path: wallets/pages/authentication/login-methods/passkey-signup.mdx
-              - page: Passkey login
-                path: wallets/pages/react/login-methods/passkey-login.mdx
-              - page: Add passkey
-                path: wallets/pages/react/add-passkey.mdx
-              - page: SMS login
-                path: wallets/pages/authentication/login-methods/sms-login.mdx
-              - page: "On-chain passkeys"
-                path: wallets/pages/react/login-methods/onchain-passkeys.mdx
-              - page: Adding and removing login methods
-                path: wallets/pages/react/login-methods/adding-and-removing-login-methods.mdx
-          - section: UI components
-            contents:
-              - page: Using UI components
-                path: wallets/pages/react/ui-components.mdx
-              - page: Theme & branding
-                path: wallets/pages/react/customization/theme.mdx
-              - page: Tailwind setup
-                path: wallets/pages/react/customization/tailwind-setup.mdx
-          - section: Whitelabel
-            contents:
-              - page: React hooks
-                path: wallets/pages/react/react-hooks.mdx
-              - page: Other JS initialization
-                path: wallets/pages/signer/quickstart.mdx
-          - section: Connectors
-            contents:
-              - page: Connect external wallets
-                path: wallets/pages/react/login-methods/eoa-login.mdx
-              - page: Customize
-                path: wallets/pages/react/connectors/customization.mdx
-          - section: MFA
-            contents:
-              - page: Set up MFA
-                path: wallets/pages/react/mfa/setup-mfa.mdx
-              - page: Email OTP
-                path: wallets/pages/react/mfa/email-otp.mdx
-              - page: Email magic-link
-                path: wallets/pages/react/mfa/email-magic-link.mdx
-              - page: Social login
-                path: wallets/pages/react/mfa/social-login.mdx
-          - page: Solana wallets
-            path: wallets/pages/react/solana-wallets/get-started.mdx
-          - page: Server wallets
-            path: wallets/pages/signer/authentication/server-wallets.mdx
-          - section: Account management
-            contents:
-              - page: Pregenerate wallets
-                path: wallets/pages/react/pregenerate-wallets.mdx
-              - page: User sessions
-                path: wallets/pages/signer/user-sessions.mdx
-              - section: Policies
-                contents:
-                  - page: Overview
-                    path: wallets/pages/authorization/policies/overview.mdx
-                  - page: Key Concepts
-                    path: wallets/pages/signer/policies/key-concepts-and-examples.mdx
-                  - page: Session key overview
-                    path: wallets/pages/smart-contracts/modular-account-v2/session-keys/index.mdx
-                  - page: Session key permissions
-                    path: wallets/pages/authorization/policies/session-key-permissions.mdx
-                  - page: Adding session keys
-                    path: wallets/pages/smart-contracts/modular-account-v2/session-keys/adding-session-keys.mdx
-                  - page: Using session keys
-                    path: wallets/pages/smart-contracts/modular-account-v2/session-keys/using-session-keys.mdx
-                  - page: Removing session keys
-                    path: wallets/pages/smart-contracts/modular-account-v2/session-keys/removing-session-keys.mdx
-              - page: Manage account ownership
-                path: wallets/pages/smart-contracts/modular-account-v2/managing-ownership.mdx
-              - page: Export private key
-                path: wallets/pages/signer/export-private-key.mdx
-          - section: Third party signers
-            contents:
-              - page: Privy
-                path: wallets/pages/third-party/signers/privy.mdx
-              - page: Turnkey
-                path: wallets/pages/third-party/signers/turnkey.mdx
-              - page: Custom integration
-                path: wallets/pages/third-party/signers/custom-integration.mdx
-          - page: What is a signer?
-            path: wallets/pages/authentication/what-is-a-signer.mdx
 
       - section: API Reference
         contents:
