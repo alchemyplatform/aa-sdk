@@ -44,6 +44,7 @@ export type ToLightAccountParams<
   salt?: bigint;
   accountAddress?: Address;
   factoryAddress?: Address;
+  factoryData?: Hex;
   version?: TLightAccountVersion;
 };
 
@@ -63,6 +64,7 @@ export async function toLightAccount<
   accountAddress: accountAddress_,
   version = defaultLightAccountVersion() as TLightAccountVersion,
   factoryAddress = AccountVersionRegistry.LightAccount[version].factoryAddress,
+  factoryData: factoryData_,
 }: ToLightAccountParams<TLightAccountVersion>): Promise<
   LightAccount<TLightAccountVersion>
 > {
@@ -96,11 +98,13 @@ export async function toLightAccount<
   LOGGER.debug("toLightAccount:address-resolved", { accountAddress });
 
   const getFactoryArgs = async () => {
-    const factoryData = encodeFunctionData({
-      abi: factoryAbi,
-      functionName: "createAccount",
-      args: [owner.address, salt],
-    });
+    const factoryData =
+      factoryData_ ??
+      encodeFunctionData({
+        abi: factoryAbi,
+        functionName: "createAccount",
+        args: [owner.address, salt],
+      });
 
     return {
       factory: factoryAddress,
