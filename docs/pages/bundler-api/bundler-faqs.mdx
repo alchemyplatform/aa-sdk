@@ -15,10 +15,6 @@ To understand the status of a userOp you can use the `eth_getUserOperationByHash
 1. **The userOp is still pending**: This is the most common scenario and typically means *the fees are too low*. In this case, you should drop and replace the userOp with higher fees.
 2. **The userOp has been dropped**: The most common (but rare) reason is that they paymaster signature has expired. However, this should rarely happen if you set a reasonable sponsorship expiry time, unless there is a significant delay in sending the userOp after the paymaster signs it.
 
-### How can I get push notifications for mined userOps?
-
-Follow the guide on [using custom webhooks to get real time alerts and receipts for mined `userOperations`](/docs/how-to-use-custom-webhooks-to-get-push-notifications-for-mined-user-operations).
-
 ### How do I get my userOp unstuck from the mempool?
 
 For EIP-1559 fee markets, the base fee is fixed per block. To prioritize the inclusion of your userOp and get it unstuck from the mempool, you need to increase the `maxPriorityFeePerGas`. This can be achieved by dropping and replacing the userOp with a new one that has a higher `maxPriorityFeePerGas`.

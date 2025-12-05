@@ -2897,6 +2897,8 @@ navigation:
             contents:
               - page: General FAQs
                 path: wallets/pages/resources/faqs.mdx
+              - page: Wallet APIs Errors
+                path: wallets/pages/troubleshooting/wallet-apis-errors.mdx
               - page: Gas Manager FAQs
                 path: wallets/pages/gas-manager-admin-api/gas-manager-faqs.mdx
               - page: Gas Manager Errors

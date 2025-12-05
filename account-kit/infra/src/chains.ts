@@ -525,6 +525,30 @@ export const monadTestnet: Chain = defineChain({
   testnet: true,
 });
 
+export const monadMainnet: Chain = defineChain({
+  id: 143,
+  name: "Monad Mainnet",
+  nativeCurrency: { name: "Monad", symbol: "MON", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://monad-mainnet.g.alchemy.com/v2"],
+    },
+    public: {
+      http: ["https://monad-mainnet.g.alchemy.com/v2"],
+    },
+    alchemy: {
+      http: ["https://monad-mainnet.g.alchemy.com/v2"],
+    },
+  },
+  blockExplorers: {
+    default: {
+      name: "Block Explorer",
+      url: "https://mainnet-beta.monvision.io",
+    },
+  },
+  testnet: false,
+});
+
 export const mekong: Chain = defineChain({
   id: 7078815900,
   name: "Mekong Pectra Devnet",
@@ -802,6 +826,78 @@ export const edgeMainnet: Chain = defineChain({
     default: {
       name: "Block Explorer",
       url: "https://edge-mainnet.blockscout.com/",
+    },
+  },
+  testnet: false,
+});
+
+export const worldl3devnet: Chain = defineChain({
+  id: 48011,
+  name: "WorldL3 Devnet",
+  nativeCurrency: { name: "eth", symbol: "eth", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://worldl3-devnet.g.alchemy.com/v2"],
+    },
+    public: {
+      http: ["https://worldl3-devnet.g.alchemy.com/v2"],
+    },
+    alchemy: {
+      http: ["https://worldl3-devnet.g.alchemy.com/v2"],
+    },
+  },
+  blockExplorers: {
+    default: {
+      name: "Block Explorer",
+      url: "https://worldl3-devnet.blockscout.com/",
+    },
+  },
+  testnet: true,
+});
+
+export const stableMainnet: Chain = defineChain({
+  id: 988,
+  name: "Stable Mainnet",
+  nativeCurrency: { name: "gUSDT", symbol: "gUSDT", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://stable-mainnet.g.alchemy.com/v2"],
+    },
+    public: {
+      http: ["https://stable-mainnet.g.alchemy.com/v2"],
+    },
+    alchemy: {
+      http: ["https://stable-mainnet.g.alchemy.com/v2"],
+    },
+  },
+  blockExplorers: {
+    default: {
+      name: "Block Explorer",
+      url: "https://stablescan.xyz/",
+    },
+  },
+  testnet: false,
+});
+
+export const mythosMainnet: Chain = defineChain({
+  id: 42018,
+  name: "Mythos Mainnet",
+  nativeCurrency: { name: "eth", symbol: "eth", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://mythos-mainnet.g.alchemy.com/v2"],
+    },
+    public: {
+      http: ["https://mythos-mainnet.g.alchemy.com/v2"],
+    },
+    alchemy: {
+      http: ["https://mythos-mainnet.g.alchemy.com/v2"],
+    },
+  },
+  blockExplorers: {
+    default: {
+      name: "Block Explorer",
+      url: "https://mythos-mainnet.explorer.alchemy.com/",
     },
   },
   testnet: false,

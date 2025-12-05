@@ -52,13 +52,13 @@ methods:
                                     - description: "Light Account V2 account type"
                                       enum:
                                         - "la-v2"
-                                    - description: "Light Account V1.0.1 account type"
+                                    - description: "(deprecated - backwards compatibility only - reach out to support@alchemy.com with questions/concerns) Light Account V1.0.1 account type"
                                       enum:
                                         - "la-v1.0.1"
-                                    - description: "Light Account V1.0.2 account type"
+                                    - description: "(deprecated - backwards compatibility only - reach out to support@alchemy.com with questions/concerns) Light Account V1.0.2 account type"
                                       enum:
                                         - "la-v1.0.2"
-                                    - description: "Light Account V1.1.0 account type"
+                                    - description: "(deprecated - backwards compatibility only - reach out to support@alchemy.com with questions/concerns) Light Account V1.1.0 account type"
                                       enum:
                                         - "la-v1.1.0"
                                   errorMessage: "accountType must be one of: 'sma-b', 'la-v2', 'la-v1.0.1', 'la-v1.0.2', 'la-v1.1.0', 'la-v2-multi-owner', or 'ma-v1-multi-owner'"
@@ -72,7 +72,7 @@ methods:
                                     - description: "Light Account V2 Multi-Owner account type"
                                       enum:
                                         - "la-v2-multi-owner"
-                                    - description: "Modular Account V1 Multi-Owner account type"
+                                    - description: "(deprecated - backwards compatibility only - reach out to support@alchemy.com with questions/concerns) Modular Account V1 Multi-Owner account type"
                                       enum:
                                         - "ma-v1-multi-owner"
                                   errorMessage: "accountType must be one of: 'sma-b', 'la-v2', 'la-v1.0.1', 'la-v1.0.2', 'la-v1.1.0', 'la-v2-multi-owner', 'ma-v1-multi-owner', or '7702'"
