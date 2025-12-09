@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.81.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.81.1...v4.81.2) (2025-12-08)
+
+### Bug Fixes
+
+- auth modal won't open after session expires ([#2287](https://github.com/alchemyplatform/aa-sdk/issues/2287)) ([39cb964](https://github.com/alchemyplatform/aa-sdk/commit/39cb9644a2606df44dbf279eb6ff8cb56b48110d))
+
 ## [4.81.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.81.0...v4.81.1) (2025-12-05)
 
 **Note:** Version bump only for package @account-kit/react
