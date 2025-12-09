@@ -7,6 +7,11 @@ experimental:
   mdx-components:
     - wallets/components
 
+tabs:
+  wallets:
+    display-name: Wallets
+    slug: wallets
+
 navigation:
   - tab: wallets
     layout:
