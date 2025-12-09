@@ -332,7 +332,7 @@ navigation:
                 api-name: bundler
                 slug: bundler-api-endpoints
               - api: UserOp Simulation Endpoints
-                api-name: user-op-sim
+                api-name: userop-sim
                 slug: useroperation-simulation-endpoints
               - section: EntryPoint Revert Codes
                 contents:
