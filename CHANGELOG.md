@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.81.3](https://github.com/alchemyplatform/aa-sdk/compare/v4.81.2...v4.81.3) (2025-12-10)
+
+### Bug Fixes
+
+- improper react syntax ([#2290](https://github.com/alchemyplatform/aa-sdk/issues/2290)) ([addbaa0](https://github.com/alchemyplatform/aa-sdk/commit/addbaa05433ef7205ddcc084aa2d995a10d3e265))
+
 ## [4.81.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.81.1...v4.81.2) (2025-12-08)
 
 ### Bug Fixes
