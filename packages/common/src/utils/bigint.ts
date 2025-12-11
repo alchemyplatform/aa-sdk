@@ -56,3 +56,17 @@ export const bigIntMultiply = (
     ? result / BigInt(10 ** decimalPlaces) + 1n
     : result / BigInt(10 ** decimalPlaces);
 };
+
+/**
+ * Returns the max bigint in a list of bigints
+ *
+ * @param {bigint[]} args a list of bigints to get the max of
+ * @returns {bigint} the max bigint in the list
+ */
+export const bigIntMax = (...args: bigint[]): bigint => {
+  if (!args.length) {
+    throw new Error("bigIntMax requires at least one argument");
+  }
+
+  return args.reduce((m, c) => (m > c ? m : c));
+};
