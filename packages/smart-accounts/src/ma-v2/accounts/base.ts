@@ -145,10 +145,16 @@ export async function toModularAccountV2Base<
     throw new InvalidEntityIdError(entityId);
   }
 
+  let isDeployed = false;
+
   const isAccountDeployed: () => Promise<boolean> = async () => {
+    if (isDeployed) {
+      return true;
+    }
     const action = getAction(client, getCode, "getCode");
     const code = await action({ address: accountAddress });
-    return code != null && code !== "0x";
+    isDeployed = !!code;
+    return isDeployed;
   };
 
   // These default values signal that we should not use the set deferred action nonce
