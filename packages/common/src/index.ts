@@ -18,7 +18,7 @@ export {
 export type * from "./utils/types.js";
 export { assertNever } from "./utils/assertNever.js";
 export { raise } from "./utils/raise.js";
-export { bigIntMultiply } from "./utils/bigint.js";
+export { bigIntMultiply, bigIntMax } from "./utils/bigint.js";
 export { lowerAddress } from "./utils/lowerAddress.js";
 export { createEip1193HandlerFactory } from "./utils/createEip1193HandlerFactory.js";
 

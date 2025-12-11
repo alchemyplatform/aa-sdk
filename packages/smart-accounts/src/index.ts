@@ -1,5 +1,7 @@
 export type * from "./types.js";
 
+export { chainHas7212 } from "./utils.js";
+
 // LightAccount
 export type * from "./light-account/accounts/account.js";
 export { toLightAccount } from "./light-account/accounts/account.js";
@@ -129,6 +131,7 @@ export {
   pack1271Signature,
   toReplaySafeTypedData,
   toWebAuthnSignature,
+  WEBAUTHN_DUMMY_SIGNATURE,
 } from "./ma-v2/utils/signature.js";
 
 // Errors
