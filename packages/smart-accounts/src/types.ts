@@ -6,7 +6,11 @@ import type {
   SignableMessage,
   TypedDataDefinition,
 } from "viem";
-import type { EntryPointVersion, SmartAccount } from "viem/account-abstraction";
+import type {
+  EntryPointVersion,
+  SmartAccount,
+  SmartAccountImplementation,
+} from "viem/account-abstraction";
 
 export type GetAccountParameter<
   TAccount extends SmartAccount | undefined = SmartAccount | undefined,
@@ -15,6 +19,16 @@ export type GetAccountParameter<
   IsUndefined<TAccount> extends true
     ? { account: TAccountOverride }
     : { account?: TAccountOverride };
+
+/**
+ * Helper type that converts a SmartAccount type to have a required `decodeCalls` function.
+ * This is useful for account implementations that always provide the `decodeCalls` functionality.
+ */
+export type SmartAccountWithDecodeCalls<
+  TImplementation extends SmartAccountImplementation,
+> = SmartAccount<TImplementation> & {
+  decodeCalls: NonNullable<SmartAccount<TImplementation>["decodeCalls"]>;
+};
 
 export type SignatureRequest =
   | {

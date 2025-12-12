@@ -19,7 +19,6 @@ import {
 import {
   entryPoint07Abi,
   type SmartAccountImplementation,
-  type SmartAccount,
   entryPoint07Address,
   getUserOperationHash,
   toSmartAccount,
@@ -42,7 +41,10 @@ import {
   type ValidationDataView,
 } from "../types.js";
 import { modularAccountAbi } from "../abis/modularAccountAbi.js";
-import type { SignatureRequest } from "../../types.js";
+import type {
+  SignatureRequest,
+  SmartAccountWithDecodeCalls,
+} from "../../types.js";
 import {
   decodeFunctionData,
   getAction,
@@ -96,7 +98,7 @@ export type BaseModularAccountV2Implementation = SmartAccountImplementation<
 >;
 
 export type ModularAccountV2Base =
-  SmartAccount<BaseModularAccountV2Implementation>;
+  SmartAccountWithDecodeCalls<BaseModularAccountV2Implementation>;
 
 export type ToModularAccountV2BaseParams<
   TTransport extends Transport = Transport,
