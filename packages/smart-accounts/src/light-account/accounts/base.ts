@@ -19,7 +19,6 @@ import {
 import {
   getUserOperationHash,
   toSmartAccount,
-  type SmartAccount,
   type SmartAccountImplementation,
 } from "viem/account-abstraction";
 import { getStorageAt, signMessage, signTypedData } from "viem/actions";
@@ -38,6 +37,7 @@ import { BaseError, lowerAddress } from "@alchemy/common";
 import type {
   SignatureRequest,
   StaticSmartAccountImplementation,
+  SmartAccountWithDecodeCalls,
 } from "../../types.js";
 import { getAction } from "viem/utils";
 
@@ -74,7 +74,7 @@ export type LightAccountBase<
   TLightAccountType extends LightAccountType = LightAccountType,
   TLightAccountVersion extends
     LightAccountVersion<TLightAccountType> = LightAccountVersion<TLightAccountType>,
-> = SmartAccount<
+> = SmartAccountWithDecodeCalls<
   BaseLightAccountImplementation<TLightAccountType, TLightAccountVersion>
 >;
 

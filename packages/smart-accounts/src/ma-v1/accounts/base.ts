@@ -13,12 +13,14 @@ import {
 import {
   entryPoint06Abi,
   toSmartAccount,
-  type SmartAccount,
   type SmartAccountImplementation,
   entryPoint06Address,
   getUserOperationHash,
 } from "viem/account-abstraction";
-import type { SignatureRequest } from "../../types.js";
+import type {
+  SignatureRequest,
+  SmartAccountWithDecodeCalls,
+} from "../../types.js";
 import { IStandardExecutorAbi } from "../abis/IStandardExecutor.js";
 import { signMessage, signTypedData } from "viem/actions";
 import {
@@ -43,7 +45,8 @@ export type BaseMaV1AccountImplementation = SmartAccountImplementation<
   false
 >;
 
-export type ModularAccountV1Base = SmartAccount<BaseMaV1AccountImplementation>;
+export type ModularAccountV1Base =
+  SmartAccountWithDecodeCalls<BaseMaV1AccountImplementation>;
 
 export type ToModularAccountV1BaseParams<
   TTransport extends Transport = Transport,
