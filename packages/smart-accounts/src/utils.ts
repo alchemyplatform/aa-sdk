@@ -121,7 +121,7 @@ export const bigIntMultiply = (
  * @param {Hex} params.factory - The factory address for the account.
  * @param {Hex} params.factoryData - The factory data for the account.
  * @param {object} params.entryPoint - The entry point contract details.
- * @param {EntryPointVersion} [params.entryPoint.version] - The entry point version ("0.6" or "0.7").
+ * @param {EntryPointVersion} [params.entryPoint.version] - The entry point version.
  * @param {Address} params.entryPoint.address - The entry point contract address.
  * @returns {Promise<Address>} The counterfactual address of the smart account.
  */
@@ -159,10 +159,7 @@ export const getSenderFromFactoryData = async (
       case "0.8":
       case "0.7": {
         const decoded = decodeErrorResult({
-          abi:
-            params.entryPoint.version === "0.8"
-              ? entryPoint08Abi
-              : entryPoint07Abi,
+          abi: entryPoint07Abi, // same error signature for EP v0.7 and v0.8
           data: revertData,
         });
         if (decoded.errorName !== "SenderAddressResult") {

@@ -136,8 +136,6 @@ export async function toModularAccountV2<TMode extends Mode = Mode>({
     };
   };
 
-  // TODO(jh): If we have factory address + factory data but no acct address,
-  // we could call the EP to get the sender address!
   const accountAddress =
     accountAddress_ ??
     (is7702 && owner.type !== "webAuthn"

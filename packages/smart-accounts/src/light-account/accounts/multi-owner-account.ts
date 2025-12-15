@@ -67,12 +67,6 @@ export async function toMultiOwnerLightAccount({
     return bigintA < bigintB ? -1 : bigintA > bigintB ? 1 : 0;
   });
 
-  if (factoryData_ && !accountAddress_) {
-    throw new BaseError(
-      "accountAddress is required when factoryData is provided",
-    );
-  }
-
   const accountAddress =
     accountAddress_ ??
     (factoryData_

@@ -207,7 +207,7 @@ describe("MA v2 Account Tests", async () => {
     const { factory, factoryData } = await provider.account.getFactoryArgs();
 
     // Now create another account with just factoryData (no accountAddress)
-    // and verify it derives the same address via getSenderFromInitCode
+    // and verify it derives the same address via getSenderFromFactoryData
     const providerWithFactoryData = await givenConnectedProvider({
       signer: owner,
       factoryArgs: { factory, factoryData },
