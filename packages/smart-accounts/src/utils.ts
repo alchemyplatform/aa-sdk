@@ -18,7 +18,6 @@ import {
 } from "viem/utils";
 import {
   entryPoint07Abi,
-  entryPoint08Abi,
   type EntryPointVersion,
   type UserOperation,
 } from "viem/account-abstraction";
