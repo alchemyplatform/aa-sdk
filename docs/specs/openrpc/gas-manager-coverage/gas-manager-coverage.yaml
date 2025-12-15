@@ -59,6 +59,8 @@ servers:
     name: Monad Mainnet
   - url: https://monad-testnet.g.alchemy.com/v2
     name: Monad Testnet
+  - url: https://mythos-mainnet.g.alchemy.com/v2
+    name: Mythos Mainnet
   - url: https://opbnb-mainnet.g.alchemy.com/v2
     name: opBNB Mainnet
   - url: https://opbnb-testnet.g.alchemy.com/v2
