@@ -18,6 +18,7 @@ import { toLightAccountBase, type LightAccountBase } from "./base.js";
 import { BaseError, lowerAddress } from "@alchemy/common";
 import { getAction } from "viem/utils";
 import { AccountVersionRegistry } from "../registry.js";
+import { getSenderFromFactoryData } from "../../utils.js";
 
 export type MultiOwnerLightAccount = LightAccountBase<
   "MultiOwnerLightAccount",
@@ -66,13 +67,27 @@ export async function toMultiOwnerLightAccount({
     return bigintA < bigintB ? -1 : bigintA > bigintB ? 1 : 0;
   });
 
+  if (factoryData_ && !accountAddress_) {
+    throw new BaseError(
+      "accountAddress is required when factoryData is provided",
+    );
+  }
+
   const accountAddress =
     accountAddress_ ??
-    predictMultiOwnerLightAccountAddress({
-      factoryAddress,
-      salt,
-      ownerAddresses: sortedOwners,
-    });
+    (factoryData_
+      ? await getSenderFromFactoryData(client, {
+          factory: factoryAddress,
+          factoryData: factoryData_,
+          entryPoint:
+            AccountVersionRegistry["MultiOwnerLightAccount"]["v2.0.0"]
+              .entryPoint,
+        })
+      : predictMultiOwnerLightAccountAddress({
+          factoryAddress,
+          salt,
+          ownerAddresses: sortedOwners,
+        }));
 
   const getFactoryArgs = async () => {
     const factoryData =

@@ -21,6 +21,8 @@ import { MultiOwnerPluginExecutionFunctionAbi } from "../abis/MultiOwnerPluginEx
 import { readContract } from "viem/actions";
 import { getAction } from "viem/utils";
 import { MultiOwnerPluginAbi } from "../abis/MultiOwnerPlugin.js";
+import { getSenderFromFactoryData } from "../../utils.js";
+import { entryPoint06Address } from "viem/account-abstraction";
 
 export type MultiOwnerModularAccountV1 = ModularAccountV1Base & {
   encodeUpdateOwners: (
@@ -67,11 +69,20 @@ export async function toMultiOwnerModularAccountV1({
 
   const accountAddress =
     accountAddress_ ??
-    predictMultiOwnerModularAccountV1Address({
-      factoryAddress,
-      salt,
-      ownerAddresses: sortedOwners,
-    });
+    (factoryData_
+      ? await getSenderFromFactoryData(client, {
+          factory: factoryAddress,
+          factoryData: factoryData_,
+          entryPoint: {
+            version: "0.6",
+            address: entryPoint06Address,
+          },
+        })
+      : predictMultiOwnerModularAccountV1Address({
+          factoryAddress,
+          salt,
+          ownerAddresses: sortedOwners,
+        }));
 
   const getFactoryArgs = async () => {
     const factoryData =

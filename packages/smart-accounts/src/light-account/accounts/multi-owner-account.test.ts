@@ -5,6 +5,7 @@ import {
   publicActions,
   type Address,
   type Chain,
+  type Hex,
   type JsonRpcAccount,
   type LocalAccount,
   type OneOf,
@@ -68,6 +69,26 @@ describe.sequential("MultiOwner Light Account Tests", () => {
     expect(provider.account.address).toMatchInlineSnapshot(
       '"0x6ef8bb149c4422a33f87eF6A406B601D8F964b65"',
     );
+  });
+
+  it("should derive correct address from factoryData without accountAddress", async () => {
+    // First create an account normally to get expected address and factory data
+    const provider = await givenConnectedProvider({
+      signer: fundedAccountSigner,
+      salt: 0n,
+    });
+    const expectedAddress = provider.account.address;
+    const { factory, factoryData } = await provider.account.getFactoryArgs();
+
+    // Now create another account with just factoryData (no accountAddress)
+    // and verify it derives the same address via getSenderFromInitCode
+    const providerWithFactoryData = await givenConnectedProvider({
+      signer: fundedAccountSigner,
+      factoryAddress: factory,
+      factoryData,
+    });
+
+    expect(providerWithFactoryData.account.address).toBe(expectedAddress);
   });
 
   it("should execute successfully", async () => {
@@ -259,6 +280,8 @@ describe.sequential("MultiOwner Light Account Tests", () => {
     paymaster,
     owners,
     salt: _salt,
+    factoryAddress,
+    factoryData,
   }: {
     signer: WalletClient<Transport, Chain, JsonRpcAccount | LocalAccount>;
     version?: LightAccountVersion<"MultiOwnerLightAccount">;
@@ -266,12 +289,16 @@ describe.sequential("MultiOwner Light Account Tests", () => {
     paymaster?: boolean;
     owners?: OneOf<JsonRpcAccount | LocalAccount>[];
     salt?: bigint;
+    factoryAddress?: Address;
+    factoryData?: Hex;
   }) => {
     const account = await toMultiOwnerLightAccount({
       client: signer,
       accountAddress,
       salt: _salt ?? salt++,
       owners: [signer.account, ...(owners ?? [])],
+      factoryAddress,
+      factoryData,
     });
 
     return createBundlerClient({

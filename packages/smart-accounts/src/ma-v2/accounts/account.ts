@@ -9,9 +9,10 @@ import {
   type PrivateKeyAccount,
   type Transport,
 } from "viem";
-import type {
-  WebAuthnAccount,
-  ToSmartAccountParameters,
+import {
+  type WebAuthnAccount,
+  type ToSmartAccountParameters,
+  entryPoint07Address,
 } from "viem/account-abstraction";
 import { toModularAccountV2Base, type ModularAccountV2Base } from "./base.js";
 import type { SignerEntity } from "../types.js";
@@ -23,6 +24,7 @@ import { EntityIdOverrideError } from "../../errors/EntityIdOverrideError.js";
 import { InvalidOwnerError } from "../../errors/InvalidOwnerError.js";
 import { DEFAULT_OWNER_ENTITY_ID, DefaultAddress } from "../utils/account.js";
 import { LOGGER } from "../../logger.js";
+import { getSenderFromFactoryData } from "../../utils.js";
 
 type Mode = "default" | "7702";
 
@@ -134,26 +136,37 @@ export async function toModularAccountV2<TMode extends Mode = Mode>({
     };
   };
 
+  // TODO(jh): If we have factory address + factory data but no acct address,
+  // we could call the EP to get the sender address!
   const accountAddress =
     accountAddress_ ??
-    (mode === "7702" && owner.type === "local"
+    (is7702 && owner.type !== "webAuthn"
       ? owner.address
-      : predictModularAccountV2Address({
-          factoryAddress,
-          implementationAddress,
-          salt,
-          ...(owner.type === "webAuthn"
-            ? {
-                type: "WebAuthn",
-                ownerPublicKey: owner.publicKey,
-                entityId,
-              }
-            : {
-                type: "SMA", // `MA` is never used here since we only support deploying SMA & WebAuthn accounts.
-                ownerAddress: owner.address,
-                entityId,
-              }),
-        }));
+      : factoryData_
+        ? await getSenderFromFactoryData(client, {
+            factory: factoryAddress,
+            factoryData: factoryData_,
+            entryPoint: {
+              version: "0.7",
+              address: entryPoint07Address,
+            },
+          })
+        : predictModularAccountV2Address({
+            factoryAddress,
+            implementationAddress,
+            salt,
+            ...(owner.type === "webAuthn"
+              ? {
+                  type: "WebAuthn",
+                  ownerPublicKey: owner.publicKey,
+                  entityId,
+                }
+              : {
+                  type: "SMA", // `MA` is never used here since we only support deploying SMA & WebAuthn accounts.
+                  ownerAddress: owner.address,
+                  entityId,
+                }),
+          }));
 
   LOGGER.debug("toModularAccountV2:address-resolved", {
     accountAddress,
@@ -163,7 +176,6 @@ export async function toModularAccountV2<TMode extends Mode = Mode>({
   let authorization: ToSmartAccountParameters["authorization"];
   if (is7702) {
     LOGGER.debug("toModularAccountV2:7702-mode");
-    // TODO(v5): Ensure this works w/ our signer types.
     if (owner.type !== "local") {
       LOGGER.error("toModularAccountV2:invalid-owner-type", {
         ownerType: owner.type,

@@ -61,6 +61,26 @@ describe("MA v1 Account Tests", async () => {
     expect(isAddress(provider.account.address)).toBe(true);
   });
 
+  it("should derive correct address from factoryData without accountAddress", async () => {
+    // First create an account normally to get expected address and factory data
+    const provider = await givenConnectedProvider({
+      signer,
+      otherOwners,
+    });
+    const expectedAddress = provider.account.address;
+    const { factory, factoryData } = await provider.account.getFactoryArgs();
+
+    // Now create another account with just factoryData (no accountAddress)
+    // and verify it derives the same address via getSenderFromInitCode
+    const providerWithFactoryData = await givenConnectedProvider({
+      signer,
+      otherOwners,
+      factoryArgs: { factory, factoryData },
+    });
+
+    expect(providerWithFactoryData.account.address).toBe(expectedAddress);
+  });
+
   it("should execute successfully", async () => {
     const provider = await givenConnectedProvider({ signer, otherOwners });
 
@@ -385,10 +405,11 @@ describe("MA v1 Account Tests", async () => {
         transport: custom(instance.getClient()),
         chain: instance.chain,
       }),
-      accountAddress,
       owners: [signer, ...(otherOwners || [])],
       salt,
-      ...factoryArgs,
+      accountAddress,
+      factoryAddress: factoryArgs?.factory,
+      factoryData: factoryArgs?.factoryData,
     });
 
     return createBundlerClient({

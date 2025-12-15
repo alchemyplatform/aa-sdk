@@ -26,6 +26,7 @@ import { toLightAccountBase, type LightAccountBase } from "./base.js";
 import { BaseError, lowerAddress } from "@alchemy/common";
 import { getAction } from "viem/utils";
 import { LOGGER } from "../../logger.js";
+import { getSenderFromFactoryData } from "../../utils.js";
 
 export type LightAccount<
   TLightAccountVersion extends
@@ -88,12 +89,19 @@ export async function toLightAccount<
 
   const accountAddress =
     accountAddress_ ??
-    predictLightAccountAddress({
-      factoryAddress,
-      salt,
-      ownerAddress: owner.address,
-      version,
-    });
+    (factoryData_
+      ? await getSenderFromFactoryData(client, {
+          factory: factoryAddress,
+          factoryData: factoryData_,
+          entryPoint:
+            AccountVersionRegistry["LightAccount"][version].entryPoint,
+        })
+      : predictLightAccountAddress({
+          factoryAddress,
+          salt,
+          ownerAddress: owner.address,
+          version,
+        }));
 
   LOGGER.debug("toLightAccount:address-resolved", { accountAddress });
 

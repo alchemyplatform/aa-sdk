@@ -5,6 +5,7 @@ import {
   publicActions,
   type Address,
   type Call,
+  type Hex,
   type LocalAccount,
 } from "viem";
 import {
@@ -265,6 +266,25 @@ describe("Light Account Tests", () => {
     );
   });
 
+  it("should derive correct address from factoryData without accountAddress", async () => {
+    // First create an account normally to get expected address and factory data
+    const provider = await givenConnectedProvider({
+      signerAccount: accounts.fundedAccountOwner,
+    });
+    const expectedAddress = provider.account.address;
+    const { factory, factoryData } = await provider.account.getFactoryArgs();
+
+    // Now create another account with just factoryData (no accountAddress)
+    // and verify it derives the same address via getSenderFromInitCode
+    const providerWithFactoryData = await givenConnectedProvider({
+      signerAccount: accounts.fundedAccountOwner,
+      factoryAddress: factory,
+      factoryData,
+    });
+
+    expect(providerWithFactoryData.account.address).toBe(expectedAddress);
+  });
+
   it("should execute successfully", async () => {
     const provider = await givenConnectedProvider({
       signerAccount,
@@ -443,11 +463,15 @@ describe("Light Account Tests", () => {
     accountAddress,
     signerAccount,
     paymaster,
+    factoryAddress,
+    factoryData,
   }: {
     signerAccount: LocalAccount;
     version?: LightAccountVersion<"LightAccount">;
     accountAddress?: Address;
     paymaster?: boolean;
+    factoryAddress?: Address;
+    factoryData?: Hex;
   }) => {
     const account = await toLightAccount({
       client: createWalletClient({
@@ -458,6 +482,8 @@ describe("Light Account Tests", () => {
       version,
       accountAddress,
       owner: signerAccount,
+      factoryAddress,
+      factoryData,
     });
 
     return createBundlerClient({
