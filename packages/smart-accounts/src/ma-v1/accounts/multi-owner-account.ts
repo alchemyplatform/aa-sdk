@@ -1,26 +1,30 @@
 import {
+  encodeFunctionData,
   hexToBigInt,
   type Address,
   type Chain,
   type Client,
+  type Hash,
   type Hex,
   type JsonRpcAccount,
   type LocalAccount,
   type OneOf,
   type Transport,
-  encodeFunctionData,
-  type Hash,
   type TypedDataDefinition,
 } from "viem";
 import { toModularAccountV1Base, type ModularAccountV1Base } from "./base.js";
 import { lowerAddress, BaseError } from "@alchemy/common";
 import { DefaultMaV1Address, DefaultMaV1PluginAddress } from "../account.js";
 import { MultiOwnerModularAccountFactoryAbi } from "../abis/MultiOwnerModularAccountFactory.js";
-import { predictMultiOwnerModularAccountV1Address } from "../predictAddress.js";
+import {
+  getMultiOwnerModularAccountV1AddressFromFactoryData,
+  predictMultiOwnerModularAccountV1Address,
+} from "../predictAddress.js";
 import { MultiOwnerPluginExecutionFunctionAbi } from "../abis/MultiOwnerPluginExecutionFunction.js";
 import { readContract } from "viem/actions";
 import { getAction } from "viem/utils";
 import { MultiOwnerPluginAbi } from "../abis/MultiOwnerPlugin.js";
+import { entryPoint06Address } from "viem/account-abstraction";
 
 export type MultiOwnerModularAccountV1 = ModularAccountV1Base & {
   encodeUpdateOwners: (
@@ -67,11 +71,21 @@ export async function toMultiOwnerModularAccountV1({
 
   const accountAddress =
     accountAddress_ ??
-    predictMultiOwnerModularAccountV1Address({
-      factoryAddress,
-      salt,
-      ownerAddresses: sortedOwners,
-    });
+    (factoryData_
+      ? await getMultiOwnerModularAccountV1AddressFromFactoryData({
+          client,
+          factoryAddress,
+          factoryData: factoryData_,
+          entryPoint: {
+            version: "0.6",
+            address: entryPoint06Address,
+          },
+        })
+      : predictMultiOwnerModularAccountV1Address({
+          factoryAddress,
+          salt,
+          ownerAddresses: sortedOwners,
+        }));
 
   const getFactoryArgs = async () => {
     const factoryData =

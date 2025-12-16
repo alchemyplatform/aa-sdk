@@ -5,6 +5,7 @@ import {
   encodeFunctionData,
   concatHex,
   type LocalAccount,
+  type Address,
 } from "viem";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import {
@@ -15,14 +16,22 @@ import {
 } from "viem/account-abstraction";
 import { local060Instance, local070Instance } from "~test/instances.js";
 import { LightAccountFactoryAbi_v1 } from "./abis/LightAccountFactoryAbi_v1.js";
+import { LightAccountFactoryAbi_v2 } from "./abis/LightAccountFactoryAbi_v2.js";
+import { MultiOwnerLightAccountFactoryAbi } from "./abis/MultiOwnerLightAccountFactoryAbi.js";
 import { toLightAccount } from "./accounts/account.js";
 import { toMultiOwnerLightAccount } from "./accounts/multi-owner-account.js";
 import {
+  getLightAccountAddressFromFactoryData,
+  getMultiOwnerLightAccountAddressFromFactoryData,
   predictLightAccountAddress,
   predictMultiOwnerLightAccountAddress,
 } from "./predictAddress.js";
-import type { LightAccountVersion } from "./registry.js";
+import {
+  AccountVersionRegistry,
+  type LightAccountVersion,
+} from "./registry.js";
 import { getAccountAddressViaEntryPoint } from "../test-utils/getAccountAddressViaEntryPoint.js";
+import * as utils from "../utils.js";
 
 describe("Light Account Counterfactual Address Tests", () => {
   const instanceV060 = local060Instance;
@@ -193,5 +202,184 @@ describe("Light Account Counterfactual Address Tests", () => {
 
       expect(entryPointComputedAddress).toEqual(locallyComputedAddress);
     }
+  });
+});
+
+describe("getLightAccountAddressFromFactoryData", () => {
+  const instanceV070 = local070Instance;
+
+  it("should decode factory data and predict address for default factory", async () => {
+    const localSigner = createWalletClient({
+      account: privateKeyToAccount(generatePrivateKey()),
+      transport: custom(instanceV070.getClient()),
+      chain: instanceV070.chain,
+    });
+
+    const salt = BigInt(generatePrivateKey());
+    const ownerAddress = localSigner.account.address;
+    const factoryAddress =
+      AccountVersionRegistry["LightAccount"]["v2.0.0"].factoryAddress;
+
+    const factoryData = encodeFunctionData({
+      abi: LightAccountFactoryAbi_v2,
+      functionName: "createAccount",
+      args: [ownerAddress, salt],
+    });
+
+    // Spy on getSenderFromFactoryData to ensure it's NOT called
+    const getSenderSpy = vi.spyOn(utils, "getSenderFromFactoryData");
+
+    const address = await getLightAccountAddressFromFactoryData({
+      client: instanceV070.getClient(),
+      factoryAddress,
+      factoryData,
+      entryPoint: AccountVersionRegistry["LightAccount"]["v2.0.0"].entryPoint,
+      version: "v2.0.0",
+    });
+
+    // Should use local prediction, not RPC
+    expect(getSenderSpy).not.toHaveBeenCalled();
+
+    // Verify the address matches the direct prediction
+    const expectedAddress = predictLightAccountAddress({
+      factoryAddress,
+      salt,
+      ownerAddress,
+      version: "v2.0.0",
+    });
+    expect(address).toEqual(expectedAddress);
+
+    getSenderSpy.mockRestore();
+  });
+
+  it("should fall back to RPC for non-default factory", async () => {
+    const localSigner = createWalletClient({
+      account: privateKeyToAccount(generatePrivateKey()),
+      transport: custom(instanceV070.getClient()),
+      chain: instanceV070.chain,
+    });
+
+    const salt = BigInt(generatePrivateKey());
+    const ownerAddress = localSigner.account.address;
+    // Use a non-default factory address
+    const nonDefaultFactory =
+      "0x1234567890123456789012345678901234567890" as Address;
+
+    const factoryData = encodeFunctionData({
+      abi: LightAccountFactoryAbi_v2,
+      functionName: "createAccount",
+      args: [ownerAddress, salt],
+    });
+
+    // Mock getSenderFromFactoryData to return a known address
+    const mockAddress = "0xabcdef1234567890abcdef1234567890abcdef12" as Address;
+    const getSenderSpy = vi
+      .spyOn(utils, "getSenderFromFactoryData")
+      .mockResolvedValue(mockAddress);
+
+    const address = await getLightAccountAddressFromFactoryData({
+      client: instanceV070.getClient(),
+      factoryAddress: nonDefaultFactory,
+      factoryData,
+      entryPoint: AccountVersionRegistry["LightAccount"]["v2.0.0"].entryPoint,
+      version: "v2.0.0",
+    });
+
+    // Should fall back to RPC
+    expect(getSenderSpy).toHaveBeenCalledOnce();
+    expect(address).toEqual(mockAddress);
+
+    getSenderSpy.mockRestore();
+  });
+});
+
+describe("getMultiOwnerLightAccountAddressFromFactoryData", () => {
+  const instanceV070 = local070Instance;
+
+  it("should decode factory data and predict address for default factory", async () => {
+    const localSigner = createWalletClient({
+      account: privateKeyToAccount(generatePrivateKey()),
+      transport: custom(instanceV070.getClient()),
+      chain: instanceV070.chain,
+    });
+
+    const salt = BigInt(generatePrivateKey());
+    const ownerAddresses = [localSigner.account.address].sort((a, b) => {
+      const bigintA = hexToBigInt(a);
+      const bigintB = hexToBigInt(b);
+      return bigintA < bigintB ? -1 : bigintA > bigintB ? 1 : 0;
+    });
+    const factoryAddress =
+      AccountVersionRegistry["MultiOwnerLightAccount"]["v2.0.0"].factoryAddress;
+
+    const factoryData = encodeFunctionData({
+      abi: MultiOwnerLightAccountFactoryAbi,
+      functionName: "createAccount",
+      args: [ownerAddresses, salt],
+    });
+
+    // Spy on getSenderFromFactoryData to ensure it's NOT called
+    const getSenderSpy = vi.spyOn(utils, "getSenderFromFactoryData");
+
+    const address = await getMultiOwnerLightAccountAddressFromFactoryData({
+      client: instanceV070.getClient(),
+      factoryAddress,
+      factoryData,
+      entryPoint:
+        AccountVersionRegistry["MultiOwnerLightAccount"]["v2.0.0"].entryPoint,
+    });
+
+    // Should use local prediction, not RPC
+    expect(getSenderSpy).not.toHaveBeenCalled();
+
+    // Verify the address matches the direct prediction
+    const expectedAddress = predictMultiOwnerLightAccountAddress({
+      factoryAddress,
+      salt,
+      ownerAddresses,
+    });
+    expect(address).toEqual(expectedAddress);
+
+    getSenderSpy.mockRestore();
+  });
+
+  it("should fall back to RPC for non-default factory", async () => {
+    const localSigner = createWalletClient({
+      account: privateKeyToAccount(generatePrivateKey()),
+      transport: custom(instanceV070.getClient()),
+      chain: instanceV070.chain,
+    });
+
+    const salt = BigInt(generatePrivateKey());
+    const ownerAddresses = [localSigner.account.address];
+    // Use a non-default factory address
+    const nonDefaultFactory =
+      "0x1234567890123456789012345678901234567890" as Address;
+
+    const factoryData = encodeFunctionData({
+      abi: MultiOwnerLightAccountFactoryAbi,
+      functionName: "createAccount",
+      args: [ownerAddresses, salt],
+    });
+
+    // Mock getSenderFromFactoryData to return a known address
+    const mockAddress = "0xabcdef1234567890abcdef1234567890abcdef12" as Address;
+    const getSenderSpy = vi
+      .spyOn(utils, "getSenderFromFactoryData")
+      .mockResolvedValue(mockAddress);
+
+    const address = await getMultiOwnerLightAccountAddressFromFactoryData({
+      client: instanceV070.getClient(),
+      factoryAddress: nonDefaultFactory,
+      factoryData,
+      entryPoint:
+        AccountVersionRegistry["MultiOwnerLightAccount"]["v2.0.0"].entryPoint,
+    });
+
+    // Should fall back to RPC
+    expect(getSenderSpy).toHaveBeenCalledOnce();
+    expect(address).toEqual(mockAddress);
+
+    getSenderSpy.mockRestore();
   });
 });
