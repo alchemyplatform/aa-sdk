@@ -16,7 +16,10 @@ import {
 } from "viem/account-abstraction";
 import { toModularAccountV2Base, type ModularAccountV2Base } from "./base.js";
 import type { SignerEntity } from "../types.js";
-import { predictModularAccountV2Address } from "../predictAddress.js";
+import {
+  getModularAccountV2AddressFromFactoryData,
+  predictModularAccountV2Address,
+} from "../predictAddress.js";
 import { parsePublicKey } from "webauthn-p256";
 import { accountFactoryAbi } from "../abis/accountFactoryAbi.js";
 import { webAuthnFactoryAbi } from "../abis/webAuthnFactoryAbi.js";
@@ -24,7 +27,6 @@ import { EntityIdOverrideError } from "../../errors/EntityIdOverrideError.js";
 import { InvalidOwnerError } from "../../errors/InvalidOwnerError.js";
 import { DEFAULT_OWNER_ENTITY_ID, DefaultAddress } from "../utils/account.js";
 import { LOGGER } from "../../logger.js";
-import { getSenderFromFactoryData } from "../../utils.js";
 
 type Mode = "default" | "7702";
 
@@ -141,9 +143,12 @@ export async function toModularAccountV2<TMode extends Mode = Mode>({
     (is7702 && owner.type !== "webAuthn"
       ? owner.address
       : factoryData_
-        ? await getSenderFromFactoryData(client, {
-            factory: factoryAddress,
+        ? await getModularAccountV2AddressFromFactoryData({
+            client,
+            factoryAddress,
             factoryData: factoryData_,
+            implementationAddress,
+            entityId,
             entryPoint: {
               version: "0.7",
               address: entryPoint07Address,

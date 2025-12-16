@@ -13,7 +13,10 @@ import { LightAccountAbi_v1 } from "../abis/LightAccountAbi_v1.js";
 import { LightAccountAbi_v2 } from "../abis/LightAccountAbi_v2.js";
 import { LightAccountFactoryAbi_v1 } from "../abis/LightAccountFactoryAbi_v1.js";
 import { LightAccountFactoryAbi_v2 } from "../abis/LightAccountFactoryAbi_v2.js";
-import { predictLightAccountAddress } from "../predictAddress.js";
+import {
+  getLightAccountAddressFromFactoryData,
+  predictLightAccountAddress,
+} from "../predictAddress.js";
 import {
   type LightAccountVersion,
   AccountVersionRegistry,
@@ -26,7 +29,6 @@ import { toLightAccountBase, type LightAccountBase } from "./base.js";
 import { BaseError, lowerAddress } from "@alchemy/common";
 import { getAction } from "viem/utils";
 import { LOGGER } from "../../logger.js";
-import { getSenderFromFactoryData } from "../../utils.js";
 
 export type LightAccount<
   TLightAccountVersion extends
@@ -90,11 +92,13 @@ export async function toLightAccount<
   const accountAddress =
     accountAddress_ ??
     (factoryData_
-      ? await getSenderFromFactoryData(client, {
-          factory: factoryAddress,
+      ? await getLightAccountAddressFromFactoryData({
+          client,
+          factoryAddress,
           factoryData: factoryData_,
           entryPoint:
             AccountVersionRegistry["LightAccount"][version].entryPoint,
+          version,
         })
       : predictLightAccountAddress({
           factoryAddress,

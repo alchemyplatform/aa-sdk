@@ -5,7 +5,7 @@ import {
   type Address,
   type Hex,
 } from "viem";
-import { type SmartAccount } from "viem/account-abstraction";
+import type { SmartAccount } from "viem/account-abstraction";
 import type { GetAccountParameter } from "../../types.js";
 import type { ModuleEntity, UpgradeToData } from "../types.js";
 import { semiModularAccountStorageAbi } from "../abis/semiModularAccountStorageAbi.js";

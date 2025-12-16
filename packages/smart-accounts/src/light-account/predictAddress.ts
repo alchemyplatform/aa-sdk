@@ -1,18 +1,29 @@
 import {
   concatHex,
+  decodeFunctionData,
   encodeAbiParameters,
   encodeDeployData,
   encodeFunctionData,
   getContractAddress,
+  isAddressEqual,
   keccak256,
   toHex,
   type Address,
+  type Client,
   type Hex,
 } from "viem";
+import type { EntryPointVersion } from "viem/account-abstraction";
 import { LightAccountAbi_v1 } from "./abis/LightAccountAbi_v1.js";
+import { LightAccountFactoryAbi_v1 } from "./abis/LightAccountFactoryAbi_v1.js";
+import { LightAccountFactoryAbi_v2 } from "./abis/LightAccountFactoryAbi_v2.js";
+import { MultiOwnerLightAccountFactoryAbi } from "./abis/MultiOwnerLightAccountFactoryAbi.js";
 import { OZ_ERC1967Proxy_ConstructorAbi } from "./abis/OZ_ERC1967Proxy.js";
-import { AccountVersionRegistry } from "./registry.js";
+import {
+  AccountVersionRegistry,
+  type LightAccountVersion,
+} from "./registry.js";
 import { BaseError, lowerAddress } from "@alchemy/common";
+import { getSenderFromFactoryData } from "../utils.js";
 
 export type PredictLightAccountAddressParams = {
   version: keyof typeof AccountVersionRegistry.LightAccount;
@@ -171,4 +182,113 @@ function getLAv2ProxyBytecode(implementationAddress: Address): Hex {
 
 function assertNeverLightAccountVersion(version: never): never {
   throw new BaseError(`Unknown light account version: ${version}`);
+}
+
+export type GetLightAccountAddressFromFactoryDataParams = {
+  client: Client;
+  factoryAddress: Address;
+  factoryData: Hex;
+  entryPoint: {
+    version: EntryPointVersion;
+    address: Address;
+  };
+  version: LightAccountVersion<"LightAccount">;
+};
+
+/**
+ * Gets the light account address from factory data.
+ * If the factory is a known default, decodes the args and predicts without RPC.
+ * Otherwise falls back to calling the entry point's getSenderAddress.
+ *
+ * @param {GetLightAccountAddressFromFactoryDataParams} params - The parameters
+ * @returns {Promise<Address>} The account address
+ */
+export async function getLightAccountAddressFromFactoryData({
+  client,
+  factoryAddress,
+  factoryData,
+  entryPoint,
+  version,
+}: GetLightAccountAddressFromFactoryDataParams): Promise<Address> {
+  const defaultFactory =
+    AccountVersionRegistry["LightAccount"][version].factoryAddress;
+  if (isAddressEqual(factoryAddress, defaultFactory)) {
+    const factoryAbi =
+      version === "v2.0.0"
+        ? LightAccountFactoryAbi_v2
+        : LightAccountFactoryAbi_v1;
+    try {
+      const decoded = decodeFunctionData({
+        abi: factoryAbi,
+        data: factoryData,
+      });
+      if (decoded.functionName === "createAccount") {
+        const [decodedOwner, decodedSalt] = decoded.args;
+        return predictLightAccountAddress({
+          factoryAddress,
+          salt: decodedSalt,
+          ownerAddress: decodedOwner,
+          version,
+        });
+      }
+    } catch {
+      // Decode failed, fall through to RPC
+    }
+  }
+  return getSenderFromFactoryData(client, {
+    factory: factoryAddress,
+    factoryData,
+    entryPoint,
+  });
+}
+
+export type GetMultiOwnerLightAccountAddressFromFactoryDataParams = {
+  client: Client;
+  factoryAddress: Address;
+  factoryData: Hex;
+  entryPoint: {
+    version: EntryPointVersion;
+    address: Address;
+  };
+};
+
+/**
+ * Gets the multi-owner light account address from factory data.
+ * If the factory is a known default, decodes the args and predicts without RPC.
+ * Otherwise falls back to calling the entry point's getSenderAddress.
+ *
+ * @param {GetMultiOwnerLightAccountAddressFromFactoryDataParams} params - The parameters
+ * @returns {Promise<Address>} The account address
+ */
+export async function getMultiOwnerLightAccountAddressFromFactoryData({
+  client,
+  factoryAddress,
+  factoryData,
+  entryPoint,
+}: GetMultiOwnerLightAccountAddressFromFactoryDataParams): Promise<Address> {
+  const defaultFactory =
+    AccountVersionRegistry["MultiOwnerLightAccount"]["v2.0.0"].factoryAddress;
+  if (isAddressEqual(factoryAddress, defaultFactory)) {
+    try {
+      const decoded = decodeFunctionData({
+        abi: MultiOwnerLightAccountFactoryAbi,
+        data: factoryData,
+      });
+      if (decoded.functionName === "createAccount") {
+        const [decodedOwners, decodedSalt] = decoded.args;
+        return predictMultiOwnerLightAccountAddress({
+          factoryAddress,
+          salt: decodedSalt,
+          ownerAddresses: [...decodedOwners],
+        });
+      }
+    } catch {
+      // Decode failed, fall through to RPC
+    }
+  }
+  return getSenderFromFactoryData(client, {
+    factory: factoryAddress,
+    factoryData,
+    entryPoint,
+  });
 }
