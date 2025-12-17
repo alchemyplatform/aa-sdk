@@ -45,7 +45,8 @@
   "dependencies": {
     "@alchemy/common": "*",
     "ox": "^0.9.6",
-    "viem": "^2.32.0"
+    "viem": "^2.32.0",
+    "webauthn-p256": "^0.0.10"
   },
   "publishConfig": {
     "access": "public",
