@@ -126,7 +126,7 @@ CALL_ID=$(echo $SEND_CALLS_RESPONSE | jq -r '.result.preparedCallIds[0]')
 
 <Step title="Check the Calls Status">
 
-Finally check the calls status using `wallet_getCallsStatus`.
+Finally, use `wallet_getCallsStatus` to check the status of the call. A “pending” state (1xx status codes) is expected for some time before the transition to “confirmed,” so this endpoint should be polled while the status is pending. If the call does not progress, refer to the [retry guide](/wallets/transactions/retry-transactions). The [API documentation](/wallets/api-reference/smart-wallets/wallet-api-endpoints/wallet-api-endpoints/wallet-get-calls-status#response.body.status) provides details on each status code.
 
 ```bash twoslash
 curl --request POST \

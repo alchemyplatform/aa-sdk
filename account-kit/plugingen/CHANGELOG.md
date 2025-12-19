@@ -3,6 +3,42 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.81.5](https://github.com/alchemyplatform/aa-sdk/compare/v4.81.3...v4.81.5) (2025-12-19)
+
+### Bug Fixes
+
+- json stringify plugin contract reads ([#2297](https://github.com/alchemyplatform/aa-sdk/issues/2297)) ([9ad930a](https://github.com/alchemyplatform/aa-sdk/commit/9ad930a60d0ce3ca7e3e2066c2919651ff001d2e))
+
+## [4.81.4](https://github.com/alchemyplatform/aa-sdk/compare/v4.81.3...v4.81.4) (2025-12-19)
+
+### Bug Fixes
+
+- json stringify plugin contract reads ([#2297](https://github.com/alchemyplatform/aa-sdk/issues/2297)) ([9ad930a](https://github.com/alchemyplatform/aa-sdk/commit/9ad930a60d0ce3ca7e3e2066c2919651ff001d2e))
+
+## [4.81.3](https://github.com/alchemyplatform/aa-sdk/compare/v4.81.2...v4.81.3) (2025-12-10)
+
+**Note:** Version bump only for package @account-kit/plugingen
+
+## [4.81.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.81.1...v4.81.2) (2025-12-08)
+
+**Note:** Version bump only for package @account-kit/plugingen
+
+## [4.81.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.81.0...v4.81.1) (2025-12-05)
+
+**Note:** Version bump only for package @account-kit/plugingen
+
+# [4.81.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.80.0...v4.81.0) (2025-12-03)
+
+**Note:** Version bump only for package @account-kit/plugingen
+
+# [4.80.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.79.0...v4.80.0) (2025-12-02)
+
+**Note:** Version bump only for package @account-kit/plugingen
+
+# [4.79.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.78.0...v4.79.0) (2025-11-19)
+
+**Note:** Version bump only for package @account-kit/plugingen
+
 # [4.78.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.77.1...v4.78.0) (2025-11-05)
 
 **Note:** Version bump only for package @account-kit/plugingen

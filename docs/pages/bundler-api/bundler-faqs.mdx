@@ -2,8 +2,8 @@
 title: FAQs
 description: Frequently asked questions about the Bundler
 subtitle: Frequently asked questions about the Bundler
-url: https://alchemy.com/docs/reference/bundler-faqs
-slug: reference/bundler-faqs
+url: https://alchemy.com/docs/wallets/reference/bundler-faqs
+slug: wallets/reference/bundler-faqs
 ---
 
 ## userOperation
@@ -14,10 +14,6 @@ To understand the status of a userOp you can use the `eth_getUserOperationByHash
 
 1. **The userOp is still pending**: This is the most common scenario and typically means *the fees are too low*. In this case, you should drop and replace the userOp with higher fees.
 2. **The userOp has been dropped**: The most common (but rare) reason is that they paymaster signature has expired. However, this should rarely happen if you set a reasonable sponsorship expiry time, unless there is a significant delay in sending the userOp after the paymaster signs it.
-
-### How can I get push notifications for mined userOps?
-
-Follow the guide on [using custom webhooks to get real time alerts and receipts for mined `userOperations`](/docs/how-to-use-custom-webhooks-to-get-push-notifications-for-mined-user-operations).
 
 ### How do I get my userOp unstuck from the mempool?
 

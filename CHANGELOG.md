@@ -3,6 +3,65 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.81.5](https://github.com/alchemyplatform/aa-sdk/compare/v4.81.3...v4.81.5) (2025-12-19)
+
+### Bug Fixes
+
+- json stringify plugin contract reads ([#2297](https://github.com/alchemyplatform/aa-sdk/issues/2297)) ([9ad930a](https://github.com/alchemyplatform/aa-sdk/commit/9ad930a60d0ce3ca7e3e2066c2919651ff001d2e))
+
+## [4.81.4](https://github.com/alchemyplatform/aa-sdk/compare/v4.81.3...v4.81.4) (2025-12-19)
+
+### Bug Fixes
+
+- json stringify plugin contract reads ([#2297](https://github.com/alchemyplatform/aa-sdk/issues/2297)) ([9ad930a](https://github.com/alchemyplatform/aa-sdk/commit/9ad930a60d0ce3ca7e3e2066c2919651ff001d2e))
+
+## [4.81.3](https://github.com/alchemyplatform/aa-sdk/compare/v4.81.2...v4.81.3) (2025-12-10)
+
+### Bug Fixes
+
+- improper react syntax ([#2290](https://github.com/alchemyplatform/aa-sdk/issues/2290)) ([addbaa0](https://github.com/alchemyplatform/aa-sdk/commit/addbaa05433ef7205ddcc084aa2d995a10d3e265))
+
+## [4.81.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.81.1...v4.81.2) (2025-12-08)
+
+### Bug Fixes
+
+- auth modal won't open after session expires ([#2287](https://github.com/alchemyplatform/aa-sdk/issues/2287)) ([39cb964](https://github.com/alchemyplatform/aa-sdk/commit/39cb9644a2606df44dbf279eb6ff8cb56b48110d))
+
+## [4.81.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.81.0...v4.81.1) (2025-12-05)
+
+### Bug Fixes
+
+- session config expiration time should never be restored ([#2283](https://github.com/alchemyplatform/aa-sdk/issues/2283)) ([69999e6](https://github.com/alchemyplatform/aa-sdk/commit/69999e6295fe9588c73e9c5a9417f1c7df732f2f))
+
+# [4.81.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.80.0...v4.81.0) (2025-12-03)
+
+### Features
+
+- **monad:** add monad mainnet ([#2014](https://github.com/alchemyplatform/aa-sdk/issues/2014)) ([323612b](https://github.com/alchemyplatform/aa-sdk/commit/323612be774d7d93a8fc945539c1cd45001ed6cc))
+
+# [4.80.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.79.0...v4.80.0) (2025-12-02)
+
+### Bug Fixes
+
+- **chains:** expose worldl3devnet ([#2274](https://github.com/alchemyplatform/aa-sdk/issues/2274)) ([a85d0a4](https://github.com/alchemyplatform/aa-sdk/commit/a85d0a4e0300c7aa4b13b62e537815e31db322b4))
+
+### Features
+
+- **mythos:** add mythos mainnet ([#2265](https://github.com/alchemyplatform/aa-sdk/issues/2265)) ([2a53ac2](https://github.com/alchemyplatform/aa-sdk/commit/2a53ac2a4c7d820c66d764ea3f5dedafb605518c))
+
+# [4.79.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.78.0...v4.79.0) (2025-11-19)
+
+### Bug Fixes
+
+- fix link ([#2254](https://github.com/alchemyplatform/aa-sdk/issues/2254)) ([8c879d2](https://github.com/alchemyplatform/aa-sdk/commit/8c879d29db51eced8fcb2909ba101cd2764c5211))
+
+### Features
+
+- add worldl3-devnet ([#2251](https://github.com/alchemyplatform/aa-sdk/issues/2251)) ([bbab618](https://github.com/alchemyplatform/aa-sdk/commit/bbab618dc7dc6b77354ab5b944ad3ae5d11ec5b5))
+- adds celo sepolia ([#2239](https://github.com/alchemyplatform/aa-sdk/issues/2239)) ([11d46d1](https://github.com/alchemyplatform/aa-sdk/commit/11d46d1a54ec2faf191d007beb3b92ec72839d06))
+- adds edge mainnet ([#2241](https://github.com/alchemyplatform/aa-sdk/issues/2241)) ([27e3632](https://github.com/alchemyplatform/aa-sdk/commit/27e36329c103b4660886c9508b86d0a2c5c6c47e))
+- **stable:** add stable mainnet ([#2259](https://github.com/alchemyplatform/aa-sdk/issues/2259)) ([f713157](https://github.com/alchemyplatform/aa-sdk/commit/f713157b4db575f7662bc2c6e814286997430f3b))
+
 # [4.78.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.77.1...v4.78.0) (2025-11-05)
 
 ### Bug Fixes

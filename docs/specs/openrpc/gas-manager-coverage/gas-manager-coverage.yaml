@@ -37,8 +37,6 @@ servers:
     name: BNB Smart Chain Testnet
   - url: https://celo-mainnet.g.alchemy.com/v2
     name: Celo Mainnet
-  - url: https://celo-alfajores.g.alchemy.com/v2
-    name: Celo Alfajores
   - url: https://celo-sepolia.g.alchemy.com/v2
     name: Celo Sepolia
   - url: https://frax-mainnet.g.alchemy.com/v2
@@ -57,8 +55,12 @@ servers:
     name: Polygon Mainnet
   - url: https://polygon-amoy.g.alchemy.com/v2
     name: Polygon Amoy
+  - url: https://monad-mainnet.g.alchemy.com/v2
+    name: Monad Mainnet
   - url: https://monad-testnet.g.alchemy.com/v2
     name: Monad Testnet
+  - url: https://mythos-mainnet.g.alchemy.com/v2
+    name: Mythos Mainnet
   - url: https://opbnb-mainnet.g.alchemy.com/v2
     name: opBNB Mainnet
   - url: https://opbnb-testnet.g.alchemy.com/v2
@@ -89,6 +91,8 @@ servers:
     name: Soneium Mainnet
   - url: https://soneium-minato.g.alchemy.com/v2
     name: Soneium Minato
+  - url: https://stable-mainnet.g.alchemy.com/v2
+    name: Stable Mainnet
   - url: https://stable-testnet.g.alchemy.com/v2
     name: Stable Testnet
   - url: https://story-mainnet.g.alchemy.com/v2

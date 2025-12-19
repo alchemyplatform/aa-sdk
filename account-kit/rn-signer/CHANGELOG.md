@@ -3,6 +3,38 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.81.5](https://github.com/alchemyplatform/aa-sdk/compare/v4.81.3...v4.81.5) (2025-12-19)
+
+**Note:** Version bump only for package @account-kit/react-native-signer
+
+## [4.81.4](https://github.com/alchemyplatform/aa-sdk/compare/v4.81.3...v4.81.4) (2025-12-19)
+
+**Note:** Version bump only for package @account-kit/react-native-signer
+
+## [4.81.3](https://github.com/alchemyplatform/aa-sdk/compare/v4.81.2...v4.81.3) (2025-12-10)
+
+**Note:** Version bump only for package @account-kit/react-native-signer
+
+## [4.81.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.81.1...v4.81.2) (2025-12-08)
+
+**Note:** Version bump only for package @account-kit/react-native-signer
+
+## [4.81.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.81.0...v4.81.1) (2025-12-05)
+
+**Note:** Version bump only for package @account-kit/react-native-signer
+
+# [4.81.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.80.0...v4.81.0) (2025-12-03)
+
+**Note:** Version bump only for package @account-kit/react-native-signer
+
+# [4.80.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.79.0...v4.80.0) (2025-12-02)
+
+**Note:** Version bump only for package @account-kit/react-native-signer
+
+# [4.79.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.78.0...v4.79.0) (2025-11-19)
+
+**Note:** Version bump only for package @account-kit/react-native-signer
+
 # [4.78.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.77.1...v4.78.0) (2025-11-05)
 
 **Note:** Version bump only for package @account-kit/react-native-signer
