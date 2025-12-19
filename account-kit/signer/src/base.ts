@@ -1052,16 +1052,6 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
   };
 
   /**
-   * Exports a private key for a given account
-   *
-   * @param {ExportPrivateKeyParams} opts the parameters for the export
-   * @returns {Promise<string>} the private key
-   */
-  exportPrivateKey: TClient["exportPrivateKey"] = (opts) => {
-    return this.inner.exportPrivateKey(opts);
-  };
-
-  /**
    * Exports a private key for a given account encrypted with the provided public key
    *
    * @param {ExportPrivateKeyParams} opts the parameters for the export
