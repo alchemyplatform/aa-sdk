@@ -1062,6 +1062,16 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
   };
 
   /**
+   * Exports a private key for a given account encrypted with the provided public key
+   *
+   * @param {ExportPrivateKeyParams} opts the parameters for the export
+   * @returns {Promise<string>} the private key
+   */
+  exportPrivateKeyEncrypted: TClient["exportPrivateKeyEncrypted"] = (opts) => {
+    return this.inner.exportPrivateKeyEncrypted(opts);
+  };
+
+  /**
    * This method lets you adapt your AlchemySigner to a viem LocalAccount, which
    * will let you use the signer as an EOA directly.
    *
