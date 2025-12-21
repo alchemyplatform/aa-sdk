@@ -213,6 +213,42 @@ We recommend adding error handling when sending a UO to handle potential gas and
 
 </Accordion>
 
+### How to Send User Operations without Gas Sponsorship?
+
+<Accordion title="Answer">
+    Sponsoring gas for your users is optional. If you prefer for users' smart accounts to pay gas themselves in the native token, you can use one of the following approaches.
+
+    You can do this using one of two approaches:
+
+    ---
+
+    ### Option 1: Omit the gas policy in your config
+
+    Don't include a gas policy in the `AlchemyAccountProvider` component configuration or in the `paymasterService` capabilities `policyId` parameter.
+
+    ---
+
+    ### Option 2: Override sponsorship at the UserOp level
+
+    Explicitly disable sponsorship by setting `paymasterAndData` to `0x`.
+
+    ```ts
+    const overrides: UserOperationOverrides = {
+      paymasterAndData: "0x",
+    };
+
+    const userOperationResult = await client.sendUserOperation({
+      uo: {
+        target: "0x0000000000000000",
+        data: "0x",
+        value: 0n,
+      },
+      overrides: overrides,
+    });
+    ```
+
+</Accordion>
+
 ## Common Errors
 
 ### Replacement underpriced: `"code":-32602,"message":"replacement underpriced","data"...`
