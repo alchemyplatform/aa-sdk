@@ -23,6 +23,8 @@ import {
   arbitrumNova as vabn,
   zora as vzora,
   zoraSepolia as vzoras,
+  worldchain as vwc,
+  worldchainSepolia as vwcs,
 } from "viem/chains";
 
 export type AlchemyChainConfig = {
@@ -260,41 +262,25 @@ export const zoraSepolia: Chain = {
   },
 };
 
-export const worldChainSepolia: Chain = defineChain({
-  id: 4801,
-  name: "World Chain Sepolia",
-  network: "World Chain Sepolia",
-  nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+export const worldChainSepolia: Chain = {
+  ...vwcs,
   rpcUrls: {
-    default: {
-      http: ["https://worldchain-sepolia.g.alchemy.com/v2"],
-    },
-    public: {
-      http: ["https://worldchain-sepolia.g.alchemy.com/v2"],
-    },
+    ...vwcs.rpcUrls,
     alchemy: {
       http: ["https://worldchain-sepolia.g.alchemy.com/v2"],
     },
   },
-});
+};
 
-export const worldChain: Chain = defineChain({
-  id: 480,
-  name: "World Chain",
-  network: "World Chain",
-  nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+export const worldChain: Chain = {
+  ...vwc,
   rpcUrls: {
-    default: {
-      http: ["https://worldchain-mainnet.g.alchemy.com/v2"],
-    },
-    public: {
-      http: ["https://worldchain-mainnet.g.alchemy.com/v2"],
-    },
+    ...vwc.rpcUrls,
     alchemy: {
       http: ["https://worldchain-mainnet.g.alchemy.com/v2"],
     },
   },
-});
+};
 
 export const shapeSepolia: Chain = defineChain({
   id: 11011,
