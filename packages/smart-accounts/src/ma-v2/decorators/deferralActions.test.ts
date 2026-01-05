@@ -487,7 +487,7 @@ describe("MA v2 deferral actions tests", async () => {
       // If the account is not yet deployed & the signer is not the root owner, the
       // factoryAddress & factoryData must be provided, since they are deterministic
       // based on the original signer.
-      factoryAddress: factoryArgs?.factory,
+      factory: factoryArgs?.factory,
       factoryData: factoryArgs?.factoryData,
     });
 
