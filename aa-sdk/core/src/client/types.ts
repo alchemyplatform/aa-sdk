@@ -13,26 +13,20 @@ export type ConnectorData = {
 
 export type ConnectionConfig = z.input<typeof ConnectionConfigSchema>;
 
-// [!region SendUserOperationResult]
 export type SendUserOperationResult<
   TEntryPointVersion extends EntryPointVersion = EntryPointVersion,
 > = {
   hash: Hash;
   request: UserOperationRequest<TEntryPointVersion>;
 };
-// [!endregion SendUserOperationResult]
 
-// [!region UpgradeToData]
 export type UpgradeToData = {
   implAddress: Address;
   initializationData: Hex;
 };
-// [!endregion UpgradeToData]
 
-// [!region ClientMiddlewareConfig]
 export type ClientMiddlewareConfig<
   TContext extends UserOperationContext | undefined =
     | UserOperationContext
     | undefined,
 > = Partial<ClientMiddleware<TContext>>;
-// [!endregion ClientMiddlewareConfig]
