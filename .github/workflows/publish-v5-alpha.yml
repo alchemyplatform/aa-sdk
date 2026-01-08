@@ -124,6 +124,17 @@ jobs:
             --no-private \
             --ignore-scripts
 
+      # Run inject-version scripts to update version.ts files with new versions
+      - name: Inject Versions
+        if: ${{ inputs.publish }}
+        run: |
+          for pkg in packages/*/; do
+            if [ -f "$pkg/inject-version.ts" ]; then
+              echo "Injecting version for $pkg"
+              (cd "$pkg" && npx tsx inject-version.ts)
+            fi
+          done
+
       # Commit version changes so lerna publish doesn't complain about uncommitted changes
       - name: Commit Version Changes
         if: ${{ inputs.publish }}
