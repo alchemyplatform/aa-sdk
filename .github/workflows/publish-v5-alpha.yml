@@ -2,6 +2,10 @@ name: Publish V5 Alpha Packages
 
 # workflow dispatch requires a maintainer to go to the Actions tab and manually trigger the workflow
 on:
+  # TODO: Remove push trigger after testing
+  push:
+    branches:
+      - jake/v5-alpha-publish
   workflow_dispatch:
     inputs:
       publish:
@@ -33,10 +37,11 @@ jobs:
 
     steps:
       # Always checkout moldy/v5-base, regardless of which branch the workflow file lives on
-      - name: Checkout moldy/v5-base branch
+      # TODO: Change back to moldy/v5-base after testing
+      - name: Checkout jake/prepare-gha-publishing branch
         uses: actions/checkout@v3
         with:
-          ref: moldy/v5-base
+          ref: jake/prepare-gha-publishing
           token: ${{ secrets.ALCHEMY_BOT_PAT }}
           fetch-depth: "0"
           submodules: "recursive"
