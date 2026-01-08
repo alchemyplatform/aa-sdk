@@ -138,7 +138,7 @@ jobs:
         if: ${{ inputs.publish || github.event_name == 'push' }}
         run: |
           git add -A
-          git commit -m "chore: bump versions for alpha publish [skip ci]" || echo "No changes to commit"
+          git commit --no-verify -m "chore: bump versions for alpha publish [skip ci]"
 
       # Publish packages from the updated package.json versions
       - name: Publish V5 Alpha to NPM
@@ -188,7 +188,7 @@ jobs:
           git add lerna.json lerna-v5.json
 
           # Amend the previous commit to include the restored lerna configs
-          git commit --amend -m "chore(v5): publish alpha version $NEW_VERSION [skip ci]"
+          git commit --amend --no-verify -m "chore(v5): publish alpha version $NEW_VERSION [skip ci]"
 
           # Create tag for the release
           TAG_NAME="v$NEW_VERSION"
