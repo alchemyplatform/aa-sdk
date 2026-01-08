@@ -44,7 +44,7 @@ export function packageJsonTemplate(packageName: string, description: string) {
       "typescript-template": "*",
     },
     dependencies: {
-      "@alchemy/common": "^0.0.0-alpha.8",
+      "@alchemy/common": "^0.0.0-alpha.10",
       viem: "2.29.2",
     },
     publishConfig: {
