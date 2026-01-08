@@ -57,6 +57,10 @@ jobs:
           echo "Disk space after cleanup:"
           df -h
 
+      # Clear yarn cache to avoid stale workspace resolution from other branches
+      - name: Clear Yarn Cache
+        run: yarn cache clean
+
       - name: Setup
         uses: ./.github/actions/setup
         with:
