@@ -1,6 +1,6 @@
 {
   "name": "@alchemy/aa-infra",
-  "version": "0.0.0",
+  "version": "0.0.0-alpha.7",
   "description": "Alchemy Account Abstraction Infrastructure",
   "author": "Alchemy",
   "license": "MIT",
