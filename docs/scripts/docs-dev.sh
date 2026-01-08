@@ -45,10 +45,10 @@ cd "$DOCS_SITE_DIR"
 # Install/update dependencies
 pnpm i
 
-# Insert docs content into docs-site
+# Insert SDK references from aa-sdk into docs-site
 pnpm exec $DOCS_DIR/scripts/insert-docs.sh aa-sdk
 
-# Start watching docs folder for changes in the background
+# Watch for SDK reference changes in aa-sdk
 pnpm exec onchange "$DOCS_DIR/**/*.mdx" "$DOCS_DIR/**/*.yml" -- sh -c "$DOCS_DIR/scripts/insert-docs.sh aa-sdk" &
 ONCHANGE_PID=$!
 

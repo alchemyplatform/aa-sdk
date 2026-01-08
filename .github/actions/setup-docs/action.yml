@@ -9,10 +9,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Extract code snippets
-      shell: bash
-      run: node docs/scripts/extract-include-statements.js
-
     - name: Ensure docs-site submodule is up-to-date
       shell: bash
       run: git submodule update --init --remote docs-site/

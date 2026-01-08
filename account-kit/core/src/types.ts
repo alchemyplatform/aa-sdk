@@ -72,7 +72,6 @@ export type AlchemyAccountsConfig = {
     sessionLength: number;
   };
 };
-// [!region CreateCorConfigProps]
 
 export type SolanaConnection = {
   connection: SolanaWeb3Connection;
