@@ -184,8 +184,9 @@ jobs:
           NEW_VERSION=$(node -p "require('./lerna-v5.json').version")
           echo "Published version: $NEW_VERSION"
 
-          # Stage the restored lerna configs (lerna.json is now v4, lerna-v5.json has new version)
+          # Stage the restored lerna configs and removal of tmp file
           git add lerna.json lerna-v5.json
+          git add -u  # This stages the deletion of lerna-v4.json.tmp
 
           # Amend the previous commit to include the restored lerna configs
           git commit --amend --no-verify -m "chore(v5): publish alpha version $NEW_VERSION [skip ci]"
