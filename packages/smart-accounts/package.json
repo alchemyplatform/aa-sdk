@@ -39,11 +39,11 @@
     "test:run": "vitest run"
   },
   "devDependencies": {
-    "@alchemy/aa-infra": "*",
+    "@alchemy/aa-infra": "^0.0.0-alpha.7",
     "typescript-template": "*"
   },
   "dependencies": {
-    "@alchemy/common": "*",
+    "@alchemy/common": "^0.0.0-alpha.7",
     "ox": "^0.9.6",
     "viem": "^2.32.0",
     "webauthn-p256": "^0.0.10"

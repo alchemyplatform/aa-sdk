@@ -43,7 +43,7 @@
     "typescript-template": "*"
   },
   "dependencies": {
-    "@alchemy/common": "*",
+    "@alchemy/common": "^0.0.0-alpha.7",
     "viem": "^2.32.0"
   },
   "publishConfig": {

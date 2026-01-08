@@ -44,8 +44,7 @@ export function packageJsonTemplate(packageName: string, description: string) {
       "typescript-template": "*",
     },
     dependencies: {
-      // TODO: this needs to be given a proper version, but it might be that lerna will handle this for you on publish
-      "@alchemy/common": "*",
+      "@alchemy/common": "^0.0.0-alpha.7",
       viem: "2.29.2",
     },
     publishConfig: {
