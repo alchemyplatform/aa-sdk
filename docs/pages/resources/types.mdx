@@ -122,7 +122,7 @@ In the vast majority of cases, you will not use this client directly. Use the [`
 
 <Accordion title="BundlerClient">
 
-```ts
+````ts
 export type BundlerClient<T extends Transport = Transport> = Client<
   T,
   Chain,
@@ -155,7 +155,7 @@ export const createBundlerClientFromExisting: <
 ): BundlerClient<T> => {
   return client.extend(bundlerActions);
 };
-```
+````
 
 </Accordion>
 

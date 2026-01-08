@@ -216,7 +216,6 @@ export type UserOperationRequest<
     : never) &
   Eip7702ExtendedFields;
 
-
 export interface UserOperationEstimateGasResponse<
   TEntryPointVersion extends EntryPointVersion = EntryPointVersion,
 > {
