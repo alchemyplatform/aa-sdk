@@ -27,7 +27,6 @@ export type ClientMiddlewareArgs<
   client: C;
 };
 
-// [!region ClientMiddlewareFn]
 export type ClientMiddlewareFn<
   TContext extends UserOperationContext | undefined =
     | UserOperationContext
@@ -41,9 +40,7 @@ export type ClientMiddlewareFn<
   struct: Deferrable<UserOperationStruct<TEntryPointVersion>>,
   args: ClientMiddlewareArgs<TAccount, C, TContext, TEntryPointVersion>,
 ) => Promise<Deferrable<UserOperationStruct<TEntryPointVersion>>>;
-// [!endregion ClientMiddlewareFn]
 
-// [!region ClientMiddleware]
 export type ClientMiddleware<
   TContext extends UserOperationContext | undefined =
     | UserOperationContext
@@ -57,4 +54,3 @@ export type ClientMiddleware<
   userOperationSimulator: ClientMiddlewareFn<TContext>;
   signUserOperation: ClientMiddlewareFn<TContext>;
 };
-// [!endregion ClientMiddleware]

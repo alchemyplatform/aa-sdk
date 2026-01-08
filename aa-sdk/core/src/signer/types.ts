@@ -8,7 +8,6 @@ import type {
   SignedAuthorization,
 } from "viem";
 
-// [!region SmartAccountAuthenticator]
 /**
  * Extends the @interface SmartAccountSigner interface with authentication.
  *
@@ -22,9 +21,7 @@ export interface SmartAccountAuthenticator<AuthParams, AuthDetails, Inner = any>
 
   getAuthDetails: () => Promise<AuthDetails>;
 }
-// [!endregion SmartAccountAuthenticator]
 
-// [!region SmartAccountSigner]
 // TODO: This is a temporary type to be removed when viem is updated
 export type AuthorizationRequest<uint32 = number> = OneOf<
   | {
@@ -64,4 +61,3 @@ export interface SmartAccountSigner<Inner = any> {
     unsignedAuthorization: AuthorizationRequest<number>,
   ) => Promise<SignedAuthorization<number>>;
 }
-// [!endregion SmartAccountSigner]
