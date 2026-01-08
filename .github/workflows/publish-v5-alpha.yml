@@ -198,10 +198,12 @@ jobs:
           echo "has_changes=true" >> $GITHUB_ENV
           echo "new_version=$NEW_VERSION" >> $GITHUB_ENV
 
-      # Push commit and tags to moldy/v5-base
-      - name: Push Changes to moldy/v5-base
+      # Push commit and tags
+      # TODO: Revert to pushing to moldy/v5-base after testing
+      - name: Push Changes
         # TODO: Revert to `inputs.publish && env.lerna_published == 'true' && env.has_changes == 'true'` after testing
         if: ${{ (inputs.publish || github.event_name == 'push') && env.lerna_published == 'true' && env.has_changes == 'true' }}
         run: |
-          git push origin moldy/v5-base --follow-tags
-          echo "Successfully pushed version ${{ env.new_version }} to moldy/v5-base"
+          # TODO: Revert to `git push origin HEAD:moldy/v5-base --follow-tags` after testing
+          git push origin HEAD:jake/prepare-gha-publishing --follow-tags
+          echo "Successfully pushed version ${{ env.new_version }}"
