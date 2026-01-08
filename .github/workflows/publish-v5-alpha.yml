@@ -132,6 +132,14 @@ jobs:
             --no-private \
             --ignore-scripts
 
+      # Commit version changes so lerna publish doesn't complain about uncommitted changes
+      - name: Commit Version Changes
+        # TODO: Revert to `inputs.publish` after testing
+        if: ${{ inputs.publish || github.event_name == 'push' }}
+        run: |
+          git add -A
+          git commit -m "chore: bump versions for alpha publish [skip ci]" || echo "No changes to commit"
+
       # Publish packages from the updated package.json versions
       - name: Publish V5 Alpha to NPM
         # TODO: Revert to `inputs.publish` after testing
@@ -166,8 +174,8 @@ jobs:
           mv lerna.json lerna-v5.json
           mv lerna-v4.json.tmp lerna.json
 
-      # Create git commit and tags
-      - name: Commit and Tag Changes
+      # Amend commit with restored lerna configs and create tag
+      - name: Amend Commit and Tag Changes
         # TODO: Revert to `inputs.publish && env.lerna_published == 'true'` after testing
         if: ${{ (inputs.publish || github.event_name == 'push') && env.lerna_published == 'true' }}
         shell: bash
@@ -176,25 +184,19 @@ jobs:
           NEW_VERSION=$(node -p "require('./lerna-v5.json').version")
           echo "Published version: $NEW_VERSION"
 
-          # Stage all changes (package.json files + lerna-v5.json)
-          git add packages/*/package.json lerna-v5.json
+          # Stage the restored lerna configs (lerna.json is now v4, lerna-v5.json has new version)
+          git add lerna.json lerna-v5.json
 
-          # Check if there are actually changes to commit
-          if git diff --staged --quiet; then
-            echo "No changes to commit"
-            echo "has_changes=false" >> $GITHUB_ENV
-          else
-            # Create commit
-            git commit -m "chore(v5): publish alpha version $NEW_VERSION [skip ci]"
+          # Amend the previous commit to include the restored lerna configs
+          git commit --amend -m "chore(v5): publish alpha version $NEW_VERSION [skip ci]"
 
-            # Create tag for the release
-            TAG_NAME="v$NEW_VERSION"
-            echo "Creating tag: $TAG_NAME"
-            git tag -a "$TAG_NAME" -m "v$NEW_VERSION"
+          # Create tag for the release
+          TAG_NAME="v$NEW_VERSION"
+          echo "Creating tag: $TAG_NAME"
+          git tag -a "$TAG_NAME" -m "v$NEW_VERSION"
 
-            echo "has_changes=true" >> $GITHUB_ENV
-            echo "new_version=$NEW_VERSION" >> $GITHUB_ENV
-          fi
+          echo "has_changes=true" >> $GITHUB_ENV
+          echo "new_version=$NEW_VERSION" >> $GITHUB_ENV
 
       # Push commit and tags to moldy/v5-base
       - name: Push Changes to moldy/v5-base
