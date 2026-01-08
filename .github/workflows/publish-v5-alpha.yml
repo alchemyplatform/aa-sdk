@@ -91,7 +91,8 @@ jobs:
 
       # Dry run to see what would be published
       - name: Dry Run - Show what would be published
-        if: ${{ inputs.publish == false }}
+        # TODO: Revert to `inputs.publish == false` after testing
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.publish == false }}
         shell: bash
         run: |
           echo "=== DRY RUN MODE - No packages will be published ==="
@@ -108,15 +109,17 @@ jobs:
           echo "=== To actually publish, re-run with 'publish' checkbox checked ==="
 
       # Restore lerna config after dry run
-      - name: Restore Lerna Config (Dry Run)
-        if: ${{ inputs.publish == false }}
+      - name: Dry Run - Restore Lerna Config
+        # TODO: Revert to `inputs.publish == false` after testing
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.publish == false }}
         run: |
           mv lerna.json lerna-v5.json
           mv lerna-v4.json.tmp lerna.json
 
       # Auto-increment prerelease version
       - name: Increment Version
-        if: ${{ inputs.publish }}
+        # TODO: Revert to `inputs.publish` after testing
+        if: ${{ inputs.publish || github.event_name == 'push' }}
         shell: bash
         run: |
           echo "Auto-incrementing prerelease version..."
@@ -131,7 +134,8 @@ jobs:
 
       # Publish packages from the updated package.json versions
       - name: Publish V5 Alpha to NPM
-        if: ${{ inputs.publish }}
+        # TODO: Revert to `inputs.publish` after testing
+        if: ${{ inputs.publish || github.event_name == 'push' }}
         shell: bash
         run: |
           set +e
@@ -156,14 +160,16 @@ jobs:
 
       # Restore lerna configs to their original names for committing
       - name: Restore Lerna Config Names
-        if: ${{ inputs.publish }}
+        # TODO: Revert to `inputs.publish` after testing
+        if: ${{ inputs.publish || github.event_name == 'push' }}
         run: |
           mv lerna.json lerna-v5.json
           mv lerna-v4.json.tmp lerna.json
 
       # Create git commit and tags
       - name: Commit and Tag Changes
-        if: ${{ inputs.publish && env.lerna_published == 'true' }}
+        # TODO: Revert to `inputs.publish && env.lerna_published == 'true'` after testing
+        if: ${{ (inputs.publish || github.event_name == 'push') && env.lerna_published == 'true' }}
         shell: bash
         run: |
           # Get the new version from lerna-v5.json
@@ -192,7 +198,8 @@ jobs:
 
       # Push commit and tags to moldy/v5-base
       - name: Push Changes to moldy/v5-base
-        if: ${{ inputs.publish && env.lerna_published == 'true' && env.has_changes == 'true' }}
+        # TODO: Revert to `inputs.publish && env.lerna_published == 'true' && env.has_changes == 'true'` after testing
+        if: ${{ (inputs.publish || github.event_name == 'push') && env.lerna_published == 'true' && env.has_changes == 'true' }}
         run: |
           git push origin moldy/v5-base --follow-tags
           echo "Successfully pushed version ${{ env.new_version }} to moldy/v5-base"
