@@ -93,8 +93,7 @@ jobs:
           echo ""
           CURRENT_VERSION=$(node -p "require('./lerna.json').version")
           echo "Current version: $CURRENT_VERSION"
-          # Calculate next version (increment the number after the last dot)
-          NEXT_VERSION=$(echo "$CURRENT_VERSION" | awk -F. -v OFS=. '{$NF++; print}')
+          NEXT_VERSION=$(npx semver $CURRENT_VERSION -i prerelease --preid alpha)
           echo "Next version:    $NEXT_VERSION"
           echo ""
           echo "Packages that would be published:"
