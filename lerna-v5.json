@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/lerna/schemas/lerna-schema.json",
-  "version": "0.0.0",
+  "version": "0.0.0-alpha.10",
   "npmClient": "yarn",
   "packages": [
     "packages/aa-infra",
@@ -12,13 +12,11 @@
       "message": "chore(v5): publish alpha version %s [skip ci]",
       "forcePublish": true,
       "conventionalCommits": false,
-      "preid": "alpha",
-      "allowBranch": "moldy/v5-base"
+      "preid": "alpha"
     },
     "publish": {
       "distTag": "alpha",
-      "access": "public",
-      "allowBranch": "moldy/v5-base"
+      "access": "public"
     }
   }
 }

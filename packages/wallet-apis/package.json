@@ -54,7 +54,7 @@
     "typescript-template": "*"
   },
   "dependencies": {
-    "@alchemy/common": "*",
+    "@alchemy/common": "^0.0.0-alpha.10",
     "@alchemy/wallet-api-types": "^0.1.0-alpha.18",
     "deep-equal": "^2.2.3",
     "ox": "^0.6.12",
