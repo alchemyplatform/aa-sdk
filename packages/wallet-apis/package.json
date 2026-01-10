@@ -1,6 +1,6 @@
 {
   "name": "@alchemy/wallet-apis",
-  "version": "0.0.0",
+  "version": "0.0.0-alpha.11",
   "description": "Alchemy Wallet APIs",
   "author": "Alchemy",
   "license": "MIT",

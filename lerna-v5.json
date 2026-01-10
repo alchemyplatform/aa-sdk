@@ -5,7 +5,8 @@
   "packages": [
     "packages/aa-infra",
     "packages/common",
-    "packages/smart-accounts"
+    "packages/smart-accounts",
+    "packages/wallet-apis"
   ],
   "command": {
     "version": {
