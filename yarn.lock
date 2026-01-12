@@ -238,6 +238,16 @@
     typebox "^1.0.0"
     viem "2.29.2"
 
+"@alchemy/wallet-api-types@^0.1.0-alpha.19":
+  version "0.1.0-alpha.19"
+  resolved "https://registry.yarnpkg.com/@alchemy/wallet-api-types/-/wallet-api-types-0.1.0-alpha.19.tgz#57f01caacb0110d82344539d872cd696ce6f651d"
+  integrity sha512-RJ7iMJZB4PHCFZB01VNa9hyarO1DmnjoPw3eWSt7fDYwqSQvCJUdekcnu5XPU8HojZ9KY+mUk/TdLEcilBg8eQ==
+  dependencies:
+    deep-equal "^2.2.3"
+    ox "^0.6.12"
+    typebox "^1.0.60"
+    viem "2.29.2"
+
 "@alloc/quick-lru@^5.2.0":
   version "5.2.0"
   resolved "https://registry.yarnpkg.com/@alloc/quick-lru/-/quick-lru-5.2.0.tgz#7bf68b20c0a350f936915fcae06f58e32007ce30"
@@ -22193,6 +22203,11 @@ typebox@^1.0.0:
   version "1.0.43"
   resolved "https://registry.yarnpkg.com/typebox/-/typebox-1.0.43.tgz#e796a1bc8c1a91027b7582bb174c989af3a390b0"
   integrity sha512-NALtTG+DfndC+48JURdOQ6y6CrCEZl9xLM+BMNwFduUIUJv6AqqVT3ZcCf+jQ9uEJlLAhLyds/gkfufkpBh+2g==
+
+typebox@^1.0.60:
+  version "1.0.77"
+  resolved "https://registry.yarnpkg.com/typebox/-/typebox-1.0.77.tgz#544410ff930a53f1d3ec5f122579f20f1fa38348"
+  integrity sha512-4PgDeVyUcdf1tZyDUr6Nqx0f4WR9pusFhjyDyuTWS7tQTd94Yx0zAUevvbRSn8dC8UG1eWhTTobDEuRk7pxclw==
 
 typed-array-buffer@^1.0.3:
   version "1.0.3"
