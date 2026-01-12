@@ -8,6 +8,8 @@ import {
 } from "./sendPreparedCalls.js";
 import { LOGGER } from "../logger.js";
 import { signSignatureRequest } from "./signSignatureRequest.js";
+import { isWebAuthnAccount } from "../utils/assertions.js";
+import { BaseError } from "@alchemy/common";
 
 export type SendCallsParams<
   TAccount extends Address | undefined = Address | undefined,
@@ -59,6 +61,11 @@ export async function sendCalls<
   let calls = await prepareCalls(client, params);
 
   if (calls.type === "paymaster-permit") {
+    if (isWebAuthnAccount(client.owner)) {
+      throw new BaseError(
+        "WebAuthn signer is not currently supported for signing paymaster permit signatures",
+      );
+    }
     const signature = await signSignatureRequest(
       client,
       calls.signatureRequest,
@@ -68,7 +75,11 @@ export async function sendCalls<
       from: calls.modifiedRequest.from,
       calls: calls.modifiedRequest.calls,
       capabilities: calls.modifiedRequest.capabilities,
-      paymasterPermitSignature: signature,
+      // WebAuthn signatures are not supported for paymaster permits (throws above).
+      paymasterPermitSignature: signature as Exclude<
+        typeof signature,
+        { type: "webauthn-p256" }
+      >,
     };
 
     calls = await prepareCalls(client, secondCallParams);

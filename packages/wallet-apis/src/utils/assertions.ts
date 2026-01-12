@@ -1,6 +1,7 @@
-import type { Client } from "viem";
-import type { InnerWalletApiClient } from "../types.js";
+import type { Client, LocalAccount } from "viem";
+import type { InnerWalletApiClient, SignerClient } from "../types.js";
 import { BaseError } from "@alchemy/common";
+import type { WebAuthnAccount } from "viem/account-abstraction";
 
 /**
  * Type guard function to check if a client is an Alchemy Smart Wallet Client.
@@ -29,4 +30,22 @@ export function assertSmartWalletClient(
   if (!isSmartWalletClient(client)) {
     throw new BaseError(message);
   }
+}
+
+export function isLocalAccount(
+  signer: LocalAccount | WebAuthnAccount | SignerClient,
+): signer is LocalAccount {
+  return !("credential" in signer) && !("request" in signer);
+}
+
+export function isWebAuthnAccount(
+  signer: LocalAccount | WebAuthnAccount | SignerClient,
+): signer is WebAuthnAccount {
+  return "credential" in signer;
+}
+
+export function isSignerClient(
+  signer: LocalAccount | WebAuthnAccount | SignerClient,
+): signer is SignerClient {
+  return "request" in signer;
 }

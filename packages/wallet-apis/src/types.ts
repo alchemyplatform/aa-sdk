@@ -11,10 +11,12 @@ import type {
   Prettify,
   Transport,
   WalletClient,
+  LocalAccount,
 } from "viem";
 import type { InternalState } from "./internal";
 import type { SmartWalletClient1193Methods } from "./provider";
 import type { SmartWalletActions } from "./decorators/smartWalletActions";
+import type { WebAuthnAccount } from "viem/account-abstraction";
 
 export type BaseWalletClient<
   TExtend extends { [key: string]: unknown } | undefined =
@@ -30,11 +32,13 @@ export type BaseWalletClient<
 
 export type InnerWalletApiClient = BaseWalletClient<{
   internal: InternalState | undefined; // undefined if you want to skip using an internal cache
-  owner: SignerClient;
+  owner: SmartWalletSigner;
   policyIds?: string[];
 }>;
 
 export type SignerClient = WalletClient<Transport, Chain | undefined, Account>;
+
+export type SmartWalletSigner = LocalAccount | WebAuthnAccount | SignerClient;
 
 export type SmartWalletClientEip1193Provider = Prettify<
   EIP1193Events & {
@@ -48,10 +52,6 @@ export type SmartWalletClient<
 
 export type OptionalChainId<T> = T extends { chainId: Hex }
   ? Omit<T, "chainId"> & { chainId?: Hex | undefined }
-  : T;
-
-export type OptionalSignerAddress<T> = T extends { signerAddress: Address }
-  ? Omit<T, "signerAddress"> & { signerAddress?: Address | undefined }
   : T;
 
 export type WithoutRawPayload<T> = T extends { rawPayload: Hex }

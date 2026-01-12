@@ -10,6 +10,7 @@ import type {
 import type { InnerWalletApiClient } from "../types.js";
 import { LOGGER } from "../logger.js";
 import type { SendPreparedCallsParams } from "./sendPreparedCalls.js";
+import { isWebAuthnAccount } from "../utils/assertions.js";
 
 export type SignPreparedCallsParams = Prettify<PrepareCallsResult>;
 
@@ -49,6 +50,12 @@ export async function signPreparedCalls(
   const signAuthorizationCall = async (call: PreparedCall_Authorization) => {
     const { signatureRequest: _signatureRequest, ...rest } = call;
 
+    if (isWebAuthnAccount(client.owner)) {
+      throw new BaseError(
+        "WebAuthn account cannot sign EIP-7702 authorization requests",
+      );
+    }
+
     const signature = await signSignatureRequest(client, {
       type: "eip7702Auth",
       data: {
@@ -56,9 +63,13 @@ export async function signPreparedCalls(
         chainId: call.chainId,
       },
     });
+    // Authorization signatures are never webauthn-256 (throws above).
     return {
       ...rest,
-      signature,
+      signature: signature as Exclude<
+        typeof signature,
+        { type: "webauthn-p256" }
+      >,
     };
   };
 
