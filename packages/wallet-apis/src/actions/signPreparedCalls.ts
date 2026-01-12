@@ -45,8 +45,10 @@ export async function signPreparedCalls(
   params: SignPreparedCallsParams,
 ): Promise<SignPreparedCallsResult> {
   LOGGER.debug("signPreparedCalls:start", { type: params.type });
+
   const signAuthorizationCall = async (call: PreparedCall_Authorization) => {
     const { signatureRequest: _signatureRequest, ...rest } = call;
+
     const signature = await signSignatureRequest(client, {
       type: "eip7702Auth",
       data: {

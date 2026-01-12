@@ -7,6 +7,7 @@ import {
   type SendPreparedCallsResult,
 } from "./sendPreparedCalls.js";
 import { LOGGER } from "../logger.js";
+import { signSignatureRequest } from "./signSignatureRequest.js";
 
 export type SendCallsParams<
   TAccount extends Address | undefined = Address | undefined,
@@ -40,6 +41,10 @@ export type SendCallsResult = Prettify<SendPreparedCallsResult>;
  * // The result contains the prepared call IDs
  * console.log(result.preparedCallIds);
  * ```
+ * <Note>
+ * If using this action with an ERC-20 paymaster in pre-operation mode with `autoPermit`, the contents of the permit will be hidden
+ * from the user. It is recommended to use the `prepareCalls` action instead to manually handle the permit signature.
+ * </Note>
  */
 export async function sendCalls<
   TAccount extends Address | undefined = Address | undefined,
@@ -51,7 +56,23 @@ export async function sendCalls<
     calls: params.calls?.length,
     hasCapabilities: !!params.capabilities,
   });
-  const calls = await prepareCalls(client, params);
+  let calls = await prepareCalls(client, params);
+
+  if (calls.type === "paymaster-permit") {
+    const signature = await signSignatureRequest(
+      client,
+      calls.signatureRequest,
+    );
+
+    const secondCallParams = {
+      from: calls.modifiedRequest.from,
+      calls: calls.modifiedRequest.calls,
+      capabilities: calls.modifiedRequest.capabilities,
+      paymasterPermitSignature: signature,
+    };
+
+    calls = await prepareCalls(client, secondCallParams);
+  }
 
   const signedCalls = await signPreparedCalls(client, calls);
 
