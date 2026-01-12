@@ -14,20 +14,15 @@ export const HexSchema = z.custom<`0x${string}` | "0x">((val) => {
   return isHex(val, { strict: true });
 });
 
-// [!region BigNumberish]
 export const BigNumberishSchema = z.union([HexSchema, z.number(), z.bigint()]);
-// [!endregion BigNumberish]
 
-// [!region BigNumberishRange]
 export const BigNumberishRangeSchema = z
   .object({
     min: BigNumberishSchema.optional(),
     max: BigNumberishSchema.optional(),
   })
   .strict();
-// [!endregion BigNumberishRange]
 
-// [!region Multiplier]
 export const MultiplierSchema = z
   .object({
     /**
@@ -41,7 +36,6 @@ export const MultiplierSchema = z
     ),
   })
   .strict();
-// [!endregion Multiplier]
 
 export function isBigNumberish(x: any): x is BigNumberish {
   return x != null && BigNumberishSchema.safeParse(x).success;

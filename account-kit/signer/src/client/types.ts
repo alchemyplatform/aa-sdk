@@ -7,20 +7,17 @@ import type {
 import type { Hex } from "viem";
 import type { AuthParams } from "../signer";
 
-// [!region VerificationOtp]
 export type VerificationOtp = {
   /** The OTP ID returned from initOtp */
   id: string;
   /** The OTP code received by the user */
   code: string;
 };
-// [!endregion VerificationOtp]
 
 export type CredentialCreationOptionOverrides = {
   publicKey?: Partial<CredentialCreationOptions["publicKey"]>;
 } & Pick<CredentialCreationOptions, "signal">;
 
-// [!region User]
 export type User = {
   email?: string;
   phone?: string;
@@ -33,7 +30,6 @@ export type User = {
   accessToken?: string;
   claims?: Record<string, unknown>;
 };
-// [!endregion User]
 
 export type ExportWalletParams = {
   iframeContainerId: string;
