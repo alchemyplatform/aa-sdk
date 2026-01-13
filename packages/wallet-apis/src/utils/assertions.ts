@@ -35,13 +35,13 @@ export function assertSmartWalletClient(
 export function isLocalAccount(
   signer: LocalAccount | WebAuthnAccount | SignerClient,
 ): signer is LocalAccount {
-  return !("credential" in signer) && !("request" in signer);
+  return signer.type === "local";
 }
 
 export function isWebAuthnAccount(
   signer: LocalAccount | WebAuthnAccount | SignerClient,
 ): signer is WebAuthnAccount {
-  return "credential" in signer;
+  return signer.type === "webAuthn";
 }
 
 export function isSignerClient(
