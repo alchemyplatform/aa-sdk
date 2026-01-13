@@ -9,7 +9,7 @@ export function getSignerAddressOrPublicKey(
   | { type: "secp256k1"; address: Address }
   | { type: "webauthn-p256"; publicKey: WebAuthnPublicKey } {
   // SignerClient.
-  if ("account" in signer) {
+  if ("request" in signer) {
     return {
       type: "secp256k1",
       address: signer.account.address,
