@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.82.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.82.0...v4.82.1) (2026-01-12)
+
+### Bug Fixes
+
+- extend worldchain from viem/chains ([#2301](https://github.com/alchemyplatform/aa-sdk/issues/2301)) ([#2312](https://github.com/alchemyplatform/aa-sdk/issues/2312)) ([241ea9b](https://github.com/alchemyplatform/aa-sdk/commit/241ea9be0dc2e627c39a20b4b6fd9759ca0f44d0))
+
+### Features
+
+- migrate manual wallet content to main docs repo ([#2306](https://github.com/alchemyplatform/aa-sdk/issues/2306)) ([f8992ae](https://github.com/alchemyplatform/aa-sdk/commit/f8992aecbb1683679033bbf83bc657f684a2aff2))
+
 # [4.82.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.81.6...v4.82.0) (2025-12-20)
 
 ### Features
