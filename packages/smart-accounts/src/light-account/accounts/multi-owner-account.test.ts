@@ -18,7 +18,7 @@ import {
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import { setBalance } from "viem/actions";
 import { accounts, poolId } from "~test/constants.js";
-import { local070Instance } from "~test/instances.js";
+import { localInstance } from "~test/instances.js";
 import { multiOwnerLightAccountActions } from "../decorators/multiOwner.js";
 import type { LightAccountVersion } from "../registry.js";
 import { toMultiOwnerLightAccount } from "./multi-owner-account.js";
@@ -26,8 +26,7 @@ import { estimateFeesPerGas } from "@alchemy/aa-infra";
 
 // Run sequentially to avoid interference across tests sharing anvil/rundler state
 describe.sequential("MultiOwner Light Account Tests", () => {
-  const instance = local070Instance;
-  let client: ReturnType<typeof instance.getClient>;
+  let client: ReturnType<typeof localInstance.getClient>;
   let salt: bigint = BigInt(poolId());
   let signer: WalletClient<Transport, Chain, JsonRpcAccount | LocalAccount>;
   let undeployedSigner: WalletClient<
@@ -42,7 +41,7 @@ describe.sequential("MultiOwner Light Account Tests", () => {
   >;
 
   beforeAll(async () => {
-    client = instance.getClient();
+    client = localInstance.getClient();
     signer = createWalletClient({
       account: privateKeyToAccount(generatePrivateKey()),
       transport: custom(client.transport),
@@ -178,7 +177,7 @@ describe.sequential("MultiOwner Light Account Tests", () => {
       owners: [undeployedSigner.account],
     });
 
-    await setBalance(instance.getClient(), {
+    await setBalance(localInstance.getClient(), {
       address: provider.account.address,
       value: parseEther("10"),
     });

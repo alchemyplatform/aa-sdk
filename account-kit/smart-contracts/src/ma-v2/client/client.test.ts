@@ -68,7 +68,7 @@ import {
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import { setBalance } from "viem/actions";
 import { parsePublicKey } from "webauthn-p256";
-import { local070Instance } from "~test/instances.js";
+import { localInstance } from "~test/instances.js";
 import { paymaster070 } from "~test/paymaster/paymaster070.js";
 import { SoftWebauthnDevice } from "~test/webauthn.js";
 import {
@@ -81,14 +81,13 @@ import { mintableERC20Abi, mintableERC20Bytecode } from "../utils.js";
 
 // Note: These tests maintain a shared state to not break the local-running rundler by desyncing the chain.
 describe("MA v2 Tests", async () => {
-  const instance = local070Instance;
   const isValidSigSuccess = "0x1626ba7e";
 
-  let client: ReturnType<typeof instance.getClient> &
+  let client: ReturnType<typeof localInstance.getClient> &
     ReturnType<typeof publicActions> &
     TestActions;
   beforeAll(async () => {
-    client = instance
+    client = localInstance
       .getClient()
       .extend(publicActions)
       .extend(testActions({ mode: "anvil" }));
@@ -113,7 +112,7 @@ describe("MA v2 Tests", async () => {
   it("sends a simple UO", async () => {
     const provider = await givenConnectedProvider({ signer });
 
-    await setBalance(instance.getClient(), {
+    await setBalance(localInstance.getClient(), {
       address: provider.getAddress(),
       value: parseEther("20"),
     });
@@ -143,7 +142,7 @@ describe("MA v2 Tests", async () => {
   it("sends a simple UO with webauthn account", async () => {
     const { provider } = await givenWebAuthnProvider();
 
-    await setBalance(instance.getClient(), {
+    await setBalance(localInstance.getClient(), {
       address: provider.getAddress(),
       value: parseEther("2"),
     });
@@ -175,7 +174,7 @@ describe("MA v2 Tests", async () => {
       installValidationActions,
     );
 
-    await setBalance(instance.getClient(), {
+    await setBalance(localInstance.getClient(), {
       address: provider.getAddress(),
       value: parseEther("2"),
     });
@@ -255,7 +254,7 @@ describe("MA v2 Tests", async () => {
     async () => {
       const { provider } = await givenWebAuthnProvider();
 
-      await setBalance(instance.getClient(), {
+      await setBalance(localInstance.getClient(), {
         address: provider.getAddress(),
         value: parseEther("2"),
       });
@@ -264,7 +263,7 @@ describe("MA v2 Tests", async () => {
 
       let signature = await provider.signMessage({ message });
 
-      const publicClient = instance.getClient().extend(publicActions);
+      const publicClient = localInstance.getClient().extend(publicActions);
 
       // TODO: should be using verifyTypedData here
       const isValid = await publicClient.verifyMessage({
@@ -283,7 +282,7 @@ describe("MA v2 Tests", async () => {
       installValidationActions,
     );
 
-    await setBalance(instance.getClient(), {
+    await setBalance(localInstance.getClient(), {
       address: provider.getAddress(),
       value: parseEther("2"),
     });
@@ -338,9 +337,9 @@ describe("MA v2 Tests", async () => {
 
     // connect session key
     let sessionKeyClient = await createModularAccountV2Client({
-      chain: instance.chain,
+      chain: localInstance.chain,
       signer: sessionKey,
-      transport: custom(instance.getClient()),
+      transport: custom(localInstance.getClient()),
       accountAddress: provider.getAddress(),
       signerEntity: { entityId: 1, isGlobalValidation: true },
     });
@@ -357,7 +356,7 @@ describe("MA v2 Tests", async () => {
       installValidationActions,
     );
 
-    await setBalance(instance.getClient(), {
+    await setBalance(localInstance.getClient(), {
       address: provider.getAddress(),
       value: parseEther("2"),
     });
@@ -447,9 +446,9 @@ describe("MA v2 Tests", async () => {
 
     // connect session key
     let sessionKeyClient = await createModularAccountV2Client({
-      chain: instance.chain,
+      chain: localInstance.chain,
       signer: sessionKey,
-      transport: custom(instance.getClient()),
+      transport: custom(localInstance.getClient()),
       accountAddress: provider.getAddress(),
       signerEntity: { entityId: 1, isGlobalValidation: true },
     });
@@ -498,9 +497,9 @@ describe("MA v2 Tests", async () => {
 
     // connect session key and send tx with session key
     let sessionKeyClient = await createModularAccountV2Client({
-      chain: instance.chain,
+      chain: localInstance.chain,
       signer: sessionKey,
-      transport: custom(instance.getClient()),
+      transport: custom(localInstance.getClient()),
       accountAddress: provider.getAddress(),
       signerEntity: { entityId: 1, isGlobalValidation: true },
     });
@@ -581,8 +580,8 @@ describe("MA v2 Tests", async () => {
 
     // Initialize the session key client corresponding to the session key we will install in the deferred action
     let sessionKeyClient = await createModularAccountV2Client({
-      transport: custom(instance.getClient()),
-      chain: instance.chain,
+      transport: custom(localInstance.getClient()),
+      chain: localInstance.chain,
       accountAddress: provider.getAddress(),
       signer: sessionKey,
       initCode: await provider.account.getInitCode(), // must be called with the owner provider!
@@ -617,7 +616,7 @@ describe("MA v2 Tests", async () => {
 
     const walletClient = createWalletClient({
       chain: provider.chain,
-      transport: custom(instance.getClient()),
+      transport: custom(localInstance.getClient()),
       account: privateKeyToAccount(generatePrivateKey()),
     });
 
@@ -693,9 +692,9 @@ describe("MA v2 Tests", async () => {
 
     // Initialize the session key client corresponding to the session key we will install in the deferred action
     let sessionKeyClient = await createModularAccountV2Client({
-      chain: instance.chain,
+      chain: localInstance.chain,
       signer: sessionKey,
-      transport: custom(instance.getClient()),
+      transport: custom(localInstance.getClient()),
       accountAddress: provider.getAddress(),
       initCode: await provider.account.getInitCode(),
       deferredAction: deferredActionDigest,
@@ -802,8 +801,8 @@ describe("MA v2 Tests", async () => {
 
     // Initialize the session key client corresponding to the session key we will install in the deferred action
     let sessionKeyClient = await createModularAccountV2Client({
-      transport: custom(instance.getClient()),
-      chain: instance.chain,
+      transport: custom(localInstance.getClient()),
+      chain: localInstance.chain,
       accountAddress: provider.getAddress(),
       signer: sessionKey,
       initCode: await provider.account.getInitCode(),
@@ -868,9 +867,9 @@ describe("MA v2 Tests", async () => {
     // Create a client with the first session key
     let sessionKeyClient = (
       await createModularAccountV2Client({
-        chain: instance.chain,
+        chain: localInstance.chain,
         signer: sessionKey,
-        transport: custom(instance.getClient()),
+        transport: custom(localInstance.getClient()),
         accountAddress: provider.getAddress(),
         signerEntity: {
           entityId: sessionKeyEntityId,
@@ -922,8 +921,8 @@ describe("MA v2 Tests", async () => {
 
     // Initialize the session key client corresponding to the session key we will install in the deferred action
     let newSessionKeyClient = await createModularAccountV2Client({
-      transport: custom(instance.getClient()),
-      chain: instance.chain,
+      transport: custom(localInstance.getClient()),
+      chain: localInstance.chain,
       accountAddress: provider.getAddress(),
       signer: newSessionKey,
       initCode: await provider.account.getInitCode(),
@@ -986,9 +985,9 @@ describe("MA v2 Tests", async () => {
 
     // connect session key and send tx with session key
     let sessionKeyClient = await createModularAccountV2Client({
-      chain: instance.chain,
+      chain: localInstance.chain,
       signer: sessionKey,
-      transport: custom(instance.getClient()),
+      transport: custom(localInstance.getClient()),
       accountAddress: provider.getAddress(),
       signerEntity: { entityId: 1, isGlobalValidation: true },
     });
@@ -1544,7 +1543,7 @@ describe("MA v2 Tests", async () => {
 
     // force block timestamp to be inside of range
     await client.setNextBlockTimestamp({
-      timestamp: 1754507101n,
+      timestamp: 1854507101n,
     });
 
     await client.mine({
@@ -1871,9 +1870,9 @@ describe("MA v2 Tests", async () => {
 
   it("upgrade from a lightaccount", async () => {
     const lightAccountClient = await createLightAccountClient({
-      chain: instance.chain,
+      chain: localInstance.chain,
       signer,
-      transport: custom(instance.getClient()),
+      transport: custom(localInstance.getClient()),
       version: "v2.0.0",
     });
 
@@ -1893,7 +1892,7 @@ describe("MA v2 Tests", async () => {
     });
 
     const maV2Client = createSmartAccountClient({
-      chain: instance.chain,
+      chain: localInstance.chain,
       transport: custom(client),
       account: await createModularAccountV2FromExisting(),
     });
@@ -1946,9 +1945,9 @@ describe("MA v2 Tests", async () => {
       .mockImplementation(() => "faked" as any);
     expect(
       await createModularAccountV2Client({
-        chain: instance.chain,
+        chain: localInstance.chain,
         signer,
-        transport: custom(instance.getClient()),
+        transport: custom(localInstance.getClient()),
       }),
     ).toMatch("faked");
 
@@ -1974,19 +1973,19 @@ describe("MA v2 Tests", async () => {
     rpId?: ToWebAuthnAccountParameters["rpId"];
   }) =>
     createModularAccountV2Client({
-      chain: instance.chain,
+      chain: localInstance.chain,
       accountAddress,
       signerEntity,
       credential,
       getFn,
       rpId,
       mode: "webauthn",
-      transport: custom(instance.getClient()),
+      transport: custom(localInstance.getClient()),
       ...(paymasterMiddleware === "alchemyGasAndPaymasterAndData"
         ? alchemyGasAndPaymasterAndDataMiddleware({
             policyId: "FAKE_POLICY_ID",
             // @ts-ignore (expects an alchemy transport, but we're using a custom transport for mocking)
-            transport: custom(instance.getClient()),
+            transport: custom(localInstance.getClient()),
           })
         : paymasterMiddleware === "erc7677"
           ? erc7677Middleware()
@@ -2024,20 +2023,20 @@ describe("MA v2 Tests", async () => {
     paymasterMiddleware?: "alchemyGasAndPaymasterAndData" | "erc7677";
   }) =>
     createModularAccountV2Client({
-      chain: instance.chain,
+      chain: localInstance.chain,
       signer,
       accountAddress,
       signerEntity,
-      transport: custom(instance.getClient()),
+      transport: custom(localInstance.getClient()),
       feeEstimator: alchemyFeeEstimator(
         // @ts-ignore (expects an alchemy transport, but we're using a custom transport for mocking)
-        custom(instance.getClient()),
+        custom(localInstance.getClient()),
       ),
       ...(paymasterMiddleware === "alchemyGasAndPaymasterAndData"
         ? alchemyGasAndPaymasterAndDataMiddleware({
             policyId: "FAKE_POLICY_ID",
             // @ts-ignore (expects an alchemy transport, but we're using a custom transport for mocking)
-            transport: custom(instance.getClient()),
+            transport: custom(localInstance.getClient()),
           })
         : paymasterMiddleware === "erc7677"
           ? erc7677Middleware()

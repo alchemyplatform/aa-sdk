@@ -1,4 +1,4 @@
-import { local060Instance } from "~test/instances.js";
+import { localInstance } from "~test/instances.js";
 import {
   publicActions,
   type TestActions,
@@ -29,14 +29,12 @@ import { setBalance } from "viem/actions";
 
 // Note: These tests maintain a shared state to not break the local-running rundler by desyncing the chain.
 describe("MA v1 Account Tests", async () => {
-  const instance = local060Instance;
-
-  let client: ReturnType<typeof instance.getClient> &
+  let client: ReturnType<typeof localInstance.getClient> &
     ReturnType<typeof publicActions> &
     TestActions;
 
   beforeAll(async () => {
-    client = instance
+    client = localInstance
       .getClient()
       .extend(publicActions)
       .extend(testActions({ mode: "anvil" }));
@@ -177,7 +175,7 @@ describe("MA v1 Account Tests", async () => {
       otherOwners,
     });
 
-    await setBalance(instance.getClient(), {
+    await setBalance(localInstance.getClient(), {
       address: provider.account.address,
       value: parseEther("10"),
     });
@@ -382,8 +380,8 @@ describe("MA v1 Account Tests", async () => {
   }) => {
     const account = await toMultiOwnerModularAccountV1({
       client: createPublicClient({
-        transport: custom(instance.getClient()),
-        chain: instance.chain,
+        transport: custom(localInstance.getClient()),
+        chain: localInstance.chain,
       }),
       accountAddress,
       owners: [signer, ...(otherOwners || [])],
@@ -393,11 +391,11 @@ describe("MA v1 Account Tests", async () => {
 
     return createBundlerClient({
       account,
-      transport: custom(instance.getClient()),
-      chain: instance.chain,
+      transport: custom(localInstance.getClient()),
+      chain: localInstance.chain,
       paymaster: paymaster
         ? createPaymasterClient({
-            transport: custom(instance.getClient()),
+            transport: custom(localInstance.getClient()),
           })
         : undefined,
       paymasterContext: paymaster ? { policyId: "test-policy" } : undefined,

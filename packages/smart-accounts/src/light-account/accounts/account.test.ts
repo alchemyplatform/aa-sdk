@@ -14,7 +14,7 @@ import {
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import { setBalance } from "viem/actions";
 import { accounts } from "~test/constants.js";
-import { local060Instance } from "~test/instances.js";
+import { localInstance } from "~test/instances.js";
 import { singleOwnerLightAccountActions } from "../decorators/singleOwner.js";
 import type { LightAccountVersion } from "../registry.js";
 import { AccountVersionRegistry } from "../registry.js";
@@ -26,17 +26,16 @@ const versions = Object.keys(
 ) as LightAccountVersion<"LightAccount">[];
 
 describe("Light Account Tests", () => {
-  let instance = local060Instance;
-  let client: ReturnType<typeof instance.getClient>;
   const signerAccount = privateKeyToAccount(generatePrivateKey());
 
+  let client: ReturnType<typeof localInstance.getClient>;
+
   beforeAll(async () => {
-    client = instance.getClient();
+    client = localInstance.getClient();
   });
 
-  it.each(versions)(
-    "should return correct dummy signature",
-    async (version) => {
+  describe.each(versions)("%s", (version) => {
+    it("should return correct dummy signature", async () => {
       const { account } = await givenConnectedProvider({
         signerAccount,
         version,
@@ -59,95 +58,98 @@ describe("Light Account Tests", () => {
         default:
           throw new Error(`Unknown version ${version}`);
       }
-    },
-  );
-
-  it.each(versions)("should correctly sign the message", async (version) => {
-    const provider = await givenConnectedProvider({
-      signerAccount,
-      version,
     });
 
-    const { account } = provider;
+    it("should correctly sign the message", async () => {
+      const provider = await givenConnectedProvider({
+        signerAccount,
+        version,
+      });
 
-    const message = "hello world";
-    switch (version) {
-      case "v1.0.2":
-        await expect(account.signMessage({ message })).rejects.toThrowError(
-          "Version v1.0.2 of LightAccount doesn't support 1271",
-        );
-        break;
-      case "v1.0.1":
-      case "v1.1.0":
-      case "v2.0.0":
-      case "v2.1.0":
-      case "v2.2.0":
-        {
-          const signature = await account.signMessage({
-            message,
-          });
+      const { account } = provider;
 
-          // We must use a public client, rather than an account client, to verify the message, because AA-SDK incorrectly attaches the account address as a "from" field to all actions taken by that client, including the `eth_call` used internally by viem's signature verifier logic. Per EIP-684, contract creation reverts on non-zero nonce, and the `eth_call`'s from field implicitly increases the nonce of the account contract, causing the contract creation to revert.
-          expect(
-            await client.extend(publicActions).verifyMessage({
-              address: account.address,
+      const message = "hello world";
+      switch (version) {
+        case "v1.0.2":
+          await expect(account.signMessage({ message })).rejects.toThrowError(
+            "Version v1.0.2 of LightAccount doesn't support 1271",
+          );
+          break;
+        case "v1.0.1":
+        case "v1.1.0":
+        case "v2.0.0":
+        case "v2.1.0":
+        case "v2.2.0":
+          {
+            const signature = await account.signMessage({
               message,
-              signature,
-            }),
-          ).toBe(true);
-        }
-        break;
-      default:
-        throw new Error(`Unknown version ${version}`);
-    }
-  });
+            });
 
-  it.each(versions)("should correctly sign typed data", async (version) => {
-    const { account } = await givenConnectedProvider({
-      signerAccount,
-      version,
+            // We must use a public client, rather than an account client, to verify the message, because AA-SDK incorrectly attaches the account address as a "from" field to all actions taken by that client, including the `eth_call` used internally by viem's signature verifier logic. Per EIP-684, contract creation reverts on non-zero nonce, and the `eth_call`'s from field implicitly increases the nonce of the account contract, causing the contract creation to revert.
+            expect(
+              await localInstance
+                .getClient()
+                .extend(publicActions)
+                .verifyMessage({
+                  address: account.address,
+                  message,
+                  signature,
+                }),
+            ).toBe(true);
+          }
+          break;
+        default:
+          throw new Error(`Unknown version ${version}`);
+      }
     });
-    const typedData = {
-      types: {
-        Request: [{ name: "hello", type: "string" }],
-      },
-      primaryType: "Request",
-      message: {
-        hello: "world",
-      },
-    } as const;
-    switch (version) {
-      case "v1.0.2":
-        await expect(account.signTypedData(typedData)).rejects.toThrowError(
-          "Version v1.0.2 of LightAccount doesn't support 1271",
-        );
-        break;
-      case "v1.1.0":
-      case "v1.0.1":
-      case "v2.0.0":
-      case "v2.1.0":
-      case "v2.2.0":
-        {
-          const signature = await account.signTypedData(typedData);
 
-          // See above comment for context on the duplicate client.
-          expect(
-            await client.extend(publicActions).verifyTypedData({
-              address: account.address,
-              signature,
-              ...typedData,
-            }),
-          ).toBe(true);
-        }
-        break;
-      default:
-        throw new Error(`Unknown version ${version}`);
-    }
-  });
+    it("should correctly sign typed data", async () => {
+      const { account } = await givenConnectedProvider({
+        signerAccount,
+        version,
+      });
+      const typedData = {
+        types: {
+          Request: [{ name: "hello", type: "string" }],
+        },
+        primaryType: "Request",
+        message: {
+          hello: "world",
+        },
+      } as const;
+      switch (version) {
+        case "v1.0.2":
+          await expect(account.signTypedData(typedData)).rejects.toThrowError(
+            "Version v1.0.2 of LightAccount doesn't support 1271",
+          );
+          break;
+        case "v1.1.0":
+        case "v1.0.1":
+        case "v2.0.0":
+        case "v2.1.0":
+        case "v2.2.0":
+          {
+            const signature = await account.signTypedData(typedData);
 
-  it.each(versions)(
-    "should correctly encode transferOwnership data",
-    async (version) => {
+            // See above comment for context on the duplicate client.
+            expect(
+              await localInstance
+                .getClient()
+                .extend(publicActions)
+                .verifyTypedData({
+                  address: account.address,
+                  signature,
+                  ...typedData,
+                }),
+            ).toBe(true);
+          }
+          break;
+        default:
+          throw new Error(`Unknown version ${version}`);
+      }
+    });
+
+    it("should correctly encode transferOwnership data", async () => {
       const { account } = await givenConnectedProvider({
         signerAccount,
         version,
@@ -159,12 +161,9 @@ describe("Light Account Tests", () => {
       ).toBe(
         "0xf2fde38b000000000000000000000000deadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
       );
-    },
-  );
+    });
 
-  it.each(versions)(
-    "should correctly encode and decode a single call transaction",
-    async (version) => {
+    it("should correctly encode and decode a single call transaction", async () => {
       const provider = await givenConnectedProvider({ signerAccount, version });
       const data = [
         {
@@ -189,12 +188,9 @@ describe("Light Account Tests", () => {
       expect(decoded[0].data?.toLowerCase()).toEqual(
         data[0].data?.toLowerCase(),
       );
-    },
-  );
+    });
 
-  it.each(versions)(
-    "should correctly encode and decode a single call transaction with value",
-    async (version) => {
+    it("should correctly encode and decode a single call transaction with value", async () => {
       const provider = await givenConnectedProvider({ signerAccount, version });
       const data = [
         {
@@ -220,12 +216,9 @@ describe("Light Account Tests", () => {
       expect(decoded[0].data?.toLowerCase()).toEqual(
         data[0].data?.toLowerCase(),
       );
-    },
-  );
+    });
 
-  it.each(versions)(
-    "should correctly encode and decode batch transaction data",
-    async (version) => {
+    it("should correctly encode and decode batch transaction data", async () => {
       const provider = await givenConnectedProvider({ signerAccount, version });
       const data = [
         {
@@ -259,161 +252,9 @@ describe("Light Account Tests", () => {
       expect(decoded[1].data?.toLowerCase()).toEqual(
         data[1].data?.toLowerCase(),
       );
-    },
-  );
-
-  it("should successfully get counterfactual address", async () => {
-    const provider = await givenConnectedProvider({
-      signerAccount: accounts.fundedAccountOwner,
-    });
-    expect(provider.account.address).toMatchInlineSnapshot(
-      '"0x9EfDfCB56390eDd8b2eAE6daBC148CED3491AAf6"',
-    );
-  });
-
-  it("should execute successfully", async () => {
-    const provider = await givenConnectedProvider({
-      signerAccount,
     });
 
-    await setBalance(instance.getClient(), {
-      address: provider.account.address,
-      value: parseEther("10"),
-    });
-
-    const result = await provider.sendUserOperation({
-      calls: [
-        {
-          to: provider.account.entryPoint.address,
-          data: "0x",
-          value: parseEther("1"),
-        },
-      ],
-    });
-
-    const receipt = provider.waitForUserOperationReceipt({ hash: result });
-
-    await expect(receipt).resolves.not.toThrowError();
-  }, 30_000);
-
-  it("should execute successfully after account has already been deployed", async () => {
-    const provider = await givenConnectedProvider({
-      signerAccount,
-    });
-
-    await setBalance(instance.getClient(), {
-      address: provider.account.address,
-      value: parseEther("10"),
-    });
-
-    const result = await provider.sendUserOperation({
-      calls: [
-        {
-          to: provider.account.entryPoint.address,
-          data: "0x",
-          value: parseEther("1"),
-        },
-      ],
-    });
-
-    const receipt = provider.waitForUserOperationReceipt({ hash: result });
-
-    await expect(receipt).resolves.not.toThrowError();
-
-    const result2 = await provider.sendUserOperation({
-      calls: [
-        {
-          to: provider.account.entryPoint.address,
-          data: "0x",
-          value: parseEther("1"),
-        },
-      ],
-    });
-
-    const receipt2 = provider.waitForUserOperationReceipt({ hash: result2 });
-    await expect(receipt2).resolves.not.toThrowError();
-  }, 30_000);
-
-  it("should fail to execute if account address is not deployed and not correct", async () => {
-    const accountAddress = "0xc33AbD9621834CA7c6Fc9f9CC3c47b9c17B03f9F";
-    const provider = await givenConnectedProvider({
-      signerAccount,
-      accountAddress,
-    });
-
-    const result = provider.sendUserOperation({
-      calls: [
-        {
-          to: provider.account.entryPoint.address,
-          data: "0x",
-        },
-      ],
-    });
-
-    await expect(result).rejects.toThrowError();
-  });
-
-  it("should successfully execute with paymaster info using erc-7677 middleware", async () => {
-    const provider = await givenConnectedProvider({
-      signerAccount,
-      paymaster: true,
-    });
-
-    await setBalance(instance.getClient(), {
-      address: provider.account.address,
-      value: parseEther("0"),
-    });
-
-    const result = await provider.sendUserOperation({
-      calls: [
-        {
-          to: provider.account.entryPoint.address,
-          data: "0x",
-        },
-      ],
-    });
-
-    const receipt = provider.waitForUserOperationReceipt({ hash: result });
-
-    await expect(receipt).resolves.not.toThrowError();
-  });
-
-  it("should transfer ownership successfully", async () => {
-    // create a throwaway address
-    const throwawaySigner = privateKeyToAccount(generatePrivateKey());
-    const throwawayClient = await givenConnectedProvider({
-      signerAccount: throwawaySigner,
-    });
-
-    // fund the throwaway address
-    await setBalance(client, {
-      address: throwawayClient.account.address,
-      value: 200000000000000000n,
-    });
-
-    // create new signer and transfer ownership
-    const newOwner = privateKeyToAccount(generatePrivateKey());
-
-    const hash = await throwawayClient.transferOwnership({
-      newOwner: newOwner.address,
-    });
-
-    await throwawayClient.waitForUserOperationReceipt({ hash });
-
-    const newOwnerClient = await givenConnectedProvider({
-      signerAccount: newOwner,
-      accountAddress: throwawayClient.account.address,
-    });
-
-    const newOwnerAddress = await newOwnerClient.account.getOwnerAddress();
-
-    expect(newOwnerAddress).not.toBe(throwawaySigner.address);
-    expect(newOwnerAddress).toBe(newOwner.address);
-  }, 100000);
-
-  it.each(versions)(
-    "should expose prepare and format functions that work",
-    async (version) => {
+    it("should expose prepare and format functions that work", async () => {
       if (version !== "v1.0.2") {
         const provider = await givenConnectedProvider({
           signerAccount,
@@ -437,21 +278,196 @@ describe("Light Account Tests", () => {
         // We use `includes` to check against 6492, and slice to remove the 0x prefix
         expect(fullSignature.includes(signature.slice(2))).toBe(true);
       }
-    },
-  );
+    });
+
+    it("should successfully get counterfactual address", async () => {
+      const provider = await givenConnectedProvider({
+        signerAccount: accounts.fundedAccountOwner,
+        version,
+      });
+      expect(provider.account.address).toMatchSnapshot();
+    });
+
+    // skip v0.9 due to Reentrancy() issue with alloy
+    it.skipIf(version === "v2.2.0")(
+      "should execute successfully",
+      async () => {
+        const provider = await givenConnectedProvider({
+          signerAccount,
+          version,
+        });
+
+        await setBalance(client, {
+          address: provider.account.address,
+          value: parseEther("10"),
+        });
+
+        const result = await provider.sendUserOperation({
+          calls: [
+            {
+              to: provider.account.entryPoint.address,
+              data: "0x",
+              value: parseEther("1"),
+            },
+          ],
+        });
+
+        const receipt = provider.waitForUserOperationReceipt({ hash: result });
+
+        await expect(receipt).resolves.not.toThrowError();
+      },
+      30_000,
+    );
+
+    // skip v0.9 due to Reentrancy() issue with alloy
+    it.skipIf(version === "v2.2.0")(
+      "should execute successfully after account has already been deployed",
+      async () => {
+        const provider = await givenConnectedProvider({
+          signerAccount,
+          version,
+        });
+
+        await setBalance(client, {
+          address: provider.account.address,
+          value: parseEther("10"),
+        });
+
+        const result = await provider.sendUserOperation({
+          calls: [
+            {
+              to: provider.account.entryPoint.address,
+              data: "0x",
+              value: parseEther("1"),
+            },
+          ],
+        });
+
+        const receipt = provider.waitForUserOperationReceipt({ hash: result });
+
+        await expect(receipt).resolves.not.toThrowError();
+
+        const result2 = await provider.sendUserOperation({
+          calls: [
+            {
+              to: provider.account.entryPoint.address,
+              data: "0x",
+              value: parseEther("1"),
+            },
+          ],
+        });
+
+        const receipt2 = provider.waitForUserOperationReceipt({
+          hash: result2,
+        });
+        await expect(receipt2).resolves.not.toThrowError();
+      },
+      30_000,
+    );
+
+    it("should fail to execute if account address is not deployed and not correct", async () => {
+      const accountAddress = "0xc33AbD9621834CA7c6Fc9f9CC3c47b9c17B03f9F";
+      const provider = await givenConnectedProvider({
+        signerAccount,
+        accountAddress,
+        version,
+      });
+
+      const result = provider.sendUserOperation({
+        calls: [
+          {
+            to: provider.account.entryPoint.address,
+            data: "0x",
+          },
+        ],
+      });
+
+      await expect(result).rejects.toThrowError();
+    });
+
+    // Skip for v0.9 entry point - paymaster not yet supported
+    it.skipIf(version === "v2.2.0")(
+      "should successfully execute with paymaster info using erc-7677 middleware",
+      async () => {
+        const provider = await givenConnectedProvider({
+          signerAccount,
+          paymaster: true,
+          version,
+        });
+
+        await setBalance(client, {
+          address: provider.account.address,
+          value: parseEther("0"),
+        });
+
+        const result = await provider.sendUserOperation({
+          calls: [
+            {
+              to: provider.account.entryPoint.address,
+              data: "0x",
+            },
+          ],
+        });
+
+        const receipt = provider.waitForUserOperationReceipt({ hash: result });
+
+        await expect(receipt).resolves.not.toThrowError();
+      },
+    );
+
+    // skip due to Reentrancy() issue with alloy
+    it.skipIf(version === "v2.2.0")(
+      "should transfer ownership successfully",
+      async () => {
+        // create a throwaway address
+        const throwawaySigner = privateKeyToAccount(generatePrivateKey());
+        const throwawayClient = await givenConnectedProvider({
+          signerAccount: throwawaySigner,
+          version,
+        });
+
+        // fund the throwaway address
+        await setBalance(client, {
+          address: throwawayClient.account.address,
+          value: 200000000000000000n,
+        });
+
+        // create new signer and transfer ownership
+        const newOwner = privateKeyToAccount(generatePrivateKey());
+
+        const hash = await throwawayClient.transferOwnership({
+          newOwner: newOwner.address,
+        });
+
+        await throwawayClient.waitForUserOperationReceipt({ hash });
+
+        const newOwnerClient = await givenConnectedProvider({
+          signerAccount: newOwner,
+          accountAddress: throwawayClient.account.address,
+          version,
+        });
+
+        const newOwnerAddress = await newOwnerClient.account.getOwnerAddress();
+
+        expect(newOwnerAddress).not.toBe(throwawaySigner.address);
+        expect(newOwnerAddress).toBe(newOwner.address);
+      },
+      100000,
+    );
+  });
 
   // TODO(v5): implement test for upgrading account to MSCA?
 
   // TODO(v5): implement test for upgrading account to MAv2 (prob will do this in the MAv2 tests)
 
   const givenConnectedProvider = async ({
-    version = "v1.1.0",
+    version,
     accountAddress,
     signerAccount,
     paymaster,
   }: {
     signerAccount: LocalAccount;
-    version?: LightAccountVersion<"LightAccount">;
+    version: LightAccountVersion<"LightAccount">;
     accountAddress?: Address;
     paymaster?: boolean;
   }) => {
