@@ -2,7 +2,7 @@ import type { UserOperationRequest } from "@aa-sdk/core";
 import type { Address, Client, Hex } from "viem";
 
 export type Paymaster = {
-  entryPointVersion: "0.6.0" | "0.7.0";
+  entryPointVersion: "0.6.0" | "0.7.0" | "0.8.0";
   entryPointAddress: Address;
   getPaymasterStubData: () =>
     | {
@@ -31,4 +31,5 @@ export type Paymaster = {
     bytecode: Hex;
     calldata: Hex;
   };
+  isV07Abi: boolean;
 };

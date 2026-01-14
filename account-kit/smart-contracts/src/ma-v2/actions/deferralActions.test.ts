@@ -36,7 +36,7 @@ import {
 import { entryPoint07Abi } from "viem/account-abstraction";
 import { mine, setBalance, setNextBlockBaseFeePerGas } from "viem/actions";
 import { accounts } from "~test/constants.js";
-import { local070Instance } from "~test/instances.js";
+import { localInstance } from "~test/instances.js";
 import {
   packAccountGasLimits,
   packPaymasterData,
@@ -44,8 +44,6 @@ import {
 
 // Note: These tests maintain a shared state to not break the local-running rundler by desyncing the chain.
 describe("MA v2 deferral actions tests", async () => {
-  const instance = local070Instance;
-
   const target = "0x000000000000000000000000000000000000dEaD";
   const sendAmount = parseEther("1");
 
@@ -66,7 +64,7 @@ describe("MA v2 deferral actions tests", async () => {
       })
     ).extend(deferralActions);
 
-    await setBalance(instance.getClient(), {
+    await setBalance(localInstance.getClient(), {
       address: provider.getAddress(),
       value: parseEther("30"),
     });
@@ -110,15 +108,15 @@ describe("MA v2 deferral actions tests", async () => {
     { retry: 3, timeout: 30_000 },
     async () => {
       const sessionKeyClient = await createModularAccountV2Client({
-        transport: custom(instance.getClient()),
-        chain: instance.chain,
+        transport: custom(localInstance.getClient()),
+        chain: localInstance.chain,
         accountAddress,
         signer: sessionKey,
         initCode,
         deferredAction: deferredActionDigest,
         feeEstimator: alchemyFeeEstimator(
           // @ts-ignore (expects an alchemy transport, but we're using a custom transport for mocking)
-          custom(instance.getClient()),
+          custom(localInstance.getClient()),
         ),
       });
 
@@ -134,11 +132,11 @@ describe("MA v2 deferral actions tests", async () => {
         },
       });
 
-      await setNextBlockBaseFeePerGas(instance.getClient(), {
+      await setNextBlockBaseFeePerGas(localInstance.getClient(), {
         baseFeePerGas: parseGwei("1"),
       });
 
-      await mine(instance.getClient(), { blocks: 5 });
+      await mine(localInstance.getClient(), { blocks: 5 });
 
       await sessionKeyClient.waitForUserOperationTransaction({
         hash: uoResult.hash,
@@ -161,10 +159,10 @@ describe("MA v2 deferral actions tests", async () => {
         },
       });
 
-      await setNextBlockBaseFeePerGas(instance.getClient(), {
+      await setNextBlockBaseFeePerGas(localInstance.getClient(), {
         baseFeePerGas: parseGwei("1"),
       });
-      await mine(instance.getClient(), { blocks: 5 });
+      await mine(localInstance.getClient(), { blocks: 5 });
 
       await sessionKeyClient.waitForUserOperationTransaction({
         hash: uoResult2.hash,
@@ -182,15 +180,15 @@ describe("MA v2 deferral actions tests", async () => {
     { retry: 3, timeout: 30_000 },
     async () => {
       const sessionKeyClient = await createModularAccountV2Client({
-        transport: custom(instance.getClient()),
-        chain: instance.chain,
+        transport: custom(localInstance.getClient()),
+        chain: localInstance.chain,
         accountAddress,
         signer: sessionKey,
         initCode,
         deferredAction: deferredActionDigest,
         feeEstimator: alchemyFeeEstimator(
           // @ts-ignore (expects an alchemy transport, but we're using a custom transport for mocking)
-          custom(instance.getClient()),
+          custom(localInstance.getClient()),
         ),
       });
 
@@ -206,7 +204,7 @@ describe("MA v2 deferral actions tests", async () => {
         },
       });
 
-      await setNextBlockBaseFeePerGas(instance.getClient(), {
+      await setNextBlockBaseFeePerGas(localInstance.getClient(), {
         baseFeePerGas: 10n,
       });
 
@@ -220,15 +218,15 @@ describe("MA v2 deferral actions tests", async () => {
       });
 
       const sessionKeyClient2 = await createModularAccountV2Client({
-        transport: custom(instance.getClient()),
-        chain: instance.chain,
+        transport: custom(localInstance.getClient()),
+        chain: localInstance.chain,
         accountAddress,
         signer: sessionKey,
         initCode,
         deferredAction: deferredActionDigest,
         feeEstimator: alchemyFeeEstimator(
           // @ts-ignore (expects an alchemy transport, but we're using a custom transport for mocking)
-          custom(instance.getClient()),
+          custom(localInstance.getClient()),
         ),
       });
 
@@ -240,7 +238,7 @@ describe("MA v2 deferral actions tests", async () => {
         },
       });
 
-      await setNextBlockBaseFeePerGas(instance.getClient(), {
+      await setNextBlockBaseFeePerGas(localInstance.getClient(), {
         baseFeePerGas: 10n,
       });
 
@@ -263,7 +261,7 @@ describe("MA v2 deferral actions tests", async () => {
       deferralActions,
     );
 
-    await setBalance(instance.getClient(), {
+    await setBalance(localInstance.getClient(), {
       address: provider.getAddress(),
       value: parseEther("2"),
     });
@@ -306,7 +304,7 @@ describe("MA v2 deferral actions tests", async () => {
       deferralActions,
     );
 
-    await setBalance(instance.getClient(), {
+    await setBalance(localInstance.getClient(), {
       address: provider.getAddress(),
       value: parseEther("2"),
     });
@@ -393,15 +391,15 @@ describe("MA v2 deferral actions tests", async () => {
 
     // Initialize the session key client corresponding to the session key we will install in the deferred action
     const sessionKeyClient = await createModularAccountV2Client({
-      transport: custom(instance.getClient()),
-      chain: instance.chain,
+      transport: custom(localInstance.getClient()),
+      chain: localInstance.chain,
       accountAddress,
       signer: sessionKey,
       initCode,
       deferredAction: deferredActionDigest,
       feeEstimator: alchemyFeeEstimator(
         // @ts-ignore (expects an alchemy transport, but we're using a custom transport for mocking)
-        custom(instance.getClient()),
+        custom(localInstance.getClient()),
       ),
     });
 
@@ -478,7 +476,7 @@ describe("MA v2 deferral actions tests", async () => {
       deferralActions,
     );
 
-    await setBalance(instance.getClient(), {
+    await setBalance(localInstance.getClient(), {
       address: provider.getAddress(),
       value: parseEther("2"),
     });
@@ -538,20 +536,20 @@ describe("MA v2 deferral actions tests", async () => {
     salt?: bigint;
   }) =>
     createModularAccountV2Client({
-      chain: instance.chain,
+      chain: localInstance.chain,
       signer,
       accountAddress,
       signerEntity,
-      transport: custom(instance.getClient()),
+      transport: custom(localInstance.getClient()),
       feeEstimator: alchemyFeeEstimator(
         // @ts-ignore (expects an alchemy transport, but we're using a custom transport for mocking)
-        custom(instance.getClient()),
+        custom(localInstance.getClient()),
       ),
       ...(paymasterMiddleware === "alchemyGasAndPaymasterAndData"
         ? alchemyGasAndPaymasterAndDataMiddleware({
             policyId: "FAKE_POLICY_ID",
             // @ts-ignore (expects an alchemy transport, but we're using a custom transport for mocking)
-            transport: custom(instance.getClient()),
+            transport: custom(localInstance.getClient()),
           })
         : paymasterMiddleware === "erc7677"
           ? erc7677Middleware()
