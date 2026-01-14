@@ -50,6 +50,8 @@ describe("Light Account Tests", () => {
           );
           break;
         case "v2.0.0":
+        case "v2.1.0":
+        case "v2.2.0":
           expect(await account.getStubSignature()).toBe(
             "0x00fffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c",
           );
@@ -78,6 +80,8 @@ describe("Light Account Tests", () => {
       case "v1.0.1":
       case "v1.1.0":
       case "v2.0.0":
+      case "v2.1.0":
+      case "v2.2.0":
         {
           const signature = await account.signMessage({
             message,
@@ -121,6 +125,8 @@ describe("Light Account Tests", () => {
       case "v1.1.0":
       case "v1.0.1":
       case "v2.0.0":
+      case "v2.1.0":
+      case "v2.2.0":
         {
           const signature = await account.signTypedData(typedData);
 

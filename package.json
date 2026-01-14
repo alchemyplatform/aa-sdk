@@ -19,7 +19,7 @@
   },
   "resolutions": {
     "wagmi": "2.16.9",
-    "viem": "^2.32.0",
+    "viem": "^2.44.2",
     "@noble/hashes": "^1.4.0",
     "@noble/curves": "^1.4.0",
     "zustand": "^5.0.0-rc.2",
@@ -90,7 +90,7 @@
     "typedoc-plugin-markdown": "^4.8.1",
     "typedoc-plugin-remark": "^2.0.1",
     "typescript": "^5.8.3",
-    "viem": "^2.32.0",
+    "viem": "^2.44.2",
     "vitest": "^2.1.9",
     "wagmi": "2.16.9",
     "webauthn-p256": "^0.0.10"

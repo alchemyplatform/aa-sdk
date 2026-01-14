@@ -1,5 +1,4 @@
 import {
-  concat,
   concatHex,
   encodeFunctionData,
   fromHex,
@@ -18,6 +17,7 @@ import {
 } from "viem";
 import {
   getUserOperationHash,
+  getUserOperationTypedData,
   toSmartAccount,
   type SmartAccountImplementation,
 } from "viem/account-abstraction";
@@ -28,7 +28,7 @@ import type {
   LightAccountVersion,
 } from "../registry.js";
 import { EIP1967_PROXY_IMPL_STORAGE_SLOT } from "../utils.js";
-import { AccountVersionRegistry } from "../registry.js";
+import { AccountVersionRegistry, isLightAccountVersion2 } from "../registry.js";
 import {
   encodeCallsLA as encodeCalls,
   decodeCallsLA as decodeCalls,
@@ -203,6 +203,8 @@ export async function toLightAccountBase<
           data: get1271Wrapper(messageHash, "1"),
         };
       case "v2.0.0":
+      case "v2.1.0":
+      case "v2.2.0":
         return {
           type: "eth_signTypedData_v4",
           data: get1271Wrapper(messageHash, "2"),
@@ -215,8 +217,10 @@ export async function toLightAccountBase<
   };
 
   const formatSignature = async (signature: Hex): Promise<Hex> => {
-    return version === "v2.0.0"
-      ? concat([SignaturePrefix.EOA, signature])
+    return isLightAccountVersion2(
+      version as LightAccountVersion<"LightAccount">,
+    )
+      ? concatHex([SignaturePrefix.EOA, signature])
       : signature;
   };
 
@@ -251,7 +255,9 @@ export async function toLightAccountBase<
         case "v1.1.0":
           return signature;
         case "v2.0.0":
-          return concat([SignaturePrefix.EOA, signature]);
+        case "v2.1.0":
+        case "v2.2.0":
+          return concatHex([SignaturePrefix.EOA, signature]);
         default:
           throw new BaseError(`Unknown version ${type} of ${String(version)}`);
       }
@@ -307,26 +313,59 @@ export async function toLightAccountBase<
 
     async signUserOperation(parameters) {
       const { chainId = client.chain.id, ...userOperation } = parameters;
-      const userOpHash = getUserOperationHash({
-        chainId,
-        entryPointAddress: entryPoint.address,
-        entryPointVersion: entryPoint.version,
-        userOperation: {
-          ...userOperation,
-          sender: accountAddress,
-        },
-      });
+      let signature: Hex;
 
-      const signMessageAction = getAction(client, signMessage, "signMessage");
+      switch (version) {
+        case "v1.0.1":
+        case "v1.0.2":
+        case "v1.1.0":
+        case "v2.0.0":
+          const userOpHash = getUserOperationHash({
+            chainId,
+            entryPointAddress: entryPoint.address,
+            entryPointVersion: entryPoint.version,
+            userOperation: {
+              ...userOperation,
+              sender: accountAddress,
+            },
+          });
 
-      const signature = await signMessageAction({
-        account: owner,
-        message: { raw: userOpHash },
-      });
+          const signMessageAction = getAction(
+            client,
+            signMessage,
+            "signMessage",
+          );
 
-      return version === "v2.0.0"
-        ? concatHex([SignaturePrefix.EOA, signature])
-        : signature;
+          signature = await signMessageAction({
+            account: owner,
+            message: { raw: userOpHash },
+          });
+          break;
+        case "v2.1.0":
+        case "v2.2.0":
+          const signTypedDataAction = getAction(
+            client,
+            signTypedData,
+            "signTypedData",
+          );
+
+          signature = await signTypedDataAction({
+            account: owner,
+            ...getUserOperationTypedData({
+              chainId,
+              entryPointAddress: entryPoint.address,
+              userOperation: {
+                ...userOperation,
+                sender: accountAddress,
+              },
+            }),
+          });
+          break;
+        default:
+          throw new BaseError(`Unknown version ${type} of ${String(version)}`);
+      }
+
+      return formatSignature(signature);
     },
 
     extend: {
