@@ -37,7 +37,7 @@ export type RundlerClient<
  * @example
  * ```ts
  * import { createBundlerClient } from "viem/account-abstraction";
- * import { alchemyEstimateFeesPerGas } from "@alchemy/aa-infra";
+ * import { estimateFeesPerGas as alchemyEstimateFeesPerGas } from "@alchemy/aa-infra";
  *
  * const bundler = createBundlerClient({
  *   transport: http("<rundler-url>"),

@@ -40,16 +40,16 @@
   },
   "peerDependencies": {
     "@wagmi/core": "^2",
-    "viem": "^2.32.0"
+    "viem": "^2.44.2"
   },
   "devDependencies": {
     "@alchemy/wallet-api-types": "^0.1.0-alpha.18",
     "typescript-template": "*",
-    "viem": "^2.32.0"
+    "viem": "^2.44.2"
   },
   "dependencies": {
     "@alchemy/common": "^0.0.0-alpha.10",
-    "@alchemy/wallet-apis": "0.0.0-alpha.11"
+    "@alchemy/wallet-apis": "0.0.0-alpha.12"
   },
   "publishConfig": {
     "access": "public",

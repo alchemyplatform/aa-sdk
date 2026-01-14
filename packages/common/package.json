@@ -47,7 +47,7 @@
     "typescript-template": "*"
   },
   "dependencies": {
-    "viem": "^2.32.0"
+    "viem": "^2.44.2"
   },
   "publishConfig": {
     "access": "public",

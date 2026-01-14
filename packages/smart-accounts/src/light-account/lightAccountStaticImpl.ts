@@ -4,6 +4,10 @@ import {
   entryPoint07Abi,
   entryPoint06Address,
   entryPoint07Address,
+  entryPoint08Abi,
+  entryPoint08Address,
+  entryPoint09Abi,
+  entryPoint09Address,
 } from "viem/account-abstraction";
 import { LightAccountAbi_v1 } from "./abis/LightAccountAbi_v1.js";
 import { LightAccountFactoryAbi_v1 } from "./abis/LightAccountFactoryAbi_v1.js";
@@ -96,15 +100,6 @@ export const lightAccountStaticImplV1_1_0: LightAccountV1StaticImpl = {
   },
 };
 
-// Shared type and fields for all light account v2 implementations
-const lightAccountV2Base = {
-  entryPoint: {
-    abi: entryPoint07Abi,
-    address: entryPoint07Address,
-    version: "0.7",
-  },
-} satisfies Partial<StaticSmartAccountImplementation<false, "0.7">>;
-
 export const lightAccountStaticImplV2_0_0: StaticSmartAccountImplementation<
   false,
   "0.7",
@@ -113,7 +108,11 @@ export const lightAccountStaticImplV2_0_0: StaticSmartAccountImplementation<
   typeof LightAccountAbi_v2,
   typeof LightAccountFactoryAbi_v2
 > = {
-  ...lightAccountV2Base,
+  entryPoint: {
+    abi: entryPoint07Abi,
+    address: entryPoint07Address,
+    version: "0.7",
+  },
   accountAbi: LightAccountAbi_v2,
   accountImplementation: lowerAddress(
     "0x8E8e658E22B12ada97B402fF0b044D6A325013C7",
@@ -149,7 +148,11 @@ export const multiOwnerLightAccountStaticImplV2_0_0: StaticSmartAccountImplement
   typeof MultiOwnerLightAccountAbi,
   typeof MultiOwnerLightAccountFactoryAbi
 > = {
-  ...lightAccountV2Base,
+  entryPoint: {
+    abi: entryPoint07Abi,
+    address: entryPoint07Address,
+    version: "0.7",
+  },
   accountAbi: MultiOwnerLightAccountAbi,
   accountImplementation: lowerAddress(
     "0xd2c27F9eE8E4355f71915ffD5568cB3433b6823D",
@@ -167,6 +170,76 @@ export const multiOwnerLightAccountStaticImplV2_0_0: StaticSmartAccountImplement
     return predictMultiOwnerLightAccountAddress({
       salt: factoryArgs.salt,
       ownerAddresses: factoryArgs.owners,
+    });
+  },
+};
+
+export const lightAccountStaticImplV2_1_0: StaticSmartAccountImplementation<
+  false,
+  "0.8",
+  LightAccountFactoryArgs,
+  typeof entryPoint08Abi,
+  typeof LightAccountAbi_v2,
+  typeof LightAccountFactoryAbi_v2
+> = {
+  entryPoint: {
+    abi: entryPoint08Abi,
+    address: entryPoint08Address,
+    version: "0.8",
+  },
+  accountAbi: LightAccountAbi_v2,
+  accountImplementation: lowerAddress(
+    "0x2c53D0bD33A60db8881c7b049Df6fd762A1f059C",
+  ),
+  factoryAbi: LightAccountFactoryAbi_v2,
+  factoryAddress: lowerAddress("0x000000000000B1c70Df4DC2CcF86372714e14154"),
+  getFactoryData: (factoryArgs) => {
+    return encodeFunctionData({
+      abi: LightAccountFactoryAbi_v2,
+      functionName: "createAccount",
+      args: [factoryArgs.owner, factoryArgs.salt],
+    });
+  },
+  predictAccountAddress: (factoryArgs) => {
+    return predictLightAccountAddress({
+      salt: factoryArgs.salt,
+      ownerAddress: factoryArgs.owner,
+      version: "v2.1.0",
+    });
+  },
+};
+
+export const lightAccountStaticImplV2_2_0: StaticSmartAccountImplementation<
+  false,
+  "0.9",
+  LightAccountFactoryArgs,
+  typeof entryPoint09Abi,
+  typeof LightAccountAbi_v2,
+  typeof LightAccountFactoryAbi_v2
+> = {
+  entryPoint: {
+    abi: entryPoint09Abi,
+    address: entryPoint09Address,
+    version: "0.9",
+  },
+  accountAbi: LightAccountAbi_v2,
+  accountImplementation: lowerAddress(
+    "0x05FF1bF6Ac15d4990Ea77Ae60394629bcB16640d",
+  ),
+  factoryAbi: LightAccountFactoryAbi_v2,
+  factoryAddress: lowerAddress("0x0000000000003805C662f84E42E446C96a446e82"),
+  getFactoryData: (factoryArgs) => {
+    return encodeFunctionData({
+      abi: LightAccountFactoryAbi_v2,
+      functionName: "createAccount",
+      args: [factoryArgs.owner, factoryArgs.salt],
+    });
+  },
+  predictAccountAddress: (factoryArgs) => {
+    return predictLightAccountAddress({
+      salt: factoryArgs.salt,
+      ownerAddress: factoryArgs.owner,
+      version: "v2.2.0",
     });
   },
 };
