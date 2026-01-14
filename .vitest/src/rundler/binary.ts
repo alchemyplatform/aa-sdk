@@ -30,9 +30,7 @@ export async function downloadLatestRundlerRelease(
 
   try {
     // Get the list of releases from GitHub API
-    const releasesResponse = await fetch(repoUrl, {
-      headers: { Authorization: `Bearer ${process.env.GH_AUTH_TOKEN}` },
-    });
+    const releasesResponse = await fetch(repoUrl);
     if (!releasesResponse.ok) {
       throw new Error(
         `Failed to fetch releases: ${releasesResponse.statusText}`,
@@ -78,9 +76,7 @@ export async function downloadLatestRundlerRelease(
     const assetUrl = asset.browser_download_url;
 
     // Download the asset
-    const assetResponse = await fetch(assetUrl, {
-      headers: { Authorization: `Bearer ${process.env.GH_AUTH_TOKEN}` },
-    });
+    const assetResponse = await fetch(assetUrl);
     if (!assetResponse.ok) {
       throw new Error(`Failed to download asset: ${assetResponse.statusText}`);
     }
