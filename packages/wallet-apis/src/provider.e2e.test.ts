@@ -9,7 +9,7 @@ import {
   type Client,
   type Transport,
 } from "viem";
-import { alchemyTransport, type AlchemyTransport } from "@alchemy/common";
+import { type AlchemyTransport } from "@alchemy/common";
 import { privateKeyToAccount } from "viem/accounts";
 import { arbitrumSepolia } from "viem/chains";
 import {
