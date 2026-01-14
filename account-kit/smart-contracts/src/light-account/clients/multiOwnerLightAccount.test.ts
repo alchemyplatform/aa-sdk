@@ -14,19 +14,18 @@ import { custom, parseEther, publicActions, zeroAddress } from "viem";
 import { generatePrivateKey } from "viem/accounts";
 import { setBalance } from "viem/actions";
 import { accounts, poolId } from "~test/constants.js";
-import { local070Instance } from "~test/instances.js";
+import { localInstance } from "~test/instances.js";
 import { multiOwnerPluginActions } from "../../msca/plugins/multi-owner/index.js";
 import { getMSCAUpgradeToData } from "../../msca/utils.js";
 import type { LightAccountVersion } from "../types";
 import { createMultiOwnerLightAccountClient } from "./multiOwnerLightAccount.js";
 
 describe("MultiOwner Light Account Tests", () => {
-  const instance = local070Instance;
-  let client: ReturnType<typeof instance.getClient>;
+  let client: ReturnType<typeof localInstance.getClient>;
   let salt: bigint = BigInt(poolId());
 
   beforeAll(async () => {
-    client = instance.getClient();
+    client = localInstance.getClient();
   });
 
   const signer: SmartAccountSigner =
@@ -190,7 +189,7 @@ describe("MultiOwner Light Account Tests", () => {
       signer,
     });
 
-    await setBalance(instance.getClient(), {
+    await setBalance(localInstance.getClient(), {
       address: client.getAddress(),
       value: parseEther("10"),
     });
@@ -286,7 +285,7 @@ describe("MultiOwner Light Account Tests", () => {
 
     const upgradedClient = createSmartAccountClientFromExisting({
       client: createBundlerClient({
-        chain: instance.chain,
+        chain: localInstance.chain,
         transport: custom(client),
       }),
       account: await createMAAccount(),
@@ -321,17 +320,17 @@ describe("MultiOwner Light Account Tests", () => {
       accountAddress,
       version,
       transport: custom(client),
-      chain: instance.chain,
+      chain: localInstance.chain,
       salt: accountIndex ?? salt++,
       feeEstimator: alchemyFeeEstimator(
         // @ts-ignore (expects an alchemy transport, but we're using a custom transport for mocking)
-        custom(instance.getClient()),
+        custom(localInstance.getClient()),
       ),
       ...(paymasterMiddleware === "alchemyGasAndPaymasterAndData"
         ? alchemyGasAndPaymasterAndDataMiddleware({
             policyId: "FAKE_POLICY_ID",
             // @ts-ignore (expects an alchemy transport, but we're using a custom transport for mocking)
-            transport: custom(instance.getClient()),
+            transport: custom(localInstance.getClient()),
           })
         : paymasterMiddleware === "erc7677"
           ? erc7677Middleware({ context: { policyId: "FAKE_POLICY_ID" } })

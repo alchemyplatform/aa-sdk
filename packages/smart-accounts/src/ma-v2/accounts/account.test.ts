@@ -37,7 +37,7 @@ import {
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import { getBalance, setBalance } from "viem/actions";
 import { parsePublicKey } from "webauthn-p256";
-import { local070Instance } from "~test/instances.js";
+import { localInstance } from "~test/instances.js";
 import { paymaster070 } from "~test/paymaster/paymaster070.js";
 import { SoftWebauthnDevice } from "~test/webauthn.js";
 import { WebAuthnValidationModule } from "../modules/webauthn-validation/module.js";
@@ -65,15 +65,14 @@ import { EXECUTE_USER_OP_SELECTOR } from "../utils/account.js";
 
 // Note: These tests maintain a shared state to not break the local-running rundler by desyncing the chain.
 describe("MA v2 Account Tests", async () => {
-  const instance = local070Instance;
   const VALID_1271_SIG_MAGIC_BYTES = "0x1626ba7e";
 
-  let client: ReturnType<typeof instance.getClient> &
+  let client: ReturnType<typeof localInstance.getClient> &
     ReturnType<typeof publicActions> &
     TestActions;
 
   beforeAll(async () => {
-    client = instance
+    client = localInstance
       .getClient()
       .extend(publicActions)
       .extend(testActions({ mode: "anvil" }));
@@ -203,7 +202,7 @@ describe("MA v2 Account Tests", async () => {
   it("sends a simple UO", { retry: 3, timeout: 30_000 }, async () => {
     const provider = await givenConnectedProvider({ signer: owner });
 
-    await setBalance(instance.getClient(), {
+    await setBalance(localInstance.getClient(), {
       address: provider.account.address,
       value: parseEther("20"),
     });
@@ -238,7 +237,7 @@ describe("MA v2 Account Tests", async () => {
 
     const startingBalance = parseEther("20");
 
-    await setBalance(instance.getClient(), {
+    await setBalance(localInstance.getClient(), {
       address: provider.account.address,
       value: startingBalance,
     });
@@ -274,7 +273,7 @@ describe("MA v2 Account Tests", async () => {
         signer: toWebAuthnAccount(credential),
       });
 
-      await setBalance(instance.getClient(), {
+      await setBalance(localInstance.getClient(), {
         address: provider.account.address,
         value: parseEther("2"),
       });
@@ -306,7 +305,7 @@ describe("MA v2 Account Tests", async () => {
       signer: toWebAuthnAccount(credential),
     });
 
-    await setBalance(instance.getClient(), {
+    await setBalance(localInstance.getClient(), {
       address: provider.account.address,
       value: parseEther("2"),
     });
@@ -375,8 +374,8 @@ describe("MA v2 Account Tests", async () => {
     const signature = await provider.account.signMessage({ message });
 
     const publicClient = createPublicClient({
-      chain: instance.chain,
-      transport: custom(instance.getClient()),
+      chain: localInstance.chain,
+      transport: custom(localInstance.getClient()),
     });
     const isValid = await publicClient.verifyMessage({
       address: provider.account.address,
@@ -430,8 +429,8 @@ describe("MA v2 Account Tests", async () => {
     const signature = await provider.account.signTypedData(typedData);
 
     const publicClient = createPublicClient({
-      chain: instance.chain,
-      transport: custom(instance.getClient()),
+      chain: localInstance.chain,
+      transport: custom(localInstance.getClient()),
     });
     const isValid = await publicClient.verifyTypedData({
       ...typedData,
@@ -449,7 +448,7 @@ describe("MA v2 Account Tests", async () => {
         installValidationActions,
       );
 
-      await setBalance(instance.getClient(), {
+      await setBalance(localInstance.getClient(), {
         address: provider.account.address,
         value: parseEther("2"),
       });
@@ -520,7 +519,7 @@ describe("MA v2 Account Tests", async () => {
         installValidationActions,
       );
 
-      await setBalance(instance.getClient(), {
+      await setBalance(localInstance.getClient(), {
         address: provider.account.address,
         value: parseEther("2"),
       });
@@ -657,8 +656,8 @@ describe("MA v2 Account Tests", async () => {
           : formattedSig;
 
       const publicClient = createPublicClient({
-        chain: instance.chain,
-        transport: custom(instance.getClient()),
+        chain: localInstance.chain,
+        transport: custom(localInstance.getClient()),
       });
       const isValid = await publicClient.verifyMessage({
         address: provider.account.address,
@@ -674,8 +673,8 @@ describe("MA v2 Account Tests", async () => {
     { retry: 3, timeout: 30_000 },
     async () => {
       const publicClient = createPublicClient({
-        chain: instance.chain,
-        transport: custom(instance.getClient()),
+        chain: localInstance.chain,
+        transport: custom(localInstance.getClient()),
       });
 
       const provider = await givenConnectedProvider({
@@ -771,8 +770,8 @@ describe("MA v2 Account Tests", async () => {
           : formattedSig;
 
       const publicClient = createPublicClient({
-        chain: instance.chain,
-        transport: custom(instance.getClient()),
+        chain: localInstance.chain,
+        transport: custom(localInstance.getClient()),
       });
       const isValid = await publicClient.verifyMessage({
         address: provider.account.address,
@@ -942,7 +941,7 @@ describe("MA v2 Account Tests", async () => {
 
       const walletClient = createWalletClient({
         chain: provider.chain,
-        transport: custom(instance.getClient()),
+        transport: custom(localInstance.getClient()),
         account: privateKeyToAccount(generatePrivateKey()),
       });
 
@@ -2172,8 +2171,8 @@ describe("MA v2 Account Tests", async () => {
     const lightAccount = await toLightAccount({
       client: createWalletClient({
         account: owner,
-        transport: custom(instance.getClient()),
-        chain: instance.chain,
+        transport: custom(localInstance.getClient()),
+        chain: localInstance.chain,
       }),
       version: "v2.0.0",
       owner,
@@ -2181,8 +2180,8 @@ describe("MA v2 Account Tests", async () => {
 
     const lightAccountClient = createBundlerClient({
       account: lightAccount,
-      transport: custom(instance.getClient()),
-      chain: instance.chain,
+      transport: custom(localInstance.getClient()),
+      chain: localInstance.chain,
       userOperation: {
         estimateFeesPerGas,
       },
@@ -2227,15 +2226,15 @@ describe("MA v2 Account Tests", async () => {
         mode: "7702",
       });
 
-      await setBalance(instance.getClient(), {
+      await setBalance(localInstance.getClient(), {
         address: provider.account.address,
         value: parseEther("1"),
       });
 
       const walletClient = createWalletClient({
         account: owner,
-        transport: custom(instance.getClient()),
-        chain: instance.chain,
+        transport: custom(localInstance.getClient()),
+        chain: localInstance.chain,
       });
 
       const preparedAuthorization = provider.account.authorization
@@ -2270,8 +2269,8 @@ describe("MA v2 Account Tests", async () => {
 
       // Use `getCode` to check the delegation.
       const publicProvider = createPublicClient({
-        transport: custom(instance.getClient()),
-        chain: instance.chain,
+        transport: custom(localInstance.getClient()),
+        chain: localInstance.chain,
       });
       const code = await publicProvider.getCode({
         address: provider.account.address,
@@ -2333,8 +2332,8 @@ describe("MA v2 Account Tests", async () => {
   }) => {
     const account = await toModularAccountV2({
       client: createPublicClient({
-        transport: custom(instance.getClient()),
-        chain: instance.chain,
+        transport: custom(localInstance.getClient()),
+        chain: localInstance.chain,
       }),
       accountAddress,
       signerEntity,
@@ -2346,11 +2345,11 @@ describe("MA v2 Account Tests", async () => {
 
     return createBundlerClient({
       account,
-      transport: custom(instance.getClient()),
-      chain: instance.chain,
+      transport: custom(localInstance.getClient()),
+      chain: localInstance.chain,
       paymaster: paymaster
         ? createPaymasterClient({
-            transport: custom(instance.getClient()),
+            transport: custom(localInstance.getClient()),
           })
         : undefined,
       paymasterContext: paymaster ? { policyId: "test-policy" } : undefined,
