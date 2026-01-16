@@ -16,13 +16,13 @@ describe("swapActions decorator tests", () => {
   );
 
   it("should successfully request a same-chain quote", async () => {
-    const testAccountAddr = "0x0d1Ea60Dddd2a76F3a3afD6d78660d366C6A30c0";
+    const usdcHolderAddr = "0x463f5D63e5a5EDB8615b0e485A090a18Aba08578";
 
     const client = createSmartWalletClient({
       transport,
       chain: arbitrum,
       signer: {
-        getAddress: async () => testAccountAddr,
+        getAddress: async () => usdcHolderAddr,
         signMessage: async () => {
           throw new Error("Not implemented");
         },
@@ -58,13 +58,13 @@ describe("swapActions decorator tests", () => {
   }, 30_000);
 
   it("should successfully request a cross-chain quote", async () => {
-    const testAccountAddr = "0x0d1Ea60Dddd2a76F3a3afD6d78660d366C6A30c0";
+    const usdcHolderAddr = "0x463f5D63e5a5EDB8615b0e485A090a18Aba08578";
 
     const client = createSmartWalletClient({
       transport,
       chain: arbitrum,
       signer: {
-        getAddress: async () => testAccountAddr,
+        getAddress: async () => usdcHolderAddr,
         signMessage: async () => {
           throw new Error("Not implemented");
         },
