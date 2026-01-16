@@ -173,6 +173,11 @@ jobs:
           mv lerna.json lerna-v5.json
           mv lerna-v4.json.tmp lerna.json
 
+      # Format lerna-v5.json to satisfy Prettier checks
+      - name: Format Lerna Config
+        if: ${{ inputs.publish }}
+        run: npx prettier --write lerna-v5.json
+
       # Amend commit with restored lerna configs and create tag
       - name: Amend Commit and Tag Changes
         if: ${{ inputs.publish && env.lerna_published == 'true' }}
