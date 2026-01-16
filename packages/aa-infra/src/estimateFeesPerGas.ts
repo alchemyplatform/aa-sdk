@@ -65,6 +65,10 @@ export async function estimateFeesPerGas({
   maxFeePerGas: bigint;
   maxPriorityFeePerGas: bigint;
 }> {
+  // Cast to RundlerClient to access rundler-specific RPC methods and BundlerClient properties.
+  // This mirrors viem's pattern in prepareUserOperation.ts where they cast `client as unknown as BundlerClient`
+  // to access bundler-specific properties from a base Client type.
+  // See: https://github.com/wevm/viem/blob/d18b3b27/src/account-abstraction/actions/bundler/prepareUserOperation.ts#L355
   const rundlerClient = bundlerClient as RundlerClient;
 
   const [block, maxPriorityFeePerGasHex] = await Promise.all([
