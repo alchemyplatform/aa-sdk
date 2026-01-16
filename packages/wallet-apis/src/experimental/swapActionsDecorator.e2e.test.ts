@@ -2,15 +2,15 @@ import { arbitrum } from "viem/chains";
 import { apiTransport } from "../testSetup.js";
 import { createSmartWalletClient } from "../client.js";
 import { swapActions } from "./swapActionsDecorator.js";
-import { privateKeyToAccount } from "viem/accounts";
+import type { LocalAccount } from "viem/accounts";
 
 describe("swapActions decorator tests", () => {
   it("should successfully request a quote", async () => {
-    const dummySigner = privateKeyToAccount(
-      "0xd7b061ef04d29cf68b3c89356678eccec9988de8d5ed892c19461c4a9d65925d",
-    );
+    const usdcHolderAddr = "0x463f5D63e5a5EDB8615b0e485A090a18Aba08578";
 
-    const testAccountAddr = "0x0d1Ea60Dddd2a76F3a3afD6d78660d366C6A30c0";
+    const dummySigner = {
+      address: usdcHolderAddr,
+    } as unknown as LocalAccount;
 
     const client = createSmartWalletClient({
       transport: apiTransport,
@@ -19,7 +19,6 @@ describe("swapActions decorator tests", () => {
     }).extend(swapActions);
 
     const account = await client.requestAccount({
-      signerAddress: testAccountAddr,
       creationHint: {
         accountType: "7702",
       },
