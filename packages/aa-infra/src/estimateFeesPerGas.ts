@@ -53,28 +53,26 @@ export type RundlerClient<
  * });
  * ```
  */
-export async function estimateFeesPerGas<
-  TTransport extends Transport = Transport,
-  TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends SmartAccount | undefined = SmartAccount | undefined,
->({
+export async function estimateFeesPerGas({
   bundlerClient,
   account: _account,
   userOperation: _userOperation,
 }: {
-  bundlerClient: RundlerClient<TTransport, TChain, TAccount>;
+  bundlerClient: Client;
   account?: SmartAccount;
   userOperation?: UserOperationRequest;
 }): Promise<{
   maxFeePerGas: bigint;
   maxPriorityFeePerGas: bigint;
 }> {
+  const rundlerClient = bundlerClient as RundlerClient;
+
   const [block, maxPriorityFeePerGasHex] = await Promise.all([
     // If the node rpc url is different from the bundler url, the public
     // client should be passed in when creating the bundler client, which
     // we can access here for public actions.
-    getBlock(bundlerClient.client ?? bundlerClient, { blockTag: "latest" }),
-    bundlerClient.request({
+    getBlock(rundlerClient.client ?? rundlerClient, { blockTag: "latest" }),
+    rundlerClient.request({
       method: "rundler_maxPriorityFeePerGas",
       params: [],
     }),
