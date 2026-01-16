@@ -245,7 +245,6 @@ export async function toModularAccountV2Base<
     });
   };
 
-  // TODO(jh): this fails it the account is delegated to the wrong address!
   const getValidationData = async (args: ValidationDataParams) => {
     if (!(await isAccountDeployed())) {
       return {
