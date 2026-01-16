@@ -2,6 +2,8 @@ import type { InnerWalletApiClient } from "../types.ts";
 import { LOGGER } from "../logger.js";
 import type { Address, Prettify } from "viem";
 import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
+import { getSignerAddressOrPublicKey } from "../utils/signer.js";
+import type { WebAuthnPublicKey } from "@alchemy/wallet-api-types";
 
 type RpcSchema = Extract<
   WalletServerRpcSchemaType,
@@ -13,9 +15,18 @@ type RpcSchema = Extract<
 >;
 
 export type ListAccountsParams = Prettify<
-  Omit<RpcSchema["Request"]["params"][0], "signerAddress"> & {
-    signerAddress?: Address;
-  }
+  Omit<RpcSchema["Request"]["params"][0], "signerAddress"> &
+    (
+      | {
+          signerAddress?: Address;
+          signerPublicKey?: never;
+        }
+      | { signerPublicKey: WebAuthnPublicKey; signerAddress?: never }
+      | {
+          signerAddress?: never;
+          signerPublicKey?: never;
+        }
+    )
 >;
 
 export type ListAccountsResult = Prettify<RpcSchema["ReturnType"]>;
@@ -50,17 +61,40 @@ export async function listAccounts(
   client: InnerWalletApiClient,
   params: ListAccountsParams,
 ): Promise<ListAccountsResult> {
-  const signerAddress = params.signerAddress ?? client.owner.account.address;
+  const owner = getSignerAddressOrPublicKey(client.owner);
+
+  // Coalesce:
+  // signerAddress or signerPublicKey in params takes priority.
+  // if not present, then fallback to client's attached signer.
+  const signerParam: RpcSchema["Request"]["params"][0] = params.signerAddress
+    ? { signerAddress: params.signerAddress }
+    : params.signerPublicKey
+      ? {
+          signerPublicKey: {
+            type: "webauthn-p256",
+            ...params.signerPublicKey,
+          },
+        }
+      : owner.type === "webauthn-p256"
+        ? {
+            signerPublicKey: {
+              type: "webauthn-p256",
+              ...owner.publicKey,
+            },
+          }
+        : { signerAddress: owner.address };
+
   LOGGER.debug("listAccounts:start", { hasAfter: !!params.after });
   const res = await client.request({
     method: "wallet_listAccounts",
     params: [
       {
         ...params,
-        signerAddress,
+        ...signerParam,
       },
     ],
   });
   LOGGER.debug("listAccounts:done", { count: res.accounts.length });
+
   return res;
 }

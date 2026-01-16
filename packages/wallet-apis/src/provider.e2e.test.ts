@@ -9,7 +9,7 @@ import {
   type Client,
   type Transport,
 } from "viem";
-import { alchemyTransport, type AlchemyTransport } from "@alchemy/common";
+import { type AlchemyTransport } from "@alchemy/common";
 import { privateKeyToAccount } from "viem/accounts";
 import { arbitrumSepolia } from "viem/chains";
 import {
@@ -24,6 +24,7 @@ import {
   waitForCallsStatus,
 } from "viem/actions";
 import { createEip1193Provider } from "./provider.js";
+import { apiTransport, publicTransport } from "./testSetup.js";
 
 describe.sequential("Provider E2E Tests", async () => {
   let clientFromProvider: Client<Transport, Chain, Account>;
@@ -32,22 +33,11 @@ describe.sequential("Provider E2E Tests", async () => {
 
   const publicClient = createPublicClient({
     chain: arbitrumSepolia,
-    transport: alchemyTransport({
-      apiKey: process.env.TEST_ALCHEMY_API_KEY!,
-    }),
+    transport: publicTransport,
   });
 
   beforeAll(async () => {
-    transport = alchemyTransport(
-      process.env.ALCHEMY_PROXY_RPC_URL
-        ? {
-            url: process.env.ALCHEMY_PROXY_RPC_URL,
-          }
-        : {
-            url: "https://api.g.alchemy.com/v2",
-            apiKey: process.env.TEST_ALCHEMY_API_KEY!,
-          },
-    );
+    transport = apiTransport;
 
     const signer = privateKeyToAccount(
       "0xd7b061ef04d29cf68b3c89356678eccec9988de8d5ed892c19461c4a9d65925d",
