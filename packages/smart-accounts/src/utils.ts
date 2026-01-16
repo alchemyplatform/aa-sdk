@@ -1,6 +1,6 @@
-import { type Client, concat, type Hex, toHex } from "viem";
+import { type Address, type Client, concat, type Hex, toHex } from "viem";
 import { call } from "viem/actions";
-import { getAction } from "viem/utils";
+import { concatHex, getAction } from "viem/utils";
 import type { UserOperation } from "viem/account-abstraction";
 import { BaseError } from "@alchemy/common";
 
@@ -91,3 +91,12 @@ export const bigIntMultiply = (
       return product >= 0n ? product / scale : (product - scale + 1n) / scale;
   }
 };
+
+export function is7702Delegated(
+  delegation: Address,
+  code: Hex | undefined,
+): boolean {
+  return (
+    code?.toLowerCase() === concatHex(["0xef0100", delegation]).toLowerCase()
+  );
+}

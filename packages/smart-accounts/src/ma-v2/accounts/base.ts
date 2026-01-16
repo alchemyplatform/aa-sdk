@@ -69,6 +69,7 @@ import { chainHas7212 } from "../../utils.js";
 import { InvalidDeferredActionNonceError } from "../../errors/InvalidDeferredActionNonceError.js";
 import { InvalidNonceKeyError } from "../../errors/InvalidNonceKeyError.js";
 import { InvalidEntityIdError } from "../../errors/InvalidEntityIdError.js";
+import { is7702Delegated } from "../../utils.js";
 
 export type ValidationDataParams =
   | {
@@ -155,7 +156,9 @@ export async function toModularAccountV2Base<
     }
     const action = getAction(client, getCode, "getCode");
     const code = await action({ address: accountAddress });
-    isDeployed = !!code;
+    isDeployed = authorization
+      ? is7702Delegated(authorization.address, code)
+      : !!code;
     return isDeployed;
   };
 
