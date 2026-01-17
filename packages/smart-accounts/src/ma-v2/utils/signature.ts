@@ -100,6 +100,13 @@ export function toWebAuthnSignature({
   signature: Hex;
 }) {
   const { r, s } = Signature.fromHex(signature);
+
+  // If either index is undefined, derive them from the clientDataJSON string
+  const challengeIndex =
+    webauthn.challengeIndex ?? webauthn.clientDataJSON.indexOf('"challenge"');
+  const typeIndex =
+    webauthn.typeIndex ?? webauthn.clientDataJSON.indexOf('"type"');
+
   return encodeAbiParameters(
     [
       {
@@ -119,8 +126,8 @@ export function toWebAuthnSignature({
       {
         authenticatorData: webauthn.authenticatorData,
         clientDataJSON: webauthn.clientDataJSON,
-        challengeIndex: BigInt(webauthn.challengeIndex),
-        typeIndex: BigInt(webauthn.typeIndex),
+        challengeIndex: BigInt(challengeIndex),
+        typeIndex: BigInt(typeIndex),
         r,
         s,
       },

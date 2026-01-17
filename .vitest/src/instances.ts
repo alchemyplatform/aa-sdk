@@ -11,33 +11,20 @@ import { poolId, rundlerBinaryPath } from "./constants";
 import { paymasterTransport } from "./paymaster/transport";
 import { rundler } from "./rundler/instance";
 
-export const local060Instance = defineInstance({
+export const localInstance = defineInstance({
   chain: localhost,
-  forkBlockNumber: 6381303,
+  forkBlockNumber: 10043061,
   forkUrl:
     process.env.VITEST_SEPOLIA_FORK_URL ??
     "https://ethereum-sepolia-rpc.publicnode.com",
-  entryPointVersion: "0.6.0",
-  anvilPort: 8545,
-  bundlerPort: 8645,
-});
-
-export const local070Instance = defineInstance({
-  chain: localhost,
-  forkBlockNumber: 8805588,
-  forkUrl:
-    process.env.VITEST_SEPOLIA_FORK_URL ??
-    "https://ethereum-sepolia-rpc.publicnode.com",
-  entryPointVersion: "0.7.0",
-  anvilPort: 8345,
-  bundlerPort: 8445,
+  anvilPort: 18545,
+  bundlerPort: 18546,
 });
 
 type DefineInstanceParams = {
   chain: Chain;
   forkUrl: string;
   forkBlockNumber?: number;
-  entryPointVersion: "0.6.0" | "0.7.0";
   anvilPort: number;
   bundlerPort: number;
   useLocalRunningInstance?: boolean;
@@ -148,9 +135,6 @@ function defineInstance(params: DefineInstanceParams) {
       rundler(
         {
           binary: rundlerBinaryPath,
-          // ...(entryPointVersion === "0.6.0"
-          //   ? { disableEntryPointV0_7: true }
-          //   : { disableEntryPointV0_6: true }),
           nodeHttp: `http://127.0.0.1:${anvilPort}/${key}`,
           rpc: {
             api: "eth,rundler,debug",

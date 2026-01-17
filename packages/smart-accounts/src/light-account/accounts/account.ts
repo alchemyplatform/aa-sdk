@@ -20,6 +20,7 @@ import {
 import {
   type LightAccountVersion,
   AccountVersionRegistry,
+  isLightAccountVersion2,
 } from "../registry.js";
 import {
   LightAccountUnsupported1271Factories,
@@ -77,12 +78,12 @@ export async function toLightAccount<
     hasAccountAddress: !!accountAddress_,
   });
 
-  const accountAbi =
-    version === "v2.0.0" ? LightAccountAbi_v2 : LightAccountAbi_v1;
-  const factoryAbi =
-    version === "v2.0.0"
-      ? LightAccountFactoryAbi_v2
-      : LightAccountFactoryAbi_v1;
+  const accountAbi = isLightAccountVersion2(version)
+    ? LightAccountAbi_v2
+    : LightAccountAbi_v1;
+  const factoryAbi = isLightAccountVersion2(version)
+    ? LightAccountFactoryAbi_v2
+    : LightAccountFactoryAbi_v1;
 
   const salt = LightAccountUnsupported1271Factories.has(lowerAddress(factory))
     ? 0n

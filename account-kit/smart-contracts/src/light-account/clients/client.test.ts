@@ -20,7 +20,7 @@ import {
 } from "@account-kit/infra";
 import { toHex } from "viem";
 import { generatePrivateKey } from "viem/accounts";
-import { local060Instance, local070Instance } from "~test/instances.js";
+import { localInstance } from "~test/instances.js";
 import { multiOwnerPluginActions } from "../../msca/plugins/multi-owner/index.js";
 import { getMSCAUpgradeToData } from "../../msca/utils.js";
 import type { LightAccountVersion } from "../types.js";
@@ -32,11 +32,10 @@ const versions = Object.keys(
 ) as LightAccountVersion<"LightAccount">[];
 
 describe("Light Account Tests", () => {
-  let instance = local060Instance;
-  let client: ReturnType<typeof instance.getClient>;
+  let client: ReturnType<typeof localInstance.getClient>;
 
   beforeAll(async () => {
-    client = instance.getClient();
+    client = localInstance.getClient();
   });
 
   const signer: SmartAccountSigner =
@@ -199,7 +198,7 @@ describe("Light Account Tests", () => {
       signer: LocalAccountSigner.generatePrivateKeySigner(),
     });
 
-    await setBalance(instance.getClient(), {
+    await setBalance(localInstance.getClient(), {
       address: provider.getAddress(),
       value: parseEther("10"),
     });
@@ -318,7 +317,7 @@ describe("Light Account Tests", () => {
     });
 
     // set the value to 0 so that we can capture an error in sending the uo
-    await resetBalance(provider, instance.getClient());
+    await resetBalance(provider, localInstance.getClient());
 
     const toSend = {
       uo: {
@@ -341,7 +340,6 @@ describe("Light Account Tests", () => {
   it.each(versions)(
     "should override nonce key when nonce key of user operation overrides is set for version %s",
     async (version) => {
-      instance = version !== "v2.0.0" ? local060Instance : local070Instance; // v2 uses EP0.7
       const provider = await givenConnectedProvider({
         signer,
         paymasterMiddleware: "erc7677",
@@ -349,7 +347,7 @@ describe("Light Account Tests", () => {
       });
 
       // set the value to 0 so that we can capture an error in sending the uo
-      await resetBalance(provider, instance.getClient());
+      await resetBalance(provider, localInstance.getClient());
 
       const toSend = {
         uo: {
@@ -368,9 +366,6 @@ describe("Light Account Tests", () => {
       await expect(
         provider.waitForUserOperationTransaction(result),
       ).resolves.not.toThrowError();
-
-      // reset the instance
-      instance = local060Instance;
     },
   );
 
@@ -381,7 +376,7 @@ describe("Light Account Tests", () => {
     });
 
     // set the value to 0 so that we can capture an error in sending the uo
-    await resetBalance(provider, instance.getClient());
+    await resetBalance(provider, localInstance.getClient());
 
     const toSend = {
       uo: {
@@ -467,7 +462,7 @@ describe("Light Account Tests", () => {
 
     const upgradedClient = createSmartAccountClientFromExisting({
       client: createBundlerClient({
-        chain: instance.chain,
+        chain: localInstance.chain,
         transport: custom(client),
       }),
       account: await createMAAccount(),
@@ -525,17 +520,17 @@ describe("Light Account Tests", () => {
       signer,
       accountAddress,
       version,
-      transport: custom(instance.getClient()),
-      chain: instance.chain,
+      transport: custom(localInstance.getClient()),
+      chain: localInstance.chain,
       feeEstimator: alchemyFeeEstimator(
         // @ts-ignore (expects an alchemy transport, but we're using a custom transport for mocking)
-        custom(instance.getClient()),
+        custom(localInstance.getClient()),
       ),
       ...(paymasterMiddleware === "alchemyGasAndPaymasterAndData"
         ? alchemyGasAndPaymasterAndDataMiddleware({
             policyId: "FAKE_POLICY_ID",
             // @ts-ignore (expects an alchemy transport, but we're using a custom transport for mocking)
-            transport: custom(instance.getClient()),
+            transport: custom(localInstance.getClient()),
           })
         : paymasterMiddleware === "erc7677"
           ? erc7677Middleware()

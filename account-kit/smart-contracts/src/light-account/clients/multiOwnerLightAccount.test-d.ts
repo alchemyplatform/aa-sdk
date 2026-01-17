@@ -10,7 +10,7 @@ import { custom, type Chain } from "viem";
 import { generatePrivateKey } from "viem/accounts";
 import { setBalance } from "viem/actions";
 import { accounts } from "~test/constants.js";
-import { local070Instance } from "~test/instances.js";
+import { localInstance } from "~test/instances.js";
 import { multiOwnerPluginActions } from "../../msca/plugins/multi-owner/index.js";
 import { getMSCAUpgradeToData } from "../../msca/utils.js";
 import type { LightAccountVersion } from "../types";
@@ -23,11 +23,10 @@ import {
 import { Alchemy, Network } from "alchemy-sdk";
 
 describe("Types: MultiOwner Light Account Tests", () => {
-  const instance = local070Instance;
-  let client: ReturnType<typeof instance.getClient>;
+  let client: ReturnType<typeof localInstance.getClient>;
 
   beforeAll(async () => {
-    client = instance.getClient();
+    client = localInstance.getClient();
   });
 
   const signer: SmartAccountSigner = new LocalAccountSigner(
@@ -66,7 +65,7 @@ describe("Types: MultiOwner Light Account Tests", () => {
 
     const upgradedClient = createSmartAccountClientFromExisting({
       client: createBundlerClient({
-        chain: instance.chain,
+        chain: localInstance.chain,
         transport: custom(client),
       }),
       account: await createMAAccount(),
@@ -133,7 +132,7 @@ describe("Types: MultiOwner Light Account Tests", () => {
       accountAddress,
       version,
       transport: custom(client),
-      chain: instance.chain,
+      chain: localInstance.chain,
       salt: accountIndex,
       ...(usePaymaster ? erc7677Middleware() : {}),
     });

@@ -5,6 +5,8 @@ import {
   lightAccountStaticImplV1_0_2,
   lightAccountStaticImplV1_1_0,
   lightAccountStaticImplV2_0_0,
+  lightAccountStaticImplV2_1_0,
+  lightAccountStaticImplV2_2_0,
   multiOwnerLightAccountStaticImplV2_0_0,
 } from "./lightAccountStaticImpl.js";
 import type { StaticSmartAccountImplementation } from "../types.js";
@@ -20,6 +22,8 @@ export const AccountVersionRegistry = {
     "v1.0.2": lightAccountStaticImplV1_0_2,
     "v1.1.0": lightAccountStaticImplV1_1_0,
     "v2.0.0": lightAccountStaticImplV2_0_0,
+    "v2.1.0": lightAccountStaticImplV2_1_0,
+    "v2.2.0": lightAccountStaticImplV2_2_0,
   },
   MultiOwnerLightAccount: {
     "v2.0.0": multiOwnerLightAccountStaticImplV2_0_0,
@@ -33,6 +37,46 @@ export type LightAccountType = Extract<
 
 export type LightAccountVersion<TAccountType extends LightAccountType> =
   keyof (typeof AccountVersionRegistry)[TAccountType];
+
+/**
+ * Light Account v1 versions
+ */
+export const LightAccountV1Versions = [
+  "v1.0.1",
+  "v1.0.2",
+  "v1.1.0",
+] as const satisfies LightAccountVersion<"LightAccount">[];
+
+/**
+ * Light Account v2 versions
+ */
+export const LightAccountV2Versions = [
+  "v2.0.0",
+  "v2.1.0",
+  "v2.2.0",
+] as const satisfies LightAccountVersion<"LightAccount">[];
+
+/**
+ * Type guard to check if a version is a Light Account v1 version
+ *
+ * @param {LightAccountVersion<"LightAccount">} version - The version to check.
+ * @returns {boolean} True if the version is a v1 version.
+ */
+export const isLightAccountVersion1 = (
+  version: LightAccountVersion<"LightAccount">,
+): version is (typeof LightAccountV1Versions)[number] =>
+  (LightAccountV1Versions as readonly string[]).includes(version);
+
+/**
+ * Type guard to check if a version is a Light Account v2 version
+ *
+ * @param {LightAccountVersion<"LightAccount">} version - The version to check.
+ * @returns {boolean} True if the version is a v2 version.
+ */
+export const isLightAccountVersion2 = (
+  version: LightAccountVersion<"LightAccount">,
+): version is (typeof LightAccountV2Versions)[number] =>
+  (LightAccountV2Versions as readonly string[]).includes(version);
 
 export type GetLightAccountType<TAccount extends LightAccountBase> =
   TAccount["smartAccountType"] extends LightAccountType

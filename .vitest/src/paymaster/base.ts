@@ -22,10 +22,10 @@ import { accounts, create2deployer } from "../constants";
 import { ERC1967ProxyAbi } from "../Proxy";
 import type { Paymaster } from "./types";
 import type { VerifyingPaymaster060Abi } from "./VerifyingPaymaster060";
-import type { VerifyingPaymaster070Abi } from "./VerifyingPaymaster070";
+import { VerifyingPaymaster070Abi } from "./VerifyingPaymaster070";
 
 type ToPaymasterArgs = {
-  entryPointVersion: "0.6.0" | "0.7.0";
+  entryPointVersion: "0.6.0" | "0.7.0" | "0.8.0";
   entryPointAddress: Address;
   abi: typeof VerifyingPaymaster060Abi | typeof VerifyingPaymaster070Abi;
   dummyData: Hex;
@@ -52,6 +52,7 @@ export const toPaymaster = (args: ToPaymasterArgs): Paymaster => {
 
   const paymaster: Paymaster = {
     ...rest,
+    isV07Abi: abi === VerifyingPaymaster070Abi,
     getPaymasterData(uo, client) {
       return getPaymasterData_(paymaster, uo, client);
     },
@@ -139,7 +140,6 @@ export const toPaymaster = (args: ToPaymasterArgs): Paymaster => {
         abi: abi.abi,
         functionName: "initialize",
         args: [
-          // for now this just deploy 0.6.0
           entrypoint,
           // signer, owner, pauser
           accounts.paymasterOwner.address,

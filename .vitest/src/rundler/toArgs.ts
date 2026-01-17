@@ -21,7 +21,7 @@ export function toArgs(
   return Object.entries(obj).flatMap(([key, value]) => {
     if (value === undefined) return [];
 
-    if (Array.isArray(value)) return [toFlagCase(key), value.join(",")];
+    if (Array.isArray(value)) return [toFlagCase(key, "_"), value.join(",")];
 
     if (typeof value === "object" && value !== null) {
       return Object.entries(value).flatMap(([subKey, subValue]) => {

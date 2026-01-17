@@ -12,7 +12,7 @@ import {
   type CustomTransport,
 } from "viem";
 import { accounts } from "~test/constants.js";
-import { local060Instance } from "~test/instances.js";
+import { localInstance } from "~test/instances.js";
 import type { LightAccountVersion } from "../types.js";
 import { createLightAccountClient } from "./client.js";
 import {
@@ -26,7 +26,6 @@ import {
 import { Alchemy, Network } from "alchemy-sdk";
 
 describe("Types: Light Account Tests", () => {
-  const instance = local060Instance;
   const signer: SmartAccountSigner = new LocalAccountSigner(
     accounts.fundedAccountOwner,
   );
@@ -46,8 +45,8 @@ describe("Types: Light Account Tests", () => {
       signer,
       accountAddress,
       version,
-      transport: custom(instance.getClient()),
-      chain: instance.chain,
+      transport: custom(localInstance.getClient()),
+      chain: localInstance.chain,
       ...(usePaymaster ? erc7677Middleware() : {}),
     });
 

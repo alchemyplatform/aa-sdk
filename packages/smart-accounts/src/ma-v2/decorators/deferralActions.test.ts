@@ -17,7 +17,7 @@ import { createBundlerClient } from "viem/account-abstraction";
 import { entryPoint07Abi } from "viem/account-abstraction";
 import { mine, setBalance, setNextBlockBaseFeePerGas } from "viem/actions";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
-import { local070Instance } from "~test/instances.js";
+import { localInstance } from "~test/instances.js";
 import { toModularAccountV2 } from "../accounts/account.js";
 import { deferralActions } from "./deferralActions.js";
 import {
@@ -33,8 +33,6 @@ import { estimateFeesPerGas } from "@alchemy/aa-infra";
 
 // Note: These tests maintain a shared state to not break the local-running rundler by desyncing the chain.
 describe("MA v2 deferral actions tests", async () => {
-  const instance = local070Instance;
-
   const target = "0x000000000000000000000000000000000000dEaD";
   const sendAmount = parseEther("1");
 
@@ -55,7 +53,7 @@ describe("MA v2 deferral actions tests", async () => {
       })
     ).extend(deferralActions);
 
-    await setBalance(instance.getClient(), {
+    await setBalance(localInstance.getClient(), {
       address: provider.account.address,
       value: parseEther("30"),
     });
@@ -117,11 +115,11 @@ describe("MA v2 deferral actions tests", async () => {
         ],
       });
 
-      await setNextBlockBaseFeePerGas(instance.getClient(), {
+      await setNextBlockBaseFeePerGas(localInstance.getClient(), {
         baseFeePerGas: parseGwei("1"),
       });
 
-      await mine(instance.getClient(), { blocks: 5 });
+      await mine(localInstance.getClient(), { blocks: 5 });
 
       await sessionKeyClient.waitForUserOperationReceipt({
         hash,
@@ -138,10 +136,10 @@ describe("MA v2 deferral actions tests", async () => {
         ],
       });
 
-      await setNextBlockBaseFeePerGas(instance.getClient(), {
+      await setNextBlockBaseFeePerGas(localInstance.getClient(), {
         baseFeePerGas: parseGwei("1"),
       });
-      await mine(instance.getClient(), { blocks: 5 });
+      await mine(localInstance.getClient(), { blocks: 5 });
 
       await sessionKeyClient.waitForUserOperationReceipt({
         hash: hash2,
@@ -171,7 +169,7 @@ describe("MA v2 deferral actions tests", async () => {
         ],
       });
 
-      await setNextBlockBaseFeePerGas(instance.getClient(), {
+      await setNextBlockBaseFeePerGas(localInstance.getClient(), {
         baseFeePerGas: 10n,
       });
 
@@ -197,7 +195,7 @@ describe("MA v2 deferral actions tests", async () => {
         ],
       });
 
-      await setNextBlockBaseFeePerGas(instance.getClient(), {
+      await setNextBlockBaseFeePerGas(localInstance.getClient(), {
         baseFeePerGas: 10n,
       });
 
@@ -211,7 +209,7 @@ describe("MA v2 deferral actions tests", async () => {
   it("PermissionBuilder: Cannot add any permission after root", async () => {
     const provider = await givenConnectedProvider({ signer: owner });
 
-    await setBalance(instance.getClient(), {
+    await setBalance(localInstance.getClient(), {
       address: provider.account.address,
       value: parseEther("2"),
     });
@@ -250,7 +248,7 @@ describe("MA v2 deferral actions tests", async () => {
   it("PermissionBuilder: Cannot compile post expiry", async () => {
     const provider = await givenConnectedProvider({ signer: owner });
 
-    await setBalance(instance.getClient(), {
+    await setBalance(localInstance.getClient(), {
       address: provider.account.address,
       value: parseEther("2"),
     });
@@ -291,7 +289,7 @@ describe("MA v2 deferral actions tests", async () => {
   });
 
   it("PermissionBuilder: Cannot install expired deferred action", async () => {
-    const client = instance
+    const client = localInstance
       .getClient()
       .extend(publicActions)
       .extend(testActions({ mode: "anvil" }));
@@ -418,7 +416,7 @@ describe("MA v2 deferral actions tests", async () => {
   it("PermissionBuilder: Cannot add root after any permission", async () => {
     const provider = await givenConnectedProvider({ signer: owner });
 
-    await setBalance(instance.getClient(), {
+    await setBalance(localInstance.getClient(), {
       address: provider.account.address,
       value: parseEther("2"),
     });
@@ -478,8 +476,8 @@ describe("MA v2 deferral actions tests", async () => {
   }) => {
     const account = await toModularAccountV2({
       client: createPublicClient({
-        transport: custom(instance.getClient().transport),
-        chain: instance.chain,
+        transport: custom(localInstance.getClient().transport),
+        chain: localInstance.chain,
       }),
       owner: signer,
       accountAddress,
@@ -493,8 +491,8 @@ describe("MA v2 deferral actions tests", async () => {
 
     return createBundlerClient({
       account,
-      transport: custom(instance.getClient().transport),
-      chain: instance.chain,
+      transport: custom(localInstance.getClient().transport),
+      chain: localInstance.chain,
       userOperation: {
         estimateFeesPerGas,
       },
