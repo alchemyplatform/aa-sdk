@@ -1,6 +1,6 @@
 {
   "name": "@alchemy/smart-accounts",
-  "version": "0.0.0",
+  "version": "0.0.0-alpha.15",
   "description": "This package contains all of the viem interfaces for Alchemy's Smart Contract Accounts",
   "author": "Alchemy",
   "license": "MIT",
@@ -39,13 +39,14 @@
     "test:run": "vitest run"
   },
   "devDependencies": {
-    "@alchemy/aa-infra": "*",
+    "@alchemy/aa-infra": "^0.0.0-alpha.15",
     "typescript-template": "*"
   },
   "dependencies": {
-    "@alchemy/common": "*",
+    "@alchemy/common": "^0.0.0-alpha.15",
     "ox": "^0.9.6",
-    "viem": "^2.32.0"
+    "viem": "^2.32.0",
+    "webauthn-p256": "^0.0.10"
   },
   "publishConfig": {
     "access": "public",

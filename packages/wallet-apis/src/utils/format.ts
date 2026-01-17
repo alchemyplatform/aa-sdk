@@ -6,8 +6,13 @@ import {
   bytesToHex,
   type TypedDataDefinition,
   getTypesForEIP712Domain,
+  sliceHex,
 } from "viem";
-import type { TypedDataDefinition as WalletServerTypedDataDefinition } from "@alchemy/wallet-api-types";
+import type {
+  TypedDataDefinition as WalletServerTypedDataDefinition,
+  WebAuthnPublicKey,
+} from "@alchemy/wallet-api-types";
+import type { ToWebAuthnAccountParameters } from "viem/account-abstraction";
 
 export const castToHex = (val: string | number | bigint | Hex): Hex => {
   if (isHex(val)) {
@@ -59,3 +64,17 @@ export const typedDataToJsonSafe = ({
     ),
   };
 };
+
+export function credentialToWebAuthnPublicKey(
+  credential: ToWebAuthnAccountParameters["credential"],
+): WebAuthnPublicKey {
+  const { x, y } = {
+    x: sliceHex(credential.publicKey, 0, 32, { strict: true }),
+    y: sliceHex(credential.publicKey, 32, 64, { strict: true }),
+  };
+
+  return {
+    x,
+    y,
+  };
+}

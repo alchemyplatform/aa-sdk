@@ -9,9 +9,10 @@ import {
 import type { InnerWalletApiClient } from "../types.ts";
 import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
 import { signSignatureRequest } from "./signSignatureRequest.js";
-import { AccountNotFoundError } from "@alchemy/common";
+import { AccountNotFoundError, BaseError } from "@alchemy/common";
 import { LOGGER } from "../logger.js";
 import type { OptionalChainId } from "../types.ts";
+import { isWebAuthnAccount } from "../utils/assertions.js";
 
 type RpcSchema = Extract<
   WalletServerRpcSchemaType,
@@ -100,6 +101,13 @@ export async function grantPermissions<
     LOGGER.warn("grantPermissions:no-account");
     throw new AccountNotFoundError();
   }
+  if (isWebAuthnAccount(client.owner)) {
+    LOGGER.warn("grantPermissions:unsupported-account");
+    throw new BaseError(
+      "WebAuthn signer is not currently supported for grantPermissions",
+    );
+  }
+
   LOGGER.debug("grantPermissions:start", { expirySec: params.expirySec });
   const { sessionId, signatureRequest } = await client.request({
     method: "wallet_createSession",
@@ -113,11 +121,14 @@ export async function grantPermissions<
   });
 
   const signature = await signSignatureRequest(client, signatureRequest);
+
   const res = {
     context: concatHex([
       "0x00", // Remote mode.
       sessionId,
-      signature.data,
+      signature.type === "webauthn-p256"
+        ? signature.data.signature
+        : signature.data,
     ]),
   } as const;
   LOGGER.debug("grantPermissions:done");

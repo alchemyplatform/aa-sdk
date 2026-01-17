@@ -38,7 +38,7 @@ export type ToMultiOwnerLightAccountParams = {
   owners: [OneOf<JsonRpcAccount | LocalAccount>, ...{ address: Address }[]];
   salt?: bigint;
   accountAddress?: Address;
-  factoryAddress?: Address;
+  factory?: Address;
   factoryData?: Hex;
 };
 
@@ -53,7 +53,7 @@ export async function toMultiOwnerLightAccount({
   salt = 0n,
   owners,
   accountAddress: accountAddress_,
-  factoryAddress = AccountVersionRegistry.MultiOwnerLightAccount["v2.0.0"]
+  factory = AccountVersionRegistry.MultiOwnerLightAccount["v2.0.0"]
     .factoryAddress,
   factoryData: factoryData_,
 }: ToMultiOwnerLightAccountParams): Promise<MultiOwnerLightAccount> {
@@ -74,14 +74,14 @@ export async function toMultiOwnerLightAccount({
     (factoryData_
       ? await getMultiOwnerLightAccountAddressFromFactoryData({
           client,
-          factoryAddress,
+          factoryAddress: factory,
           factoryData: factoryData_,
           entryPoint:
             AccountVersionRegistry["MultiOwnerLightAccount"]["v2.0.0"]
               .entryPoint,
         })
       : predictMultiOwnerLightAccountAddress({
-          factoryAddress,
+          factoryAddress: factory,
           salt,
           ownerAddresses: sortedOwners,
         }));
@@ -96,7 +96,7 @@ export async function toMultiOwnerLightAccount({
       });
 
     return {
-      factory: factoryAddress,
+      factory,
       factoryData,
     };
   };

@@ -30,7 +30,11 @@ export async function downloadLatestRundlerRelease(
 
   try {
     // Get the list of releases from GitHub API
-    const releasesResponse = await fetch(repoUrl);
+    const releasesResponse = await fetch(repoUrl, {
+      headers: process.env.GH_AUTH_TOKEN
+        ? { Authorization: `Bearer ${process.env.GH_AUTH_TOKEN}` }
+        : undefined,
+    });
     if (!releasesResponse.ok) {
       throw new Error(
         `Failed to fetch releases: ${releasesResponse.statusText}`,

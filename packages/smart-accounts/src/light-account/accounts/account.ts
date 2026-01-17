@@ -46,7 +46,7 @@ export type ToLightAccountParams<
   owner: JsonRpcAccount | LocalAccount;
   salt?: bigint;
   accountAddress?: Address;
-  factoryAddress?: Address;
+  factory?: Address;
   factoryData?: Hex;
   version?: TLightAccountVersion;
 };
@@ -66,7 +66,7 @@ export async function toLightAccount<
   salt: salt_ = 0n,
   accountAddress: accountAddress_,
   version = defaultLightAccountVersion() as TLightAccountVersion,
-  factoryAddress = AccountVersionRegistry.LightAccount[version].factoryAddress,
+  factory = AccountVersionRegistry.LightAccount[version].factoryAddress,
   factoryData: factoryData_,
 }: ToLightAccountParams<TLightAccountVersion>): Promise<
   LightAccount<TLightAccountVersion>
@@ -83,9 +83,7 @@ export async function toLightAccount<
       ? LightAccountFactoryAbi_v2
       : LightAccountFactoryAbi_v1;
 
-  const salt = LightAccountUnsupported1271Factories.has(
-    lowerAddress(factoryAddress),
-  )
+  const salt = LightAccountUnsupported1271Factories.has(lowerAddress(factory))
     ? 0n
     : salt_;
 
@@ -94,14 +92,14 @@ export async function toLightAccount<
     (factoryData_
       ? await getLightAccountAddressFromFactoryData({
           client,
-          factoryAddress,
+          factoryAddress: factory,
           factoryData: factoryData_,
           entryPoint:
             AccountVersionRegistry["LightAccount"][version].entryPoint,
           version,
         })
       : predictLightAccountAddress({
-          factoryAddress,
+          factoryAddress: factory,
           salt,
           ownerAddress: owner.address,
           version,
@@ -119,7 +117,7 @@ export async function toLightAccount<
       });
 
     return {
-      factory: factoryAddress,
+      factory,
       factoryData,
     };
   };

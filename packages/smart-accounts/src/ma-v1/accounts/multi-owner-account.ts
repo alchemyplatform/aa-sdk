@@ -39,7 +39,7 @@ export type ToMultiOwnerModularAccountV1Params = {
   owners: [OneOf<JsonRpcAccount | LocalAccount>, ...{ address: Address }[]];
   salt?: bigint;
   accountAddress?: Address;
-  factoryAddress?: Address;
+  factory?: Address;
   factoryData?: Hex;
 };
 
@@ -54,7 +54,7 @@ export async function toMultiOwnerModularAccountV1({
   salt = 0n,
   owners,
   accountAddress: accountAddress_,
-  factoryAddress = DefaultMaV1Address.MULTI_OWNER_MAV1_FACTORY,
+  factory = DefaultMaV1Address.MULTI_OWNER_MAV1_FACTORY,
   factoryData: factoryData_,
 }: ToMultiOwnerModularAccountV1Params): Promise<MultiOwnerModularAccountV1> {
   const signer = owners[0];
@@ -74,7 +74,7 @@ export async function toMultiOwnerModularAccountV1({
     (factoryData_
       ? await getMultiOwnerModularAccountV1AddressFromFactoryData({
           client,
-          factoryAddress,
+          factoryAddress: factory,
           factoryData: factoryData_,
           entryPoint: {
             version: "0.6",
@@ -82,7 +82,7 @@ export async function toMultiOwnerModularAccountV1({
           },
         })
       : predictMultiOwnerModularAccountV1Address({
-          factoryAddress,
+          factoryAddress: factory,
           salt,
           ownerAddresses: sortedOwners,
         }));
@@ -97,7 +97,7 @@ export async function toMultiOwnerModularAccountV1({
       });
 
     return {
-      factory: factoryAddress,
+      factory,
       factoryData,
     };
   };

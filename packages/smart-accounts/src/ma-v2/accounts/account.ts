@@ -45,13 +45,13 @@ export type ToModularAccountV2Params<
 } & (TMode extends "7702"
   ? {
       salt?: never;
-      factoryAddress?: never;
+      factory?: never;
       factoryData?: never;
       implementationAddress?: never;
     }
   : {
       salt?: bigint;
-      factoryAddress?: Address;
+      factory?: Address;
       factoryData?: Hex;
       implementationAddress?: Address;
     });
@@ -69,7 +69,7 @@ export async function toModularAccountV2<TMode extends Mode = Mode>({
   signerEntity,
   accountAddress: accountAddress_,
   salt = 0n,
-  factoryAddress: factoryAddress_,
+  factory,
   factoryData: factoryData_,
   implementationAddress: implementationAddress_,
   mode,
@@ -86,7 +86,7 @@ export async function toModularAccountV2<TMode extends Mode = Mode>({
   const entityId = signerEntity?.entityId ?? DEFAULT_OWNER_ENTITY_ID;
 
   const factoryAddress =
-    factoryAddress_ ??
+    factory ??
     (owner.type === "webAuthn"
       ? DefaultAddress.MAV2_FACTORY_WEBAUTHN
       : DefaultAddress.MAV2_FACTORY);

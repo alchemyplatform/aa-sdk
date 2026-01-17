@@ -48,8 +48,8 @@
     "viem": "^2.32.0"
   },
   "dependencies": {
-    "@alchemy/common": "*",
-    "@alchemy/wallet-apis": "*"
+    "@alchemy/common": "^0.0.0-alpha.10",
+    "@alchemy/wallet-apis": "0.0.0-alpha.12"
   },
   "publishConfig": {
     "access": "public",

@@ -1,9 +1,16 @@
 import type { Address } from "abitype";
-import type { Prettify, UnionOmit } from "viem";
+import { BaseError, type Prettify } from "viem";
 import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
 import deepEqual from "deep-equal";
-import type { InnerWalletApiClient, OptionalSignerAddress } from "../types";
+import type { InnerWalletApiClient } from "../types";
 import { LOGGER } from "../logger.js";
+import type {
+  CreationOptionsByPublicKey,
+  CreationOptionsBySignerAddress,
+  WebAuthnPublicKey,
+} from "@alchemy/wallet-api-types";
+import { isWebAuthnAccount } from "../utils/assertions.js";
+import { getSignerAddressOrPublicKey } from "../utils/signer.js";
 
 type RpcSchema = Extract<
   WalletServerRpcSchemaType,
@@ -15,9 +22,13 @@ type RpcSchema = Extract<
 >;
 
 export type RequestAccountParams = Prettify<
-  OptionalSignerAddress<
-    UnionOmit<RpcSchema["Request"]["params"][0], "includeCounterfactualInfo">
-  >
+  Omit<
+    Extract<
+      RpcSchema["Request"]["params"][0],
+      { signerAddress: Address } | { signerPublicKey: WebAuthnPublicKey }
+    >,
+    "signerAddress" | "signerPublicKey" | "includeCounterfactualInfo"
+  > & { accountAddress?: Address }
 >;
 
 export type RequestAccountResult = Prettify<{ address: Address }>;
@@ -48,31 +59,65 @@ export async function requestAccount(
     hasParams: !!params,
     hasAccountOnClient: !!client.account,
   });
-  const args =
-    client.account && !params
+
+  const { creationHint = {} } = params ?? {};
+
+  if (isWebAuthnAccount(client.owner)) {
+    if (
+      creationHint.accountType &&
+      creationHint.accountType !== "mav2-webauthn"
+    ) {
+      throw new BaseError(
+        "WebAuthn signers are only supported with mav2-webauthn account type",
+      );
+    }
+  } else {
+    // Non-webauthn signers do not support the "mav2-webauthn" account type.
+    if (creationHint.accountType === "mav2-webauthn") {
+      throw new BaseError(
+        "ECDSA (secp256k1) signers are not supported with mav2-webauthn account type",
+      );
+    }
+  }
+
+  const owner = getSignerAddressOrPublicKey(client.owner);
+
+  const args: RpcSchema["Request"]["params"][0] =
+    (client.account && !params) || params?.accountAddress
       ? {
-          accountAddress: client.account.address,
+          accountAddress: params?.accountAddress ?? client.account!.address,
           includeCounterfactualInfo: true,
         }
-      : params != null && "accountAddress" in params
-        ? {
-            accountAddress: params.accountAddress,
-            includeCounterfactualInfo: true,
-          }
-        : {
-            ...params,
-            signerAddress:
-              (params && "signerAddress" in params
-                ? params.signerAddress
-                : undefined) ?? client.owner.account.address,
-            includeCounterfactualInfo: true,
-          };
+      : {
+          ...(owner.type === "webauthn-p256"
+            ? {
+                signerPublicKey: {
+                  ...owner.publicKey,
+                  type: "webauthn-p256",
+                },
+                // Casts here are safe due to our checks above.
+                ...(creationHint
+                  ? { creationHint: creationHint as CreationOptionsByPublicKey }
+                  : {}),
+              }
+            : {
+                signerAddress: owner.address,
+                ...(creationHint
+                  ? {
+                      creationHint:
+                        creationHint as CreationOptionsBySignerAddress,
+                    }
+                  : {}),
+              }),
+          includeCounterfactualInfo: true,
+        };
 
   const cachedAccount = client.internal?.getAccount();
 
   if (
     cachedAccount &&
-    ((args.accountAddress && cachedAccount.address === args.accountAddress) ||
+    ((params?.accountAddress &&
+      cachedAccount.address === params.accountAddress) ||
       deepEqual(cachedAccount.requestParams, args, { strict: true }))
   ) {
     LOGGER.debug("requestAccount:cache-hit", {

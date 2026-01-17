@@ -3,6 +3,7 @@ import {
   type Hex,
   type Prettify,
   type SignableMessage,
+  BaseError,
 } from "viem";
 import type { InnerWalletApiClient } from "../types.js";
 import { requestAccount } from "./requestAccount.js";
@@ -61,6 +62,13 @@ export async function signMessage(
   });
 
   const signed = await signSignatureRequest(client, prepared.signatureRequest);
+
+  // TODO: Wallet server needs to be updated to support webauthn here.
+  if (signed.type === "webauthn-p256") {
+    throw new BaseError(
+      "WebAuthn account is currently unsupported by wallet_formatSign",
+    );
+  }
 
   const formatted = await formatSign(client, {
     from: account.address,

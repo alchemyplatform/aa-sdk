@@ -4,12 +4,12 @@ import {
   isHex,
   type Transport,
   type Chain,
-  type Account,
   hexToBigInt,
 } from "viem";
 import type {
   UserOperationRequest,
   SmartAccount,
+  BundlerClient,
 } from "viem/account-abstraction";
 import { bigIntMultiply } from "@alchemy/common";
 import type { RundlerRpcSchema } from "./schema.js";
@@ -19,8 +19,14 @@ import { InvalidHexValueError } from "./errors.js";
 export type RundlerClient<
   transport extends Transport = Transport,
   chain extends Chain | undefined = Chain | undefined,
-  account extends Account | undefined = Account | undefined,
-> = Client<transport, chain, account, RundlerRpcSchema>;
+  account extends SmartAccount | undefined = SmartAccount | undefined,
+> = BundlerClient<
+  transport,
+  chain,
+  account,
+  Client | undefined,
+  RundlerRpcSchema
+>;
 
 /**
  * A custom `estimateFeesPerGas` function for viem bundler clients to use `rundler_maxPriorityFeePerGas` for priority fee estimation.
@@ -47,25 +53,30 @@ export type RundlerClient<
  * });
  * ```
  */
-export async function estimateFeesPerGas<
-  TTransport extends Transport = Transport,
-  TChain extends Chain | undefined = Chain | undefined,
-  TAccount extends Account | undefined = Account | undefined,
->({
+export async function estimateFeesPerGas({
   bundlerClient,
   account: _account,
   userOperation: _userOperation,
 }: {
-  bundlerClient: RundlerClient<TTransport, TChain, TAccount>;
+  bundlerClient: Client;
   account?: SmartAccount;
   userOperation?: UserOperationRequest;
 }): Promise<{
   maxFeePerGas: bigint;
   maxPriorityFeePerGas: bigint;
 }> {
+  // Cast to RundlerClient to access rundler-specific RPC methods and BundlerClient properties.
+  // This mirrors viem's pattern in prepareUserOperation.ts where they cast `client as unknown as BundlerClient`
+  // to access bundler-specific properties from a base Client type.
+  // See: https://github.com/wevm/viem/blob/d18b3b27/src/account-abstraction/actions/bundler/prepareUserOperation.ts#L355
+  const rundlerClient = bundlerClient as RundlerClient;
+
   const [block, maxPriorityFeePerGasHex] = await Promise.all([
-    getBlock(bundlerClient, { blockTag: "latest" }), // This is technically hitting the node rpc, not rundler.
-    bundlerClient.request({
+    // If the node rpc url is different from the bundler url, the public
+    // client should be passed in when creating the bundler client, which
+    // we can access here for public actions.
+    getBlock(rundlerClient.client ?? rundlerClient, { blockTag: "latest" }),
+    rundlerClient.request({
       method: "rundler_maxPriorityFeePerGas",
       params: [],
     }),

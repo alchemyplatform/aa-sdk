@@ -19,50 +19,71 @@ if [ "$VERCEL_GIT_COMMIT_REF" == "main" ]; then
   exit 1
 fi
 
-# Check GitHub API for PR information
+# Check if we should skip builds for a specific branch and its descendants
 SKIP_BRANCH="${SKIP_BUILD_FOR_BRANCH:-}"
-if [ -n "$SKIP_BRANCH" ] && [ -n "$GITHUB_TOKEN" ]; then
 
-  # Method 1: If we have a PR ID, use it
-  if [ -n "$VERCEL_GIT_PULL_REQUEST_ID" ]; then
-    echo "➜ Checking PR #$VERCEL_GIT_PULL_REQUEST_ID base branch..."
+if [ -n "$SKIP_BRANCH" ]; then
+  echo "➜ Will skip builds for $SKIP_BRANCH and any branches descended from it"
 
-    API_URL="https://api.github.com/repos/$VERCEL_GIT_REPO_OWNER/$VERCEL_GIT_REPO_SLUG/pulls/$VERCEL_GIT_PULL_REQUEST_ID"
-    PR_RESPONSE=$(curl -s -H "Authorization: token $GITHUB_TOKEN" "$API_URL")
-
-  # Method 2: No PR ID yet - find PR by branch name
-  else
-    echo "➜ Looking for PR with head branch: $VERCEL_GIT_COMMIT_REF..."
-
-    # Search for open PRs from this branch
-    API_URL="https://api.github.com/repos/$VERCEL_GIT_REPO_OWNER/$VERCEL_GIT_REPO_SLUG/pulls?state=open&head=$VERCEL_GIT_REPO_OWNER:$VERCEL_GIT_COMMIT_REF"
-    PR_RESPONSE=$(curl -s -H "Authorization: token $GITHUB_TOKEN" "$API_URL")
-
-    # The response is an array, but we'll just look for the first base.ref in it
-    # This works because we're searching for a specific branch which should have only one PR
+  # Skip if we're directly on the skip branch
+  if [ "$VERCEL_GIT_COMMIT_REF" == "$SKIP_BRANCH" ]; then
+    echo "🛑 Skipping build - on $SKIP_BRANCH branch"
+    exit 0
   fi
 
-  # Extract base.ref from the PR response
-  if [ -n "$PR_RESPONSE" ]; then
-    # Look for the first occurrence of "base": { ... "ref": "branch" ... }
-    # This works for both single PR responses and array responses
-    PR_BASE=$(echo "$PR_RESPONSE" | grep -A 5 '"base"' | grep '"ref"' | head -1 | sed 's/.*"ref"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/')
+  # Fetch origin branches to check ancestry (need enough history to find common commits)
+  echo "➜ Fetching git history to check branch ancestry..."
+  git fetch origin main --depth=200 2>/dev/null || true
+  git fetch origin "$SKIP_BRANCH" --depth=200 2>/dev/null || true
 
-    if [ -n "$PR_BASE" ]; then
-      echo "➜ PR base branch: $PR_BASE"
+  # Find commits that are unique to the skip branch (exist in skip branch but not in main)
+  # If any of these commits are ancestors of HEAD, this branch descended from the skip branch
+  UNIQUE_COMMIT=$(git log --oneline "origin/$SKIP_BRANCH" ^origin/main 2>/dev/null | head -1 | awk '{print $1}')
 
-      if [ "$PR_BASE" = "$SKIP_BRANCH" ]; then
-        echo "🛑 Skipping build - PR targets $SKIP_BRANCH"
-        exit 0  # Skip build
+  if [ -n "$UNIQUE_COMMIT" ]; then
+    echo "➜ Found commit unique to $SKIP_BRANCH: $UNIQUE_COMMIT"
+    
+    # Check if this unique commit is in the current branch's history
+    if git merge-base --is-ancestor "$UNIQUE_COMMIT" HEAD 2>/dev/null; then
+      echo "🛑 Skipping build - branch is descended from $SKIP_BRANCH"
+      exit 0
+    else
+      echo "➜ Branch does not descend from $SKIP_BRANCH"
+    fi
+  else
+    echo "⚠️ Could not find commits unique to $SKIP_BRANCH"
+    echo "➜ Falling back to PR-based detection..."
+    
+    # Fallback: Check GitHub API for PR base branch
+    if [ -n "$GITHUB_TOKEN" ]; then
+      if [ -n "$VERCEL_GIT_PULL_REQUEST_ID" ]; then
+        echo "➜ Checking PR #$VERCEL_GIT_PULL_REQUEST_ID base branch..."
+        API_URL="https://api.github.com/repos/$VERCEL_GIT_REPO_OWNER/$VERCEL_GIT_REPO_SLUG/pulls/$VERCEL_GIT_PULL_REQUEST_ID"
+        PR_RESPONSE=$(curl -s -H "Authorization: token $GITHUB_TOKEN" "$API_URL")
       else
-        echo "➜ PR targets $PR_BASE, not skipping"
+        echo "➜ Looking for PR with head branch: $VERCEL_GIT_COMMIT_REF..."
+        API_URL="https://api.github.com/repos/$VERCEL_GIT_REPO_OWNER/$VERCEL_GIT_REPO_SLUG/pulls?state=open&head=$VERCEL_GIT_REPO_OWNER:$VERCEL_GIT_COMMIT_REF"
+        PR_RESPONSE=$(curl -s -H "Authorization: token $GITHUB_TOKEN" "$API_URL")
+      fi
+
+      if [ -n "$PR_RESPONSE" ]; then
+        PR_BASE=$(echo "$PR_RESPONSE" | grep -A 5 '"base"' | grep '"ref"' | head -1 | sed 's/.*"ref"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/')
+
+        if [ -n "$PR_BASE" ]; then
+          echo "➜ PR base branch: $PR_BASE"
+
+          if [ "$PR_BASE" = "$SKIP_BRANCH" ]; then
+            echo "🛑 Skipping build - PR targets $SKIP_BRANCH"
+            exit 0
+          fi
+        fi
       fi
     else
-      echo "➜ No PR found or could not determine base branch"
+      echo "⚠️ GITHUB_TOKEN not set, cannot check PR base branch"
     fi
   fi
-elif [ -z "$GITHUB_TOKEN" ]; then
-  echo "⚠️ GITHUB_TOKEN not set, cannot check PR base branch"
+else
+  echo "➜ SKIP_BUILD_FOR_BRANCH not set, no branch ancestry check"
 fi
 
 echo "✅ Proceeding with build"
