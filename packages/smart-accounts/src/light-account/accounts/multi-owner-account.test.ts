@@ -295,10 +295,10 @@ describe.sequential("MultiOwner Light Account Tests", () => {
     const account = await toMultiOwnerLightAccount({
       client: signer,
       accountAddress,
-      salt: _salt ?? salt++,
       owners: [signer.account, ...(owners ?? [])],
-      factory: factoryAddress,
-      factoryData,
+      ...(factoryData
+        ? { factory: factoryAddress, factoryData }
+        : { salt: _salt ?? salt++ }),
     });
 
     return createBundlerClient({

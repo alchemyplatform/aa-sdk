@@ -36,11 +36,12 @@ export type MultiOwnerLightAccount = LightAccountBase<
 export type ToMultiOwnerLightAccountParams = {
   client: Client<Transport, Chain, JsonRpcAccount | LocalAccount | undefined>;
   owners: [OneOf<JsonRpcAccount | LocalAccount>, ...{ address: Address }[]];
-  salt?: bigint;
   accountAddress?: Address;
   factory?: Address;
-  factoryData?: Hex;
-};
+} & (
+  | { salt?: bigint; factoryData?: never }
+  | { salt?: never; factoryData?: Hex }
+);
 
 /**
  * Creates a multi-owner light account.

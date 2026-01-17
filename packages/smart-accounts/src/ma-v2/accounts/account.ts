@@ -50,11 +50,18 @@ export type ToModularAccountV2Params<
       implementationAddress?: never;
     }
   : {
-      salt?: bigint;
       factory?: Address;
-      factoryData?: Hex;
       implementationAddress?: Address;
-    });
+    } & (
+      | {
+          salt?: bigint;
+          factoryData?: never;
+        }
+      | {
+          salt?: never;
+          factoryData?: Hex;
+        }
+    ));
 
 /**
  * Creates a MAv2 account.

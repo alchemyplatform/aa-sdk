@@ -44,12 +44,13 @@ export type ToLightAccountParams<
 > = {
   client: Client<Transport, Chain, JsonRpcAccount | LocalAccount | undefined>;
   owner: JsonRpcAccount | LocalAccount;
-  salt?: bigint;
   accountAddress?: Address;
   factory?: Address;
-  factoryData?: Hex;
   version?: TLightAccountVersion;
-};
+} & (
+  | { salt?: bigint; factoryData?: never }
+  | { salt?: never; factoryData?: Hex }
+);
 
 /**
  * Creates a light account.

@@ -37,11 +37,12 @@ export type MultiOwnerModularAccountV1 = ModularAccountV1Base & {
 export type ToMultiOwnerModularAccountV1Params = {
   client: Client<Transport, Chain, JsonRpcAccount | LocalAccount | undefined>;
   owners: [OneOf<JsonRpcAccount | LocalAccount>, ...{ address: Address }[]];
-  salt?: bigint;
   accountAddress?: Address;
   factory?: Address;
-  factoryData?: Hex;
-};
+} & (
+  | { salt?: bigint; factoryData?: never }
+  | { salt?: never; factoryData?: Hex }
+);
 
 /**
  * Creates a multi-owner MAv1 account.

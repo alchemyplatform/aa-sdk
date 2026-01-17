@@ -75,7 +75,8 @@ describe("MA v1 Account Tests", async () => {
     const providerWithFactoryData = await givenConnectedProvider({
       signer,
       otherOwners,
-      factoryArgs: { factory, factoryData },
+      factoryAddress: factory,
+      factoryData,
     });
 
     expect(providerWithFactoryData.account.address).toBe(expectedAddress);
@@ -391,14 +392,16 @@ describe("MA v1 Account Tests", async () => {
     salt,
     accountAddress,
     paymaster,
-    factoryArgs,
+    factoryAddress,
+    factoryData,
   }: {
     signer: LocalAccount;
     otherOwners?: OneOf<JsonRpcAccount | LocalAccount>[];
     salt?: bigint;
     accountAddress?: Address;
     paymaster?: boolean;
-    factoryArgs?: { factory?: Address; factoryData?: Hex };
+    factoryAddress?: Address;
+    factoryData?: Hex;
   }) => {
     const account = await toMultiOwnerModularAccountV1({
       client: createPublicClient({
@@ -406,9 +409,9 @@ describe("MA v1 Account Tests", async () => {
         chain: instance.chain,
       }),
       owners: [signer, ...(otherOwners || [])],
-      salt,
+      factory: factoryAddress,
       accountAddress,
-      ...factoryArgs,
+      ...(factoryData ? { factoryData } : { salt }),
     });
 
     return createBundlerClient({
