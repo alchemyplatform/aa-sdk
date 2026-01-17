@@ -5,6 +5,7 @@ import {
   publicActions,
   type Address,
   type Call,
+  type Hex,
   type LocalAccount,
 } from "viem";
 import {
@@ -252,6 +253,40 @@ describe("Light Account Tests", () => {
       expect(decoded[1].data?.toLowerCase()).toEqual(
         data[1].data?.toLowerCase(),
       );
+    },
+  );
+
+  it("should successfully get counterfactual address", async () => {
+    const provider = await givenConnectedProvider({
+      signerAccount: accounts.fundedAccountOwner,
+    });
+    expect(provider.account.address).toMatchInlineSnapshot(
+      '"0x9EfDfCB56390eDd8b2eAE6daBC148CED3491AAf6"',
+    );
+  });
+
+  it("should derive correct address from factoryData without accountAddress", async () => {
+    // First create an account normally to get expected address and factory data
+    const provider = await givenConnectedProvider({
+      signerAccount: accounts.fundedAccountOwner,
+    });
+    const expectedAddress = provider.account.address;
+    const { factory, factoryData } = await provider.account.getFactoryArgs();
+
+    // Now create another account with just factoryData (no accountAddress)
+    // and verify it derives the same address via getSenderFromFactoryData
+    const providerWithFactoryData = await givenConnectedProvider({
+      signerAccount: accounts.fundedAccountOwner,
+      factoryAddress: factory,
+      factoryData,
+    });
+
+    expect(providerWithFactoryData.account.address).toBe(expectedAddress);
+  });
+
+  it("should execute successfully", async () => {
+    const provider = await givenConnectedProvider({
+      signerAccount,
     });
 
     it("should expose prepare and format functions that work", async () => {
@@ -465,11 +500,15 @@ describe("Light Account Tests", () => {
     accountAddress,
     signerAccount,
     paymaster,
+    factoryAddress,
+    factoryData,
   }: {
     signerAccount: LocalAccount;
     version: LightAccountVersion<"LightAccount">;
     accountAddress?: Address;
     paymaster?: boolean;
+    factoryAddress?: Address;
+    factoryData?: Hex;
   }) => {
     const account = await toLightAccount({
       client: createWalletClient({
@@ -480,6 +519,8 @@ describe("Light Account Tests", () => {
       version,
       accountAddress,
       owner: signerAccount,
+      factory: factoryAddress,
+      factoryData,
     });
 
     return createBundlerClient({
@@ -495,6 +536,6 @@ describe("Light Account Tests", () => {
       userOperation: {
         estimateFeesPerGas,
       },
-    }).extend((client) => singleOwnerLightAccountActions(client));
+    }).extend(singleOwnerLightAccountActions);
   };
 });

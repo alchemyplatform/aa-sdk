@@ -13,7 +13,10 @@ import { LightAccountAbi_v1 } from "../abis/LightAccountAbi_v1.js";
 import { LightAccountAbi_v2 } from "../abis/LightAccountAbi_v2.js";
 import { LightAccountFactoryAbi_v1 } from "../abis/LightAccountFactoryAbi_v1.js";
 import { LightAccountFactoryAbi_v2 } from "../abis/LightAccountFactoryAbi_v2.js";
-import { predictLightAccountAddress } from "../predictAddress.js";
+import {
+  getLightAccountAddressFromFactoryData,
+  predictLightAccountAddress,
+} from "../predictAddress.js";
 import {
   type LightAccountVersion,
   AccountVersionRegistry,
@@ -42,12 +45,13 @@ export type ToLightAccountParams<
 > = {
   client: Client<Transport, Chain, JsonRpcAccount | LocalAccount | undefined>;
   owner: JsonRpcAccount | LocalAccount;
-  salt?: bigint;
   accountAddress?: Address;
   factory?: Address;
-  factoryData?: Hex;
   version?: TLightAccountVersion;
-};
+} & (
+  | { salt?: bigint; factoryData?: never }
+  | { salt?: never; factoryData?: Hex }
+);
 
 /**
  * Creates a light account.
@@ -87,12 +91,21 @@ export async function toLightAccount<
 
   const accountAddress =
     accountAddress_ ??
-    predictLightAccountAddress({
-      factoryAddress: factory,
-      salt,
-      ownerAddress: owner.address,
-      version,
-    });
+    (factoryData_
+      ? await getLightAccountAddressFromFactoryData({
+          client,
+          factoryAddress: factory,
+          factoryData: factoryData_,
+          entryPoint:
+            AccountVersionRegistry["LightAccount"][version].entryPoint,
+          version,
+        })
+      : predictLightAccountAddress({
+          factoryAddress: factory,
+          salt,
+          ownerAddress: owner.address,
+          version,
+        }));
 
   LOGGER.debug("toLightAccount:address-resolved", { accountAddress });
 
