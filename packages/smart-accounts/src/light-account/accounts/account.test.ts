@@ -482,7 +482,7 @@ describe("Light Account Tests", () => {
       version,
       accountAddress,
       owner: signerAccount,
-      factoryAddress,
+      factory: factoryAddress,
       factoryData,
     });
 
@@ -499,6 +499,6 @@ describe("Light Account Tests", () => {
       userOperation: {
         estimateFeesPerGas,
       },
-    }).extend((client) => singleOwnerLightAccountActions(client));
+    }).extend(singleOwnerLightAccountActions);
   };
 });

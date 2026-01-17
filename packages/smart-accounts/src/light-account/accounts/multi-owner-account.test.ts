@@ -297,7 +297,7 @@ describe.sequential("MultiOwner Light Account Tests", () => {
       accountAddress,
       salt: _salt ?? salt++,
       owners: [signer.account, ...(owners ?? [])],
-      factoryAddress,
+      factory: factoryAddress,
       factoryData,
     });
 

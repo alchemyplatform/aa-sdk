@@ -2355,7 +2355,7 @@ describe("MA v2 Account Tests", async () => {
       accountAddress,
       signerEntity,
       owner: signer,
-      factoryAddress: factoryArgs?.factory,
+      factory: factoryArgs?.factory,
       factoryData: factoryArgs?.factoryData,
       deferredAction,
       mode,

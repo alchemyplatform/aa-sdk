@@ -408,8 +408,7 @@ describe("MA v1 Account Tests", async () => {
       owners: [signer, ...(otherOwners || [])],
       salt,
       accountAddress,
-      factoryAddress: factoryArgs?.factory,
-      factoryData: factoryArgs?.factoryData,
+      ...factoryArgs,
     });
 
     return createBundlerClient({
