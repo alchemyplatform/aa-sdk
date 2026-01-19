@@ -20,6 +20,7 @@ import {
   getUserOperationTypedData,
   toSmartAccount,
   type SmartAccountImplementation,
+  type ToSmartAccountParameters,
 } from "viem/account-abstraction";
 import { getStorageAt, signMessage, signTypedData } from "viem/actions";
 import type {
@@ -67,7 +68,7 @@ export type BaseLightAccountImplementation<
     prepareSignature: (request: SignatureRequest) => Promise<SignatureRequest>;
     formatSignature: (signature: Hex) => Promise<Hex>;
   },
-  false
+  boolean
 >;
 
 export type LightAccountBase<
@@ -94,6 +95,7 @@ export type ToLightAccountBaseParams<
     factory?: Address | undefined;
     factoryData?: Hex | undefined;
   }>;
+  authorization?: ToSmartAccountParameters["authorization"];
 };
 
 export async function toLightAccountBase<
@@ -109,6 +111,7 @@ export async function toLightAccountBase<
   type,
   version,
   getFactoryArgs,
+  authorization,
 }: ToLightAccountBaseParams<
   TLightAccountType,
   TLightAccountVersion,
@@ -232,6 +235,7 @@ export async function toLightAccountBase<
     getFactoryArgs,
     client,
     entryPoint,
+    authorization,
 
     async getAddress() {
       return accountAddress;

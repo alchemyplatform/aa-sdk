@@ -39,8 +39,12 @@ export {
   lightAccountStaticImplV1_0_2,
   lightAccountStaticImplV1_1_0,
   lightAccountStaticImplV2_0_0,
+  lightAccountStaticImplV2_1_0,
+  lightAccountStaticImplV2_2_0,
+  lightAccountStaticImpl7702V2_1_0,
   multiOwnerLightAccountStaticImplV2_0_0,
 } from "./light-account/lightAccountStaticImpl.js";
+export type { LightAccountStaticImpl7702V2_1_0 } from "./light-account/lightAccountStaticImpl.js";
 
 // ModularAccountV1
 export type * from "./ma-v1/accounts/base.js";

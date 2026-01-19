@@ -174,6 +174,15 @@ export const multiOwnerLightAccountStaticImplV2_0_0: StaticSmartAccountImplement
   },
 };
 
+const lightAccountBaseV2_1_0 = {
+  entryPoint: {
+    abi: entryPoint08Abi,
+    address: entryPoint08Address,
+    version: "0.8",
+  },
+  accountAbi: LightAccountAbi_v2,
+} as const;
+
 export const lightAccountStaticImplV2_1_0: StaticSmartAccountImplementation<
   false,
   "0.8",
@@ -182,12 +191,7 @@ export const lightAccountStaticImplV2_1_0: StaticSmartAccountImplementation<
   typeof LightAccountAbi_v2,
   typeof LightAccountFactoryAbi_v2
 > = {
-  entryPoint: {
-    abi: entryPoint08Abi,
-    address: entryPoint08Address,
-    version: "0.8",
-  },
-  accountAbi: LightAccountAbi_v2,
+  ...lightAccountBaseV2_1_0,
   accountImplementation: lowerAddress(
     "0x2c53D0bD33A60db8881c7b049Df6fd762A1f059C",
   ),
@@ -208,6 +212,23 @@ export const lightAccountStaticImplV2_1_0: StaticSmartAccountImplementation<
     });
   },
 };
+
+export type LightAccountStaticImpl7702V2_1_0 = StaticSmartAccountImplementation<
+  true,
+  "0.8",
+  {},
+  typeof entryPoint08Abi,
+  typeof LightAccountAbi_v2,
+  never
+>;
+
+export const lightAccountStaticImpl7702V2_1_0: LightAccountStaticImpl7702V2_1_0 =
+  {
+    ...lightAccountBaseV2_1_0,
+    delegationAddress: lowerAddress(
+      "0x82CfFc0f83A66F016f1273CdD5C43f86E78d2478",
+    ),
+  };
 
 export const lightAccountStaticImplV2_2_0: StaticSmartAccountImplementation<
   false,
