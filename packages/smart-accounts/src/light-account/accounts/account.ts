@@ -6,9 +6,11 @@ import {
   type Hex,
   type JsonRpcAccount,
   type LocalAccount,
+  type PrivateKeyAccount,
   type Transport,
 } from "viem";
-import { readContract } from "viem/actions";
+import { getCode, readContract } from "viem/actions";
+import type { ToSmartAccountParameters } from "viem/account-abstraction";
 import { LightAccountAbi_v1 } from "../abis/LightAccountAbi_v1.js";
 import { LightAccountAbi_v2 } from "../abis/LightAccountAbi_v2.js";
 import { LightAccountFactoryAbi_v1 } from "../abis/LightAccountFactoryAbi_v1.js";
@@ -23,10 +25,15 @@ import {
   LightAccountUnsupported1271Factories,
   defaultLightAccountVersion,
 } from "../utils.js";
+import { is7702Delegated } from "../../utils.js";
 import { toLightAccountBase, type LightAccountBase } from "./base.js";
 import { BaseError, lowerAddress } from "@alchemy/common";
 import { getAction } from "viem/utils";
 import { LOGGER } from "../../logger.js";
+import { InvalidOwnerError } from "../../errors/InvalidOwnerError.js";
+import { lightAccountStaticImpl7702V2_1_0 } from "../lightAccountStaticImpl.js";
+
+type LightAccountMode = "default" | "7702";
 
 export type LightAccount<
   TLightAccountVersion extends
@@ -39,15 +46,24 @@ export type LightAccount<
 export type ToLightAccountParams<
   TLightAccountVersion extends
     LightAccountVersion<"LightAccount"> = LightAccountVersion<"LightAccount">,
+  TMode extends LightAccountMode | undefined = LightAccountMode | undefined,
 > = {
   client: Client<Transport, Chain, JsonRpcAccount | LocalAccount | undefined>;
   owner: JsonRpcAccount | LocalAccount;
-  salt?: bigint;
   accountAddress?: Address;
-  factory?: Address;
-  factoryData?: Hex;
   version?: TLightAccountVersion;
-};
+  mode?: TMode;
+} & (TMode extends "7702"
+  ? {
+      salt?: never;
+      factory?: never;
+      factoryData?: never;
+    }
+  : {
+      salt?: bigint;
+      factory?: Address;
+      factoryData?: Hex;
+    });
 
 /**
  * Creates a light account.
@@ -58,6 +74,7 @@ export type ToLightAccountParams<
 export async function toLightAccount<
   TLightAccountVersion extends
     LightAccountVersion<"LightAccount"> = LightAccountVersion<"LightAccount">,
+  TMode extends LightAccountMode = LightAccountMode,
 >({
   client,
   owner,
@@ -66,11 +83,15 @@ export async function toLightAccount<
   version = defaultLightAccountVersion() as TLightAccountVersion,
   factory = AccountVersionRegistry.LightAccount[version].factoryAddress,
   factoryData: factoryData_,
-}: ToLightAccountParams<TLightAccountVersion>): Promise<
+  mode,
+}: ToLightAccountParams<TLightAccountVersion, TMode>): Promise<
   LightAccount<TLightAccountVersion>
 > {
+  const is7702 = mode === "7702";
+
   LOGGER.debug("toLightAccount:start", {
     version,
+    mode,
     hasAccountAddress: !!accountAddress_,
   });
 
@@ -87,16 +108,42 @@ export async function toLightAccount<
 
   const accountAddress =
     accountAddress_ ??
-    predictLightAccountAddress({
-      factoryAddress: factory,
-      salt,
-      ownerAddress: owner.address,
-      version,
-    });
+    (is7702 && owner.type === "local"
+      ? owner.address
+      : predictLightAccountAddress({
+          factoryAddress: factory,
+          salt,
+          ownerAddress: owner.address,
+          version,
+        }));
 
-  LOGGER.debug("toLightAccount:address-resolved", { accountAddress });
+  LOGGER.debug("toLightAccount:address-resolved", { accountAddress, is7702 });
 
   const getFactoryArgs = async () => {
+    if (is7702) {
+      // For 7702 mode, check if the delegation is already set to the correct address.
+      // We need to do this check here because viem's default isDeployed only checks
+      // for any code, not whether it's the correct delegation.
+      const getCodeAction = getAction(client, getCode, "getCode");
+      const code = await getCodeAction({ address: accountAddress });
+      const delegationAddress =
+        lightAccountStaticImpl7702V2_1_0.delegationAddress;
+      const isCorrectlyDelegated = is7702Delegated(delegationAddress, code);
+
+      if (isCorrectlyDelegated) {
+        return {
+          factory: undefined,
+          factoryData: undefined,
+        };
+      }
+
+      // EIP-7702 uses special factory address for EP 0.8
+      return {
+        factory: "0x7702000000000000000000000000000000000000" as Address,
+        factoryData: "0x" as Hex,
+      } as const;
+    }
+
     const factoryData =
       factoryData_ ??
       encodeFunctionData({
@@ -111,6 +158,39 @@ export async function toLightAccount<
     };
   };
 
+  let authorization: ToSmartAccountParameters["authorization"];
+  if (is7702) {
+    LOGGER.debug("toLightAccount:7702-mode");
+    if (owner.type !== "local") {
+      LOGGER.error("toLightAccount:invalid-owner-type", {
+        ownerType: owner.type,
+      });
+      throw new InvalidOwnerError(
+        `Owner of type ${owner.type} is unsupported for 7702 mode.`,
+      );
+    }
+    if (owner.signAuthorization == null) {
+      LOGGER.error("toLightAccount:missing-signAuthorization");
+      throw new InvalidOwnerError(
+        "Owner must implement `signAuthorization` to be used with 7702 mode.",
+      );
+    }
+
+    // Check if already correctly delegated - if so, no authorization needed
+    const getCodeAction = getAction(client, getCode, "getCode");
+    const code = await getCodeAction({ address: accountAddress });
+    const delegationAddress =
+      lightAccountStaticImpl7702V2_1_0.delegationAddress;
+    const isCorrectlyDelegated = is7702Delegated(delegationAddress, code);
+
+    if (!isCorrectlyDelegated) {
+      authorization = {
+        account: owner as PrivateKeyAccount,
+        address: delegationAddress,
+      };
+    }
+  }
+
   const baseAccount = await toLightAccountBase({
     client,
     owner,
@@ -119,6 +199,7 @@ export async function toLightAccount<
     type: "LightAccount",
     version,
     getFactoryArgs,
+    authorization,
   });
 
   return {

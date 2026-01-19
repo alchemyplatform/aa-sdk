@@ -20,14 +20,21 @@ import {
   getUserOperationTypedData,
   toSmartAccount,
   type SmartAccountImplementation,
+  type ToSmartAccountParameters,
 } from "viem/account-abstraction";
-import { getStorageAt, signMessage, signTypedData } from "viem/actions";
+import {
+  getCode,
+  getStorageAt,
+  signMessage,
+  signTypedData,
+} from "viem/actions";
 import type {
   EntryPointFromAccountRegistry,
   LightAccountType,
   LightAccountVersion,
 } from "../registry.js";
 import { EIP1967_PROXY_IMPL_STORAGE_SLOT } from "../utils.js";
+import { is7702Delegated } from "../../utils.js";
 import { AccountVersionRegistry, isLightAccountVersion2 } from "../registry.js";
 import {
   encodeCallsLA as encodeCalls,
@@ -67,7 +74,7 @@ export type BaseLightAccountImplementation<
     prepareSignature: (request: SignatureRequest) => Promise<SignatureRequest>;
     formatSignature: (signature: Hex) => Promise<Hex>;
   },
-  false
+  boolean
 >;
 
 export type LightAccountBase<
@@ -94,6 +101,7 @@ export type ToLightAccountBaseParams<
     factory?: Address | undefined;
     factoryData?: Hex | undefined;
   }>;
+  authorization?: ToSmartAccountParameters["authorization"];
 };
 
 export async function toLightAccountBase<
@@ -109,6 +117,7 @@ export async function toLightAccountBase<
   type,
   version,
   getFactoryArgs,
+  authorization,
 }: ToLightAccountBaseParams<
   TLightAccountType,
   TLightAccountVersion,
@@ -228,10 +237,17 @@ export async function toLightAccountBase<
     AccountVersionRegistry[type][version] as StaticSmartAccountImplementation
   ).entryPoint;
 
-  return await toSmartAccount({
+  // Extract delegation address for 7702 mode
+  const delegationAddress =
+    authorization && "address" in authorization
+      ? authorization.address
+      : undefined;
+
+  const account = await toSmartAccount({
     getFactoryArgs,
     client,
     entryPoint,
+    authorization,
 
     async getAddress() {
       return accountAddress;
@@ -376,4 +392,25 @@ export async function toLightAccountBase<
       formatSignature,
     },
   });
+
+  // For 7702 mode, we need to override getFactoryArgs because viem's default
+  // isDeployed check returns true for any code at the address, but for 7702
+  // we need to check if it's delegated to the CORRECT address.
+  if (delegationAddress) {
+    account.getFactoryArgs = async () => {
+      const getCodeAction = getAction(client, getCode, "getCode");
+      const code = await getCodeAction({ address: accountAddress });
+      const isCorrectlyDelegated = is7702Delegated(delegationAddress, code);
+
+      if (isCorrectlyDelegated) {
+        return { factory: undefined, factoryData: undefined };
+      }
+
+      // Not correctly delegated - call our original getFactoryArgs
+      // which returns the 0x7702 factory
+      return getFactoryArgs();
+    };
+  }
+
+  return account;
 }
