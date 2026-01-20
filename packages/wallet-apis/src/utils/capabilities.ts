@@ -4,12 +4,18 @@ import type {
 } from "@alchemy/wallet-api-types/capabilities";
 import type { InnerWalletApiClient } from "../types.js";
 
+export type MergeClientCapabilitiesOptions = {
+  /** If true, always use policyId (singular) even when client has multiple policyIds. Takes the first one. */
+  useSinglePolicyId?: boolean;
+};
+
 /**
  * Merges client capabilities with capabilities from the request.
- * Uses policyId (singular) when there's one policy, policyIds (array) when multiple.
+ * Uses policyId (singular) when there's one policy, policyIds (array) when multiple (unless useSinglePolicyId is true).
  *
  * @param {InnerWalletApiClient} client - The inner wallet API client (potentially including global capabilities like policy IDs)
  * @param {T | undefined} capabilities - Request capabilities to merge with, if any
+ * @param {MergeClientCapabilitiesOptions} options - Options for merging
  * @returns {T | undefined} The merged capabilities object, or original capabilities if no capability configuration exists on the client
  */
 export const mergeClientCapabilities = <
@@ -17,15 +23,18 @@ export const mergeClientCapabilities = <
 >(
   client: InnerWalletApiClient,
   capabilities: T | undefined,
+  options?: MergeClientCapabilitiesOptions,
 ): T | undefined => {
   if (!client.policyIds?.length || capabilities?.paymasterService) {
     return capabilities;
   }
 
+  const useSinglePolicyId = options?.useSinglePolicyId ?? false;
+
   return {
     ...capabilities,
     paymasterService:
-      client.policyIds.length === 1
+      useSinglePolicyId || client.policyIds.length === 1
         ? { policyId: client.policyIds[0] }
         : { policyIds: client.policyIds },
   } as T;

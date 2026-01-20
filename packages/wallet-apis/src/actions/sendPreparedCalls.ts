@@ -54,7 +54,12 @@ export async function sendPreparedCalls(
   client: InnerWalletApiClient,
   params: SendPreparedCallsParams,
 ): Promise<SendPreparedCallsResult> {
-  params.capabilities = mergeClientCapabilities(client, params.capabilities);
+  params.capabilities = mergeClientCapabilities(client, params.capabilities, {
+    // `wallet_prepareCalls` accepts multiple policy ids, but this is only supported for
+    // traditional "sponsorship" policy types. Since `wallet_sendPreparedCalls` only
+    // requires a policy id for BSOs, we always use a single policy here.
+    useSinglePolicyId: true,
+  });
 
   LOGGER.debug("sendPreparedCalls:start", { type: params.type });
   const res = await client.request({

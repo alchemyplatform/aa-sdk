@@ -111,6 +111,24 @@ describe("mergeClientCapabilities", () => {
 
     expect(result).toBeUndefined();
   });
+
+  it("uses policyId (singular) when useSinglePolicyId option is true, even with multiple policyIds", () => {
+    const client = createMockClient(["policy-1", "policy-2", "policy-3"]);
+    const capabilities: PrepareCallsCapabilities = {
+      permissions: { context: "0x1234" },
+    };
+
+    const result = mergeClientCapabilities(
+      client as InnerWalletApiClient,
+      capabilities,
+      { useSinglePolicyId: true },
+    );
+
+    expect(result).toEqual({
+      permissions: { context: "0x1234" },
+      paymasterService: { policyId: "policy-1" },
+    });
+  });
 });
 
 describe("extractCapabilitiesForSending", () => {
