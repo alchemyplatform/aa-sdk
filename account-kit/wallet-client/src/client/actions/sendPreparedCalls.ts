@@ -2,6 +2,7 @@ import { toHex } from "viem";
 import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
 import type { InnerWalletApiClient, WithoutChainId } from "../../types.ts";
 import { metrics } from "../../metrics.js";
+import { mergeClientCapabilities } from "../../internal/capabilities.js";
 
 type RpcSchema = Extract<
   WalletServerRpcSchemaType,
@@ -59,6 +60,8 @@ export async function sendPreparedCalls(
       type: params.type,
     },
   });
+
+  params.capabilities = mergeClientCapabilities(client, params.capabilities);
 
   return client.request({
     method: "wallet_sendPreparedCalls",

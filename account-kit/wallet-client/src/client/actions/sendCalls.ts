@@ -86,11 +86,31 @@ export async function sendCalls<
 
   const signedCalls = await signPreparedCalls(signer, calls);
 
+  // Extract only the fields supported by sendPreparedCalls capabilities.
+  const paymasterService = params.capabilities?.paymasterService;
+  const sendPreparedCallsPaymasterService =
+    paymasterService != null
+      ? {
+          // TODO(jh): create a helper for getting single policy id here if we do it elsewhere?
+          policyId:
+            "policyId" in paymasterService
+              ? paymasterService.policyId
+              : paymasterService.policyIds[0],
+          webhookData: paymasterService.webhookData,
+        }
+      : undefined;
+
   return await sendPreparedCalls(client, {
     ...signedCalls,
-    // The only capability that is supported in sendPreparedCalls is permissions.
-    ...(params.capabilities?.permissions != null
-      ? { capabilities: { permissions: params.capabilities.permissions } }
+    // The only capabilities supported in sendPreparedCalls are permissions & paymasterService (policyId & webhookData only).
+    ...(params.capabilities?.permissions != null ||
+    sendPreparedCallsPaymasterService != null
+      ? {
+          capabilities: {
+            permissions: params.capabilities?.permissions,
+            paymasterService: sendPreparedCallsPaymasterService,
+          },
+        }
       : {}),
   });
 }
