@@ -245,10 +245,10 @@
     typebox "^1.0.0"
     viem "2.29.2"
 
-"@alchemy/wallet-api-types@^0.1.0-alpha.20":
-  version "0.1.0-alpha.20"
-  resolved "https://registry.yarnpkg.com/@alchemy/wallet-api-types/-/wallet-api-types-0.1.0-alpha.20.tgz#c566210129687b01e456f670a980ba13b6d4f3ca"
-  integrity sha512-zlCOrCrzt7FCf1U6f79uug+eYD5PmkO9A+aHB51xEBSde/G6qmrWElpFYTdWQbbWx2jwK6KgQPHD0SvaWbt7lw==
+"@alchemy/wallet-api-types@^0.1.0-alpha.21":
+  version "0.1.0-alpha.21"
+  resolved "https://registry.yarnpkg.com/@alchemy/wallet-api-types/-/wallet-api-types-0.1.0-alpha.21.tgz#42b015aab80a60a0612e903b2d23410e1050889a"
+  integrity sha512-A6VIGuvPL9eIEVWymj8sqm/fLYM8IpG4/j2SmJJujAT2Zq13GxgDXxF8cOk1MpA0RLtbBTiYcZX+SghNz9AbnQ==
   dependencies:
     "@alchemy/common" "0.0.0-alpha.13"
     deep-equal "^2.2.3"

@@ -19,7 +19,7 @@ import type {
   PreparedCall_UserOpV060,
   PreparedCall_UserOpV070,
 } from "@alchemy/wallet-api-types";
-import type { Capabilities as WalletApiCapabilities } from "@alchemy/wallet-api-types/capabilities";
+import type { PrepareCallsCapabilities as WalletApiCapabilities } from "@alchemy/wallet-api-types/capabilities";
 
 export type ViemEncodedPreparedCalls =
   | (ViemEncodedUserOperationCall | ViemEncodedPaymasterPermitCall)
