@@ -9,7 +9,7 @@ import {
 } from "viem";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import { entryPoint06Address, entryPoint06Abi } from "viem/account-abstraction";
-import { local060Instance } from "~test/instances.js";
+import { localInstance } from "~test/instances.js";
 import { toMultiOwnerModularAccountV1 } from "./accounts/multi-owner-account.js";
 import {
   getMultiOwnerModularAccountV1AddressFromFactoryData,
@@ -21,17 +21,15 @@ import { getAccountAddressViaEntryPoint } from "../test-utils/getAccountAddressV
 import * as utils from "../utils.js";
 
 describe("MAv1 Counterfactual Address Tests", () => {
-  const instanceV060 = local060Instance;
-
   it("Multi-Owner MAv1 should match the entrypoint generated counterfactual address", async () => {
     // Repeat 20 times, with a randomized address and salt. Pseudo-fuzzing.
 
     for (let i = 0; i < 20; i++) {
-      const chain = instanceV060.chain;
+      const chain = localInstance.chain;
 
       const localSigner = createWalletClient({
         account: privateKeyToAccount(generatePrivateKey()),
-        transport: custom(instanceV060.getClient()),
+        transport: custom(localInstance.getClient()),
         chain,
       });
 
@@ -54,7 +52,7 @@ describe("MAv1 Counterfactual Address Tests", () => {
 
       // Compute the address using the EntryPoint's getSenderAddress function
       const entryPointComputedAddress = await getAccountAddressViaEntryPoint({
-        client: instanceV060.getClient(),
+        client: localInstance.getClient(),
         entryPointAddress: entryPoint06Address,
         entryPointAbi: entryPoint06Abi,
         getAccountInitCode: async () => {
@@ -91,7 +89,7 @@ describe("MAv1 Counterfactual Address Tests", () => {
 });
 
 describe("getMultiOwnerModularAccountV1AddressFromFactoryData", () => {
-  const instanceV060 = local060Instance;
+  const instanceV060 = localInstance;
 
   it("should decode factory data and predict address for default factory", async () => {
     const localSigner = createWalletClient({

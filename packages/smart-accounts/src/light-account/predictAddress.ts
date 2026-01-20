@@ -84,7 +84,9 @@ export function predictLightAccountAddress({
       });
 
     case "v2.0.0":
-      // Logic ported from LA factory v2.0.0
+    case "v2.1.0":
+    case "v2.2.0":
+      // Logic ported from LA factory v2
       const combinedSalt = keccak256(
         encodeAbiParameters(
           [{ type: "address" }, { type: "uint256" }],
@@ -100,7 +102,6 @@ export function predictLightAccountAddress({
         salt: combinedSalt,
         bytecode: initCode,
       });
-
     default:
       assertNeverLightAccountVersion(version);
   }

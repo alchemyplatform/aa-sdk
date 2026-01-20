@@ -154,6 +154,7 @@ export const getSenderFromFactoryData = async (
     }
 
     switch (params.entryPoint.version) {
+      case "0.9":
       case "0.8":
       case "0.7": {
         const decoded = decodeErrorResult({

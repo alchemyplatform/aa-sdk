@@ -133,12 +133,6 @@ export type RundlerParameters = {
   mempoolConfigPath?: string;
 
   /**
-   * Disables entry point version v0.6.
-   * @default false
-   */
-  disableEntryPointV0_6?: boolean;
-
-  /**
    * The number of builder accounts to use for entry point version v0.6.
    *
    * @default 1
@@ -146,16 +140,28 @@ export type RundlerParameters = {
   numBuildersV0_6?: number;
 
   /**
-   * Disables entry point version v0.7.
-   * @default false
-   */
-  disableEntryPointV0_7?: boolean;
-
-  /**
    * The number of builder accounts to use for entry point version v0.7.
    * @default 1
    */
   numBuildersV0_7?: number;
+
+  /**
+   * The number of builder accounts to use for entry point version v0.8.
+   * @default 1
+   */
+  numBuildersV0_8?: number;
+
+  /**
+   * The number of builder accounts to use for entry point version v0.9.
+   * @default 1
+   */
+  numBuildersV0_9?: number;
+
+  /**
+   * The entry points to enable.
+   * @default "v0.7"
+   */
+  enabledEntryPoints?: ("v0.6" | "v0.7" | "v0.8" | "v0.9")[];
 
   metrics?: {
     /**
@@ -428,7 +434,7 @@ export type RundlerParameters = {
 export const rundler = defineInstance((parameters?: RundlerParameters) => {
   const {
     binary = "rundler",
-    logLevel = "debug",
+    logLevel = "info",
     chainId,
     ...args
   } = (parameters ?? {}) as RundlerParameters;
@@ -450,6 +456,7 @@ export const rundler = defineInstance((parameters?: RundlerParameters) => {
     async start({ port = args.rpc?.port ?? 3000 }, options) {
       const args_ = {
         ...args,
+        enabledEntryPoints: ["v0.6", "v0.7", "v0.8", "v0.9"],
         builder: {
           ...args.builder,
         },

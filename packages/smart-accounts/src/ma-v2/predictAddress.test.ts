@@ -13,7 +13,7 @@ import {
   entryPoint07Abi,
 } from "viem/account-abstraction";
 import { parsePublicKey, serializePublicKey } from "webauthn-p256";
-import { local070Instance } from "~test/instances.js";
+import { localInstance } from "~test/instances.js";
 import { SoftWebauthnDevice } from "~test/webauthn.js";
 import { toModularAccountV2 } from "./accounts/account.js";
 import {
@@ -27,17 +27,15 @@ import { getAccountAddressViaEntryPoint } from "../test-utils/getAccountAddressV
 import * as utils from "../utils.js";
 
 describe("MAv2 Counterfactual Address Tests", () => {
-  const instanceV070 = local070Instance;
-
   it("MAv2 should match the entrypoint generated counterfactual address", async () => {
     // Repeat 20 times, with a randomized address and salt. Pseudo-fuzzing.
 
     for (let i = 0; i < 20; i++) {
-      const chain = instanceV070.chain;
+      const chain = localInstance.chain;
 
       const localSigner = createWalletClient({
         account: privateKeyToAccount(generatePrivateKey()),
-        transport: custom(instanceV070.getClient()),
+        transport: custom(localInstance.getClient()),
         chain,
       });
 
@@ -53,7 +51,7 @@ describe("MAv2 Counterfactual Address Tests", () => {
 
       // Compute the address using the EntryPoint's getSenderAddress function
       const entryPointComputedAddress = await getAccountAddressViaEntryPoint({
-        client: instanceV070.getClient(),
+        client: localInstance.getClient(),
         entryPointAddress: entryPoint07Address,
         entryPointAbi: entryPoint07Abi,
         getAccountInitCode: async () => {
@@ -84,7 +82,7 @@ describe("MAv2 Counterfactual Address Tests", () => {
     // Repeat 20 times, with a randomized webauthn credential and salt. Pseudo-fuzzing.
 
     for (let i = 0; i < 20; i++) {
-      const chain = instanceV070.chain;
+      const chain = localInstance.chain;
 
       // Create a WebAuthn credential for testing
       const webauthnDevice = new SoftWebauthnDevice();
@@ -104,7 +102,7 @@ describe("MAv2 Counterfactual Address Tests", () => {
 
       const modularAccountV2 = await toModularAccountV2({
         client: createWalletClient({
-          transport: custom(instanceV070.getClient()),
+          transport: custom(localInstance.getClient()),
           chain,
         }),
         owner: webauthnAccount,
@@ -114,7 +112,7 @@ describe("MAv2 Counterfactual Address Tests", () => {
       // Compute the address using the EntryPoint's getSenderAddress function
       const { x, y } = parsePublicKey(credential.publicKey);
       const entryPointComputedAddress = await getAccountAddressViaEntryPoint({
-        client: instanceV070.getClient(),
+        client: localInstance.getClient(),
         entryPointAddress: entryPoint07Address,
         entryPointAbi: entryPoint07Abi,
         getAccountInitCode: async () => {
@@ -143,14 +141,14 @@ describe("MAv2 Counterfactual Address Tests", () => {
 });
 
 describe("getModularAccountV2AddressFromFactoryData", () => {
-  const instanceV070 = local070Instance;
+  const instance = localInstance;
 
   describe("SMA factory", () => {
     it("should decode factory data and predict address for default factory", async () => {
       const localSigner = createWalletClient({
         account: privateKeyToAccount(generatePrivateKey()),
-        transport: custom(instanceV070.getClient()),
-        chain: instanceV070.chain,
+        transport: custom(instance.getClient()),
+        chain: instance.chain,
       });
 
       const salt = BigInt(generatePrivateKey());
@@ -166,7 +164,7 @@ describe("getModularAccountV2AddressFromFactoryData", () => {
       const getSenderSpy = vi.spyOn(utils, "getSenderFromFactoryData");
 
       const address = await getModularAccountV2AddressFromFactoryData({
-        client: instanceV070.getClient(),
+        client: instance.getClient(),
         factoryAddress: DefaultAddress.MAV2_FACTORY,
         factoryData,
         implementationAddress: DefaultAddress.SMAV2_BYTECODE,
@@ -191,8 +189,8 @@ describe("getModularAccountV2AddressFromFactoryData", () => {
     it("should fall back to RPC for non-default factory", async () => {
       const localSigner = createWalletClient({
         account: privateKeyToAccount(generatePrivateKey()),
-        transport: custom(instanceV070.getClient()),
-        chain: instanceV070.chain,
+        transport: custom(instance.getClient()),
+        chain: instance.chain,
       });
 
       const salt = BigInt(generatePrivateKey());
@@ -215,7 +213,7 @@ describe("getModularAccountV2AddressFromFactoryData", () => {
         .mockResolvedValue(mockAddress);
 
       const address = await getModularAccountV2AddressFromFactoryData({
-        client: instanceV070.getClient(),
+        client: instance.getClient(),
         factoryAddress: nonDefaultFactory,
         factoryData,
         implementationAddress: DefaultAddress.SMAV2_BYTECODE,
@@ -252,7 +250,7 @@ describe("getModularAccountV2AddressFromFactoryData", () => {
       const getSenderSpy = vi.spyOn(utils, "getSenderFromFactoryData");
 
       const address = await getModularAccountV2AddressFromFactoryData({
-        client: instanceV070.getClient(),
+        client: instance.getClient(),
         factoryAddress: DefaultAddress.MAV2_FACTORY_WEBAUTHN,
         factoryData,
         implementationAddress: DefaultAddress.MAV2,
@@ -305,7 +303,7 @@ describe("getModularAccountV2AddressFromFactoryData", () => {
         .mockResolvedValue(mockAddress);
 
       const address = await getModularAccountV2AddressFromFactoryData({
-        client: instanceV070.getClient(),
+        client: instance.getClient(),
         factoryAddress: nonDefaultFactory,
         factoryData,
         implementationAddress: DefaultAddress.MAV2,

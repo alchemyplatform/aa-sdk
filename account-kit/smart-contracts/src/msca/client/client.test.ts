@@ -9,12 +9,11 @@ import {
 } from "@account-kit/infra";
 import { type Address, custom, parseEther } from "viem";
 import { setBalance } from "viem/actions";
-import { local060Instance } from "~test/instances.js";
+import { localInstance } from "~test/instances.js";
 import { createMultisigModularAccountClient } from "../client/client.js";
 import { createMultiOwnerModularAccountClient } from "./client.js";
 
 describe("Modular Account Multi Owner Account Tests", async () => {
-  const instance = local060Instance;
   const MODULAR_MULTIOWNER_ACCOUNT_OWNER_MNEMONIC =
     "indoor dish desk flag debris potato excuse depart ticket judge file exit";
 
@@ -46,7 +45,7 @@ describe("Modular Account Multi Owner Account Tests", async () => {
       owners,
     });
 
-    await setBalance(instance.getClient(), {
+    await setBalance(localInstance.getClient(), {
       address: provider.getAddress(),
       value: parseEther("1"),
     });
@@ -80,7 +79,7 @@ describe("Modular Account Multi Owner Account Tests", async () => {
       owners,
     });
 
-    await setBalance(instance.getClient(), {
+    await setBalance(localInstance.getClient(), {
       address: provider.getAddress(),
       value: parseEther("1"),
     });
@@ -273,7 +272,7 @@ describe("Modular Account Multi Owner Account Tests", async () => {
       "0x0000000000000000000000000000000000000000",
     );
 
-    await setBalance(instance.getClient(), {
+    await setBalance(localInstance.getClient(), {
       address: provider.getAddress(),
       value: parseEther("1"),
     });
@@ -299,14 +298,14 @@ describe("Modular Account Multi Owner Account Tests", async () => {
 
   it("should test 1/1 multisig", async () => {
     const client1 = await createMultisigModularAccountClient({
-      chain: instance.chain,
-      transport: custom(instance.getClient()),
+      chain: localInstance.chain,
+      transport: custom(localInstance.getClient()),
       signer: signer1,
       owners: [await signer1.getAddress(), await signer2.getAddress()],
       threshold: 1n,
     });
 
-    await setBalance(instance.getClient(), {
+    await setBalance(localInstance.getClient(), {
       address: client1.getAddress(),
       value: parseEther("1"),
     });
@@ -326,23 +325,23 @@ describe("Modular Account Multi Owner Account Tests", async () => {
 
   it("should test 2/2 multisig", async () => {
     const client = await createMultisigModularAccountClient({
-      chain: instance.chain,
-      transport: custom(instance.getClient()),
+      chain: localInstance.chain,
+      transport: custom(localInstance.getClient()),
       signer: signer1,
       owners: [await signer1.getAddress(), await signer2.getAddress()],
       threshold: 2n,
     });
 
     const client2 = await createMultisigModularAccountClient({
-      chain: instance.chain,
+      chain: localInstance.chain,
       accountAddress: client.getAddress(),
-      transport: custom(instance.getClient()),
+      transport: custom(localInstance.getClient()),
       signer: signer2,
       owners: [await signer1.getAddress(), await signer2.getAddress()],
       threshold: 2n,
     });
 
-    await setBalance(instance.getClient(), {
+    await setBalance(localInstance.getClient(), {
       address: client.getAddress(),
       value: parseEther("1"),
     });
@@ -381,8 +380,8 @@ describe("Modular Account Multi Owner Account Tests", async () => {
     const clients = await Promise.all(
       signers.map(async (s) => {
         return createMultisigModularAccountClient({
-          chain: instance.chain,
-          transport: custom(instance.getClient()),
+          chain: localInstance.chain,
+          transport: custom(localInstance.getClient()),
           signer: s,
           owners: await Promise.all(signers.map((s) => s.getAddress())),
           threshold: 3n,
@@ -390,7 +389,7 @@ describe("Modular Account Multi Owner Account Tests", async () => {
       }),
     );
 
-    await setBalance(instance.getClient(), {
+    await setBalance(localInstance.getClient(), {
       address: clients[0].getAddress(),
       value: parseEther("1"),
     });
@@ -441,17 +440,17 @@ describe("Modular Account Multi Owner Account Tests", async () => {
       accountAddress,
       owners,
       salt,
-      transport: custom(instance.getClient()),
-      chain: instance.chain,
+      transport: custom(localInstance.getClient()),
+      chain: localInstance.chain,
       feeEstimator: alchemyFeeEstimator(
         // @ts-ignore (expects an alchemy transport, but we're using a custom transport for mocking)
-        custom(instance.getClient()),
+        custom(localInstance.getClient()),
       ),
       ...(paymasterMiddleware === "alchemyGasAndPaymasterAndData"
         ? alchemyGasAndPaymasterAndDataMiddleware({
             policyId: "FAKE_POLICY_ID",
             // @ts-ignore (expects an alchemy transport, but we're using a custom transport for mocking)
-            transport: custom(instance.getClient()),
+            transport: custom(localInstance.getClient()),
           })
         : paymasterMiddleware === "erc7677"
           ? erc7677Middleware()

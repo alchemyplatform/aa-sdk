@@ -14,7 +14,7 @@ import {
   entryPoint06Abi,
   entryPoint07Abi,
 } from "viem/account-abstraction";
-import { local060Instance, local070Instance } from "~test/instances.js";
+import { localInstance } from "~test/instances.js";
 import { LightAccountFactoryAbi_v1 } from "./abis/LightAccountFactoryAbi_v1.js";
 import { LightAccountFactoryAbi_v2 } from "./abis/LightAccountFactoryAbi_v2.js";
 import { MultiOwnerLightAccountFactoryAbi } from "./abis/MultiOwnerLightAccountFactoryAbi.js";
@@ -34,9 +34,6 @@ import { getAccountAddressViaEntryPoint } from "../test-utils/getAccountAddressV
 import * as utils from "../utils.js";
 
 describe("Light Account Counterfactual Address Tests", () => {
-  const instanceV060 = local060Instance;
-  const instanceV070 = local070Instance;
-
   it.each([
     "v1.0.1",
     "v1.0.2",
@@ -49,8 +46,8 @@ describe("Light Account Counterfactual Address Tests", () => {
       for (let i = 0; i < 20; i++) {
         const localSigner = createWalletClient({
           account: privateKeyToAccount(generatePrivateKey()),
-          transport: custom(instanceV060.getClient()),
-          chain: instanceV060.chain,
+          transport: custom(localInstance.getClient()),
+          chain: localInstance.chain,
         });
 
         // Generate a random salt. The same generator function for private keys can be used, because it is also a 32 byte value.
@@ -65,7 +62,7 @@ describe("Light Account Counterfactual Address Tests", () => {
 
         // Compute the address using the EntryPoint's getSenderAddress function
         const entryPointComputedAddress = await getAccountAddressViaEntryPoint({
-          client: instanceV060.getClient(),
+          client: localInstance.getClient(),
           entryPointAddress: entryPoint06Address,
           entryPointAbi: entryPoint06Abi,
           getAccountInitCode: async () => {
@@ -100,8 +97,8 @@ describe("Light Account Counterfactual Address Tests", () => {
     for (let i = 0; i < 20; i++) {
       const localSigner = createWalletClient({
         account: privateKeyToAccount(generatePrivateKey()),
-        transport: custom(instanceV070.getClient()),
-        chain: instanceV070.chain,
+        transport: custom(localInstance.getClient()),
+        chain: localInstance.chain,
       });
 
       // Generate a random salt. The same generator function for private keys can be used, because it is also a 32 byte value.
@@ -116,7 +113,7 @@ describe("Light Account Counterfactual Address Tests", () => {
 
       // Compute the address using the EntryPoint's getSenderAddress function
       const entryPointComputedAddress = await getAccountAddressViaEntryPoint({
-        client: instanceV070.getClient(),
+        client: localInstance.getClient(),
         entryPointAddress: entryPoint07Address,
         entryPointAbi: entryPoint07Abi,
         getAccountInitCode: async () => {
@@ -145,8 +142,8 @@ describe("Light Account Counterfactual Address Tests", () => {
     for (let i = 0; i < 20; i++) {
       const localSigner = createWalletClient({
         account: privateKeyToAccount(generatePrivateKey()),
-        transport: custom(instanceV070.getClient()),
-        chain: instanceV070.chain,
+        transport: custom(localInstance.getClient()),
+        chain: localInstance.chain,
       });
 
       const signerAddress = localSigner.account.address;
@@ -168,7 +165,7 @@ describe("Light Account Counterfactual Address Tests", () => {
 
       // Compute the address using the EntryPoint's getSenderAddress function
       const entryPointComputedAddress = await getAccountAddressViaEntryPoint({
-        client: instanceV070.getClient(),
+        client: localInstance.getClient(),
         entryPointAddress: entryPoint07Address,
         entryPointAbi: entryPoint07Abi,
         getAccountInitCode: async () => {
@@ -206,7 +203,7 @@ describe("Light Account Counterfactual Address Tests", () => {
 });
 
 describe("getLightAccountAddressFromFactoryData", () => {
-  const instanceV070 = local070Instance;
+  const instanceV070 = localInstance;
 
   it("should decode factory data and predict address for default factory", async () => {
     const localSigner = createWalletClient({
@@ -294,7 +291,7 @@ describe("getLightAccountAddressFromFactoryData", () => {
 });
 
 describe("getMultiOwnerLightAccountAddressFromFactoryData", () => {
-  const instanceV070 = local070Instance;
+  const instanceV070 = localInstance;
 
   it("should decode factory data and predict address for default factory", async () => {
     const localSigner = createWalletClient({

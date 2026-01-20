@@ -14,6 +14,7 @@ import {
 } from "viem";
 import { paymaster060 } from "./paymaster060";
 import { paymaster070 } from "./paymaster070";
+import { paymaster080 } from "./paymaster080";
 import { estimateUserOperationGas } from "../../../aa-sdk/core/src/actions/bundler/estimateUserOperationGas";
 
 export const paymasterTransport = (
@@ -35,14 +36,8 @@ export const paymasterTransport = (
         }
 
         try {
-          if (
-            entrypoint.toLowerCase() ===
-            paymaster060.entryPointAddress.toLowerCase()
-          ) {
-            return paymaster060.getPaymasterStubData();
-          } else {
-            return paymaster070.getPaymasterStubData();
-          }
+          const paymaster = getPaymasterForAddress(entrypoint);
+          return paymaster.getPaymasterStubData();
         } catch (e) {
           console.log(e);
           throw e;
@@ -60,14 +55,8 @@ export const paymasterTransport = (
         }
 
         try {
-          if (
-            entrypoint.toLowerCase() ===
-            paymaster060.entryPointAddress.toLowerCase()
-          ) {
-            return paymaster060.getPaymasterData(uo, client);
-          } else {
-            return paymaster070.getPaymasterData(uo, client);
-          }
+          const paymaster = getPaymasterForAddress(entrypoint);
+          return paymaster.getPaymasterData(uo, client);
         } catch (e) {
           console.log(e);
           throw e;
@@ -92,9 +81,8 @@ export const paymasterTransport = (
                 };
               },
             ];
-          const isPMv7 =
-            entryPoint.toLowerCase() ===
-            paymaster070.entryPointAddress.toLowerCase();
+
+          const paymaster = getPaymasterForAddress(entryPoint);
 
           let uo = {
             ...userOperation,
@@ -120,9 +108,7 @@ export const paymasterTransport = (
             params: [],
           });
 
-          const stubData = isPMv7
-            ? paymaster070.getPaymasterStubData()
-            : paymaster060.getPaymasterStubData();
+          const stubData = paymaster.getPaymasterStubData();
 
           uo = {
             ...uo,
@@ -141,16 +127,14 @@ export const paymasterTransport = (
           uo = {
             ...uo,
             ...gasEstimates,
-            ...(isPMv7
+            ...(paymaster.isV07Abi
               ? {
                   paymasterPostOpGasLimit: toHex(0),
                 }
               : {}),
           };
 
-          const pmFields = isPMv7
-            ? await paymaster070.getPaymasterData(uo, client)
-            : await paymaster060.getPaymasterData(uo, client);
+          const pmFields = await paymaster.getPaymasterData(uo, client);
 
           return {
             ...uo,
@@ -166,3 +150,18 @@ export const paymasterTransport = (
       throw new Error("Method not found");
     },
   });
+
+const getPaymasterForAddress = (address: Address) => {
+  if (address.toLowerCase() === paymaster060.entryPointAddress.toLowerCase()) {
+    return paymaster060;
+  } else if (
+    address.toLowerCase() === paymaster070.entryPointAddress.toLowerCase()
+  ) {
+    return paymaster070;
+  } else if (
+    address.toLowerCase() === paymaster080.entryPointAddress.toLowerCase()
+  ) {
+    return paymaster080;
+  }
+  throw new Error(`Paymaster not found for address ${address}`);
+};
