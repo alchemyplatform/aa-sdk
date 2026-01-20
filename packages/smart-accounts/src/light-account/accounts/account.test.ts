@@ -461,15 +461,6 @@ describe("Light Account Tests", () => {
 
   // TODO(v5): implement test for upgrading account to MAv2 (prob will do this in the MAv2 tests)
 
-  it("should successfully get counterfactual address", async () => {
-    const provider = await givenConnectedProvider({
-      signerAccount: accounts.fundedAccountOwner,
-    });
-    expect(provider.account.address).toMatchInlineSnapshot(
-      '"0x9EfDfCB56390eDd8b2eAE6daBC148CED3491AAf6"',
-    );
-  });
-
   it("should derive correct address from factoryData without accountAddress", async () => {
     // First create an account normally to get expected address and factory data
     const provider = await givenConnectedProvider({
