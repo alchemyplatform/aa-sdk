@@ -1,17 +1,9 @@
 import type {
-  Capabilities,
-  PermissionsCapability,
+  PrepareCallsCapabilities,
+  SendPreparedCallsCapabilities,
 } from "@alchemy/wallet-api-types/capabilities";
-import type { InnerWalletApiClientBase } from "../types.js";
 
-// TODO(jh): this should be imported from wallet-api-types.
-export type RpcSendPreparedCallsCapabilities = {
-  permissions?: PermissionsCapability;
-  paymasterService?: {
-    policyId: string;
-    webhookData?: string;
-  };
-};
+import type { InnerWalletApiClientBase } from "../types.js";
 
 /**
  * Merges client capabilities with capabilities from the request.
@@ -22,7 +14,7 @@ export type RpcSendPreparedCallsCapabilities = {
  * @returns {T | undefined} The merged capabilities object, or original capabilities if no capability configuration exists on the client
  */
 export const mergeClientCapabilities = <
-  T extends Capabilities | RpcSendPreparedCallsCapabilities,
+  T extends PrepareCallsCapabilities | SendPreparedCallsCapabilities,
 >(
   client: InnerWalletApiClientBase,
   capabilities: T | undefined,
@@ -44,12 +36,12 @@ export const mergeClientCapabilities = <
  * Extracts capabilities from prepareCalls that are useable for sendPreparedCalls.
  * Converts policyIds (array) to policyId (singular) by taking the first element.
  *
- * @param {Capabilities | undefined} capabilities - The prepareCalls capabilities
- * @returns {RpcSendPreparedCallsCapabilities | undefined} The sendPreparedCalls capabilities, or undefined if no relevant capabilities exist
+ * @param {PrepareCallsCapabilities | undefined} capabilities - The prepareCalls capabilities
+ * @returns {SendPreparedCallsCapabilities | undefined} The sendPreparedCalls capabilities, or undefined if no relevant capabilities exist
  */
 export const extractCapabilitiesForSending = (
-  capabilities: Capabilities | undefined,
-): RpcSendPreparedCallsCapabilities | undefined => {
+  capabilities: PrepareCallsCapabilities | undefined,
+): SendPreparedCallsCapabilities | undefined => {
   const paymasterService = capabilities?.paymasterService;
   const sendPreparedCallsPaymasterService =
     paymasterService != null
