@@ -2,8 +2,6 @@ import type {
   Capabilities,
   PermissionsCapability,
 } from "@alchemy/wallet-api-types/capabilities";
-// TODO(jh): this must be a type import to not break react native!
-// import { wallet_sendPreparedCalls as RpcSendPreparedCalls } from "@alchemy/wallet-api-types/rpc";
 import type { InnerWalletApiClient } from "../types.js";
 
 // TODO(jh): this should be imported from wallet-api-types.
@@ -35,11 +33,44 @@ export const mergeClientCapabilities = <
 
   return {
     ...capabilities,
-    paymasterService: {
-      ...capabilities?.paymasterService,
-      ...(client.policyIds.length === 1
+    paymasterService:
+      client.policyIds.length === 1
         ? { policyId: client.policyIds[0] }
-        : { policyIds: client.policyIds }),
-    },
+        : { policyIds: client.policyIds },
   } as T;
+};
+
+/**
+ * Extracts capabilities from prepareCalls that are useable for sendPreparedCalls.
+ * Converts policyIds (array) to policyId (singular) by taking the first element.
+ *
+ * @param {Capabilities | undefined} capabilities - The prepareCalls capabilities
+ * @returns {RpcSendPreparedCallsCapabilities | undefined} The sendPreparedCalls capabilities, or undefined if no relevant capabilities exist
+ */
+export const extractCapabilitiesForSending = (
+  capabilities: Capabilities | undefined,
+): RpcSendPreparedCallsCapabilities | undefined => {
+  const paymasterService = capabilities?.paymasterService;
+  const sendPreparedCallsPaymasterService =
+    paymasterService != null
+      ? {
+          policyId:
+            "policyId" in paymasterService
+              ? paymasterService.policyId
+              : paymasterService.policyIds[0],
+          webhookData: paymasterService.webhookData,
+        }
+      : undefined;
+
+  if (
+    capabilities?.permissions == null &&
+    sendPreparedCallsPaymasterService == null
+  ) {
+    return undefined;
+  }
+
+  return {
+    permissions: capabilities?.permissions,
+    paymasterService: sendPreparedCallsPaymasterService,
+  };
 };
