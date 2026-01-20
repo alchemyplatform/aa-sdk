@@ -17,7 +17,7 @@ import {
 import { parsePublicKey, serializePublicKey } from "webauthn-p256";
 import { accountFactoryAbi } from "./abis/accountFactoryAbi.js";
 import { webAuthnFactoryAbi } from "./abis/webAuthnFactoryAbi.js";
-import { DefaultAddress, DEFAULT_OWNER_ENTITY_ID } from "./utils/account.js";
+import { DefaultAddress } from "./utils/account.js";
 import { getSenderFromFactoryData } from "../utils.js";
 
 export type PredictModularAccountV2AddressParams = {
@@ -164,7 +164,6 @@ export type GetModularAccountV2AddressFromFactoryDataParams = {
   factoryAddress: Address;
   factoryData: Hex;
   implementationAddress: Address;
-  entityId?: number;
   entryPoint?: {
     version: EntryPointVersion;
     address: Address;
@@ -184,7 +183,6 @@ export async function getModularAccountV2AddressFromFactoryData({
   factoryAddress,
   factoryData,
   implementationAddress,
-  entityId = DEFAULT_OWNER_ENTITY_ID,
   entryPoint = {
     version: "0.7",
     address: entryPoint07Address,
@@ -219,7 +217,8 @@ export async function getModularAccountV2AddressFromFactoryData({
         data: factoryData,
       });
       if (decoded.functionName === "createWebAuthnAccount") {
-        const [decodedOwnerX, decodedOwnerY, decodedSalt] = decoded.args;
+        const [decodedOwnerX, decodedOwnerY, decodedSalt, decodedEntityId] =
+          decoded.args;
         return predictModularAccountV2Address({
           factoryAddress,
           implementationAddress,
@@ -229,7 +228,7 @@ export async function getModularAccountV2AddressFromFactoryData({
             x: decodedOwnerX,
             y: decodedOwnerY,
           }),
-          entityId,
+          entityId: decodedEntityId,
         });
       }
     } catch {

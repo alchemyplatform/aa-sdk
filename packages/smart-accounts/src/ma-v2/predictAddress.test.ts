@@ -254,7 +254,6 @@ describe("getModularAccountV2AddressFromFactoryData", () => {
         factoryAddress: DefaultAddress.MAV2_FACTORY_WEBAUTHN,
         factoryData,
         implementationAddress: DefaultAddress.MAV2,
-        entityId,
       });
 
       // Should use local prediction, not RPC
@@ -307,7 +306,6 @@ describe("getModularAccountV2AddressFromFactoryData", () => {
         factoryAddress: nonDefaultFactory,
         factoryData,
         implementationAddress: DefaultAddress.MAV2,
-        entityId,
       });
 
       // Should fall back to RPC

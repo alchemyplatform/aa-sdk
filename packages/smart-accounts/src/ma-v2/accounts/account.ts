@@ -155,7 +155,6 @@ export async function toModularAccountV2<TMode extends Mode = Mode>({
             factoryAddress,
             factoryData: factoryData_,
             implementationAddress,
-            entityId,
             entryPoint: {
               version: "0.7",
               address: entryPoint07Address,
