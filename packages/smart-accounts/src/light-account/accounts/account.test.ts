@@ -5,6 +5,7 @@ import {
   publicActions,
   type Address,
   type Call,
+  type Hex,
   type LocalAccount,
 } from "viem";
 import {
@@ -460,16 +461,39 @@ describe("Light Account Tests", () => {
 
   // TODO(v5): implement test for upgrading account to MAv2 (prob will do this in the MAv2 tests)
 
+  it("should derive correct address from factoryData without accountAddress", async () => {
+    // First create an account normally to get expected address and factory data
+    const provider = await givenConnectedProvider({
+      signerAccount: accounts.fundedAccountOwner,
+    });
+    const expectedAddress = provider.account.address;
+    const { factory, factoryData } = await provider.account.getFactoryArgs();
+
+    // Now create another account with just factoryData (no accountAddress)
+    // and verify it derives the same address via getSenderFromFactoryData
+    const providerWithFactoryData = await givenConnectedProvider({
+      signerAccount: accounts.fundedAccountOwner,
+      factoryAddress: factory,
+      factoryData,
+    });
+
+    expect(providerWithFactoryData.account.address).toBe(expectedAddress);
+  });
+
   const givenConnectedProvider = async ({
-    version,
+    version = "v2.2.0",
     accountAddress,
     signerAccount,
     paymaster,
+    factoryAddress,
+    factoryData,
   }: {
     signerAccount: LocalAccount;
-    version: LightAccountVersion<"LightAccount">;
+    version?: LightAccountVersion<"LightAccount">;
     accountAddress?: Address;
     paymaster?: boolean;
+    factoryAddress?: Address;
+    factoryData?: Hex;
   }) => {
     const account = await toLightAccount({
       client: createWalletClient({
@@ -480,6 +504,8 @@ describe("Light Account Tests", () => {
       version,
       accountAddress,
       owner: signerAccount,
+      factory: factoryAddress,
+      factoryData,
     });
 
     return createBundlerClient({

@@ -1,13 +1,24 @@
 import { assertNever } from "@alchemy/common";
 import {
   concatHex,
+  decodeFunctionData,
   encodePacked,
   getContractAddress,
+  isAddressEqual,
   keccak256,
   type Address,
+  type Client,
   type Hex,
 } from "viem";
-import { parsePublicKey } from "webauthn-p256";
+import {
+  entryPoint07Address,
+  type EntryPointVersion,
+} from "viem/account-abstraction";
+import { parsePublicKey, serializePublicKey } from "webauthn-p256";
+import { accountFactoryAbi } from "./abis/accountFactoryAbi.js";
+import { webAuthnFactoryAbi } from "./abis/webAuthnFactoryAbi.js";
+import { DefaultAddress } from "./utils/account.js";
+import { getSenderFromFactoryData } from "../utils.js";
 
 export type PredictModularAccountV2AddressParams = {
   factoryAddress: Address;
@@ -146,4 +157,87 @@ function getProxyBytecodeWithImmutableArgs(
   )}60095155f3363d3d373d3d363d7f360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc545af43d6000803e6038573d6000fd5b3d6000f3${immutableArgs.slice(
     2,
   )}`;
+}
+
+export type GetModularAccountV2AddressFromFactoryDataParams = {
+  client: Client;
+  factoryAddress: Address;
+  factoryData: Hex;
+  implementationAddress: Address;
+  entryPoint?: {
+    version: EntryPointVersion;
+    address: Address;
+  };
+};
+
+/**
+ * Gets the modular account v2 address from factory data.
+ * If the factory is a known default (SMA or WebAuthn), decodes the args and predicts without RPC.
+ * Otherwise falls back to calling the entry point's getSenderAddress.
+ *
+ * @param {GetModularAccountV2AddressFromFactoryDataParams} params - The parameters
+ * @returns {Promise<Address>} The account address
+ */
+export async function getModularAccountV2AddressFromFactoryData({
+  client,
+  factoryAddress,
+  factoryData,
+  implementationAddress,
+  entryPoint = {
+    version: "0.7",
+    address: entryPoint07Address,
+  },
+}: GetModularAccountV2AddressFromFactoryDataParams): Promise<Address> {
+  // Try SMA factory
+  if (isAddressEqual(factoryAddress, DefaultAddress.MAV2_FACTORY)) {
+    try {
+      const decoded = decodeFunctionData({
+        abi: accountFactoryAbi,
+        data: factoryData,
+      });
+      if (decoded.functionName === "createSemiModularAccount") {
+        const [decodedOwner, decodedSalt] = decoded.args;
+        return predictModularAccountV2Address({
+          factoryAddress,
+          implementationAddress,
+          salt: decodedSalt,
+          type: "SMA",
+          ownerAddress: decodedOwner,
+        });
+      }
+    } catch {
+      // Decode failed, fall through to RPC
+    }
+  }
+  // Try WebAuthn factory
+  if (isAddressEqual(factoryAddress, DefaultAddress.MAV2_FACTORY_WEBAUTHN)) {
+    try {
+      const decoded = decodeFunctionData({
+        abi: webAuthnFactoryAbi,
+        data: factoryData,
+      });
+      if (decoded.functionName === "createWebAuthnAccount") {
+        const [decodedOwnerX, decodedOwnerY, decodedSalt, decodedEntityId] =
+          decoded.args;
+        return predictModularAccountV2Address({
+          factoryAddress,
+          implementationAddress,
+          salt: decodedSalt,
+          type: "WebAuthn",
+          ownerPublicKey: serializePublicKey({
+            x: decodedOwnerX,
+            y: decodedOwnerY,
+          }),
+          entityId: decodedEntityId,
+        });
+      }
+    } catch {
+      // Decode failed, fall through to RPC
+    }
+  }
+  return getSenderFromFactoryData(client, {
+    factory: factoryAddress,
+    factoryData,
+    entryPoint,
+  });
 }

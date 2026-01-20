@@ -22906,7 +22906,7 @@ vfile@^6.0.0, vfile@^6.0.3:
     "@types/unist" "^3.0.0"
     vfile-message "^4.0.0"
 
-viem@2.23.2, viem@2.29.2, viem@2.x, viem@>=2.23.11, viem@>=2.29.0, viem@^2.1.1, viem@^2.21.35, viem@^2.21.40, viem@^2.27.2, viem@^2.29.2, viem@^2.31.7, viem@^2.44.2:
+viem@2.23.2, viem@2.29.2, viem@2.x, viem@>=2.23.11, viem@>=2.29.0, viem@^2.1.1, viem@^2.21.35, viem@^2.21.40, viem@^2.27.2, viem@^2.29.2, viem@^2.31.7, viem@^2.32.0, viem@^2.44.2:
   version "2.44.2"
   resolved "https://registry.yarnpkg.com/viem/-/viem-2.44.2.tgz#602798baa22338a4bc4790ca103facfbb2d8979d"
   integrity sha512-nHY872t/T3flLpVsnvQT/89bwbrJwxaL917FDv7Oxy4E5FWIFkokRQOKXG3P+hgl30QYVZxi9o2SUHLnebycxw==

@@ -3,6 +3,7 @@ import {
   createWalletClient,
   encodeFunctionData,
   concatHex,
+  type Address,
 } from "viem";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import {
@@ -11,15 +12,19 @@ import {
   entryPoint07Address,
   entryPoint07Abi,
 } from "viem/account-abstraction";
-import { parsePublicKey } from "webauthn-p256";
+import { parsePublicKey, serializePublicKey } from "webauthn-p256";
 import { localInstance } from "~test/instances.js";
 import { SoftWebauthnDevice } from "~test/webauthn.js";
 import { toModularAccountV2 } from "./accounts/account.js";
-import { predictModularAccountV2Address } from "./predictAddress.js";
+import {
+  getModularAccountV2AddressFromFactoryData,
+  predictModularAccountV2Address,
+} from "./predictAddress.js";
 import { accountFactoryAbi } from "./abis/accountFactoryAbi.js";
 import { webAuthnFactoryAbi } from "./abis/webAuthnFactoryAbi.js";
 import { DefaultAddress } from "./utils/account.js";
 import { getAccountAddressViaEntryPoint } from "../test-utils/getAccountAddressViaEntryPoint.js";
+import * as utils from "../utils.js";
 
 describe("MAv2 Counterfactual Address Tests", () => {
   it("MAv2 should match the entrypoint generated counterfactual address", async () => {
@@ -132,5 +137,182 @@ describe("MAv2 Counterfactual Address Tests", () => {
 
       expect(entryPointComputedAddress).toEqual(locallyComputedAddress);
     }
+  });
+});
+
+describe("getModularAccountV2AddressFromFactoryData", () => {
+  const instance = localInstance;
+
+  describe("SMA factory", () => {
+    it("should decode factory data and predict address for default factory", async () => {
+      const localSigner = createWalletClient({
+        account: privateKeyToAccount(generatePrivateKey()),
+        transport: custom(instance.getClient()),
+        chain: instance.chain,
+      });
+
+      const salt = BigInt(generatePrivateKey());
+      const ownerAddress = localSigner.account.address;
+
+      const factoryData = encodeFunctionData({
+        abi: accountFactoryAbi,
+        functionName: "createSemiModularAccount",
+        args: [ownerAddress, salt],
+      });
+
+      // Spy on getSenderFromFactoryData to ensure it's NOT called
+      const getSenderSpy = vi.spyOn(utils, "getSenderFromFactoryData");
+
+      const address = await getModularAccountV2AddressFromFactoryData({
+        client: instance.getClient(),
+        factoryAddress: DefaultAddress.MAV2_FACTORY,
+        factoryData,
+        implementationAddress: DefaultAddress.SMAV2_BYTECODE,
+      });
+
+      // Should use local prediction, not RPC
+      expect(getSenderSpy).not.toHaveBeenCalled();
+
+      // Verify the address matches the direct prediction
+      const expectedAddress = predictModularAccountV2Address({
+        factoryAddress: DefaultAddress.MAV2_FACTORY,
+        implementationAddress: DefaultAddress.SMAV2_BYTECODE,
+        salt,
+        type: "SMA",
+        ownerAddress,
+      });
+      expect(address).toEqual(expectedAddress);
+
+      getSenderSpy.mockRestore();
+    });
+
+    it("should fall back to RPC for non-default factory", async () => {
+      const localSigner = createWalletClient({
+        account: privateKeyToAccount(generatePrivateKey()),
+        transport: custom(instance.getClient()),
+        chain: instance.chain,
+      });
+
+      const salt = BigInt(generatePrivateKey());
+      const ownerAddress = localSigner.account.address;
+      // Use a non-default factory address
+      const nonDefaultFactory =
+        "0x1234567890123456789012345678901234567890" as Address;
+
+      const factoryData = encodeFunctionData({
+        abi: accountFactoryAbi,
+        functionName: "createSemiModularAccount",
+        args: [ownerAddress, salt],
+      });
+
+      // Mock getSenderFromFactoryData to return a known address
+      const mockAddress =
+        "0xabcdef1234567890abcdef1234567890abcdef12" as Address;
+      const getSenderSpy = vi
+        .spyOn(utils, "getSenderFromFactoryData")
+        .mockResolvedValue(mockAddress);
+
+      const address = await getModularAccountV2AddressFromFactoryData({
+        client: instance.getClient(),
+        factoryAddress: nonDefaultFactory,
+        factoryData,
+        implementationAddress: DefaultAddress.SMAV2_BYTECODE,
+      });
+
+      // Should fall back to RPC
+      expect(getSenderSpy).toHaveBeenCalledOnce();
+      expect(address).toEqual(mockAddress);
+
+      getSenderSpy.mockRestore();
+    });
+  });
+
+  describe("WebAuthn factory", () => {
+    it("should decode factory data and predict address for default factory", async () => {
+      const webauthnDevice = new SoftWebauthnDevice();
+      const credential = await createWebAuthnCredential({
+        rp: { id: "localhost", name: "localhost" },
+        createFn: (opts) => webauthnDevice.create(opts, "localhost"),
+        user: { name: "test", displayName: "test" },
+      });
+
+      const salt = BigInt(generatePrivateKey());
+      const entityId = 0;
+      const { x, y } = parsePublicKey(credential.publicKey);
+
+      const factoryData = encodeFunctionData({
+        abi: webAuthnFactoryAbi,
+        functionName: "createWebAuthnAccount",
+        args: [x, y, salt, entityId],
+      });
+
+      // Spy on getSenderFromFactoryData to ensure it's NOT called
+      const getSenderSpy = vi.spyOn(utils, "getSenderFromFactoryData");
+
+      const address = await getModularAccountV2AddressFromFactoryData({
+        client: instance.getClient(),
+        factoryAddress: DefaultAddress.MAV2_FACTORY_WEBAUTHN,
+        factoryData,
+        implementationAddress: DefaultAddress.MAV2,
+      });
+
+      // Should use local prediction, not RPC
+      expect(getSenderSpy).not.toHaveBeenCalled();
+
+      // Verify the address matches the direct prediction
+      const expectedAddress = predictModularAccountV2Address({
+        factoryAddress: DefaultAddress.MAV2_FACTORY_WEBAUTHN,
+        implementationAddress: DefaultAddress.MAV2,
+        salt,
+        type: "WebAuthn",
+        ownerPublicKey: serializePublicKey({ x, y }),
+        entityId,
+      });
+      expect(address).toEqual(expectedAddress);
+
+      getSenderSpy.mockRestore();
+    });
+
+    it("should fall back to RPC for non-default factory", async () => {
+      const webauthnDevice = new SoftWebauthnDevice();
+      const credential = await createWebAuthnCredential({
+        rp: { id: "localhost", name: "localhost" },
+        createFn: (opts) => webauthnDevice.create(opts, "localhost"),
+        user: { name: "test", displayName: "test" },
+      });
+
+      const salt = BigInt(generatePrivateKey());
+      const entityId = 0;
+      const { x, y } = parsePublicKey(credential.publicKey);
+      // Use a non-default factory address
+      const nonDefaultFactory =
+        "0x1234567890123456789012345678901234567890" as Address;
+
+      const factoryData = encodeFunctionData({
+        abi: webAuthnFactoryAbi,
+        functionName: "createWebAuthnAccount",
+        args: [x, y, salt, entityId],
+      });
+
+      // Mock getSenderFromFactoryData to return a known address
+      const mockAddress =
+        "0xabcdef1234567890abcdef1234567890abcdef12" as Address;
+      const getSenderSpy = vi
+        .spyOn(utils, "getSenderFromFactoryData")
+        .mockResolvedValue(mockAddress);
+
+      const address = await getModularAccountV2AddressFromFactoryData({
+        client: instance.getClient(),
+        factoryAddress: nonDefaultFactory,
+        factoryData,
+        implementationAddress: DefaultAddress.MAV2,
+      });
+
+      // Should fall back to RPC
+      expect(getSenderSpy).toHaveBeenCalledOnce();
+      expect(address).toEqual(mockAddress);
+
+      getSenderSpy.mockRestore();
+    });
   });
 });

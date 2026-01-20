@@ -199,6 +199,22 @@ describe("MA v2 Account Tests", async () => {
     expect(decoded[1].data?.toLowerCase()).toEqual(data[1].data?.toLowerCase());
   });
 
+  it("should derive correct address from factoryData without accountAddress", async () => {
+    // First create an account normally to get expected address and factory data
+    const provider = await givenConnectedProvider({ signer: owner });
+    const expectedAddress = provider.account.address;
+    const { factory, factoryData } = await provider.account.getFactoryArgs();
+
+    // Now create another account with just factoryData (no accountAddress)
+    // and verify it derives the same address via getSenderFromFactoryData
+    const providerWithFactoryData = await givenConnectedProvider({
+      signer: owner,
+      factoryArgs: { factory, factoryData },
+    });
+
+    expect(providerWithFactoryData.account.address).toBe(expectedAddress);
+  });
+
   it("sends a simple UO", { retry: 3, timeout: 30_000 }, async () => {
     const provider = await givenConnectedProvider({ signer: owner });
 
@@ -2341,7 +2357,8 @@ describe("MA v2 Account Tests", async () => {
       accountAddress,
       signerEntity,
       owner: signer,
-      ...factoryArgs,
+      factory: factoryArgs?.factory,
+      factoryData: factoryArgs?.factoryData,
       deferredAction,
       mode,
     });

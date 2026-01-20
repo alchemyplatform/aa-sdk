@@ -5,6 +5,7 @@ import {
   type Transport,
   type Chain,
   hexToBigInt,
+  type Account,
 } from "viem";
 import type {
   UserOperationRequest,
@@ -53,12 +54,19 @@ export type RundlerClient<
  * });
  * ```
  */
-export async function estimateFeesPerGas({
+export async function estimateFeesPerGas<
+  TTransport extends Transport = Transport,
+  TChain extends Chain | undefined = Chain | undefined,
+  TAccount extends SmartAccount | Account | undefined =
+    | SmartAccount
+    | Account
+    | undefined,
+>({
   bundlerClient,
   account: _account,
   userOperation: _userOperation,
 }: {
-  bundlerClient: Client;
+  bundlerClient: Client<TTransport, TChain, TAccount>;
   account?: SmartAccount;
   userOperation?: UserOperationRequest;
 }): Promise<{
@@ -69,7 +77,7 @@ export async function estimateFeesPerGas({
   // This mirrors viem's pattern in prepareUserOperation.ts where they cast `client as unknown as BundlerClient`
   // to access bundler-specific properties from a base Client type.
   // See: https://github.com/wevm/viem/blob/d18b3b27/src/account-abstraction/actions/bundler/prepareUserOperation.ts#L355
-  const rundlerClient = bundlerClient as RundlerClient;
+  const rundlerClient = bundlerClient as unknown as RundlerClient;
 
   const [block, maxPriorityFeePerGasHex] = await Promise.all([
     // If the node rpc url is different from the bundler url, the public

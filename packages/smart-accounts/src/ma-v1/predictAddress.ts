@@ -1,13 +1,19 @@
 import {
   type Address,
-  getContractAddress,
-  encodeAbiParameters,
-  keccak256,
+  type Client,
   concatHex,
+  decodeFunctionData,
+  encodeAbiParameters,
+  getContractAddress,
+  isAddressEqual,
+  keccak256,
   type Hex,
 } from "viem";
+import type { EntryPointVersion } from "viem/account-abstraction";
 import { DefaultMaV1Address } from "./account.js";
+import { MultiOwnerModularAccountFactoryAbi } from "./abis/MultiOwnerModularAccountFactory.js";
 import { BaseError } from "@alchemy/common";
+import { getSenderFromFactoryData } from "../utils.js";
 
 export type PredictMultiOwnerModularAccountV1AddressParams = {
   salt: bigint;
@@ -82,4 +88,55 @@ function getERC1967ProxyInitCodeHash(implementationAddress: Address): Hex {
   );
 
   return keccak256(concatHex([ERC1967_PROXY_BYTECODE, constructorArgs]));
+}
+
+export type GetMultiOwnerModularAccountV1AddressFromFactoryDataParams = {
+  client: Client;
+  factoryAddress: Address;
+  factoryData: Hex;
+  entryPoint: {
+    version: EntryPointVersion;
+    address: Address;
+  };
+};
+
+/**
+ * Gets the multi-owner modular account v1 address from factory data.
+ * If the factory is a known default, decodes the args and predicts without RPC.
+ * Otherwise falls back to calling the entry point's getSenderAddress.
+ *
+ * @param {GetMultiOwnerModularAccountV1AddressFromFactoryDataParams} params - The parameters
+ * @returns {Promise<Address>} The account address
+ */
+export async function getMultiOwnerModularAccountV1AddressFromFactoryData({
+  client,
+  factoryAddress,
+  factoryData,
+  entryPoint,
+}: GetMultiOwnerModularAccountV1AddressFromFactoryDataParams): Promise<Address> {
+  if (
+    isAddressEqual(factoryAddress, DefaultMaV1Address.MULTI_OWNER_MAV1_FACTORY)
+  ) {
+    try {
+      const decoded = decodeFunctionData({
+        abi: MultiOwnerModularAccountFactoryAbi,
+        data: factoryData,
+      });
+      if (decoded.functionName === "createAccount") {
+        const [decodedSalt, decodedOwners] = decoded.args;
+        return predictMultiOwnerModularAccountV1Address({
+          factoryAddress,
+          salt: decodedSalt,
+          ownerAddresses: [...decodedOwners],
+        });
+      }
+    } catch {
+      // Decode failed, fall through to RPC
+    }
+  }
+  return getSenderFromFactoryData(client, {
+    factory: factoryAddress,
+    factoryData,
+    entryPoint,
+  });
 }
