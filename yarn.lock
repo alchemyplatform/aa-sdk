@@ -218,6 +218,13 @@
   resolved "https://registry.yarnpkg.com/@adraffy/ens-normalize/-/ens-normalize-1.11.0.tgz#42cc67c5baa407ac25059fcd7d405cc5ecdb0c33"
   integrity sha512-/3DDPKHqqIqxUULp8yP4zODUY1i+2xvVWsv8A79xGWdCAG+8sb0hRh0Rk2QyOJUnnbyPUAZYcpBuRe3nS2OIUg==
 
+"@alchemy/common@0.0.0-alpha.13":
+  version "0.0.0-alpha.13"
+  resolved "https://registry.yarnpkg.com/@alchemy/common/-/common-0.0.0-alpha.13.tgz#52e5be7b1fe7eb541aae4bbe7f78975ef86122cc"
+  integrity sha512-2YRLIeswvdiVHCH245SefRwQgBw3hGRsKWIElhBmcwNOT5QuonTRmORSamffW7SstVwrGS6L7Cr3WXc1iZHfpA==
+  dependencies:
+    viem "^2.32.0"
+
 "@alchemy/wallet-api-types@0.1.0-alpha.16":
   version "0.1.0-alpha.16"
   resolved "https://registry.yarnpkg.com/@alchemy/wallet-api-types/-/wallet-api-types-0.1.0-alpha.16.tgz#fab9908f22e37283b611cf2c08989e5a20632d91"
@@ -238,15 +245,16 @@
     typebox "^1.0.0"
     viem "2.29.2"
 
-"@alchemy/wallet-api-types@^0.1.0-alpha.19":
-  version "0.1.0-alpha.19"
-  resolved "https://registry.yarnpkg.com/@alchemy/wallet-api-types/-/wallet-api-types-0.1.0-alpha.19.tgz#57f01caacb0110d82344539d872cd696ce6f651d"
-  integrity sha512-RJ7iMJZB4PHCFZB01VNa9hyarO1DmnjoPw3eWSt7fDYwqSQvCJUdekcnu5XPU8HojZ9KY+mUk/TdLEcilBg8eQ==
+"@alchemy/wallet-api-types@^0.1.0-alpha.20":
+  version "0.1.0-alpha.20"
+  resolved "https://registry.yarnpkg.com/@alchemy/wallet-api-types/-/wallet-api-types-0.1.0-alpha.20.tgz#c566210129687b01e456f670a980ba13b6d4f3ca"
+  integrity sha512-zlCOrCrzt7FCf1U6f79uug+eYD5PmkO9A+aHB51xEBSde/G6qmrWElpFYTdWQbbWx2jwK6KgQPHD0SvaWbt7lw==
   dependencies:
+    "@alchemy/common" "0.0.0-alpha.13"
     deep-equal "^2.2.3"
     ox "^0.6.12"
-    typebox "^1.0.60"
-    viem "2.29.2"
+    typebox "^1.0.75"
+    viem "^2.32.0"
 
 "@alchemy/wallet-apis@0.0.0-alpha.12":
   version "0.0.0-alpha.12"
@@ -22229,10 +22237,10 @@ typebox@^1.0.0:
   resolved "https://registry.yarnpkg.com/typebox/-/typebox-1.0.43.tgz#e796a1bc8c1a91027b7582bb174c989af3a390b0"
   integrity sha512-NALtTG+DfndC+48JURdOQ6y6CrCEZl9xLM+BMNwFduUIUJv6AqqVT3ZcCf+jQ9uEJlLAhLyds/gkfufkpBh+2g==
 
-typebox@^1.0.60:
-  version "1.0.77"
-  resolved "https://registry.yarnpkg.com/typebox/-/typebox-1.0.77.tgz#544410ff930a53f1d3ec5f122579f20f1fa38348"
-  integrity sha512-4PgDeVyUcdf1tZyDUr6Nqx0f4WR9pusFhjyDyuTWS7tQTd94Yx0zAUevvbRSn8dC8UG1eWhTTobDEuRk7pxclw==
+typebox@^1.0.75:
+  version "1.0.79"
+  resolved "https://registry.yarnpkg.com/typebox/-/typebox-1.0.79.tgz#a74a1e630e235762077aeb0f925875116ccbf2c5"
+  integrity sha512-luG4ORaG70S8mK00kCQR3Ow2xXaqzHv03/PHJJGs9Mjg1Q+0k3Kwz6Z5ORjoqSwWl3ixDUKgJajZ2vvBGs3ECA==
 
 typed-array-buffer@^1.0.3:
   version "1.0.3"
