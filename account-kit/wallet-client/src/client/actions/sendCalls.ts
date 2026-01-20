@@ -10,6 +10,7 @@ import {
 import { signSignatureRequest } from "./signSignatureRequest.js";
 import type { SmartWalletSigner } from "../index.js";
 import { isWebAuthnSigner } from "../../utils.js";
+import { extractCapabilitiesForSending } from "../../internal/capabilities.js";
 
 export type SendCallsParams<
   TAccount extends Address | undefined = Address | undefined,
@@ -86,31 +87,10 @@ export async function sendCalls<
 
   const signedCalls = await signPreparedCalls(signer, calls);
 
-  // Extract only the fields supported by sendPreparedCalls capabilities.
-  const paymasterService = params.capabilities?.paymasterService;
-  const sendPreparedCallsPaymasterService =
-    paymasterService != null
-      ? {
-          // TODO(jh): create a helper for getting single policy id here if we do it elsewhere?
-          policyId:
-            "policyId" in paymasterService
-              ? paymasterService.policyId
-              : paymasterService.policyIds[0],
-          webhookData: paymasterService.webhookData,
-        }
-      : undefined;
+  const capabilities = extractCapabilitiesForSending(params.capabilities);
 
   return await sendPreparedCalls(client, {
     ...signedCalls,
-    // The only capabilities supported in sendPreparedCalls are permissions & paymasterService (policyId & webhookData only).
-    ...(params.capabilities?.permissions != null ||
-    sendPreparedCallsPaymasterService != null
-      ? {
-          capabilities: {
-            permissions: params.capabilities?.permissions,
-            paymasterService: sendPreparedCallsPaymasterService,
-          },
-        }
-      : {}),
+    ...(capabilities != null ? { capabilities } : {}),
   });
 }

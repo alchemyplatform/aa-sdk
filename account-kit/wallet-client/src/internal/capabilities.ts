@@ -5,7 +5,7 @@ import type {
 import type { InnerWalletApiClientBase } from "../types.js";
 
 // TODO(jh): this should be imported from wallet-api-types.
-type RpcSendPreparedCallsCapabilities = {
+export type RpcSendPreparedCallsCapabilities = {
   permissions?: PermissionsCapability;
   paymasterService?: {
     policyId: string;
@@ -38,4 +38,39 @@ export const mergeClientCapabilities = <
         ? { policyId: client.policyIds[0] }
         : { policyIds: client.policyIds },
   } as T;
+};
+
+/**
+ * Extracts capabilities from prepareCalls that are useable for sendPreparedCalls.
+ * Converts policyIds (array) to policyId (singular) by taking the first element.
+ *
+ * @param {Capabilities | undefined} capabilities - The prepareCalls capabilities
+ * @returns {RpcSendPreparedCallsCapabilities | undefined} The sendPreparedCalls capabilities, or undefined if no relevant capabilities exist
+ */
+export const extractCapabilitiesForSending = (
+  capabilities: Capabilities | undefined,
+): RpcSendPreparedCallsCapabilities | undefined => {
+  const paymasterService = capabilities?.paymasterService;
+  const sendPreparedCallsPaymasterService =
+    paymasterService != null
+      ? {
+          policyId:
+            "policyId" in paymasterService
+              ? paymasterService.policyId
+              : paymasterService.policyIds[0],
+          webhookData: paymasterService.webhookData,
+        }
+      : undefined;
+
+  if (
+    capabilities?.permissions == null &&
+    sendPreparedCallsPaymasterService == null
+  ) {
+    return undefined;
+  }
+
+  return {
+    permissions: capabilities?.permissions,
+    paymasterService: sendPreparedCallsPaymasterService,
+  };
 };
