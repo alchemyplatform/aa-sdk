@@ -490,7 +490,7 @@ describe("Light Account Tests", () => {
   });
 
   const givenConnectedProvider = async ({
-    version = "v1.1.0",
+    version = "v2.2.0",
     accountAddress,
     signerAccount,
     paymaster,
