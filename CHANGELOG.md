@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.83.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.82.1...v4.83.0) (2026-01-21)
+
+### Bug Fixes
+
+- **ci:** format lerna file after publishing v5 alpha ([#2322](https://github.com/alchemyplatform/aa-sdk/issues/2322)) ([28d0d40](https://github.com/alchemyplatform/aa-sdk/commit/28d0d409df6634b367c0d4915a509db5f2440ef1))
+
+### Features
+
+- add GHA for trigger SDK References indexer ([#2308](https://github.com/alchemyplatform/aa-sdk/issues/2308)) ([bb1ed9a](https://github.com/alchemyplatform/aa-sdk/commit/bb1ed9a4a891f8aca0deb4ded4d474c33a737185))
+- **v4:** add support for bundler sponsored operations ([#2331](https://github.com/alchemyplatform/aa-sdk/issues/2331)) ([a9a9d38](https://github.com/alchemyplatform/aa-sdk/commit/a9a9d3822e79b7107d236ceba26bf40830d4b11f))
+
 ## [4.82.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.82.0...v4.82.1) (2026-01-12)
 
 ### Bug Fixes

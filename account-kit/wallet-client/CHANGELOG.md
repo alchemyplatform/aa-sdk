@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.83.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.82.1...v4.83.0) (2026-01-21)
+
+### Features
+
+- **v4:** add support for bundler sponsored operations ([#2331](https://github.com/alchemyplatform/aa-sdk/issues/2331)) ([a9a9d38](https://github.com/alchemyplatform/aa-sdk/commit/a9a9d3822e79b7107d236ceba26bf40830d4b11f))
+
 ## [4.82.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.82.0...v4.82.1) (2026-01-12)
 
 **Note:** Version bump only for package @account-kit/wallet-client
