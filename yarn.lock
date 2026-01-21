@@ -89,15 +89,23 @@
   resolved "https://registry.npmjs.org/@adraffy/ens-normalize/-/ens-normalize-1.11.0.tgz"
   integrity sha512-/3DDPKHqqIqxUULp8yP4zODUY1i+2xvVWsv8A79xGWdCAG+8sb0hRh0Rk2QyOJUnnbyPUAZYcpBuRe3nS2OIUg==
 
-"@alchemy/wallet-api-types@0.1.0-alpha.18":
-  version "0.1.0-alpha.18"
-  resolved "https://registry.yarnpkg.com/@alchemy/wallet-api-types/-/wallet-api-types-0.1.0-alpha.18.tgz#83b4e6d56c5e3b993f5cc3110588b9c21720aaa2"
-  integrity sha512-zhp1JjyM8eVIutl+iMcXfAYTVvtLTSGn2ty36akfx3eC4okUeVZilgt7N1qN6sx5ydJOPlhh3z1dRJJ0HC2DXA==
+"@alchemy/common@0.0.0-alpha.13":
+  version "0.0.0-alpha.13"
+  resolved "https://registry.yarnpkg.com/@alchemy/common/-/common-0.0.0-alpha.13.tgz#52e5be7b1fe7eb541aae4bbe7f78975ef86122cc"
+  integrity sha512-2YRLIeswvdiVHCH245SefRwQgBw3hGRsKWIElhBmcwNOT5QuonTRmORSamffW7SstVwrGS6L7Cr3WXc1iZHfpA==
   dependencies:
+    viem "^2.32.0"
+
+"@alchemy/wallet-api-types@0.1.0-alpha.22":
+  version "0.1.0-alpha.22"
+  resolved "https://registry.yarnpkg.com/@alchemy/wallet-api-types/-/wallet-api-types-0.1.0-alpha.22.tgz#97588f0eeb666a6d93d44b56a08eee35f7913ceb"
+  integrity sha512-SgNbEcrVKWh4Jcy0D9OxMiwYOtuAqbd0O44TN6hm837iqNXqDd9yXbbADm4WTFHuE9pSqJlRNqYGqqyG83jdYw==
+  dependencies:
+    "@alchemy/common" "0.0.0-alpha.13"
     deep-equal "^2.2.3"
     ox "^0.6.12"
-    typebox "^1.0.0"
-    viem "2.29.2"
+    typebox "^1.0.75"
+    viem "^2.32.0"
 
 "@alloc/quick-lru@^5.2.0":
   version "5.2.0"
@@ -26180,10 +26188,10 @@ type@^2.7.2:
   resolved "https://registry.npmjs.org/type/-/type-2.7.3.tgz"
   integrity sha512-8j+1QmAbPvLZow5Qpi6NCaN8FB60p/6x8/vfNqOk/hC+HuvFZhL4+WfekuhQLiqFZXOgQdrs3B+XxEmCc6b3FQ==
 
-typebox@^1.0.0:
-  version "1.0.43"
-  resolved "https://registry.yarnpkg.com/typebox/-/typebox-1.0.43.tgz#e796a1bc8c1a91027b7582bb174c989af3a390b0"
-  integrity sha512-NALtTG+DfndC+48JURdOQ6y6CrCEZl9xLM+BMNwFduUIUJv6AqqVT3ZcCf+jQ9uEJlLAhLyds/gkfufkpBh+2g==
+typebox@^1.0.75:
+  version "1.0.79"
+  resolved "https://registry.yarnpkg.com/typebox/-/typebox-1.0.79.tgz#a74a1e630e235762077aeb0f925875116ccbf2c5"
+  integrity sha512-luG4ORaG70S8mK00kCQR3Ow2xXaqzHv03/PHJJGs9Mjg1Q+0k3Kwz6Z5ORjoqSwWl3ixDUKgJajZ2vvBGs3ECA==
 
 typed-array-buffer@^1.0.3:
   version "1.0.3"
@@ -27011,7 +27019,7 @@ vfile@^6.0.0, vfile@^6.0.3:
     "@types/unist" "^3.0.0"
     vfile-message "^4.0.0"
 
-viem@2.23.2, viem@2.29.2, viem@2.31.0, viem@2.33.3, viem@>=2.23.11, viem@>=2.29.0, viem@^2, viem@^2.1.1, viem@^2.21.35, viem@^2.21.40, viem@^2.29.2, viem@^2.31.7, viem@^2.32.0:
+viem@2.23.2, viem@2.31.0, viem@2.33.3, viem@>=2.23.11, viem@>=2.29.0, viem@^2, viem@^2.1.1, viem@^2.21.35, viem@^2.21.40, viem@^2.29.2, viem@^2.31.7, viem@^2.32.0:
   version "2.33.3"
   resolved "https://registry.yarnpkg.com/viem/-/viem-2.33.3.tgz#b69d7ff9edf649d1b7d9218e0225bcadc83a8caa"
   integrity sha512-aWDr6i6r3OfNCs0h9IieHFhn7xQJJ8YsuA49+9T5JRyGGAkWhLgcbLq2YMecgwM7HdUZpx1vPugZjsShqNi7Gw==
