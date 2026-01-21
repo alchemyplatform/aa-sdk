@@ -9,6 +9,7 @@ import {
 import { LOGGER } from "../logger.js";
 import { signSignatureRequest } from "./signSignatureRequest.js";
 import { isWebAuthnAccount } from "../utils/assertions.js";
+import { extractCapabilitiesForSending } from "../utils/capabilities.js";
 import { BaseError } from "@alchemy/common";
 
 export type SendCallsParams<
@@ -87,11 +88,14 @@ export async function sendCalls<
 
   const signedCalls = await signPreparedCalls(client, calls);
 
+  const sendPreparedCallsCapabilities = extractCapabilitiesForSending(
+    params.capabilities,
+  );
+
   const res = await sendPreparedCalls(client, {
     ...signedCalls,
-    // The only capability that is supported in sendPreparedCalls is permissions.
-    ...(params.capabilities?.permissions != null
-      ? { capabilities: { permissions: params.capabilities.permissions } }
+    ...(sendPreparedCallsCapabilities != null
+      ? { capabilities: sendPreparedCallsCapabilities }
       : {}),
   });
   LOGGER.info("sendCalls:done");
