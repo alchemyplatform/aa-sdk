@@ -33,7 +33,7 @@ export const mergeClientCapabilities = <
 };
 
 /**
- * Extracts capabilities from prepareCalls that are useable for sendPreparedCalls.
+ * Extracts capabilities from prepareCalls that are usable for sendPreparedCalls.
  * Only permissions and paymasterService (policyId/policyIds & webhookData) are supported.
  *
  * @param {PrepareCallsCapabilities | undefined} capabilities - The prepareCalls capabilities
