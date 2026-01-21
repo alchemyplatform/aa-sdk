@@ -61,12 +61,7 @@ export async function sendPreparedCalls(
     },
   });
 
-  params.capabilities = mergeClientCapabilities(client, params.capabilities, {
-    // `wallet_prepareCalls` accepts multiple policy ids, but this is only supported for
-    // traditional "sponsorship" policy types. Since `wallet_sendPreparedCalls` only
-    // requires a policy id for BSOs, we always use a single policy here.
-    useSinglePolicyId: true,
-  });
+  params.capabilities = mergeClientCapabilities(client, params.capabilities);
 
   return client.request({
     method: "wallet_sendPreparedCalls",
