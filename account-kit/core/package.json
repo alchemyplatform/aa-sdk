@@ -61,7 +61,7 @@
   },
   "peerDependencies": {
     "viem": "^2.29.2",
-    "wagmi": "^2.12.7"
+    "wagmi": "^2.15.5"
   },
   "publishConfig": {
     "access": "public",
