@@ -1,0 +1,93 @@
+name: Revalidate SDK Content
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "docs/pages/**/*.md"
+      - "docs/pages/**/*.mdx"
+
+jobs:
+  revalidate-content:
+    name: Revalidate Changed Pages
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch full history to compare all commits in push
+
+      - name: Get changed MDX files
+        id: changed-files
+        run: |
+          # Get all MDX files changed in this push (handles multiple commits)
+          set +e
+          CHANGED_FILES=$(git diff --name-only \
+            "${{ github.event.before }}" "${{ github.event.after }}" \
+            -- 'docs/pages/**/*.md' 'docs/pages/**/*.mdx')
+          EXIT_CODE=$?
+          set -e
+
+          # Check for git errors
+          if [ $EXIT_CODE -ne 0 ]; then
+            echo "::error::git diff failed with exit code $EXIT_CODE"
+            exit 1
+          fi
+
+          # Handle empty result (no files changed)
+          if [ -z "$CHANGED_FILES" ]; then
+            echo "No MDX files changed in /docs/pages/ directory"
+            echo "filePaths=[]" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          # Transform paths: docs/pages/... -> wallets/pages/...
+          # This matches how SDK content is indexed (wallets/ prefix in docs.yml)
+          FILE_PATHS_JSON=$(echo "$CHANGED_FILES" | sed 's|^docs/|wallets/|' | jq -R -s -c 'split("\n") | map(select(length > 0))')
+
+          echo "File paths JSON: $FILE_PATHS_JSON"
+          echo "filePaths=$FILE_PATHS_JSON" >> $GITHUB_OUTPUT
+
+      - name: Call revalidation API
+        if: steps.changed-files.outputs.filePaths != '[]'
+        run: |
+          # Create JSON payload using jq for safety
+          PAYLOAD=$(jq -n --argjson paths '${{ steps.changed-files.outputs.filePaths }}' \
+            '{filePaths: $paths}')
+
+          echo "Revalidating files:"
+          echo "$PAYLOAD" | jq -r '.filePaths[]'
+
+          # Call API with 60s timeout
+          HTTP_CODE=$(curl -X POST "${{ secrets.DOCS_SITE_URL }}/api/revalidate/markdown" \
+            -H "Authorization: Bearer ${{ secrets.DOCS_SITE_API_KEY }}" \
+            -H "Content-Type: application/json" \
+            -d "$PAYLOAD" \
+            --max-time 60 \
+            --fail-with-body \
+            -o response.json \
+            -w "%{http_code}" \
+            -s)
+
+          echo ""
+          echo "Response (HTTP $HTTP_CODE):"
+          jq '.' response.json || cat response.json
+
+          # Check HTTP status
+          if [ "$HTTP_CODE" != "200" ]; then
+            echo "::error::Revalidation API returned status $HTTP_CODE"
+            exit 1
+          fi
+
+          # Check success field in response
+          SUCCESS=$(jq -r '.success' response.json)
+          if [ "$SUCCESS" != "true" ]; then
+            echo "::warning::Revalidation completed with errors"
+            jq -r '.errors[]?' response.json
+          else
+            FILE_COUNT=$(jq -r '.revalidated | length' response.json)
+            echo "::notice::Successfully revalidated $FILE_COUNT files"
+          fi
