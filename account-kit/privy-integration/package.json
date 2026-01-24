@@ -1,6 +1,6 @@
 {
   "name": "@account-kit/privy-integration",
-  "version": "4.83.0",
+  "version": "4.83.1",
   "description": "Use Alchemy gas sponsorship, swaps and more with Privy",
   "author": "Alchemy",
   "license": "MIT",
@@ -64,8 +64,8 @@
     "typescript-template": "*"
   },
   "dependencies": {
-    "@account-kit/infra": "^4.83.0",
-    "@account-kit/wallet-client": "^4.83.0"
+    "@account-kit/infra": "^4.83.1",
+    "@account-kit/wallet-client": "^4.83.1"
   },
   "peerDependencies": {
     "@privy-io/expo": "^0.58.1",
