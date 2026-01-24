@@ -10,6 +10,7 @@ import {
 import { signSignatureRequest } from "./signSignatureRequest.js";
 import type { SmartWalletSigner } from "../index.js";
 import { isWebAuthnSigner } from "../../utils.js";
+import { extractCapabilitiesForSending } from "../../internal/capabilities.js";
 
 export type SendCallsParams<
   TAccount extends Address | undefined = Address | undefined,
@@ -86,11 +87,10 @@ export async function sendCalls<
 
   const signedCalls = await signPreparedCalls(signer, calls);
 
+  const capabilities = extractCapabilitiesForSending(params.capabilities);
+
   return await sendPreparedCalls(client, {
     ...signedCalls,
-    // The only capability that is supported in sendPreparedCalls is permissions.
-    ...(params.capabilities?.permissions != null
-      ? { capabilities: { permissions: params.capabilities.permissions } }
-      : {}),
+    ...(capabilities != null ? { capabilities } : {}),
   });
 }
