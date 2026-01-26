@@ -25,6 +25,8 @@ import {
   zoraSepolia as vzoras,
   worldchain as vwc,
   worldchainSepolia as vwcs,
+  hyperliquid as vhyperliquid,
+  hyperliquidEvmTestnet as vhyperliquidEvmTestnet,
 } from "viem/chains";
 
 export type AlchemyChainConfig = {
@@ -888,3 +890,23 @@ export const mythosMainnet: Chain = defineChain({
   },
   testnet: false,
 });
+
+export const hyperliquid: Chain = {
+  ...vhyperliquid,
+  rpcUrls: {
+    ...vhyperliquid.rpcUrls,
+    alchemy: {
+      http: ["https://hyperliquid-mainnet.g.alchemy.com/v2"],
+    },
+  },
+};
+
+export const hyperliquidEvmTestnet: Chain = {
+  ...vhyperliquidEvmTestnet,
+  rpcUrls: {
+    ...vhyperliquidEvmTestnet.rpcUrls,
+    alchemy: {
+      http: ["https://hyperliquid-testnet.g.alchemy.com/v2"],
+    },
+  },
+};

@@ -58,7 +58,7 @@
     "@ethersproject/wallet": "^5.7.0"
   },
   "peerDependencies": {
-    "viem": "^2.29.2"
+    "viem": "^2.45.0"
   },
   "repository": {
     "type": "git",
