@@ -58,6 +58,8 @@ export {
   stableMainnet,
   mythosMainnet,
   worldl3devnet,
+  hyperliquid,
+  hyperliquidEvmTestnet,
 } from "../chains.js";
 export type * from "../client/decorators/smartAccount.js";
 export { alchemyActions } from "../client/decorators/smartAccount.js";

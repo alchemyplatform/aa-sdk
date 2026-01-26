@@ -146,7 +146,7 @@
     "@turnkey/crypto": "^2.5.0",
     "@turnkey/react-native-passkey-stamper": "^1.1.4",
     "uuid": "^11.1.0",
-    "viem": "^2.29.2",
+    "viem": "^2.45.0",
     "zod": "^3.22.4"
   }
 }

@@ -20,7 +20,7 @@
   "resolutions": {
     "axios": "1.12.0",
     "wagmi": "2.15.5",
-    "viem": "2.33.3",
+    "viem": "2.45.0",
     "zustand": "^5.0.0-rc.2",
     "react-native": "0.76.5",
     "react-native-config": "1.5.3",
@@ -92,7 +92,7 @@
     "typedoc-plugin-markdown": "^4.8.1",
     "typedoc-plugin-remark": "^2.0.1",
     "typescript": "^5.8.3",
-    "viem": "^2.29.2",
+    "viem": "^2.45.0",
     "vitest": "^2.1.9",
     "wagmi": "2.15.5",
     "webauthn-p256": "^0.0.10"

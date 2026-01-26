@@ -633,7 +633,7 @@ export abstract class BaseAlchemySigner<TClient extends BaseSignerClient>
       const serializeFn = args?.serializer ?? serializeTransaction;
       const serializedTx = serializeFn(tx);
       const signatureHex = await this.inner.signRawMessage(
-        keccak256(serializedTx),
+        keccak256(await serializedTx),
       );
 
       const signature = unpackSignRawMessageBytes(signatureHex);

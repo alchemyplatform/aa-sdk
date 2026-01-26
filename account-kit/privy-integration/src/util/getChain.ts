@@ -43,6 +43,8 @@ import {
   teaSepolia,
   bobaSepolia,
   bobaMainnet,
+  hyperliquid,
+  hyperliquidEvmTestnet,
 } from "@account-kit/infra";
 
 export function getChain(chainId: number) {
@@ -135,6 +137,10 @@ export function getChain(chainId: number) {
       return bobaSepolia;
     case bobaMainnet.id:
       return bobaMainnet;
+    case hyperliquid.id:
+      return hyperliquid;
+    case hyperliquidEvmTestnet.id:
+      return hyperliquidEvmTestnet;
 
     default:
       throw new Error(`Unsupported chainId: ${chainId}`);

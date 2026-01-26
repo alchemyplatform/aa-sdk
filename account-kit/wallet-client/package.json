@@ -58,7 +58,7 @@
     "bun-types": "^1.2.18"
   },
   "peerDependencies": {
-    "viem": "^2.29.2"
+    "viem": "^2.45.0"
   },
   "publishConfig": {
     "access": "public",
