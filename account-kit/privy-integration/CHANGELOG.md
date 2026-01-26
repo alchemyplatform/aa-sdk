@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.83.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.83.1...v4.83.2) (2026-01-26)
+
+**Note:** Version bump only for package @account-kit/privy-integration
+
 ## [4.83.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.83.0...v4.83.1) (2026-01-24)
 
 **Note:** Version bump only for package @account-kit/privy-integration
