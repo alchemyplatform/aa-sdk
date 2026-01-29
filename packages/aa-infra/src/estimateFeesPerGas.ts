@@ -102,8 +102,14 @@ export async function estimateFeesPerGas<
   }
   const maxPriorityFeePerGas = hexToBigInt(maxPriorityFeePerGasHex);
 
-  return {
+  const bufferedMaxPriorityFeePerGas = bigIntMultiply(
     maxPriorityFeePerGas,
-    maxFeePerGas: bigIntMultiply(baseFeePerGas, 1.5) + maxPriorityFeePerGas,
+    1.5,
+  );
+
+  return {
+    maxPriorityFeePerGas: bufferedMaxPriorityFeePerGas,
+    maxFeePerGas:
+      bigIntMultiply(baseFeePerGas, 1.5) + bufferedMaxPriorityFeePerGas,
   };
 }
