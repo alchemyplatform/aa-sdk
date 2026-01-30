@@ -9,7 +9,7 @@ import type { PrepareCallsParams } from "./actions/prepareCalls.js";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import { arbitrumSepolia } from "viem/chains";
 import { createSmartWalletClient } from "./client.js";
-import { apiTransport, publicTransport } from "./testSetup.js";
+import { apiTransport, publicTransport } from "./__tests__/setup.js";
 
 // We want to test both the "unroll each step" method and the full e2e "sendCalls" method.
 const sendVariants: Array<
