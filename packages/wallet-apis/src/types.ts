@@ -4,17 +4,13 @@ import type {
   Address,
   Chain,
   Client,
-  EIP1193Events,
-  EIP1193RequestFn,
   Hex,
   JsonRpcAccount,
-  Prettify,
   Transport,
   WalletClient,
   LocalAccount,
 } from "viem";
 import type { InternalState } from "./internal";
-import type { SmartWalletClient1193Methods } from "./provider";
 import type { SmartWalletActions } from "./decorators/smartWalletActions";
 import type { WebAuthnAccount } from "viem/account-abstraction";
 
@@ -39,12 +35,6 @@ export type InnerWalletApiClient = BaseWalletClient<{
 export type SignerClient = WalletClient<Transport, Chain | undefined, Account>;
 
 export type SmartWalletSigner = LocalAccount | WebAuthnAccount | SignerClient;
-
-export type SmartWalletClientEip1193Provider = Prettify<
-  EIP1193Events & {
-    request: EIP1193RequestFn<SmartWalletClient1193Methods>;
-  }
->;
 
 export type SmartWalletClient<
   TAccount extends Address | undefined = Address | undefined,
