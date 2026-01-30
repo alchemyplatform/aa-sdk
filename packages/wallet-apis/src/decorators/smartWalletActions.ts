@@ -1,4 +1,4 @@
-import { type Hex, type Address } from "viem";
+import { type Hex } from "viem";
 import {
   requestAccount,
   type RequestAccountParams,
@@ -57,19 +57,15 @@ import {
   type GetCapabilitiesReturnType,
 } from "viem/actions";
 
-export type SmartWalletActions<
-  TAccount extends Address | undefined = Address | undefined,
-> = {
+export type SmartWalletActions = {
   requestAccount: (
     params?: RequestAccountParams,
   ) => Promise<RequestAccountResult>;
-  prepareCalls: (
-    params: PrepareCallsParams<TAccount>,
-  ) => Promise<PrepareCallsResult>;
+  prepareCalls: (params: PrepareCallsParams) => Promise<PrepareCallsResult>;
   sendPreparedCalls: (
     params: SendPreparedCallsParams,
   ) => Promise<SendPreparedCallsResult>;
-  sendCalls: (params: SendCallsParams<TAccount>) => Promise<SendCallsResult>;
+  sendCalls: (params: SendCallsParams) => Promise<SendCallsResult>;
   listAccounts: (params: ListAccountsParams) => Promise<ListAccountsResult>;
   signSignatureRequest: (
     params: SignSignatureRequestParams,
@@ -80,7 +76,7 @@ export type SmartWalletActions<
   signMessage: (params: SignMessageParams) => Promise<Hex>;
   signTypedData: (params: SignTypedDataParams) => Promise<Hex>;
   grantPermissions: (
-    params: GrantPermissionsParams<TAccount>,
+    params: GrantPermissionsParams,
   ) => Promise<GrantPermissionsResult>;
   getCallsStatus: (
     params: GetCallsStatusParameters,
@@ -100,11 +96,9 @@ export type SmartWalletActions<
  * @param {InnerWalletApiClient} client The wallet API client instance
  * @returns {SmartWalletActions<TAccount>} An object containing smart wallet action methods
  */
-export const smartWalletActions = <
-  TAccount extends Address | undefined = Address | undefined,
->(
+export const smartWalletActions = (
   client: InnerWalletApiClient,
-): SmartWalletActions<TAccount> => ({
+): SmartWalletActions => ({
   // Alchemy methods.
   requestAccount: (params) => requestAccount(client, params),
   prepareCalls: (params) => prepareCalls(client, params),

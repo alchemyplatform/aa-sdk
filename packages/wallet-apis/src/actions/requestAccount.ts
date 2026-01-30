@@ -1,16 +1,10 @@
 import type { Address } from "abitype";
-import { BaseError, type Prettify } from "viem";
+import { isAddressEqual, type Prettify } from "viem";
 import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
 import deepEqual from "deep-equal";
 import type { InnerWalletApiClient } from "../types";
 import { LOGGER } from "../logger.js";
-import type {
-  CreationOptionsByPublicKey,
-  CreationOptionsBySignerAddress,
-  WebAuthnPublicKey,
-} from "@alchemy/wallet-api-types";
-import { isWebAuthnAccount } from "../utils/assertions.js";
-import { getSignerAddressOrPublicKey } from "../utils/signer.js";
+import { isLocalAccount } from "../utils/assertions.js";
 
 type RpcSchema = Extract<
   WalletServerRpcSchemaType,
@@ -23,12 +17,13 @@ type RpcSchema = Extract<
 
 export type RequestAccountParams = Prettify<
   Omit<
-    Extract<
-      RpcSchema["Request"]["params"][0],
-      { signerAddress: Address } | { signerPublicKey: WebAuthnPublicKey }
-    >,
-    "signerAddress" | "signerPublicKey" | "includeCounterfactualInfo"
-  > & { accountAddress?: Address }
+    Extract<RpcSchema["Request"]["params"][0], { signerAddress: Address }>,
+    "signerAddress" | "includeCounterfactualInfo"
+  > &
+    (
+      | { signerAddress?: Address; accountAddress?: never }
+      | { signerAddress?: never; accountAddress: Address }
+    )
 >;
 
 export type RequestAccountResult = Prettify<{ address: Address }>;
@@ -60,55 +55,21 @@ export async function requestAccount(
     hasAccountOnClient: !!client.account,
   });
 
-  const { creationHint = {} } = params ?? {};
+  const signerAddress =
+    (params && "signerAddress" in params ? params.signerAddress : undefined) ??
+    (isLocalAccount(client.owner)
+      ? client.owner.address
+      : client.owner.account.address);
 
-  if (isWebAuthnAccount(client.owner)) {
-    if (
-      creationHint.accountType &&
-      creationHint.accountType !== "mav2-webauthn"
-    ) {
-      throw new BaseError(
-        "WebAuthn signers are only supported with mav2-webauthn account type",
-      );
-    }
-  } else {
-    // Non-webauthn signers do not support the "mav2-webauthn" account type.
-    if (creationHint.accountType === "mav2-webauthn") {
-      throw new BaseError(
-        "ECDSA (secp256k1) signers are not supported with mav2-webauthn account type",
-      );
-    }
-  }
-
-  const owner = getSignerAddressOrPublicKey(client.owner);
-
-  const args: RpcSchema["Request"]["params"][0] =
-    (client.account && !params) || params?.accountAddress
+  const args =
+    params && "accountAddress" in params && params.accountAddress
       ? {
-          accountAddress: params?.accountAddress ?? client.account!.address,
+          accountAddress: params.accountAddress,
           includeCounterfactualInfo: true,
         }
       : {
-          ...(owner.type === "webauthn-p256"
-            ? {
-                signerPublicKey: {
-                  ...owner.publicKey,
-                  type: "webauthn-p256",
-                },
-                // Casts here are safe due to our checks above.
-                ...(creationHint
-                  ? { creationHint: creationHint as CreationOptionsByPublicKey }
-                  : {}),
-              }
-            : {
-                signerAddress: owner.address,
-                ...(creationHint
-                  ? {
-                      creationHint:
-                        creationHint as CreationOptionsBySignerAddress,
-                    }
-                  : {}),
-              }),
+          ...params,
+          signerAddress,
           includeCounterfactualInfo: true,
         };
 
@@ -116,8 +77,8 @@ export async function requestAccount(
 
   if (
     cachedAccount &&
-    ((params?.accountAddress &&
-      cachedAccount.address === params.accountAddress) ||
+    ((args.accountAddress &&
+      isAddressEqual(cachedAccount.address, args.accountAddress)) ||
       deepEqual(cachedAccount.requestParams, args, { strict: true }))
   ) {
     LOGGER.debug("requestAccount:cache-hit", {
@@ -139,6 +100,7 @@ export async function requestAccount(
   });
 
   LOGGER.debug("requestAccount:done", { address: resp.accountAddress });
+
   return {
     address: resp.accountAddress,
   };

@@ -1,4 +1,4 @@
-import type { Address, Prettify } from "viem";
+import type { Prettify } from "viem";
 import type { InnerWalletApiClient } from "../types.js";
 import { prepareCalls, type PrepareCallsParams } from "./prepareCalls.js";
 import { signPreparedCalls } from "./signPreparedCalls.js";
@@ -8,13 +8,9 @@ import {
 } from "./sendPreparedCalls.js";
 import { LOGGER } from "../logger.js";
 import { signSignatureRequest } from "./signSignatureRequest.js";
-import { isWebAuthnAccount } from "../utils/assertions.js";
 import { extractCapabilitiesForSending } from "../utils/capabilities.js";
-import { BaseError } from "@alchemy/common";
 
-export type SendCallsParams<
-  TAccount extends Address | undefined = Address | undefined,
-> = Prettify<PrepareCallsParams<TAccount>>;
+export type SendCallsParams = Prettify<PrepareCallsParams>;
 
 export type SendCallsResult = Prettify<SendPreparedCallsResult>;
 
@@ -49,11 +45,9 @@ export type SendCallsResult = Prettify<SendPreparedCallsResult>;
  * from the user. It is recommended to use the `prepareCalls` action instead to manually handle the permit signature.
  * </Note>
  */
-export async function sendCalls<
-  TAccount extends Address | undefined = Address | undefined,
->(
+export async function sendCalls(
   client: InnerWalletApiClient,
-  params: SendCallsParams<TAccount>,
+  params: SendCallsParams,
 ): Promise<SendCallsResult> {
   LOGGER.info("sendCalls:start", {
     calls: params.calls?.length,
@@ -62,11 +56,6 @@ export async function sendCalls<
   let calls = await prepareCalls(client, params);
 
   if (calls.type === "paymaster-permit") {
-    if (isWebAuthnAccount(client.owner)) {
-      throw new BaseError(
-        "WebAuthn signer is not currently supported for signing paymaster permit signatures",
-      );
-    }
     const signature = await signSignatureRequest(
       client,
       calls.signatureRequest,

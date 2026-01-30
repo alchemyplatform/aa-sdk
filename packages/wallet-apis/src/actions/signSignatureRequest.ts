@@ -13,13 +13,9 @@ import type {
 } from "../types";
 import { assertNever, BaseError } from "@alchemy/common";
 import { LOGGER } from "../logger.js";
-import { isLocalAccount, isWebAuthnAccount } from "../utils/assertions.js";
+import { isLocalAccount } from "../utils/assertions.js";
 import { getAction } from "viem/utils";
 import { signAuthorization, signMessage, signTypedData } from "viem/actions";
-import type {
-  WebAuthnSignReturnType,
-  WebAuthnAccount,
-} from "viem/account-abstraction";
 import type { LocalAccount } from "viem";
 
 export type SignSignatureRequestParams = Prettify<
@@ -32,21 +28,10 @@ export type SignSignatureRequestParams = Prettify<
   >
 >;
 
-export type SignSignatureRequestResult =
-  | {
-      type: "secp256k1";
-      data: Hex;
-    }
-  | {
-      type: "webauthn-p256";
-      data: {
-        signature: Hex;
-        metadata: Pick<
-          WebAuthnSignReturnType["webauthn"],
-          "clientDataJSON" | "authenticatorData"
-        >;
-      };
-    };
+export type SignSignatureRequestResult = {
+  type: "secp256k1";
+  data: Hex;
+};
 
 /**
  * Signs a signature request using the provided signer.
@@ -85,55 +70,11 @@ export async function signSignatureRequest(
 ): Promise<SignSignatureRequestResult> {
   LOGGER.debug("signSignatureRequest:start", { type: params.type });
 
-  if (isWebAuthnAccount(client.owner)) {
-    return signWithWebAuthn(client.owner, params);
-  }
-
   if (isLocalAccount(client.owner)) {
     return signWithLocalAccount(client.owner, params);
   }
 
   return signWithSignerClient(client.owner, params);
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// WebAuthn signer
-// ─────────────────────────────────────────────────────────────────────────────
-
-type WebAuthnResult = Extract<
-  SignSignatureRequestResult,
-  { type: "webauthn-p256" }
->;
-
-async function signWithWebAuthn(
-  signer: WebAuthnAccount,
-  params: SignSignatureRequestParams,
-): Promise<WebAuthnResult> {
-  switch (params.type) {
-    case "personal_sign": {
-      const { signature, webauthn: metadata } = await signer.signMessage({
-        message: params.data,
-      });
-      LOGGER.debug("signSignatureRequest:webauthn:personal_sign:ok");
-      return { type: "webauthn-p256", data: { signature, metadata } };
-    }
-    case "eth_signTypedData_v4": {
-      const { signature, webauthn: metadata } = await signer.signTypedData(
-        params.data,
-      );
-      LOGGER.debug("signSignatureRequest:webauthn:eth_signTypedData_v4:ok");
-      return { type: "webauthn-p256", data: { signature, metadata } };
-    }
-    case "eip7702Auth":
-      throw new BaseError(
-        "WebAuthn account cannot sign EIP-7702 authorization requests",
-      );
-    default:
-      LOGGER.warn("signSignatureRequest:unknown-type", {
-        type: (params as { type?: unknown }).type,
-      });
-      return assertNever(params, "Unexpected signature request type.");
-  }
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

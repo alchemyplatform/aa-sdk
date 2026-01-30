@@ -1,12 +1,10 @@
 import {
-  BaseError,
   type Address,
   type Hex,
   type Prettify,
   type TypedDataDefinition,
 } from "viem";
 import type { InnerWalletApiClient } from "../types.ts";
-import { requestAccount } from "./requestAccount.js";
 import { prepareSign } from "./prepareSign.js";
 import { signSignatureRequest } from "./signSignatureRequest.js";
 import { formatSign } from "./formatSign.js";
@@ -64,13 +62,9 @@ export async function signTypedData(
     primaryType: params.primaryType,
   });
   const accountAddress = params.account ?? client.account?.address;
-  const account = await requestAccount(
-    client,
-    accountAddress != null ? { accountAddress } : undefined,
-  );
 
   const prepared = await prepareSign(client, {
-    from: account.address,
+    from: accountAddress,
     signatureRequest: {
       type: "eth_signTypedData_v4",
       data: typedDataToJsonSafe(params),
@@ -79,20 +73,13 @@ export async function signTypedData(
 
   const signed = await signSignatureRequest(client, prepared.signatureRequest);
 
-  // TODO: Wallet server needs to be updated to support webauthn here.
-  if (signed.type === "webauthn-p256") {
-    throw new BaseError(
-      "WebAuthn account is currently unsupported by wallet_formatSign",
-    );
-  }
-
   const formatted = await formatSign(client, {
-    from: account.address,
+    from: accountAddress,
     signature: {
       type: "ecdsa",
       data: signed.data,
     },
   });
-  LOGGER.debug("signTypedData:done", { from: account.address });
+  LOGGER.debug("signTypedData:done", { from: accountAddress });
   return formatted.signature;
 }

@@ -12,7 +12,6 @@ import type {
 } from "viem";
 import type { InternalState } from "./internal";
 import type { SmartWalletActions } from "./decorators/smartWalletActions";
-import type { WebAuthnAccount } from "viem/account-abstraction";
 
 export type BaseWalletClient<
   TExtend extends { [key: string]: unknown } | undefined =
@@ -21,7 +20,7 @@ export type BaseWalletClient<
 > = Client<
   Transport<"alchemyHttp">,
   Chain,
-  JsonRpcAccount<Address> | undefined,
+  JsonRpcAccount<Address>,
   WalletServerViemRpcSchema,
   TExtend
 >;
@@ -34,14 +33,16 @@ export type InnerWalletApiClient = BaseWalletClient<{
 
 export type SignerClient = WalletClient<Transport, Chain | undefined, Account>;
 
-export type SmartWalletSigner = LocalAccount | WebAuthnAccount | SignerClient;
+export type SmartWalletSigner = LocalAccount | SignerClient;
 
-export type SmartWalletClient<
-  TAccount extends Address | undefined = Address | undefined,
-> = BaseWalletClient<SmartWalletActions<TAccount>>;
+export type SmartWalletClient = BaseWalletClient<SmartWalletActions>;
 
 export type OptionalChainId<T> = T extends { chainId: Hex }
   ? Omit<T, "chainId"> & { chainId?: Hex | undefined }
+  : T;
+
+export type OptionalFrom<T> = T extends { from: Address }
+  ? Omit<T, "from"> & { from?: Address | undefined }
   : T;
 
 export type WithoutRawPayload<T> = T extends { rawPayload: Hex }

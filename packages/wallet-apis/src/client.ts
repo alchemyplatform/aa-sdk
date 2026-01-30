@@ -3,14 +3,13 @@ import { smartWalletActions } from "./decorators/smartWalletActions.js";
 import { type AlchemyTransport } from "@alchemy/common";
 import type { SmartWalletClient, SmartWalletSigner } from "./types.js";
 import { createInternalState } from "./internal.js";
+import { isLocalAccount } from "./utils/assertions.js";
 
-export type CreateSmartWalletClientParams<
-  TAccount extends Address | undefined = Address | undefined,
-> = {
+export type CreateSmartWalletClientParams = {
   signer: SmartWalletSigner;
   transport: AlchemyTransport;
   chain: Chain;
-  account?: TAccount;
+  account?: Address;
   paymaster?: {
     policyId?: string;
     policyIds?: string[];
@@ -27,15 +26,14 @@ export type CreateSmartWalletClientParams<
  * @param {string[]} params.policyIds - Optional policy IDs for paymaster service.
  * @returns {WalletClient} A wallet client extended with smart wallet actions.
  */
-export const createSmartWalletClient = <
-  TAccount extends Address | undefined = Address | undefined,
->({
-  account,
+export const createSmartWalletClient = ({
+  signer,
   transport,
   chain,
-  signer,
+  // If no account address is provided, the client defaults to using the signer's address via EIP-7702.
+  account = isLocalAccount(signer) ? signer.address : signer.account.address,
   paymaster: { policyId, policyIds } = {},
-}: CreateSmartWalletClientParams<TAccount>): SmartWalletClient<TAccount> => {
+}: CreateSmartWalletClientParams): SmartWalletClient => {
   const _policyIds = [...(policyId ? [policyId] : []), ...(policyIds ?? [])];
 
   return createClient({
@@ -49,5 +47,5 @@ export const createSmartWalletClient = <
       internal: createInternalState(),
       owner: signer,
     }))
-    .extend(smartWalletActions<TAccount>);
+    .extend(smartWalletActions);
 };

@@ -1,5 +1,9 @@
-import type { InnerWalletApiClient, OptionalChainId } from "../types.ts";
-import { toHex, type Address, type IsUndefined, type Prettify } from "viem";
+import type {
+  InnerWalletApiClient,
+  OptionalChainId,
+  OptionalFrom,
+} from "../types.ts";
+import { toHex, type Prettify } from "viem";
 import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
 import { AccountNotFoundError } from "@alchemy/common";
 import { LOGGER } from "../logger.js";
@@ -13,11 +17,8 @@ type RpcSchema = Extract<
   }
 >;
 
-export type PrepareSignParams<
-  TAccount extends Address | undefined = Address | undefined,
-> = Prettify<
-  OptionalChainId<Omit<RpcSchema["Request"]["params"][0], "from">> &
-    (IsUndefined<TAccount> extends true ? { from: Address } : { from?: never })
+export type PrepareSignParams = Prettify<
+  OptionalFrom<OptionalChainId<RpcSchema["Request"]["params"][0]>>
 >;
 
 export type PrepareSignResult = Prettify<RpcSchema["ReturnType"]>;
@@ -39,11 +40,9 @@ export type PrepareSignResult = Prettify<RpcSchema["ReturnType"]>;
  * });
  * ```
  */
-export async function prepareSign<
-  TAccount extends Address | undefined = Address | undefined,
->(
+export async function prepareSign(
   client: InnerWalletApiClient,
-  params: PrepareSignParams<TAccount>,
+  params: PrepareSignParams,
 ): Promise<PrepareSignResult> {
   const from = params.from ?? client.account?.address;
   if (!from) {

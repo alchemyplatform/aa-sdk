@@ -1,5 +1,9 @@
-import { toHex, type Address, type IsUndefined, type Prettify } from "viem";
-import type { InnerWalletApiClient, OptionalChainId } from "../types.ts";
+import { toHex, type Prettify } from "viem";
+import type {
+  InnerWalletApiClient,
+  OptionalChainId,
+  OptionalFrom,
+} from "../types.ts";
 import { AccountNotFoundError } from "@alchemy/common";
 import { LOGGER } from "../logger.js";
 import { mergeClientCapabilities } from "../utils/capabilities.js";
@@ -14,11 +18,8 @@ type RpcSchema = Extract<
   }
 >;
 
-export type PrepareCallsParams<
-  TAccount extends Address | undefined = Address | undefined,
-> = Prettify<
-  OptionalChainId<Omit<RpcSchema["Request"]["params"][0], "from">> &
-    (IsUndefined<TAccount> extends true ? { from: Address } : { from?: never })
+export type PrepareCallsParams = Prettify<
+  OptionalFrom<OptionalChainId<RpcSchema["Request"]["params"][0]>>
 >;
 
 export type PrepareCallsResult = Prettify<RpcSchema["ReturnType"]>;
@@ -51,11 +52,9 @@ export type PrepareCallsResult = Prettify<RpcSchema["ReturnType"]>;
  * });
  * ```
  */
-export async function prepareCalls<
-  TAccount extends Address | undefined = Address | undefined,
->(
+export async function prepareCalls(
   client: InnerWalletApiClient,
-  params: PrepareCallsParams<TAccount>,
+  params: PrepareCallsParams,
 ): Promise<PrepareCallsResult> {
   const from = params.from ?? client.account?.address;
   if (!from) {
