@@ -15,7 +15,7 @@ export type SwapActions = {
  * This is a decorator that is used to add experimental swap actions to a client.
  *
  * @param {BaseWalletClient} client The wallet client to extend with swap functionality
- * @returns {SwapActions<TAccount>} An object containing swap-related actions
+ * @returns {SwapActions} An object containing swap-related actions
  */
 export const swapActions: (client: BaseWalletClient) => SwapActions = (
   client,

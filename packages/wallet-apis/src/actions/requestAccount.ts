@@ -29,7 +29,12 @@ export type RequestAccountParams = Prettify<
 export type RequestAccountResult = Prettify<{ address: Address }>;
 
 /**
- * Requests an account for the provided signer using the wallet API client.
+ * Requests a smart account address for the provided signer using the wallet API client.
+ *
+ * Note: This is only needed for non-EIP-7702 accounts. The client defaults to using
+ * EIP-7702 with the signer's address, so you can call `prepareCalls` or `sendCalls`
+ * directly without first calling `requestAccount`.
+ *
  * If an account already exists for the signer, it will always return that account unless a new ID is specified.
  * If an account already exists, the creationHint will be ignored.
  *
@@ -41,9 +46,8 @@ export type RequestAccountResult = Prettify<{ address: Address }>;
  *
  * @example
  * ```ts
- * // Request an account with default parameters using a local signer
- * const signer = LocalAccountSigner.privateKeyToAccountSigner("0x...");
- * const account = await client.requestAccount(signer);
+ * // Request a non-7702 smart account
+ * const account = await client.requestAccount();
  * ```
  */
 export async function requestAccount(

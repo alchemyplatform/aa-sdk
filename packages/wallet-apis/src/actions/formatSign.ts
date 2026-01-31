@@ -1,6 +1,10 @@
 import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
-import type { InnerWalletApiClient, OptionalChainId } from "../types.ts";
-import { toHex, type Address, type Prettify } from "viem";
+import type {
+  InnerWalletApiClient,
+  OptionalChainId,
+  OptionalFrom,
+} from "../types.ts";
+import { toHex, type Prettify } from "viem";
 import { AccountNotFoundError } from "@alchemy/common";
 import { LOGGER } from "../logger.js";
 
@@ -14,9 +18,7 @@ type RpcSchema = Extract<
 >;
 
 export type FormatSignParams = Prettify<
-  Omit<OptionalChainId<RpcSchema["Request"]["params"][0]>, "from"> & {
-    from?: Address;
-  }
+  OptionalFrom<OptionalChainId<RpcSchema["Request"]["params"][0]>>
 >;
 
 export type FormatSignResult = Prettify<RpcSchema["ReturnType"]>;

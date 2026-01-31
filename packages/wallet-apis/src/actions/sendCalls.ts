@@ -17,15 +17,19 @@ export type SendCallsResult = Prettify<SendPreparedCallsResult>;
 /**
  * Prepares, signs, and submits calls. This function internally calls `prepareCalls`, `signPreparedCalls`, and `sendPreparedCalls`.
  *
+ * The client defaults to using EIP-7702 with the signer's address, so you can call
+ * this directly without first calling `requestAccount`.
+ *
  * @param {InnerWalletApiClient} client - The wallet API client to use for the request
- * @param {PrepareCallsParams<TAccount>} params - Parameters for sending calls
+ * @param {PrepareCallsParams} params - Parameters for sending calls
  * @param {Array<{to: Address, data?: Hex, value?: Hex}>} params.calls - Array of contract calls to execute
- * @param {Address} [params.from] - The address to execute the calls from (required if the client wasn't initialized with an account)
+ * @param {Address} [params.from] - The address to execute the calls from. Defaults to the client's account (signer address via EIP-7702).
  * @param {object} [params.capabilities] - Optional capabilities to include with the request.
  * @returns {Promise<SendPreparedCallsResult>} A Promise that resolves to the result containing the prepared call IDs.
  *
  *  @example
  * ```ts
+ * // Send calls (uses signer address via EIP-7702 by default)
  * const result = await client.sendCalls({
  *   calls: [{
  *     to: "0x1234...",

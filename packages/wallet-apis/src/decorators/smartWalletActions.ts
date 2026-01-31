@@ -94,7 +94,7 @@ export type SmartWalletActions = {
  * Provides both Alchemy-specific methods and standard viem wallet actions.
  *
  * @param {InnerWalletApiClient} client The wallet API client instance
- * @returns {SmartWalletActions<TAccount>} An object containing smart wallet action methods
+ * @returns {SmartWalletActions} An object containing smart wallet action methods
  */
 export const smartWalletActions = (
   client: InnerWalletApiClient,

@@ -1,6 +1,13 @@
-import { alchemyTransport, type AlchemyTransportConfig } from "@alchemy/common";
+import {
+  alchemyTransport,
+  type AlchemyTransport,
+  type AlchemyTransportConfig,
+} from "@alchemy/common";
 
-// TODO(jh): add jsdoc for this & update other docs examples to use this instead of alchemyTransport directly.
-export const alchemyWalletTransport = (config: AlchemyTransportConfig) => {
+export type AlchemyWalletTransport = AlchemyTransport;
+
+export const alchemyWalletTransport = (
+  config: AlchemyTransportConfig,
+): AlchemyWalletTransport => {
   return alchemyTransport({ ...config, url: "https://api.g.alchemy.com" });
 };

@@ -1,11 +1,9 @@
-import {
-  toHex,
-  type Address,
-  type IsUndefined,
-  type Prettify,
-  type UnionOmit,
-} from "viem";
-import type { OptionalChainId, InnerWalletApiClient } from "../../types.ts";
+import { toHex, type Prettify } from "viem";
+import type {
+  OptionalChainId,
+  InnerWalletApiClient,
+  OptionalFrom,
+} from "../../types.ts";
 import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
 import { AccountNotFoundError } from "@alchemy/common";
 import { mergeClientCapabilities } from "../../utils/capabilities.js";
@@ -19,12 +17,9 @@ type RpcSchema = Extract<
   }
 >;
 
-export type RequestQuoteV0Params<
-  TAccount extends Address | undefined = Address | undefined,
-> = Prettify<
-  OptionalChainId<UnionOmit<RpcSchema["Request"]["params"][0], "from">>
-> &
-  (IsUndefined<TAccount> extends true ? { from: Address } : { from?: never });
+export type RequestQuoteV0Params = Prettify<
+  OptionalFrom<OptionalChainId<RpcSchema["Request"]["params"][0]>>
+>;
 
 export type RequestQuoteV0Result = Prettify<RpcSchema["ReturnType"]>;
 
@@ -33,12 +28,12 @@ export type RequestQuoteV0Result = Prettify<RpcSchema["ReturnType"]>;
  * or raw calls for EOA wallets depending on the returnRawCalls parameter.
  *
  * @param {InnerWalletApiClient} client - The wallet API client to use for the request
- * @param {RequestQuoteV0Params<TAccount>} params - Parameters for requesting a swap quote
+ * @param {RequestQuoteV0Params} params - Parameters for requesting a swap quote
  * @param {Address} params.fromToken - The address of the token to swap from
  * @param {Address} params.toToken - The address of the token to swap to
  * @param {Hex} [params.fromAmount] - The amount to swap from (mutually exclusive with minimumToAmount)
  * @param {Hex} [params.minimumToAmount] - The minimum amount to receive (mutually exclusive with fromAmount)
- * @param {Address} [params.from] - The address to execute the swap from (required if the client wasn't initialized with an account)
+ * @param {Address} [params.from] - The address to execute the swap from. Defaults to the client's account (signer address via EIP-7702).
  * @param {Hex} [params.slippage] - The maximum acceptable slippage percentage
  * @param {boolean} [params.returnRawCalls] - Whether to return raw calls for EOA wallets (defaults to false for smart wallets)
  * @param {object} [params.capabilities] - Optional capabilities to include with the request (only available when returnRawCalls is false)
@@ -66,11 +61,9 @@ export type RequestQuoteV0Result = Prettify<RpcSchema["ReturnType"]>;
  * });
  * ```
  */
-export async function requestQuoteV0<
-  TAccount extends Address | undefined = Address | undefined,
->(
+export async function requestQuoteV0(
   client: InnerWalletApiClient,
-  params: RequestQuoteV0Params<TAccount>,
+  params: RequestQuoteV0Params,
 ): Promise<RequestQuoteV0Result> {
   const from = params.from ?? client.account?.address;
   if (!from) {
