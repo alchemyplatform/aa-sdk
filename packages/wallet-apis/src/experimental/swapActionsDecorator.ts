@@ -1,4 +1,3 @@
-import type { Address } from "viem";
 import {
   requestQuoteV0,
   type RequestQuoteV0Params,
@@ -6,11 +5,9 @@ import {
 } from "./actions/requestQuoteV0.js";
 import type { BaseWalletClient, InnerWalletApiClient } from "../types.js";
 
-export type SwapActions<
-  TAccount extends Address | undefined = Address | undefined,
-> = {
+export type SwapActions = {
   requestQuoteV0: (
-    params: RequestQuoteV0Params<TAccount>,
+    params: RequestQuoteV0Params,
   ) => Promise<RequestQuoteV0Result>;
 };
 
@@ -18,13 +15,11 @@ export type SwapActions<
  * This is a decorator that is used to add experimental swap actions to a client.
  *
  * @param {BaseWalletClient} client The wallet client to extend with swap functionality
- * @returns {SwapActions<TAccount>} An object containing swap-related actions
+ * @returns {SwapActions} An object containing swap-related actions
  */
-export const swapActions: <
-  TAccount extends Address | undefined = Address | undefined,
->(
-  client: BaseWalletClient,
-) => SwapActions<TAccount> = (client) => {
+export const swapActions: (client: BaseWalletClient) => SwapActions = (
+  client,
+) => {
   // This is safe. It's just needed b/c we have an internal decorator
   // that we don't expose on the public type.
   const _client = client as InnerWalletApiClient;

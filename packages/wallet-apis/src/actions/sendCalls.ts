@@ -1,4 +1,4 @@
-import type { Address, Prettify } from "viem";
+import type { Prettify } from "viem";
 import type { InnerWalletApiClient } from "../types.js";
 import { prepareCalls, type PrepareCallsParams } from "./prepareCalls.js";
 import { signPreparedCalls } from "./signPreparedCalls.js";
@@ -8,28 +8,28 @@ import {
 } from "./sendPreparedCalls.js";
 import { LOGGER } from "../logger.js";
 import { signSignatureRequest } from "./signSignatureRequest.js";
-import { isWebAuthnAccount } from "../utils/assertions.js";
 import { extractCapabilitiesForSending } from "../utils/capabilities.js";
-import { BaseError } from "@alchemy/common";
 
-export type SendCallsParams<
-  TAccount extends Address | undefined = Address | undefined,
-> = Prettify<PrepareCallsParams<TAccount>>;
+export type SendCallsParams = Prettify<PrepareCallsParams>;
 
 export type SendCallsResult = Prettify<SendPreparedCallsResult>;
 
 /**
  * Prepares, signs, and submits calls. This function internally calls `prepareCalls`, `signPreparedCalls`, and `sendPreparedCalls`.
  *
+ * The client defaults to using EIP-7702 with the signer's address, so you can call
+ * this directly without first calling `requestAccount`.
+ *
  * @param {InnerWalletApiClient} client - The wallet API client to use for the request
- * @param {PrepareCallsParams<TAccount>} params - Parameters for sending calls
+ * @param {PrepareCallsParams} params - Parameters for sending calls
  * @param {Array<{to: Address, data?: Hex, value?: Hex}>} params.calls - Array of contract calls to execute
- * @param {Address} [params.from] - The address to execute the calls from (required if the client wasn't initialized with an account)
+ * @param {Address} [params.from] - The address to execute the calls from. Defaults to the client's account (signer address via EIP-7702).
  * @param {object} [params.capabilities] - Optional capabilities to include with the request.
  * @returns {Promise<SendPreparedCallsResult>} A Promise that resolves to the result containing the prepared call IDs.
  *
  *  @example
  * ```ts
+ * // Send calls (uses signer address via EIP-7702 by default)
  * const result = await client.sendCalls({
  *   calls: [{
  *     to: "0x1234...",
@@ -49,11 +49,9 @@ export type SendCallsResult = Prettify<SendPreparedCallsResult>;
  * from the user. It is recommended to use the `prepareCalls` action instead to manually handle the permit signature.
  * </Note>
  */
-export async function sendCalls<
-  TAccount extends Address | undefined = Address | undefined,
->(
+export async function sendCalls(
   client: InnerWalletApiClient,
-  params: SendCallsParams<TAccount>,
+  params: SendCallsParams,
 ): Promise<SendCallsResult> {
   LOGGER.info("sendCalls:start", {
     calls: params.calls?.length,
@@ -62,11 +60,6 @@ export async function sendCalls<
   let calls = await prepareCalls(client, params);
 
   if (calls.type === "paymaster-permit") {
-    if (isWebAuthnAccount(client.owner)) {
-      throw new BaseError(
-        "WebAuthn signer is not currently supported for signing paymaster permit signatures",
-      );
-    }
     const signature = await signSignatureRequest(
       client,
       calls.signatureRequest,

@@ -1,5 +1,5 @@
 import { arbitrum, base } from "viem/chains";
-import { apiTransport } from "../testSetup.js";
+import { apiTransport } from "../__tests__/setup.js";
 import { createSmartWalletClient } from "../client.js";
 import { swapActions } from "./swapActionsDecorator.js";
 import { size, toHex, type LocalAccount } from "viem";

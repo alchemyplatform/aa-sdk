@@ -3,10 +3,8 @@ import {
   type Hex,
   type Prettify,
   type SignableMessage,
-  BaseError,
 } from "viem";
 import type { InnerWalletApiClient } from "../types.js";
-import { requestAccount } from "./requestAccount.js";
 import { prepareSign } from "./prepareSign.js";
 import { signSignatureRequest } from "./signSignatureRequest.js";
 import { formatSign } from "./formatSign.js";
@@ -43,18 +41,13 @@ export async function signMessage(
   client: InnerWalletApiClient,
   params: SignMessageParams,
 ): Promise<SignMessageResult> {
-  const accountAddress = params.account ?? client.account?.address;
+  const accountAddress = params.account ?? client.account.address;
   LOGGER.debug("signMessage:start", {
     hasExplicitAccount: params.account != null,
   });
 
-  const account = await requestAccount(
-    client,
-    accountAddress != null ? { accountAddress } : undefined,
-  );
-
   const prepared = await prepareSign(client, {
-    from: account.address,
+    from: accountAddress,
     signatureRequest: {
       type: "personal_sign",
       data: signableMessageToJsonSafe(params.message),
@@ -63,20 +56,13 @@ export async function signMessage(
 
   const signed = await signSignatureRequest(client, prepared.signatureRequest);
 
-  // TODO: Wallet server needs to be updated to support webauthn here.
-  if (signed.type === "webauthn-p256") {
-    throw new BaseError(
-      "WebAuthn account is currently unsupported by wallet_formatSign",
-    );
-  }
-
   const formatted = await formatSign(client, {
-    from: account.address,
+    from: accountAddress,
     signature: {
       type: "ecdsa",
       data: signed.data,
     },
   });
-  LOGGER.debug("signMessage:done", { from: account.address });
+  LOGGER.debug("signMessage:done", { from: accountAddress });
   return formatted.signature;
 }

@@ -35,7 +35,7 @@
     "postinstall": "git submodule update --init --recursive && patch-package && turbo run build --filter='./templates/*' --filter='halp'",
     "build": "yarn build:libs",
     "postbuild": "yarn lint:write",
-    "build:libs": "turbo run build --filter='./templates/*' --filter='./packages/*'",
+    "build:libs": "turbo run build --filter='./templates/*' --filter='./packages/*' --filter='!./packages/wagmi-core'",
     "build:demo": "turbo run build --filter=ui-demo --filter='./templates/*'",
     "build:examples": "turbo run build",
     "clean": "yarn clean:turbo && yarn clean:node_modules",

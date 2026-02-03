@@ -1,5 +1,9 @@
-import { toHex, type Address, type IsUndefined, type Prettify } from "viem";
-import type { InnerWalletApiClient, OptionalChainId } from "../types.ts";
+import { toHex, type Prettify } from "viem";
+import type {
+  InnerWalletApiClient,
+  OptionalChainId,
+  OptionalFrom,
+} from "../types.ts";
 import { AccountNotFoundError } from "@alchemy/common";
 import { LOGGER } from "../logger.js";
 import { mergeClientCapabilities } from "../utils/capabilities.js";
@@ -14,11 +18,8 @@ type RpcSchema = Extract<
   }
 >;
 
-export type PrepareCallsParams<
-  TAccount extends Address | undefined = Address | undefined,
-> = Prettify<
-  OptionalChainId<Omit<RpcSchema["Request"]["params"][0], "from">> &
-    (IsUndefined<TAccount> extends true ? { from: Address } : { from?: never })
+export type PrepareCallsParams = Prettify<
+  OptionalFrom<OptionalChainId<RpcSchema["Request"]["params"][0]>>
 >;
 
 export type PrepareCallsResult = Prettify<RpcSchema["ReturnType"]>;
@@ -28,17 +29,20 @@ export type PrepareCallsResult = Prettify<RpcSchema["ReturnType"]>;
  * Returns the built user operation and a signature request that needs to be signed
  * before submitting to sendPreparedCalls.
  *
- * @param {InnerWalletApiClient<TAccount>} client - The wallet API client to use for the request
- * @param {PrepareCallsParams<TAccount>} params - Parameters for preparing calls
+ * The client defaults to using EIP-7702 with the signer's address, so you can call
+ * this directly without first calling `requestAccount`.
+ *
+ * @param {InnerWalletApiClient} client - The wallet API client to use for the request
+ * @param {PrepareCallsParams} params - Parameters for preparing calls
  * @param {Array<{to: Address, data?: Hex, value?: Hex}>} params.calls - Array of contract calls to execute
- * @param {Address} [params.from] - The address to execute the calls from (required if the client wasn't initialized with an account)
+ * @param {Address} [params.from] - The address to execute the calls from. Defaults to the client's account (signer address via EIP-7702).
  * @param {object} [params.capabilities] - Optional capabilities to include with the request
  * @returns {Promise<PrepareCallsResult>} A Promise that resolves to the prepared calls result containing
  * the user operation data and signature request
  *
  * @example
  * ```ts
- * // Prepare a sponsored user operation call
+ * // Prepare a sponsored user operation call (uses signer address via EIP-7702 by default)
  * const result = await client.prepareCalls({
  *   calls: [{
  *     to: "0x1234...",
@@ -51,11 +55,9 @@ export type PrepareCallsResult = Prettify<RpcSchema["ReturnType"]>;
  * });
  * ```
  */
-export async function prepareCalls<
-  TAccount extends Address | undefined = Address | undefined,
->(
+export async function prepareCalls(
   client: InnerWalletApiClient,
-  params: PrepareCallsParams<TAccount>,
+  params: PrepareCallsParams,
 ): Promise<PrepareCallsResult> {
   const from = params.from ?? client.account?.address;
   if (!from) {

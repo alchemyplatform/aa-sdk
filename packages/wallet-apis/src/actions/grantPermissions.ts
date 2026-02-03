@@ -1,18 +1,10 @@
-import {
-  toHex,
-  type Address,
-  type Hex,
-  type IsUndefined,
-  type Prettify,
-  concatHex,
-} from "viem";
+import { toHex, type Address, type Hex, type Prettify, concatHex } from "viem";
 import type { InnerWalletApiClient } from "../types.ts";
 import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
 import { signSignatureRequest } from "./signSignatureRequest.js";
-import { AccountNotFoundError, BaseError } from "@alchemy/common";
+import { AccountNotFoundError } from "@alchemy/common";
 import { LOGGER } from "../logger.js";
 import type { OptionalChainId } from "../types.ts";
-import { isWebAuthnAccount } from "../utils/assertions.js";
 
 type RpcSchema = Extract<
   WalletServerRpcSchemaType,
@@ -23,13 +15,10 @@ type RpcSchema = Extract<
   }
 >;
 
-export type GrantPermissionsParams<
-  TAccount extends Address | undefined = Address | undefined,
-> = Prettify<
-  OptionalChainId<Omit<RpcSchema["Request"]["params"][0], "account">> &
-    (IsUndefined<TAccount> extends true
-      ? { account: Address }
-      : { account?: never })
+export type GrantPermissionsParams = Prettify<
+  OptionalChainId<Omit<RpcSchema["Request"]["params"][0], "account">> & {
+    account?: Address;
+  }
 >;
 
 export type GrantPermissionsResult = Prettify<{
@@ -90,24 +79,15 @@ export type GrantPermissionsResult = Prettify<{
  * });
  * ```
  */
-export async function grantPermissions<
-  TAccount extends Address | undefined = Address | undefined,
->(
+export async function grantPermissions(
   client: InnerWalletApiClient,
-  params: GrantPermissionsParams<TAccount>,
+  params: GrantPermissionsParams,
 ): Promise<GrantPermissionsResult> {
-  const account = params.account ?? client.account?.address;
+  const account = params.account ?? client.account.address;
   if (!account) {
     LOGGER.warn("grantPermissions:no-account");
     throw new AccountNotFoundError();
   }
-  if (isWebAuthnAccount(client.owner)) {
-    LOGGER.warn("grantPermissions:unsupported-account");
-    throw new BaseError(
-      "WebAuthn signer is not currently supported for grantPermissions",
-    );
-  }
-
   LOGGER.debug("grantPermissions:start", { expirySec: params.expirySec });
   const { sessionId, signatureRequest } = await client.request({
     method: "wallet_createSession",
@@ -126,9 +106,7 @@ export async function grantPermissions<
     context: concatHex([
       "0x00", // Remote mode.
       sessionId,
-      signature.type === "webauthn-p256"
-        ? signature.data.signature
-        : signature.data,
+      signature.data,
     ]),
   } as const;
   LOGGER.debug("grantPermissions:done");

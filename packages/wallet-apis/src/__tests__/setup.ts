@@ -1,14 +1,12 @@
 import { alchemyTransport } from "@alchemy/common";
+import { alchemyWalletTransport } from "../transport.js";
 
-export const ALCHEMY_API_URL = "https://api.g.alchemy.com/v2";
-
-export const apiTransport = alchemyTransport(
+export const apiTransport = alchemyWalletTransport(
   process.env.ALCHEMY_PROXY_RPC_URL
     ? {
         url: process.env.ALCHEMY_PROXY_RPC_URL,
       }
     : {
-        url: ALCHEMY_API_URL,
         apiKey: process.env.TEST_ALCHEMY_API_KEY!,
       },
 );

@@ -1,9 +1,9 @@
 import { zeroAddress } from "viem";
-import { type AlchemyTransport } from "@alchemy/common";
 import { privateKeyToAccount } from "viem/accounts";
 import { arbitrumSepolia } from "viem/chains";
 import { createSmartWalletClient } from "./client.js";
 import { custom } from "viem";
+import type { AlchemyWalletTransport } from "./transport.js";
 
 describe("chainId overrides", () => {
   const signer = privateKeyToAccount(
@@ -75,7 +75,7 @@ describe("chainId overrides", () => {
 
   it("should allow overriding the chainId in prepareCalls", async () => {
     const client = createSmartWalletClient({
-      transport: mockTransport as unknown as AlchemyTransport,
+      transport: mockTransport as unknown as AlchemyWalletTransport,
       chain: arbitrumSepolia,
       signer,
     });
@@ -96,7 +96,7 @@ describe("chainId overrides", () => {
 
   it("should allow overriding the chainId in sendPreparedCalls", async () => {
     const client = createSmartWalletClient({
-      transport: mockTransport as unknown as AlchemyTransport,
+      transport: mockTransport as unknown as AlchemyWalletTransport,
       chain: arbitrumSepolia,
       signer,
     });
@@ -132,7 +132,7 @@ describe("chainId overrides", () => {
 
   it("should allow overriding the chainId in grantPermissions", async () => {
     const client = createSmartWalletClient({
-      transport: mockTransport as unknown as AlchemyTransport,
+      transport: mockTransport as unknown as AlchemyWalletTransport,
       chain: arbitrumSepolia,
       signer,
     });

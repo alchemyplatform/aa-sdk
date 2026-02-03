@@ -58,8 +58,7 @@
     "@alchemy/wallet-api-types": "^0.1.0-alpha.22",
     "deep-equal": "^2.2.3",
     "ox": "^0.11.1",
-    "viem": "^2.44.2",
-    "webauthn-p256": "^0.0.10"
+    "viem": "^2.44.2"
   },
   "publishConfig": {
     "access": "public",

@@ -2,8 +2,7 @@ import type { InnerWalletApiClient } from "../types.ts";
 import { LOGGER } from "../logger.js";
 import type { Address, Prettify } from "viem";
 import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
-import { getSignerAddressOrPublicKey } from "../utils/signer.js";
-import type { WebAuthnPublicKey } from "@alchemy/wallet-api-types";
+import { isLocalAccount } from "../utils/assertions.js";
 
 type RpcSchema = Extract<
   WalletServerRpcSchemaType,
@@ -15,18 +14,13 @@ type RpcSchema = Extract<
 >;
 
 export type ListAccountsParams = Prettify<
-  Omit<RpcSchema["Request"]["params"][0], "signerAddress"> &
-    (
-      | {
-          signerAddress?: Address;
-          signerPublicKey?: never;
-        }
-      | { signerPublicKey: WebAuthnPublicKey; signerAddress?: never }
-      | {
-          signerAddress?: never;
-          signerPublicKey?: never;
-        }
-    )
+  Omit<
+    RpcSchema["Request"]["params"][0],
+    "signerAddress" | "signerPublicKey"
+  > & {
+    signerAddress?: Address;
+    signerPublicKey?: never;
+  }
 >;
 
 export type ListAccountsResult = Prettify<RpcSchema["ReturnType"]>;
@@ -61,28 +55,11 @@ export async function listAccounts(
   client: InnerWalletApiClient,
   params: ListAccountsParams,
 ): Promise<ListAccountsResult> {
-  const owner = getSignerAddressOrPublicKey(client.owner);
-
-  // Coalesce:
-  // signerAddress or signerPublicKey in params takes priority.
-  // if not present, then fallback to client's attached signer.
-  const signerParam: RpcSchema["Request"]["params"][0] = params.signerAddress
-    ? { signerAddress: params.signerAddress }
-    : params.signerPublicKey
-      ? {
-          signerPublicKey: {
-            type: "webauthn-p256",
-            ...params.signerPublicKey,
-          },
-        }
-      : owner.type === "webauthn-p256"
-        ? {
-            signerPublicKey: {
-              type: "webauthn-p256",
-              ...owner.publicKey,
-            },
-          }
-        : { signerAddress: owner.address };
+  const signerAddress =
+    params.signerAddress ??
+    (isLocalAccount(client.owner)
+      ? client.owner.address
+      : client.owner.account.address);
 
   LOGGER.debug("listAccounts:start", { hasAfter: !!params.after });
   const res = await client.request({
@@ -90,7 +67,7 @@ export async function listAccounts(
     params: [
       {
         ...params,
-        ...signerParam,
+        signerAddress,
       },
     ],
   });
