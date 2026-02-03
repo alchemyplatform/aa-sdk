@@ -101,21 +101,20 @@ describe("chainId overrides", () => {
       signer,
     });
 
-    const overrideChainId = "0x1"; // Ethereum mainnet
+    const overrideChainId = 1; // Ethereum mainnet
 
     await client.sendPreparedCalls({
       type: "user-operation-v060",
       data: {
         sender: "0x1234567890123456789012345678901234567890",
-        nonce: "0x0",
+        nonce: 0n,
         initCode: "0x",
         callData: "0x",
-        callGasLimit: "0x0",
-        verificationGasLimit: "0x0",
-        preVerificationGas: "0x0",
-        maxFeePerGas: "0x0",
-        maxPriorityFeePerGas: "0x0",
-        paymasterAndData: "0x",
+        callGasLimit: 0n,
+        verificationGasLimit: 0n,
+        preVerificationGas: 0n,
+        maxFeePerGas: 0n,
+        maxPriorityFeePerGas: 0n,
       },
       signature: {
         type: "secp256k1",
@@ -124,10 +123,10 @@ describe("chainId overrides", () => {
       chainId: overrideChainId,
     });
 
-    // Verify the request was captured with the overridden chainId
+    // Verify the request was captured with the overridden chainId (converted to hex)
     expect(capturedRequests).toHaveLength(1);
     expect(capturedRequests[0].method).toBe("wallet_sendPreparedCalls");
-    expect(capturedRequests[0].params[0].chainId).toBe(overrideChainId);
+    expect(capturedRequests[0].params[0].chainId).toBe("0x1");
   });
 
   it("should allow overriding the chainId in grantPermissions", async () => {

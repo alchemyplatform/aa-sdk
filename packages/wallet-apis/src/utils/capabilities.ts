@@ -1,7 +1,7 @@
 import type {
   PrepareCallsCapabilities,
   SendPreparedCallsCapabilities,
-} from "./viemTypes.js";
+} from "../types.js";
 import type { InnerWalletApiClient } from "../types.js";
 
 /**
@@ -18,13 +18,13 @@ export const mergeClientCapabilities = <
   client: InnerWalletApiClient,
   capabilities: T | undefined,
 ): T | undefined => {
-  if (!client.policyIds?.length || capabilities?.paymasterService) {
+  if (!client.policyIds?.length || capabilities?.paymaster) {
     return capabilities;
   }
 
   return {
     ...capabilities,
-    paymasterService:
+    paymaster:
       client.policyIds.length === 1
         ? { policyId: client.policyIds[0] }
         : { policyIds: client.policyIds },
@@ -33,7 +33,7 @@ export const mergeClientCapabilities = <
 
 /**
  * Extracts capabilities from prepareCalls that are usable for sendPreparedCalls.
- * Only permissions and paymasterService (policyId/policyIds & webhookData) are supported.
+ * Only permissions and paymaster (policyId/policyIds & webhookData) are supported.
  *
  * @param {PrepareCallsCapabilities | undefined} capabilities - The prepareCalls capabilities
  * @returns {SendPreparedCallsCapabilities | undefined} The sendPreparedCalls capabilities, or undefined if no relevant capabilities exist
@@ -41,24 +41,21 @@ export const mergeClientCapabilities = <
 export const extractCapabilitiesForSending = (
   capabilities: PrepareCallsCapabilities | undefined,
 ): SendPreparedCallsCapabilities | undefined => {
-  if (
-    capabilities?.permissions == null &&
-    capabilities?.paymasterService == null
-  ) {
+  if (capabilities?.permissions == null && capabilities?.paymaster == null) {
     return undefined;
   }
 
-  const paymasterService = capabilities.paymasterService;
+  const paymaster = capabilities.paymaster;
 
   return {
     permissions: capabilities.permissions,
-    paymasterService:
-      paymasterService != null
+    paymaster:
+      paymaster != null
         ? {
-            ...("policyId" in paymasterService
-              ? { policyId: paymasterService.policyId }
-              : { policyIds: paymasterService.policyIds }),
-            webhookData: paymasterService.webhookData,
+            ...("policyId" in paymaster
+              ? { policyId: paymaster.policyId }
+              : { policyIds: paymaster.policyIds }),
+            webhookData: paymaster.webhookData,
           }
         : undefined,
   };

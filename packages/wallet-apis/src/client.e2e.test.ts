@@ -216,7 +216,7 @@ describe("Client E2E Tests", () => {
           calls: [{ to: zeroAddress, value: 0n }],
           from: account.address,
           capabilities: {
-            paymasterService: {
+            paymaster: {
               policyId: process.env.TEST_PAYMASTER_POLICY_ID!,
             },
           },
@@ -239,7 +239,7 @@ describe("Client E2E Tests", () => {
           calls: [{ to: zeroAddress, value: 0n }],
           from: account.address,
           capabilities: {
-            paymasterService: {
+            paymaster: {
               policyId: process.env.TEST_PAYMASTER_POLICY_ID!,
             },
           },
@@ -255,7 +255,7 @@ describe("Client E2E Tests", () => {
           calls: [{ to: zeroAddress, value: 0n }],
           from: account.address,
           capabilities: {
-            paymasterService: {
+            paymaster: {
               policyId: process.env.TEST_PAYMASTER_POLICY_ID!,
             },
           },
@@ -294,7 +294,7 @@ describe("Client E2E Tests", () => {
           calls: [{ to: zeroAddress, value: 0n }],
           from: account.address,
           capabilities: {
-            paymasterService: {
+            paymaster: {
               policyId: process.env.TEST_PAYMASTER_POLICY_ID!,
             },
           },
@@ -336,7 +336,7 @@ describe("Client E2E Tests", () => {
           calls: [{ to: zeroAddress, value: 0n }],
           from: account.address,
           capabilities: {
-            paymasterService: {
+            paymaster: {
               policyId: process.env.TEST_PAYMASTER_POLICY_ID!,
             },
             permissions,

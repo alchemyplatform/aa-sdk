@@ -4,12 +4,12 @@ import type {
   PreparedCall_UserOpV060,
   PreparedCall_UserOpV070,
 } from "@alchemy/wallet-api-types";
-import { viemEncodePreparedCall } from "./viemEncode.js";
-import { viemDecodePreparedCall } from "./viemDecode.js";
+import { fromRpcPrepareCallsResult } from "./viemEncode.js";
+import { toRpcPrepareCallsResult } from "./viemDecode.js";
 
 describe("transforms", () => {
   it("transforms a prepared call UO v060 into a viem-compatible call", () => {
-    const transformed = viemEncodePreparedCall(preparedCallV060);
+    const transformed = fromRpcPrepareCallsResult(preparedCallV060);
     expect(transformed).toMatchInlineSnapshot(`
       {
         "chainId": 1,
@@ -39,7 +39,7 @@ describe("transforms", () => {
     `);
   });
   it("transforms a prepared call UO v070 into a viem-compatible call", () => {
-    const transformed = viemEncodePreparedCall(preparedCallV070);
+    const transformed = fromRpcPrepareCallsResult(preparedCallV070);
     expect(transformed).toMatchInlineSnapshot(`
       {
         "chainId": 1,
@@ -95,7 +95,7 @@ describe("transforms", () => {
   it("transforms a prepared Authorization call a viem-compatible authorization", () => {
     // Authorization type is only valid within arrays in PrepareCallsReturnType, cast for testing
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const transformed = viemEncodePreparedCall(
+    const transformed = fromRpcPrepareCallsResult(
       preparedCallAuthorization as any,
     );
     expect(transformed).toMatchInlineSnapshot(`
@@ -114,7 +114,7 @@ describe("transforms", () => {
     `);
   });
   it("transforms a prepared paymaster permit call a viem-compatible call type", () => {
-    const transformed = viemEncodePreparedCall(preparedCallPermit);
+    const transformed = fromRpcPrepareCallsResult(preparedCallPermit);
     expect(transformed).toMatchInlineSnapshot(`
       {
         "data": {
@@ -275,27 +275,29 @@ describe("transforms", () => {
 
   describe("round-trip encode/decode", () => {
     it("should encode then decode UO v060 and get back original", () => {
-      const encoded = viemEncodePreparedCall(preparedCallV060);
-      const decoded = viemDecodePreparedCall(encoded);
+      const encoded = fromRpcPrepareCallsResult(preparedCallV060);
+      const decoded = toRpcPrepareCallsResult(encoded);
       expect(decoded).toEqual(preparedCallV060);
     });
 
     it("should encode then decode UO v070 and get back original", () => {
-      const encoded = viemEncodePreparedCall(preparedCallV070);
-      const decoded = viemDecodePreparedCall(encoded);
+      const encoded = fromRpcPrepareCallsResult(preparedCallV070);
+      const decoded = toRpcPrepareCallsResult(encoded);
       expect(decoded).toEqual(preparedCallV070);
     });
 
     it("should encode then decode Authorization and get back original", () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const encoded = viemEncodePreparedCall(preparedCallAuthorization as any);
-      const decoded = viemDecodePreparedCall(encoded);
+      const encoded = fromRpcPrepareCallsResult(
+        preparedCallAuthorization as any,
+      );
+      const decoded = toRpcPrepareCallsResult(encoded);
       expect(decoded).toEqual(preparedCallAuthorization);
     });
 
     it("should encode then decode Paymaster Permit and get back original", () => {
-      const encoded = viemEncodePreparedCall(preparedCallPermit);
-      const decoded = viemDecodePreparedCall(encoded);
+      const encoded = fromRpcPrepareCallsResult(preparedCallPermit);
+      const decoded = toRpcPrepareCallsResult(encoded);
       expect(decoded).toEqual(preparedCallPermit);
     });
   });

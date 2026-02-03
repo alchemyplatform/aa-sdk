@@ -10,33 +10,54 @@ import { numberToHex, toHex, type Address, type Hex } from "viem";
 import type {
   PrepareCallsParams as RpcPrepareCallsParams,
   PrepareCallsReturnType as RpcPrepareCallsResult,
+  PreparedCall_UserOpV060_Signed,
+  PreparedCall_UserOpV070_Signed,
+  PreparedCall_Authorization_Signed,
+  CallArray,
+  EcdsaSig,
 } from "@alchemy/wallet-api-types";
 import type {
   PrepareCallsCapabilities as RpcPrepareCallsCapabilities,
   SendPreparedCallsCapabilities as RpcSendPreparedCallsCapabilities,
 } from "@alchemy/wallet-api-types/capabilities";
+import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
 import type {
   PrepareCallsResult,
   PrepareCallsResult_UserOp,
   PrepareCallsResult_Authorization,
   PrepareCallsResult_PaymasterPermit,
 } from "./viemEncode.js";
+// Shared types from types.ts
 import type {
   Call,
   PrepareCallsCapabilities,
-  PrepareCallsParams,
   SendPreparedCallsCapabilities,
+  SignedUserOperation,
+  SignedAuthorization,
+  UserOperationV060,
+  UserOperationV070,
   GasParamsOverride,
   GasMultiplier,
   PaymasterService,
   Erc20PaymasterSettings,
   StateOverride,
-  PrepareSignParams,
-  FormatSignParams,
-  GrantPermissionsParams,
   Permission,
-  RequestQuoteParams,
-} from "./viemTypes.js";
+  EncodedSignature,
+} from "../types.js";
+// Action-specific params types from action files
+import type { PrepareCallsParams } from "../actions/prepareCalls.js";
+import type { PrepareSignParams } from "../actions/prepareSign.js";
+import type { FormatSignParams } from "../actions/formatSign.js";
+import type { GrantPermissionsParams } from "../actions/grantPermissions.js";
+import type { SendPreparedCallsParams } from "../actions/sendPreparedCalls.js";
+import type { RequestQuoteV0Params as RequestQuoteParams } from "../experimental/actions/requestQuoteV0.js";
+
+// Helper type to extract RPC params for a specific method
+type RpcMethodParams<M extends WalletServerRpcSchemaType["Request"]["method"]> =
+  Extract<
+    WalletServerRpcSchemaType,
+    { Request: { method: M } }
+  >["Request"]["params"][0];
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Main Converters
@@ -64,9 +85,10 @@ export const toRpcPrepareCallsCapabilities = (
 ): RpcPrepareCallsCapabilities => {
   return {
     permissions: capabilities.permissions,
+    // Map viem's 'paymaster' to RPC's 'paymasterService'
     paymasterService:
-      capabilities.paymasterService != null
-        ? toRpcPaymasterService(capabilities.paymasterService)
+      capabilities.paymaster != null
+        ? toRpcPaymasterService(capabilities.paymaster)
         : undefined,
     gasParamsOverride:
       capabilities.gasParamsOverride != null
@@ -89,13 +111,14 @@ export const toRpcSendPreparedCallsCapabilities = (
 ): RpcSendPreparedCallsCapabilities => {
   return {
     permissions: capabilities.permissions,
+    // Map viem's 'paymaster' to RPC's 'paymasterService'
     paymasterService:
-      capabilities.paymasterService != null
+      capabilities.paymaster != null
         ? {
-            ...(capabilities.paymasterService.policyId != null
-              ? { policyId: capabilities.paymasterService.policyId }
-              : { policyIds: capabilities.paymasterService.policyIds ?? [] }),
-            webhookData: capabilities.paymasterService.webhookData,
+            ...(capabilities.paymaster.policyId != null
+              ? { policyId: capabilities.paymaster.policyId }
+              : { policyIds: capabilities.paymaster.policyIds ?? [] }),
+            webhookData: capabilities.paymaster.webhookData,
           }
         : undefined,
   };
@@ -245,22 +268,11 @@ const toRpcStateOverride = (
 // PrepareSign Params Converter
 // ─────────────────────────────────────────────────────────────────────────────
 
-type RpcPrepareSignParams = {
-  from: Address;
-  chainId: Hex;
-  signatureRequest:
-    | { type: "personal_sign"; data: string | { raw: Hex } }
-    | { type: "eth_signTypedData_v4"; data: unknown };
-  capabilities?: {
-    permissions: { context: Hex } | { signature: Hex; sessionId: Hex };
-  };
-};
-
 export const toRpcPrepareSignParams = (
   params: PrepareSignParams,
   defaultChainId: number,
   defaultFrom: Address,
-): RpcPrepareSignParams => {
+): RpcMethodParams<"wallet_prepareSign"> => {
   return {
     from: params.from ?? defaultFrom,
     chainId: numberToHex(params.chainId ?? defaultChainId),
@@ -300,29 +312,9 @@ export const toRpcFormatSignParams = (
 // GrantPermissions (createSession) Params Converter
 // ─────────────────────────────────────────────────────────────────────────────
 
-type RpcPermission =
-  | { type: "native-token-transfer"; data: { allowance: Hex } }
-  | { type: "erc20-token-transfer"; data: { allowance: Hex; address: Address } }
-  | { type: "gas-limit"; data: { limit: Hex } }
-  | { type: "contract-access"; data: { address: Address } }
-  | { type: "account-functions"; data: { functions: Hex[] } }
-  | { type: "functions-on-all-contracts"; data: { functions: Hex[] } }
-  | {
-      type: "functions-on-contract";
-      data: { address: Address; functions: Hex[] };
-    }
-  | { type: "root" };
-
-type RpcGrantPermissionsParams = {
-  account: Address;
-  chainId: Hex;
-  expirySec?: number;
-  key: {
-    publicKey: Hex;
-    type: "secp256k1" | "ecdsa" | "contract";
-  };
-  permissions: RpcPermission[];
-};
+// Extract the permission type from the RPC schema
+type RpcCreateSessionParams = RpcMethodParams<"wallet_createSession">;
+type RpcPermission = RpcCreateSessionParams["permissions"][number];
 
 const toRpcPermission = (permission: Permission): RpcPermission => {
   switch (permission.type) {
@@ -360,7 +352,7 @@ export const toRpcGrantPermissionsParams = (
   params: GrantPermissionsParams,
   defaultChainId: number,
   defaultAccount: Address,
-): RpcGrantPermissionsParams => {
+): RpcCreateSessionParams => {
   return {
     account: params.account ?? defaultAccount,
     chainId: numberToHex(params.chainId ?? defaultChainId),
@@ -378,57 +370,204 @@ export const toRpcGrantPermissionsParams = (
 // RequestQuote Params Converter
 // ─────────────────────────────────────────────────────────────────────────────
 
-type RpcRequestQuoteParams = {
-  from: Address;
-  chainId: Hex;
-  fromToken: Address;
-  toToken: Address;
-  toChainId?: Hex;
-  fromAmount?: Hex;
-  minimumToAmount?: Hex;
-  slippage?: Hex;
-  postCalls?: Array<{ to: Address; data?: Hex; value?: Hex }>;
-  returnRawCalls?: boolean;
-  capabilities?: RpcPrepareCallsCapabilities;
-};
+type RpcRequestQuoteParams = RpcMethodParams<"wallet_requestQuote_v0">;
 
 export const toRpcRequestQuoteParams = (
   params: RequestQuoteParams,
   _defaultFrom: Address,
 ): RpcRequestQuoteParams => {
-  const result: RpcRequestQuoteParams = {
+  // Build the base params
+  const base = {
     from: params.sender,
     chainId: numberToHex(params.from.chainId),
     fromToken: params.from.address,
     toToken: params.to.address,
-    returnRawCalls: params.rawCalls,
+    ...(params.to.chainId != null && {
+      toChainId: numberToHex(params.to.chainId),
+    }),
+    ...(params.slippageBps != null && {
+      slippage: numberToHex(params.slippageBps),
+    }),
   };
 
+  // The RPC schema uses discriminated unions based on fromAmount/minimumToAmount/returnRawCalls
+  if (params.rawCalls === true) {
+    // Raw calls variant
+    if (params.from.amount != null) {
+      return {
+        ...base,
+        fromAmount: toHex(params.from.amount),
+        returnRawCalls: true,
+      } as RpcRequestQuoteParams;
+    }
+    return {
+      ...base,
+      minimumToAmount: toHex(params.to.minimumAmount!),
+      returnRawCalls: true,
+    } as RpcRequestQuoteParams;
+  }
+
+  // Prepared calls variant (default)
   if (params.from.amount != null) {
-    result.fromAmount = toHex(params.from.amount);
+    return {
+      ...base,
+      fromAmount: toHex(params.from.amount),
+    } as RpcRequestQuoteParams;
   }
-
-  if (params.to.minimumAmount != null) {
-    result.minimumToAmount = toHex(params.to.minimumAmount);
-  }
-
-  if (params.to.chainId != null) {
-    result.toChainId = numberToHex(params.to.chainId);
-  }
-
-  if (params.slippageBps != null) {
-    result.slippage = numberToHex(params.slippageBps);
-  }
-
-  return result;
+  return {
+    ...base,
+    minimumToAmount: toHex(params.to.minimumAmount!),
+  } as RpcRequestQuoteParams;
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Legacy export for round-trip testing
+// SendPreparedCalls Params Converter
 // ─────────────────────────────────────────────────────────────────────────────
 
-// @deprecated For testing only - converts viem-native prepared calls back to RPC format
-export const viemDecodePreparedCall = (
+// Define the exact type expected by the RPC schema
+type RpcSendPreparedCallsParams = (
+  | CallArray
+  | PreparedCall_UserOpV060_Signed
+  | PreparedCall_UserOpV070_Signed
+) & {
+  capabilities?: RpcSendPreparedCallsCapabilities;
+  callId?: Hex;
+};
+
+export const toRpcSendPreparedCallsParams = (
+  params: SendPreparedCallsParams,
+  defaultChainId: number,
+): RpcSendPreparedCallsParams => {
+  if (params.type === "array") {
+    return {
+      type: "array",
+      data: params.data.map((item) =>
+        item.type === "authorization"
+          ? toRpcSignedAuthorization(item)
+          : toRpcSignedUserOperation(item),
+      ),
+    };
+  }
+
+  const base = toRpcSignedUserOperation(params);
+  return {
+    ...base,
+    chainId: base.chainId ?? numberToHex(defaultChainId),
+    capabilities: params.capabilities
+      ? toRpcSendPreparedCallsCapabilities(params.capabilities)
+      : undefined,
+  };
+};
+
+// RPC signature type - matches what the API expects for user operations
+type RpcUserOpSignature =
+  | {
+      type: "secp256k1";
+      data: Hex | { r: Hex; s: Hex; yParity: Hex } | { r: Hex; s: Hex; v: Hex };
+    }
+  | {
+      type: "ecdsa";
+      data: Hex | { r: Hex; s: Hex; yParity: Hex } | { r: Hex; s: Hex; v: Hex };
+    };
+
+const toRpcUserOpSignature = (sig: EncodedSignature): RpcUserOpSignature => {
+  if (typeof sig.data === "string") {
+    return { type: sig.type, data: sig.data };
+  }
+  if ("yParity" in sig.data) {
+    return {
+      type: sig.type,
+      data: {
+        r: sig.data.r,
+        s: sig.data.s,
+        yParity: numberToHex(sig.data.yParity),
+      },
+    };
+  }
+  return {
+    type: sig.type,
+    data: { r: sig.data.r, s: sig.data.s, v: toHex(sig.data.v) },
+  };
+};
+
+const toRpcSignedUserOperation = (
+  op: SignedUserOperation,
+): PreparedCall_UserOpV060_Signed | PreparedCall_UserOpV070_Signed => {
+  if (op.type === "user-operation-v070") {
+    return {
+      type: "user-operation-v070",
+      chainId: numberToHex(op.chainId),
+      data: toRpcUserOperationDataV070(op.data as UserOperationV070),
+      signature: toRpcUserOpSignature(op.signature),
+    };
+  }
+  return {
+    type: "user-operation-v060",
+    chainId: numberToHex(op.chainId),
+    data: toRpcUserOperationDataV060(op.data as UserOperationV060),
+    signature: toRpcUserOpSignature(op.signature),
+  };
+};
+
+const toRpcSignedAuthorization = (
+  auth: SignedAuthorization,
+): PreparedCall_Authorization_Signed => {
+  return {
+    type: "authorization",
+    chainId: numberToHex(auth.chainId),
+    data: {
+      address: auth.data.address,
+      nonce: numberToHex(auth.data.nonce),
+    },
+    signature: toRpcUserOpSignature(auth.signature),
+  };
+};
+
+const toRpcUserOperationDataV060 = (uo: UserOperationV060) => {
+  return {
+    sender: uo.sender,
+    nonce: toHex(uo.nonce),
+    initCode: uo.initCode ?? ("0x" as Hex),
+    callData: uo.callData,
+    callGasLimit: toHex(uo.callGasLimit),
+    verificationGasLimit: toHex(uo.verificationGasLimit),
+    preVerificationGas: toHex(uo.preVerificationGas),
+    maxFeePerGas: toHex(uo.maxFeePerGas),
+    maxPriorityFeePerGas: toHex(uo.maxPriorityFeePerGas),
+    paymasterAndData: uo.paymasterAndData ?? ("0x" as Hex),
+  };
+};
+
+const toRpcUserOperationDataV070 = (uo: UserOperationV070) => {
+  return {
+    sender: uo.sender,
+    nonce: toHex(uo.nonce),
+    factory: uo.factory,
+    factoryData: uo.factoryData,
+    callData: uo.callData,
+    callGasLimit: toHex(uo.callGasLimit),
+    verificationGasLimit: toHex(uo.verificationGasLimit),
+    preVerificationGas: toHex(uo.preVerificationGas),
+    maxFeePerGas: toHex(uo.maxFeePerGas),
+    maxPriorityFeePerGas: toHex(uo.maxPriorityFeePerGas),
+    paymaster: uo.paymaster,
+    paymasterData: uo.paymasterData,
+    paymasterVerificationGasLimit:
+      uo.paymasterVerificationGasLimit != null
+        ? toHex(uo.paymasterVerificationGasLimit)
+        : undefined,
+    paymasterPostOpGasLimit:
+      uo.paymasterPostOpGasLimit != null
+        ? toHex(uo.paymasterPostOpGasLimit)
+        : undefined,
+  };
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+// PrepareCallsResult → RPC Converter (for round-trip testing)
+// ─────────────────────────────────────────────────────────────────────────────
+
+export const toRpcPrepareCallsResult = (
   viemResult: PrepareCallsResult,
 ): RpcPrepareCallsResult => {
   if (viemResult.type === "array") {
@@ -450,67 +589,39 @@ export const viemDecodePreparedCall = (
   return toRpcUserOperationCall(viemResult) as RpcPrepareCallsResult;
 };
 
-const toRpcUserOperationCall = (
-  call: PrepareCallsResult_UserOp,
-): Record<string, unknown> => {
-  // Cast to access version-specific fields
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const callData = call.data as any;
-  const data =
-    call.type === "user-operation-v070"
-      ? {
-          sender: callData.sender,
-          nonce: toHex(callData.nonce),
-          factory: callData.factory,
-          factoryData: callData.factoryData,
-          callData: callData.callData,
-          callGasLimit: toHex(callData.callGasLimit),
-          verificationGasLimit: toHex(callData.verificationGasLimit),
-          preVerificationGas: toHex(callData.preVerificationGas),
-          maxFeePerGas: toHex(callData.maxFeePerGas),
-          maxPriorityFeePerGas: toHex(callData.maxPriorityFeePerGas),
-          paymaster: callData.paymaster,
-          paymasterData: callData.paymasterData,
-          paymasterVerificationGasLimit:
-            callData.paymasterVerificationGasLimit != null
-              ? toHex(callData.paymasterVerificationGasLimit)
-              : undefined,
-          paymasterPostOpGasLimit:
-            callData.paymasterPostOpGasLimit != null
-              ? toHex(callData.paymasterPostOpGasLimit)
-              : undefined,
-        }
-      : {
-          sender: callData.sender,
-          nonce: toHex(callData.nonce),
-          initCode: callData.initCode,
-          callData: callData.callData,
-          callGasLimit: toHex(callData.callGasLimit),
-          verificationGasLimit: toHex(callData.verificationGasLimit),
-          preVerificationGas: toHex(callData.preVerificationGas),
-          maxFeePerGas: toHex(callData.maxFeePerGas),
-          maxPriorityFeePerGas: toHex(callData.maxPriorityFeePerGas),
-          paymasterAndData: "0x",
-        };
+// Return type is looser than RPC type because viem has tokenAddress as optional.
+// The parent function casts to RpcPrepareCallsResult which handles the mismatch.
+const toRpcUserOperationCall = (call: PrepareCallsResult_UserOp) => {
+  const feePayment = {
+    sponsored: call.feePayment.sponsored,
+    maxAmount: toHex(call.feePayment.maxAmount),
+    tokenAddress: call.feePayment.tokenAddress,
+  };
 
+  if (call.type === "user-operation-v070") {
+    return {
+      type: "user-operation-v070" as const,
+      chainId: numberToHex(call.chainId),
+      data: toRpcUserOperationDataV070(call.data as UserOperationV070),
+      signatureRequest: call.signatureRequest,
+      feePayment,
+    };
+  }
   return {
-    type: call.type,
+    type: "user-operation-v060" as const,
     chainId: numberToHex(call.chainId),
-    data,
-    signatureRequest: call.signatureRequest,
-    feePayment: {
-      sponsored: call.feePayment.sponsored,
-      tokenAddress: call.feePayment.tokenAddress,
-      maxAmount: toHex(call.feePayment.maxAmount),
+    data: {
+      ...toRpcUserOperationDataV060(call.data as UserOperationV060),
+      paymasterAndData: "0x" as Hex,
     },
+    signatureRequest: call.signatureRequest,
+    feePayment,
   };
 };
 
-const toRpcAuthorizationCall = (
-  call: PrepareCallsResult_Authorization,
-): Record<string, unknown> => {
+const toRpcAuthorizationCall = (call: PrepareCallsResult_Authorization) => {
   return {
-    type: call.type,
+    type: "authorization" as const,
     chainId: numberToHex(call.chainId),
     data: {
       address: call.data.address,
@@ -520,11 +631,9 @@ const toRpcAuthorizationCall = (
   };
 };
 
-const toRpcPaymasterPermitCall = (
-  call: PrepareCallsResult_PaymasterPermit,
-): Record<string, unknown> => {
+const toRpcPaymasterPermitCall = (call: PrepareCallsResult_PaymasterPermit) => {
   return {
-    type: call.type,
+    type: "paymaster-permit" as const,
     data: call.data,
     signatureRequest: call.signatureRequest,
     modifiedRequest: {
@@ -539,17 +648,17 @@ const toRpcPaymasterPermitCall = (
         ? toRpcPrepareCallsCapabilities(call.modifiedRequest.capabilities)
         : undefined,
       paymasterPermitSignature: call.modifiedRequest.paymasterPermitSignature
-        ? toRpcSignature(call.modifiedRequest.paymasterPermitSignature)
+        ? toRpcPermitSignature(call.modifiedRequest.paymasterPermitSignature)
         : undefined,
     },
   };
 };
 
-const toRpcSignature = (
+const toRpcPermitSignature = (
   signature: NonNullable<
     PrepareCallsResult_PaymasterPermit["modifiedRequest"]["paymasterPermitSignature"]
   >,
-): Record<string, unknown> => {
+): EcdsaSig["signature"] => {
   if (typeof signature.data === "string") {
     return { type: signature.type, data: signature.data };
   }
@@ -563,15 +672,12 @@ const toRpcSignature = (
       },
     };
   }
-  if ("v" in signature.data) {
-    return {
-      type: signature.type,
-      data: {
-        r: signature.data.r,
-        s: signature.data.s,
-        v: toHex(signature.data.v),
-      },
-    };
-  }
-  return signature as Record<string, unknown>;
+  return {
+    type: signature.type,
+    data: {
+      r: signature.data.r,
+      s: signature.data.s,
+      v: toHex(signature.data.v),
+    },
+  };
 };

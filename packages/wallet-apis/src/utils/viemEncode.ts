@@ -24,21 +24,41 @@ import type {
   PrepareCallsReturnType as RpcPrepareCallsResult,
 } from "@alchemy/wallet-api-types";
 import type { PrepareCallsCapabilities as RpcPrepareCallsCapabilities } from "@alchemy/wallet-api-types/capabilities";
+import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
+// Shared types from types.ts
 import type {
-  SendPreparedCallsResult,
-  PrepareSignResult,
-  FormatSignResult,
-  GrantPermissionsResult,
   GetCallsStatusResult,
-  RequestQuoteResult,
-  RequestQuoteResult_PreparedCalls,
-  RequestQuoteResult_RawCalls,
   PrepareCallsCapabilities,
   Erc20PaymasterSettings,
   StateOverride,
   SignableMessage,
   TypedData,
-} from "./viemTypes.js";
+} from "../types.js";
+// Action-specific result types from action files
+import type { PrepareSignResult } from "../actions/prepareSign.js";
+import type { FormatSignResult } from "../actions/formatSign.js";
+import type { SendPreparedCallsResult } from "../actions/sendPreparedCalls.js";
+import type {
+  RequestQuoteV0Result as RequestQuoteResult,
+  RequestQuoteV0Result_PreparedCalls as RequestQuoteResult_PreparedCalls,
+  RequestQuoteV0Result_RawCalls as RequestQuoteResult_RawCalls,
+} from "../experimental/actions/requestQuoteV0.js";
+
+// Note: GrantPermissionsResult has a different shape in grantPermissions.ts (just {context})
+// The viemEncode.ts fromRpcCreateSessionResult returns a different internal type
+// that includes sessionId and signatureRequest for internal use
+type GrantPermissionsResult = {
+  sessionId: Hex;
+  chainId: number;
+  signatureRequest: {
+    type: "eth_signTypedData_v4";
+    data: TypedData;
+  };
+};
+
+// Helper type to extract RPC return type for a specific method
+type RpcMethodReturn<M extends WalletServerRpcSchemaType["Request"]["method"]> =
+  Extract<WalletServerRpcSchemaType, { Request: { method: M } }>["ReturnType"];
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Result Types (viem-native)
@@ -342,7 +362,8 @@ const fromRpcCapabilities = (
 
   return {
     permissions,
-    paymasterService: capabilities.paymasterService
+    // Map RPC's 'paymasterService' to viem's 'paymaster'
+    paymaster: capabilities.paymasterService
       ? fromRpcPaymasterService(capabilities.paymasterService)
       : undefined,
     gasParamsOverride: capabilities.gasParamsOverride
@@ -384,7 +405,7 @@ const fromRpcGasParamsOverride = (
 
 const fromRpcPaymasterService = (
   paymaster: NonNullable<RpcPrepareCallsCapabilities["paymasterService"]>,
-): NonNullable<PrepareCallsCapabilities["paymasterService"]> => {
+): NonNullable<PrepareCallsCapabilities["paymaster"]> => {
   return {
     policyId: "policyId" in paymaster ? paymaster.policyId : undefined,
     policyIds: "policyIds" in paymaster ? paymaster.policyIds : undefined,
@@ -485,25 +506,7 @@ const fromRpcStateOverride = (
 // SendPreparedCalls Result Converter
 // ─────────────────────────────────────────────────────────────────────────────
 
-type RpcSendPreparedCallsResult = {
-  preparedCallIds: Hex[];
-  details:
-    | {
-        type: "user-operations";
-        data: Array<{
-          callId: Hex;
-          hash: Hex;
-          calls?: Array<{ to: Address; data?: Hex; value?: Hex }>;
-        }>;
-      }
-    | {
-        type: "user-operation";
-        data: {
-          hash: Hex;
-          calls?: Array<{ to: Address; data?: Hex; value?: Hex }>;
-        };
-      };
-};
+type RpcSendPreparedCallsResult = RpcMethodReturn<"wallet_sendPreparedCalls">;
 
 export const fromRpcSendPreparedCallsResult = (
   rpcResult: RpcSendPreparedCallsResult,
@@ -546,12 +549,7 @@ export const fromRpcSendPreparedCallsResult = (
 // PrepareSign Result Converter
 // ─────────────────────────────────────────────────────────────────────────────
 
-type RpcPrepareSignResult = {
-  chainId: Hex;
-  signatureRequest:
-    | { type: "personal_sign"; data: string | { raw: Hex } }
-    | { type: "eth_signTypedData_v4"; data: unknown };
-};
+type RpcPrepareSignResult = RpcMethodReturn<"wallet_prepareSign">;
 
 export const fromRpcPrepareSignResult = (
   rpcResult: RpcPrepareSignResult,
@@ -590,14 +588,7 @@ export const fromRpcFormatSignResult = (rpcResult: {
 // GrantPermissions (createSession) Result Converter
 // ─────────────────────────────────────────────────────────────────────────────
 
-type RpcCreateSessionResult = {
-  sessionId: Hex;
-  chainId: Hex;
-  signatureRequest: {
-    type: "eth_signTypedData_v4";
-    data: unknown;
-  };
-};
+type RpcCreateSessionResult = RpcMethodReturn<"wallet_createSession">;
 
 export const fromRpcCreateSessionResult = (
   rpcResult: RpcCreateSessionResult,
@@ -617,29 +608,18 @@ export const fromRpcCreateSessionResult = (
 // GetCallsStatus Result Converter
 // ─────────────────────────────────────────────────────────────────────────────
 
-type RpcGetCallsStatusResult = {
-  id: Hex;
-  chainId: Hex;
-  atomic: boolean;
-  status: "PENDING" | "CONFIRMED" | "FAILED";
-  receipts?: Array<{
-    logs: Array<{
-      address: Address;
-      data: Hex;
-      topics: Hex[];
-    }>;
-    status: Hex;
-    blockHash: Hex;
-    blockNumber: Hex;
-    gasUsed: Hex;
-    transactionHash: Hex;
-  }>;
-  details: {
-    type: "user-operation";
-    data: {
-      hash: Hex;
-    };
-  };
+type RpcGetCallsStatusResult = RpcMethodReturn<"wallet_getCallsStatus">;
+
+// RPC uses numeric status codes, convert to user-friendly strings
+const fromRpcStatus = (
+  status: RpcGetCallsStatusResult["status"],
+): GetCallsStatusResult["status"] => {
+  // 100-199: pending states
+  // 200: confirmed
+  // 400+: failed states
+  if (status >= 100 && status < 200) return "PENDING";
+  if (status === 200) return "CONFIRMED";
+  return "FAILED";
 };
 
 export const fromRpcGetCallsStatusResult = (
@@ -649,7 +629,7 @@ export const fromRpcGetCallsStatusResult = (
     id: rpcResult.id,
     chainId: hexToNumber(rpcResult.chainId),
     atomic: rpcResult.atomic,
-    status: rpcResult.status,
+    status: fromRpcStatus(rpcResult.status),
     receipts: rpcResult.receipts?.map((receipt) => ({
       logs: receipt.logs,
       status: receipt.status,
@@ -671,39 +651,7 @@ export const fromRpcGetCallsStatusResult = (
 // RequestQuote Result Converter
 // ─────────────────────────────────────────────────────────────────────────────
 
-type RpcRequestQuoteResult = {
-  chainId: Hex;
-  callId?: Hex;
-  quote: {
-    fromAmount: Hex;
-    minimumToAmount: Hex;
-    expiry: Hex;
-  };
-} & (
-  | {
-      rawCalls: false;
-      // Plus one of the prepared calls types
-      type?: string;
-      data?: unknown;
-      signatureRequest?: unknown;
-      feePayment?: {
-        sponsored: boolean;
-        tokenAddress?: Address;
-        maxAmount: Hex;
-      };
-      modifiedRequest?: {
-        from: Address;
-        paymasterPermitSignature?: unknown;
-        calls: Array<{ to: Address; data?: Hex; value?: Hex }>;
-        capabilities?: unknown;
-        chainId: Hex;
-      };
-    }
-  | {
-      rawCalls: true;
-      calls: Array<{ to: Address; data?: Hex; value?: Hex }>;
-    }
-);
+type RpcRequestQuoteResult = RpcMethodReturn<"wallet_requestQuote_v0">;
 
 export const fromRpcRequestQuoteResult = (
   rpcResult: RpcRequestQuoteResult,
@@ -741,82 +689,68 @@ export const fromRpcRequestQuoteResult = (
 };
 
 // Helper to extract prepared calls from quote result
-// Uses casts because the RPC result types use `unknown` for complex fields
+// Reuses fromRpcPrepareCallsResult since the structure is the same
 const fromRpcPrepareCallsResultForQuote = (
   rpcResult: Extract<RpcRequestQuoteResult, { rawCalls: false }>,
 ): RequestQuoteResult_PreparedCalls["preparedCalls"] => {
-  if (rpcResult.type === "array" && Array.isArray(rpcResult.data)) {
-    return {
-      type: "array",
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      data: rpcResult.data as any,
-    };
-  }
+  // The quote result (when rawCalls: false) contains the same structure as PrepareCallsResult
+  // We can reuse the existing converter
+  const preparedCalls = fromRpcPrepareCallsResult(rpcResult);
 
-  if (rpcResult.type === "paymaster-permit" && rpcResult.modifiedRequest) {
-    return {
-      type: "paymaster-permit",
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      data: rpcResult.data as any,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      signatureRequest: rpcResult.signatureRequest as any,
-      modifiedRequest: {
-        from: rpcResult.modifiedRequest.from,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        paymasterPermitSignature: rpcResult.modifiedRequest
-          .paymasterPermitSignature as any,
-        calls: rpcResult.modifiedRequest.calls.map((call) => ({
-          to: call.to,
-          data: call.data,
-          value: call.value != null ? hexToBigInt(call.value) : undefined,
-        })),
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        capabilities: rpcResult.modifiedRequest.capabilities as any,
-        chainId: hexToNumber(rpcResult.modifiedRequest.chainId),
-      },
-    };
-  }
+  // Map the result to the quote-specific format
+  switch (preparedCalls.type) {
+    case "array":
+      return {
+        type: "array",
+        data: preparedCalls.data.map((item) => {
+          if (item.type === "authorization") {
+            return {
+              type: item.type,
+              chainId: item.chainId,
+              data: item.data,
+              signatureRequest: item.signatureRequest,
+            };
+          }
+          return {
+            type: item.type,
+            chainId: item.chainId,
+            data: item.data,
+            signatureRequest: item.signatureRequest,
+            feePayment: item.feePayment,
+          };
+        }),
+      };
 
-  // user-operation-v060 or user-operation-v070
-  if (
-    (rpcResult.type === "user-operation-v060" ||
-      rpcResult.type === "user-operation-v070") &&
-    rpcResult.feePayment
-  ) {
-    return {
-      type: rpcResult.type,
-      chainId: hexToNumber(rpcResult.chainId),
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      data: rpcResult.data as any,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      signatureRequest: rpcResult.signatureRequest as any,
-      feePayment: {
-        sponsored: rpcResult.feePayment.sponsored,
-        tokenAddress: rpcResult.feePayment.tokenAddress,
-        maxAmount: hexToBigInt(rpcResult.feePayment.maxAmount),
-      },
-    };
-  }
+    case "paymaster-permit":
+      return {
+        type: "paymaster-permit",
+        data: preparedCalls.data,
+        signatureRequest: preparedCalls.signatureRequest,
+        modifiedRequest: preparedCalls.modifiedRequest,
+      };
 
-  // Fallback - shouldn't happen but return a safe default
-  return {
-    type: "array",
-    data: [],
-  };
+    case "user-operation-v060":
+      return {
+        type: "user-operation-v060",
+        chainId: preparedCalls.chainId,
+        data: preparedCalls.data,
+        signatureRequest: preparedCalls.signatureRequest,
+        feePayment: preparedCalls.feePayment,
+      };
+
+    case "user-operation-v070":
+      return {
+        type: "user-operation-v070",
+        chainId: preparedCalls.chainId,
+        data: preparedCalls.data,
+        signatureRequest: preparedCalls.signatureRequest,
+        feePayment: preparedCalls.feePayment,
+      };
+
+    default:
+      return assertNever(
+        preparedCalls,
+        `Unexpected prepared calls type in quote result`,
+      );
+  }
 };
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Legacy exports for backwards compatibility (to be removed)
-// ─────────────────────────────────────────────────────────────────────────────
-
-/** @deprecated Use fromRpcPrepareCallsResult instead */
-export const viemEncodePreparedCalls = fromRpcPrepareCallsResult;
-
-/** @deprecated Use fromRpcPrepareCallsResult instead */
-export const viemEncodePreparedCall = fromRpcPrepareCallsResult;
-
-// Legacy type exports
-export type ViemEncodedPreparedCalls = PrepareCallsResult;
-export type ViemEncodedUserOperationCall = PrepareCallsResult_UserOp;
-export type ViemEncodedAuthorizationCall = PrepareCallsResult_Authorization;
-export type ViemEncodedPaymasterPermitCall = PrepareCallsResult_PaymasterPermit;

@@ -1,17 +1,32 @@
-import type { Prettify } from "viem";
-import type { InnerWalletApiClient } from "../types.ts";
+import type { Address, Hex, Prettify } from "viem";
+import type {
+  InnerWalletApiClient,
+  Call,
+  PrepareCallsCapabilities,
+} from "../types.ts";
 import { AccountNotFoundError } from "@alchemy/common";
 import { LOGGER } from "../logger.js";
 import { mergeClientCapabilities } from "../utils/capabilities.js";
-import type { PrepareCallsParams as ViemPrepareCallsParams } from "../utils/viemTypes.js";
 import { toRpcPrepareCallsParams } from "../utils/viemDecode.js";
 import {
   fromRpcPrepareCallsResult,
   type PrepareCallsResult,
 } from "../utils/viemEncode.js";
 
-// Input params use viem-native types (bigint, number)
-export type PrepareCallsParams = Prettify<ViemPrepareCallsParams>;
+// ─────────────────────────────────────────────────────────────────────────────
+// Action Types
+// ─────────────────────────────────────────────────────────────────────────────
+
+export type PrepareCallsParams = Prettify<{
+  calls: Call[];
+  from?: Address;
+  chainId?: number;
+  capabilities?: PrepareCallsCapabilities;
+  paymasterPermitSignature?: {
+    type: "secp256k1" | "ecdsa";
+    data: Hex;
+  };
+}>;
 
 // Export the viem-native result type
 export type { PrepareCallsResult };
@@ -42,7 +57,7 @@ export type { PrepareCallsResult };
  *     value: "0x0"
  *   }],
  *   capabilities: {
- *     paymasterService: { policyId: "your-policy-id" }
+ *     paymaster: { policyId: "your-policy-id" }
  *   }
  * });
  * ```

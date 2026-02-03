@@ -37,7 +37,7 @@ export type SendCallsResult = Prettify<SendPreparedCallsResult>;
  *     value: "0x0"
  *   }],
  *   capabilities: {
- *     paymasterService: { policyId: "your-policy-id" }
+ *     paymaster: { policyId: "your-policy-id" }
  *   }
  * });
  *
@@ -82,15 +82,13 @@ export async function sendCalls(
   const signedCalls = await signPreparedCalls(client, calls);
 
   const sendPreparedCallsCapabilities = extractCapabilitiesForSending(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    params.capabilities as any,
+    params.capabilities,
   );
 
   const res = await sendPreparedCalls(client, {
     ...signedCalls,
     ...(sendPreparedCallsCapabilities != null
-      ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        { capabilities: sendPreparedCallsCapabilities as any }
+      ? { capabilities: sendPreparedCallsCapabilities }
       : {}),
   });
   LOGGER.info("sendCalls:done");

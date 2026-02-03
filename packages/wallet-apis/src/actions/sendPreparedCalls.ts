@@ -1,26 +1,43 @@
-import { toHex, type Prettify } from "viem";
-import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
-import type { InnerWalletApiClient, OptionalChainId } from "../types.ts";
+import { type Address, type Hex, type Prettify } from "viem";
+import type {
+  InnerWalletApiClient,
+  SignedPreparedCalls,
+  SendPreparedCallsCapabilities,
+} from "../types.ts";
 import { LOGGER } from "../logger.js";
 import { mergeClientCapabilities } from "../utils/capabilities.js";
-import type { SendPreparedCallsResult as ViemSendPreparedCallsResult } from "../utils/viemTypes.js";
 import { fromRpcSendPreparedCallsResult } from "../utils/viemEncode.js";
+import { toRpcSendPreparedCallsParams } from "../utils/viemDecode.js";
 
-type RpcSchema = Extract<
-  WalletServerRpcSchemaType,
-  {
-    Request: {
-      method: "wallet_sendPreparedCalls";
-    };
+// ─────────────────────────────────────────────────────────────────────────────
+// Action Types
+// ─────────────────────────────────────────────────────────────────────────────
+
+export type SendPreparedCallsParams = Prettify<
+  SignedPreparedCalls & {
+    capabilities?: SendPreparedCallsCapabilities;
   }
 >;
 
-// SendPreparedCallsParams uses RPC types since it takes signed calls from signPreparedCalls
-export type SendPreparedCallsParams = Prettify<
-  OptionalChainId<RpcSchema["Request"]["params"][0]>
->;
-
-export type SendPreparedCallsResult = Prettify<ViemSendPreparedCallsResult>;
+export type SendPreparedCallsResult = Prettify<{
+  preparedCallIds: Hex[];
+  details:
+    | {
+        type: "user-operations";
+        data: Array<{
+          callId: Hex;
+          hash: Hex;
+          calls?: Array<{ to: Address; data?: Hex; value?: bigint }>;
+        }>;
+      }
+    | {
+        type: "user-operation";
+        data: {
+          hash: Hex;
+          calls?: Array<{ to: Address; data?: Hex; value?: bigint }>;
+        };
+      };
+}>;
 
 /**
  * Sends prepared calls by submitting a signed user operation.
@@ -37,10 +54,10 @@ export type SendPreparedCallsResult = Prettify<ViemSendPreparedCallsResult>;
  *   calls: [{
  *     to: "0x1234...",
  *     data: "0xabcdef...",
- *     value: "0x0"
+ *     value: 0n
  *   }],
  *   capabilities: {
- *     paymasterService: { policyId: "your-policy-id" }
+ *     paymaster: { policyId: "your-policy-id" }
  *   }
  * });
  *
@@ -48,32 +65,30 @@ export type SendPreparedCallsResult = Prettify<ViemSendPreparedCallsResult>;
  * const signedCalls = await client.signPreparedCalls(preparedCalls);
  *
  * // Then send the prepared calls with the signature
- * const result = await client.sendPreparedCalls({
- *   signedCalls,
- * });
+ * const result = await client.sendPreparedCalls(signedCalls);
  * ```
  */
 export async function sendPreparedCalls(
   client: InnerWalletApiClient,
   params: SendPreparedCallsParams,
 ): Promise<SendPreparedCallsResult> {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  params.capabilities = mergeClientCapabilities(
+  // Merge client-level capabilities into the params
+  const mergedCapabilities = mergeClientCapabilities(
     client,
-    params.capabilities as any,
+    params.capabilities,
   );
 
   LOGGER.debug("sendPreparedCalls:start", { type: params.type });
+
+  // Convert viem-native params to RPC format
+  const rpcParams = toRpcSendPreparedCallsParams(
+    { ...params, capabilities: mergedCapabilities },
+    client.chain.id,
+  );
+
   const res = await client.request({
     method: "wallet_sendPreparedCalls",
-    params: [
-      params.type === "array"
-        ? params
-        : {
-            ...params,
-            chainId: params.chainId ?? toHex(client.chain.id),
-          },
-    ],
+    params: [rpcParams],
   });
   LOGGER.debug("sendPreparedCalls:done");
 

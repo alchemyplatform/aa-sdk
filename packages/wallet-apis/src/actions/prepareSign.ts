@@ -1,17 +1,32 @@
-import type { InnerWalletApiClient } from "../types.ts";
-import type { Prettify } from "viem";
+import type { Address, Prettify } from "viem";
+import type {
+  InnerWalletApiClient,
+  SignableMessage,
+  TypedData,
+} from "../types.ts";
 import { AccountNotFoundError } from "@alchemy/common";
 import { LOGGER } from "../logger.js";
-import type { PrepareSignParams as ViemPrepareSignParams } from "../utils/viemTypes.js";
 import { toRpcPrepareSignParams } from "../utils/viemDecode.js";
 import { fromRpcPrepareSignResult } from "../utils/viemEncode.js";
-import type { PrepareSignResult as ViemPrepareSignResult } from "../utils/viemTypes.js";
 
-// Input params use viem-native types
-export type PrepareSignParams = Prettify<ViemPrepareSignParams>;
+// ─────────────────────────────────────────────────────────────────────────────
+// Action Types
+// ─────────────────────────────────────────────────────────────────────────────
 
-// Result uses viem-native types
-export type PrepareSignResult = Prettify<ViemPrepareSignResult>;
+export type PrepareSignParams = Prettify<{
+  from?: Address;
+  chainId?: number;
+  signatureRequest:
+    | { type: "personal_sign"; data: SignableMessage }
+    | { type: "eth_signTypedData_v4"; data: TypedData };
+}>;
+
+export type PrepareSignResult = Prettify<{
+  chainId: number;
+  signatureRequest:
+    | { type: "personal_sign"; data: SignableMessage }
+    | { type: "eth_signTypedData_v4"; data: TypedData };
+}>;
 
 /**
  * Prepares a signature request for signing messages or transactions.
@@ -47,14 +62,11 @@ export async function prepareSign(
 
   const res = await client.request({
     method: "wallet_prepareSign",
-    // Cast to satisfy RPC schema - our converted params match the expected format
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    params: [rpcParams as any],
+    params: [rpcParams],
   });
 
   LOGGER.debug("prepareSign:done");
 
   // Convert RPC result to viem-native format
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return fromRpcPrepareSignResult(res as any);
+  return fromRpcPrepareSignResult(res);
 }

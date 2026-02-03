@@ -2,7 +2,7 @@ import { arbitrum, base } from "viem/chains";
 import { apiTransport } from "../__tests__/setup.js";
 import { createSmartWalletClient } from "../client.js";
 import { swapActions } from "./swapActionsDecorator.js";
-import { size, toHex, type LocalAccount } from "viem";
+import { size, type LocalAccount } from "viem";
 
 describe("swapActions decorator tests", () => {
   it("should successfully request a quote", async () => {
@@ -29,10 +29,9 @@ describe("swapActions decorator tests", () => {
     const NATIVE_TOKEN_ADDR = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEee"; // from ERC-7528
 
     const quote = await client.requestQuoteV0({
-      from: account.address,
-      fromToken: USDC_ARB,
-      toToken: NATIVE_TOKEN_ADDR,
-      minimumToAmount: "0x5AF3107A4000",
+      from: { address: USDC_ARB, chainId: arbitrum.id },
+      to: { address: NATIVE_TOKEN_ADDR, minimumAmount: 0x5af3107a4000n },
+      sender: account.address,
     });
 
     expect(quote.quote).toBeDefined();
@@ -66,11 +65,13 @@ describe("swapActions decorator tests", () => {
     const NATIVE_TOKEN_ADDR = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEee"; // from ERC-7528
 
     const quote = await client.requestQuoteV0({
-      from: account.address,
-      fromToken: USDC_ARB,
-      toToken: NATIVE_TOKEN_ADDR,
-      toChainId: toHex(base.id),
-      minimumToAmount: "0x5AF3107A4000",
+      from: { address: USDC_ARB, chainId: arbitrum.id },
+      to: {
+        address: NATIVE_TOKEN_ADDR,
+        chainId: base.id,
+        minimumAmount: 0x5af3107a4000n,
+      },
+      sender: account.address,
     });
 
     expect(quote.quote).toBeDefined();

@@ -1,17 +1,26 @@
+import type { Address, Hex, Prettify } from "viem";
 import type { InnerWalletApiClient } from "../types.ts";
-import type { Prettify } from "viem";
 import { AccountNotFoundError } from "@alchemy/common";
 import { LOGGER } from "../logger.js";
-import type {
-  FormatSignParams as ViemFormatSignParams,
-  FormatSignResult as ViemFormatSignResult,
-} from "../utils/viemTypes.js";
 import { toRpcFormatSignParams } from "../utils/viemDecode.js";
 import { fromRpcFormatSignResult } from "../utils/viemEncode.js";
 
-export type FormatSignParams = Prettify<ViemFormatSignParams>;
+// ─────────────────────────────────────────────────────────────────────────────
+// Action Types
+// ─────────────────────────────────────────────────────────────────────────────
 
-export type FormatSignResult = Prettify<ViemFormatSignResult>;
+export type FormatSignParams = Prettify<{
+  from?: Address;
+  chainId?: number;
+  signature: {
+    type: "ecdsa";
+    data: Hex;
+  };
+}>;
+
+export type FormatSignResult = Prettify<{
+  signature: Hex;
+}>;
 
 /**
  * Formats a signature request for signing messages or transactions.

@@ -1,12 +1,24 @@
-import { type Hex, type Prettify, concatHex } from "viem";
-import type { InnerWalletApiClient } from "../types.ts";
+import { type Address, type Hex, type Prettify, concatHex } from "viem";
+import type { InnerWalletApiClient, Permission } from "../types.ts";
 import { signSignatureRequest } from "./signSignatureRequest.js";
 import { AccountNotFoundError } from "@alchemy/common";
 import { LOGGER } from "../logger.js";
-import type { GrantPermissionsParams as ViemGrantPermissionsParams } from "../utils/viemTypes.js";
 import { toRpcGrantPermissionsParams } from "../utils/viemDecode.js";
 
-export type GrantPermissionsParams = Prettify<ViemGrantPermissionsParams>;
+// ─────────────────────────────────────────────────────────────────────────────
+// Action Types
+// ─────────────────────────────────────────────────────────────────────────────
+
+export type GrantPermissionsParams = Prettify<{
+  account?: Address;
+  chainId?: number;
+  expirySec: number;
+  key: {
+    publicKey: Hex;
+    type: "secp256k1" | "p256"; // TODO(claude): p256 should not be supported here. webauthn support is being deprecated.
+  };
+  permissions: Permission[];
+}>;
 
 export type GrantPermissionsResult = Prettify<{
   context: Hex;
@@ -47,7 +59,7 @@ export type GrantPermissionsResult = Prettify<{
  *   calls: [{ to: zeroAddress, value: "0x0" }],
  *   from: account.address,
  *   capabilities: {
- *     paymasterService: {
+ *     paymaster: {
  *       policyId: "your-paymaster-policy-id",
  *     },
  *     permissions,
@@ -84,11 +96,9 @@ export async function grantPermissions(
     account,
   );
 
-  // Cast to satisfy RPC schema - our RpcPermission types are compatible with the API
   const response = await client.request({
     method: "wallet_createSession",
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    params: [rpcParams as any],
+    params: [rpcParams],
   });
 
   const { sessionId, signatureRequest } = response;
