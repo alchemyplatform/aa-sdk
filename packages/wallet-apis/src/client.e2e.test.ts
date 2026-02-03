@@ -144,10 +144,13 @@ describe("Client E2E Tests", () => {
     `);
   });
 
-  it("can correctly sign a message", async () => {
+  it("can correctly sign a message using sma-b account", async () => {
     const account = await client.requestAccount();
     const message = "hello world";
-    const signature = await client.signMessage({ message });
+    const signature = await client.signMessage({
+      message,
+      account: account.address,
+    });
     const isValid = await publicClient.verifyMessage({
       address: account.address,
       message: "hello world",
@@ -156,13 +159,39 @@ describe("Client E2E Tests", () => {
     expect(isValid).toBe(true);
   });
 
-  it("can correctly sign typed data", async () => {
+  it("can correctly sign a message using default 7702 account", async () => {
+    const message = "hello world";
+    const signature = await client.signMessage({
+      message,
+    });
+    const isValid = await publicClient.verifyMessage({
+      address: client.account.address,
+      message: "hello world",
+      signature,
+    });
+    expect(isValid).toBe(true);
+  });
+
+  it("can correctly sign typed data using sma-b account", async () => {
     const account = await client.requestAccount();
-    const signature = await client.signTypedData(givenTypedData);
+    const signature = await client.signTypedData({
+      ...givenTypedData,
+      account: account.address,
+    });
     const isValid = await publicClient.verifyTypedData({
       ...givenTypedData,
       signature,
       address: account.address,
+    });
+    expect(isValid).toBe(true);
+  });
+
+  it("can correctly sign typed data using default 7702 account", async () => {
+    const signature = await client.signTypedData(givenTypedData);
+    const isValid = await publicClient.verifyTypedData({
+      ...givenTypedData,
+      signature,
+      address: client.account.address,
     });
     expect(isValid).toBe(true);
   });
