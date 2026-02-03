@@ -9,5 +9,8 @@ export type AlchemyWalletTransport = AlchemyTransport;
 export const alchemyWalletTransport = (
   config: AlchemyTransportConfig,
 ): AlchemyWalletTransport => {
-  return alchemyTransport({ ...config, url: "https://api.g.alchemy.com/v2" });
+  return alchemyTransport({
+    ...config,
+    url: config.url ?? "https://api.g.alchemy.com/v2",
+  });
 };
