@@ -25,7 +25,6 @@ import type {
 } from "@alchemy/wallet-api-types";
 import type { PrepareCallsCapabilities as RpcPrepareCallsCapabilities } from "@alchemy/wallet-api-types/capabilities";
 import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
-// Shared types from types.ts
 import type {
   GetCallsStatusResult,
   PrepareCallsCapabilities,
@@ -33,8 +32,8 @@ import type {
   StateOverride,
   SignableMessage,
   TypedData,
+  FeePayment,
 } from "../types.js";
-// Action-specific result types from action files
 import type { PrepareSignResult } from "../actions/prepareSign.js";
 import type { FormatSignResult } from "../actions/formatSign.js";
 import type { SendPreparedCallsResult } from "../actions/sendPreparedCalls.js";
@@ -44,25 +43,8 @@ import type {
   RequestQuoteV0Result_RawCalls as RequestQuoteResult_RawCalls,
 } from "../experimental/actions/requestQuoteV0.js";
 
-// Note: GrantPermissionsResult has a different shape in grantPermissions.ts (just {context})
-// The viemEncode.ts fromRpcCreateSessionResult returns a different internal type
-// that includes sessionId and signatureRequest for internal use
-type GrantPermissionsResult = {
-  sessionId: Hex;
-  chainId: number;
-  signatureRequest: {
-    type: "eth_signTypedData_v4";
-    data: TypedData;
-  };
-};
-
-// Helper type to extract RPC return type for a specific method
 type RpcMethodReturn<M extends WalletServerRpcSchemaType["Request"]["method"]> =
   Extract<WalletServerRpcSchemaType, { Request: { method: M } }>["ReturnType"];
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Result Types (viem-native)
-// ─────────────────────────────────────────────────────────────────────────────
 
 export type PrepareCallsResult =
   | PrepareCallsResult_UserOp
@@ -82,11 +64,7 @@ export type PrepareCallsResult_UserOp = {
     | Omit<UserOperation<"0.6">, "signature">
     | Omit<UserOperation<"0.7">, "signature">;
   signatureRequest: PreparedCall_UserOpV070["signatureRequest"];
-  feePayment: {
-    sponsored: boolean;
-    tokenAddress?: Address;
-    maxAmount: bigint;
-  };
+  feePayment: FeePayment;
   details?: PrepareCallsDetails;
 };
 
@@ -102,7 +80,7 @@ export type PrepareCallsResult_Authorization = {
 
 export type PrepareCallsResult_PaymasterPermit = {
   type: "paymaster-permit";
-  data: PreparedCall_Permit["data"]; // TypedDataDefinition - no conversion needed
+  data: PreparedCall_Permit["data"];
   signatureRequest: PreparedCall_Permit["signatureRequest"];
   modifiedRequest: {
     from: Address;
@@ -122,16 +100,10 @@ export type PrepareCallsDetails = {
   };
 };
 
-// PrepareCallsCapabilities, Erc20PaymasterSettings, and StateOverride are imported from viemTypes.js
-
 type EncodedSignature = {
   type: EcdsaSig["signature"]["type"];
   data: Signature | Hex;
 };
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Main Converter
-// ─────────────────────────────────────────────────────────────────────────────
 
 export const fromRpcPrepareCallsResult = (
   rpcResult: RpcPrepareCallsResult,
@@ -172,10 +144,6 @@ export const fromRpcPrepareCallsResult = (
       return assertNever(rpcResult, "Unexpected prepared call type");
   }
 };
-
-// ─────────────────────────────────────────────────────────────────────────────
-// User Operation Converters
-// ─────────────────────────────────────────────────────────────────────────────
 
 const fromRpcUserOperationCall = (
   call: PreparedCall_UserOpV060 | PreparedCall_UserOpV070,
@@ -239,10 +207,6 @@ const fromRpcUoData070 = (
   };
 };
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Authorization Converter
-// ─────────────────────────────────────────────────────────────────────────────
-
 const fromRpcAuthorizationCall = (
   call: PreparedCall_Authorization,
 ): PrepareCallsResult_Authorization => {
@@ -256,10 +220,6 @@ const fromRpcAuthorizationCall = (
     signatureRequest: call.signatureRequest,
   };
 };
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Paymaster Permit Converter
-// ─────────────────────────────────────────────────────────────────────────────
 
 const fromRpcPaymasterPermitCall = (
   call: PreparedCall_Permit,
@@ -319,10 +279,6 @@ const fromRpcSignature = (
   return assertNever(data, "Signature object must include 'v' or 'yParity'");
 };
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Details Converter
-// ─────────────────────────────────────────────────────────────────────────────
-
 const fromRpcDetails = (
   details: RpcPrepareCallsResult["details"],
 ): PrepareCallsDetails | undefined => {
@@ -342,14 +298,9 @@ const fromRpcDetails = (
   };
 };
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Capabilities Converter (for paymaster permit modifiedRequest)
-// ─────────────────────────────────────────────────────────────────────────────
-
 const fromRpcCapabilities = (
   capabilities: RpcPrepareCallsCapabilities,
 ): PrepareCallsCapabilities => {
-  // Convert RPC permissions to viem format
   // RPC can have { context } or { sessionId, signature }, viem only has { context }
   let permissions: PrepareCallsCapabilities["permissions"];
   if (capabilities.permissions != null) {
@@ -492,19 +443,15 @@ const fromRpcStateOverride = (
       code: override.code,
     };
     if ("state" in override && override.state != null) {
-      entry.state = override.state as { [slot: Hex]: Hex };
+      entry.state = override.state satisfies { [slot: Hex]: Hex };
     }
     if ("stateDiff" in override && override.stateDiff != null) {
-      entry.stateDiff = override.stateDiff as { [slot: Hex]: Hex };
+      entry.stateDiff = override.stateDiff satisfies { [slot: Hex]: Hex };
     }
     result[address as Address] = entry;
   }
   return result;
 };
-
-// ─────────────────────────────────────────────────────────────────────────────
-// SendPreparedCalls Result Converter
-// ─────────────────────────────────────────────────────────────────────────────
 
 type RpcSendPreparedCallsResult = RpcMethodReturn<"wallet_sendPreparedCalls">;
 
@@ -564,25 +511,20 @@ const getIdFromResult = (rpcResult: RpcSendPreparedCallsResult): Hex => {
   return rpcResult.preparedCallIds[0];
 };
 
-// ─────────────────────────────────────────────────────────────────────────────
-// PrepareSign Result Converter
-// ─────────────────────────────────────────────────────────────────────────────
-
 type RpcPrepareSignResult = RpcMethodReturn<"wallet_prepareSign">;
 
 export const fromRpcPrepareSignResult = (
   rpcResult: RpcPrepareSignResult,
 ): PrepareSignResult => {
-  // Convert RPC signature request to viem-native format
   const signatureRequest =
     rpcResult.signatureRequest.type === "personal_sign"
       ? {
           type: "personal_sign" as const,
-          data: rpcResult.signatureRequest.data as SignableMessage,
+          data: rpcResult.signatureRequest.data satisfies SignableMessage,
         }
       : {
           type: "eth_signTypedData_v4" as const,
-          data: rpcResult.signatureRequest.data as TypedData,
+          data: rpcResult.signatureRequest.data satisfies TypedData,
         };
 
   return {
@@ -591,10 +533,6 @@ export const fromRpcPrepareSignResult = (
   };
 };
 
-// ─────────────────────────────────────────────────────────────────────────────
-// FormatSign Result Converter (no conversion needed)
-// ─────────────────────────────────────────────────────────────────────────────
-
 export const fromRpcFormatSignResult = (rpcResult: {
   signature: Hex;
 }): FormatSignResult => {
@@ -602,30 +540,6 @@ export const fromRpcFormatSignResult = (rpcResult: {
     signature: rpcResult.signature,
   };
 };
-
-// ─────────────────────────────────────────────────────────────────────────────
-// GrantPermissions (createSession) Result Converter
-// ─────────────────────────────────────────────────────────────────────────────
-
-type RpcCreateSessionResult = RpcMethodReturn<"wallet_createSession">;
-
-export const fromRpcCreateSessionResult = (
-  rpcResult: RpcCreateSessionResult,
-): GrantPermissionsResult => {
-  return {
-    sessionId: rpcResult.sessionId,
-    chainId: hexToNumber(rpcResult.chainId),
-    signatureRequest: {
-      type: "eth_signTypedData_v4" as const,
-      // Cast to TypedData - the top-level structure is correct
-      data: rpcResult.signatureRequest.data as TypedData,
-    },
-  };
-};
-
-// ─────────────────────────────────────────────────────────────────────────────
-// GetCallsStatus Result Converter
-// ─────────────────────────────────────────────────────────────────────────────
 
 type RpcGetCallsStatusResult = RpcMethodReturn<"wallet_getCallsStatus">;
 
@@ -666,10 +580,6 @@ export const fromRpcGetCallsStatusResult = (
   };
 };
 
-// ─────────────────────────────────────────────────────────────────────────────
-// RequestQuote Result Converter
-// ─────────────────────────────────────────────────────────────────────────────
-
 type RpcRequestQuoteResult = RpcMethodReturn<"wallet_requestQuote_v0">;
 
 export const fromRpcRequestQuoteResult = (
@@ -707,8 +617,6 @@ export const fromRpcRequestQuoteResult = (
   return preparedCallsResult;
 };
 
-// Helper to extract prepared calls from quote result
-// Reuses fromRpcPrepareCallsResult since the structure is the same
 const fromRpcPrepareCallsResultForQuote = (
   rpcResult: Extract<RpcRequestQuoteResult, { rawCalls: false }>,
 ): RequestQuoteResult_PreparedCalls["preparedCalls"] => {

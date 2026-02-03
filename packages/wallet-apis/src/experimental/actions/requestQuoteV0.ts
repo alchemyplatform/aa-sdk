@@ -1,29 +1,32 @@
 import type { Address, Hex, Prettify } from "viem";
-import type { UserOperation } from "viem/account-abstraction";
-import type {
-  InnerWalletApiClient,
-  SignatureRequest,
-  EncodedSignature,
-  PrepareCallsCapabilities,
-  TypedData,
-} from "../../types.ts";
+import type { InnerWalletApiClient, Call } from "../../types.ts";
 import { AccountNotFoundError } from "@alchemy/common";
 import { toRpcRequestQuoteParams } from "../../utils/viemDecode.js";
-import { fromRpcRequestQuoteResult } from "../../utils/viemEncode.js";
+import {
+  fromRpcRequestQuoteResult,
+  type PrepareCallsResult_UserOp,
+  type PrepareCallsResult_Authorization,
+  type PrepareCallsResult_PaymasterPermit,
+} from "../../utils/viemEncode.js";
 
 export type RequestQuoteV0Params = Prettify<{
-  from: {
-    address: Address;
-    chainId: number;
-    amount?: bigint;
-  };
-  to: {
-    address: Address;
-    chainId?: number;
-    minimumAmount?: bigint;
-  };
-  sender: Address;
+  /** The address of the account executing the swap (consistent with prepareCalls) */
+  from: Address;
+  /** The chain ID where the swap originates */
+  chainId: number;
+  /** The address of the source token */
+  fromToken: Address;
+  /** The address of the destination token */
+  toToken: Address;
+  /** The amount of source token to swap (mutually exclusive with minimumToAmount) */
+  fromAmount?: bigint;
+  /** The minimum amount to receive (mutually exclusive with fromAmount) */
+  minimumToAmount?: bigint;
+  /** The destination chain ID (for cross-chain swaps, defaults to same chain if omitted) */
+  toChainId?: number;
+  /** Maximum acceptable slippage in basis points */
   slippageBps?: number;
+  /** Whether to return raw calls for EOA wallets (defaults to false for smart wallets) */
   rawCalls?: boolean;
 }>;
 
@@ -31,16 +34,10 @@ export type RequestQuoteV0Result =
   | RequestQuoteV0Result_PreparedCalls
   | RequestQuoteV0Result_RawCalls;
 
-// Internal helper types
-type UserOperationData =
-  | Omit<UserOperation<"0.6">, "signature">
-  | Omit<UserOperation<"0.7">, "signature">;
-
-type FeePayment = {
-  sponsored: boolean;
-  tokenAddress?: Address;
-  maxAmount: bigint;
-};
+// Reuse PrepareCallsResult types, omitting `details` which isn't present in quote responses
+type QuoteUserOp = Omit<PrepareCallsResult_UserOp, "details">;
+type QuoteAuthorization = PrepareCallsResult_Authorization;
+type QuotePaymasterPermit = Omit<PrepareCallsResult_PaymasterPermit, "details">;
 
 export type RequestQuoteV0Result_PreparedCalls = Prettify<{
   quote: {
@@ -52,49 +49,11 @@ export type RequestQuoteV0Result_PreparedCalls = Prettify<{
   callId?: Hex;
   rawCalls: false;
   preparedCalls:
-    | {
-        type: "user-operation-v060";
-        chainId: number;
-        data: UserOperationData;
-        signatureRequest?: SignatureRequest;
-        feePayment: FeePayment;
-      }
-    | {
-        type: "user-operation-v070";
-        chainId: number;
-        data: UserOperationData;
-        signatureRequest?: SignatureRequest;
-        feePayment: FeePayment;
-      }
-    | {
-        type: "paymaster-permit";
-        data: TypedData;
-        signatureRequest: SignatureRequest;
-        modifiedRequest: {
-          from: Address;
-          paymasterPermitSignature?: EncodedSignature;
-          calls: Array<{ to: Address; data?: Hex; value?: bigint }>;
-          capabilities?: PrepareCallsCapabilities;
-          chainId: number;
-        };
-      }
+    | QuoteUserOp
+    | QuotePaymasterPermit
     | {
         type: "array";
-        data: Array<
-          | {
-              type: "user-operation-v060" | "user-operation-v070";
-              chainId: number;
-              data: UserOperationData;
-              signatureRequest?: SignatureRequest;
-              feePayment: FeePayment;
-            }
-          | {
-              type: "authorization";
-              chainId: number;
-              data: { address: Address; nonce: number };
-              signatureRequest: SignatureRequest;
-            }
-        >;
+        data: Array<QuoteUserOp | QuoteAuthorization>;
       };
 }>;
 
@@ -107,7 +66,7 @@ export type RequestQuoteV0Result_RawCalls = Prettify<{
   chainId: number;
   callId?: Hex;
   rawCalls: true;
-  calls: Array<{ to: Address; data?: Hex; value?: bigint }>;
+  calls: Call[];
 }>;
 
 /**
@@ -116,15 +75,13 @@ export type RequestQuoteV0Result_RawCalls = Prettify<{
  *
  * @param {InnerWalletApiClient} client - The wallet API client to use for the request
  * @param {RequestQuoteV0Params} params - Parameters for requesting a swap quote
- * @param {object} params.from - The token to swap from
- * @param {Address} params.from.address - The address of the token to swap from
- * @param {number} params.from.chainId - The chain ID for the swap
- * @param {bigint} [params.from.amount] - The amount to swap from (mutually exclusive with to.minimumAmount)
- * @param {object} params.to - The token to swap to
- * @param {Address} params.to.address - The address of the token to swap to
- * @param {number} [params.to.chainId] - The destination chain ID (same chain if omitted)
- * @param {bigint} [params.to.minimumAmount] - The minimum amount to receive (mutually exclusive with from.amount)
- * @param {Address} params.sender - The address executing the swap
+ * @param {Address} params.from - The address of the account executing the swap
+ * @param {number} params.chainId - The chain ID for the swap
+ * @param {Address} params.fromToken - The address of the token to swap from
+ * @param {Address} params.toToken - The address of the token to swap to
+ * @param {bigint} [params.fromAmount] - The amount to swap (mutually exclusive with minimumToAmount)
+ * @param {bigint} [params.minimumToAmount] - The minimum amount to receive (mutually exclusive with fromAmount)
+ * @param {number} [params.toChainId] - The destination chain ID (for cross-chain swaps)
  * @param {number} [params.slippageBps] - The maximum acceptable slippage in basis points
  * @param {boolean} [params.rawCalls] - Whether to return raw calls for EOA wallets (defaults to false for smart wallets)
  * @returns {Promise<RequestQuoteV0Result>} A Promise that resolves to either prepared calls or raw calls depending on rawCalls
@@ -133,16 +90,20 @@ export type RequestQuoteV0Result_RawCalls = Prettify<{
  * ```ts twoslash
  * // Request a quote for smart wallet (prepared calls)
  * const quote = await client.requestQuoteV0({
- *   from: { address: "0xA0b86...", chainId: 1, amount: 1000000000000000000n },
- *   to: { address: "0xB0b86..." },
- *   sender: "0x1234...",
+ *   from: "0x1234...",
+ *   chainId: 1,
+ *   fromToken: "0xA0b86...",
+ *   toToken: "0xB0b86...",
+ *   fromAmount: 1000000000000000000n,
  * });
  *
  * // Request a quote for EOA wallet (raw calls)
  * const rawQuote = await client.requestQuoteV0({
- *   from: { address: "0xA0b86...", chainId: 1, amount: 1000000000000000000n },
- *   to: { address: "0xB0b86..." },
- *   sender: "0x1234...",
+ *   from: "0x1234...",
+ *   chainId: 1,
+ *   fromToken: "0xA0b86...",
+ *   toToken: "0xB0b86...",
+ *   minimumToAmount: 500000000000000000n,
  *   rawCalls: true,
  * });
  * ```
@@ -151,12 +112,12 @@ export async function requestQuoteV0(
   client: InnerWalletApiClient,
   params: RequestQuoteV0Params,
 ): Promise<RequestQuoteV0Result> {
-  const sender = params.sender ?? client.account?.address;
-  if (!sender) {
+  const from = params.from ?? client.account?.address;
+  if (!from) {
     throw new AccountNotFoundError();
   }
 
-  const rpcParams = toRpcRequestQuoteParams({ ...params, sender }, sender);
+  const rpcParams = toRpcRequestQuoteParams({ ...params, from });
 
   const res = await client.request({
     method: "wallet_requestQuote_v0",

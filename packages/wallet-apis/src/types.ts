@@ -314,22 +314,6 @@ export type GetCallsStatusResult = {
   };
 };
 
-export type RequestQuoteParams = {
-  from: {
-    address: Address;
-    chainId: number;
-    amount?: bigint;
-  };
-  to: {
-    address: Address;
-    chainId?: number; // Same chain if omitted
-    minimumAmount?: bigint;
-  };
-  sender: Address;
-  slippageBps?: number;
-  rawCalls?: boolean;
-};
-
 // ─────────────────────────────────────────────────────────────────────────────
 // Signature Request Types (for prepared calls)
 // ─────────────────────────────────────────────────────────────────────────────
@@ -344,10 +328,19 @@ type EncodedSignatureData =
   | { r: Hex; s: Hex; yParity: number }
   | { r: Hex; s: Hex; v: bigint };
 
-// Discriminated union so TypeScript can properly narrow when assigned to RPC types
 export type EncodedSignature =
   | { type: "secp256k1"; data: EncodedSignatureData }
   | { type: "ecdsa"; data: EncodedSignatureData };
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Fee Payment Types (shared by prepareCalls and requestQuote)
+// ─────────────────────────────────────────────────────────────────────────────
+
+export type FeePayment = {
+  sponsored: boolean;
+  tokenAddress?: Address;
+  maxAmount: bigint;
+};
 
 // ─────────────────────────────────────────────────────────────────────────────
 // User Operation Types (viem-native)
@@ -356,14 +349,14 @@ export type EncodedSignature =
 export type UserOperationV060 = {
   sender: Address;
   nonce: bigint;
-  initCode?: Hex; // Optional per viem's UserOperation<'0.6'> - only for new accounts
+  initCode?: Hex;
   callData: Hex;
   callGasLimit: bigint;
   verificationGasLimit: bigint;
   preVerificationGas: bigint;
   maxFeePerGas: bigint;
   maxPriorityFeePerGas: bigint;
-  paymasterAndData?: Hex; // Optional per viem's UserOperation<'0.6'>
+  paymasterAndData?: Hex;
 };
 
 export type UserOperationV070 = {

@@ -29,9 +29,11 @@ describe("swapActions decorator tests", () => {
     const NATIVE_TOKEN_ADDR = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEee"; // from ERC-7528
 
     const quote = await client.requestQuoteV0({
-      from: { address: USDC_ARB, chainId: arbitrum.id },
-      to: { address: NATIVE_TOKEN_ADDR, minimumAmount: 0x5af3107a4000n },
-      sender: account.address,
+      from: account.address,
+      chainId: arbitrum.id,
+      fromToken: USDC_ARB,
+      toToken: NATIVE_TOKEN_ADDR,
+      minimumToAmount: 0x5af3107a4000n,
     });
 
     expect(quote.quote).toBeDefined();
@@ -65,13 +67,12 @@ describe("swapActions decorator tests", () => {
     const NATIVE_TOKEN_ADDR = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEee"; // from ERC-7528
 
     const quote = await client.requestQuoteV0({
-      from: { address: USDC_ARB, chainId: arbitrum.id },
-      to: {
-        address: NATIVE_TOKEN_ADDR,
-        chainId: base.id,
-        minimumAmount: 0x5af3107a4000n,
-      },
-      sender: account.address,
+      from: account.address,
+      chainId: arbitrum.id,
+      fromToken: USDC_ARB,
+      toToken: NATIVE_TOKEN_ADDR,
+      toChainId: base.id,
+      minimumToAmount: 0x5af3107a4000n,
     });
 
     expect(quote.quote).toBeDefined();

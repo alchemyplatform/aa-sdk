@@ -49,11 +49,9 @@ export async function signPreparedCalls(
 ): Promise<SignPreparedCallsResult> {
   LOGGER.debug("signPreparedCalls:start", { type: params.type });
 
-  // Helper to sign authorization call - returns viem-native format
   const signAuthorizationCall = async (
     call: PrepareCallsResult_Authorization,
   ): Promise<SignedAuthorization> => {
-    // Sign with hex-encoded data as required by the signer
     const signature = await signSignatureRequest(client, {
       type: "eip7702Auth",
       data: {
@@ -63,7 +61,6 @@ export async function signPreparedCalls(
       },
     });
 
-    // Return viem-native format
     return {
       type: "authorization",
       chainId: call.chainId,
@@ -75,7 +72,6 @@ export async function signPreparedCalls(
     };
   };
 
-  // Helper to sign user operation - returns viem-native format
   const signUserOperationCall = async (
     call: PrepareCallsResult_UserOp,
   ): Promise<SignedUserOperation> => {
@@ -92,7 +88,6 @@ export async function signPreparedCalls(
 
     const signature = await signSignatureRequest(client, signatureRequest);
 
-    // Return viem-native format (data stays as bigint)
     return {
       type: rest.type,
       chainId: rest.chainId,

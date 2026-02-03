@@ -27,7 +27,6 @@ import type {
   PrepareCallsResult_Authorization,
   PrepareCallsResult_PaymasterPermit,
 } from "./viemEncode.js";
-// Shared types from types.ts
 import type {
   Call,
   PrepareCallsCapabilities,
@@ -44,24 +43,19 @@ import type {
   Permission,
   EncodedSignature,
 } from "../types.js";
-// Action-specific params types from action files
 import type { PrepareCallsParams } from "../actions/prepareCalls.js";
 import type { PrepareSignParams } from "../actions/prepareSign.js";
 import type { FormatSignParams } from "../actions/formatSign.js";
 import type { GrantPermissionsParams } from "../actions/grantPermissions.js";
 import type { SendPreparedCallsParams } from "../actions/sendPreparedCalls.js";
 import type { RequestQuoteV0Params as RequestQuoteParams } from "../experimental/actions/requestQuoteV0.js";
+import { assertNever } from "@alchemy/common";
 
-// Helper type to extract RPC params for a specific method
 type RpcMethodParams<M extends WalletServerRpcSchemaType["Request"]["method"]> =
   Extract<
     WalletServerRpcSchemaType,
     { Request: { method: M } }
   >["Request"]["params"][0];
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Main Converters
-// ─────────────────────────────────────────────────────────────────────────────
 
 export const toRpcPrepareCallsParams = (
   params: PrepareCallsParams,
@@ -123,10 +117,6 @@ export const toRpcSendPreparedCallsCapabilities = (
         : undefined,
   };
 };
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Helper Converters
-// ─────────────────────────────────────────────────────────────────────────────
 
 const toRpcCall = (call: Call): { to: Address; data?: Hex; value?: Hex } => {
   return {
@@ -264,10 +254,6 @@ const toRpcStateOverride = (
   return result;
 };
 
-// ─────────────────────────────────────────────────────────────────────────────
-// PrepareSign Params Converter
-// ─────────────────────────────────────────────────────────────────────────────
-
 export const toRpcPrepareSignParams = (
   params: PrepareSignParams,
   defaultChainId: number,
@@ -279,10 +265,6 @@ export const toRpcPrepareSignParams = (
     signatureRequest: params.signatureRequest,
   };
 };
-
-// ─────────────────────────────────────────────────────────────────────────────
-// FormatSign Params Converter
-// ─────────────────────────────────────────────────────────────────────────────
 
 type RpcFormatSignParams = {
   from: Address;
@@ -308,11 +290,6 @@ export const toRpcFormatSignParams = (
   };
 };
 
-// ─────────────────────────────────────────────────────────────────────────────
-// GrantPermissions (createSession) Params Converter
-// ─────────────────────────────────────────────────────────────────────────────
-
-// Extract the permission type from the RPC schema
 type RpcCreateSessionParams = RpcMethodParams<"wallet_createSession">;
 type RpcPermission = RpcCreateSessionParams["permissions"][number];
 
@@ -344,7 +321,7 @@ const toRpcPermission = (permission: Permission): RpcPermission => {
     case "root":
       return { type: "root" };
     default:
-      return permission as RpcPermission;
+      return assertNever(permission, "Unexpected permission type.");
   }
 };
 
@@ -365,24 +342,18 @@ export const toRpcGrantPermissionsParams = (
   };
 };
 
-// ─────────────────────────────────────────────────────────────────────────────
-// RequestQuote Params Converter
-// ─────────────────────────────────────────────────────────────────────────────
-
 type RpcRequestQuoteParams = RpcMethodParams<"wallet_requestQuote_v0">;
 
 export const toRpcRequestQuoteParams = (
   params: RequestQuoteParams,
-  _defaultFrom: Address,
 ): RpcRequestQuoteParams => {
-  // Build the base params
   const base = {
-    from: params.sender,
-    chainId: numberToHex(params.from.chainId),
-    fromToken: params.from.address,
-    toToken: params.to.address,
-    ...(params.to.chainId != null && {
-      toChainId: numberToHex(params.to.chainId),
+    from: params.from,
+    chainId: numberToHex(params.chainId),
+    fromToken: params.fromToken,
+    toToken: params.toToken,
+    ...(params.toChainId != null && {
+      toChainId: numberToHex(params.toChainId),
     }),
     ...(params.slippageBps != null && {
       slippage: numberToHex(params.slippageBps),
@@ -392,38 +363,33 @@ export const toRpcRequestQuoteParams = (
   // The RPC schema uses discriminated unions based on fromAmount/minimumToAmount/returnRawCalls
   if (params.rawCalls === true) {
     // Raw calls variant
-    if (params.from.amount != null) {
+    if (params.fromAmount != null) {
       return {
         ...base,
-        fromAmount: toHex(params.from.amount),
+        fromAmount: toHex(params.fromAmount),
         returnRawCalls: true,
       } as RpcRequestQuoteParams;
     }
     return {
       ...base,
-      minimumToAmount: toHex(params.to.minimumAmount!),
+      minimumToAmount: toHex(params.minimumToAmount!),
       returnRawCalls: true,
     } as RpcRequestQuoteParams;
   }
 
   // Prepared calls variant (default)
-  if (params.from.amount != null) {
+  if (params.fromAmount != null) {
     return {
       ...base,
-      fromAmount: toHex(params.from.amount),
+      fromAmount: toHex(params.fromAmount),
     } as RpcRequestQuoteParams;
   }
   return {
     ...base,
-    minimumToAmount: toHex(params.to.minimumAmount!),
+    minimumToAmount: toHex(params.minimumToAmount!),
   } as RpcRequestQuoteParams;
 };
 
-// ─────────────────────────────────────────────────────────────────────────────
-// SendPreparedCalls Params Converter
-// ─────────────────────────────────────────────────────────────────────────────
-
-// Define the exact type expected by the RPC schema
 type RpcSendPreparedCallsParams = (
   | CallArray
   | PreparedCall_UserOpV060_Signed
@@ -458,7 +424,6 @@ export const toRpcSendPreparedCallsParams = (
   };
 };
 
-// RPC signature type - matches what the API expects for user operations
 type RpcUserOpSignature =
   | {
       type: "secp256k1";
@@ -496,14 +461,14 @@ const toRpcSignedUserOperation = (
     return {
       type: "user-operation-v070",
       chainId: numberToHex(op.chainId),
-      data: toRpcUserOperationDataV070(op.data as UserOperationV070),
+      data: toRpcUserOperationDataV070(op.data),
       signature: toRpcUserOpSignature(op.signature),
     };
   }
   return {
     type: "user-operation-v060",
     chainId: numberToHex(op.chainId),
-    data: toRpcUserOperationDataV060(op.data as UserOperationV060),
+    data: toRpcUserOperationDataV060(op.data),
     signature: toRpcUserOpSignature(op.signature),
   };
 };
@@ -526,14 +491,14 @@ const toRpcUserOperationDataV060 = (uo: UserOperationV060) => {
   return {
     sender: uo.sender,
     nonce: toHex(uo.nonce),
-    initCode: uo.initCode ?? ("0x" as Hex),
+    initCode: uo.initCode ?? ("0x" as const),
     callData: uo.callData,
     callGasLimit: toHex(uo.callGasLimit),
     verificationGasLimit: toHex(uo.verificationGasLimit),
     preVerificationGas: toHex(uo.preVerificationGas),
     maxFeePerGas: toHex(uo.maxFeePerGas),
     maxPriorityFeePerGas: toHex(uo.maxPriorityFeePerGas),
-    paymasterAndData: uo.paymasterAndData ?? ("0x" as Hex),
+    paymasterAndData: uo.paymasterAndData ?? ("0x" as const),
   };
 };
 
@@ -562,10 +527,6 @@ const toRpcUserOperationDataV070 = (uo: UserOperationV070) => {
   };
 };
 
-// ─────────────────────────────────────────────────────────────────────────────
-// PrepareCallsResult → RPC Converter (for round-trip testing)
-// ─────────────────────────────────────────────────────────────────────────────
-
 export const toRpcPrepareCallsResult = (
   viemResult: PrepareCallsResult,
 ): RpcPrepareCallsResult => {
@@ -582,7 +543,7 @@ export const toRpcPrepareCallsResult = (
   }
 
   if (viemResult.type === "paymaster-permit") {
-    return toRpcPaymasterPermitCall(viemResult) as RpcPrepareCallsResult;
+    return toRpcPaymasterPermitCall(viemResult);
   }
 
   return toRpcUserOperationCall(viemResult) as RpcPrepareCallsResult;
@@ -601,7 +562,7 @@ const toRpcUserOperationCall = (call: PrepareCallsResult_UserOp) => {
     return {
       type: "user-operation-v070" as const,
       chainId: numberToHex(call.chainId),
-      data: toRpcUserOperationDataV070(call.data as UserOperationV070),
+      data: toRpcUserOperationDataV070(call.data),
       signatureRequest: call.signatureRequest,
       feePayment,
     };
@@ -610,7 +571,7 @@ const toRpcUserOperationCall = (call: PrepareCallsResult_UserOp) => {
     type: "user-operation-v060" as const,
     chainId: numberToHex(call.chainId),
     data: {
-      ...toRpcUserOperationDataV060(call.data as UserOperationV060),
+      ...toRpcUserOperationDataV060(call.data),
       paymasterAndData: "0x" as Hex,
     },
     signatureRequest: call.signatureRequest,

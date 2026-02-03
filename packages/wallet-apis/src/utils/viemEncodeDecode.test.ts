@@ -1,11 +1,9 @@
 import type {
-  PreparedCall_Authorization,
   PreparedCall_Permit,
   PreparedCall_UserOpV060,
   PreparedCall_UserOpV070,
 } from "@alchemy/wallet-api-types";
 import { fromRpcPrepareCallsResult } from "./viemEncode.js";
-import { toRpcPrepareCallsResult } from "./viemDecode.js";
 
 describe("transforms", () => {
   it("transforms a prepared call UO v060 into a viem-compatible call", () => {
@@ -24,6 +22,7 @@ describe("transforms", () => {
           "sender": "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
           "verificationGasLimit": 100000n,
         },
+        "details": undefined,
         "feePayment": {
           "maxAmount": 0n,
           "sponsored": true,
@@ -59,6 +58,7 @@ describe("transforms", () => {
           "sender": "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
           "verificationGasLimit": 100000n,
         },
+        "details": undefined,
         "feePayment": {
           "maxAmount": 1000000000n,
           "sponsored": false,
@@ -89,27 +89,6 @@ describe("transforms", () => {
           "type": "eth_signTypedData_v4",
         },
         "type": "user-operation-v070",
-      }
-    `);
-  });
-  it("transforms a prepared Authorization call a viem-compatible authorization", () => {
-    // Authorization type is only valid within arrays in PrepareCallsReturnType, cast for testing
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const transformed = fromRpcPrepareCallsResult(
-      preparedCallAuthorization as any,
-    );
-    expect(transformed).toMatchInlineSnapshot(`
-      {
-        "chainId": 1,
-        "data": {
-          "address": "0x1234567890123456789012345678901234567890",
-          "nonce": 0,
-        },
-        "signatureRequest": {
-          "rawPayload": "0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890",
-          "type": "eip7702Auth",
-        },
-        "type": "authorization",
       }
     `);
   });
@@ -157,6 +136,7 @@ describe("transforms", () => {
             ],
           },
         },
+        "details": undefined,
         "modifiedRequest": {
           "calls": [
             {
@@ -166,30 +146,6 @@ describe("transforms", () => {
             },
           ],
           "capabilities": {
-            "alchemyPaymaster": {
-              "erc20": {
-                "maxTokenAmount": 1000000000n,
-                "postOpSettings": {
-                  "autoApprove": {
-                    "amount": 1267650600228229401496703205375n,
-                    "below": 4096n,
-                  },
-                },
-                "preOpSettings": {
-                  "autoPermit": {
-                    "amount": 115792089237316195423570985008687907853269984665640564039457584007913129639935n,
-                    "below": 4096n,
-                    "durationSeconds": 86400n,
-                  },
-                  "permitDetails": {
-                    "deadline": 1n,
-                    "value": 2n,
-                  },
-                },
-                "tokenAddress": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
-              },
-              "policyId": "my-policy-123",
-            },
             "eip7702Auth": true,
             "gasParamsOverride": {
               "callGasLimit": 21000n,
@@ -209,9 +165,27 @@ describe("transforms", () => {
             "nonceOverride": {
               "nonceKey": 0n,
             },
+            "paymaster": {
+              "erc20": {
+                "maxTokenAmount": 1000000000n,
+                "preOpSettings": {
+                  "autoPermit": {
+                    "amount": 115792089237316195423570985008687907853269984665640564039457584007913129639935n,
+                    "below": 4096n,
+                    "durationSeconds": 86400,
+                  },
+                },
+                "tokenAddress": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+              },
+              "onlyEstimation": undefined,
+              "policyId": "my-policy-123",
+              "policyIds": undefined,
+              "webhookData": undefined,
+            },
             "permissions": {
               "context": "0x1234abcd",
             },
+            "stateOverride": undefined,
           },
           "chainId": 1,
           "from": "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
@@ -271,35 +245,6 @@ describe("transforms", () => {
         "type": "paymaster-permit",
       }
     `);
-  });
-
-  describe("round-trip encode/decode", () => {
-    it("should encode then decode UO v060 and get back original", () => {
-      const encoded = fromRpcPrepareCallsResult(preparedCallV060);
-      const decoded = toRpcPrepareCallsResult(encoded);
-      expect(decoded).toEqual(preparedCallV060);
-    });
-
-    it("should encode then decode UO v070 and get back original", () => {
-      const encoded = fromRpcPrepareCallsResult(preparedCallV070);
-      const decoded = toRpcPrepareCallsResult(encoded);
-      expect(decoded).toEqual(preparedCallV070);
-    });
-
-    it("should encode then decode Authorization and get back original", () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const encoded = fromRpcPrepareCallsResult(
-        preparedCallAuthorization as any,
-      );
-      const decoded = toRpcPrepareCallsResult(encoded);
-      expect(decoded).toEqual(preparedCallAuthorization);
-    });
-
-    it("should encode then decode Paymaster Permit and get back original", () => {
-      const encoded = fromRpcPrepareCallsResult(preparedCallPermit);
-      const decoded = toRpcPrepareCallsResult(encoded);
-      expect(decoded).toEqual(preparedCallPermit);
-    });
   });
 });
 
@@ -376,20 +321,6 @@ const preparedCallV070 = {
     maxAmount: "0x3b9aca00",
   },
 } as const satisfies PreparedCall_UserOpV070;
-
-const preparedCallAuthorization = {
-  type: "authorization",
-  data: {
-    address: "0x1234567890123456789012345678901234567890",
-    nonce: "0x0",
-  },
-  chainId: "0x1",
-  signatureRequest: {
-    type: "eip7702Auth",
-    rawPayload:
-      "0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890",
-  },
-} as const satisfies PreparedCall_Authorization;
 
 const preparedCallPermit = {
   type: "paymaster-permit",

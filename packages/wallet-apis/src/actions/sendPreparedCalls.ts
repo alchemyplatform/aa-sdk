@@ -69,7 +69,6 @@ export async function sendPreparedCalls(
   client: InnerWalletApiClient,
   params: SendPreparedCallsParams,
 ): Promise<SendPreparedCallsResult> {
-  // Merge client-level capabilities into the params
   const mergedCapabilities = mergeClientCapabilities(
     client,
     params.capabilities,
