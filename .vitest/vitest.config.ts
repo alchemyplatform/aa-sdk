@@ -8,7 +8,7 @@ export default mergeConfig(
   sharedConfig,
   defineProject({
     test: {
-      name: "account-kit/testing",
+      name: "alchemy/sdk-testing",
     },
   }),
 );

@@ -1,6 +1,6 @@
 # Vitest Testing Infrastructure
 
-This directory contains the testing infrastructure for the aa-sdk project using Vitest.
+This directory contains the testing infrastructure for this repo using Vitest.
 
 ## Prerequisites
 

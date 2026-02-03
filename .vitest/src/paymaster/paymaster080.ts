@@ -1,13 +1,17 @@
 import {
-  deepHexlify,
-  resolveProperties,
-  type UserOperationRequest_v7,
-} from "@aa-sdk/core";
-import { concat, encodeAbiParameters, keccak256, pad, toHex } from "viem";
+  concat,
+  encodeAbiParameters,
+  keccak256,
+  pad,
+  toHex,
+  type RpcUserOperation,
+} from "viem";
 import { accounts, entrypoint080 } from "../constants";
 import { toPaymaster } from "./base";
 import type { Paymaster } from "./types";
 import { VerifyingPaymaster070Abi } from "./VerifyingPaymaster070";
+import { deepHexlify } from "../utils/deepHexlify";
+import { resolveProperties } from "../utils/resolveProperties";
 
 export const paymaster080: Paymaster = toPaymaster({
   entryPointVersion: "0.8.0",
@@ -27,7 +31,7 @@ export const paymaster080: Paymaster = toPaymaster({
     const uo = deepHexlify(
       // @ts-ignore
       await resolveProperties(uo_),
-    ) as UserOperationRequest_v7;
+    ) as RpcUserOperation<"0.7">;
 
     const validUntil = 0n;
     const validFrom = 0n;
