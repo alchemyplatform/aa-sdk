@@ -57,16 +57,23 @@ export type PrepareCallsResult_Array = {
   details?: PrepareCallsDetails;
 };
 
-export type PrepareCallsResult_UserOp = {
-  type: "user-operation-v070" | "user-operation-v060";
-  chainId: number;
-  data:
-    | Omit<UserOperation<"0.6">, "signature">
-    | Omit<UserOperation<"0.7">, "signature">;
-  signatureRequest: PreparedCall_UserOpV070["signatureRequest"];
-  feePayment: FeePayment;
-  details?: PrepareCallsDetails;
-};
+export type PrepareCallsResult_UserOp =
+  | {
+      type: "user-operation-v060";
+      chainId: number;
+      data: Omit<UserOperation<"0.6">, "signature">;
+      signatureRequest: PreparedCall_UserOpV060["signatureRequest"];
+      feePayment: FeePayment;
+      details?: PrepareCallsDetails;
+    }
+  | {
+      type: "user-operation-v070";
+      chainId: number;
+      data: Omit<UserOperation<"0.7">, "signature">;
+      signatureRequest: PreparedCall_UserOpV070["signatureRequest"];
+      feePayment: FeePayment;
+      details?: PrepareCallsDetails;
+    };
 
 export type PrepareCallsResult_Authorization = {
   type: "authorization";

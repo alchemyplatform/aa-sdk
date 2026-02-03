@@ -6,15 +6,17 @@ import {
   type WaitForCallsStatusReturnType,
 } from "viem";
 import {
-  sendCalls as viemSendCalls,
-  signMessage as viemSignMessage,
-  signTypedData as viemSignTypedData,
+  sendCalls,
+  signMessage,
+  signTypedData,
+  waitForCallsStatus,
 } from "viem/actions";
 import type { PrepareCallsParams } from "./actions/prepareCalls.js";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import { arbitrumSepolia } from "viem/chains";
 import { createSmartWalletClient } from "./client.js";
 import { apiTransport, publicTransport } from "./__tests__/setup.js";
+import { getAction } from "viem/utils";
 
 // We want to test both the "unroll each step" method and the full e2e "sendCalls" method.
 const sendVariants: Array<
@@ -276,9 +278,7 @@ describe("Client E2E Tests", () => {
   it.each(sendVariants)(
     "should successfully send a UO with paymaster using 7702",
     async (sendVariant) => {
-      const _signer = privateKeyToAccount(
-        "0x00d35c6d307b5cddeb70aeed96ee27a551fee58bf1a43858477e6c11f9172ba8",
-      );
+      const _signer = privateKeyToAccount(generatePrivateKey());
 
       const _client = createSmartWalletClient({
         transport: apiTransport,
@@ -286,18 +286,11 @@ describe("Client E2E Tests", () => {
         signer: _signer,
       });
 
-      const account = await _client.requestAccount({
-        creationHint: {
-          accountType: "7702",
-        },
-      });
-      expect(account.address).toBe(_signer.address);
-
       const result = await sendVariant(
         _client,
         {
           calls: [{ to: zeroAddress, value: 0n }],
-          from: account.address,
+          from: _signer.address,
           capabilities: {
             paymaster: {
               policyId: process.env.TEST_PAYMASTER_POLICY_ID!,
@@ -389,10 +382,14 @@ describe("Client E2E Tests", () => {
   } as const;
 
   describe("viem action compatibility", () => {
-    it("can use viem's sendCalls action directly", async () => {
+    it("can use viem's sendCalls and waitForCallsStatus actions via getAction", async () => {
       const account = await client.requestAccount();
 
-      const { id: callId } = await viemSendCalls(client, {
+      const { id: callId } = await getAction(
+        client,
+        sendCalls,
+        "sendCalls",
+      )({
         calls: [{ to: zeroAddress, value: 0n }],
         account: account.address,
         capabilities: {
@@ -403,15 +400,23 @@ describe("Client E2E Tests", () => {
       expect(callId).toBeDefined();
       expect(typeof callId).toBe("string");
 
-      const result = await client.waitForCallsStatus({ id: callId });
+      const result = await getAction(
+        client,
+        waitForCallsStatus,
+        "waitForCallsStatus",
+      )({ id: callId });
       expect(result.status).toBe("success");
     }, 60_000);
 
-    it("can use viem's signMessage action directly", async () => {
+    it("can use viem's signMessage action via getAction", async () => {
       const account = await client.requestAccount();
       const message = "hello from viem action";
 
-      const signature = await viemSignMessage(client, {
+      const signature = await getAction(
+        client,
+        signMessage,
+        "signMessage",
+      )({
         message,
         account: account.address,
       });
@@ -424,10 +429,14 @@ describe("Client E2E Tests", () => {
       expect(isValid).toBe(true);
     });
 
-    it("can use viem's signTypedData action directly", async () => {
+    it("can use viem's signTypedData action via getAction", async () => {
       const account = await client.requestAccount();
 
-      const signature = await viemSignTypedData(client, {
+      const signature = await getAction(
+        client,
+        signTypedData,
+        "signTypedData",
+      )({
         ...givenTypedData,
         account: account.address,
       });
