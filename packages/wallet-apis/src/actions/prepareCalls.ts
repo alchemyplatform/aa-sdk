@@ -1,28 +1,20 @@
-import { toHex, type Prettify } from "viem";
-import type {
-  InnerWalletApiClient,
-  OptionalChainId,
-  OptionalFrom,
-} from "../types.ts";
+import type { Prettify } from "viem";
+import type { InnerWalletApiClient } from "../types.ts";
 import { AccountNotFoundError } from "@alchemy/common";
 import { LOGGER } from "../logger.js";
 import { mergeClientCapabilities } from "../utils/capabilities.js";
-import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
+import type { PrepareCallsParams as ViemPrepareCallsParams } from "../utils/viemTypes.js";
+import { toRpcPrepareCallsParams } from "../utils/viemDecode.js";
+import {
+  fromRpcPrepareCallsResult,
+  type PrepareCallsResult,
+} from "../utils/viemEncode.js";
 
-type RpcSchema = Extract<
-  WalletServerRpcSchemaType,
-  {
-    Request: {
-      method: "wallet_prepareCalls";
-    };
-  }
->;
+// Input params use viem-native types (bigint, number)
+export type PrepareCallsParams = Prettify<ViemPrepareCallsParams>;
 
-export type PrepareCallsParams = Prettify<
-  OptionalFrom<OptionalChainId<RpcSchema["Request"]["params"][0]>>
->;
-
-export type PrepareCallsResult = Prettify<RpcSchema["ReturnType"]>;
+// Export the viem-native result type
+export type { PrepareCallsResult };
 
 /**
  * Prepares a set of contract calls for execution by building a user operation.
@@ -71,17 +63,24 @@ export async function prepareCalls(
     callsCount: params.calls?.length,
     hasCapabilities: !!params.capabilities,
   });
+
+  // Convert viem-native params to RPC format
+  const rpcParams = toRpcPrepareCallsParams(
+    {
+      ...params,
+      capabilities,
+    },
+    client.chain.id,
+    from,
+  );
+
   const res = await client.request({
     method: "wallet_prepareCalls",
-    params: [
-      {
-        ...params,
-        chainId: params.chainId ?? toHex(client.chain.id),
-        from,
-        capabilities,
-      },
-    ],
+    params: [rpcParams],
   });
+
   LOGGER.debug("prepareCalls:done");
-  return res;
+
+  // Convert RPC result to viem-native format
+  return fromRpcPrepareCallsResult(res);
 }

@@ -1,7 +1,7 @@
 import type {
   PrepareCallsCapabilities,
   SendPreparedCallsCapabilities,
-} from "@alchemy/wallet-api-types/capabilities";
+} from "./viemTypes.js";
 import type { InnerWalletApiClient } from "../types.js";
 
 /**

@@ -1,27 +1,17 @@
-import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
-import type {
-  InnerWalletApiClient,
-  OptionalChainId,
-  OptionalFrom,
-} from "../types.ts";
-import { toHex, type Prettify } from "viem";
+import type { InnerWalletApiClient } from "../types.ts";
+import type { Prettify } from "viem";
 import { AccountNotFoundError } from "@alchemy/common";
 import { LOGGER } from "../logger.js";
+import type {
+  FormatSignParams as ViemFormatSignParams,
+  FormatSignResult as ViemFormatSignResult,
+} from "../utils/viemTypes.js";
+import { toRpcFormatSignParams } from "../utils/viemDecode.js";
+import { fromRpcFormatSignResult } from "../utils/viemEncode.js";
 
-type RpcSchema = Extract<
-  WalletServerRpcSchemaType,
-  {
-    Request: {
-      method: "wallet_formatSign";
-    };
-  }
->;
+export type FormatSignParams = Prettify<ViemFormatSignParams>;
 
-export type FormatSignParams = Prettify<
-  OptionalFrom<OptionalChainId<RpcSchema["Request"]["params"][0]>>
->;
-
-export type FormatSignResult = Prettify<RpcSchema["ReturnType"]>;
+export type FormatSignResult = Prettify<ViemFormatSignResult>;
 
 /**
  * Formats a signature request for signing messages or transactions.
@@ -52,12 +42,17 @@ export async function formatSign(
   }
 
   LOGGER.debug("formatSign:start");
+
+  // Convert viem-native params to RPC format
+  const rpcParams = toRpcFormatSignParams(params, client.chain.id, from);
+
   const res = await client.request({
     method: "wallet_formatSign",
-    params: [
-      { ...params, from, chainId: params.chainId ?? toHex(client.chain.id) },
-    ],
+    params: [rpcParams],
   });
+
   LOGGER.debug("formatSign:done");
-  return res;
+
+  // Convert RPC result to viem-native format
+  return fromRpcFormatSignResult(res);
 }

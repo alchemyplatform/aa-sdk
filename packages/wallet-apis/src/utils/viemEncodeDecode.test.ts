@@ -93,7 +93,11 @@ describe("transforms", () => {
     `);
   });
   it("transforms a prepared Authorization call a viem-compatible authorization", () => {
-    const transformed = viemEncodePreparedCall(preparedCallAuthorization);
+    // Authorization type is only valid within arrays in PrepareCallsReturnType, cast for testing
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const transformed = viemEncodePreparedCall(
+      preparedCallAuthorization as any,
+    );
     expect(transformed).toMatchInlineSnapshot(`
       {
         "chainId": 1,
@@ -283,7 +287,8 @@ describe("transforms", () => {
     });
 
     it("should encode then decode Authorization and get back original", () => {
-      const encoded = viemEncodePreparedCall(preparedCallAuthorization);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const encoded = viemEncodePreparedCall(preparedCallAuthorization as any);
       const decoded = viemDecodePreparedCall(encoded);
       expect(decoded).toEqual(preparedCallAuthorization);
     });

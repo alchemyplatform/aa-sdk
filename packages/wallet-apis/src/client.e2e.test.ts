@@ -213,7 +213,7 @@ describe("Client E2E Tests", () => {
       const result = await sendVariant(
         client,
         {
-          calls: [{ to: zeroAddress, value: "0x0" }],
+          calls: [{ to: zeroAddress, value: 0n }],
           from: account.address,
           capabilities: {
             paymasterService: {
@@ -236,7 +236,7 @@ describe("Client E2E Tests", () => {
       const result1 = await sendVariant(
         client,
         {
-          calls: [{ to: zeroAddress, value: "0x0" }],
+          calls: [{ to: zeroAddress, value: 0n }],
           from: account.address,
           capabilities: {
             paymasterService: {
@@ -252,7 +252,7 @@ describe("Client E2E Tests", () => {
       const result2 = await sendVariant(
         client,
         {
-          calls: [{ to: zeroAddress, value: "0x0" }],
+          calls: [{ to: zeroAddress, value: 0n }],
           from: account.address,
           capabilities: {
             paymasterService: {
@@ -291,7 +291,7 @@ describe("Client E2E Tests", () => {
       const result = await sendVariant(
         _client,
         {
-          calls: [{ to: zeroAddress, value: "0x0" }],
+          calls: [{ to: zeroAddress, value: 0n }],
           from: account.address,
           capabilities: {
             paymasterService: {
@@ -333,7 +333,7 @@ describe("Client E2E Tests", () => {
       const result = await sendVariant(
         sessionKeyClient,
         {
-          calls: [{ to: zeroAddress, value: "0x0" }],
+          calls: [{ to: zeroAddress, value: 0n }],
           from: account.address,
           capabilities: {
             paymasterService: {

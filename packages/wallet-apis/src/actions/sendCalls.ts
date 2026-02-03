@@ -82,13 +82,15 @@ export async function sendCalls(
   const signedCalls = await signPreparedCalls(client, calls);
 
   const sendPreparedCallsCapabilities = extractCapabilitiesForSending(
-    params.capabilities,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    params.capabilities as any,
   );
 
   const res = await sendPreparedCalls(client, {
     ...signedCalls,
     ...(sendPreparedCallsCapabilities != null
-      ? { capabilities: sendPreparedCallsCapabilities }
+      ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        { capabilities: sendPreparedCallsCapabilities as any }
       : {}),
   });
   LOGGER.info("sendCalls:done");

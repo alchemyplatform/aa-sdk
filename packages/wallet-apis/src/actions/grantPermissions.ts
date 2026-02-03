@@ -1,25 +1,12 @@
-import { toHex, type Address, type Hex, type Prettify, concatHex } from "viem";
+import { type Hex, type Prettify, concatHex } from "viem";
 import type { InnerWalletApiClient } from "../types.ts";
-import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
 import { signSignatureRequest } from "./signSignatureRequest.js";
 import { AccountNotFoundError } from "@alchemy/common";
 import { LOGGER } from "../logger.js";
-import type { OptionalChainId } from "../types.ts";
+import type { GrantPermissionsParams as ViemGrantPermissionsParams } from "../utils/viemTypes.js";
+import { toRpcGrantPermissionsParams } from "../utils/viemDecode.js";
 
-type RpcSchema = Extract<
-  WalletServerRpcSchemaType,
-  {
-    Request: {
-      method: "wallet_createSession";
-    };
-  }
->;
-
-export type GrantPermissionsParams = Prettify<
-  OptionalChainId<Omit<RpcSchema["Request"]["params"][0], "account">> & {
-    account?: Address;
-  }
->;
+export type GrantPermissionsParams = Prettify<ViemGrantPermissionsParams>;
 
 export type GrantPermissionsResult = Prettify<{
   context: Hex;
@@ -89,16 +76,22 @@ export async function grantPermissions(
     throw new AccountNotFoundError();
   }
   LOGGER.debug("grantPermissions:start", { expirySec: params.expirySec });
-  const { sessionId, signatureRequest } = await client.request({
+
+  // Convert viem-native params to RPC format
+  const rpcParams = toRpcGrantPermissionsParams(
+    params,
+    client.chain.id,
+    account,
+  );
+
+  // Cast to satisfy RPC schema - our RpcPermission types are compatible with the API
+  const response = await client.request({
     method: "wallet_createSession",
-    params: [
-      {
-        ...params,
-        account,
-        chainId: params.chainId ?? toHex(client.chain.id),
-      },
-    ],
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    params: [rpcParams as any],
   });
+
+  const { sessionId, signatureRequest } = response;
 
   const signature = await signSignatureRequest(client, signatureRequest);
 

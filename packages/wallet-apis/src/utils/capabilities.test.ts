@@ -1,4 +1,4 @@
-import type { PrepareCallsCapabilities } from "@alchemy/wallet-api-types/capabilities";
+import type { PrepareCallsCapabilities } from "./viemTypes.js";
 import type { InnerWalletApiClient } from "../types.js";
 import {
   mergeClientCapabilities,
@@ -122,7 +122,7 @@ describe("extractCapabilitiesForSending", () => {
 
   it("returns undefined when capabilities has no permissions or paymasterService", () => {
     const capabilities: PrepareCallsCapabilities = {
-      gasParamsOverride: { callGasLimit: "0x5208" },
+      gasParamsOverride: { callGasLimit: 21000n },
     };
 
     const result = extractCapabilitiesForSending(capabilities);
@@ -201,7 +201,7 @@ describe("extractCapabilitiesForSending", () => {
         policyId: "my-policy",
         webhookData: "some-data",
       },
-      gasParamsOverride: { callGasLimit: "0x5208" },
+      gasParamsOverride: { callGasLimit: 21000n },
       eip7702Auth: true,
     };
 

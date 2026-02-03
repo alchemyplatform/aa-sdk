@@ -72,17 +72,20 @@ export async function requestQuoteV0(
 
   const capabilities = params.returnRawCalls
     ? undefined
-    : mergeClientCapabilities(client, params.capabilities);
+    : // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      mergeClientCapabilities(client, params.capabilities as any);
 
   return await client.request({
     method: "wallet_requestQuote_v0",
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     params: [
       {
         ...params,
         chainId: params.chainId ?? toHex(client.chain.id),
         from,
         ...(capabilities && { capabilities }),
-      },
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } as any,
     ],
   });
 }

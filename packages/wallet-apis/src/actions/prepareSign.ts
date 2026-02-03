@@ -1,27 +1,17 @@
-import type {
-  InnerWalletApiClient,
-  OptionalChainId,
-  OptionalFrom,
-} from "../types.ts";
-import { toHex, type Prettify } from "viem";
-import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
+import type { InnerWalletApiClient } from "../types.ts";
+import type { Prettify } from "viem";
 import { AccountNotFoundError } from "@alchemy/common";
 import { LOGGER } from "../logger.js";
+import type { PrepareSignParams as ViemPrepareSignParams } from "../utils/viemTypes.js";
+import { toRpcPrepareSignParams } from "../utils/viemDecode.js";
+import { fromRpcPrepareSignResult } from "../utils/viemEncode.js";
+import type { PrepareSignResult as ViemPrepareSignResult } from "../utils/viemTypes.js";
 
-type RpcSchema = Extract<
-  WalletServerRpcSchemaType,
-  {
-    Request: {
-      method: "wallet_prepareSign";
-    };
-  }
->;
+// Input params use viem-native types
+export type PrepareSignParams = Prettify<ViemPrepareSignParams>;
 
-export type PrepareSignParams = Prettify<
-  OptionalFrom<OptionalChainId<RpcSchema["Request"]["params"][0]>>
->;
-
-export type PrepareSignResult = Prettify<RpcSchema["ReturnType"]>;
+// Result uses viem-native types
+export type PrepareSignResult = Prettify<ViemPrepareSignResult>;
 
 /**
  * Prepares a signature request for signing messages or transactions.
@@ -51,16 +41,20 @@ export async function prepareSign(
   }
 
   LOGGER.debug("prepareSign:start", { type: params.signatureRequest.type });
+
+  // Convert viem-native params to RPC format
+  const rpcParams = toRpcPrepareSignParams(params, client.chain.id, from);
+
   const res = await client.request({
     method: "wallet_prepareSign",
-    params: [
-      {
-        ...params,
-        from,
-        chainId: params.chainId ?? toHex(client.chain.id),
-      },
-    ],
+    // Cast to satisfy RPC schema - our converted params match the expected format
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    params: [rpcParams as any],
   });
+
   LOGGER.debug("prepareSign:done");
-  return res;
+
+  // Convert RPC result to viem-native format
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return fromRpcPrepareSignResult(res as any);
 }

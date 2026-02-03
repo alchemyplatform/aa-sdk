@@ -3,6 +3,8 @@ import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
 import type { InnerWalletApiClient, OptionalChainId } from "../types.ts";
 import { LOGGER } from "../logger.js";
 import { mergeClientCapabilities } from "../utils/capabilities.js";
+import type { SendPreparedCallsResult as ViemSendPreparedCallsResult } from "../utils/viemTypes.js";
+import { fromRpcSendPreparedCallsResult } from "../utils/viemEncode.js";
 
 type RpcSchema = Extract<
   WalletServerRpcSchemaType,
@@ -13,11 +15,12 @@ type RpcSchema = Extract<
   }
 >;
 
+// SendPreparedCallsParams uses RPC types since it takes signed calls from signPreparedCalls
 export type SendPreparedCallsParams = Prettify<
   OptionalChainId<RpcSchema["Request"]["params"][0]>
 >;
 
-export type SendPreparedCallsResult = Prettify<RpcSchema["ReturnType"]>;
+export type SendPreparedCallsResult = Prettify<ViemSendPreparedCallsResult>;
 
 /**
  * Sends prepared calls by submitting a signed user operation.
@@ -54,7 +57,11 @@ export async function sendPreparedCalls(
   client: InnerWalletApiClient,
   params: SendPreparedCallsParams,
 ): Promise<SendPreparedCallsResult> {
-  params.capabilities = mergeClientCapabilities(client, params.capabilities);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  params.capabilities = mergeClientCapabilities(
+    client,
+    params.capabilities as any,
+  );
 
   LOGGER.debug("sendPreparedCalls:start", { type: params.type });
   const res = await client.request({
@@ -69,5 +76,7 @@ export async function sendPreparedCalls(
     ],
   });
   LOGGER.debug("sendPreparedCalls:done");
-  return res;
+
+  // Convert RPC result to viem-native format
+  return fromRpcSendPreparedCallsResult(res);
 }

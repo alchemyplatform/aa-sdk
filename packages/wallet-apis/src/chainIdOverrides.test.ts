@@ -80,18 +80,18 @@ describe("chainId overrides", () => {
       signer,
     });
 
-    const overrideChainId = "0x1"; // Ethereum mainnet
+    const overrideChainId = 1; // Ethereum mainnet
 
     await client.prepareCalls({
-      calls: [{ to: zeroAddress, value: "0x0" }],
+      calls: [{ to: zeroAddress, value: 0n }],
       from: "0x1234567890123456789012345678901234567890",
       chainId: overrideChainId,
     });
 
-    // Verify the request was captured with the overridden chainId
+    // Verify the request was captured with the overridden chainId (converted to hex)
     expect(capturedRequests).toHaveLength(1);
     expect(capturedRequests[0].method).toBe("wallet_prepareCalls");
-    expect(capturedRequests[0].params[0].chainId).toBe(overrideChainId);
+    expect(capturedRequests[0].params[0].chainId).toBe("0x1");
   });
 
   it("should allow overriding the chainId in sendPreparedCalls", async () => {
@@ -137,7 +137,7 @@ describe("chainId overrides", () => {
       signer,
     });
 
-    const overrideChainId = "0x1"; // Ethereum mainnet
+    const overrideChainId = 1; // Ethereum mainnet
 
     await client.grantPermissions({
       account: "0x1234567890123456789012345678901234567890",
@@ -150,9 +150,9 @@ describe("chainId overrides", () => {
       chainId: overrideChainId,
     });
 
-    // Verify the request was captured with the overridden chainId
+    // Verify the request was captured with the overridden chainId (converted to hex)
     expect(capturedRequests).toHaveLength(1);
     expect(capturedRequests[0].method).toBe("wallet_createSession");
-    expect(capturedRequests[0].params[0].chainId).toBe(overrideChainId);
+    expect(capturedRequests[0].params[0].chainId).toBe("0x1");
   });
 });
