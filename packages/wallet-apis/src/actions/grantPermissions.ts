@@ -15,7 +15,7 @@ export type GrantPermissionsParams = Prettify<{
   expirySec: number;
   key: {
     publicKey: Hex;
-    type: "secp256k1" | "p256"; // TODO(claude): p256 should not be supported here. webauthn support is being deprecated.
+    type: "secp256k1";
   };
   permissions: Permission[];
 }>;

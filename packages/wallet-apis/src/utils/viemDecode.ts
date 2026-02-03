@@ -359,8 +359,7 @@ export const toRpcGrantPermissionsParams = (
     expirySec: params.expirySec,
     key: {
       publicKey: params.key.publicKey,
-      // Map p256 to ecdsa for RPC compatibility
-      type: params.key.type === "p256" ? "ecdsa" : params.key.type,
+      type: params.key.type,
     },
     permissions: params.permissions.map(toRpcPermission),
   };
