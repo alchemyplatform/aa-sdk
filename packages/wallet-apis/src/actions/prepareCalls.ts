@@ -13,10 +13,6 @@ import {
   type PrepareCallsResult,
 } from "../utils/viemEncode.js";
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Action Types
-// ─────────────────────────────────────────────────────────────────────────────
-
 export type PrepareCallsParams = Prettify<{
   calls: Call[];
   from?: Address;
@@ -28,7 +24,6 @@ export type PrepareCallsParams = Prettify<{
   };
 }>;
 
-// Export the viem-native result type
 export type { PrepareCallsResult };
 
 /**
@@ -79,7 +74,6 @@ export async function prepareCalls(
     hasCapabilities: !!params.capabilities,
   });
 
-  // Convert viem-native params to RPC format
   const rpcParams = toRpcPrepareCallsParams(
     {
       ...params,
@@ -96,6 +90,5 @@ export async function prepareCalls(
 
   LOGGER.debug("prepareCalls:done");
 
-  // Convert RPC result to viem-native format
   return fromRpcPrepareCallsResult(res);
 }

@@ -511,8 +511,12 @@ type RpcSendPreparedCallsResult = RpcMethodReturn<"wallet_sendPreparedCalls">;
 export const fromRpcSendPreparedCallsResult = (
   rpcResult: RpcSendPreparedCallsResult,
 ): SendPreparedCallsResult => {
+  // Use id from RPC result if present, otherwise fall back to preparedCallIds[0]
+  const id = getIdFromResult(rpcResult);
+
   if (rpcResult.details.type === "user-operations") {
     return {
+      id,
       preparedCallIds: rpcResult.preparedCallIds,
       details: {
         type: "user-operations",
@@ -530,6 +534,7 @@ export const fromRpcSendPreparedCallsResult = (
   }
 
   return {
+    id,
     preparedCallIds: rpcResult.preparedCallIds,
     details: {
       type: "user-operation",
@@ -543,6 +548,20 @@ export const fromRpcSendPreparedCallsResult = (
       },
     },
   };
+};
+
+const getIdFromResult = (rpcResult: RpcSendPreparedCallsResult): Hex => {
+  if ("id" in rpcResult && rpcResult.id != null) {
+    return rpcResult.id as Hex;
+  }
+
+  if (rpcResult.preparedCallIds.length > 1) {
+    throw new Error(
+      "Multiple preparedCallIds returned but no id field present. Cannot determine single id.",
+    );
+  }
+
+  return rpcResult.preparedCallIds[0];
 };
 
 // ─────────────────────────────────────────────────────────────────────────────

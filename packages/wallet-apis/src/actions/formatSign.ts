@@ -5,10 +5,6 @@ import { LOGGER } from "../logger.js";
 import { toRpcFormatSignParams } from "../utils/viemDecode.js";
 import { fromRpcFormatSignResult } from "../utils/viemEncode.js";
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Action Types
-// ─────────────────────────────────────────────────────────────────────────────
-
 export type FormatSignParams = Prettify<{
   from?: Address;
   chainId?: number;
@@ -52,7 +48,6 @@ export async function formatSign(
 
   LOGGER.debug("formatSign:start");
 
-  // Convert viem-native params to RPC format
   const rpcParams = toRpcFormatSignParams(params, client.chain.id, from);
 
   const res = await client.request({
@@ -62,6 +57,5 @@ export async function formatSign(
 
   LOGGER.debug("formatSign:done");
 
-  // Convert RPC result to viem-native format
   return fromRpcFormatSignResult(res);
 }

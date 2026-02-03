@@ -9,10 +9,6 @@ import { mergeClientCapabilities } from "../utils/capabilities.js";
 import { fromRpcSendPreparedCallsResult } from "../utils/viemEncode.js";
 import { toRpcSendPreparedCallsParams } from "../utils/viemDecode.js";
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Action Types
-// ─────────────────────────────────────────────────────────────────────────────
-
 export type SendPreparedCallsParams = Prettify<
   SignedPreparedCalls & {
     capabilities?: SendPreparedCallsCapabilities;
@@ -20,6 +16,7 @@ export type SendPreparedCallsParams = Prettify<
 >;
 
 export type SendPreparedCallsResult = Prettify<{
+  id: Hex;
   preparedCallIds: Hex[];
   details:
     | {
@@ -80,7 +77,6 @@ export async function sendPreparedCalls(
 
   LOGGER.debug("sendPreparedCalls:start", { type: params.type });
 
-  // Convert viem-native params to RPC format
   const rpcParams = toRpcSendPreparedCallsParams(
     { ...params, capabilities: mergedCapabilities },
     client.chain.id,
@@ -92,6 +88,5 @@ export async function sendPreparedCalls(
   });
   LOGGER.debug("sendPreparedCalls:done");
 
-  // Convert RPC result to viem-native format
   return fromRpcSendPreparedCallsResult(res);
 }

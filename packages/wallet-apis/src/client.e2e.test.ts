@@ -5,6 +5,11 @@ import {
   type Address,
   type WaitForCallsStatusReturnType,
 } from "viem";
+import {
+  sendCalls as viemSendCalls,
+  signMessage as viemSignMessage,
+  signTypedData as viemSignTypedData,
+} from "viem/actions";
 import type { PrepareCallsParams } from "./actions/prepareCalls.js";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import { arbitrumSepolia } from "viem/chains";
@@ -382,4 +387,57 @@ describe("Client E2E Tests", () => {
       contents: "Hello, Bob!",
     },
   } as const;
+
+  describe("viem action compatibility", () => {
+    it("can use viem's sendCalls action directly", async () => {
+      const account = await client.requestAccount();
+
+      const { id: callId } = await viemSendCalls(client, {
+        calls: [{ to: zeroAddress, value: 0n }],
+        account: account.address,
+        capabilities: {
+          paymaster: { policyId: process.env.TEST_PAYMASTER_POLICY_ID! },
+        },
+      });
+
+      expect(callId).toBeDefined();
+      expect(typeof callId).toBe("string");
+
+      const result = await client.waitForCallsStatus({ id: callId });
+      expect(result.status).toBe("success");
+    }, 60_000);
+
+    it("can use viem's signMessage action directly", async () => {
+      const account = await client.requestAccount();
+      const message = "hello from viem action";
+
+      const signature = await viemSignMessage(client, {
+        message,
+        account: account.address,
+      });
+
+      const isValid = await publicClient.verifyMessage({
+        address: account.address,
+        message,
+        signature,
+      });
+      expect(isValid).toBe(true);
+    });
+
+    it("can use viem's signTypedData action directly", async () => {
+      const account = await client.requestAccount();
+
+      const signature = await viemSignTypedData(client, {
+        ...givenTypedData,
+        account: account.address,
+      });
+
+      const isValid = await publicClient.verifyTypedData({
+        ...givenTypedData,
+        signature,
+        address: account.address,
+      });
+      expect(isValid).toBe(true);
+    });
+  });
 });

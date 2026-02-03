@@ -11,10 +11,6 @@ import { AccountNotFoundError } from "@alchemy/common";
 import { toRpcRequestQuoteParams } from "../../utils/viemDecode.js";
 import { fromRpcRequestQuoteResult } from "../../utils/viemEncode.js";
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Action Types
-// ─────────────────────────────────────────────────────────────────────────────
-
 export type RequestQuoteV0Params = Prettify<{
   from: {
     address: Address;
@@ -160,7 +156,6 @@ export async function requestQuoteV0(
     throw new AccountNotFoundError();
   }
 
-  // Convert viem-native params to RPC format
   const rpcParams = toRpcRequestQuoteParams({ ...params, sender }, sender);
 
   const res = await client.request({
@@ -168,6 +163,5 @@ export async function requestQuoteV0(
     params: [rpcParams],
   });
 
-  // Convert RPC result to viem-native format
   return fromRpcRequestQuoteResult(res);
 }

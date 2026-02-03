@@ -77,10 +77,6 @@ export async function signSignatureRequest(
   return signWithSignerClient(client.owner, params);
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// LocalAccount signer
-// ─────────────────────────────────────────────────────────────────────────────
-
 type Secp256k1Result = Extract<
   SignSignatureRequestResult,
   { type: "secp256k1" }
@@ -132,10 +128,6 @@ async function signWithLocalAccount(
       return assertNever(params, "Unexpected signature request type.");
   }
 }
-
-// ─────────────────────────────────────────────────────────────────────────────
-// SignerClient (WalletClient)
-// ─────────────────────────────────────────────────────────────────────────────
 
 async function signWithSignerClient(
   signer: SignerClient,

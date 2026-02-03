@@ -9,10 +9,6 @@ import { LOGGER } from "../logger.js";
 import { toRpcPrepareSignParams } from "../utils/viemDecode.js";
 import { fromRpcPrepareSignResult } from "../utils/viemEncode.js";
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Action Types
-// ─────────────────────────────────────────────────────────────────────────────
-
 export type PrepareSignParams = Prettify<{
   from?: Address;
   chainId?: number;
@@ -57,7 +53,6 @@ export async function prepareSign(
 
   LOGGER.debug("prepareSign:start", { type: params.signatureRequest.type });
 
-  // Convert viem-native params to RPC format
   const rpcParams = toRpcPrepareSignParams(params, client.chain.id, from);
 
   const res = await client.request({
@@ -67,6 +62,5 @@ export async function prepareSign(
 
   LOGGER.debug("prepareSign:done");
 
-  // Convert RPC result to viem-native format
   return fromRpcPrepareSignResult(res);
 }

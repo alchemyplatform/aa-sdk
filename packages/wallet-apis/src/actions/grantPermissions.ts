@@ -5,10 +5,6 @@ import { AccountNotFoundError } from "@alchemy/common";
 import { LOGGER } from "../logger.js";
 import { toRpcGrantPermissionsParams } from "../utils/viemDecode.js";
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Action Types
-// ─────────────────────────────────────────────────────────────────────────────
-
 export type GrantPermissionsParams = Prettify<{
   account?: Address;
   chainId?: number;
@@ -89,7 +85,6 @@ export async function grantPermissions(
   }
   LOGGER.debug("grantPermissions:start", { expirySec: params.expirySec });
 
-  // Convert viem-native params to RPC format
   const rpcParams = toRpcGrantPermissionsParams(
     params,
     client.chain.id,
