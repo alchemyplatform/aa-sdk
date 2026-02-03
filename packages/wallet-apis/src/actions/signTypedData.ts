@@ -61,7 +61,7 @@ export async function signTypedData(
     hasExplicitAccount: params.account != null,
     primaryType: params.primaryType,
   });
-  const accountAddress = params.account ?? client.account?.address;
+  const accountAddress = params.account ?? client.account.address;
 
   const prepared = await prepareSign(client, {
     from: accountAddress,

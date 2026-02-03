@@ -83,7 +83,7 @@ export async function grantPermissions(
   client: InnerWalletApiClient,
   params: GrantPermissionsParams,
 ): Promise<GrantPermissionsResult> {
-  const account = params.account ?? client.account?.address;
+  const account = params.account ?? client.account.address;
   if (!account) {
     LOGGER.warn("grantPermissions:no-account");
     throw new AccountNotFoundError();

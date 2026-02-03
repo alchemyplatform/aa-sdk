@@ -41,7 +41,7 @@ export async function signMessage(
   client: InnerWalletApiClient,
   params: SignMessageParams,
 ): Promise<SignMessageResult> {
-  const accountAddress = params.account ?? client.account?.address;
+  const accountAddress = params.account ?? client.account.address;
   LOGGER.debug("signMessage:start", {
     hasExplicitAccount: params.account != null,
   });

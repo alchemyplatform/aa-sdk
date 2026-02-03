@@ -35,14 +35,21 @@ export const createSmartWalletClient = ({
   signer,
   transport,
   chain,
-  // If no account address is provided, the client defaults to using the signer's address via EIP-7702.
-  account = isLocalAccount(signer) ? signer.address : signer.account.address,
-  paymaster: { policyId, policyIds } = {},
+  account,
+  paymaster,
 }: CreateSmartWalletClientParams): SmartWalletClient => {
-  const _policyIds = [...(policyId ? [policyId] : []), ...(policyIds ?? [])];
+  const _policyIds = [
+    ...(paymaster?.policyId ? [paymaster?.policyId] : []),
+    ...(paymaster?.policyIds ?? []),
+  ];
+
+  // If no account address is provided, the client defaults to using the signer's address via EIP-7702.
+  const _account =
+    account ??
+    (isLocalAccount(signer) ? signer.address : signer.account.address);
 
   return createClient({
-    account,
+    account: _account,
     transport,
     chain,
     name: "alchemySmartWalletClient",
