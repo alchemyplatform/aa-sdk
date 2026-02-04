@@ -20,7 +20,6 @@ import { paymaster060 } from "./paymaster060";
 import { paymaster070 } from "./paymaster070";
 import { paymaster080 } from "./paymaster080";
 import { bigIntMultiply } from "@alchemy/common";
-import { deepHexlify } from "../utils/deepHexlify";
 
 interface Multiplier {
   multiplier: number;
@@ -142,11 +141,9 @@ export const paymasterTransport = (
         }
       } else if (args.method === "alchemy_requestGasAndPaymasterAndData") {
         try {
-          // TODO(jh): look into this TODO.
           // There's some bad type-casting happening here as of SDKv5, because viem and aa-sdk/core's concept of a
           // RpcUserOperation is slightly different, but so far the only issue we've needed to patch is loading
           // the dummy signature into the UO's signature. More may come up as we increase test coverage.
-          // TODO(v5): cast as viem RpcUserOperation instead of aa-sdk/core's RpcUserOperation.
           const [{ userOperation, entryPoint, dummySignature, overrides }] =
             args.params as [
               {
@@ -199,11 +196,18 @@ export const paymasterTransport = (
             ...stubData,
           } as RpcUserOperation;
 
-          const gasEstimates = deepHexlify(
-            await estimateUserOperationGas(bundlerClient, {
+          const gasEstimatesRaw = await estimateUserOperationGas(
+            bundlerClient,
+            {
               ...formatUserOperation(uo),
               entryPointAddress: entryPoint,
-            }),
+            },
+          );
+          const gasEstimates = Object.fromEntries(
+            Object.entries(gasEstimatesRaw).map(([k, v]) => [
+              k,
+              typeof v === "bigint" ? toHex(v) : v,
+            ]),
           );
 
           uo = {

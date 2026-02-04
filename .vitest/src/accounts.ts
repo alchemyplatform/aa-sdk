@@ -17,7 +17,7 @@ export async function resetBalance(
   client: BundlerClient<any, any, SmartAccount>,
   testClient: Client & { mode: "anvil" },
 ) {
-  const ep = client.account!.entryPoint;
+  const ep = client.account.entryPoint;
   const entryPointContract = getContract({
     abi:
       ep.version === "0.6"
@@ -28,7 +28,7 @@ export async function resetBalance(
   });
 
   const balance = await entryPointContract.read.balanceOf([
-    client.account!.address,
+    client.account.address,
   ]);
 
   if (balance > 0n) {
@@ -39,18 +39,18 @@ export async function resetBalance(
           data: encodeFunctionData({
             abi: entryPointContract.abi,
             functionName: "withdrawTo",
-            args: [client.account!.address, balance],
+            args: [client.account.address, balance],
           }),
         },
       ],
-      account: client.account!,
+      account: client.account,
     });
 
     await client.waitForUserOperationReceipt({ hash });
   }
 
   await setBalance(testClient as TestClient, {
-    address: client.account!.address,
+    address: client.account.address,
     value: 0n,
   });
 }

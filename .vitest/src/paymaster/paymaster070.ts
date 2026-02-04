@@ -10,8 +10,6 @@ import { accounts, entrypoint070 } from "../constants";
 import { toPaymaster } from "./base";
 import type { Paymaster } from "./types";
 import { VerifyingPaymaster070Abi } from "./VerifyingPaymaster070";
-import { deepHexlify } from "../utils/deepHexlify";
-import { resolveProperties } from "../utils/resolveProperties";
 
 export const paymaster070: Paymaster = toPaymaster({
   entryPointVersion: "0.7.0",
@@ -26,12 +24,8 @@ export const paymaster070: Paymaster = toPaymaster({
 
     return { paymaster: address, paymasterData: dummyData };
   },
-  async getPaymasterData(self, uo_, client) {
+  async getPaymasterData(self, uo: RpcUserOperation<"0.7">, client) {
     const { address } = self.getPaymasterDetails();
-    const uo = deepHexlify(
-      // @ts-ignore
-      await resolveProperties(uo_),
-    ) as RpcUserOperation<"0.7">;
 
     const validUntil = 0n;
     const validFrom = 0n;
