@@ -162,18 +162,15 @@ describe("Client E2E Tests", () => {
     async (sendVariant) => {
       const account = await client.requestAccount();
 
-      const result = await sendVariant(
-        client,
-        {
-          calls: [{ to: zeroAddress, value: "0x0" }],
-          from: account.address,
-          capabilities: {
-            paymasterService: {
-              policyId: process.env.TEST_PAYMASTER_POLICY_ID!,
-            },
+      const result = await sendVariant(client, {
+        calls: [{ to: zeroAddress, value: "0x0" }],
+        from: account.address,
+        capabilities: {
+          paymasterService: {
+            policyId: process.env.TEST_PAYMASTER_POLICY_ID!,
           },
         },
-      );
+      });
 
       expect(result.status).toBe("success");
     },
@@ -186,33 +183,27 @@ describe("Client E2E Tests", () => {
     "should successfully drop and replace a UO with repeat calls",
     async (sendVariant) => {
       const account = await client.requestAccount();
-      const result1 = await sendVariant(
-        client,
-        {
-          calls: [{ to: zeroAddress, value: "0x0" }],
-          from: account.address,
-          capabilities: {
-            paymasterService: {
-              policyId: process.env.TEST_PAYMASTER_POLICY_ID!,
-            },
+      const result1 = await sendVariant(client, {
+        calls: [{ to: zeroAddress, value: "0x0" }],
+        from: account.address,
+        capabilities: {
+          paymasterService: {
+            policyId: process.env.TEST_PAYMASTER_POLICY_ID!,
           },
         },
-      );
+      });
 
       expect(result1.status).toBe("success");
 
-      const result2 = await sendVariant(
-        client,
-        {
-          calls: [{ to: zeroAddress, value: "0x0" }],
-          from: account.address,
-          capabilities: {
-            paymasterService: {
-              policyId: process.env.TEST_PAYMASTER_POLICY_ID!,
-            },
+      const result2 = await sendVariant(client, {
+        calls: [{ to: zeroAddress, value: "0x0" }],
+        from: account.address,
+        capabilities: {
+          paymasterService: {
+            policyId: process.env.TEST_PAYMASTER_POLICY_ID!,
           },
         },
-      );
+      });
 
       expect(result2.status).toBe("success");
     },
@@ -241,18 +232,15 @@ describe("Client E2E Tests", () => {
       });
       expect(account.address).toBe(await _signer.getAddress());
 
-      const result = await sendVariant(
-        _client,
-        {
-          calls: [{ to: zeroAddress, value: "0x0" }],
-          from: account.address,
-          capabilities: {
-            paymasterService: {
-              policyId: process.env.TEST_PAYMASTER_POLICY_ID!,
-            },
+      const result = await sendVariant(_client, {
+        calls: [{ to: zeroAddress, value: "0x0" }],
+        from: account.address,
+        capabilities: {
+          paymasterService: {
+            policyId: process.env.TEST_PAYMASTER_POLICY_ID!,
           },
         },
-      );
+      });
 
       expect(result.status).toBe("success");
     },
@@ -282,19 +270,16 @@ describe("Client E2E Tests", () => {
         signer: sessionKey,
       });
 
-      const result = await sendVariant(
-        sessionKeyClient,
-        {
-          calls: [{ to: zeroAddress, value: "0x0" }],
-          from: account.address,
-          capabilities: {
-            paymasterService: {
-              policyId: process.env.TEST_PAYMASTER_POLICY_ID!,
-            },
-            permissions,
+      const result = await sendVariant(sessionKeyClient, {
+        calls: [{ to: zeroAddress, value: "0x0" }],
+        from: account.address,
+        capabilities: {
+          paymasterService: {
+            policyId: process.env.TEST_PAYMASTER_POLICY_ID!,
           },
+          permissions,
         },
-      );
+      });
 
       expect(result.status).toBe("success");
     },

@@ -123,9 +123,7 @@ export function useAlchemySendTransaction(): UseSendTransactionResult {
         });
 
         if (!result.id) {
-          throw new Error(
-            "No call ID returned from transaction submission",
-          );
+          throw new Error("No call ID returned from transaction submission");
         }
 
         // Wait for the transaction to be confirmed

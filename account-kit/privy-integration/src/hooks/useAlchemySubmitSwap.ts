@@ -58,8 +58,7 @@ export function useAlchemySubmitSwap(): UseSubmitSwapResult {
         const signedCalls = await swapClient.signPreparedCalls(preparedSwap);
 
         // Send the signed calls
-        const { id } =
-          await swapClient.sendPreparedCalls(signedCalls);
+        const { id } = await swapClient.sendPreparedCalls(signedCalls);
 
         if (!id) {
           throw new Error("No call ID returned from swap submission");

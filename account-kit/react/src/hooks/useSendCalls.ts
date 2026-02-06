@@ -199,8 +199,7 @@ export function useSendCalls<
         const signedCalls =
           await _smartWalletClient.signPreparedCalls(preparedCalls);
 
-        const { id } =
-          await _smartWalletClient.sendPreparedCalls(signedCalls);
+        const { id } = await _smartWalletClient.sendPreparedCalls(signedCalls);
 
         const uoCall =
           signedCalls.type === "array"
