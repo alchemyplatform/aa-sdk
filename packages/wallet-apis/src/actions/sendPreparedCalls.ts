@@ -17,9 +17,7 @@ export type SendPreparedCallsParams = Prettify<
   OptionalChainId<RpcSchema["Request"]["params"][0]>
 >;
 
-export type SendPreparedCallsResult = Prettify<{
-  id: `0x${string}`;
-}>;
+export type SendPreparedCallsResult = Prettify<RpcSchema["ReturnType"]>;
 
 /**
  * Sends prepared calls by submitting a signed user operation.
@@ -71,7 +69,5 @@ export async function sendPreparedCalls(
     ],
   });
   LOGGER.debug("sendPreparedCalls:done");
-  // The RPC types package still uses the old `preparedCallIds` shape;
-  // the API now returns `{ id }` instead.
-  return res as unknown as SendPreparedCallsResult;
+  return res;
 }

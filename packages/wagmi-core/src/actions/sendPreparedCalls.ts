@@ -10,7 +10,6 @@ import { getAction } from "viem/utils";
 import {
   sendPreparedCalls as sendPreparedCallsClientAction,
   signPreparedCalls as signPreparedCallsClientAction,
-  type SendPreparedCallsResult,
 } from "@alchemy/wallet-apis";
 import { LOGGER } from "../logger.js";
 
@@ -71,11 +70,7 @@ export async function sendPreparedCalls(
     "sendPreparedCalls",
   );
 
-  // The RPC types package still uses the old `preparedCallIds` shape;
-  // the API now returns `{ id }` instead.
-  const { id } = (await sendPreparedCallsAction(
-    signed,
-  )) as unknown as SendPreparedCallsResult;
+  const { id } = await sendPreparedCallsAction(signed);
 
   LOGGER.info("sendPreparedCalls:success", { id });
   return {

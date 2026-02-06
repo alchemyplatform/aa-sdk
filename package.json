@@ -110,5 +110,8 @@
     "**/src/**/*.{tsx,jsx,ts,js}": [
       "yarn lint:write"
     ]
+  },
+  "dependencies": {
+    "@alchemy/wallet-api-types": "0.1.0-alpha.23"
   }
 }
