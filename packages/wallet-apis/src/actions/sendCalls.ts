@@ -25,7 +25,7 @@ export type SendCallsResult = Prettify<SendPreparedCallsResult>;
  * @param {Array<{to: Address, data?: Hex, value?: Hex}>} params.calls - Array of contract calls to execute
  * @param {Address} [params.from] - The address to execute the calls from. Defaults to the client's account (signer address via EIP-7702).
  * @param {object} [params.capabilities] - Optional capabilities to include with the request.
- * @returns {Promise<SendPreparedCallsResult>} A Promise that resolves to the result containing the prepared call IDs.
+ * @returns {Promise<SendPreparedCallsResult>} A Promise that resolves to the result containing the call ID.
  *
  *  @example
  * ```ts
@@ -41,8 +41,8 @@ export type SendCallsResult = Prettify<SendPreparedCallsResult>;
  *   }
  * });
  *
- * // The result contains the prepared call IDs
- * console.log(result.preparedCallIds);
+ * // The result contains the call ID
+ * console.log(result.id);
  * ```
  * <Note>
  * If using this action with an ERC-20 paymaster in pre-operation mode with `autoPermit`, the contents of the permit will be hidden

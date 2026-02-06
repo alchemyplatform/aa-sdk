@@ -2785,13 +2785,11 @@ methods:
       schema:
         type: "object"
         properties:
-          preparedCallIds:
-            type: "array"
-            items:
-              type: "string"
-              pattern: "^0x(.*)$"
+          id:
+            type: "string"
+            pattern: "^0x(.*)$"
         required:
-          - "preparedCallIds"
+          - "id"
 
     examples:
       - name: "wallet_sendPreparedCalls example"
@@ -2819,8 +2817,7 @@ methods:
         result:
           name: "Response"
           value:
-            preparedCallIds:
-              - "0x0000000000000000000000000000000000000000000000000000000000066eeec69e468aa6fafb5c7298c02841e76f976b433018266af39a5807bc29ea9ad392"
+            id: "0x0000000000000000000000000000000000000000000000000000000000066eeec69e468aa6fafb5c7298c02841e76f976b433018266af39a5807bc29ea9ad392"
 
   - name: wallet_createSession
     description: This method is used to create a session for a given address with specified permissions.

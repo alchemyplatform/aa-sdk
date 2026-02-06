@@ -10,6 +10,7 @@ import { getAction } from "viem/utils";
 import {
   sendPreparedCalls as sendPreparedCallsClientAction,
   signPreparedCalls as signPreparedCallsClientAction,
+  type SendPreparedCallsResult,
 } from "@alchemy/wallet-apis";
 import { LOGGER } from "../logger.js";
 
@@ -25,7 +26,7 @@ export type SendPreparedCallsReturnType = Prettify<{
  * Signs and sends prepared calls.
  *
  * This function takes prepared calls (from `prepareSwap` or `prepareCalls`), signs them,
- * and executes the transaction. Returns prepared call IDs that can be used to track the
+ * and executes the transaction. Returns a call ID that can be used to track the
  * execution status.
  *
  * Notice: If you do not wish to inspect the prepared call data, you can
@@ -70,12 +71,11 @@ export async function sendPreparedCalls(
     "sendPreparedCalls",
   );
 
-  const {
-    // This will only ever contain a single call ID. An upgrade is being planned to
-    // wallets apis so that `wallet_sendPreparedCalls` only returns a single ID
-    // instead of an array, to align w/ a recent change to EIP-5792.
-    preparedCallIds: [id],
-  } = await sendPreparedCallsAction(signed);
+  // The RPC types package still uses the old `preparedCallIds` shape;
+  // the API now returns `{ id }` instead.
+  const { id } = (await sendPreparedCallsAction(
+    signed,
+  )) as unknown as SendPreparedCallsResult;
 
   LOGGER.info("sendPreparedCalls:success", { id });
   return {

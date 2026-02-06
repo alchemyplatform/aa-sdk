@@ -17,7 +17,9 @@ export type SendPreparedCallsParams = Prettify<
   OptionalChainId<RpcSchema["Request"]["params"][0]>
 >;
 
-export type SendPreparedCallsResult = Prettify<RpcSchema["ReturnType"]>;
+export type SendPreparedCallsResult = Prettify<{
+  id: `0x${string}`;
+}>;
 
 /**
  * Sends prepared calls by submitting a signed user operation.
@@ -25,7 +27,7 @@ export type SendPreparedCallsResult = Prettify<RpcSchema["ReturnType"]>;
  *
  * @param {InnerWalletApiClient} client - The wallet API client to use for the request
  * @param {SendPreparedCallsParams} params - Parameters for sending prepared calls
- * @returns {Promise<SendPreparedCallsResult>} A Promise that resolves to the result containing the prepared call IDs
+ * @returns {Promise<SendPreparedCallsResult>} A Promise that resolves to the result containing the call ID
  *
  * @example
  * ```ts
@@ -69,5 +71,7 @@ export async function sendPreparedCalls(
     ],
   });
   LOGGER.debug("sendPreparedCalls:done");
-  return res;
+  // The RPC types package still uses the old `preparedCallIds` shape;
+  // the API now returns `{ id }` instead.
+  return res as unknown as SendPreparedCallsResult;
 }
