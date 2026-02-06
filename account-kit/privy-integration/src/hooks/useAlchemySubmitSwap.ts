@@ -58,16 +58,16 @@ export function useAlchemySubmitSwap(): UseSubmitSwapResult {
         const signedCalls = await swapClient.signPreparedCalls(preparedSwap);
 
         // Send the signed calls
-        const { preparedCallIds } =
+        const { id } =
           await swapClient.sendPreparedCalls(signedCalls);
 
-        if (!preparedCallIds || preparedCallIds.length === 0) {
-          throw new Error("No prepared call IDs returned from swap submission");
+        if (!id) {
+          throw new Error("No call ID returned from swap submission");
         }
 
         // Wait for the swap to be confirmed
         const callStatusResult = await swapClient.waitForCallsStatus({
-          id: preparedCallIds[0],
+          id,
           timeout: 60_000,
         });
 

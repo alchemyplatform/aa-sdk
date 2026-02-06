@@ -122,15 +122,15 @@ export function useAlchemySendTransaction(): UseSendTransactionResult {
           capabilities,
         });
 
-        if (!result.preparedCallIds || result.preparedCallIds.length === 0) {
+        if (!result.id) {
           throw new Error(
-            "No prepared call IDs returned from transaction submission",
+            "No call ID returned from transaction submission",
           );
         }
 
         // Wait for the transaction to be confirmed
         const txStatus = await client.waitForCallsStatus({
-          id: result.preparedCallIds[0],
+          id: result.id,
           timeout: 60_000,
         });
 

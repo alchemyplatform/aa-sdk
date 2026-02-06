@@ -12,7 +12,7 @@ function sendPreparedCalls(
   client,
   params,
 ): Promise<{
-  preparedCallIds: `0x${string}`[];
+  id: `0x${string}`;
 }>;
 ```
 
@@ -93,7 +93,7 @@ const result = await client.sendPreparedCalls({
 ## Returns
 
 `Promise`\<\{
-`preparedCallIds`: `` `0x${string}` ``\[];
+`id`: `` `0x${string}` ``;
 }>
 
-A Promise that resolves to the result containing the prepared call IDs
+A Promise that resolves to the result containing the call ID

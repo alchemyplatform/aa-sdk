@@ -17,19 +17,16 @@ const sendVariants: Array<
   (
     client: SmartWalletClient,
     input: PrepareCallsParams,
-    assertCallIdsSize?: number,
   ) => Promise<WaitForCallsStatusReturnType>
 > = [
   // Send calls
-  async (client, input, assertCallIdsSize) => {
+  async (client, input) => {
     const result = await client.sendCalls(input);
-    if (assertCallIdsSize != null) {
-      expect(result.preparedCallIds).toHaveLength(assertCallIdsSize);
-    }
-    return client.waitForCallsStatus({ id: result.preparedCallIds[0] });
+    expect(result.id).toBeDefined();
+    return client.waitForCallsStatus({ id: result.id });
   },
   // Prepare, sign, send calls
-  async (client, input, assertCallIdsSize) => {
+  async (client, input) => {
     const preparedCalls = await client.prepareCalls(input);
     const signedCalls = await client.signPreparedCalls(preparedCalls);
     const result = await client.sendPreparedCalls({
@@ -39,11 +36,9 @@ const sendVariants: Array<
         : {}),
     });
 
-    if (assertCallIdsSize != null) {
-      expect(result.preparedCallIds).toHaveLength(assertCallIdsSize);
-    }
+    expect(result.id).toBeDefined();
 
-    return client.waitForCallsStatus({ id: result.preparedCallIds[0] });
+    return client.waitForCallsStatus({ id: result.id });
   },
 ];
 
@@ -178,7 +173,6 @@ describe("Client E2E Tests", () => {
             },
           },
         },
-        1,
       );
 
       expect(result.status).toBe("success");
@@ -203,7 +197,6 @@ describe("Client E2E Tests", () => {
             },
           },
         },
-        1,
       );
 
       expect(result1.status).toBe("success");
@@ -219,7 +212,6 @@ describe("Client E2E Tests", () => {
             },
           },
         },
-        1,
       );
 
       expect(result2.status).toBe("success");
@@ -260,7 +252,6 @@ describe("Client E2E Tests", () => {
             },
           },
         },
-        1,
       );
 
       expect(result.status).toBe("success");
@@ -303,7 +294,6 @@ describe("Client E2E Tests", () => {
             permissions,
           },
         },
-        1,
       );
 
       expect(result.status).toBe("success");
@@ -383,7 +373,7 @@ describe("Client E2E Tests", () => {
         });
 
         const waitForResult = await webauthClient.waitForCallsStatus({
-          id: result.preparedCallIds[0],
+          id: result.id,
         });
         expect(waitForResult.status).toBe("success");
       },
