@@ -235,17 +235,6 @@
     ox "^0.6.12"
     viem "2.29.2"
 
-"@alchemy/wallet-api-types@0.1.0-alpha.23", "@alchemy/wallet-api-types@^0.1.0-alpha.23":
-  version "0.1.0-alpha.23"
-  resolved "https://registry.yarnpkg.com/@alchemy/wallet-api-types/-/wallet-api-types-0.1.0-alpha.23.tgz#0abeb947a58230425102604eda9f372274751adc"
-  integrity sha512-ZScyKuS1u5s1xEy25pzWrr7cydB+VcWAAZLcPU9K+Bgp2XHSd0d9xhdYDGW5IztkGtxt92/EghXznK9OaeBFyQ==
-  dependencies:
-    "@alchemy/common" "0.0.0-alpha.13"
-    deep-equal "^2.2.3"
-    ox "^0.6.12"
-    typebox "^1.0.75"
-    viem "^2.32.0"
-
 "@alchemy/wallet-api-types@^0.1.0-alpha.18":
   version "0.1.0-alpha.18"
   resolved "https://registry.yarnpkg.com/@alchemy/wallet-api-types/-/wallet-api-types-0.1.0-alpha.18.tgz#83b4e6d56c5e3b993f5cc3110588b9c21720aaa2"
@@ -255,6 +244,17 @@
     ox "^0.6.12"
     typebox "^1.0.0"
     viem "2.29.2"
+
+"@alchemy/wallet-api-types@^0.1.0-alpha.23":
+  version "0.1.0-alpha.23"
+  resolved "https://registry.yarnpkg.com/@alchemy/wallet-api-types/-/wallet-api-types-0.1.0-alpha.23.tgz#0abeb947a58230425102604eda9f372274751adc"
+  integrity sha512-ZScyKuS1u5s1xEy25pzWrr7cydB+VcWAAZLcPU9K+Bgp2XHSd0d9xhdYDGW5IztkGtxt92/EghXznK9OaeBFyQ==
+  dependencies:
+    "@alchemy/common" "0.0.0-alpha.13"
+    deep-equal "^2.2.3"
+    ox "^0.6.12"
+    typebox "^1.0.75"
+    viem "^2.32.0"
 
 "@alchemy/wallet-apis@0.0.0-alpha.12":
   version "0.0.0-alpha.12"
