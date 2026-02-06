@@ -113,5 +113,8 @@
       "eslint --fix --max-warnings 0",
       "prettier --write"
     ]
+  },
+  "dependencies": {
+    "@alchemy/wallet-api-types": "0.1.0-alpha.23"
   }
 }
