@@ -1,9 +1,11 @@
 import {
-  deepHexlify,
-  resolveProperties,
-  type UserOperationRequest_v7,
-} from "@aa-sdk/core";
-import { concat, encodeAbiParameters, keccak256, pad, toHex } from "viem";
+  concat,
+  encodeAbiParameters,
+  keccak256,
+  pad,
+  toHex,
+  type RpcUserOperation,
+} from "viem";
 import { accounts, entrypoint080 } from "../constants";
 import { toPaymaster } from "./base";
 import type { Paymaster } from "./types";
@@ -22,12 +24,8 @@ export const paymaster080: Paymaster = toPaymaster({
 
     return { paymaster: address, paymasterData: dummyData };
   },
-  async getPaymasterData(self, uo_, client) {
+  async getPaymasterData(self, uo: RpcUserOperation<"0.7">, client) {
     const { address } = self.getPaymasterDetails();
-    const uo = deepHexlify(
-      // @ts-ignore
-      await resolveProperties(uo_),
-    ) as UserOperationRequest_v7;
 
     const validUntil = 0n;
     const validFrom = 0n;

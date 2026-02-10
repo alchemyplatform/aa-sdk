@@ -4,9 +4,16 @@ dotenv.config();
 import getPort from "get-port";
 import { createServer } from "prool";
 import { anvil, type AnvilParameters } from "prool/instances";
-import { createClient, http, type Chain, type ClientConfig } from "viem";
+import {
+  createClient,
+  http,
+  type Chain,
+  type ClientConfig,
+  custom,
+  type CustomTransport,
+  type Transport,
+} from "viem";
 import { localhost } from "viem/chains";
-import { split } from "../../aa-sdk/core/src/transport/split";
 import { poolId, rundlerBinaryPath } from "./constants";
 import { paymasterTransport } from "./paymaster/transport";
 import { rundler } from "./rundler/instance";
@@ -42,6 +49,40 @@ const bundlerMethods = [
   "debug_bundler_setBundlingMode",
   "rundler_maxPriorityFeePerGas",
 ];
+
+const split = (params: {
+  overrides: {
+    methods: string[];
+    transport: Transport;
+  }[];
+  fallback: Transport;
+}): CustomTransport => {
+  const overrideMap = params.overrides.reduce((accum, curr) => {
+    curr.methods.forEach((method) => {
+      if (accum.has(method) && accum.get(method) !== curr.transport) {
+        throw new Error(
+          "A method cannot be handled by more than one transport",
+        );
+      }
+
+      accum.set(method, curr.transport);
+    });
+
+    return accum;
+  }, new Map<string, Transport>());
+
+  return (opts) =>
+    custom({
+      request: async (args) => {
+        const transportOverride = overrideMap.get(args.method);
+        if (transportOverride != null) {
+          return transportOverride(opts).request(args);
+        }
+
+        return params.fallback(opts).request(args);
+      },
+    })(opts);
+};
 
 function defineInstance(params: DefineInstanceParams) {
   const {

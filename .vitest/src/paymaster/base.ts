@@ -1,4 +1,3 @@
-import { type UserOperationRequest } from "@aa-sdk/core";
 import {
   concat,
   encodeAbiParameters,
@@ -10,6 +9,7 @@ import {
   type Address,
   type Client,
   type Hex,
+  type RpcUserOperation,
   type TestClient,
 } from "viem";
 import {
@@ -34,7 +34,7 @@ type ToPaymasterArgs = {
   ) => { paymasterAndData: Hex } | { paymaster: Address; paymasterData: Hex };
   getPaymasterData: (
     self: Paymaster,
-    uo: UserOperationRequest,
+    uo: RpcUserOperation,
     client: Client & { mode: "anvil" },
   ) => Promise<
     { paymasterAndData: Hex } | { paymaster: Address; paymasterData: Hex }

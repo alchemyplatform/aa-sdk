@@ -1,4 +1,4 @@
-import { concat, encodePacked, getContract, type Hex } from "viem";
+import { concat, encodePacked, getContract } from "viem";
 import { accounts, entrypoint060 } from "../constants";
 import { toPaymaster } from "./base";
 import type { Paymaster } from "./types";
@@ -40,7 +40,7 @@ export const paymaster060: Paymaster = toPaymaster({
     const paymasterAndData = encodePacked(
       ["address", "uint256", "bytes"],
       [address, expiry, signature],
-    ) as Hex;
+    );
 
     return { paymasterAndData };
   },
