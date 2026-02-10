@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.84.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.83.2...v4.84.0) (2026-02-10)
+
+### Features
+
+- update wallet_sendPreparedCalls to use new call id ([#2340](https://github.com/alchemyplatform/aa-sdk/issues/2340)) ([7bcd59a](https://github.com/alchemyplatform/aa-sdk/commit/7bcd59a8c71a5e64ab055d2ff5ddba0d0269d96b))
+
 ## [4.83.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.83.1...v4.83.2) (2026-01-26)
 
 ### Features
