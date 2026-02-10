@@ -32,7 +32,7 @@ export type SendCallsResult = SendPreparedCallsResult;
  * @param {Array<{to: Address, data?: Hex, value?: Hex}>} params.calls - Array of contract calls to execute
  * @param {Address} [params.from] - The address to execute the calls from (required if the client wasn't initialized with an account)
  * @param {object} [params.capabilities] - Optional capabilities to include with the request. See [API documentation](/wallets/api-reference/smart-wallets/wallet-api-endpoints/wallet-api-endpoints/wallet-prepare-calls#request.body.prepareCallsRequest.capabilities) for details.
- * @returns {Promise<SendPreparedCallsResult>} A Promise that resolves to the result containing the prepared call IDs.
+ * @returns {Promise<SendPreparedCallsResult>} A Promise that resolves to the result containing the call ID.
  *
  *  @example
  * ```ts
@@ -47,8 +47,8 @@ export type SendCallsResult = SendPreparedCallsResult;
  *   }
  * });
  *
- * // The result contains the prepared call IDs
- * console.log(result.preparedCallIds);
+ * // The result contains the call ID
+ * console.log(result.id);
  * ```
  */
 export async function sendCalls<

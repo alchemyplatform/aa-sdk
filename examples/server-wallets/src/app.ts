@@ -40,13 +40,13 @@ async function app() {
   const account = await client.requestAccount();
   console.log("🧩 Using account:", account.address);
 
-  const { preparedCallIds: [preparedCallId] } = await client.sendCalls({
+  const { id } = await client.sendCalls({
     calls: [{ to: "0x0000000000000000000000000000000000000000", value: "0x0" }],
     from: account.address
   });
-  console.log("🚀 Call sent:", preparedCallId);
+  console.log("🚀 Call sent:", id);
 
-  const { receipts } = await client.waitForCallsStatus({ id: preparedCallId });
+  const { receipts } = await client.waitForCallsStatus({ id });
   console.log("✨ Landed in tx:", receipts?.[0].transactionHash);
 }
 

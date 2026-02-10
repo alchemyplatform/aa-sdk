@@ -17,19 +17,16 @@ const sendVariants: Array<
   (
     client: SmartWalletClient,
     input: PrepareCallsParams,
-    assertCallIdsSize?: number,
   ) => Promise<WaitForCallsStatusReturnType>
 > = [
   // Send calls
-  async (client, input, assertCallIdsSize) => {
+  async (client, input) => {
     const result = await client.sendCalls(input);
-    if (assertCallIdsSize != null) {
-      expect(result.preparedCallIds).toHaveLength(assertCallIdsSize);
-    }
-    return client.waitForCallsStatus({ id: result.preparedCallIds[0] });
+    expect(result.id).toBeDefined();
+    return client.waitForCallsStatus({ id: result.id });
   },
   // Prepare, sign, send calls
-  async (client, input, assertCallIdsSize) => {
+  async (client, input) => {
     const preparedCalls = await client.prepareCalls(input);
     const signedCalls = await client.signPreparedCalls(preparedCalls);
     const result = await client.sendPreparedCalls({
@@ -39,11 +36,9 @@ const sendVariants: Array<
         : {}),
     });
 
-    if (assertCallIdsSize != null) {
-      expect(result.preparedCallIds).toHaveLength(assertCallIdsSize);
-    }
+    expect(result.id).toBeDefined();
 
-    return client.waitForCallsStatus({ id: result.preparedCallIds[0] });
+    return client.waitForCallsStatus({ id: result.id });
   },
 ];
 
@@ -167,19 +162,15 @@ describe("Client E2E Tests", () => {
     async (sendVariant) => {
       const account = await client.requestAccount();
 
-      const result = await sendVariant(
-        client,
-        {
-          calls: [{ to: zeroAddress, value: "0x0" }],
-          from: account.address,
-          capabilities: {
-            paymasterService: {
-              policyId: process.env.TEST_PAYMASTER_POLICY_ID!,
-            },
+      const result = await sendVariant(client, {
+        calls: [{ to: zeroAddress, value: "0x0" }],
+        from: account.address,
+        capabilities: {
+          paymasterService: {
+            policyId: process.env.TEST_PAYMASTER_POLICY_ID!,
           },
         },
-        1,
-      );
+      });
 
       expect(result.status).toBe("success");
     },
@@ -192,35 +183,27 @@ describe("Client E2E Tests", () => {
     "should successfully drop and replace a UO with repeat calls",
     async (sendVariant) => {
       const account = await client.requestAccount();
-      const result1 = await sendVariant(
-        client,
-        {
-          calls: [{ to: zeroAddress, value: "0x0" }],
-          from: account.address,
-          capabilities: {
-            paymasterService: {
-              policyId: process.env.TEST_PAYMASTER_POLICY_ID!,
-            },
+      const result1 = await sendVariant(client, {
+        calls: [{ to: zeroAddress, value: "0x0" }],
+        from: account.address,
+        capabilities: {
+          paymasterService: {
+            policyId: process.env.TEST_PAYMASTER_POLICY_ID!,
           },
         },
-        1,
-      );
+      });
 
       expect(result1.status).toBe("success");
 
-      const result2 = await sendVariant(
-        client,
-        {
-          calls: [{ to: zeroAddress, value: "0x0" }],
-          from: account.address,
-          capabilities: {
-            paymasterService: {
-              policyId: process.env.TEST_PAYMASTER_POLICY_ID!,
-            },
+      const result2 = await sendVariant(client, {
+        calls: [{ to: zeroAddress, value: "0x0" }],
+        from: account.address,
+        capabilities: {
+          paymasterService: {
+            policyId: process.env.TEST_PAYMASTER_POLICY_ID!,
           },
         },
-        1,
-      );
+      });
 
       expect(result2.status).toBe("success");
     },
@@ -249,19 +232,15 @@ describe("Client E2E Tests", () => {
       });
       expect(account.address).toBe(await _signer.getAddress());
 
-      const result = await sendVariant(
-        _client,
-        {
-          calls: [{ to: zeroAddress, value: "0x0" }],
-          from: account.address,
-          capabilities: {
-            paymasterService: {
-              policyId: process.env.TEST_PAYMASTER_POLICY_ID!,
-            },
+      const result = await sendVariant(_client, {
+        calls: [{ to: zeroAddress, value: "0x0" }],
+        from: account.address,
+        capabilities: {
+          paymasterService: {
+            policyId: process.env.TEST_PAYMASTER_POLICY_ID!,
           },
         },
-        1,
-      );
+      });
 
       expect(result.status).toBe("success");
     },
@@ -291,20 +270,16 @@ describe("Client E2E Tests", () => {
         signer: sessionKey,
       });
 
-      const result = await sendVariant(
-        sessionKeyClient,
-        {
-          calls: [{ to: zeroAddress, value: "0x0" }],
-          from: account.address,
-          capabilities: {
-            paymasterService: {
-              policyId: process.env.TEST_PAYMASTER_POLICY_ID!,
-            },
-            permissions,
+      const result = await sendVariant(sessionKeyClient, {
+        calls: [{ to: zeroAddress, value: "0x0" }],
+        from: account.address,
+        capabilities: {
+          paymasterService: {
+            policyId: process.env.TEST_PAYMASTER_POLICY_ID!,
           },
+          permissions,
         },
-        1,
-      );
+      });
 
       expect(result.status).toBe("success");
     },
@@ -383,7 +358,7 @@ describe("Client E2E Tests", () => {
         });
 
         const waitForResult = await webauthClient.waitForCallsStatus({
-          id: result.preparedCallIds[0],
+          id: result.id,
         });
         expect(waitForResult.status).toBe("success");
       },

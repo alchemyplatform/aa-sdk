@@ -13,7 +13,7 @@ function sendCalls<TAccount>(
   signer,
   params,
 ): Promise<{
-  preparedCallIds: `0x${string}`[];
+  id: `0x${string}`;
 }>;
 ```
 
@@ -42,8 +42,8 @@ const result = await client.sendCalls({
   },
 });
 
-// The result contains the prepared call IDs
-console.log(result.preparedCallIds);
+// The result contains the call ID
+console.log(result.id);
 ```
 
 ## Type Parameters
@@ -130,7 +130,7 @@ console.log(result.preparedCallIds);
 ## Returns
 
 `Promise`\<\{
-`preparedCallIds`: `` `0x${string}` ``\[];
+`id`: `` `0x${string}` ``;
 }>
 
-A Promise that resolves to the result containing the prepared call IDs.
+A Promise that resolves to the result containing the call ID.

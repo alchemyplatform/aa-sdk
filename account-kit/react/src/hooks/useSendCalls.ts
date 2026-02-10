@@ -199,8 +199,7 @@ export function useSendCalls<
         const signedCalls =
           await _smartWalletClient.signPreparedCalls(preparedCalls);
 
-        const { preparedCallIds } =
-          await _smartWalletClient.sendPreparedCalls(signedCalls);
+        const { id } = await _smartWalletClient.sendPreparedCalls(signedCalls);
 
         const uoCall =
           signedCalls.type === "array"
@@ -212,7 +211,7 @@ export function useSendCalls<
             : signedCalls;
 
         return {
-          ids: preparedCallIds,
+          ids: [id],
           request: {
             ...uoCall.data,
             signature: uoCall.signature.data,

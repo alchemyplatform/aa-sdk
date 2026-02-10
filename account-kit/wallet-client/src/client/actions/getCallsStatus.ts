@@ -32,8 +32,8 @@ export type GetCallsStatusResult = RpcSchema["ReturnType"];
  * // After sending prepared calls
  * const sendResult = await client.sendPreparedCalls({...});
  *
- * // Check the status of the first call ID
- * const status = await client.getCallsStatus(sendResult.preparedCallIds[0]);
+ * // Check the status of the call ID
+ * const status = await client.getCallsStatus(sendResult.id);
  * ```
  */
 export async function getCallsStatus(
