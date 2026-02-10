@@ -42,7 +42,7 @@ describe("chainId overrides", () => {
           };
         case "wallet_sendPreparedCalls":
           return {
-            preparedCallIds: ["test-call-id"],
+            id: "test-call-id",
           };
         case "wallet_prepareSign":
           return {

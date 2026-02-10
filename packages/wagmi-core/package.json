@@ -43,7 +43,7 @@
     "viem": "^2.44.2"
   },
   "devDependencies": {
-    "@alchemy/wallet-api-types": "^0.1.0-alpha.18",
+    "@alchemy/wallet-api-types": "^0.1.0-alpha.23",
     "typescript-template": "*",
     "viem": "^2.44.2"
   },

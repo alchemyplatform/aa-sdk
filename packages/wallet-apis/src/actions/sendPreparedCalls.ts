@@ -25,7 +25,7 @@ export type SendPreparedCallsResult = Prettify<RpcSchema["ReturnType"]>;
  *
  * @param {InnerWalletApiClient} client - The wallet API client to use for the request
  * @param {SendPreparedCallsParams} params - Parameters for sending prepared calls
- * @returns {Promise<SendPreparedCallsResult>} A Promise that resolves to the result containing the prepared call IDs
+ * @returns {Promise<SendPreparedCallsResult>} A Promise that resolves to the result containing the call ID
  *
  * @example
  * ```ts
