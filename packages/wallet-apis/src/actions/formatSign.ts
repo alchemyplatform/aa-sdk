@@ -1,27 +1,29 @@
-import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
-import type {
-  InnerWalletApiClient,
-  OptionalChainId,
-  OptionalFrom,
-} from "../types.ts";
-import { toHex, type Prettify } from "viem";
+import type { Address, Prettify } from "viem";
+import type { DistributiveOmit, InnerWalletApiClient } from "../types.ts";
+import { wallet_formatSign as MethodSchema } from "@alchemy/wallet-api-types/rpc";
 import { AccountNotFoundError } from "@alchemy/common";
 import { LOGGER } from "../logger.js";
+import type { StaticDecode } from "typebox";
+import { Value } from "typebox/value";
 
-type RpcSchema = Extract<
-  WalletServerRpcSchemaType,
-  {
-    Request: {
-      method: "wallet_formatSign";
-    };
+const schema = {
+  request: MethodSchema.properties.Request.properties.params.items[0],
+  response: MethodSchema.properties.ReturnType,
+};
+
+// Runtime types.
+type Schema = StaticDecode<typeof MethodSchema>;
+type BaseFormatSignParams = Schema["Request"]["params"][0];
+type FormatSignResponse = Schema["ReturnType"];
+
+export type FormatSignParams = Prettify<
+  DistributiveOmit<BaseFormatSignParams, "from" | "chainId"> & {
+    from?: Address;
+    chainId?: number;
   }
 >;
 
-export type FormatSignParams = Prettify<
-  OptionalFrom<OptionalChainId<RpcSchema["Request"]["params"][0]>>
->;
-
-export type FormatSignResult = Prettify<RpcSchema["ReturnType"]>;
+export type FormatSignResult = FormatSignResponse;
 
 /**
  * Formats a signature request for signing messages or transactions.
@@ -52,12 +54,18 @@ export async function formatSign(
   }
 
   LOGGER.debug("formatSign:start");
-  const res = await client.request({
+
+  const rpcParams = Value.Encode(schema.request, {
+    ...params,
+    from,
+    chainId: params.chainId ?? client.chain.id,
+  } satisfies BaseFormatSignParams);
+
+  const rpcResp = await client.request({
     method: "wallet_formatSign",
-    params: [
-      { ...params, from, chainId: params.chainId ?? toHex(client.chain.id) },
-    ],
+    params: [rpcParams],
   });
+
   LOGGER.debug("formatSign:done");
-  return res;
+  return Value.Decode(schema.response, rpcResp) satisfies FormatSignResult;
 }

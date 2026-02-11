@@ -1,6 +1,8 @@
 // Actions.
 export type * from "../actions/formatSign.js";
 export { formatSign } from "../actions/formatSign.js";
+export type * from "../actions/getCapabilities.js";
+export { getCapabilities } from "../actions/getCapabilities.js";
 export type * from "../actions/grantPermissions.js";
 export { grantPermissions } from "../actions/grantPermissions.js";
 export type * from "../actions/listAccounts.js";

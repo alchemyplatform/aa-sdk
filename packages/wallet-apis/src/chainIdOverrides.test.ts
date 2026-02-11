@@ -1,11 +1,11 @@
 import { zeroAddress } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
-import { arbitrumSepolia } from "viem/chains";
+import { arbitrumSepolia, mainnet } from "viem/chains";
 import { createSmartWalletClient } from "./client.js";
 import { custom } from "viem";
 import type { AlchemyWalletTransport } from "./transport.js";
 
-describe("chainId overrides", () => {
+describe("param overrides", () => {
   const signer = privateKeyToAccount(
     "0xd7b061ef04d29cf68b3c89356678eccec9988de8d5ed892c19461c4a9d65925d",
   );
@@ -80,18 +80,18 @@ describe("chainId overrides", () => {
       signer,
     });
 
-    const overrideChainId = "0x1"; // Ethereum mainnet
+    const overrideChainId = 1; // Ethereum mainnet
 
     await client.prepareCalls({
-      calls: [{ to: zeroAddress, value: "0x0" }],
-      from: "0x1234567890123456789012345678901234567890",
+      calls: [{ to: zeroAddress, value: 0n }],
+      account: "0x1234567890123456789012345678901234567890",
       chainId: overrideChainId,
     });
 
-    // Verify the request was captured with the overridden chainId
+    // Verify the request was captured with the overridden chainId (encoded to hex)
     expect(capturedRequests).toHaveLength(1);
     expect(capturedRequests[0].method).toBe("wallet_prepareCalls");
-    expect(capturedRequests[0].params[0].chainId).toBe(overrideChainId);
+    expect(capturedRequests[0].params[0].chainId).toBe("0x1");
   });
 
   it("should allow overriding the chainId in sendPreparedCalls", async () => {
@@ -101,33 +101,33 @@ describe("chainId overrides", () => {
       signer,
     });
 
-    const overrideChainId = "0x1"; // Ethereum mainnet
+    const overrideChainId = 1; // Ethereum mainnet
 
     await client.sendPreparedCalls({
-      type: "user-operation-v060",
+      type: "user-operation-v060" as const,
       data: {
-        sender: "0x1234567890123456789012345678901234567890",
-        nonce: "0x0",
-        initCode: "0x",
-        callData: "0x",
-        callGasLimit: "0x0",
-        verificationGasLimit: "0x0",
-        preVerificationGas: "0x0",
-        maxFeePerGas: "0x0",
-        maxPriorityFeePerGas: "0x0",
-        paymasterAndData: "0x",
+        sender: "0x1234567890123456789012345678901234567890" as const,
+        nonce: 0n,
+        initCode: "0x" as const,
+        callData: "0x" as const,
+        callGasLimit: 0n,
+        verificationGasLimit: 0n,
+        preVerificationGas: 0n,
+        maxFeePerGas: 0n,
+        maxPriorityFeePerGas: 0n,
+        paymasterAndData: "0x" as const,
       },
       signature: {
-        type: "secp256k1",
-        data: "0x1234567890abcdef",
+        type: "secp256k1" as const,
+        data: "0x1234567890abcdef" as const,
       },
       chainId: overrideChainId,
     });
 
-    // Verify the request was captured with the overridden chainId
+    // Verify the request was captured with the overridden chainId (encoded to hex)
     expect(capturedRequests).toHaveLength(1);
     expect(capturedRequests[0].method).toBe("wallet_sendPreparedCalls");
-    expect(capturedRequests[0].params[0].chainId).toBe(overrideChainId);
+    expect(capturedRequests[0].params[0].chainId).toBe("0x1");
   });
 
   it("should allow overriding the chainId in grantPermissions", async () => {
@@ -137,7 +137,7 @@ describe("chainId overrides", () => {
       signer,
     });
 
-    const overrideChainId = "0x1"; // Ethereum mainnet
+    const overrideChainId = 1; // Ethereum mainnet
 
     await client.grantPermissions({
       account: "0x1234567890123456789012345678901234567890",
@@ -150,9 +150,71 @@ describe("chainId overrides", () => {
       chainId: overrideChainId,
     });
 
-    // Verify the request was captured with the overridden chainId
+    // Verify the request was captured with the overridden chainId (encoded to hex)
     expect(capturedRequests).toHaveLength(1);
     expect(capturedRequests[0].method).toBe("wallet_createSession");
-    expect(capturedRequests[0].params[0].chainId).toBe(overrideChainId);
+    expect(capturedRequests[0].params[0].chainId).toBe("0x1");
+  });
+
+  it("should allow overriding the account in prepareCalls", async () => {
+    const client = createSmartWalletClient({
+      transport: mockTransport as unknown as AlchemyWalletTransport,
+      chain: arbitrumSepolia,
+      signer,
+    });
+
+    const overrideAccount = "0x0000000000000000000000000000000000000001";
+
+    await client.prepareCalls({
+      calls: [{ to: zeroAddress, value: 0n }],
+      account: overrideAccount,
+    });
+
+    expect(capturedRequests).toHaveLength(1);
+    expect(capturedRequests[0].method).toBe("wallet_prepareCalls");
+    expect(capturedRequests[0].params[0].from).toBe(overrideAccount);
+  });
+
+  it("should allow overriding the account in grantPermissions", async () => {
+    const client = createSmartWalletClient({
+      transport: mockTransport as unknown as AlchemyWalletTransport,
+      chain: arbitrumSepolia,
+      signer,
+    });
+
+    const overrideAccount = "0x0000000000000000000000000000000000000001";
+
+    await client.grantPermissions({
+      account: overrideAccount,
+      expirySec: Math.floor(Date.now() / 1000) + 60 * 60,
+      key: {
+        publicKey: "0x1234567890123456789012345678901234567890",
+        type: "secp256k1",
+      },
+      permissions: [{ type: "root" }],
+    });
+
+    expect(capturedRequests).toHaveLength(1);
+    expect(capturedRequests[0].method).toBe("wallet_createSession");
+    expect(capturedRequests[0].params[0].account).toBe(overrideAccount);
+  });
+
+  it("should allow overriding the chain in sendCalls", async () => {
+    const client = createSmartWalletClient({
+      transport: mockTransport as unknown as AlchemyWalletTransport,
+      chain: arbitrumSepolia,
+      signer,
+    });
+
+    await client.sendCalls({
+      calls: [{ to: zeroAddress, value: 0n }],
+      account: "0x1234567890123456789012345678901234567890",
+      chain: mainnet,
+    });
+
+    // sendCalls internally calls prepareCalls then sendPreparedCalls
+    expect(capturedRequests.length).toBeGreaterThanOrEqual(1);
+    expect(capturedRequests[0].method).toBe("wallet_prepareCalls");
+    expect(capturedRequests[0].params[0].chainId).toBe("0x1");
   });
 });

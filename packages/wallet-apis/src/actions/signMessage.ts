@@ -1,19 +1,15 @@
-import {
-  type Address,
-  type Hex,
-  type Prettify,
-  type SignableMessage,
-} from "viem";
+import { type Hex, type Prettify, type SignableMessage } from "viem";
 import type { InnerWalletApiClient } from "../types.js";
 import { prepareSign } from "./prepareSign.js";
 import { signSignatureRequest } from "./signSignatureRequest.js";
 import { formatSign } from "./formatSign.js";
 import { signableMessageToJsonSafe } from "../utils/format.js";
 import { LOGGER } from "../logger.js";
+import { resolveAddress, type AccountParam } from "../utils/resolve.js";
 
 export type SignMessageParams = Prettify<{
   message: SignableMessage;
-  account?: Address;
+  account?: AccountParam;
 }>;
 
 export type SignMessageResult = Prettify<Hex>;
@@ -41,7 +37,9 @@ export async function signMessage(
   client: InnerWalletApiClient,
   params: SignMessageParams,
 ): Promise<SignMessageResult> {
-  const accountAddress = params.account ?? client.account.address;
+  const accountAddress = params.account
+    ? resolveAddress(params.account)
+    : client.account.address;
   LOGGER.debug("signMessage:start", {
     hasExplicitAccount: params.account != null,
   });

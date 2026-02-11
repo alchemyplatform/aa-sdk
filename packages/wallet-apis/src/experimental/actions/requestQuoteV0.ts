@@ -1,27 +1,36 @@
-import { toHex, type Prettify } from "viem";
-import type {
-  OptionalChainId,
-  InnerWalletApiClient,
-  OptionalFrom,
-} from "../../types.ts";
-import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
+import type { Address, Prettify } from "viem";
+import type { DistributiveOmit, InnerWalletApiClient } from "../../types.ts";
 import { AccountNotFoundError } from "@alchemy/common";
-import { mergeClientCapabilities } from "../../utils/capabilities.js";
+import {
+  mergeClientCapabilities,
+  toRpcCapabilities,
+  type PrepareCallsCapabilities,
+  type WithCapabilities,
+} from "../../utils/capabilities.js";
+import { wallet_requestQuote_v0 as MethodSchema } from "@alchemy/wallet-api-types/rpc";
+import type { StaticDecode } from "typebox";
+import { Value } from "typebox/value";
 
-type RpcSchema = Extract<
-  WalletServerRpcSchemaType,
-  {
-    Request: {
-      method: "wallet_requestQuote_v0";
-    };
-  }
->;
+const schema = {
+  request: MethodSchema.properties.Request.properties.params.items[0],
+  response: MethodSchema.properties.ReturnType,
+};
+
+// Runtime types.
+type Schema = StaticDecode<typeof MethodSchema>;
+type BaseRequestQuoteV0Params = Schema["Request"]["params"][0];
+type RequestQuoteV0Response = Schema["ReturnType"];
 
 export type RequestQuoteV0Params = Prettify<
-  OptionalFrom<OptionalChainId<RpcSchema["Request"]["params"][0]>>
+  WithCapabilities<
+    DistributiveOmit<BaseRequestQuoteV0Params, "from" | "chainId"> & {
+      from?: Address;
+      chainId?: number;
+    }
+  >
 >;
 
-export type RequestQuoteV0Result = Prettify<RpcSchema["ReturnType"]>;
+export type RequestQuoteV0Result = RequestQuoteV0Response;
 
 /**
  * Requests a quote for a token swap, returning either prepared calls for smart wallets
@@ -46,9 +55,9 @@ export type RequestQuoteV0Result = Prettify<RpcSchema["ReturnType"]>;
  * const quote = await client.requestQuoteV0({
  *   fromToken: "0xA0b86a33E6441e1d6a8E8C7a8E8E8E8E8E8E8E8E",
  *   toToken: "0xB0b86a33E6441e1d6a8E8C7a8E8E8E8E8E8E8E8E",
- *   fromAmount: "0x1000000000000000000", // 1 ETH
+ *   fromAmount: 1000000000000000000n, // 1 ETH
  *   capabilities: {
- *     paymasterService: { policyId: "your-policy-id" }
+ *     paymaster: { policyId: "your-policy-id" }
  *   }
  * });
  *
@@ -56,7 +65,7 @@ export type RequestQuoteV0Result = Prettify<RpcSchema["ReturnType"]>;
  * const rawQuote = await client.requestQuoteV0({
  *   fromToken: "0xA0b86a33E6441e1d6a8E8C7a8E8E8E8E8E8E8E8E",
  *   toToken: "0xB0b86a33E6441e1d6a8E8C7a8E8E8E8E8E8E8E8E",
- *   fromAmount: "0x1000000000000000000",
+ *   fromAmount: 1000000000000000000n,
  *   returnRawCalls: true
  * });
  * ```
@@ -70,19 +79,27 @@ export async function requestQuoteV0(
     throw new AccountNotFoundError();
   }
 
-  const capabilities = params.returnRawCalls
-    ? undefined
-    : mergeClientCapabilities(client, params.capabilities);
+  const capabilities =
+    "returnRawCalls" in params && params.returnRawCalls
+      ? undefined
+      : mergeClientCapabilities(
+          client,
+          ("capabilities" in params ? params.capabilities : undefined) as
+            | PrepareCallsCapabilities
+            | undefined,
+        );
 
-  return await client.request({
+  const rpcParams = Value.Encode(schema.request, {
+    ...params,
+    chainId: params.chainId ?? client.chain.id,
+    from,
+    ...(capabilities && { capabilities: toRpcCapabilities(capabilities) }),
+  } satisfies BaseRequestQuoteV0Params);
+
+  const rpcResp = await client.request({
     method: "wallet_requestQuote_v0",
-    params: [
-      {
-        ...params,
-        chainId: params.chainId ?? toHex(client.chain.id),
-        from,
-        ...(capabilities && { capabilities }),
-      },
-    ],
+    params: [rpcParams],
   });
+
+  return Value.Decode(schema.response, rpcResp) satisfies RequestQuoteV0Result;
 }

@@ -1,23 +1,34 @@
-import { toHex, type Prettify } from "viem";
-import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
-import type { InnerWalletApiClient, OptionalChainId } from "../types.ts";
+import type { Prettify } from "viem";
+import type { DistributiveOmit, InnerWalletApiClient } from "../types.ts";
 import { LOGGER } from "../logger.js";
-import { mergeClientCapabilities } from "../utils/capabilities.js";
+import {
+  mergeClientCapabilities,
+  toRpcCapabilities,
+  type WithCapabilities,
+} from "../utils/capabilities.js";
+import { wallet_sendPreparedCalls as MethodSchema } from "@alchemy/wallet-api-types/rpc";
+import type { StaticDecode } from "typebox";
+import { Value } from "typebox/value";
 
-type RpcSchema = Extract<
-  WalletServerRpcSchemaType,
-  {
-    Request: {
-      method: "wallet_sendPreparedCalls";
-    };
-  }
->;
+const schema = {
+  request: MethodSchema.properties.Request.properties.params.items[0],
+  response: MethodSchema.properties.ReturnType,
+};
+
+// Runtime types.
+type Schema = StaticDecode<typeof MethodSchema>;
+type BaseSendPreparedCallsParams = Schema["Request"]["params"][0];
+type SendPreparedCallsResponse = Schema["ReturnType"];
 
 export type SendPreparedCallsParams = Prettify<
-  OptionalChainId<RpcSchema["Request"]["params"][0]>
+  WithCapabilities<
+    DistributiveOmit<BaseSendPreparedCallsParams, "chainId"> & {
+      chainId?: number;
+    }
+  >
 >;
 
-export type SendPreparedCallsResult = Prettify<RpcSchema["ReturnType"]>;
+export type SendPreparedCallsResult = SendPreparedCallsResponse;
 
 /**
  * Sends prepared calls by submitting a signed user operation.
@@ -34,10 +45,10 @@ export type SendPreparedCallsResult = Prettify<RpcSchema["ReturnType"]>;
  *   calls: [{
  *     to: "0x1234...",
  *     data: "0xabcdef...",
- *     value: "0x0"
+ *     value: 0n
  *   }],
  *   capabilities: {
- *     paymasterService: { policyId: "your-policy-id" }
+ *     paymaster: { policyId: "your-policy-id" }
  *   }
  * });
  *
@@ -54,20 +65,32 @@ export async function sendPreparedCalls(
   client: InnerWalletApiClient,
   params: SendPreparedCallsParams,
 ): Promise<SendPreparedCallsResult> {
-  params.capabilities = mergeClientCapabilities(client, params.capabilities);
+  const capabilities = mergeClientCapabilities(client, params.capabilities);
 
   LOGGER.debug("sendPreparedCalls:start", { type: params.type });
-  const res = await client.request({
+
+  const { chainId: rawChainId, ...restParams } = params;
+  const chainId = rawChainId ?? client.chain.id;
+
+  const fullParams =
+    restParams.type === "array"
+      ? { ...restParams, capabilities: toRpcCapabilities(capabilities) }
+      : {
+          ...restParams,
+          chainId,
+          capabilities: toRpcCapabilities(capabilities),
+        };
+
+  const rpcParams = Value.Encode(schema.request, fullParams);
+
+  const rpcResp = await client.request({
     method: "wallet_sendPreparedCalls",
-    params: [
-      params.type === "array"
-        ? params
-        : {
-            ...params,
-            chainId: params.chainId ?? toHex(client.chain.id),
-          },
-    ],
+    params: [rpcParams],
   });
+
   LOGGER.debug("sendPreparedCalls:done");
-  return res;
+  return Value.Decode(
+    schema.response,
+    rpcResp,
+  ) satisfies SendPreparedCallsResult;
 }

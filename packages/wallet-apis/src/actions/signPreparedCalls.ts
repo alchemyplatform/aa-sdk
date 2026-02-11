@@ -2,11 +2,6 @@ import { assertNever, BaseError } from "@alchemy/common";
 import type { PrepareCallsResult } from "./prepareCalls.ts";
 import { signSignatureRequest } from "./signSignatureRequest.js";
 import type { Prettify } from "viem";
-import type {
-  PreparedCall_Authorization,
-  PreparedCall_UserOpV060,
-  PreparedCall_UserOpV070,
-} from "@alchemy/wallet-api-types";
 import type { InnerWalletApiClient } from "../types.js";
 import { LOGGER } from "../logger.js";
 import type { SendPreparedCallsParams } from "./sendPreparedCalls.js";
@@ -14,6 +9,14 @@ import type { SendPreparedCallsParams } from "./sendPreparedCalls.js";
 export type SignPreparedCallsParams = Prettify<PrepareCallsResult>;
 
 export type SignPreparedCallsResult = SendPreparedCallsParams;
+
+// Decoded types derived from PrepareCallsResult (numbers/bigints, not hex strings)
+type ArrayCallData = Extract<
+  PrepareCallsResult,
+  { type: "array" }
+>["data"][number];
+type AuthorizationCall = Extract<ArrayCallData, { type: "authorization" }>;
+type UserOpCall = Exclude<ArrayCallData, { type: "authorization" }>;
 
 /**
  * Signs prepared calls using the provided signer.
@@ -46,9 +49,11 @@ export async function signPreparedCalls(
 ): Promise<SignPreparedCallsResult> {
   LOGGER.debug("signPreparedCalls:start", { type: params.type });
 
-  const signAuthorizationCall = async (call: PreparedCall_Authorization) => {
+  const signAuthorizationCall = async (call: AuthorizationCall) => {
     const { signatureRequest: _signatureRequest, ...rest } = call;
 
+    // chainId/nonce are decoded (number) from PrepareCallsResult;
+    // signSignatureRequest handles both formats via Number().
     const signature = await signSignatureRequest(client, {
       type: "eip7702Auth",
       data: {
@@ -62,9 +67,7 @@ export async function signPreparedCalls(
     };
   };
 
-  const signUserOperationCall = async (
-    call: PreparedCall_UserOpV060 | PreparedCall_UserOpV070,
-  ) => {
+  const signUserOperationCall = async (call: UserOpCall) => {
     const { signatureRequest, ...rest } = call;
 
     if (!signatureRequest) {

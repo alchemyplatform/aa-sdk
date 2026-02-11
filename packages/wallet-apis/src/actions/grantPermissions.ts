@@ -1,23 +1,26 @@
-import { toHex, type Address, type Hex, type Prettify, concatHex } from "viem";
-import type { InnerWalletApiClient } from "../types.ts";
-import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
+import { type Hex, type Prettify, concatHex } from "viem";
+import type { DistributiveOmit, InnerWalletApiClient } from "../types.ts";
+import { wallet_createSession as MethodSchema } from "@alchemy/wallet-api-types/rpc";
 import { signSignatureRequest } from "./signSignatureRequest.js";
 import { AccountNotFoundError } from "@alchemy/common";
 import { LOGGER } from "../logger.js";
-import type { OptionalChainId } from "../types.ts";
+import type { StaticDecode } from "typebox";
+import { Value } from "typebox/value";
+import { resolveAddress, type AccountParam } from "../utils/resolve.js";
 
-type RpcSchema = Extract<
-  WalletServerRpcSchemaType,
-  {
-    Request: {
-      method: "wallet_createSession";
-    };
-  }
->;
+const schema = {
+  request: MethodSchema.properties.Request.properties.params.items[0],
+  response: MethodSchema.properties.ReturnType,
+};
+
+// Runtime types.
+type Schema = StaticDecode<typeof MethodSchema>;
+type BaseCreateSessionParams = Schema["Request"]["params"][0];
 
 export type GrantPermissionsParams = Prettify<
-  OptionalChainId<Omit<RpcSchema["Request"]["params"][0], "account">> & {
-    account?: Address;
+  DistributiveOmit<BaseCreateSessionParams, "account" | "chainId"> & {
+    account?: AccountParam;
+    chainId?: number;
   }
 >;
 
@@ -57,10 +60,10 @@ export type GrantPermissionsResult = Prettify<{
  *
  * // Use the permissions to prepare a call
  * const preparedCalls = await client.prepareCalls({
- *   calls: [{ to: zeroAddress, value: "0x0" }],
+ *   calls: [{ to: zeroAddress, value: 0n }],
  *   from: account.address,
  *   capabilities: {
- *     paymasterService: {
+ *     paymaster: {
  *       policyId: "your-paymaster-policy-id",
  *     },
  *     permissions,
@@ -83,22 +86,37 @@ export async function grantPermissions(
   client: InnerWalletApiClient,
   params: GrantPermissionsParams,
 ): Promise<GrantPermissionsResult> {
-  const account = params.account ?? client.account.address;
+  const account = params.account
+    ? resolveAddress(params.account)
+    : client.account.address;
   if (!account) {
     LOGGER.warn("grantPermissions:no-account");
     throw new AccountNotFoundError();
   }
+
   LOGGER.debug("grantPermissions:start", { expirySec: params.expirySec });
-  const { sessionId, signatureRequest } = await client.request({
+
+  const chainId = params.chainId ?? client.chain.id;
+
+  const { account: _, chainId: __, ...rest } = params;
+  const rpcParams = Value.Encode(schema.request, {
+    ...rest,
+    account,
+    chainId,
+  } satisfies BaseCreateSessionParams);
+
+  const rpcResp = await client.request({
     method: "wallet_createSession",
-    params: [
-      {
-        ...params,
-        account,
-        chainId: params.chainId ?? toHex(client.chain.id),
-      },
-    ],
+    params: [rpcParams],
   });
+
+  const { sessionId, signatureRequest } = Value.Decode(
+    schema.response,
+    rpcResp,
+  ) as {
+    sessionId: Hex;
+    signatureRequest: Parameters<typeof signSignatureRequest>[1];
+  };
 
   const signature = await signSignatureRequest(client, signatureRequest);
 

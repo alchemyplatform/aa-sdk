@@ -1,23 +1,25 @@
 import type { Address } from "abitype";
-import { isAddressEqual, type Prettify } from "viem";
-import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
+import { isAddressEqual, type JsonRpcAccount, type Prettify } from "viem";
+import { wallet_requestAccount as MethodSchema } from "@alchemy/wallet-api-types/rpc";
 import deepEqual from "deep-equal";
-import type { InnerWalletApiClient } from "../types";
+import type { DistributiveOmit, InnerWalletApiClient } from "../types";
 import { LOGGER } from "../logger.js";
 import { isLocalAccount } from "../utils/assertions.js";
+import type { StaticDecode } from "typebox";
+import { Value } from "typebox/value";
 
-type RpcSchema = Extract<
-  WalletServerRpcSchemaType,
-  {
-    Request: {
-      method: "wallet_requestAccount";
-    };
-  }
->;
+const schema = {
+  request: MethodSchema.properties.Request.properties.params.items[0],
+  response: MethodSchema.properties.ReturnType,
+};
+
+// Runtime types.
+type Schema = StaticDecode<typeof MethodSchema>;
+type BaseRequestAccountParams = Schema["Request"]["params"][0];
 
 export type RequestAccountParams = Prettify<
-  Omit<
-    Extract<RpcSchema["Request"]["params"][0], { signerAddress: Address }>,
+  DistributiveOmit<
+    Extract<BaseRequestAccountParams, { signerAddress: Address }>,
     "signerAddress" | "includeCounterfactualInfo"
   > &
     (
@@ -26,7 +28,7 @@ export type RequestAccountParams = Prettify<
     )
 >;
 
-export type RequestAccountResult = Prettify<{ address: Address }>;
+export type RequestAccountResult = JsonRpcAccount<Address>;
 
 /**
  * Requests a smart account address for the provided signer using the wallet API client.
@@ -90,13 +92,23 @@ export async function requestAccount(
     });
     return {
       address: cachedAccount.address,
+      type: "json-rpc",
     };
   }
 
-  const resp = await client.request({
+  const rpcParams = Value.Encode(schema.request, args);
+
+  const rpcResp = await client.request({
     method: "wallet_requestAccount",
-    params: [args],
+    params: [rpcParams],
   });
+
+  const resp = Value.Decode(
+    schema.response,
+    rpcResp,
+  ) as RequestAccountResult & {
+    accountAddress: Address;
+  };
 
   client.internal?.setAccount({
     address: resp.accountAddress,
@@ -107,5 +119,6 @@ export async function requestAccount(
 
   return {
     address: resp.accountAddress,
+    type: "json-rpc",
   };
 }

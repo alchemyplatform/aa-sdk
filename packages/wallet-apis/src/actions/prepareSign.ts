@@ -1,27 +1,30 @@
-import type {
-  InnerWalletApiClient,
-  OptionalChainId,
-  OptionalFrom,
-} from "../types.ts";
-import { toHex, type Prettify } from "viem";
-import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
+import type { Address } from "viem";
+import type { DistributiveOmit, InnerWalletApiClient } from "../types.ts";
+import { wallet_prepareSign as MethodSchema } from "@alchemy/wallet-api-types/rpc";
 import { AccountNotFoundError } from "@alchemy/common";
 import { LOGGER } from "../logger.js";
+import type { StaticDecode } from "typebox";
+import { Value } from "typebox/value";
 
-type RpcSchema = Extract<
-  WalletServerRpcSchemaType,
-  {
-    Request: {
-      method: "wallet_prepareSign";
-    };
-  }
->;
+const schema = {
+  request: MethodSchema.properties.Request.properties.params.items[0],
+  response: MethodSchema.properties.ReturnType,
+};
 
-export type PrepareSignParams = Prettify<
-  OptionalFrom<OptionalChainId<RpcSchema["Request"]["params"][0]>>
->;
+// Runtime types.
+type Schema = StaticDecode<typeof MethodSchema>;
+type BasePrepareSignParams = Schema["Request"]["params"][0];
+type PrepareSignResponse = Schema["ReturnType"];
 
-export type PrepareSignResult = Prettify<RpcSchema["ReturnType"]>;
+export type PrepareSignParams = DistributiveOmit<
+  BasePrepareSignParams,
+  "from" | "chainId"
+> & {
+  from?: Address;
+  chainId?: number;
+};
+
+export type PrepareSignResult = PrepareSignResponse;
 
 /**
  * Prepares a signature request for signing messages or transactions.
@@ -51,16 +54,18 @@ export async function prepareSign(
   }
 
   LOGGER.debug("prepareSign:start", { type: params.signatureRequest.type });
-  const res = await client.request({
+
+  const rpcParams = Value.Encode(schema.request, {
+    ...params,
+    from,
+    chainId: params.chainId ?? client.chain.id,
+  } satisfies BasePrepareSignParams);
+
+  const rpcResp = await client.request({
     method: "wallet_prepareSign",
-    params: [
-      {
-        ...params,
-        from,
-        chainId: params.chainId ?? toHex(client.chain.id),
-      },
-    ],
+    params: [rpcParams],
   });
+
   LOGGER.debug("prepareSign:done");
-  return res;
+  return Value.Decode(schema.response, rpcResp) satisfies PrepareSignResult;
 }

@@ -1,8 +1,8 @@
-import { type Hex, hexToNumber, type Prettify, serializeSignature } from "viem";
-import type {
-  PersonalSignSignatureRequest,
-  TypedDataSignatureRequest,
-  AuthorizationSignatureRequest,
+import { type Hex, type Prettify, serializeSignature } from "viem";
+import {
+  type PersonalSignSignatureRequest,
+  type TypedDataSignatureRequest,
+  type AuthorizationSignatureRequest,
   Eip7702UnsignedAuth,
 } from "@alchemy/wallet-api-types";
 import { vToYParity } from "ox/Signature";
@@ -17,13 +17,14 @@ import { isLocalAccount } from "../utils/assertions.js";
 import { getAction } from "viem/utils";
 import { signAuthorization, signMessage, signTypedData } from "viem/actions";
 import type { LocalAccount } from "viem";
+import type { StaticDecode } from "typebox";
 
 export type SignSignatureRequestParams = Prettify<
   WithoutRawPayload<
     | PersonalSignSignatureRequest
     | TypedDataSignatureRequest
     | (AuthorizationSignatureRequest & {
-        data: Eip7702UnsignedAuth;
+        data: StaticDecode<typeof Eip7702UnsignedAuth>;
       })
   >
 >;
@@ -112,11 +113,7 @@ async function signWithLocalAccount(
         s,
         v,
         yParity: _yParity,
-      } = await signer.signAuthorization({
-        address: params.data.address,
-        chainId: hexToNumber(params.data.chainId),
-        nonce: hexToNumber(params.data.nonce),
-      });
+      } = await signer.signAuthorization(params.data);
       const yParity =
         _yParity != null ? Number(_yParity) : vToYParity(Number(v));
       LOGGER.debug("signSignatureRequest:localAccount:eip7702Auth:ok");
@@ -166,8 +163,8 @@ async function signWithSignerClient(
         yParity: _yParity,
       } = await action({
         address: params.data.address,
-        chainId: hexToNumber(params.data.chainId),
-        nonce: hexToNumber(params.data.nonce),
+        chainId: Number(params.data.chainId),
+        nonce: Number(params.data.nonce),
         account: signer.account,
       });
       const yParity =

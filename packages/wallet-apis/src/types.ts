@@ -37,8 +37,8 @@ export type SmartWalletSigner = LocalAccount | SignerClient;
 
 export type SmartWalletClient = BaseWalletClient<SmartWalletActions>;
 
-export type OptionalChainId<T> = T extends { chainId: Hex }
-  ? Omit<T, "chainId"> & { chainId?: Hex | undefined }
+export type OptionalChainId<T> = T extends { chainId: number }
+  ? Omit<T, "chainId"> & { chainId?: number | undefined }
   : T;
 
 export type OptionalFrom<T> = T extends { from: Address }
@@ -50,3 +50,7 @@ export type WithoutRawPayload<T> = T extends { rawPayload: Hex }
   : T;
 
 export type Expect<T extends true> = T;
+
+export type DistributiveOmit<T, K extends keyof any> = T extends any
+  ? Omit<T, K>
+  : never;

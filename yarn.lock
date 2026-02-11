@@ -226,35 +226,20 @@
     viem "^2.32.0"
 
 "@alchemy/wallet-api-types@0.1.0-alpha.16":
-  version "0.1.0-alpha.16"
-  resolved "https://registry.yarnpkg.com/@alchemy/wallet-api-types/-/wallet-api-types-0.1.0-alpha.16.tgz#fab9908f22e37283b611cf2c08989e5a20632d91"
-  integrity sha512-hpBCyyYHvPSzXwYqNwpcvXyhovUCFXrwFk7+bvD+buHiGZUfld3/WTzXN64rVhOeU7u4psGUdQaKUuAgmNjiNg==
-  dependencies:
-    "@sinclair/typebox" "^0.34.33"
-    deep-equal "^2.2.3"
-    ox "^0.6.12"
-    viem "2.29.2"
+  version "0.0.0"
+  uid ""
 
 "@alchemy/wallet-api-types@^0.1.0-alpha.18":
-  version "0.1.0-alpha.18"
-  resolved "https://registry.yarnpkg.com/@alchemy/wallet-api-types/-/wallet-api-types-0.1.0-alpha.18.tgz#83b4e6d56c5e3b993f5cc3110588b9c21720aaa2"
-  integrity sha512-zhp1JjyM8eVIutl+iMcXfAYTVvtLTSGn2ty36akfx3eC4okUeVZilgt7N1qN6sx5ydJOPlhh3z1dRJJ0HC2DXA==
-  dependencies:
-    deep-equal "^2.2.3"
-    ox "^0.6.12"
-    typebox "^1.0.0"
-    viem "2.29.2"
+  version "0.0.0"
+  uid ""
 
-"@alchemy/wallet-api-types@^0.1.0-alpha.23":
-  version "0.1.0-alpha.23"
-  resolved "https://registry.yarnpkg.com/@alchemy/wallet-api-types/-/wallet-api-types-0.1.0-alpha.23.tgz#0abeb947a58230425102604eda9f372274751adc"
-  integrity sha512-ZScyKuS1u5s1xEy25pzWrr7cydB+VcWAAZLcPU9K+Bgp2XHSd0d9xhdYDGW5IztkGtxt92/EghXznK9OaeBFyQ==
-  dependencies:
-    "@alchemy/common" "0.0.0-alpha.13"
-    deep-equal "^2.2.3"
-    ox "^0.6.12"
-    typebox "^1.0.75"
-    viem "^2.32.0"
+"@alchemy/wallet-api-types@link:../wallet-server/types":
+  version "0.0.0"
+  uid ""
+
+"@alchemy/wallet-api-types@link:/Users/jacob.hobbs/dev/alchemyplatform/wallet-server/types":
+  version "0.0.0"
+  uid ""
 
 "@alchemy/wallet-apis@0.0.0-alpha.12":
   version "0.0.0-alpha.12"
@@ -5925,11 +5910,6 @@
   version "0.33.22"
   resolved "https://registry.yarnpkg.com/@sinclair/typebox/-/typebox-0.33.22.tgz#3339d85172509095a8384cb4b44834a7c9309d86"
   integrity sha512-auUj4k+f4pyrIVf4GW5UKquSZFHJWri06QgARy9C0t9ZTjJLIuNIrr1yl9bWcJWJ1Gz1vOvYN1D+QPaIlNMVkQ==
-
-"@sinclair/typebox@^0.34.33":
-  version "0.34.38"
-  resolved "https://registry.yarnpkg.com/@sinclair/typebox/-/typebox-0.34.38.tgz#2365df7c23406a4d79413a766567bfbca708b49d"
-  integrity sha512-HpkxMmc2XmZKhvaKIZZThlHmx1L0I/V1hWK1NubtlFnr6ZqdiOpV72TKudZUNQjZNsyDBay72qFEhEvb+bcwcA==
 
 "@sindresorhus/merge-streams@^4.0.0":
   version "4.0.0"
@@ -22232,15 +22212,10 @@ type@^2.7.2:
   resolved "https://registry.yarnpkg.com/type/-/type-2.7.3.tgz#436981652129285cc3ba94f392886c2637ea0486"
   integrity sha512-8j+1QmAbPvLZow5Qpi6NCaN8FB60p/6x8/vfNqOk/hC+HuvFZhL4+WfekuhQLiqFZXOgQdrs3B+XxEmCc6b3FQ==
 
-typebox@^1.0.0:
-  version "1.0.43"
-  resolved "https://registry.yarnpkg.com/typebox/-/typebox-1.0.43.tgz#e796a1bc8c1a91027b7582bb174c989af3a390b0"
-  integrity sha512-NALtTG+DfndC+48JURdOQ6y6CrCEZl9xLM+BMNwFduUIUJv6AqqVT3ZcCf+jQ9uEJlLAhLyds/gkfufkpBh+2g==
-
-typebox@^1.0.75:
-  version "1.0.79"
-  resolved "https://registry.yarnpkg.com/typebox/-/typebox-1.0.79.tgz#a74a1e630e235762077aeb0f925875116ccbf2c5"
-  integrity sha512-luG4ORaG70S8mK00kCQR3Ow2xXaqzHv03/PHJJGs9Mjg1Q+0k3Kwz6Z5ORjoqSwWl3ixDUKgJajZ2vvBGs3ECA==
+typebox@^1.0.81:
+  version "1.0.81"
+  resolved "https://registry.yarnpkg.com/typebox/-/typebox-1.0.81.tgz#5373248c993d0544ac76344ba51fd14e009a8787"
+  integrity sha512-bCslZUmZESHhBn4kHDghzH2oo3qu8m2W89xDLxQHv/aPvY4i81Nd1jvijlBp9wSpsVytDSfSoosbiBAjgsNb2Q==
 
 typed-array-buffer@^1.0.3:
   version "1.0.3"
@@ -22914,7 +22889,7 @@ vfile@^6.0.0, vfile@^6.0.3:
     "@types/unist" "^3.0.0"
     vfile-message "^4.0.0"
 
-viem@2.23.2, viem@2.29.2, viem@2.x, viem@>=2.23.11, viem@>=2.29.0, viem@^2.1.1, viem@^2.21.35, viem@^2.21.40, viem@^2.27.2, viem@^2.29.2, viem@^2.31.7, viem@^2.32.0, viem@^2.44.2:
+viem@2.23.2, viem@2.x, viem@>=2.23.11, viem@>=2.29.0, viem@^2.1.1, viem@^2.21.35, viem@^2.21.40, viem@^2.27.2, viem@^2.29.2, viem@^2.31.7, viem@^2.32.0, viem@^2.44.2:
   version "2.44.2"
   resolved "https://registry.yarnpkg.com/viem/-/viem-2.44.2.tgz#602798baa22338a4bc4790ca103facfbb2d8979d"
   integrity sha512-nHY872t/T3flLpVsnvQT/89bwbrJwxaL917FDv7Oxy4E5FWIFkokRQOKXG3P+hgl30QYVZxi9o2SUHLnebycxw==
