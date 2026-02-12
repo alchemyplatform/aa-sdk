@@ -13,10 +13,10 @@ type BaseSmartAccountClientActions<
   TAccount,
   TContext,
   TEntryPointVersion,
-> = object & IsUndefined<TAccount> extends false ? object : object;
+> = object & accountLoupeActions<TAccount> extends false ? object : object;
 ```
 
-Defined in: [aa-sdk/core/src/client/decorators/smartAccountClient.ts:59](https://github.com/alchemyplatform/aa-sdk/blob/27e36329c103b4660886c9508b86d0a2c5c6c47e/aa-sdk/core/src/client/decorators/smartAccountClient.ts#L59)
+Defined in: [aa-sdk/core/src/client/decorators/smartAccountClient.ts:59](https://github.com/alchemyplatform/aa-sdk/blob/d80fd19bb3cae4767898ecbfdef74c0c8623f7c4/aa-sdk/core/src/client/decorators/smartAccountClient.ts#L59)
 
 ## Type Declaration
 
@@ -35,7 +35,7 @@ Defined in: [aa-sdk/core/src/client/decorators/smartAccountClient.ts:59](https:/
       </td>
 
       <td>
-        (`args`) => `Promise`\<`UserOperationStruct`\<`TEntryPointVersion`>>
+        (`args`) => `Promise`\<[`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`TEntryPointVersion`>>
       </td>
     </tr>
 
@@ -45,7 +45,7 @@ Defined in: [aa-sdk/core/src/client/decorators/smartAccountClient.ts:59](https:/
       </td>
 
       <td>
-        (`args`, `overrides?`, `context?`) => `Promise`\<`UserOperationStruct`\<`TEntryPointVersion`>>
+        (`args`, `overrides?`, `context?`) => `Promise`\<[`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`TEntryPointVersion`>>
       </td>
     </tr>
 
@@ -55,7 +55,7 @@ Defined in: [aa-sdk/core/src/client/decorators/smartAccountClient.ts:59](https:/
       </td>
 
       <td>
-        (`args`) => `Promise`\<`BuildUserOperationFromTransactionsResult`\<`TEntryPointVersion`>>
+        (`args`) => `Promise`\<[`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`TEntryPointVersion`>>
       </td>
     </tr>
 
@@ -75,7 +75,7 @@ Defined in: [aa-sdk/core/src/client/decorators/smartAccountClient.ts:59](https:/
       </td>
 
       <td>
-        (`args`) => `Promise`\<`SendUserOperationResult`\<`TEntryPointVersion`>>
+        (`args`) => `Promise`\<[`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`TEntryPointVersion`>>
       </td>
     </tr>
 
@@ -105,7 +105,7 @@ Defined in: [aa-sdk/core/src/client/decorators/smartAccountClient.ts:59](https:/
       </td>
 
       <td>
-        (`args`) => `Promise`\<`SendUserOperationResult`\<`TEntryPointVersion`>>
+        (`args`) => `Promise`\<[`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`TEntryPointVersion`>>
       </td>
     </tr>
 
@@ -135,7 +135,7 @@ Defined in: [aa-sdk/core/src/client/decorators/smartAccountClient.ts:59](https:/
       </td>
 
       <td>
-        (`args`) => `Promise`\<`UserOperationRequest`\<`TEntryPointVersion`>>
+        (`args`) => `Promise`\<[`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`TEntryPointVersion`>>
       </td>
     </tr>
 
@@ -185,31 +185,37 @@ Defined in: [aa-sdk/core/src/client/decorators/smartAccountClient.ts:59](https:/
 
     <tr>
       <td>
-        `TAccount` *extends* `SmartContractAccount` | `undefined`
+        `TAccount` *extends*
+        | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)
+        | `undefined`
       </td>
 
       <td>
-        `SmartContractAccount` | `undefined`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TContext` *extends* `UserOperationContext` | `undefined`
-      </td>
-
-      <td>
-        `UserOperationContext` | `undefined`
+        | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)
+        | `undefined`
       </td>
     </tr>
 
     <tr>
       <td>
-        `TEntryPointVersion` *extends* `GetEntryPointFromAccount`\<`TAccount`>
+        `TContext` *extends*
+        | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)
+        | `undefined`
       </td>
 
       <td>
-        `GetEntryPointFromAccount`\<`TAccount`>
+        | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)
+        | `undefined`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TEntryPointVersion` *extends* [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`TAccount`>
+      </td>
+
+      <td>
+        [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`TAccount`>
       </td>
     </tr>
 

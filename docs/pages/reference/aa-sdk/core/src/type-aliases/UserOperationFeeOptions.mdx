@@ -10,13 +10,13 @@ layout: reference
 ```ts
 type UserOperationFeeOptions<TEntryPointVersion> =
   TEntryPointVersion extends "0.6.0"
-    ? z.input<typeof UserOperationFeeOptionsSchema_v6>
+    ? z.input<typeof accountLoupeActions>
     : TEntryPointVersion extends "0.7.0"
-      ? z.input<typeof UserOperationFeeOptionsSchema_v7>
-      : z.input<typeof UserOperationFeeOptionsSchema>;
+      ? z.input<typeof accountLoupeActions>
+      : z.input<typeof accountLoupeActions>;
 ```
 
-Defined in: [aa-sdk/core/src/types.ts:55](https://github.com/alchemyplatform/aa-sdk/blob/27e36329c103b4660886c9508b86d0a2c5c6c47e/aa-sdk/core/src/types.ts#L55)
+Defined in: [aa-sdk/core/src/types.ts:51](https://github.com/alchemyplatform/aa-sdk/blob/d80fd19bb3cae4767898ecbfdef74c0c8623f7c4/aa-sdk/core/src/types.ts#L51)
 
 ## Type Parameters
 
@@ -31,11 +31,11 @@ Defined in: [aa-sdk/core/src/types.ts:55](https://github.com/alchemyplatform/aa-
   <tbody>
     <tr>
       <td>
-        `TEntryPointVersion` *extends* `EntryPointVersion`
+        `TEntryPointVersion` *extends* [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)
       </td>
 
       <td>
-        `EntryPointVersion`
+        [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)
       </td>
     </tr>
 

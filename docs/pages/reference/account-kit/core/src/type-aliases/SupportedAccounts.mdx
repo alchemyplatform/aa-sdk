@@ -9,13 +9,13 @@ layout: reference
 
 ```ts
 type SupportedAccounts =
-  | LightAccount<AlchemySigner, LightAccountVersion<"LightAccount">>
-  | MultiOwnerModularAccount<AlchemySigner>
-  | MultiOwnerLightAccount<
+  | accountLoupeActions<AlchemySigner, accountLoupeActions<"LightAccount">>
+  | accountLoupeActions<AlchemySigner>
+  | accountLoupeActions<
       AlchemySigner,
-      LightAccountVersion<"MultiOwnerLightAccount">
+      accountLoupeActions<"MultiOwnerLightAccount">
     >
-  | ModularAccountV2<AlchemySigner>;
+  | accountLoupeActions<AlchemySigner>;
 ```
 
-Defined in: [account-kit/core/src/types.ts:39](https://github.com/alchemyplatform/aa-sdk/blob/27e36329c103b4660886c9508b86d0a2c5c6c47e/account-kit/core/src/types.ts#L39)
+Defined in: [account-kit/core/src/types.ts:39](https://github.com/alchemyplatform/aa-sdk/blob/d80fd19bb3cae4767898ecbfdef74c0c8623f7c4/account-kit/core/src/types.ts#L39)

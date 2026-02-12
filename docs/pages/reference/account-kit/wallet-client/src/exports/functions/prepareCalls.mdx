@@ -41,13 +41,28 @@ function prepareCalls<TAccount>(client, params): Promise<
         domain?: {
            chainId?: number;
            name?: string;
-           salt?: `0x${string}`;
-           verifyingContract?: `0x${string}`;
+           salt?: `0x${(...)}`;
+           verifyingContract?: `0x${(...)}`;
            version?: string;
         };
-        message: Record<string, unknown>;
+        message: StaticRecord<[], "Encode", {
+         }, {
+           domain: TOptional<TObject<...>>;
+           message: TRecord<"^.*$", TUnknown>;
+           primaryType: TString;
+           types: TRecord<"^.*$", TArray<...>>;
+        }, "^.*$", TUnknown, string, unknown>;
         primaryType: string;
-        types: Record<string, object[]>;
+        types: StaticRecord<[], "Encode", {
+         }, {
+           domain: TOptional<TObject<...>>;
+           message: TRecord<"^.*$", TUnknown>;
+           primaryType: TString;
+           types: TRecord<"^.*$", TArray<...>>;
+         }, "^.*$", TArray<TObject<{
+           name: ...;
+           type: ...;
+        }>>, string, object[]>;
      };
      rawPayload: `0x${string}`;
      type: "eth_signTypedData_v4";
@@ -90,13 +105,28 @@ function prepareCalls<TAccount>(client, params): Promise<
         domain?: {
            chainId?: number;
            name?: string;
-           salt?: `0x${string}`;
-           verifyingContract?: `0x${string}`;
+           salt?: `0x${(...)}`;
+           verifyingContract?: `0x${(...)}`;
            version?: string;
         };
-        message: Record<string, unknown>;
+        message: StaticRecord<[], "Encode", {
+         }, {
+           domain: TOptional<TObject<...>>;
+           message: TRecord<"^.*$", TUnknown>;
+           primaryType: TString;
+           types: TRecord<"^.*$", TArray<...>>;
+        }, "^.*$", TUnknown, string, unknown>;
         primaryType: string;
-        types: Record<string, object[]>;
+        types: StaticRecord<[], "Encode", {
+         }, {
+           domain: TOptional<TObject<...>>;
+           message: TRecord<"^.*$", TUnknown>;
+           primaryType: TString;
+           types: TRecord<"^.*$", TArray<...>>;
+         }, "^.*$", TArray<TObject<{
+           name: ...;
+           type: ...;
+        }>>, string, object[]>;
      };
      rawPayload: `0x${string}`;
      type: "eth_signTypedData_v4";
@@ -112,52 +142,85 @@ function prepareCalls<TAccount>(client, params): Promise<
         verifyingContract?: `0x${string}`;
         version?: string;
      };
-     message: Record<string, unknown>;
+     message: StaticRecord<[], "Encode", {
+      }, {
+        domain: TOptional<TObject<{
+           chainId: TOptional<...>;
+           name: TOptional<...>;
+           salt: TOptional<...>;
+           verifyingContract: TOptional<...>;
+           version: TOptional<...>;
+        }>>;
+        message: TRecord<"^.*$", TUnknown>;
+        primaryType: TString;
+        types: TRecord<"^.*$", TArray<TObject<{
+           name: ...;
+           type: ...;
+        }>>>;
+     }, "^.*$", TUnknown, string, unknown>;
      primaryType: string;
-     types: Record<string, object[]>;
+     types: StaticRecord<[], "Encode", {
+      }, {
+        domain: TOptional<TObject<{
+           chainId: TOptional<...>;
+           name: TOptional<...>;
+           salt: TOptional<...>;
+           verifyingContract: TOptional<...>;
+           version: TOptional<...>;
+        }>>;
+        message: TRecord<"^.*$", TUnknown>;
+        primaryType: TString;
+        types: TRecord<"^.*$", TArray<TObject<{
+           name: ...;
+           type: ...;
+        }>>>;
+      }, "^.*$", TArray<TObject<{
+        name: TString;
+        type: TString;
+     }>>, string, object[]>;
   };
   modifiedRequest: {
      calls: object[];
      capabilities?: {
         eip7702Auth?:   | true
            | {
-           account?: `0x${string}`;
+           account?: `0x${(...)}`;
            delegation: "ModularAccountV2" | "0x69007702764179f14F51cdce752f4f775d74E139";
          };
         gasParamsOverride?: {
-           callGasLimit?:   | `0x${string}`
+           callGasLimit?:   | `0x${(...)}`
               | {
-              multiplier: number;
+              multiplier: ...;
             };
-           maxFeePerGas?:   | `0x${string}`
+           maxFeePerGas?:   | `0x${(...)}`
               | {
-              multiplier: number;
+              multiplier: ...;
             };
-           maxPriorityFeePerGas?:   | `0x${string}`
+           maxPriorityFeePerGas?:   | `0x${(...)}`
               | {
-              multiplier: number;
+              multiplier: ...;
             };
-           paymasterPostOpGasLimit?:   | `0x${string}`
+           paymasterPostOpGasLimit?:   | `0x${(...)}`
               | {
-              multiplier: number;
+              multiplier: ...;
             };
-           paymasterVerificationGasLimit?:   | `0x${string}`
+           paymasterVerificationGasLimit?:   | `0x${(...)}`
               | {
-              multiplier: number;
+              multiplier: ...;
             };
-           preVerificationGas?:   | `0x${string}`
+           preVerificationGas?:   | `0x${(...)}`
               | {
-              multiplier: number;
+              multiplier: ...;
             };
-           verificationGasLimit?:   | `0x${string}`
+           verificationGasLimit?:   | `0x${(...)}`
               | {
-              multiplier: number;
+              multiplier: ...;
             };
         };
         nonceOverride?: {
            nonceKey: `0x${string}`;
         };
-        paymasterService?: ({ policyId: string; } | { policyIds: string[]; }) & { onlyEstimation?: boolean | undefined; erc20?: { maxTokenAmount?: `0x${string}` | undefined; tokenAddress: `0x${string}`; preOpSettings: { autoPermit: { ...; }; }; } | { ...; } | { ...; } | { ...; } | undefined; webhookData?: string | undefined; };
+        paymasterService?: (({ policyId: string; } | { policyIds: string[]; }) & { onlyEstimation?: boolean | undefined; erc20?: { maxTokenAmount?: `0x${string}` | undefined; tokenAddress: `0x${string}`; preOpSettings: { autoPermit: { ...; }; }; } | { ...; } | { ...; } | { ...; } | undefined; webhookData?: string | undefined; }) | undefined;
         permissions?:   | {
            context: `0x${string}`;
          }
@@ -165,6 +228,15 @@ function prepareCalls<TAccount>(client, params): Promise<
            sessionId: `0x${string}`;
            signature: `0x${string}`;
          };
+        stateOverride?: StaticRecord<[], "Encode", {
+         }, {
+           eip7702Auth: TOptional<...>;
+           gasParamsOverride: TOptional<...>;
+           nonceOverride: TOptional<...>;
+           paymasterService: TOptional<...>;
+           permissions: TOptional<...>;
+           stateOverride: TOptional<...>;
+        }, "^0x.*$", TUnion<[..., ...]>, `0x${string}`, ({ nonce?: `0x${string}` | undefined; code?: `0x${string}` | undefined; balance?: `0x${string}` | undefined; } & ({ state: StaticRecord<[], "Encode", {}, { state: TRecord<"^0x.*$", TTemplateLiteral<"^0x.*$">>; }, "^0x.*$", TTemplateLiteral<...>>; } | { ...; })) | { ...; }>;
      };
      chainId: `0x${string}`;
      from: `0x${string}`;
@@ -206,9 +278,36 @@ function prepareCalls<TAccount>(client, params): Promise<
            verifyingContract?: `0x${string}`;
            version?: string;
         };
-        message: Record<string, unknown>;
+        message: StaticRecord<[], "Encode", {
+         }, {
+           domain: TOptional<TObject<{
+              chainId: ...;
+              name: ...;
+              salt: ...;
+              verifyingContract: ...;
+              version: ...;
+           }>>;
+           message: TRecord<"^.*$", TUnknown>;
+           primaryType: TString;
+           types: TRecord<"^.*$", TArray<TObject<...>>>;
+        }, "^.*$", TUnknown, string, unknown>;
         primaryType: string;
-        types: Record<string, object[]>;
+        types: StaticRecord<[], "Encode", {
+         }, {
+           domain: TOptional<TObject<{
+              chainId: ...;
+              name: ...;
+              salt: ...;
+              verifyingContract: ...;
+              version: ...;
+           }>>;
+           message: TRecord<"^.*$", TUnknown>;
+           primaryType: TString;
+           types: TRecord<"^.*$", TArray<TObject<...>>>;
+         }, "^.*$", TArray<TObject<{
+           name: TString;
+           type: TString;
+        }>>, string, object[]>;
      };
      rawPayload: `0x${string}`;
      type: "eth_signTypedData_v4";
@@ -239,23 +338,17 @@ function prepareCalls<TAccount>(client, params): Promise<
      signatureRequest?:   | {
         data:   | string
            | {
-           raw: `0x${(...)}`;
+           raw: ...;
          };
         rawPayload: `0x${string}`;
         type: "personal_sign";
       }
         | {
         data: {
-           domain?: {
-              chainId?: ...;
-              name?: ...;
-              salt?: ...;
-              verifyingContract?: ...;
-              version?: ...;
-           };
-           message: Record<string, unknown>;
+           domain?: ... | ...;
+           message: StaticRecord<..., ..., ..., ..., ..., ..., ..., ...>;
            primaryType: string;
-           types: Record<string, ...[]>;
+           types: StaticRecord<..., ..., ..., ..., ..., ..., ..., ...>;
         };
         rawPayload: `0x${string}`;
         type: "eth_signTypedData_v4";
@@ -288,23 +381,17 @@ function prepareCalls<TAccount>(client, params): Promise<
      signatureRequest?:   | {
         data:   | string
            | {
-           raw: `0x${(...)}`;
+           raw: ...;
          };
         rawPayload: `0x${string}`;
         type: "personal_sign";
       }
         | {
         data: {
-           domain?: {
-              chainId?: ...;
-              name?: ...;
-              salt?: ...;
-              verifyingContract?: ...;
-              version?: ...;
-           };
-           message: Record<string, unknown>;
+           domain?: ... | ...;
+           message: StaticRecord<..., ..., ..., ..., ..., ..., ..., ...>;
            primaryType: string;
-           types: Record<string, ...[]>;
+           types: StaticRecord<..., ..., ..., ..., ..., ..., ..., ...>;
         };
         rawPayload: `0x${string}`;
         type: "eth_signTypedData_v4";
@@ -324,10 +411,10 @@ function prepareCalls<TAccount>(client, params): Promise<
      type: "authorization";
   })[];
   type: "array";
-}>;
+} & object>;
 ```
 
-Defined in: [account-kit/wallet-client/src/client/actions/prepareCalls.ts:57](https://github.com/alchemyplatform/aa-sdk/blob/27e36329c103b4660886c9508b86d0a2c5c6c47e/account-kit/wallet-client/src/client/actions/prepareCalls.ts#L57)
+Defined in: [account-kit/wallet-client/src/client/actions/prepareCalls.ts:57](https://github.com/alchemyplatform/aa-sdk/blob/d80fd19bb3cae4767898ecbfdef74c0c8623f7c4/account-kit/wallet-client/src/client/actions/prepareCalls.ts#L57)
 
 Prepares a set of contract calls for execution by building a user operation.
 Returns the built user operation and a signature request that needs to be signed
@@ -453,13 +540,28 @@ const result = await client.prepareCalls({
 `domain?`: \{
 `chainId?`: `number`;
 `name?`: `string`;
-`salt?`: `` `0x${string}` ``;
-`verifyingContract?`: `` `0x${string}` ``;
+`salt?`: `` `0x${(...)}` ``;
+`verifyingContract?`: `` `0x${(...)}` ``;
 `version?`: `string`;
 };
-`message`: `Record`\<`string`, `unknown`>;
+`message`: `StaticRecord`\<\[], `"Encode"`, \{
+}, \{
+`domain`: `TOptional`\<`TObject`\<...>>;
+`message`: `TRecord`\<`"^.*$"`, `TUnknown`>;
+`primaryType`: `TString`;
+`types`: `TRecord`\<`"^.*$"`, `TArray`\<...>>;
+}, `"^.*$"`, `TUnknown`, `string`, `unknown`>;
 `primaryType`: `string`;
-`types`: `Record`\<`string`, `object`\[]>;
+`types`: `StaticRecord`\<\[], `"Encode"`, \{
+}, \{
+`domain`: `TOptional`\<`TObject`\<...>>;
+`message`: `TRecord`\<`"^.*$"`, `TUnknown`>;
+`primaryType`: `TString`;
+`types`: `TRecord`\<`"^.*$"`, `TArray`\<...>>;
+}, `"^.*$"`, `TArray`\<`TObject`\<\{
+`name`: ...;
+`type`: ...;
+}>>, `string`, `object`\[]>;
 };
 `rawPayload`: `` `0x${string}` ``;
 `type`: `"eth_signTypedData_v4"`;
@@ -502,13 +604,28 @@ const result = await client.prepareCalls({
 `domain?`: \{
 `chainId?`: `number`;
 `name?`: `string`;
-`salt?`: `` `0x${string}` ``;
-`verifyingContract?`: `` `0x${string}` ``;
+`salt?`: `` `0x${(...)}` ``;
+`verifyingContract?`: `` `0x${(...)}` ``;
 `version?`: `string`;
 };
-`message`: `Record`\<`string`, `unknown`>;
+`message`: `StaticRecord`\<\[], `"Encode"`, \{
+}, \{
+`domain`: `TOptional`\<`TObject`\<...>>;
+`message`: `TRecord`\<`"^.*$"`, `TUnknown`>;
+`primaryType`: `TString`;
+`types`: `TRecord`\<`"^.*$"`, `TArray`\<...>>;
+}, `"^.*$"`, `TUnknown`, `string`, `unknown`>;
 `primaryType`: `string`;
-`types`: `Record`\<`string`, `object`\[]>;
+`types`: `StaticRecord`\<\[], `"Encode"`, \{
+}, \{
+`domain`: `TOptional`\<`TObject`\<...>>;
+`message`: `TRecord`\<`"^.*$"`, `TUnknown`>;
+`primaryType`: `TString`;
+`types`: `TRecord`\<`"^.*$"`, `TArray`\<...>>;
+}, `"^.*$"`, `TArray`\<`TObject`\<\{
+`name`: ...;
+`type`: ...;
+}>>, `string`, `object`\[]>;
 };
 `rawPayload`: `` `0x${string}` ``;
 `type`: `"eth_signTypedData_v4"`;
@@ -524,52 +641,85 @@ const result = await client.prepareCalls({
 `verifyingContract?`: `` `0x${string}` ``;
 `version?`: `string`;
 };
-`message`: `Record`\<`string`, `unknown`>;
+`message`: `StaticRecord`\<\[], `"Encode"`, \{
+}, \{
+`domain`: `TOptional`\<`TObject`\<\{
+`chainId`: `TOptional`\<...>;
+`name`: `TOptional`\<...>;
+`salt`: `TOptional`\<...>;
+`verifyingContract`: `TOptional`\<...>;
+`version`: `TOptional`\<...>;
+}>>;
+`message`: `TRecord`\<`"^.*$"`, `TUnknown`>;
+`primaryType`: `TString`;
+`types`: `TRecord`\<`"^.*$"`, `TArray`\<`TObject`\<\{
+`name`: ...;
+`type`: ...;
+}>>>;
+}, `"^.*$"`, `TUnknown`, `string`, `unknown`>;
 `primaryType`: `string`;
-`types`: `Record`\<`string`, `object`\[]>;
+`types`: `StaticRecord`\<\[], `"Encode"`, \{
+}, \{
+`domain`: `TOptional`\<`TObject`\<\{
+`chainId`: `TOptional`\<...>;
+`name`: `TOptional`\<...>;
+`salt`: `TOptional`\<...>;
+`verifyingContract`: `TOptional`\<...>;
+`version`: `TOptional`\<...>;
+}>>;
+`message`: `TRecord`\<`"^.*$"`, `TUnknown`>;
+`primaryType`: `TString`;
+`types`: `TRecord`\<`"^.*$"`, `TArray`\<`TObject`\<\{
+`name`: ...;
+`type`: ...;
+}>>>;
+}, `"^.*$"`, `TArray`\<`TObject`\<\{
+`name`: `TString`;
+`type`: `TString`;
+}>>, `string`, `object`\[]>;
 };
 `modifiedRequest`: \{
 `calls`: `object`\[];
 `capabilities?`: \{
 `eip7702Auth?`: | `true`
 | \{
-`account?`: `` `0x${string}` ``;
+`account?`: `` `0x${(...)}` ``;
 `delegation`: `"ModularAccountV2"` | `"0x69007702764179f14F51cdce752f4f775d74E139"`;
 };
 `gasParamsOverride?`: \{
-`callGasLimit?`: | `` `0x${string}` ``
+`callGasLimit?`: | `` `0x${(...)}` ``
 | \{
-`multiplier`: `number`;
+`multiplier`: ...;
 };
-`maxFeePerGas?`: | `` `0x${string}` ``
+`maxFeePerGas?`: | `` `0x${(...)}` ``
 | \{
-`multiplier`: `number`;
+`multiplier`: ...;
 };
-`maxPriorityFeePerGas?`: | `` `0x${string}` ``
+`maxPriorityFeePerGas?`: | `` `0x${(...)}` ``
 | \{
-`multiplier`: `number`;
+`multiplier`: ...;
 };
-`paymasterPostOpGasLimit?`: | `` `0x${string}` ``
+`paymasterPostOpGasLimit?`: | `` `0x${(...)}` ``
 | \{
-`multiplier`: `number`;
+`multiplier`: ...;
 };
-`paymasterVerificationGasLimit?`: | `` `0x${string}` ``
+`paymasterVerificationGasLimit?`: | `` `0x${(...)}` ``
 | \{
-`multiplier`: `number`;
+`multiplier`: ...;
 };
-`preVerificationGas?`: | `` `0x${string}` ``
+`preVerificationGas?`: | `` `0x${(...)}` ``
 | \{
-`multiplier`: `number`;
+`multiplier`: ...;
 };
-`verificationGasLimit?`: | `` `0x${string}` ``
+`verificationGasLimit?`: | `` `0x${(...)}` ``
 | \{
-`multiplier`: `number`;
+`multiplier`: ...;
 };
 };
 `nonceOverride?`: \{
 `nonceKey`: `` `0x${string}` ``;
 };
-`paymasterService?`: (\{ policyId: string; } | \{ policyIds: string\[]; }) & \{ onlyEstimation?: boolean | undefined; erc20?: \{ maxTokenAmount?: \`0x$\{string}\` | undefined; tokenAddress: \`0x$\{string}\`; preOpSettings: \{ autoPermit: \{ ...; }; }; } | \{ ...; } | \{ ...; } | \{ ...; } | undefined; webhookData?: string | undefined; };
+`paymasterService?`: ((\{ policyId: string; } | \{ policyIds: string\[]; }) & \{ onlyEstimation?: boolean | undefined; erc20?: \{ maxTokenAmount?: \`0x$\{string}\` | undefined; tokenAddress: \`0x$\{string}\`; preOpSettings: \{ autoPermit: \{ ...; }; }; } | \{ ...; } | \{ ...; } | \{ ...; } | undefined; webhookData?: string | undefined; }) | undefined;
 `permissions?`: | \{
 `context`: `` `0x${string}` ``;
 }
@@ -577,6 +727,15 @@ const result = await client.prepareCalls({
 `sessionId`: `` `0x${string}` ``;
 `signature`: `` `0x${string}` ``;
 };
+`stateOverride?`: `StaticRecord`\<\[], `"Encode"`, \{
+}, \{
+`eip7702Auth`: `TOptional`\<...>;
+`gasParamsOverride`: `TOptional`\<...>;
+`nonceOverride`: `TOptional`\<...>;
+`paymasterService`: `TOptional`\<...>;
+`permissions`: `TOptional`\<...>;
+`stateOverride`: `TOptional`\<...>;
+}, `"^0x.*$"`, `TUnion`\<\[..., ...]>, `` `0x${string}` ``, (\{ nonce?: \`0x$\{string}\` | undefined; code?: \`0x$\{string}\` | undefined; balance?: \`0x$\{string}\` | undefined; } & (\{ state: StaticRecord\<\[], "Encode", \{}, \{ state: TRecord\<"^0x.\*$", TTemplateLiteral\<"^0x.\*$">>; }, "^0x.\*$", TTemplateLiteral\<...>>; } | \{ ...; })) | \{ ...; }>;
 };
 `chainId`: `` `0x${string}` ``;
 `from`: `` `0x${string}` ``;
@@ -618,9 +777,36 @@ const result = await client.prepareCalls({
 `verifyingContract?`: `` `0x${string}` ``;
 `version?`: `string`;
 };
-`message`: `Record`\<`string`, `unknown`>;
+`message`: `StaticRecord`\<\[], `"Encode"`, \{
+}, \{
+`domain`: `TOptional`\<`TObject`\<\{
+`chainId`: ...;
+`name`: ...;
+`salt`: ...;
+`verifyingContract`: ...;
+`version`: ...;
+}>>;
+`message`: `TRecord`\<`"^.*$"`, `TUnknown`>;
+`primaryType`: `TString`;
+`types`: `TRecord`\<`"^.*$"`, `TArray`\<`TObject`\<...>>>;
+}, `"^.*$"`, `TUnknown`, `string`, `unknown`>;
 `primaryType`: `string`;
-`types`: `Record`\<`string`, `object`\[]>;
+`types`: `StaticRecord`\<\[], `"Encode"`, \{
+}, \{
+`domain`: `TOptional`\<`TObject`\<\{
+`chainId`: ...;
+`name`: ...;
+`salt`: ...;
+`verifyingContract`: ...;
+`version`: ...;
+}>>;
+`message`: `TRecord`\<`"^.*$"`, `TUnknown`>;
+`primaryType`: `TString`;
+`types`: `TRecord`\<`"^.*$"`, `TArray`\<`TObject`\<...>>>;
+}, `"^.*$"`, `TArray`\<`TObject`\<\{
+`name`: `TString`;
+`type`: `TString`;
+}>>, `string`, `object`\[]>;
 };
 `rawPayload`: `` `0x${string}` ``;
 `type`: `"eth_signTypedData_v4"`;
@@ -651,23 +837,17 @@ const result = await client.prepareCalls({
 `signatureRequest?`: | \{
 `data`: | `string`
 | \{
-`raw`: `` `0x${(...)}` ``;
+`raw`: ...;
 };
 `rawPayload`: `` `0x${string}` ``;
 `type`: `"personal_sign"`;
 }
 | \{
 `data`: \{
-`domain?`: \{
-`chainId?`: ...;
-`name?`: ...;
-`salt?`: ...;
-`verifyingContract?`: ...;
-`version?`: ...;
-};
-`message`: `Record`\<`string`, `unknown`>;
+`domain?`: ... | ...;
+`message`: `StaticRecord`\<..., ..., ..., ..., ..., ..., ..., ...>;
 `primaryType`: `string`;
-`types`: `Record`\<`string`, ...\[]>;
+`types`: `StaticRecord`\<..., ..., ..., ..., ..., ..., ..., ...>;
 };
 `rawPayload`: `` `0x${string}` ``;
 `type`: `"eth_signTypedData_v4"`;
@@ -700,23 +880,17 @@ const result = await client.prepareCalls({
 `signatureRequest?`: | \{
 `data`: | `string`
 | \{
-`raw`: `` `0x${(...)}` ``;
+`raw`: ...;
 };
 `rawPayload`: `` `0x${string}` ``;
 `type`: `"personal_sign"`;
 }
 | \{
 `data`: \{
-`domain?`: \{
-`chainId?`: ...;
-`name?`: ...;
-`salt?`: ...;
-`verifyingContract?`: ...;
-`version?`: ...;
-};
-`message`: `Record`\<`string`, `unknown`>;
+`domain?`: ... | ...;
+`message`: `StaticRecord`\<..., ..., ..., ..., ..., ..., ..., ...>;
 `primaryType`: `string`;
-`types`: `Record`\<`string`, ...\[]>;
+`types`: `StaticRecord`\<..., ..., ..., ..., ..., ..., ..., ...>;
 };
 `rawPayload`: `` `0x${string}` ``;
 `type`: `"eth_signTypedData_v4"`;
@@ -736,7 +910,7 @@ const result = await client.prepareCalls({
 `type`: `"authorization"`;
 })\[];
 `type`: `"array"`;
-}>
+} & `object`>
 
 A Promise that resolves to the prepared calls result containing
 the user operation data and signature request

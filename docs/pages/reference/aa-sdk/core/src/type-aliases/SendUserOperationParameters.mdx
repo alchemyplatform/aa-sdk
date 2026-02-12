@@ -10,12 +10,12 @@ layout: reference
 ```ts
 type SendUserOperationParameters<TAccount, TContext, TEntryPointVersion> =
   object &
-    GetAccountParameter<TAccount> &
+    accountLoupeActions<TAccount> &
     GetContextParameter<TContext> &
-    UserOperationOverridesParameter<TEntryPointVersion>;
+    accountLoupeActions<TEntryPointVersion>;
 ```
 
-Defined in: [aa-sdk/core/src/actions/smartAccount/types.ts:35](https://github.com/alchemyplatform/aa-sdk/blob/27e36329c103b4660886c9508b86d0a2c5c6c47e/aa-sdk/core/src/actions/smartAccount/types.ts#L35)
+Defined in: [aa-sdk/core/src/actions/smartAccount/types.ts:32](https://github.com/alchemyplatform/aa-sdk/blob/d80fd19bb3cae4767898ecbfdef74c0c8623f7c4/aa-sdk/core/src/actions/smartAccount/types.ts#L32)
 
 ## Type Declaration
 
@@ -34,7 +34,8 @@ Defined in: [aa-sdk/core/src/actions/smartAccount/types.ts:35](https://github.co
       </td>
 
       <td>
-        `UserOperationCallData` | `BatchUserOperationCallData`
+        | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)
+        | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)
       </td>
     </tr>
 
@@ -54,7 +55,9 @@ Defined in: [aa-sdk/core/src/actions/smartAccount/types.ts:35](https://github.co
   <tbody>
     <tr>
       <td>
-        `TAccount` *extends* `SmartContractAccount` | `undefined`
+        `TAccount` *extends*
+        | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)
+        | `undefined`
       </td>
 
       <td>
@@ -74,11 +77,11 @@ Defined in: [aa-sdk/core/src/actions/smartAccount/types.ts:35](https://github.co
 
     <tr>
       <td>
-        `TEntryPointVersion` *extends* `GetEntryPointFromAccount`\<`TAccount`>
+        `TEntryPointVersion` *extends* [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`TAccount`>
       </td>
 
       <td>
-        `GetEntryPointFromAccount`\<`TAccount`>
+        [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`TAccount`>
       </td>
     </tr>
 
