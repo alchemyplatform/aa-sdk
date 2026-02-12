@@ -21,7 +21,7 @@ export type SignMessageResult = Prettify<Hex>;
  * @param {InnerWalletApiClient} client - The wallet API client to use for the request
  * @param {SignMessageParams} params - Parameters for signing the message
  * @param {SignableMessage} params.message - The message to sign using EIP-191. Can be a string, or object with raw bytes.
- * @param {Address} [params.account] - Optional account address to use for signing. If not provided, uses the client's current account.
+ * @param {AccountParam} [params.account] - Optional account to use for signing. Can be an address string or an object with an `address` property. If not provided, uses the client's current account.
  * @returns {Promise<SignMessageResult>} A Promise that resolves to the signed message as a hex string
  *
  * @example

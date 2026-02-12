@@ -27,7 +27,7 @@ export type CreateSmartWalletClientParams = {
  * @param {SmartWalletSigner} params.signer - The signer to use for signing transactions.
  * @param {AlchemyWalletTransport} params.transport - The transport to use for RPC calls.
  * @param {Chain} params.chain - The blockchain network to connect to.
- * @param {Address} [params.account] - Optional account address. Defaults to the signer's address (EIP-7702).
+ * @param {AccountParam} [params.account] - Optional account. Can be an address string or an object with an `address` property. Defaults to the signer's address (EIP-7702).
  * @param {object} [params.paymaster] - Optional paymaster configuration with policy IDs.
  * @returns {SmartWalletClient} A wallet client extended with smart wallet actions.
  */

@@ -162,9 +162,7 @@ async function signWithSignerClient(
         v,
         yParity: _yParity,
       } = await action({
-        address: params.data.address,
-        chainId: Number(params.data.chainId),
-        nonce: Number(params.data.nonce),
+        ...params.data,
         account: signer.account,
       });
       const yParity =

@@ -43,7 +43,7 @@ function isRpcCapabilities(
 function isResolvedCapabilities(
   value: object,
 ): value is PrepareCallsCapabilities | SendPreparedCallsCapabilities {
-  return "paymasterService" in value;
+  return !("paymasterService" in value);
 }
 
 /**

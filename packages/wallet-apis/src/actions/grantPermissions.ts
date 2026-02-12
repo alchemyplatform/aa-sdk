@@ -33,7 +33,7 @@ export type GrantPermissionsResult = Prettify<{
  *
  * @param {InnerWalletApiClient} client - The wallet API client to use for the request
  * @param {GrantPermissionsParams} params - The parameters for granting permissions
- * @param {Address} [params.account] - The account address (required if client was not initialized with an account)
+ * @param {AccountParam} [params.account] - The account (required if client was not initialized with an account). Can be an address string or an object with an `address` property.
  * @param {number} params.expirySec - Unix timestamp when the permissions expire
  * @param {sessionKeyData} params.key - The session key information
  * @param {string} params.key.publicKey - The public key of the session key

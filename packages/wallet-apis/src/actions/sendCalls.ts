@@ -30,7 +30,7 @@ export type SendCallsResult = Prettify<SendPreparedCallsResult>;
  * @param {InnerWalletApiClient} client - The wallet API client to use for the request
  * @param {SendCallsParams} params - Parameters for sending calls
  * @param {Array<{to: Address, data?: Hex, value?: bigint}>} params.calls - Array of contract calls to execute
- * @param {Address} [params.account] - The account address to execute the calls from. Defaults to the client's account (signer address via EIP-7702).
+ * @param {AccountParam} [params.account] - The account to execute the calls from. Can be an address string or an object with an `address` property. Defaults to the client's account (signer address via EIP-7702).
  * @param {object} [params.capabilities] - Optional capabilities to include with the request.
  * @returns {Promise<SendPreparedCallsResult>} A Promise that resolves to the result containing the call ID.
  *

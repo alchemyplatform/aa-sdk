@@ -29,7 +29,7 @@ export type GetCapabilitiesResult = Record<number, Record<string, unknown>>;
  *
  * @param {InnerWalletApiClient} client - The wallet API client to use for the request
  * @param {GetCapabilitiesParams} [params] - Optional parameters
- * @param {Address} [params.account] - The account address. Defaults to the client's account.
+ * @param {AccountParam} [params.account] - The account to query capabilities for. Can be an address string or an object with an `address` property. Defaults to the client's account.
  * @param {number} [params.chainId] - Optional chain ID to filter capabilities for.
  * @returns {Promise<GetCapabilitiesResult>} A mapping from chain ID (number) to capabilities
  *

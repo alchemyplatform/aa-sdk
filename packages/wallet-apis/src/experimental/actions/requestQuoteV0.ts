@@ -41,7 +41,7 @@ export type RequestQuoteV0Result = RequestQuoteV0Response;
  * @param {Address} params.toToken - The address of the token to swap to
  * @param {Hex} [params.fromAmount] - The amount to swap from (mutually exclusive with minimumToAmount)
  * @param {Hex} [params.minimumToAmount] - The minimum amount to receive (mutually exclusive with fromAmount)
- * @param {AccountParam} [params.account] - The account to execute the swap from. Defaults to the client's account (signer address via EIP-7702).
+ * @param {AccountParam} [params.account] - The account to execute the swap from. Can be an address string or an object with an `address` property. Defaults to the client's account (signer address via EIP-7702).
  * @param {Hex} [params.slippage] - The maximum acceptable slippage percentage
  * @param {boolean} [params.returnRawCalls] - Whether to return raw calls for EOA wallets (defaults to false for smart wallets)
  * @param {object} [params.capabilities] - Optional capabilities to include with the request (only available when returnRawCalls is false)
