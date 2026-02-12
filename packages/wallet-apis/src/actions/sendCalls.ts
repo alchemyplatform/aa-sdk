@@ -15,7 +15,7 @@ import {
 
 export type SendCallsParams = Prettify<
   DistributiveOmit<PrepareCallsParams, "chainId"> & {
-    chain?: Chain;
+    chain?: Pick<Chain, "id">;
   }
 >;
 
