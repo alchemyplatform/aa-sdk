@@ -1,6 +1,5 @@
 import type { Prettify } from "viem";
 import type { DistributiveOmit, InnerWalletApiClient } from "../types.ts";
-import { AccountNotFoundError } from "@alchemy/common";
 import { LOGGER } from "../logger.js";
 import {
   mergeClientCapabilities,
@@ -70,13 +69,7 @@ export async function prepareCalls(
 ): Promise<PrepareCallsResult> {
   const from = params.account
     ? resolveAddress(params.account)
-    : client.account?.address;
-  if (!from) {
-    LOGGER.warn("prepareCalls:no-account", {
-      hasClientAccount: !!client.account,
-    });
-    throw new AccountNotFoundError();
-  }
+    : client.account.address;
 
   const chainId = params.chainId ?? client.chain.id;
 

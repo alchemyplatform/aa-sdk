@@ -1,12 +1,11 @@
-import type { Address, Prettify } from "viem";
+import type { Prettify } from "viem";
 import type { DistributiveOmit, InnerWalletApiClient } from "../../types.ts";
-import { AccountNotFoundError } from "@alchemy/common";
 import {
   mergeClientCapabilities,
   toRpcCapabilities,
-  type PrepareCallsCapabilities,
   type WithCapabilities,
 } from "../../utils/capabilities.js";
+import { resolveAddress, type AccountParam } from "../../utils/resolve.js";
 import { wallet_requestQuote_v0 as MethodSchema } from "@alchemy/wallet-api-types/rpc";
 import type { StaticDecode } from "typebox";
 import { Value } from "typebox/value";
@@ -24,7 +23,7 @@ type RequestQuoteV0Response = Schema["ReturnType"];
 export type RequestQuoteV0Params = Prettify<
   WithCapabilities<
     DistributiveOmit<BaseRequestQuoteV0Params, "from" | "chainId"> & {
-      from?: Address;
+      account?: AccountParam;
       chainId?: number;
     }
   >
@@ -42,7 +41,7 @@ export type RequestQuoteV0Result = RequestQuoteV0Response;
  * @param {Address} params.toToken - The address of the token to swap to
  * @param {Hex} [params.fromAmount] - The amount to swap from (mutually exclusive with minimumToAmount)
  * @param {Hex} [params.minimumToAmount] - The minimum amount to receive (mutually exclusive with fromAmount)
- * @param {Address} [params.from] - The address to execute the swap from. Defaults to the client's account (signer address via EIP-7702).
+ * @param {AccountParam} [params.account] - The account to execute the swap from. Defaults to the client's account (signer address via EIP-7702).
  * @param {Hex} [params.slippage] - The maximum acceptable slippage percentage
  * @param {boolean} [params.returnRawCalls] - Whether to return raw calls for EOA wallets (defaults to false for smart wallets)
  * @param {object} [params.capabilities] - Optional capabilities to include with the request (only available when returnRawCalls is false)
@@ -74,23 +73,21 @@ export async function requestQuoteV0(
   client: InnerWalletApiClient,
   params: RequestQuoteV0Params,
 ): Promise<RequestQuoteV0Result> {
-  const from = params.from ?? client.account?.address;
-  if (!from) {
-    throw new AccountNotFoundError();
-  }
+  const from = params.account
+    ? resolveAddress(params.account)
+    : client.account.address;
 
   const capabilities =
     "returnRawCalls" in params && params.returnRawCalls
       ? undefined
       : mergeClientCapabilities(
           client,
-          ("capabilities" in params ? params.capabilities : undefined) as
-            | PrepareCallsCapabilities
-            | undefined,
+          "capabilities" in params ? params.capabilities : undefined,
         );
 
+  const { account: _, chainId: __, ...rest } = params;
   const rpcParams = Value.Encode(schema.request, {
-    ...params,
+    ...rest,
     chainId: params.chainId ?? client.chain.id,
     from,
     ...(capabilities && { capabilities: toRpcCapabilities(capabilities) }),

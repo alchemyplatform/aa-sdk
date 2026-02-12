@@ -2,7 +2,6 @@ import { type Hex, type Prettify, concatHex } from "viem";
 import type { DistributiveOmit, InnerWalletApiClient } from "../types.ts";
 import { wallet_createSession as MethodSchema } from "@alchemy/wallet-api-types/rpc";
 import { signSignatureRequest } from "./signSignatureRequest.js";
-import { AccountNotFoundError } from "@alchemy/common";
 import { LOGGER } from "../logger.js";
 import type { StaticDecode } from "typebox";
 import { Value } from "typebox/value";
@@ -89,10 +88,6 @@ export async function grantPermissions(
   const account = params.account
     ? resolveAddress(params.account)
     : client.account.address;
-  if (!account) {
-    LOGGER.warn("grantPermissions:no-account");
-    throw new AccountNotFoundError();
-  }
 
   LOGGER.debug("grantPermissions:start", { expirySec: params.expirySec });
 
@@ -113,7 +108,7 @@ export async function grantPermissions(
   const { sessionId, signatureRequest } = Value.Decode(
     schema.response,
     rpcResp,
-  ) as {
+  ) satisfies {
     sessionId: Hex;
     signatureRequest: Parameters<typeof signSignatureRequest>[1];
   };

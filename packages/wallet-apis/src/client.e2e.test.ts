@@ -20,7 +20,6 @@ import { arbitrumSepolia } from "viem/chains";
 import { createSmartWalletClient } from "./client.js";
 import { apiTransport, publicTransport } from "./__tests__/setup.js";
 import { getAction } from "viem/utils";
-import { sign } from "node:crypto";
 
 // We want to test both the "unroll each step" method and the full e2e "sendCalls" method.
 const sendVariants: Array<
@@ -337,7 +336,7 @@ describe("Client E2E Tests", () => {
         account,
         expirySec: Math.floor(Date.now() / 1000) + 60 * 60,
         key: {
-          publicKey: await sessionKey.address,
+          publicKey: sessionKey.address,
           type: "secp256k1",
         },
         permissions: [{ type: "root" }],

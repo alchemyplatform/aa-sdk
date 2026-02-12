@@ -62,7 +62,7 @@ export async function signTypedData(
     : client.account.address;
 
   const prepared = await prepareSign(client, {
-    from: accountAddress,
+    account: accountAddress,
     signatureRequest: {
       type: "eth_signTypedData_v4",
       data: typedDataToJsonSafe(params),
@@ -72,7 +72,7 @@ export async function signTypedData(
   const signed = await signSignatureRequest(client, prepared.signatureRequest);
 
   const formatted = await formatSign(client, {
-    from: accountAddress,
+    account: accountAddress,
     signature: {
       type: "ecdsa",
       data: signed.data,

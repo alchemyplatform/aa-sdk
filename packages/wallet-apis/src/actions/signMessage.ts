@@ -45,7 +45,7 @@ export async function signMessage(
   });
 
   const prepared = await prepareSign(client, {
-    from: accountAddress,
+    account: accountAddress,
     signatureRequest: {
       type: "personal_sign",
       data: signableMessageToJsonSafe(params.message),
@@ -55,7 +55,7 @@ export async function signMessage(
   const signed = await signSignatureRequest(client, prepared.signatureRequest);
 
   const formatted = await formatSign(client, {
-    from: accountAddress,
+    account: accountAddress,
     signature: {
       type: "ecdsa",
       data: signed.data,

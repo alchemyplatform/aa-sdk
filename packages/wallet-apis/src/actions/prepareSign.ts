@@ -1,8 +1,7 @@
-import type { Address } from "viem";
 import type { DistributiveOmit, InnerWalletApiClient } from "../types.ts";
 import { wallet_prepareSign as MethodSchema } from "@alchemy/wallet-api-types/rpc";
-import { AccountNotFoundError } from "@alchemy/common";
 import { LOGGER } from "../logger.js";
+import { resolveAddress, type AccountParam } from "../utils/resolve.js";
 import type { StaticDecode } from "typebox";
 import { Value } from "typebox/value";
 
@@ -20,7 +19,7 @@ export type PrepareSignParams = DistributiveOmit<
   BasePrepareSignParams,
   "from" | "chainId"
 > & {
-  from?: Address;
+  account?: AccountParam;
   chainId?: number;
 };
 
@@ -37,7 +36,7 @@ export type PrepareSignResult = PrepareSignResponse;
  * ```ts
  * // Prepare a message to be signed
  * const result = await client.prepareSign({
- *    from: "0x1234...",
+ *    account: "0x1234...",
  *    type: "personal_sign",
  *    data: "Hello, world!",
  * });
@@ -47,16 +46,15 @@ export async function prepareSign(
   client: InnerWalletApiClient,
   params: PrepareSignParams,
 ): Promise<PrepareSignResult> {
-  const from = params.from ?? client.account?.address;
-  if (!from) {
-    LOGGER.warn("prepareSign:no-from", { hasClientAccount: !!client.account });
-    throw new AccountNotFoundError();
-  }
+  const from = params.account
+    ? resolveAddress(params.account)
+    : client.account.address;
 
   LOGGER.debug("prepareSign:start", { type: params.signatureRequest.type });
 
+  const { account: _, chainId: __, ...rest } = params;
   const rpcParams = Value.Encode(schema.request, {
-    ...params,
+    ...rest,
     from,
     chainId: params.chainId ?? client.chain.id,
   } satisfies BasePrepareSignParams);

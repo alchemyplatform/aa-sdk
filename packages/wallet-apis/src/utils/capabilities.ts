@@ -37,13 +37,13 @@ export type WithCapabilities<T> = T extends {
 function isRpcCapabilities(
   value: object,
 ): value is RpcPrepareCallsCapabilities | RpcSendPreparedCallsCapabilities {
-  return "paymasterService" in value;
+  return !("paymaster" in value);
 }
 
 function isResolvedCapabilities(
   value: object,
 ): value is PrepareCallsCapabilities | SendPreparedCallsCapabilities {
-  return "paymaster" in value;
+  return "paymasterService" in value;
 }
 
 /**

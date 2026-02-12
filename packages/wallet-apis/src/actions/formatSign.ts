@@ -1,8 +1,8 @@
-import type { Address, Prettify } from "viem";
+import type { Prettify } from "viem";
 import type { DistributiveOmit, InnerWalletApiClient } from "../types.ts";
 import { wallet_formatSign as MethodSchema } from "@alchemy/wallet-api-types/rpc";
-import { AccountNotFoundError } from "@alchemy/common";
 import { LOGGER } from "../logger.js";
+import { resolveAddress, type AccountParam } from "../utils/resolve.js";
 import type { StaticDecode } from "typebox";
 import { Value } from "typebox/value";
 
@@ -18,7 +18,7 @@ type FormatSignResponse = Schema["ReturnType"];
 
 export type FormatSignParams = Prettify<
   DistributiveOmit<BaseFormatSignParams, "from" | "chainId"> & {
-    from?: Address;
+    account?: AccountParam;
     chainId?: number;
   }
 >;
@@ -36,7 +36,7 @@ export type FormatSignResult = FormatSignResponse;
  * ```ts
  * // Formats a signature
  * const result = await client.formatSign({
- *    from: "0x1234...",
+ *    account: "0x1234...",
  *    signature: {
  *      type: "ecdsa",
  *      data: "0xabcd..."
@@ -48,15 +48,15 @@ export async function formatSign(
   client: InnerWalletApiClient,
   params: FormatSignParams,
 ): Promise<FormatSignResult> {
-  const from = params.from ?? client.account?.address;
-  if (!from) {
-    throw new AccountNotFoundError();
-  }
+  const from = params.account
+    ? resolveAddress(params.account)
+    : client.account.address;
 
   LOGGER.debug("formatSign:start");
 
+  const { account: _, chainId: __, ...rest } = params;
   const rpcParams = Value.Encode(schema.request, {
-    ...params,
+    ...rest,
     from,
     chainId: params.chainId ?? client.chain.id,
   } satisfies BaseFormatSignParams);

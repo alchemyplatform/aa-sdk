@@ -30,7 +30,7 @@ describe("swapActions decorator tests", () => {
       "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEee" as const; // from ERC-7528
 
     const quote = await client.requestQuoteV0({
-      from: account.address,
+      account,
       fromToken: USDC_ARB,
       toToken: NATIVE_TOKEN_ADDR,
       minimumToAmount: 100000000000000n,
@@ -68,7 +68,7 @@ describe("swapActions decorator tests", () => {
       "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEee" as const; // from ERC-7528
 
     const quote = await client.requestQuoteV0({
-      from: account.address,
+      account,
       fromToken: USDC_ARB,
       toToken: NATIVE_TOKEN_ADDR,
       toChainId: base.id,
