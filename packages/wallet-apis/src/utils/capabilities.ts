@@ -5,7 +5,10 @@ import type {
 import type { InnerWalletApiClient } from "../types.js";
 
 /**
- * Renames `paymasterService` (RPC) to `paymaster` in a capabilities type.
+ * Renames `paymasterService` (RPC) to `paymaster` in a capabilities type. This
+ * is because our RPC schema's paymasterService capability does not exactly match
+ * the shape of the new spec, so we want to use a different name in our client
+ * types to avoid confusion and be compatible with Viem's types.
  */
 type ResolveCapabilities<T> = T extends {
   paymasterService?: infer P;
@@ -34,13 +37,13 @@ export type WithCapabilities<T> = T extends {
 function isRpcCapabilities(
   value: object,
 ): value is RpcPrepareCallsCapabilities | RpcSendPreparedCallsCapabilities {
-  return !("paymaster" in value);
+  return "paymasterService" in value;
 }
 
 function isResolvedCapabilities(
   value: object,
 ): value is PrepareCallsCapabilities | SendPreparedCallsCapabilities {
-  return !("paymasterService" in value);
+  return "paymaster" in value;
 }
 
 /**

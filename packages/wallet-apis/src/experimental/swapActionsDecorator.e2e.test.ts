@@ -33,7 +33,7 @@ describe("swapActions decorator tests", () => {
       from: account.address,
       fromToken: USDC_ARB,
       toToken: NATIVE_TOKEN_ADDR,
-      minimumToAmount: 0x5af3107a4000n,
+      minimumToAmount: 100000000000000n,
     });
 
     expect(quote.quote).toBeDefined();
@@ -72,7 +72,7 @@ describe("swapActions decorator tests", () => {
       fromToken: USDC_ARB,
       toToken: NATIVE_TOKEN_ADDR,
       toChainId: base.id,
-      minimumToAmount: 0x5af3107a4000n,
+      minimumToAmount: 100000000000000n,
     });
 
     expect(quote.quote).toBeDefined();

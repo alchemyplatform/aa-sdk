@@ -1,14 +1,33 @@
 import { assertNever, BaseError } from "@alchemy/common";
 import type { PrepareCallsResult } from "./prepareCalls.ts";
-import { signSignatureRequest } from "./signSignatureRequest.js";
+import {
+  signSignatureRequest,
+  type SignSignatureRequestResult,
+} from "./signSignatureRequest.js";
 import type { Prettify } from "viem";
 import type { InnerWalletApiClient } from "../types.js";
 import { LOGGER } from "../logger.js";
-import type { SendPreparedCallsParams } from "./sendPreparedCalls.js";
 
 export type SignPreparedCallsParams = Prettify<PrepareCallsResult>;
 
-export type SignPreparedCallsResult = SendPreparedCallsParams;
+/** Replace signatureRequest/feePayment with the actual signature produced by signPreparedCalls. */
+type Signed<T> = T extends { signatureRequest?: unknown }
+  ? Prettify<
+      Omit<T, "signatureRequest" | "feePayment"> & {
+        signature: SignSignatureRequestResult;
+      }
+    >
+  : never;
+
+export type SignPreparedCallsResult =
+  | {
+      type: "array";
+      data: Signed<
+        Extract<PrepareCallsResult, { type: "array" }>["data"][number]
+      >[];
+    }
+  | Signed<Extract<PrepareCallsResult, { type: "user-operation-v060" }>>
+  | Signed<Extract<PrepareCallsResult, { type: "user-operation-v070" }>>;
 
 // Decoded types derived from PrepareCallsResult (numbers/bigints, not hex strings)
 type ArrayCallData = Extract<

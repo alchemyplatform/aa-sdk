@@ -5,6 +5,7 @@ import {
   type Address,
   type WaitForCallsStatusReturnType,
 } from "viem";
+import type { UserOperation } from "viem/account-abstraction";
 import {
   getCallsStatus,
   getCapabilities,
@@ -19,6 +20,7 @@ import { arbitrumSepolia } from "viem/chains";
 import { createSmartWalletClient } from "./client.js";
 import { apiTransport, publicTransport } from "./__tests__/setup.js";
 import { getAction } from "viem/utils";
+import { sign } from "node:crypto";
 
 // We want to test both the "unroll each step" method and the full e2e "sendCalls" method.
 const sendVariants: Array<
@@ -514,6 +516,79 @@ describe("Client E2E Tests", () => {
         }
       `);
     });
+
+    it("prepareCalls returns a UO satisfying viem's UserOperation type", async () => {
+      const account = await client.requestAccount();
+
+      const preparedCalls = await client.prepareCalls({
+        calls: [{ to: zeroAddress, value: 0n }],
+        account,
+        capabilities: {
+          paymaster: { policyId: process.env.TEST_PAYMASTER_POLICY_ID! },
+        },
+      });
+
+      expect(preparedCalls.type).toMatch(/^user-operation-v0(60|70)$/);
+
+      // Compile-time type check: prepared UO data + dummy signature is assignable to viem's UserOperation
+      if (preparedCalls.type === "user-operation-v060") {
+        const _uo: UserOperation<"0.6"> = {
+          ...preparedCalls.data,
+          signature: "0x",
+        };
+        expect(typeof _uo.sender).toBe("string");
+        expect(typeof _uo.nonce).toBe("bigint");
+        expect(typeof _uo.callGasLimit).toBe("bigint");
+      } else if (preparedCalls.type === "user-operation-v070") {
+        const _uo: UserOperation<"0.7"> = {
+          ...preparedCalls.data,
+          signature: "0x",
+        };
+        expect(typeof _uo.sender).toBe("string");
+        expect(typeof _uo.nonce).toBe("bigint");
+        expect(typeof _uo.callGasLimit).toBe("bigint");
+      }
+    });
+
+    it("sendPreparedCalls sends a UO satisfying viem's UserOperation type", async () => {
+      const account = await client.requestAccount();
+
+      const preparedCalls = await client.prepareCalls({
+        calls: [{ to: zeroAddress, value: 0n }],
+        account,
+        capabilities: {
+          paymaster: { policyId: process.env.TEST_PAYMASTER_POLICY_ID! },
+        },
+      });
+
+      const signedCalls = await client.signPreparedCalls(preparedCalls);
+
+      expect(signedCalls.type).toMatch(/^user-operation-v0(60|70)$/);
+
+      // Compile-time type check: signed UO data is assignable to viem's UserOperation.
+      // No manual narrowing needed — SignPreparedCallsResult guarantees secp256k1 hex signature.
+      if (signedCalls.type === "user-operation-v060") {
+        const _uo: UserOperation<"0.6"> = {
+          ...signedCalls.data,
+          signature: signedCalls.signature.data,
+        };
+        expect(_uo.signature).toMatch(/^0x/);
+        expect(_uo.signature.length).toBeGreaterThan(2);
+      } else if (signedCalls.type === "user-operation-v070") {
+        const _uo: UserOperation<"0.7"> = {
+          ...signedCalls.data,
+          signature: signedCalls.signature.data,
+        };
+        expect(_uo.signature).toMatch(/^0x/);
+        expect(_uo.signature.length).toBeGreaterThan(2);
+      }
+
+      const result = await client.sendPreparedCalls(signedCalls);
+      expect(result.id).toBeDefined();
+
+      const status = await client.waitForCallsStatus({ id: result.id });
+      expect(status.status).toBe("success");
+    }, 60_000);
 
     it("can use viem's getCallsStatus action via getAction", async () => {
       const account = await client.requestAccount();
