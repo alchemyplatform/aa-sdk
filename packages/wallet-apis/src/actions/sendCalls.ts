@@ -79,7 +79,7 @@ export async function sendCalls(
     const secondCallParams = {
       account: calls.modifiedRequest.from,
       calls: calls.modifiedRequest.calls,
-      chainId: Number(calls.modifiedRequest.chainId),
+      chainId: calls.modifiedRequest.chainId,
       capabilities: fromRpcCapabilities(calls.modifiedRequest.capabilities),
       // WebAuthn signatures are not supported for paymaster permits (throws above).
       paymasterPermitSignature: signature as Exclude<
