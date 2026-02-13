@@ -21,15 +21,8 @@ import type {
 } from "@alchemy/wallet-api-types/rpc";
 import { internalStateDecorator } from "../internal/decorator.js";
 import { metrics } from "../metrics.js";
-import type { ToWebAuthnAccountParameters } from "viem/account-abstraction";
 
-export type WebAuthnSigner = {
-  credential: ToWebAuthnAccountParameters["credential"];
-  getFn?: ToWebAuthnAccountParameters["getFn"] | undefined;
-  rpId?: ToWebAuthnAccountParameters["rpId"] | undefined;
-};
-
-export type SmartWalletSigner = SmartAccountSigner<any> | WebAuthnSigner;
+export type SmartWalletSigner = SmartAccountSigner<any>;
 
 export type SmartWalletClientParams<
   TAccount extends Address | undefined = Address | undefined,
@@ -55,7 +48,7 @@ export type SmartWalletClient<
  * @param {SmartWalletClientParams} params - The parameters for creating the smart wallet client
  * @param {AlchemyTransport} params.transport - The Alchemy transport to use
  * @param {Chain} params.chain - The chain to use
- * @param {SmartAccountSigner | WebAuthnSigner} params.signer - The signer to use for the smart account
+ * @param {SmartAccountSigner} params.signer - The signer to use for the smart account
  * @param {string} [params.policyId] - The policy ID for gas sponsorship (optional)
  * @param {Address} [params.account] - The smart account address to use (optional)
  * @returns {SmartWalletClient} - A viem-compatible client

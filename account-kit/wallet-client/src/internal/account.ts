@@ -1,7 +1,4 @@
-import {
-  InvalidSignerTypeError,
-  type SmartContractAccount,
-} from "@aa-sdk/core";
+import type { SmartContractAccount } from "@aa-sdk/core";
 import {
   createModularAccountV2,
   createLightAccount,
@@ -17,7 +14,7 @@ import {
 } from "viem";
 import type { SerializedInitcode } from "@alchemy/wallet-api-types";
 import { InternalError, InvalidRequestError } from "ox/RpcResponse";
-import { assertNever, isWebAuthnSigner } from "../utils.js";
+import { assertNever } from "../utils.js";
 import { metrics } from "../metrics.js";
 import type { SmartWalletSigner } from "../client/index.js";
 
@@ -59,10 +56,6 @@ export async function createAccount(
       throw new Error("7702 mode currently only supports ModularAccountV2");
     }
 
-    if (isWebAuthnSigner(signer)) {
-      throw new InvalidSignerTypeError("WebAuthn");
-    }
-
     return createModularAccountV2({
       ...accountParams,
       signer,
@@ -91,23 +84,6 @@ export async function createAccount(
         : (params.counterfactualInfo?.factoryType ?? "unknown"),
     },
   });
-
-  // WebAuthn accounts must use a different signer type, so they are handled separately.
-  if (factoryType === "MAv2.0.0-ma-webauthn") {
-    if (!isWebAuthnSigner(signer)) {
-      throw new InvalidSignerTypeError(signer.signerType);
-    }
-
-    return createModularAccountV2({
-      ...commonParams,
-      ...signer,
-      mode: "webauthn",
-    });
-  }
-
-  if (isWebAuthnSigner(signer)) {
-    throw new InvalidSignerTypeError("WebAuthn");
-  }
 
   // Return the account created based on the factory type
   switch (factoryType) {
@@ -152,6 +128,7 @@ export async function createAccount(
         version: "v2.0.0",
         signer,
       });
+    case "MAv2.0.0-ma-webauthn":
     case "MAv1.0.0-MultiSig":
     case "MAv2.0.0-ma-ssv":
     case "unknown":
