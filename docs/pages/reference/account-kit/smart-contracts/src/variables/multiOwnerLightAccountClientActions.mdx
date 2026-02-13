@@ -18,7 +18,7 @@ const multiOwnerLightAccountClientActions: <
 ) => MultiOwnerLightAccountClientActions<TSigner, TAccount>;
 ```
 
-Defined in: [account-kit/smart-contracts/src/light-account/decorators/multiOwnerLightAccount.ts:39](https://github.com/alchemyplatform/aa-sdk/blob/27e36329c103b4660886c9508b86d0a2c5c6c47e/account-kit/smart-contracts/src/light-account/decorators/multiOwnerLightAccount.ts#L39)
+Defined in: [account-kit/smart-contracts/src/light-account/decorators/multiOwnerLightAccount.ts:39](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/smart-contracts/src/light-account/decorators/multiOwnerLightAccount.ts#L39)
 
 Generates client actions for a multi-owner light account, including the ability to update owners.
 
@@ -38,86 +38,18 @@ const smartAccountClient = createAlchemySmartAccountClient({
 
 ## Type Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Type Parameter</th>
-      <th align="left">Default type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `TTransport` *extends* `Transport`
-      </td>
-
-      <td>
-        `Transport`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TChain` *extends* `Chain` | `undefined`
-      </td>
-
-      <td>
-        `Chain` | `undefined`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TSigner` *extends* `SmartAccountSigner`
-      </td>
-
-      <td>
-        `SmartAccountSigner`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TAccount` *extends* `MultiOwnerLightAccount`\<`TSigner`> | `undefined`
-      </td>
-
-      <td>
-        `MultiOwnerLightAccount`\<`TSigner`> | `undefined`
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Type Parameter                           | Default type                                                                             |
+| :--------------------------------------- | :--------------------------------------------------------------------------------------- | ----------- | ----------- | ---------------------------------------------------------------------------------------- | ----------- |
+| `TTransport` _extends_ `Transport`       | `Transport`                                                                              |
+| `TChain` _extends_ `Chain`               | `undefined`                                                                              | `Chain`     | `undefined` |
+| `TSigner` _extends_ `SmartAccountSigner` | `SmartAccountSigner`                                                                     |
+| `TAccount` _extends_                     | [`accountLoupeActions`](../../../core/src/variables/accountLoupeActions.mdx)\<`TSigner`> | `undefined` |             | [`accountLoupeActions`](../../../core/src/variables/accountLoupeActions.mdx)\<`TSigner`> | `undefined` |
 
 ## Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Parameter</th>
-      <th align="left">Type</th>
-      <th align="left">Description</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `client`
-      </td>
-
-      <td>
-        `Client`\<`TTransport`, `TChain`, `TAccount`>
-      </td>
-
-      <td>
-        the client for interacting with the multi-owner light account
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Parameter | Type                                          | Description                                                   |
+| :-------- | :-------------------------------------------- | :------------------------------------------------------------ |
+| `client`  | `Client`\<`TTransport`, `TChain`, `TAccount`> | the client for interacting with the multi-owner light account |
 
 ## Returns
 

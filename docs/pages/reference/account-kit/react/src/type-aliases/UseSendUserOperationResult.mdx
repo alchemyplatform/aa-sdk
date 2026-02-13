@@ -11,102 +11,21 @@ layout: reference
 type UseSendUserOperationResult<TEntryPointVersion, TAccount> = object;
 ```
 
-Defined in: [account-kit/react/src/hooks/useSendUserOperation.ts:55](https://github.com/alchemyplatform/aa-sdk/blob/27e36329c103b4660886c9508b86d0a2c5c6c47e/account-kit/react/src/hooks/useSendUserOperation.ts#L55)
+Defined in: [account-kit/react/src/hooks/useSendUserOperation.ts:55](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/react/src/hooks/useSendUserOperation.ts#L55)
 
 ## Type Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Type Parameter</th>
-      <th align="left">Default type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `TEntryPointVersion` *extends* `GetEntryPointFromAccount`\<`TAccount`>
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TAccount` *extends* `SupportedAccounts`
-      </td>
-
-      <td>
-        `SupportedAccounts`
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Type Parameter                                                                                    | Default type                                                                 |
+| :------------------------------------------------------------------------------------------------ | :--------------------------------------------------------------------------- |
+| `TEntryPointVersion` _extends_ `GetEntryPointFromAccount`\<`TAccount`>                            | -                                                                            |
+| `TAccount` _extends_ [`accountLoupeActions`](../../../core/src/variables/accountLoupeActions.mdx) | [`accountLoupeActions`](../../../core/src/variables/accountLoupeActions.mdx) |
 
 ## Properties
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Property</th>
-      <th align="left">Type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        <a id="error" /> `error`
-      </td>
-
-      <td>
-        `Error` | `null`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        <a id="issendinguseroperation" /> `isSendingUserOperation`
-      </td>
-
-      <td>
-        `boolean`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        <a id="senduseroperation" /> `sendUserOperation`
-      </td>
-
-      <td>
-        `UseMutateFunction`\<[`SendUserOperationWithEOA`](SendUserOperationWithEOA.mdx)\<`TEntryPointVersion`>, `Error`, `SendUserOperationParameters`\<`TAccount`>, `unknown`>
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        <a id="senduseroperationasync" /> `sendUserOperationAsync`
-      </td>
-
-      <td>
-        `UseMutateAsyncFunction`\<[`SendUserOperationWithEOA`](SendUserOperationWithEOA.mdx)\<`TEntryPointVersion`>, `Error`, `SendUserOperationParameters`\<`TAccount`>, `unknown`>
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        <a id="senduseroperationresult" /> `sendUserOperationResult`
-      </td>
-
-      <td>
-        | [`SendUserOperationWithEOA`](SendUserOperationWithEOA.mdx)\<`TEntryPointVersion`> | `undefined`
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Property                                                     | Type                                                                                                                                                                         |
+| :----------------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- | ----------- |
+| <a id="error" /> `error`                                     | `Error`                                                                                                                                                                      | `null`                                                                            |
+| <a id="issendinguseroperation" /> `isSendingUserOperation`   | `boolean`                                                                                                                                                                    |
+| <a id="senduseroperation" /> `sendUserOperation`             | `UseMutateFunction`\<[`SendUserOperationWithEOA`](SendUserOperationWithEOA.mdx)\<`TEntryPointVersion`>, `Error`, `SendUserOperationParameters`\<`TAccount`>, `unknown`>      |
+| <a id="senduseroperationasync" /> `sendUserOperationAsync`   | `UseMutateAsyncFunction`\<[`SendUserOperationWithEOA`](SendUserOperationWithEOA.mdx)\<`TEntryPointVersion`>, `Error`, `SendUserOperationParameters`\<`TAccount`>, `unknown`> |
+| <a id="senduseroperationresult" /> `sendUserOperationResult` |                                                                                                                                                                              | [`SendUserOperationWithEOA`](SendUserOperationWithEOA.mdx)\<`TEntryPointVersion`> | `undefined` |

@@ -11,112 +11,22 @@ layout: reference
 type ClientMiddleware<TContext> = object;
 ```
 
-Defined in: [aa-sdk/core/src/middleware/types.ts:47](https://github.com/alchemyplatform/aa-sdk/blob/27e36329c103b4660886c9508b86d0a2c5c6c47e/aa-sdk/core/src/middleware/types.ts#L47)
+Defined in: [aa-sdk/core/src/middleware/types.ts:44](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/aa-sdk/core/src/middleware/types.ts#L44)
 
 ## Type Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Type Parameter</th>
-      <th align="left">Default type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `TContext` *extends* `UserOperationContext` | `undefined`
-      </td>
-
-      <td>
-        `UserOperationContext` | `undefined`
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Type Parameter       | Default type                                                                                |
+| :------------------- | :------------------------------------------------------------------------------------------ | ----------- | --- | ------------------------------------------------------------------------------------------- | ----------- |
+| `TContext` _extends_ | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx) | `undefined` |     | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx) | `undefined` |
 
 ## Properties
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Property</th>
-      <th align="left">Type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        <a id="custommiddleware" /> `customMiddleware`
-      </td>
-
-      <td>
-        [`ClientMiddlewareFn`](ClientMiddlewareFn.mdx)\<`TContext`>
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        <a id="dummypaymasteranddata" /> `dummyPaymasterAndData`
-      </td>
-
-      <td>
-        [`ClientMiddlewareFn`](ClientMiddlewareFn.mdx)\<`TContext`>
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        <a id="feeestimator" /> `feeEstimator`
-      </td>
-
-      <td>
-        [`ClientMiddlewareFn`](ClientMiddlewareFn.mdx)\<`TContext`>
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        <a id="gasestimator" /> `gasEstimator`
-      </td>
-
-      <td>
-        [`ClientMiddlewareFn`](ClientMiddlewareFn.mdx)\<`TContext`>
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        <a id="paymasteranddata" /> `paymasterAndData`
-      </td>
-
-      <td>
-        [`ClientMiddlewareFn`](ClientMiddlewareFn.mdx)\<`TContext`>
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        <a id="signuseroperation" /> `signUserOperation`
-      </td>
-
-      <td>
-        [`ClientMiddlewareFn`](ClientMiddlewareFn.mdx)\<`TContext`>
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        <a id="useroperationsimulator" /> `userOperationSimulator`
-      </td>
-
-      <td>
-        [`ClientMiddlewareFn`](ClientMiddlewareFn.mdx)\<`TContext`>
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Property                                                   | Type                                                        |
+| :--------------------------------------------------------- | :---------------------------------------------------------- |
+| <a id="custommiddleware" /> `customMiddleware`             | [`ClientMiddlewareFn`](ClientMiddlewareFn.mdx)\<`TContext`> |
+| <a id="dummypaymasteranddata" /> `dummyPaymasterAndData`   | [`ClientMiddlewareFn`](ClientMiddlewareFn.mdx)\<`TContext`> |
+| <a id="feeestimator" /> `feeEstimator`                     | [`ClientMiddlewareFn`](ClientMiddlewareFn.mdx)\<`TContext`> |
+| <a id="gasestimator" /> `gasEstimator`                     | [`ClientMiddlewareFn`](ClientMiddlewareFn.mdx)\<`TContext`> |
+| <a id="paymasteranddata" /> `paymasterAndData`             | [`ClientMiddlewareFn`](ClientMiddlewareFn.mdx)\<`TContext`> |
+| <a id="signuseroperation" /> `signUserOperation`           | [`ClientMiddlewareFn`](ClientMiddlewareFn.mdx)\<`TContext`> |
+| <a id="useroperationsimulator" /> `userOperationSimulator` | [`ClientMiddlewareFn`](ClientMiddlewareFn.mdx)\<`TContext`> |

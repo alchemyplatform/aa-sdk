@@ -22,32 +22,9 @@ Then there are the trace headers that are part of the W3C trace context standard
 
 ## Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Parameter</th>
-      <th align="left">Type</th>
-      <th align="left">Description</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `crumb`
-      </td>
-
-      <td>
-        `string`
-      </td>
-
-      <td>
-        The crumb to add to the breadcrumb
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Parameter | Type     | Description                        |
+| :-------- | :------- | :--------------------------------- |
+| `crumb`   | `string` | The crumb to add to the breadcrumb |
 
 ## Returns
 
@@ -59,80 +36,17 @@ A function that updates the headers
 
 ### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Parameter</th>
-      <th align="left">Type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `x`
-      </td>
-
-      <td>
-        `Record`\<`string`, `string`>
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Parameter | Type                          |
+| :-------- | :---------------------------- |
+| `x`       | `Record`\<`string`, `string`> |
 
 ### Returns
 
 `object`
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Name</th>
-      <th align="left">Type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `traceparent`
-      </td>
-
-      <td>
-        `` `00-${string}-${string}-${string}` ``
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `tracestate`
-      </td>
-
-      <td>
-        `string`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `X-Alchemy-Client-Breadcrumb`
-      </td>
-
-      <td>
-        `string`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `X-Alchemy-Client-Trace-Id`
-      </td>
-
-      <td>
-        `string`
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Name                          | Type                                     |
+| :---------------------------- | :--------------------------------------- |
+| `traceparent`                 | `` `00-${string}-${string}-${string}` `` |
+| `tracestate`                  | `string`                                 |
+| `X-Alchemy-Client-Breadcrumb` | `string`                                 |
+| `X-Alchemy-Client-Trace-Id`   | `string`                                 |

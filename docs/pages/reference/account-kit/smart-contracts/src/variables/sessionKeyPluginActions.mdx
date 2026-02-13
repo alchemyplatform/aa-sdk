@@ -13,7 +13,7 @@ const sessionKeyPluginActions: <TTransport, TChain, TAccount>(
 ) => SessionKeyPluginActions<TAccount>;
 ```
 
-Defined in: [account-kit/smart-contracts/src/msca/plugins/session-key/extension.ts:99](https://github.com/alchemyplatform/aa-sdk/blob/27e36329c103b4660886c9508b86d0a2c5c6c47e/account-kit/smart-contracts/src/msca/plugins/session-key/extension.ts#L99)
+Defined in: [account-kit/smart-contracts/src/msca/plugins/session-key/extension.ts:99](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/smart-contracts/src/msca/plugins/session-key/extension.ts#L99)
 
 Creates actions for managing session keys in a smart contract associated with a client, including adding, removing, rotating, and updating session key permissions.
 
@@ -27,76 +27,17 @@ const client = createModularAccountAlchemyClient(...).extend(sessionKeyPluginAct
 
 ## Type Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Type Parameter</th>
-      <th align="left">Default type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `TTransport` *extends* `Transport`
-      </td>
-
-      <td>
-        `Transport`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TChain` *extends* `Chain` | `undefined`
-      </td>
-
-      <td>
-        `Chain` | `undefined`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TAccount` *extends* `SmartContractAccount` | `undefined`
-      </td>
-
-      <td>
-        `SmartContractAccount` | `undefined`
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Type Parameter                              | Default type |
+| :------------------------------------------ | :----------- | ---------------------- | ----------- |
+| `TTransport` _extends_ `Transport`          | `Transport`  |
+| `TChain` _extends_ `Chain`                  | `undefined`  | `Chain`                | `undefined` |
+| `TAccount` _extends_ `SmartContractAccount` | `undefined`  | `SmartContractAccount` | `undefined` |
 
 ## Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Parameter</th>
-      <th align="left">Type</th>
-      <th align="left">Description</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `client`
-      </td>
-
-      <td>
-        `Client`\<`TTransport`, `TChain`, `TAccount`>
-      </td>
-
-      <td>
-        The client instance to use for managing session keys
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Parameter | Type                                          | Description                                          |
+| :-------- | :-------------------------------------------- | :--------------------------------------------------- |
+| `client`  | `Client`\<`TTransport`, `TChain`, `TAccount`> | The client instance to use for managing session keys |
 
 ## Returns
 

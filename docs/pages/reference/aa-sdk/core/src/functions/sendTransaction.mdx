@@ -17,7 +17,7 @@ function sendTransaction<
 >(client_, args, overrides?, context?): Promise<`0x${string}`>;
 ```
 
-Defined in: [aa-sdk/core/src/actions/smartAccount/sendTransaction.ts:48](https://github.com/alchemyplatform/aa-sdk/blob/27e36329c103b4660886c9508b86d0a2c5c6c47e/aa-sdk/core/src/actions/smartAccount/sendTransaction.ts#L48)
+Defined in: [aa-sdk/core/src/actions/smartAccount/sendTransaction.ts:48](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/aa-sdk/core/src/actions/smartAccount/sendTransaction.ts#L48)
 
 Sends a transaction using the provided client, arguments, optional overrides, and context.
 This sends a UO and then waits for it to be mined
@@ -39,144 +39,22 @@ const result = await client.sendTransaction({
 
 ## Type Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Type Parameter</th>
-      <th align="left">Default type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `TChain` *extends* `undefined` | `Chain`
-      </td>
-
-      <td>
-        `undefined` | `Chain`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TAccount` *extends*
-        | `undefined`
-        | [`SmartContractAccount`](../type-aliases/SmartContractAccount.mdx)
-      </td>
-
-      <td>
-        | `undefined`
-        | [`SmartContractAccount`](../type-aliases/SmartContractAccount.mdx)
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TChainOverride` *extends* `undefined` | `Chain`
-      </td>
-
-      <td>
-        `undefined` | `Chain`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TContext` *extends*
-        | `undefined`
-        | [`UserOperationContext`](../type-aliases/UserOperationContext.mdx)
-      </td>
-
-      <td>
-        | `undefined`
-        | [`UserOperationContext`](../type-aliases/UserOperationContext.mdx)
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TEntryPointVersion` *extends* keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase.mdx)\<`unknown`>
-      </td>
-
-      <td>
-        [`GetEntryPointFromAccount`](../type-aliases/GetEntryPointFromAccount.mdx)\<`TAccount`>
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Type Parameter                                                                                                        | Default type                                                                            |
+| :-------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------- | ------------------------------------------------------------------ | ------- | ----------- | ------------------------------------------------------------------ |
+| `TChain` _extends_ `undefined`                                                                                        | `Chain`                                                                                 | `undefined`                                                        | `Chain` |
+| `TAccount` _extends_                                                                                                  | `undefined`                                                                             | [`SmartContractAccount`](../type-aliases/SmartContractAccount.mdx) |         | `undefined` | [`SmartContractAccount`](../type-aliases/SmartContractAccount.mdx) |
+| `TChainOverride` _extends_ `undefined`                                                                                | `Chain`                                                                                 | `undefined`                                                        | `Chain` |
+| `TContext` _extends_                                                                                                  | `undefined`                                                                             | [`UserOperationContext`](../type-aliases/UserOperationContext.mdx) |         | `undefined` | [`UserOperationContext`](../type-aliases/UserOperationContext.mdx) |
+| `TEntryPointVersion` _extends_ keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase.mdx)\<`unknown`> | [`GetEntryPointFromAccount`](../type-aliases/GetEntryPointFromAccount.mdx)\<`TAccount`> |
 
 ## Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Parameter</th>
-      <th align="left">Type</th>
-      <th align="left">Description</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `client_`
-      </td>
-
-      <td>
-        `Client`\<`Transport`, `TChain`, `TAccount`>
-      </td>
-
-      <td>
-        The client to send the transaction through
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `args`
-      </td>
-
-      <td>
-        `SendTransactionParameters`\<`TChain`, `TAccount`, `TChainOverride`>
-      </td>
-
-      <td>
-        The parameters required to send the transaction
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `overrides?`
-      </td>
-
-      <td>
-        [`UserOperationOverrides`](../type-aliases/UserOperationOverrides.mdx)\<`TEntryPointVersion`>
-      </td>
-
-      <td>
-        Optional overrides for the user operation
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `context?`
-      </td>
-
-      <td>
-        `TContext`
-      </td>
-
-      <td>
-        Optional context for the user operation
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Parameter    | Type                                                                                          | Description                                     |
+| :----------- | :-------------------------------------------------------------------------------------------- | :---------------------------------------------- |
+| `client_`    | `Client`\<`Transport`, `TChain`, `TAccount`>                                                  | The client to send the transaction through      |
+| `args`       | `SendTransactionParameters`\<`TChain`, `TAccount`, `TChainOverride`>                          | The parameters required to send the transaction |
+| `overrides?` | [`UserOperationOverrides`](../type-aliases/UserOperationOverrides.mdx)\<`TEntryPointVersion`> | Optional overrides for the user operation       |
+| `context?`   | `TContext`                                                                                    | Optional context for the user operation         |
 
 ## Returns
 

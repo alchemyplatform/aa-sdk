@@ -11,7 +11,7 @@ layout: reference
 function useRemoveEmail(mutationArgs?): UseRemoveEmailResult;
 ```
 
-Defined in: [account-kit/react/src/hooks/useRemoveEmail.ts:44](https://github.com/alchemyplatform/aa-sdk/blob/27e36329c103b4660886c9508b86d0a2c5c6c47e/account-kit/react/src/hooks/useRemoveEmail.ts#L44)
+Defined in: [account-kit/react/src/hooks/useRemoveEmail.ts:44](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/react/src/hooks/useRemoveEmail.ts#L44)
 
 A custom hook to handle the removal of an email from an already authenticated account, which includes executing a mutation with optional parameters.
 
@@ -31,32 +31,9 @@ const { removeEmail, isRemovingEmail, error } = useRemoveEmail({
 
 ## Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Parameter</th>
-      <th align="left">Type</th>
-      <th align="left">Description</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `mutationArgs?`
-      </td>
-
-      <td>
-        `Partial`\<`Omit`\<`UseMutationOptions`\<`void`, `Error`, `void`, `unknown`>, `"mutationFn"` | `"mutationKey"`>>
-      </td>
-
-      <td>
-        Optional arguments for the mutation used for removing an email.
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Parameter       | Type                                                                                         | Description       |
+| :-------------- | :------------------------------------------------------------------------------------------- | :---------------- | --------------------------------------------------------------- |
+| `mutationArgs?` | `Partial`\<`Omit`\<`UseMutationOptions`\<`void`, `Error`, `void`, `unknown`>, `"mutationFn"` | `"mutationKey"`>> | Optional arguments for the mutation used for removing an email. |
 
 ## Returns
 

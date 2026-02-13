@@ -13,7 +13,7 @@ function isSmartAccountClient<TTransport, TChain, TAccount>(
 ): client is SmartAccountClient<TTransport, TChain, TAccount>;
 ```
 
-Defined in: [aa-sdk/core/src/client/isSmartAccountClient.ts:17](https://github.com/alchemyplatform/aa-sdk/blob/27e36329c103b4660886c9508b86d0a2c5c6c47e/aa-sdk/core/src/client/isSmartAccountClient.ts#L17)
+Defined in: [aa-sdk/core/src/client/isSmartAccountClient.ts:17](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/aa-sdk/core/src/client/isSmartAccountClient.ts#L17)
 
 Use this method to assert that a client is a BaseSmartAccountClient.
 Useful for narrowing the type of the client down when used within the
@@ -21,76 +21,17 @@ smart account client decorators
 
 ## Type Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Type Parameter</th>
-      <th align="left">Default type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `TTransport` *extends* `Transport`
-      </td>
-
-      <td>
-        `Transport`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TChain` *extends* `undefined` | `Chain`
-      </td>
-
-      <td>
-        `undefined` | `Chain`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TAccount` *extends* `any`
-      </td>
-
-      <td>
-        `any`
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Type Parameter                     | Default type |
+| :--------------------------------- | :----------- | ----------- | ------- |
+| `TTransport` _extends_ `Transport` | `Transport`  |
+| `TChain` _extends_ `undefined`     | `Chain`      | `undefined` | `Chain` |
+| `TAccount` _extends_ `any`         | `any`        |
 
 ## Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Parameter</th>
-      <th align="left">Type</th>
-      <th align="left">Description</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `client`
-      </td>
-
-      <td>
-        `Client`\<`TTransport`, `TChain`, `TAccount`>
-      </td>
-
-      <td>
-        a viem client
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Parameter | Type                                          | Description   |
+| :-------- | :-------------------------------------------- | :------------ |
+| `client`  | `Client`\<`TTransport`, `TChain`, `TAccount`> | a viem client |
 
 ## Returns
 

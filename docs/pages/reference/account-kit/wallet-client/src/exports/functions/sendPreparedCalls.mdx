@@ -12,11 +12,24 @@ function sendPreparedCalls(
   client,
   params,
 ): Promise<{
+  details:
+    | {
+        data: object[];
+        type: "user-operations";
+      }
+    | {
+        data: {
+          calls?: object[];
+          hash: `0x${string}`;
+        };
+        type: "user-operation";
+      };
   id: `0x${string}`;
+  preparedCallIds: `0x${string}`[];
 }>;
 ```
 
-Defined in: [account-kit/wallet-client/src/client/actions/sendPreparedCalls.ts:52](https://github.com/alchemyplatform/aa-sdk/blob/27e36329c103b4660886c9508b86d0a2c5c6c47e/account-kit/wallet-client/src/client/actions/sendPreparedCalls.ts#L52)
+Defined in: [account-kit/wallet-client/src/client/actions/sendPreparedCalls.ts:53](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/wallet-client/src/client/actions/sendPreparedCalls.ts#L53)
 
 Sends prepared calls by submitting a signed user operation.
 This method is used after signing the signature request returned from prepareCalls.
@@ -49,51 +62,27 @@ const result = await client.sendPreparedCalls({
 
 ## Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Parameter</th>
-      <th align="left">Type</th>
-      <th align="left">Description</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `client`
-      </td>
-
-      <td>
-        `InnerWalletApiClient`
-      </td>
-
-      <td>
-        The wallet API client to use for the request
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `params`
-      </td>
-
-      <td>
-        [`SendPreparedCallsParams`](../type-aliases/SendPreparedCallsParams.mdx)
-      </td>
-
-      <td>
-        Parameters for sending prepared calls
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Parameter | Type                                                                     | Description                                  |
+| :-------- | :----------------------------------------------------------------------- | :------------------------------------------- |
+| `client`  | `InnerWalletApiClient`                                                   | The wallet API client to use for the request |
+| `params`  | [`SendPreparedCallsParams`](../type-aliases/SendPreparedCallsParams.mdx) | Parameters for sending prepared calls        |
 
 ## Returns
 
 `Promise`\<\{
+`details`: | \{
+`data`: `object`\[];
+`type`: `"user-operations"`;
+}
+| \{
+`data`: \{
+`calls?`: `object`\[];
+`hash`: `` `0x${string}` ``;
+};
+`type`: `"user-operation"`;
+};
 `id`: `` `0x${string}` ``;
+`preparedCallIds`: `` `0x${string}` ``\[];
 }>
 
 A Promise that resolves to the result containing the call ID

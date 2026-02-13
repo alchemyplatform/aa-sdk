@@ -496,22 +496,8 @@ navigation:
                 contents:
                   - page: ClientOnlyPropertyError
                     path: wallets/pages/reference/account-kit/core/src/classes/ClientOnlyPropertyError.mdx
-                  - page: InvalidAggregatedSignatureError
-                    path: wallets/pages/reference/account-kit/core/src/classes/InvalidAggregatedSignatureError.mdx
-                  - page: InvalidContextSignatureError
-                    path: wallets/pages/reference/account-kit/core/src/classes/InvalidContextSignatureError.mdx
-                  - page: MultisigAccountExpectedError
-                    path: wallets/pages/reference/account-kit/core/src/classes/MultisigAccountExpectedError.mdx
-                  - page: MultisigMissingSignatureError
-                    path: wallets/pages/reference/account-kit/core/src/classes/MultisigMissingSignatureError.mdx
-                  - page: SessionKeyPermissionsBuilder
-                    path: wallets/pages/reference/account-kit/core/src/classes/SessionKeyPermissionsBuilder.mdx
-                  - page: SessionKeySigner
-                    path: wallets/pages/reference/account-kit/core/src/classes/SessionKeySigner.mdx
               - section: Enumerations
                 contents:
-                  - page: SessionKeyAccessListType
-                    path: wallets/pages/reference/account-kit/core/src/enumerations/SessionKeyAccessListType.mdx
                   - page: SimulateAssetType
                     path: wallets/pages/reference/account-kit/core/src/enumerations/SimulateAssetType.mdx
                   - page: SimulateChangeType
@@ -526,10 +512,6 @@ navigation:
                     path: wallets/pages/reference/account-kit/core/src/functions/alchemyGasManagerMiddleware.mdx
                   - page: alchemyUserOperationSimulator
                     path: wallets/pages/reference/account-kit/core/src/functions/alchemyUserOperationSimulator.mdx
-                  - page: buildSessionKeysToRemoveStruct
-                    path: wallets/pages/reference/account-kit/core/src/functions/buildSessionKeysToRemoveStruct.mdx
-                  - page: combineSignatures
-                    path: wallets/pages/reference/account-kit/core/src/functions/combineSignatures.mdx
                   - page: convertSignerStatusToState
                     path: wallets/pages/reference/account-kit/core/src/functions/convertSignerStatusToState.mdx
                   - page: cookieStorage
@@ -544,36 +526,6 @@ navigation:
                     path: wallets/pages/reference/account-kit/core/src/functions/createConfig.mdx
                   - page: createDefaultAccountState
                     path: wallets/pages/reference/account-kit/core/src/functions/createDefaultAccountState.mdx
-                  - page: createLightAccount
-                    path: wallets/pages/reference/account-kit/core/src/functions/createLightAccount.mdx
-                  - page: createLightAccountAlchemyClient
-                    path: wallets/pages/reference/account-kit/core/src/functions/createLightAccountAlchemyClient.mdx
-                  - page: createLightAccountClient
-                    path: wallets/pages/reference/account-kit/core/src/functions/createLightAccountClient.mdx
-                  - page: createMAv2Base
-                    path: wallets/pages/reference/account-kit/core/src/functions/createMAv2Base.mdx
-                  - page: createModularAccount
-                    path: wallets/pages/reference/account-kit/core/src/functions/createModularAccount.mdx
-                  - page: createModularAccountAlchemyClient
-                    path: wallets/pages/reference/account-kit/core/src/functions/createModularAccountAlchemyClient.mdx
-                  - page: createModularAccountV2
-                    path: wallets/pages/reference/account-kit/core/src/functions/createModularAccountV2.mdx
-                  - page: createModularAccountV2Client
-                    path: wallets/pages/reference/account-kit/core/src/functions/createModularAccountV2Client.mdx
-                  - page: createMultiOwnerLightAccount
-                    path: wallets/pages/reference/account-kit/core/src/functions/createMultiOwnerLightAccount.mdx
-                  - page: createMultiOwnerLightAccountAlchemyClient
-                    path: wallets/pages/reference/account-kit/core/src/functions/createMultiOwnerLightAccountAlchemyClient.mdx
-                  - page: createMultiOwnerLightAccountClient
-                    path: wallets/pages/reference/account-kit/core/src/functions/createMultiOwnerLightAccountClient.mdx
-                  - page: createMultiOwnerModularAccountClient
-                    path: wallets/pages/reference/account-kit/core/src/functions/createMultiOwnerModularAccountClient.mdx
-                  - page: createMultisigAccountAlchemyClient
-                    path: wallets/pages/reference/account-kit/core/src/functions/createMultisigAccountAlchemyClient.mdx
-                  - page: createMultisigModularAccount
-                    path: wallets/pages/reference/account-kit/core/src/functions/createMultisigModularAccount.mdx
-                  - page: createMultisigModularAccountClient
-                    path: wallets/pages/reference/account-kit/core/src/functions/createMultisigModularAccountClient.mdx
                   - page: createSigner
                     path: wallets/pages/reference/account-kit/core/src/functions/createSigner.mdx
                   - page: defaultAccountState
@@ -588,14 +540,6 @@ navigation:
                     path: wallets/pages/reference/account-kit/core/src/functions/getChain.mdx
                   - page: getConnection
                     path: wallets/pages/reference/account-kit/core/src/functions/getConnection.mdx
-                  - page: getLightAccountVersionForAccount
-                    path: wallets/pages/reference/account-kit/core/src/functions/getLightAccountVersionForAccount.mdx
-                  - page: getMAInitializationData
-                    path: wallets/pages/reference/account-kit/core/src/functions/getMAInitializationData.mdx
-                  - page: getMAV2UpgradeToData
-                    path: wallets/pages/reference/account-kit/core/src/functions/getMAV2UpgradeToData.mdx
-                  - page: getMSCAUpgradeToData
-                    path: wallets/pages/reference/account-kit/core/src/functions/getMSCAUpgradeToData.mdx
                   - page: getSigner
                     path: wallets/pages/reference/account-kit/core/src/functions/getSigner.mdx
                   - page: getSignerStatus
@@ -614,16 +558,12 @@ navigation:
                     path: wallets/pages/reference/account-kit/core/src/functions/headersUpdate.mdx
                   - page: hydrate
                     path: wallets/pages/reference/account-kit/core/src/functions/hydrate.mdx
-                  - page: installPlugin
-                    path: wallets/pages/reference/account-kit/core/src/functions/installPlugin.mdx
                   - page: isAlchemySmartAccountClient
                     path: wallets/pages/reference/account-kit/core/src/functions/isAlchemySmartAccountClient.mdx
                   - page: isAlchemyTransport
                     path: wallets/pages/reference/account-kit/core/src/functions/isAlchemyTransport.mdx
                   - page: isLightAccountParams
                     path: wallets/pages/reference/account-kit/core/src/functions/isLightAccountParams.mdx
-                  - page: isModularAccountV2
-                    path: wallets/pages/reference/account-kit/core/src/functions/isModularAccountV2.mdx
                   - page: isModularV2AccountParams
                     path: wallets/pages/reference/account-kit/core/src/functions/isModularV2AccountParams.mdx
                   - page: isMultiOwnerLightAccountParams
@@ -634,14 +574,6 @@ navigation:
                     path: wallets/pages/reference/account-kit/core/src/functions/mutateRemoveTrackingHeaders.mdx
                   - page: parseCookie
                     path: wallets/pages/reference/account-kit/core/src/functions/parseCookie.mdx
-                  - page: pluginManagerActions
-                    path: wallets/pages/reference/account-kit/core/src/functions/pluginManagerActions.mdx
-                  - page: predictLightAccountAddress
-                    path: wallets/pages/reference/account-kit/core/src/functions/predictLightAccountAddress.mdx
-                  - page: predictModularAccountV2Address
-                    path: wallets/pages/reference/account-kit/core/src/functions/predictModularAccountV2Address.mdx
-                  - page: predictMultiOwnerLightAccountAddress
-                    path: wallets/pages/reference/account-kit/core/src/functions/predictMultiOwnerLightAccountAddress.mdx
                   - page: reconnect
                     path: wallets/pages/reference/account-kit/core/src/functions/reconnect.mdx
                   - page: setChain
@@ -676,8 +608,6 @@ navigation:
                 contents:
                   - page: AccountConfig
                     path: wallets/pages/reference/account-kit/core/src/type-aliases/AccountConfig.mdx
-                  - page: AccountLoupeActions
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/AccountLoupeActions.mdx
                   - page: AccountState
                     path: wallets/pages/reference/account-kit/core/src/type-aliases/AccountState.mdx
                   - page: AlchemyAccountsConfig
@@ -686,14 +616,6 @@ navigation:
                     path: wallets/pages/reference/account-kit/core/src/type-aliases/AlchemyChainConfig.mdx
                   - page: AlchemyClientState
                     path: wallets/pages/reference/account-kit/core/src/type-aliases/AlchemyClientState.mdx
-                  - page: AlchemyLightAccountClientConfig
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/AlchemyLightAccountClientConfig.mdx
-                  - page: AlchemyModularAccountClientConfig
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/AlchemyModularAccountClientConfig.mdx
-                  - page: AlchemyMultiOwnerLightAccountClientConfig
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/AlchemyMultiOwnerLightAccountClientConfig.mdx
-                  - page: AlchemyMultisigAccountClientConfig
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/AlchemyMultisigAccountClientConfig.mdx
                   - page: AlchemyRpcSchema
                     path: wallets/pages/reference/account-kit/core/src/type-aliases/AlchemyRpcSchema.mdx
                   - page: AlchemySigner
@@ -716,10 +638,6 @@ navigation:
                     path: wallets/pages/reference/account-kit/core/src/type-aliases/BaseAlchemyActions.mdx
                   - page: BaseCreateConfigProps
                     path: wallets/pages/reference/account-kit/core/src/type-aliases/BaseCreateConfigProps.mdx
-                  - page: BuildDeferredActionDigestParams
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/BuildDeferredActionDigestParams.mdx
-                  - page: BuildNonceParams
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/BuildNonceParams.mdx
                   - page: ClientActions
                     path: wallets/pages/reference/account-kit/core/src/type-aliases/ClientActions.mdx
                   - page: ClientStoreConfig
@@ -728,62 +646,14 @@ navigation:
                     path: wallets/pages/reference/account-kit/core/src/type-aliases/ClientWithAlchemyMethods.mdx
                   - page: Connection
                     path: wallets/pages/reference/account-kit/core/src/type-aliases/Connection.mdx
-                  - page: ContractAccessEntry
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/ContractAccessEntry.mdx
-                  - page: ContractMethodEntry
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/ContractMethodEntry.mdx
                   - page: CreateAccountParams
                     path: wallets/pages/reference/account-kit/core/src/type-aliases/CreateAccountParams.mdx
                   - page: CreateConfigProps
                     path: wallets/pages/reference/account-kit/core/src/type-aliases/CreateConfigProps.mdx
-                  - page: CreateLightAccountParams
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/CreateLightAccountParams.mdx
-                  - page: CreateMAV2BaseParams
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/CreateMAV2BaseParams.mdx
-                  - page: CreateMAV2BaseReturnType
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/CreateMAV2BaseReturnType.mdx
-                  - page: CreateModularAccountV2AlchemyClientParams
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/CreateModularAccountV2AlchemyClientParams.mdx
-                  - page: CreateModularAccountV2ClientParams
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/CreateModularAccountV2ClientParams.mdx
-                  - page: CreateModularAccountV2Params
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/CreateModularAccountV2Params.mdx
-                  - page: CreateMultiOwnerLightAccountParams
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/CreateMultiOwnerLightAccountParams.mdx
-                  - page: CreateMultiOwnerModularAccountParams
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/CreateMultiOwnerModularAccountParams.mdx
-                  - page: CreateMultisigModularAccountParams
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/CreateMultisigModularAccountParams.mdx
-                  - page: CreateWebauthnMAV2BaseParams
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/CreateWebauthnMAV2BaseParams.mdx
-                  - page: CreateWebauthnModularAccountV2ClientParams
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/CreateWebauthnModularAccountV2ClientParams.mdx
-                  - page: CreateWebauthnModularAccountV2Params
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/CreateWebauthnModularAccountV2Params.mdx
-                  - page: Erc20TokenLimit
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/Erc20TokenLimit.mdx
-                  - page: ExecutionDataView
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/ExecutionDataView.mdx
-                  - page: ExecutionFunctionConfig
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/ExecutionFunctionConfig.mdx
-                  - page: ExecutionHooks
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/ExecutionHooks.mdx
-                  - page: FunctionId
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/FunctionId.mdx
-                  - page: FunctionReference
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/FunctionReference.mdx
-                  - page: GasSpendLimit
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/GasSpendLimit.mdx
                   - page: GetAccountParams
                     path: wallets/pages/reference/account-kit/core/src/type-aliases/GetAccountParams.mdx
                   - page: GetAccountResult
                     path: wallets/pages/reference/account-kit/core/src/type-aliases/GetAccountResult.mdx
-                  - page: GetLightAccountType
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/GetLightAccountType.mdx
-                  - page: GetMAV2UpgradeToData
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/GetMAV2UpgradeToData.mdx
-                  - page: GetPluginAddressParameter
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/GetPluginAddressParameter.mdx
                   - page: GetSmartAccountClientParams
                     path: wallets/pages/reference/account-kit/core/src/type-aliases/GetSmartAccountClientParams.mdx
                   - page: GetSmartAccountClientResult
@@ -794,66 +664,10 @@ navigation:
                     path: wallets/pages/reference/account-kit/core/src/type-aliases/GetSmartWalletClientResult.mdx
                   - page: GetUserResult
                     path: wallets/pages/reference/account-kit/core/src/type-aliases/GetUserResult.mdx
-                  - page: InstallMultiOwnerPluginParams
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/InstallMultiOwnerPluginParams.mdx
-                  - page: InstallMultisigPluginParams
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/InstallMultisigPluginParams.mdx
-                  - page: InstallPluginParams
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/InstallPluginParams.mdx
-                  - page: InstallSessionKeyPluginParams
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/InstallSessionKeyPluginParams.mdx
-                  - page: LightAccount
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/LightAccount.mdx
-                  - page: LightAccountClientActions
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/LightAccountClientActions.mdx
-                  - page: LightAccountEntryPointVersion
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/LightAccountEntryPointVersion.mdx
-                  - page: LightAccountType
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/LightAccountType.mdx
-                  - page: LightAccountVersion
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/LightAccountVersion.mdx
-                  - page: LightAccountVersionConfig
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/LightAccountVersionConfig.mdx
-                  - page: LightAccountVersionConfigs
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/LightAccountVersionConfigs.mdx
-                  - page: ModularAccountV2
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/ModularAccountV2.mdx
-                  - page: ModularAccountV2Client
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/ModularAccountV2Client.mdx
-                  - page: ModularAccountsV2
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/ModularAccountsV2.mdx
-                  - page: MultiOwnerLightAccount
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/MultiOwnerLightAccount.mdx
-                  - page: MultiOwnerLightAccountClientActions
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/MultiOwnerLightAccountClientActions.mdx
-                  - page: MultiOwnerModularAccount
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/MultiOwnerModularAccount.mdx
-                  - page: MultiOwnerPluginActions
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/MultiOwnerPluginActions.mdx
-                  - page: MultisigModularAccount
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/MultisigModularAccount.mdx
-                  - page: MultisigPluginActions
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/MultisigPluginActions.mdx
-                  - page: MultisigUserOperationContext
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/MultisigUserOperationContext.mdx
-                  - page: NativeTokenLimit
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/NativeTokenLimit.mdx
-                  - page: Pack1271SignatureParams
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/Pack1271SignatureParams.mdx
-                  - page: PackUOSignatureParams
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/PackUOSignatureParams.mdx
                   - page: PaymasterContext
                     path: wallets/pages/reference/account-kit/core/src/type-aliases/PaymasterContext.mdx
-                  - page: Plugin
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/Plugin.mdx
-                  - page: PluginManagerActions
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/PluginManagerActions.mdx
                   - page: PolicyToken
                     path: wallets/pages/reference/account-kit/core/src/type-aliases/PolicyToken.mdx
-                  - page: PreValidationHooks
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/PreValidationHooks.mdx
-                  - page: ProposeUserOperationResult
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/ProposeUserOperationResult.mdx
                   - page: RequestGasAndPaymasterAndDataRequest
                     path: wallets/pages/reference/account-kit/core/src/type-aliases/RequestGasAndPaymasterAndDataRequest.mdx
                   - page: RequestGasAndPaymasterAndDataResponse
@@ -862,20 +676,8 @@ navigation:
                     path: wallets/pages/reference/account-kit/core/src/type-aliases/RequestPaymasterTokenQuoteRequest.mdx
                   - page: RequestPaymasterTokenQuoteResponse
                     path: wallets/pages/reference/account-kit/core/src/type-aliases/RequestPaymasterTokenQuoteResponse.mdx
-                  - page: SessionKeyPluginActions
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/SessionKeyPluginActions.mdx
-                  - page: SignMultisigUserOperationParams
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/SignMultisigUserOperationParams.mdx
-                  - page: SignMultisigUserOperationResult
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/SignMultisigUserOperationResult.mdx
-                  - page: Signature
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/Signature.mdx
-                  - page: SignerEntity
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/SignerEntity.mdx
                   - page: SignerStatus
                     path: wallets/pages/reference/account-kit/core/src/type-aliases/SignerStatus.mdx
-                  - page: SignerType
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/SignerType.mdx
                   - page: SimulateUserOperationAssetChangesRequest
                     path: wallets/pages/reference/account-kit/core/src/type-aliases/SimulateUserOperationAssetChangesRequest.mdx
                   - page: SimulateUserOperationAssetChangesResponse
@@ -894,68 +696,12 @@ navigation:
                     path: wallets/pages/reference/account-kit/core/src/type-aliases/SupportedAccountTypes.mdx
                   - page: SupportedAccounts
                     path: wallets/pages/reference/account-kit/core/src/type-aliases/SupportedAccounts.mdx
-                  - page: TimeRange
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/TimeRange.mdx
-                  - page: UninstallPluginParams
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/UninstallPluginParams.mdx
-                  - page: UserOpSignatureType
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/UserOpSignatureType.mdx
-                  - page: ValidationDataParams
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/ValidationDataParams.mdx
-                  - page: ValidationDataView
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/ValidationDataView.mdx
-                  - page: WebauthnModularAccountV2
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/WebauthnModularAccountV2.mdx
-                  - page: WebauthnModularAccountV2Client
-                    path: wallets/pages/reference/account-kit/core/src/type-aliases/WebauthnModularAccountV2Client.mdx
               - section: Variables
                 contents:
-                  - page: AccountVersionRegistry
-                    path: wallets/pages/reference/account-kit/core/src/variables/AccountVersionRegistry.mdx
                   - page: AlchemyChainSchema
                     path: wallets/pages/reference/account-kit/core/src/variables/AlchemyChainSchema.mdx
                   - page: DEFAULT_IFRAME_CONTAINER_ID
                     path: wallets/pages/reference/account-kit/core/src/variables/DEFAULT_IFRAME_CONTAINER_ID.mdx
-                  - page: DEFAULT_OWNER_ENTITY_ID
-                    path: wallets/pages/reference/account-kit/core/src/variables/DEFAULT_OWNER_ENTITY_ID.mdx
-                  - page: IAccountLoupeAbi
-                    path: wallets/pages/reference/account-kit/core/src/variables/IAccountLoupeAbi.mdx
-                  - page: IPluginAbi
-                    path: wallets/pages/reference/account-kit/core/src/variables/IPluginAbi.mdx
-                  - page: IPluginManagerAbi
-                    path: wallets/pages/reference/account-kit/core/src/variables/IPluginManagerAbi.mdx
-                  - page: IStandardExecutorAbi
-                    path: wallets/pages/reference/account-kit/core/src/variables/IStandardExecutorAbi.mdx
-                  - page: LightAccountUnsupported1271Factories
-                    path: wallets/pages/reference/account-kit/core/src/variables/LightAccountUnsupported1271Factories.mdx
-                  - page: LightAccountUnsupported1271Impls
-                    path: wallets/pages/reference/account-kit/core/src/variables/LightAccountUnsupported1271Impls.mdx
-                  - page: MULTISIG_ACCOUNT_SOURCE
-                    path: wallets/pages/reference/account-kit/core/src/variables/MULTISIG_ACCOUNT_SOURCE.mdx
-                  - page: MultiOwnerModularAccountFactoryAbi
-                    path: wallets/pages/reference/account-kit/core/src/variables/MultiOwnerModularAccountFactoryAbi.mdx
-                  - page: MultiOwnerPlugin
-                    path: wallets/pages/reference/account-kit/core/src/variables/MultiOwnerPlugin.mdx
-                  - page: MultiOwnerPluginAbi
-                    path: wallets/pages/reference/account-kit/core/src/variables/MultiOwnerPluginAbi.mdx
-                  - page: MultiOwnerPluginExecutionFunctionAbi
-                    path: wallets/pages/reference/account-kit/core/src/variables/MultiOwnerPluginExecutionFunctionAbi.mdx
-                  - page: MultisigModularAccountFactoryAbi
-                    path: wallets/pages/reference/account-kit/core/src/variables/MultisigModularAccountFactoryAbi.mdx
-                  - page: MultisigPlugin
-                    path: wallets/pages/reference/account-kit/core/src/variables/MultisigPlugin.mdx
-                  - page: MultisigPluginAbi
-                    path: wallets/pages/reference/account-kit/core/src/variables/MultisigPluginAbi.mdx
-                  - page: MultisigPluginExecutionFunctionAbi
-                    path: wallets/pages/reference/account-kit/core/src/variables/MultisigPluginExecutionFunctionAbi.mdx
-                  - page: SessionKeyPlugin
-                    path: wallets/pages/reference/account-kit/core/src/variables/SessionKeyPlugin.mdx
-                  - page: SessionKeyPluginAbi
-                    path: wallets/pages/reference/account-kit/core/src/variables/SessionKeyPluginAbi.mdx
-                  - page: SessionKeyPluginExecutionFunctionAbi
-                    path: wallets/pages/reference/account-kit/core/src/variables/SessionKeyPluginExecutionFunctionAbi.mdx
-                  - page: UpgradeableModularAccountAbi
-                    path: wallets/pages/reference/account-kit/core/src/variables/UpgradeableModularAccountAbi.mdx
                   - page: accountLoupeActions
                     path: wallets/pages/reference/account-kit/core/src/variables/accountLoupeActions.mdx
                   - page: alchemyActions
@@ -970,8 +716,6 @@ navigation:
                     path: wallets/pages/reference/account-kit/core/src/variables/arbitrumNova.mdx
                   - page: arbitrumSepolia
                     path: wallets/pages/reference/account-kit/core/src/variables/arbitrumSepolia.mdx
-                  - page: assertNever
-                    path: wallets/pages/reference/account-kit/core/src/variables/assertNever.mdx
                   - page: base
                     path: wallets/pages/reference/account-kit/core/src/variables/base.mdx
                   - page: baseGoerli
@@ -988,10 +732,6 @@ navigation:
                     path: wallets/pages/reference/account-kit/core/src/variables/bsc.mdx
                   - page: bscTestnet
                     path: wallets/pages/reference/account-kit/core/src/variables/bscTestnet.mdx
-                  - page: buildDeferredActionDigest
-                    path: wallets/pages/reference/account-kit/core/src/variables/buildDeferredActionDigest.mdx
-                  - page: buildFullNonceKey
-                    path: wallets/pages/reference/account-kit/core/src/variables/buildFullNonceKey.mdx
                   - page: celoMainnet
                     path: wallets/pages/reference/account-kit/core/src/variables/celoMainnet.mdx
                   - page: celoSepolia
@@ -1000,18 +740,10 @@ navigation:
                     path: wallets/pages/reference/account-kit/core/src/variables/convertHeadersToObject.mdx
                   - page: createAlchemyPublicRpcClient
                     path: wallets/pages/reference/account-kit/core/src/variables/createAlchemyPublicRpcClient.mdx
-                  - page: defaultLightAccountVersion
-                    path: wallets/pages/reference/account-kit/core/src/variables/defaultLightAccountVersion.mdx
                   - page: defineAlchemyChain
                     path: wallets/pages/reference/account-kit/core/src/variables/defineAlchemyChain.mdx
                   - page: edgeMainnet
                     path: wallets/pages/reference/account-kit/core/src/variables/edgeMainnet.mdx
-                  - page: entityIdAndNonceReaderBytecode
-                    path: wallets/pages/reference/account-kit/core/src/variables/entityIdAndNonceReaderBytecode.mdx
-                  - page: executeUserOpSelector
-                    path: wallets/pages/reference/account-kit/core/src/variables/executeUserOpSelector.mdx
-                  - page: formatSignatures
-                    path: wallets/pages/reference/account-kit/core/src/variables/formatSignatures.mdx
                   - page: fraxtal
                     path: wallets/pages/reference/account-kit/core/src/variables/fraxtal.mdx
                   - page: fraxtalSepolia
@@ -1020,60 +752,28 @@ navigation:
                     path: wallets/pages/reference/account-kit/core/src/variables/gensynTestnet.mdx
                   - page: getAlchemyPaymasterAddress
                     path: wallets/pages/reference/account-kit/core/src/variables/getAlchemyPaymasterAddress.mdx
-                  - page: getDefaultLightAccountFactoryAddress
-                    path: wallets/pages/reference/account-kit/core/src/variables/getDefaultLightAccountFactoryAddress.mdx
-                  - page: getDefaultMAV2Address
-                    path: wallets/pages/reference/account-kit/core/src/variables/getDefaultMAV2Address.mdx
-                  - page: getDefaultMAV2FactoryAddress
-                    path: wallets/pages/reference/account-kit/core/src/variables/getDefaultMAV2FactoryAddress.mdx
-                  - page: getDefaultMultiOwnerLightAccountFactoryAddress
-                    path: wallets/pages/reference/account-kit/core/src/variables/getDefaultMultiOwnerLightAccountFactoryAddress.mdx
-                  - page: getDefaultMultiOwnerModularAccountFactoryAddress
-                    path: wallets/pages/reference/account-kit/core/src/variables/getDefaultMultiOwnerModularAccountFactoryAddress.mdx
-                  - page: getDefaultMultisigModularAccountFactoryAddress
-                    path: wallets/pages/reference/account-kit/core/src/variables/getDefaultMultisigModularAccountFactoryAddress.mdx
-                  - page: getDefaultSMAV27702Address
-                    path: wallets/pages/reference/account-kit/core/src/variables/getDefaultSMAV27702Address.mdx
-                  - page: getDefaultSMAV2BytecodeAddress
-                    path: wallets/pages/reference/account-kit/core/src/variables/getDefaultSMAV2BytecodeAddress.mdx
-                  - page: getDefaultSMAV2StorageAddress
-                    path: wallets/pages/reference/account-kit/core/src/variables/getDefaultSMAV2StorageAddress.mdx
                   - page: getDefaultUserOperationFeeOptions
                     path: wallets/pages/reference/account-kit/core/src/variables/getDefaultUserOperationFeeOptions.mdx
-                  - page: getDefaultWebAuthnMAV2FactoryAddress
-                    path: wallets/pages/reference/account-kit/core/src/variables/getDefaultWebAuthnMAV2FactoryAddress.mdx
-                  - page: getSignerType
-                    path: wallets/pages/reference/account-kit/core/src/variables/getSignerType.mdx
                   - page: goerli
                     path: wallets/pages/reference/account-kit/core/src/variables/goerli.mdx
+                  - page: hyperliquid
+                    path: wallets/pages/reference/account-kit/core/src/variables/hyperliquid.mdx
+                  - page: hyperliquidEvmTestnet
+                    path: wallets/pages/reference/account-kit/core/src/variables/hyperliquidEvmTestnet.mdx
                   - page: inkMainnet
                     path: wallets/pages/reference/account-kit/core/src/variables/inkMainnet.mdx
                   - page: inkSepolia
                     path: wallets/pages/reference/account-kit/core/src/variables/inkSepolia.mdx
-                  - page: isDeferredAction
-                    path: wallets/pages/reference/account-kit/core/src/variables/isDeferredAction.mdx
-                  - page: isMultisigModularAccount
-                    path: wallets/pages/reference/account-kit/core/src/variables/isMultisigModularAccount.mdx
-                  - page: lightAccountClientActions
-                    path: wallets/pages/reference/account-kit/core/src/variables/lightAccountClientActions.mdx
                   - page: mainnet
                     path: wallets/pages/reference/account-kit/core/src/variables/mainnet.mdx
                   - page: mekong
                     path: wallets/pages/reference/account-kit/core/src/variables/mekong.mdx
-                  - page: mintableERC20Abi
-                    path: wallets/pages/reference/account-kit/core/src/variables/mintableERC20Abi.mdx
-                  - page: mintableERC20Bytecode
-                    path: wallets/pages/reference/account-kit/core/src/variables/mintableERC20Bytecode.mdx
+                  - page: monadMainnet
+                    path: wallets/pages/reference/account-kit/core/src/variables/monadMainnet.mdx
                   - page: monadTestnet
                     path: wallets/pages/reference/account-kit/core/src/variables/monadTestnet.mdx
-                  - page: multiOwnerLightAccountClientActions
-                    path: wallets/pages/reference/account-kit/core/src/variables/multiOwnerLightAccountClientActions.mdx
-                  - page: multiOwnerPluginActions
-                    path: wallets/pages/reference/account-kit/core/src/variables/multiOwnerPluginActions.mdx
-                  - page: multisigPluginActions
-                    path: wallets/pages/reference/account-kit/core/src/variables/multisigPluginActions.mdx
-                  - page: multisigSignatureMiddleware
-                    path: wallets/pages/reference/account-kit/core/src/variables/multisigSignatureMiddleware.mdx
+                  - page: mythosMainnet
+                    path: wallets/pages/reference/account-kit/core/src/variables/mythosMainnet.mdx
                   - page: opbnbMainnet
                     path: wallets/pages/reference/account-kit/core/src/variables/opbnbMainnet.mdx
                   - page: opbnbTestnet
@@ -1086,14 +786,6 @@ navigation:
                     path: wallets/pages/reference/account-kit/core/src/variables/optimismGoerli.mdx
                   - page: optimismSepolia
                     path: wallets/pages/reference/account-kit/core/src/variables/optimismSepolia.mdx
-                  - page: pack1271EOASignature
-                    path: wallets/pages/reference/account-kit/core/src/variables/pack1271EOASignature.mdx
-                  - page: pack1271WebAuthnSignature
-                    path: wallets/pages/reference/account-kit/core/src/variables/pack1271WebAuthnSignature.mdx
-                  - page: packUOSignature
-                    path: wallets/pages/reference/account-kit/core/src/variables/packUOSignature.mdx
-                  - page: parseDeferredAction
-                    path: wallets/pages/reference/account-kit/core/src/variables/parseDeferredAction.mdx
                   - page: polygon
                     path: wallets/pages/reference/account-kit/core/src/variables/polygon.mdx
                   - page: polygonAmoy
@@ -1102,12 +794,8 @@ navigation:
                     path: wallets/pages/reference/account-kit/core/src/variables/polygonMumbai.mdx
                   - page: riseTestnet
                     path: wallets/pages/reference/account-kit/core/src/variables/riseTestnet.mdx
-                  - page: semiModularAccountBytecodeAbi
-                    path: wallets/pages/reference/account-kit/core/src/variables/semiModularAccountBytecodeAbi.mdx
                   - page: sepolia
                     path: wallets/pages/reference/account-kit/core/src/variables/sepolia.mdx
-                  - page: sessionKeyPluginActions
-                    path: wallets/pages/reference/account-kit/core/src/variables/sessionKeyPluginActions.mdx
                   - page: shape
                     path: wallets/pages/reference/account-kit/core/src/variables/shape.mdx
                   - page: shapeSepolia
@@ -1118,28 +806,24 @@ navigation:
                     path: wallets/pages/reference/account-kit/core/src/variables/soneiumMainnet.mdx
                   - page: soneiumMinato
                     path: wallets/pages/reference/account-kit/core/src/variables/soneiumMinato.mdx
-                  - page: splitAggregatedSignature
-                    path: wallets/pages/reference/account-kit/core/src/variables/splitAggregatedSignature.mdx
-                  - page: standardExecutor
-                    path: wallets/pages/reference/account-kit/core/src/variables/standardExecutor.mdx
+                  - page: stableMainnet
+                    path: wallets/pages/reference/account-kit/core/src/variables/stableMainnet.mdx
                   - page: storyAeneid
                     path: wallets/pages/reference/account-kit/core/src/variables/storyAeneid.mdx
                   - page: storyMainnet
                     path: wallets/pages/reference/account-kit/core/src/variables/storyMainnet.mdx
                   - page: teaSepolia
                     path: wallets/pages/reference/account-kit/core/src/variables/teaSepolia.mdx
-                  - page: transferLightAccountOwnership
-                    path: wallets/pages/reference/account-kit/core/src/variables/transferLightAccountOwnership.mdx
                   - page: unichainMainnet
                     path: wallets/pages/reference/account-kit/core/src/variables/unichainMainnet.mdx
                   - page: unichainSepolia
                     path: wallets/pages/reference/account-kit/core/src/variables/unichainSepolia.mdx
-                  - page: updateMultiOwnerLightAccountOwners
-                    path: wallets/pages/reference/account-kit/core/src/variables/updateMultiOwnerLightAccountOwners.mdx
                   - page: worldChain
                     path: wallets/pages/reference/account-kit/core/src/variables/worldChain.mdx
                   - page: worldChainSepolia
                     path: wallets/pages/reference/account-kit/core/src/variables/worldChainSepolia.mdx
+                  - page: worldl3devnet
+                    path: wallets/pages/reference/account-kit/core/src/variables/worldl3devnet.mdx
                   - page: zora
                     path: wallets/pages/reference/account-kit/core/src/variables/zora.mdx
                   - page: zoraSepolia
@@ -1275,6 +959,10 @@ navigation:
                     path: wallets/pages/reference/account-kit/infra/src/exports/variables/gensynTestnet.mdx
                   - page: goerli
                     path: wallets/pages/reference/account-kit/infra/src/exports/variables/goerli.mdx
+                  - page: hyperliquid
+                    path: wallets/pages/reference/account-kit/infra/src/exports/variables/hyperliquid.mdx
+                  - page: hyperliquidEvmTestnet
+                    path: wallets/pages/reference/account-kit/infra/src/exports/variables/hyperliquidEvmTestnet.mdx
                   - page: inkMainnet
                     path: wallets/pages/reference/account-kit/infra/src/exports/variables/inkMainnet.mdx
                   - page: inkSepolia
@@ -1283,8 +971,12 @@ navigation:
                     path: wallets/pages/reference/account-kit/infra/src/exports/variables/mainnet.mdx
                   - page: mekong
                     path: wallets/pages/reference/account-kit/infra/src/exports/variables/mekong.mdx
+                  - page: monadMainnet
+                    path: wallets/pages/reference/account-kit/infra/src/exports/variables/monadMainnet.mdx
                   - page: monadTestnet
                     path: wallets/pages/reference/account-kit/infra/src/exports/variables/monadTestnet.mdx
+                  - page: mythosMainnet
+                    path: wallets/pages/reference/account-kit/infra/src/exports/variables/mythosMainnet.mdx
                   - page: opbnbMainnet
                     path: wallets/pages/reference/account-kit/infra/src/exports/variables/opbnbMainnet.mdx
                   - page: opbnbTestnet
@@ -1317,6 +1009,8 @@ navigation:
                     path: wallets/pages/reference/account-kit/infra/src/exports/variables/soneiumMainnet.mdx
                   - page: soneiumMinato
                     path: wallets/pages/reference/account-kit/infra/src/exports/variables/soneiumMinato.mdx
+                  - page: stableMainnet
+                    path: wallets/pages/reference/account-kit/infra/src/exports/variables/stableMainnet.mdx
                   - page: storyAeneid
                     path: wallets/pages/reference/account-kit/infra/src/exports/variables/storyAeneid.mdx
                   - page: storyMainnet
@@ -1331,6 +1025,8 @@ navigation:
                     path: wallets/pages/reference/account-kit/infra/src/exports/variables/worldChain.mdx
                   - page: worldChainSepolia
                     path: wallets/pages/reference/account-kit/infra/src/exports/variables/worldChainSepolia.mdx
+                  - page: worldl3devnet
+                    path: wallets/pages/reference/account-kit/infra/src/exports/variables/worldl3devnet.mdx
                   - page: zora
                     path: wallets/pages/reference/account-kit/infra/src/exports/variables/zora.mdx
                   - page: zoraSepolia
@@ -1492,8 +1188,6 @@ navigation:
                     path: wallets/pages/reference/account-kit/react/src/type-aliases/ClientActionParameters.mdx
                   - page: ConnectedUser
                     path: wallets/pages/reference/account-kit/react/src/type-aliases/ConnectedUser.mdx
-                  - page: CreateConfigProps
-                    path: wallets/pages/reference/account-kit/react/src/type-aliases/CreateConfigProps.mdx
                   - page: ExecutableFunctionArgs
                     path: wallets/pages/reference/account-kit/react/src/type-aliases/ExecutableFunctionArgs.mdx
                   - page: ExecutableFunctionName
@@ -1646,8 +1340,6 @@ navigation:
                     path: wallets/pages/reference/account-kit/react/src/variables/AlchemyAccountContext.mdx
                   - page: DEFAULT_UI_CONFIG
                     path: wallets/pages/reference/account-kit/react/src/variables/DEFAULT_UI_CONFIG.mdx
-                  - page: cookieStorage
-                    path: wallets/pages/reference/account-kit/react/src/variables/cookieStorage.mdx
           - section: React Native
             path: wallets/pages/reference/account-kit/react-native/src/README.mdx
             contents:
@@ -1655,252 +1347,16 @@ navigation:
                 contents:
                   - page: AlchemyAccountProvider
                     path: wallets/pages/reference/account-kit/react-native/src/functions/AlchemyAccountProvider.mdx
-                  - page: UiConfigProvider
-                    path: wallets/pages/reference/account-kit/react-native/src/functions/UiConfigProvider.mdx
-              - section: Hooks
-                contents:
-                  - page: useAccount
-                    path: wallets/pages/reference/account-kit/react-native/src/functions/useAccount.mdx
-                  - page: useAddOauthProvider
-                    path: wallets/pages/reference/account-kit/react-native/src/functions/useAddOauthProvider.mdx
-                  - page: useAddPasskey
-                    path: wallets/pages/reference/account-kit/react-native/src/functions/useAddPasskey.mdx
-                  - page: useAuthError
-                    path: wallets/pages/reference/account-kit/react-native/src/functions/useAuthError.mdx
-                  - page: useAuthenticate
-                    path: wallets/pages/reference/account-kit/react-native/src/functions/useAuthenticate.mdx
-                  - page: useChain
-                    path: wallets/pages/reference/account-kit/react-native/src/functions/useChain.mdx
-                  - page: useClientActions
-                    path: wallets/pages/reference/account-kit/react-native/src/functions/useClientActions.mdx
-                  - page: useConnectedUser
-                    path: wallets/pages/reference/account-kit/react-native/src/functions/useConnectedUser.mdx
-                  - page: useConnection
-                    path: wallets/pages/reference/account-kit/react-native/src/functions/useConnection.mdx
-                  - page: useDropAndReplaceUserOperation
-                    path: wallets/pages/reference/account-kit/react-native/src/functions/useDropAndReplaceUserOperation.mdx
-                  - page: useElementHeight
-                    path: wallets/pages/reference/account-kit/react-native/src/functions/useElementHeight.mdx
-                  - page: useExportAccount
-                    path: wallets/pages/reference/account-kit/react-native/src/functions/useExportAccount.mdx
-                  - page: useLogout
-                    path: wallets/pages/reference/account-kit/react-native/src/functions/useLogout.mdx
-                  - page: useMFA
-                    path: wallets/pages/reference/account-kit/react-native/src/functions/useMFA.mdx
-                  - page: useRemoveEmail
-                    path: wallets/pages/reference/account-kit/react-native/src/functions/useRemoveEmail.mdx
-                  - page: useRemoveOauthProvider
-                    path: wallets/pages/reference/account-kit/react-native/src/functions/useRemoveOauthProvider.mdx
-                  - page: useRemovePasskey
-                    path: wallets/pages/reference/account-kit/react-native/src/functions/useRemovePasskey.mdx
-                  - page: useResizeObserver
-                    path: wallets/pages/reference/account-kit/react-native/src/functions/useResizeObserver.mdx
-                  - page: useSendUserOperation
-                    path: wallets/pages/reference/account-kit/react-native/src/functions/useSendUserOperation.mdx
-                  - page: useSendVerificationCode
-                    path: wallets/pages/reference/account-kit/react-native/src/functions/useSendVerificationCode.mdx
-                  - page: useSetEmail
-                    path: wallets/pages/reference/account-kit/react-native/src/functions/useSetEmail.mdx
-                  - page: useSignMessage
-                    path: wallets/pages/reference/account-kit/react-native/src/functions/useSignMessage.mdx
-                  - page: useSignTypedData
-                    path: wallets/pages/reference/account-kit/react-native/src/functions/useSignTypedData.mdx
-                  - page: useSmartAccountClient
-                    path: wallets/pages/reference/account-kit/react-native/src/functions/useSmartAccountClient.mdx
-                  - page: useSolanaConnection
-                    path: wallets/pages/reference/account-kit/react-native/src/functions/useSolanaConnection.mdx
-                  - page: useSolanaTransaction
-                    path: wallets/pages/reference/account-kit/react-native/src/functions/useSolanaTransaction.mdx
-                  - page: useSolanaWallet
-                    path: wallets/pages/reference/account-kit/react-native/src/functions/useSolanaWallet.mdx
-                  - page: useUiConfig
-                    path: wallets/pages/reference/account-kit/react-native/src/functions/useUiConfig.mdx
-                  - page: useWaitForUserOperationTransaction
-                    path: wallets/pages/reference/account-kit/react-native/src/functions/useWaitForUserOperationTransaction.mdx
               - section: Functions
                 contents:
                   - page: createConfig
                     path: wallets/pages/reference/account-kit/react-native/src/functions/createConfig.mdx
-                  - page: createUiConfigStore
-                    path: wallets/pages/reference/account-kit/react-native/src/functions/createUiConfigStore.mdx
-              - section: Interfaces
-                contents:
-                  - page: MessageSigner
-                    path: wallets/pages/reference/account-kit/react-native/src/interfaces/MessageSigner.mdx
-                  - page: SendVerificationCodeParams
-                    path: wallets/pages/reference/account-kit/react-native/src/interfaces/SendVerificationCodeParams.mdx
-                  - page: SolanaConnection
-                    path: wallets/pages/reference/account-kit/react-native/src/interfaces/SolanaConnection.mdx
-                  - page: SolanaTransaction
-                    path: wallets/pages/reference/account-kit/react-native/src/interfaces/SolanaTransaction.mdx
-                  - page: TransactionSigner
-                    path: wallets/pages/reference/account-kit/react-native/src/interfaces/TransactionSigner.mdx
-                  - page: UseChainResult
-                    path: wallets/pages/reference/account-kit/react-native/src/interfaces/UseChainResult.mdx
               - section: Type Aliases
                 contents:
                   - page: AlchemyAccountContextProps
                     path: wallets/pages/reference/account-kit/react-native/src/type-aliases/AlchemyAccountContextProps.mdx
                   - page: AlchemyAccountsProviderProps
                     path: wallets/pages/reference/account-kit/react-native/src/type-aliases/AlchemyAccountsProviderProps.mdx
-                  - page: ClientActionParameters
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/ClientActionParameters.mdx
-                  - page: ConnectedUser
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/ConnectedUser.mdx
-                  - page: ExecutableFunctionArgs
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/ExecutableFunctionArgs.mdx
-                  - page: ExecutableFunctionName
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/ExecutableFunctionName.mdx
-                  - page: ExecuteableFunctionResult
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/ExecuteableFunctionResult.mdx
-                  - page: ExportAccountComponentProps
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/ExportAccountComponentProps.mdx
-                  - page: PreSend
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/PreSend.mdx
-                  - page: SendUserOperationWithEOA
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/SendUserOperationWithEOA.mdx
-                  - page: SetEmailParams
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/SetEmailParams.mdx
-                  - page: SignMessageArgs
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/SignMessageArgs.mdx
-                  - page: SignTypedDataArgs
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/SignTypedDataArgs.mdx
-                  - page: SignerSet
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/SignerSet.mdx
-                  - page: SolanaConnectionHookParams
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/SolanaConnectionHookParams.mdx
-                  - page: SolanaTransactionHookParams
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/SolanaTransactionHookParams.mdx
-                  - page: SolanaTransactionParamOptions
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/SolanaTransactionParamOptions.mdx
-                  - page: SolanaTransactionParams
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/SolanaTransactionParams.mdx
-                  - page: TransformInstruction
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/TransformInstruction.mdx
-                  - page: UiConfigStore
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/UiConfigStore.mdx
-                  - page: UseAccountMutationArgs
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/UseAccountMutationArgs.mdx
-                  - page: UseAccountProps
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/UseAccountProps.mdx
-                  - page: UseAccountResult
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/UseAccountResult.mdx
-                  - page: UseAddOauthProviderMutationArgs
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/UseAddOauthProviderMutationArgs.mdx
-                  - page: UseAddOauthProviderResult
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/UseAddOauthProviderResult.mdx
-                  - page: UseAddPasskeyMutationArgs
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/UseAddPasskeyMutationArgs.mdx
-                  - page: UseAddPasskeyResult
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/UseAddPasskeyResult.mdx
-                  - page: UseAuthErrorResult
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/UseAuthErrorResult.mdx
-                  - page: UseAuthenticateMutationArgs
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/UseAuthenticateMutationArgs.mdx
-                  - page: UseAuthenticateResult
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/UseAuthenticateResult.mdx
-                  - page: UseBundlerClientResult
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/UseBundlerClientResult.mdx
-                  - page: UseChainParams
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/UseChainParams.mdx
-                  - page: UseClientActionsProps
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/UseClientActionsProps.mdx
-                  - page: UseClientActionsResult
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/UseClientActionsResult.mdx
-                  - page: UseConnectedUserResult
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/UseConnectedUserResult.mdx
-                  - page: UseDropAndReplaceUserOperationArgs
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/UseDropAndReplaceUserOperationArgs.mdx
-                  - page: UseDropAndReplaceUserOperationMutationArgs
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/UseDropAndReplaceUserOperationMutationArgs.mdx
-                  - page: UseDropAndReplaceUserOperationResult
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/UseDropAndReplaceUserOperationResult.mdx
-                  - page: UseExportAccountMutationArgs
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/UseExportAccountMutationArgs.mdx
-                  - page: UseExportAccountResult
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/UseExportAccountResult.mdx
-                  - page: UseLogoutMutationArgs
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/UseLogoutMutationArgs.mdx
-                  - page: UseLogoutResult
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/UseLogoutResult.mdx
-                  - page: UseMFAResult
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/UseMFAResult.mdx
-                  - page: UseRemoveEmailMutationArgs
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/UseRemoveEmailMutationArgs.mdx
-                  - page: UseRemoveEmailResult
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/UseRemoveEmailResult.mdx
-                  - page: UseRemoveOauthProviderMutationArgs
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/UseRemoveOauthProviderMutationArgs.mdx
-                  - page: UseRemoveOauthProviderResult
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/UseRemoveOauthProviderResult.mdx
-                  - page: UseRemovePasskeyMutationArgs
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/UseRemovePasskeyMutationArgs.mdx
-                  - page: UseRemovePasskeyResult
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/UseRemovePasskeyResult.mdx
-                  - page: UseSendUserOperationArgs
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/UseSendUserOperationArgs.mdx
-                  - page: UseSendUserOperationMutationArgs
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/UseSendUserOperationMutationArgs.mdx
-                  - page: UseSendUserOperationResult
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/UseSendUserOperationResult.mdx
-                  - page: UseSendVerificationCodeMutationArgs
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/UseSendVerificationCodeMutationArgs.mdx
-                  - page: UseSendVerificationCodeResult
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/UseSendVerificationCodeResult.mdx
-                  - page: UseSetEmailMutationArgs
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/UseSetEmailMutationArgs.mdx
-                  - page: UseSetEmailResult
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/UseSetEmailResult.mdx
-                  - page: UseSignMessageArgs
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/UseSignMessageArgs.mdx
-                  - page: UseSignMessageResult
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/UseSignMessageResult.mdx
-                  - page: UseSignMessagedMutationArgs
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/UseSignMessagedMutationArgs.mdx
-                  - page: UseSignTypedDataArgs
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/UseSignTypedDataArgs.mdx
-                  - page: UseSignTypedDataMutationArgs
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/UseSignTypedDataMutationArgs.mdx
-                  - page: UseSignTypedDataResult
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/UseSignTypedDataResult.mdx
-                  - page: UseSignerStatusResult
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/UseSignerStatusResult.mdx
-                  - page: UseSmartAccountClientProps
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/UseSmartAccountClientProps.mdx
-                  - page: UseSmartAccountClientResult
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/UseSmartAccountClientResult.mdx
-                  - page: UseUserResult
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/UseUserResult.mdx
-                  - page: UseWaitForUserOperationTransactionArgs
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/UseWaitForUserOperationTransactionArgs.mdx
-                  - page: UseWaitForUserOperationTransactionMutationArgs
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/UseWaitForUserOperationTransactionMutationArgs.mdx
-                  - page: UseWaitForUserOperationTransactionResult
-                    path: wallets/pages/reference/account-kit/react-native/src/type-aliases/UseWaitForUserOperationTransactionResult.mdx
-              - section: Variables
-                contents:
-                  - page: DEFAULT_UI_CONFIG
-                    path: wallets/pages/reference/account-kit/react-native/src/variables/DEFAULT_UI_CONFIG.mdx
-                  - page: EMPTY_WALLET_CONTEXT_STATE
-                    path: wallets/pages/reference/account-kit/react-native/src/variables/EMPTY_WALLET_CONTEXT_STATE.mdx
-                  - page: getListAuthMethodsQueryKey
-                    path: wallets/pages/reference/account-kit/react-native/src/variables/getListAuthMethodsQueryKey.mdx
-                  - page: useAlchemyAccountContext
-                    path: wallets/pages/reference/account-kit/react-native/src/variables/useAlchemyAccountContext.mdx
-                  - page: useBundlerClient
-                    path: wallets/pages/reference/account-kit/react-native/src/variables/useBundlerClient.mdx
-                  - page: useConnect
-                    path: wallets/pages/reference/account-kit/react-native/src/variables/useConnect.mdx
-                  - page: useListAuthMethods
-                    path: wallets/pages/reference/account-kit/react-native/src/variables/useListAuthMethods.mdx
-                  - page: useSigner
-                    path: wallets/pages/reference/account-kit/react-native/src/variables/useSigner.mdx
-                  - page: useSignerStatus
-                    path: wallets/pages/reference/account-kit/react-native/src/variables/useSignerStatus.mdx
-                  - page: useSolanaSigner
-                    path: wallets/pages/reference/account-kit/react-native/src/variables/useSolanaSigner.mdx
-                  - page: useUser
-                    path: wallets/pages/reference/account-kit/react-native/src/variables/useUser.mdx
           - section: React Native Signer
             path: wallets/pages/reference/account-kit/rn-signer/src/README.mdx
             contents:
@@ -2340,6 +1796,8 @@ navigation:
                     path: wallets/pages/reference/account-kit/smart-contracts/src/type-aliases/ProposeUserOperationResult.mdx
                   - page: SessionKeyPluginActions
                     path: wallets/pages/reference/account-kit/smart-contracts/src/type-aliases/SessionKeyPluginActions.mdx
+                  - page: SignMultisigUserOperationParams
+                    path: wallets/pages/reference/account-kit/smart-contracts/src/type-aliases/SignMultisigUserOperationParams.mdx
                   - page: SignMultisigUserOperationResult
                     path: wallets/pages/reference/account-kit/smart-contracts/src/type-aliases/SignMultisigUserOperationResult.mdx
                   - page: Signature

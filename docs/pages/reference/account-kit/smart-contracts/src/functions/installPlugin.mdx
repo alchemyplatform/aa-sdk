@@ -14,7 +14,7 @@ function installPlugin<TTransport, TChain, TAccount, TContext>(
 ): Promise<any>;
 ```
 
-Defined in: [account-kit/smart-contracts/src/msca/plugin-manager/installPlugin.ts:65](https://github.com/alchemyplatform/aa-sdk/blob/27e36329c103b4660886c9508b86d0a2c5c6c47e/account-kit/smart-contracts/src/msca/plugin-manager/installPlugin.ts#L65)
+Defined in: [account-kit/smart-contracts/src/msca/plugin-manager/installPlugin.ts:65](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/smart-contracts/src/msca/plugin-manager/installPlugin.ts#L65)
 
 Installs a plugin on a smart account via the client, sending the user operation with the appropriate parameters.
 NOTE: it's recommended to just use the installPlugin action returned from generated plugins
@@ -35,100 +35,19 @@ const hash = await installPlugin(client, {
 
 ## Type Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Type Parameter</th>
-      <th align="left">Default type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `TTransport` *extends* `Transport`
-      </td>
-
-      <td>
-        `Transport`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TChain` *extends* `undefined` | `Chain`
-      </td>
-
-      <td>
-        `undefined` | `Chain`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TAccount` *extends* `undefined` | `SmartContractAccount`
-      </td>
-
-      <td>
-        `undefined` | `SmartContractAccount`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TContext` *extends* `undefined` | `Record`\<`string`, `unknown`>
-      </td>
-
-      <td>
-        `undefined` | `Record`\<`string`, `unknown`>
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Type Parameter                     | Default type                   |
+| :--------------------------------- | :----------------------------- | ----------- | ------------------------------ |
+| `TTransport` _extends_ `Transport` | `Transport`                    |
+| `TChain` _extends_ `undefined`     | `Chain`                        | `undefined` | `Chain`                        |
+| `TAccount` _extends_ `undefined`   | `SmartContractAccount`         | `undefined` | `SmartContractAccount`         |
+| `TContext` _extends_ `undefined`   | `Record`\<`string`, `unknown`> | `undefined` | `Record`\<`string`, `unknown`> |
 
 ## Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Parameter</th>
-      <th align="left">Type</th>
-      <th align="left">Description</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `client`
-      </td>
-
-      <td>
-        `Client`\<`TTransport`, `TChain`, `TAccount`>
-      </td>
-
-      <td>
-        The client configured to the smart account on which the plugin will be installed
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `params`
-      </td>
-
-      <td>
-        [`InstallPluginParams`](../type-aliases/InstallPluginParams.mdx)\<`TAccount`, `TContext`>
-      </td>
-
-      <td>
-        The parameters required to install the plugin, including overrides, context, and account information
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Parameter | Type                                                                                      | Description                                                                                          |
+| :-------- | :---------------------------------------------------------------------------------------- | :--------------------------------------------------------------------------------------------------- |
+| `client`  | `Client`\<`TTransport`, `TChain`, `TAccount`>                                             | The client configured to the smart account on which the plugin will be installed                     |
+| `params`  | [`InstallPluginParams`](../type-aliases/InstallPluginParams.mdx)\<`TAccount`, `TContext`> | The parameters required to install the plugin, including overrides, context, and account information |
 
 ## Returns
 

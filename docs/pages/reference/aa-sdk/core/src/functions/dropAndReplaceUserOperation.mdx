@@ -17,7 +17,7 @@ function dropAndReplaceUserOperation<
 >(client_, args): Promise<SendUserOperationResult<TEntryPointVersion>>;
 ```
 
-Defined in: [aa-sdk/core/src/actions/smartAccount/dropAndReplaceUserOperation.ts:50](https://github.com/alchemyplatform/aa-sdk/blob/27e36329c103b4660886c9508b86d0a2c5c6c47e/aa-sdk/core/src/actions/smartAccount/dropAndReplaceUserOperation.ts#L50)
+Defined in: [aa-sdk/core/src/actions/smartAccount/dropAndReplaceUserOperation.ts:50](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/aa-sdk/core/src/actions/smartAccount/dropAndReplaceUserOperation.ts#L50)
 
 Drops an existing user operation and replaces it with a new one while ensuring the appropriate fees and overrides are applied.
 
@@ -39,110 +39,20 @@ const result = await client.dropAndReplaceUserOperation({
 
 ## Type Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Type Parameter</th>
-      <th align="left">Default type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `TTransport` *extends* `Transport`
-      </td>
-
-      <td>
-        `Transport`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TChain` *extends* `undefined` | `Chain`
-      </td>
-
-      <td>
-        `undefined` | `Chain`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TAccount` *extends* `any`
-      </td>
-
-      <td>
-        `any`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TContext` *extends* `any`
-      </td>
-
-      <td>
-        `any`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TEntryPointVersion` *extends* `GetEntryPointFromAccount`\<`TAccount`>
-      </td>
-
-      <td>
-        `GetEntryPointFromAccount`\<`TAccount`>
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Type Parameter                                                         | Default type                            |
+| :--------------------------------------------------------------------- | :-------------------------------------- | ----------- | ------- |
+| `TTransport` _extends_ `Transport`                                     | `Transport`                             |
+| `TChain` _extends_ `undefined`                                         | `Chain`                                 | `undefined` | `Chain` |
+| `TAccount` _extends_ `any`                                             | `any`                                   |
+| `TContext` _extends_ `any`                                             | `any`                                   |
+| `TEntryPointVersion` _extends_ `GetEntryPointFromAccount`\<`TAccount`> | `GetEntryPointFromAccount`\<`TAccount`> |
 
 ## Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Parameter</th>
-      <th align="left">Type</th>
-      <th align="left">Description</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `client_`
-      </td>
-
-      <td>
-        `Client`\<`TTransport`, `TChain`, `TAccount`>
-      </td>
-
-      <td>
-        The client instance with the transport, chain, and account information
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `args`
-      </td>
-
-      <td>
-        `DropAndReplaceUserOperationParameters`\<`TAccount`, `TContext`>
-      </td>
-
-      <td>
-        The parameters required for dropping and replacing the user operation including the account, operation to drop, overrides, and context
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Parameter | Type                                                             | Description                                                                                                                            |
+| :-------- | :--------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------- |
+| `client_` | `Client`\<`TTransport`, `TChain`, `TAccount`>                    | The client instance with the transport, chain, and account information                                                                 |
+| `args`    | `DropAndReplaceUserOperationParameters`\<`TAccount`, `TContext`> | The parameters required for dropping and replacing the user operation including the account, operation to drop, overrides, and context |
 
 ## Returns
 

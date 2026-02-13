@@ -13,75 +13,21 @@ function createAlchemySmartAccountClient<TChain, TAccount, TContext>(
 ): AlchemySmartAccountClient<TChain, TAccount, Record<string, never>, TContext>;
 ```
 
-Defined in: [account-kit/infra/src/client/smartAccountClient.ts:107](https://github.com/alchemyplatform/aa-sdk/blob/27e36329c103b4660886c9508b86d0a2c5c6c47e/account-kit/infra/src/client/smartAccountClient.ts#L107)
+Defined in: [account-kit/infra/src/client/smartAccountClient.ts:107](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/infra/src/client/smartAccountClient.ts#L107)
 
 ## Type Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Type Parameter</th>
-      <th align="left">Default type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `TChain` *extends* `Chain`
-      </td>
-
-      <td>
-        `Chain`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TAccount` *extends* `undefined` | `SmartContractAccount`
-      </td>
-
-      <td>
-        `undefined` | `SmartContractAccount`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TContext` *extends* `undefined` | `UserOperationContext`
-      </td>
-
-      <td>
-        `undefined` | `UserOperationContext`
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Type Parameter                   | Default type           |
+| :------------------------------- | :--------------------- | ----------- | ---------------------- |
+| `TChain` _extends_ `Chain`       | `Chain`                |
+| `TAccount` _extends_ `undefined` | `SmartContractAccount` | `undefined` | `SmartContractAccount` |
+| `TContext` _extends_ `undefined` | `UserOperationContext` | `undefined` | `UserOperationContext` |
 
 ## Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Parameter</th>
-      <th align="left">Type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `params`
-      </td>
-
-      <td>
-        [`AlchemySmartAccountClientConfig`](../type-aliases/AlchemySmartAccountClientConfig.mdx)\<`TChain`, `TAccount`, `TContext`>
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Parameter | Type                                                                                                                        |
+| :-------- | :-------------------------------------------------------------------------------------------------------------------------- |
+| `params`  | [`AlchemySmartAccountClientConfig`](../type-aliases/AlchemySmartAccountClientConfig.mdx)\<`TChain`, `TAccount`, `TContext`> |
 
 ## Returns
 

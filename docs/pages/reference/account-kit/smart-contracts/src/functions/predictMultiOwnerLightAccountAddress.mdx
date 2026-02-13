@@ -11,7 +11,7 @@ layout: reference
 function predictMultiOwnerLightAccountAddress(params): `0x${string}`;
 ```
 
-Defined in: [account-kit/smart-contracts/src/light-account/accounts/predictAddress.ts:117](https://github.com/alchemyplatform/aa-sdk/blob/27e36329c103b4660886c9508b86d0a2c5c6c47e/account-kit/smart-contracts/src/light-account/accounts/predictAddress.ts#L117)
+Defined in: [account-kit/smart-contracts/src/light-account/accounts/predictAddress.ts:117](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/smart-contracts/src/light-account/accounts/predictAddress.ts#L117)
 
 Predicts the address of a **Multi-Owner Light Account** given the factory, salt
 and the set of owner addresses.
@@ -22,35 +22,9 @@ for funding or displaying to users).
 
 ## Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Parameter</th>
-      <th align="left">Type</th>
-      <th align="left">Description</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `params`
-      </td>
-
-      <td>
-        `PredictMultiOwnerLightAccountAddressParams`
-      </td>
-
-      <td>
-        Object containing:
-        – `factoryAddress` Factory contract that will deploy the account.
-        – `salt` Arbitrary salt used when calling the factory.
-        – `ownerAddresses` Array of owner EOAs (must be deduped & sorted).
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Parameter | Type                                         | Description                                                                                                                                                                                                    |
+| :-------- | :------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `params`  | `PredictMultiOwnerLightAccountAddressParams` | Object containing: – `factoryAddress` Factory contract that will deploy the account. – `salt` Arbitrary salt used when calling the factory. – `ownerAddresses` Array of owner EOAs (must be deduped & sorted). |
 
 ## Returns
 

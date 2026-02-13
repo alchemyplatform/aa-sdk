@@ -20,7 +20,7 @@ function buildUserOperationFromTxs<
 ): Promise<BuildUserOperationFromTransactionsResult<TEntryPointVersion>>;
 ```
 
-Defined in: [aa-sdk/core/src/actions/smartAccount/buildUserOperationFromTxs.ts:74](https://github.com/alchemyplatform/aa-sdk/blob/27e36329c103b4660886c9508b86d0a2c5c6c47e/aa-sdk/core/src/actions/smartAccount/buildUserOperationFromTxs.ts#L74)
+Defined in: [aa-sdk/core/src/actions/smartAccount/buildUserOperationFromTxs.ts:74](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/aa-sdk/core/src/actions/smartAccount/buildUserOperationFromTxs.ts#L74)
 
 Performs `buildUserOperationFromTx` in batch and builds into a single,
 yet to be signed `UserOperation` (UO) struct. The output user operation struct
@@ -74,110 +74,20 @@ const uoHash = await smartAccountClient.sendRawUserOperation({
 
 ## Type Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Type Parameter</th>
-      <th align="left">Default type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `TTransport` *extends* `Transport`
-      </td>
-
-      <td>
-        `Transport`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TChain` *extends* `undefined` | `Chain`
-      </td>
-
-      <td>
-        `undefined` | `Chain`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TAccount` *extends* `any`
-      </td>
-
-      <td>
-        `any`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TEntryPointVersion` *extends* `GetEntryPointFromAccount`\<`TAccount`>
-      </td>
-
-      <td>
-        `GetEntryPointFromAccount`\<`TAccount`>
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TContext` *extends* `any`
-      </td>
-
-      <td>
-        `any`
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Type Parameter                                                         | Default type                            |
+| :--------------------------------------------------------------------- | :-------------------------------------- | ----------- | ------- |
+| `TTransport` _extends_ `Transport`                                     | `Transport`                             |
+| `TChain` _extends_ `undefined`                                         | `Chain`                                 | `undefined` | `Chain` |
+| `TAccount` _extends_ `any`                                             | `any`                                   |
+| `TEntryPointVersion` _extends_ `GetEntryPointFromAccount`\<`TAccount`> | `GetEntryPointFromAccount`\<`TAccount`> |
+| `TContext` _extends_ `any`                                             | `any`                                   |
 
 ## Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Parameter</th>
-      <th align="left">Type</th>
-      <th align="left">Description</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `client_`
-      </td>
-
-      <td>
-        `Client`\<`TTransport`, `TChain`, `TAccount`>
-      </td>
-
-      <td>
-        the smart account client to use to make RPC calls
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `args`
-      </td>
-
-      <td>
-        `BuildTransactionParameters`\<`TAccount`, `TContext`, `TEntryPointVersion`>
-      </td>
-
-      <td>
-        an object containing the requests to build as well as, the account if not hoisted, the context, the overrides, and optionally a flag to enable signing of the UO via the underlying middleware
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Parameter | Type                                                                        | Description                                                                                                                                                                                    |
+| :-------- | :-------------------------------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `client_` | `Client`\<`TTransport`, `TChain`, `TAccount`>                               | the smart account client to use to make RPC calls                                                                                                                                              |
+| `args`    | `BuildTransactionParameters`\<`TAccount`, `TContext`, `TEntryPointVersion`> | an object containing the requests to build as well as, the account if not hoisted, the context, the overrides, and optionally a flag to enable signing of the UO via the underlying middleware |
 
 ## Returns
 

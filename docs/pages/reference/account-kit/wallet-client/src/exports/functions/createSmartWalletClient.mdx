@@ -11,7 +11,7 @@ layout: reference
 function createSmartWalletClient<TAccount>(params): SmartWalletClient<TAccount>;
 ```
 
-Defined in: [account-kit/wallet-client/src/client/index.ts:81](https://github.com/alchemyplatform/aa-sdk/blob/27e36329c103b4660886c9508b86d0a2c5c6c47e/account-kit/wallet-client/src/client/index.ts#L81)
+Defined in: [account-kit/wallet-client/src/client/index.ts:81](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/wallet-client/src/client/index.ts#L81)
 
 Creates a smart wallet client that can be used to interact with a smart account.
 
@@ -37,56 +37,15 @@ const client = createSmartWalletClient({
 
 ## Type Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Type Parameter</th>
-      <th align="left">Default type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `TAccount` *extends* `undefined` | `` `0x${string}` ``
-      </td>
-
-      <td>
-        `undefined`
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Type Parameter                   | Default type        |
+| :------------------------------- | :------------------ | ----------- |
+| `TAccount` _extends_ `undefined` | `` `0x${string}` `` | `undefined` |
 
 ## Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Parameter</th>
-      <th align="left">Type</th>
-      <th align="left">Description</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `params`
-      </td>
-
-      <td>
-        [`SmartWalletClientParams`](../type-aliases/SmartWalletClientParams.mdx)\<`TAccount`>
-      </td>
-
-      <td>
-        The parameters for creating the smart wallet client
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Parameter | Type                                                                                  | Description                                         |
+| :-------- | :------------------------------------------------------------------------------------ | :-------------------------------------------------- |
+| `params`  | [`SmartWalletClientParams`](../type-aliases/SmartWalletClientParams.mdx)\<`TAccount`> | The parameters for creating the smart wallet client |
 
 ## Returns
 

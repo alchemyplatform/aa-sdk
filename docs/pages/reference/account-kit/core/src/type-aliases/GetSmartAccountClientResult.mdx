@@ -11,92 +11,20 @@ layout: reference
 type GetSmartAccountClientResult<TChain, TAccount> = object;
 ```
 
-Defined in: [account-kit/core/src/actions/getSmartAccountClient.ts:60](https://github.com/alchemyplatform/aa-sdk/blob/27e36329c103b4660886c9508b86d0a2c5c6c47e/account-kit/core/src/actions/getSmartAccountClient.ts#L60)
+Defined in: [account-kit/core/src/actions/getSmartAccountClient.ts:60](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/core/src/actions/getSmartAccountClient.ts#L60)
 
 ## Type Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Type Parameter</th>
-      <th align="left">Default type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `TChain` *extends* `Chain` | `undefined`
-      </td>
-
-      <td>
-        `Chain` | `undefined`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TAccount` *extends* `SupportedAccounts`
-      </td>
-
-      <td>
-        `SupportedAccounts`
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Type Parameter                                                                     | Default type                                                  |
+| :--------------------------------------------------------------------------------- | :------------------------------------------------------------ | ------- | ----------- |
+| `TChain` _extends_ `Chain`                                                         | `undefined`                                                   | `Chain` | `undefined` |
+| `TAccount` _extends_ [`accountLoupeActions`](../variables/accountLoupeActions.mdx) | [`accountLoupeActions`](../variables/accountLoupeActions.mdx) |
 
 ## Properties
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Property</th>
-      <th align="left">Type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        <a id="address" /> `address?`
-      </td>
-
-      <td>
-        [`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx)
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        <a id="client" /> `client?`
-      </td>
-
-      <td>
-        [`AlchemySmartAccountClient`](AlchemySmartAccountClient.mdx)\<`TChain`, `TAccount`, [`ClientActions`](ClientActions.mdx)\<`TAccount`>>
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        <a id="error" /> `error?`
-      </td>
-
-      <td>
-        `Error`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        <a id="isloadingclient" /> `isLoadingClient`
-      </td>
-
-      <td>
-        `boolean`
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Property                                     | Type                                                                                                                                   |
+| :------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------- |
+| <a id="address" /> `address?`                | [`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx)                                                                      |
+| <a id="client" /> `client?`                  | [`AlchemySmartAccountClient`](AlchemySmartAccountClient.mdx)\<`TChain`, `TAccount`, [`ClientActions`](ClientActions.mdx)\<`TAccount`>> |
+| <a id="error" /> `error?`                    | `Error`                                                                                                                                |
+| <a id="isloadingclient" /> `isLoadingClient` | `boolean`                                                                                                                              |

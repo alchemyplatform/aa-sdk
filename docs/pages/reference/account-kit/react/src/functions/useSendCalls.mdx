@@ -13,7 +13,7 @@ function useSendCalls<TEntryPointVersion>(
 ): UseSendCallsResult<TEntryPointVersion>;
 ```
 
-Defined in: [account-kit/react/src/hooks/useSendCalls.ts:120](https://github.com/alchemyplatform/aa-sdk/blob/27e36329c103b4660886c9508b86d0a2c5c6c47e/account-kit/react/src/hooks/useSendCalls.ts#L120)
+Defined in: [account-kit/react/src/hooks/useSendCalls.ts:120](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/react/src/hooks/useSendCalls.ts#L120)
 
 Hook for sending calls to a smart account or EOA wallet.
 
@@ -55,61 +55,15 @@ await sendCallsAsync({
 
 ## Type Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Type Parameter</th>
-      <th align="left">Default type</th>
-      <th align="left">Description</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `TEntryPointVersion` *extends* keyof `EntryPointRegistryBase`\<`unknown`>
-      </td>
-
-      <td>
-        keyof `EntryPointRegistryBase`\<`unknown`>
-      </td>
-
-      <td>
-        The entry point version to use for user operations (defaults to EntryPointVersion)
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Type Parameter                                                            | Default type                               | Description                                                                        |
+| :------------------------------------------------------------------------ | :----------------------------------------- | :--------------------------------------------------------------------------------- |
+| `TEntryPointVersion` _extends_ keyof `EntryPointRegistryBase`\<`unknown`> | keyof `EntryPointRegistryBase`\<`unknown`> | The entry point version to use for user operations (defaults to EntryPointVersion) |
 
 ## Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Parameter</th>
-      <th align="left">Type</th>
-      <th align="left">Description</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `params`
-      </td>
-
-      <td>
-        [`UseSendCallsParams`](../type-aliases/UseSendCallsParams.mdx)
-      </td>
-
-      <td>
-        Configuration parameters for the hook
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Parameter | Type                                                           | Description                           |
+| :-------- | :------------------------------------------------------------- | :------------------------------------ |
+| `params`  | [`UseSendCallsParams`](../type-aliases/UseSendCallsParams.mdx) | Configuration parameters for the hook |
 
 ## Returns
 

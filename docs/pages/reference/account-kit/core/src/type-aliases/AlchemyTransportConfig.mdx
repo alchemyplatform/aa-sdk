@@ -17,57 +17,8 @@ Defined in: account-kit/infra/dist/types/alchemyTransport.d.ts:12
 
 ## Type Declaration
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Name</th>
-      <th align="left">Type</th>
-      <th align="left">Description</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `fetchOptions?`
-      </td>
-
-      <td>
-        `NoUndefined`\<`HttpTransportConfig`\[`"fetchOptions"`]>
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `retryCount?`
-      </td>
-
-      <td>
-        `TransportConfig`\[`"retryCount"`]
-      </td>
-
-      <td>
-        The max number of times to retry.
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `retryDelay?`
-      </td>
-
-      <td>
-        `TransportConfig`\[`"retryDelay"`]
-      </td>
-
-      <td>
-        The base delay (in ms) between retries.
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Name            | Type                                                     | Description                             |
+| :-------------- | :------------------------------------------------------- | :-------------------------------------- |
+| `fetchOptions?` | `NoUndefined`\<`HttpTransportConfig`\[`"fetchOptions"`]> | -                                       |
+| `retryCount?`   | `TransportConfig`\[`"retryCount"`]                       | The max number of times to retry.       |
+| `retryDelay?`   | `TransportConfig`\[`"retryDelay"`]                       | The base delay (in ms) between retries. |

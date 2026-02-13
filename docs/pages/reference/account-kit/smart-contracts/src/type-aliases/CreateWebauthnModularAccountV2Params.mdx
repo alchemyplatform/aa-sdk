@@ -15,142 +15,25 @@ type CreateWebauthnModularAccountV2Params<TTransport> = Pick<
   object;
 ```
 
-Defined in: [account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts:69](https://github.com/alchemyplatform/aa-sdk/blob/27e36329c103b4660886c9508b86d0a2c5c6c47e/account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts#L69)
+Defined in: [account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts:69](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts#L69)
 
 ## Type Declaration
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Name</th>
-      <th align="left">Type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `credential`
-      </td>
-
-      <td>
-        `ToWebAuthnAccountParameters`\[`"credential"`]
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `deferredAction?`
-      </td>
-
-      <td>
-        `Hex`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `entryPoint?`
-      </td>
-
-      <td>
-        `EntryPointDef`\<`"0.7.0"`, `Chain`>
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `factoryAddress?`
-      </td>
-
-      <td>
-        [`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx)
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `getFn?`
-      </td>
-
-      <td>
-        `ToWebAuthnAccountParameters`\[`"getFn"`]
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `initCode?`
-      </td>
-
-      <td>
-        `Hex`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `mode`
-      </td>
-
-      <td>
-        `"webauthn"`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `rpId?`
-      </td>
-
-      <td>
-        `ToWebAuthnAccountParameters`\[`"rpId"`]
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `salt?`
-      </td>
-
-      <td>
-        `bigint`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `signerEntity?`
-      </td>
-
-      <td>
-        [`SignerEntity`](SignerEntity.mdx)
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Name              | Type                                                              |
+| :---------------- | :---------------------------------------------------------------- |
+| `credential`      | `ToWebAuthnAccountParameters`\[`"credential"`]                    |
+| `deferredAction?` | `Hex`                                                             |
+| `entryPoint?`     | `EntryPointDef`\<`"0.7.0"`, `Chain`>                              |
+| `factoryAddress?` | [`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx) |
+| `getFn?`          | `ToWebAuthnAccountParameters`\[`"getFn"`]                         |
+| `initCode?`       | `Hex`                                                             |
+| `mode`            | `"webauthn"`                                                      |
+| `rpId?`           | `ToWebAuthnAccountParameters`\[`"rpId"`]                          |
+| `salt?`           | `bigint`                                                          |
+| `signerEntity?`   | [`SignerEntity`](SignerEntity.mdx)                                |
 
 ## Type Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Type Parameter</th>
-      <th align="left">Default type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `TTransport` *extends* `Transport`
-      </td>
-
-      <td>
-        `Transport`
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Type Parameter                     | Default type |
+| :--------------------------------- | :----------- |
+| `TTransport` _extends_ `Transport` | `Transport`  |

@@ -14,7 +14,7 @@ function transferLightAccountOwnership<TTransport, TChain, TSigner, TAccount>(
 ): Promise<`0x${string}`>;
 ```
 
-Defined in: [account-kit/smart-contracts/src/light-account/actions/transferOwnership.ts:51](https://github.com/alchemyplatform/aa-sdk/blob/27e36329c103b4660886c9508b86d0a2c5c6c47e/account-kit/smart-contracts/src/light-account/actions/transferOwnership.ts#L51)
+Defined in: [account-kit/smart-contracts/src/light-account/actions/transferOwnership.ts:51](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/smart-contracts/src/light-account/actions/transferOwnership.ts#L51)
 
 Transfers the ownership of a light account to a new owner.
 This function ensures that the client is a compatible smart acccount client and that a Light Account is provided.
@@ -42,100 +42,19 @@ const txHash = await transferOwnership(lightAccountClient, {
 
 ## Type Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Type Parameter</th>
-      <th align="left">Default type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `TTransport` *extends* `Transport`
-      </td>
-
-      <td>
-        `Transport`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TChain` *extends* `undefined` | `Chain`
-      </td>
-
-      <td>
-        `undefined` | `Chain`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TSigner` *extends* `SmartAccountSigner`\<`any`>
-      </td>
-
-      <td>
-        `SmartAccountSigner`\<`any`>
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TAccount` *extends* `any`
-      </td>
-
-      <td>
-        `any`
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Type Parameter                                   | Default type                 |
+| :----------------------------------------------- | :--------------------------- | ----------- | ------- |
+| `TTransport` _extends_ `Transport`               | `Transport`                  |
+| `TChain` _extends_ `undefined`                   | `Chain`                      | `undefined` | `Chain` |
+| `TSigner` _extends_ `SmartAccountSigner`\<`any`> | `SmartAccountSigner`\<`any`> |
+| `TAccount` _extends_ `any`                       | `any`                        |
 
 ## Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Parameter</th>
-      <th align="left">Type</th>
-      <th align="left">Description</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `client`
-      </td>
-
-      <td>
-        `Client`\<`TTransport`, `TChain`, `TAccount`>
-      </td>
-
-      <td>
-        The smart account client instance used to execute the transfer
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `args`
-      </td>
-
-      <td>
-        `TransferLightAccountOwnershipParams`\<`TSigner`, `TAccount`>
-      </td>
-
-      <td>
-        The parameters for transferring ownership
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Parameter | Type                                                          | Description                                                    |
+| :-------- | :------------------------------------------------------------ | :------------------------------------------------------------- |
+| `client`  | `Client`\<`TTransport`, `TChain`, `TAccount`>                 | The smart account client instance used to execute the transfer |
+| `args`    | `TransferLightAccountOwnershipParams`\<`TSigner`, `TAccount`> | The parameters for transferring ownership                      |
 
 ## Returns
 

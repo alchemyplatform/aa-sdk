@@ -10,7 +10,7 @@ layout: reference
 ```ts
 type AccountState<TAccount> =
   | {
-      account: Promise<SupportedAccount<TAccount>>;
+      account: Promise<accountLoupeActions<TAccount>>;
       error?: never;
       status: "INITIALIZING";
     }
@@ -22,7 +22,7 @@ type AccountState<TAccount> =
       status: "RECONNECTING";
     }
   | {
-      account: SupportedAccount<TAccount>;
+      account: accountLoupeActions<TAccount>;
       error?: never;
       status: "READY";
     }
@@ -38,22 +38,10 @@ type AccountState<TAccount> =
     };
 ```
 
-Defined in: [account-kit/core/src/store/types.ts:26](https://github.com/alchemyplatform/aa-sdk/blob/27e36329c103b4660886c9508b86d0a2c5c6c47e/account-kit/core/src/store/types.ts#L26)
+Defined in: [account-kit/core/src/store/types.ts:26](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/core/src/store/types.ts#L26)
 
 ## Type Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Type Parameter</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `TAccount` *extends* `SupportedAccountTypes`
-      </td>
-    </tr>
-  </tbody>
-</table>
+| Type Parameter                                                                     |
+| :--------------------------------------------------------------------------------- |
+| `TAccount` _extends_ [`accountLoupeActions`](../variables/accountLoupeActions.mdx) |

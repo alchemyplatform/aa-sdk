@@ -10,67 +10,25 @@ layout: reference
 ```ts
 function createMultiOwnerLightAccountAlchemyClient<TSigner>(
   params,
-): Promise<
-  AlchemySmartAccountClient<
-    undefined | Chain,
-    MultiOwnerLightAccount<TSigner>,
-    MultiOwnerLightAccountClientActions<TSigner>
-  >
->;
+): Promise<any>;
 ```
 
-Defined in: [account-kit/smart-contracts/src/light-account/clients/multiOwnerAlchemyClient.ts:25](https://github.com/alchemyplatform/aa-sdk/blob/27e36329c103b4660886c9508b86d0a2c5c6c47e/account-kit/smart-contracts/src/light-account/clients/multiOwnerAlchemyClient.ts#L25)
+Defined in: [account-kit/smart-contracts/src/light-account/clients/multiOwnerAlchemyClient.ts:25](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/smart-contracts/src/light-account/clients/multiOwnerAlchemyClient.ts#L25)
 
 ## Type Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Type Parameter</th>
-      <th align="left">Default type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `TSigner` *extends* `SmartAccountSigner`\<`any`>
-      </td>
-
-      <td>
-        `SmartAccountSigner`\<`any`>
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Type Parameter                                   | Default type                 |
+| :----------------------------------------------- | :--------------------------- |
+| `TSigner` _extends_ `SmartAccountSigner`\<`any`> | `SmartAccountSigner`\<`any`> |
 
 ## Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Parameter</th>
-      <th align="left">Type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `params`
-      </td>
-
-      <td>
-        [`AlchemyMultiOwnerLightAccountClientConfig`](../type-aliases/AlchemyMultiOwnerLightAccountClientConfig.mdx)\<`TSigner`>
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Parameter | Type                                                                                                                     |
+| :-------- | :----------------------------------------------------------------------------------------------------------------------- |
+| `params`  | [`AlchemyMultiOwnerLightAccountClientConfig`](../type-aliases/AlchemyMultiOwnerLightAccountClientConfig.mdx)\<`TSigner`> |
 
 ## Returns
 
-`Promise`\<[`AlchemySmartAccountClient`](../../../core/src/type-aliases/AlchemySmartAccountClient.mdx)\<`undefined` | `Chain`, [`MultiOwnerLightAccount`](../../../core/src/type-aliases/MultiOwnerLightAccount.mdx)\<`TSigner`>, [`MultiOwnerLightAccountClientActions`](../../../core/src/type-aliases/MultiOwnerLightAccountClientActions.mdx)\<`TSigner`>>>
+`Promise`\<`any`>
 
 A promise that resolves to an `AlchemySmartAccountClient` object containing the created account information and methods

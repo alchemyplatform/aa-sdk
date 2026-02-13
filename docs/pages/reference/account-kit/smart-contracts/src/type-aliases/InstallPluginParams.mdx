@@ -14,102 +14,21 @@ type InstallPluginParams<TAccount, TContext, TEntryPointVersion> = object &
   GetContextParameter<TContext>;
 ```
 
-Defined in: [account-kit/smart-contracts/src/msca/plugin-manager/installPlugin.ts:26](https://github.com/alchemyplatform/aa-sdk/blob/27e36329c103b4660886c9508b86d0a2c5c6c47e/account-kit/smart-contracts/src/msca/plugin-manager/installPlugin.ts#L26)
+Defined in: [account-kit/smart-contracts/src/msca/plugin-manager/installPlugin.ts:26](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/smart-contracts/src/msca/plugin-manager/installPlugin.ts#L26)
 
 ## Type Declaration
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Name</th>
-      <th align="left">Type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `dependencies?`
-      </td>
-
-      <td>
-        [`FunctionReference`](FunctionReference.mdx)\[]
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `manifestHash?`
-      </td>
-
-      <td>
-        `Hash`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `pluginAddress`
-      </td>
-
-      <td>
-        [`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx)
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `pluginInitData?`
-      </td>
-
-      <td>
-        `Hash`
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Name              | Type                                                              |
+| :---------------- | :---------------------------------------------------------------- |
+| `dependencies?`   | [`FunctionReference`](FunctionReference.mdx)\[]                   |
+| `manifestHash?`   | `Hash`                                                            |
+| `pluginAddress`   | [`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx) |
+| `pluginInitData?` | `Hash`                                                            |
 
 ## Type Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Type Parameter</th>
-      <th align="left">Default type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `TAccount` *extends* `SmartContractAccount` | `undefined`
-      </td>
-
-      <td>
-        `SmartContractAccount` | `undefined`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TContext` *extends* `Record`\<`string`, `unknown`> | `undefined`
-      </td>
-
-      <td>
-        `Record`\<`string`, `unknown`> | `undefined`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TEntryPointVersion` *extends* `GetEntryPointFromAccount`\<`TAccount`>
-      </td>
-
-      <td>
-        `GetEntryPointFromAccount`\<`TAccount`>
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Type Parameter                                                         | Default type                            |
+| :--------------------------------------------------------------------- | :-------------------------------------- | ------------------------------ | ----------- |
+| `TAccount` _extends_ `SmartContractAccount`                            | `undefined`                             | `SmartContractAccount`         | `undefined` |
+| `TContext` _extends_ `Record`\<`string`, `unknown`>                    | `undefined`                             | `Record`\<`string`, `unknown`> | `undefined` |
+| `TEntryPointVersion` _extends_ `GetEntryPointFromAccount`\<`TAccount`> | `GetEntryPointFromAccount`\<`TAccount`> |

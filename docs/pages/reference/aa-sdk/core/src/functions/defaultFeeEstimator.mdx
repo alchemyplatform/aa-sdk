@@ -11,7 +11,7 @@ layout: reference
 function defaultFeeEstimator<C>(client): ClientMiddlewareFn;
 ```
 
-Defined in: [aa-sdk/core/src/middleware/defaults/feeEstimator.ts:26](https://github.com/alchemyplatform/aa-sdk/blob/27e36329c103b4660886c9508b86d0a2c5c6c47e/aa-sdk/core/src/middleware/defaults/feeEstimator.ts#L26)
+Defined in: [aa-sdk/core/src/middleware/defaults/feeEstimator.ts:26](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/aa-sdk/core/src/middleware/defaults/feeEstimator.ts#L26)
 
 Default fee estimator middleware function that estimates the maximum fee per gas and maximum priority fee per gas for a given client and applies the necessary overrides and fee options.
 
@@ -31,56 +31,15 @@ const client = createSmartAccountClient({
 
 ## Type Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Type Parameter</th>
-      <th align="left">Description</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `C` *extends* `MiddlewareClient`
-      </td>
-
-      <td>
-        The type of the client
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Type Parameter                   | Description            |
+| :------------------------------- | :--------------------- |
+| `C` _extends_ `MiddlewareClient` | The type of the client |
 
 ## Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Parameter</th>
-      <th align="left">Type</th>
-      <th align="left">Description</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `client`
-      </td>
-
-      <td>
-        `C`
-      </td>
-
-      <td>
-        The client to perform the fee estimation
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Parameter | Type | Description                              |
+| :-------- | :--- | :--------------------------------------- |
+| `client`  | `C`  | The client to perform the fee estimation |
 
 ## Returns
 

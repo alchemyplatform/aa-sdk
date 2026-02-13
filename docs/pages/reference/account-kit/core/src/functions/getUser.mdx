@@ -11,7 +11,7 @@ layout: reference
 function getUser(config): null | (User & object);
 ```
 
-Defined in: [account-kit/core/src/actions/getUser.ts:21](https://github.com/alchemyplatform/aa-sdk/blob/27e36329c103b4660886c9508b86d0a2c5c6c47e/account-kit/core/src/actions/getUser.ts#L21)
+Defined in: [account-kit/core/src/actions/getUser.ts:21](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/core/src/actions/getUser.ts#L21)
 
 Returns the currently logged in user if using an SCA with the AlchemySigner
 or the connected EOA details.
@@ -27,35 +27,12 @@ const user = getUser(config);
 
 ## Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Parameter</th>
-      <th align="left">Type</th>
-      <th align="left">Description</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `config`
-      </td>
-
-      <td>
-        `AlchemyAccountsConfig`
-      </td>
-
-      <td>
-        the account config containing app state
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Parameter | Type                    | Description                             |
+| :-------- | :---------------------- | :-------------------------------------- |
+| `config`  | `AlchemyAccountsConfig` | the account config containing app state |
 
 ## Returns
 
-`null` | `User` & `object`
+`null` | [`User`](../../../signer/src/type-aliases/User.mdx) & `object`
 
 the user if the signer or an EOA are connected

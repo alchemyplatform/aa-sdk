@@ -11,7 +11,7 @@ layout: reference
 function watchAccount<TAccount>(type, config): (onChange) => any;
 ```
 
-Defined in: [account-kit/core/src/actions/watchAccount.ts:24](https://github.com/alchemyplatform/aa-sdk/blob/27e36329c103b4660886c9508b86d0a2c5c6c47e/account-kit/core/src/actions/watchAccount.ts#L24)
+Defined in: [account-kit/core/src/actions/watchAccount.ts:24](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/core/src/actions/watchAccount.ts#L24)
 
 Watches for changes to a specific type of account and triggers the provided callback function when changes occur.
 
@@ -27,70 +27,16 @@ watchAccount("LightAccount", config)(console.log);
 
 ## Type Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Type Parameter</th>
-      <th align="left">Description</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `TAccount` *extends* [`SupportedAccountTypes`](../type-aliases/SupportedAccountTypes.mdx)
-      </td>
-
-      <td>
-        The type of account to watch
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Type Parameter                                                                            | Description                  |
+| :---------------------------------------------------------------------------------------- | :--------------------------- |
+| `TAccount` _extends_ [`SupportedAccountTypes`](../type-aliases/SupportedAccountTypes.mdx) | The type of account to watch |
 
 ## Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Parameter</th>
-      <th align="left">Type</th>
-      <th align="left">Description</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `type`
-      </td>
-
-      <td>
-        `TAccount`
-      </td>
-
-      <td>
-        The type of account to watch
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `config`
-      </td>
-
-      <td>
-        [`AlchemyAccountsConfig`](../type-aliases/AlchemyAccountsConfig.mdx)
-      </td>
-
-      <td>
-        The configuration containing client store settings
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Parameter | Type                                                                 | Description                                        |
+| :-------- | :------------------------------------------------------------------- | :------------------------------------------------- |
+| `type`    | `TAccount`                                                           | The type of account to watch                       |
+| `config`  | [`AlchemyAccountsConfig`](../type-aliases/AlchemyAccountsConfig.mdx) | The configuration containing client store settings |
 
 ## Returns
 
@@ -102,27 +48,9 @@ A function that accepts a callback to be called when the account changes and ret
 
 ### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Parameter</th>
-      <th align="left">Type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `onChange`
-      </td>
-
-      <td>
-        (`account`) => `void`
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Parameter  | Type                  |
+| :--------- | :-------------------- |
+| `onChange` | (`account`) => `void` |
 
 ### Returns
 

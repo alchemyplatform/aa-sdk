@@ -11,87 +11,19 @@ layout: reference
 function useAuthContext<TType>(type?): AuthContextType<TType>;
 ```
 
-Defined in: [account-kit/react/src/components/auth/context.ts:73](https://github.com/alchemyplatform/aa-sdk/blob/27e36329c103b4660886c9508b86d0a2c5c6c47e/account-kit/react/src/components/auth/context.ts#L73)
+Defined in: [account-kit/react/src/components/auth/context.ts:73](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/react/src/components/auth/context.ts#L73)
 
 ## Type Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Type Parameter</th>
-      <th align="left">Default type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `TType` *extends*
-        | `undefined`
-        | `"email_verify"`
-        | `"otp_verify"`
-        | `"totp_verify"`
-        | `"passkey_verify"`
-        | `"passkey_create"`
-        | `"passkey_create_success"`
-        | `"email_completing"`
-        | `"oauth_completing"`
-        | `"initial"`
-        | `"complete"`
-        | `"eoa_connect"`
-        | `"wallet_connect"`
-        | `"pick_eoa"`
-      </td>
-
-      <td>
-        | `undefined`
-        | `"email_verify"`
-        | `"otp_verify"`
-        | `"totp_verify"`
-        | `"passkey_verify"`
-        | `"passkey_create"`
-        | `"passkey_create_success"`
-        | `"email_completing"`
-        | `"oauth_completing"`
-        | `"initial"`
-        | `"complete"`
-        | `"eoa_connect"`
-        | `"wallet_connect"`
-        | `"pick_eoa"`
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Type Parameter    | Default type |
+| :---------------- | :----------- | ---------------- | -------------- | --------------- | ------------------ | ------------------ | -------------------------- | -------------------- | -------------------- | ----------- | ------------ | --------------- | ------------------ | ------------ | --- | ----------- | ---------------- | -------------- | --------------- | ------------------ | ------------------ | -------------------------- | -------------------- | -------------------- | ----------- | ------------ | --------------- | ------------------ | ------------ |
+| `TType` _extends_ | `undefined`  | `"email_verify"` | `"otp_verify"` | `"totp_verify"` | `"passkey_verify"` | `"passkey_create"` | `"passkey_create_success"` | `"email_completing"` | `"oauth_completing"` | `"initial"` | `"complete"` | `"eoa_connect"` | `"wallet_connect"` | `"pick_eoa"` |     | `undefined` | `"email_verify"` | `"otp_verify"` | `"totp_verify"` | `"passkey_verify"` | `"passkey_create"` | `"passkey_create_success"` | `"email_completing"` | `"oauth_completing"` | `"initial"` | `"complete"` | `"eoa_connect"` | `"wallet_connect"` | `"pick_eoa"` |
 
 ## Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Parameter</th>
-      <th align="left">Type</th>
-      <th align="left">Description</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `type?`
-      </td>
-
-      <td>
-        `TType`
-      </td>
-
-      <td>
-        Optional type of authentication step to validate against the current context
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Parameter | Type    | Description                                                                  |
+| :-------- | :------ | :--------------------------------------------------------------------------- |
+| `type?`   | `TType` | Optional type of authentication step to validate against the current context |
 
 ## Returns
 

@@ -11,70 +11,22 @@ layout: reference
 function clientHeaderTrack<X>(client, crumb): X;
 ```
 
-Defined in: [aa-sdk/core/src/client/addBreadcrumb.ts:20](https://github.com/alchemyplatform/aa-sdk/blob/27e36329c103b4660886c9508b86d0a2c5c6c47e/aa-sdk/core/src/client/addBreadcrumb.ts#L20)
+Defined in: [aa-sdk/core/src/client/addBreadcrumb.ts:20](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/aa-sdk/core/src/client/addBreadcrumb.ts#L20)
 
 Add a crumb to the breadcrumb.
 
 ## Type Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Type Parameter</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `X` *extends* `object`
-      </td>
-    </tr>
-  </tbody>
-</table>
+| Type Parameter         |
+| :--------------------- |
+| `X` _extends_ `object` |
 
 ## Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Parameter</th>
-      <th align="left">Type</th>
-      <th align="left">Description</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `client`
-      </td>
-
-      <td>
-        `X`
-      </td>
-
-      <td>
-        Clients are somethings like viem, that we are adding breadcrumbs to, and could be owning the transport. Usually a alchemy client.
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `crumb`
-      </td>
-
-      <td>
-        `string`
-      </td>
-
-      <td>
-        The crumb to add to the breadcrumb
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Parameter | Type     | Description                                                                                                                       |
+| :-------- | :------- | :-------------------------------------------------------------------------------------------------------------------------------- |
+| `client`  | `X`      | Clients are somethings like viem, that we are adding breadcrumbs to, and could be owning the transport. Usually a alchemy client. |
+| `crumb`   | `string` | The crumb to add to the breadcrumb                                                                                                |
 
 ## Returns
 

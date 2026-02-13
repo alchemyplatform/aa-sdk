@@ -16,112 +16,22 @@ type AlchemySmartAccountClientActions<
 > = object;
 ```
 
-Defined in: [account-kit/infra/src/client/decorators/smartAccount.ts:26](https://github.com/alchemyplatform/aa-sdk/blob/27e36329c103b4660886c9508b86d0a2c5c6c47e/account-kit/infra/src/client/decorators/smartAccount.ts#L26)
+Defined in: [account-kit/infra/src/client/decorators/smartAccount.ts:26](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/infra/src/client/decorators/smartAccount.ts#L26)
 
 ## Type Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Type Parameter</th>
-      <th align="left">Default type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `TAccount` *extends* `SmartContractAccount` | `undefined`
-      </td>
-
-      <td>
-        `SmartContractAccount` | `undefined`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TContext` *extends* `UserOperationContext` | `undefined`
-      </td>
-
-      <td>
-        `UserOperationContext` | `undefined`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TChain` *extends* `Chain` | `undefined`
-      </td>
-
-      <td>
-        `Chain` | `undefined`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TEntryPointVersion` *extends* `GetEntryPointFromAccount`\<`TAccount`>
-      </td>
-
-      <td>
-        `GetEntryPointFromAccount`\<`TAccount`>
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Type Parameter                                                         | Default type                            |
+| :--------------------------------------------------------------------- | :-------------------------------------- | ---------------------- | ----------- |
+| `TAccount` _extends_ `SmartContractAccount`                            | `undefined`                             | `SmartContractAccount` | `undefined` |
+| `TContext` _extends_ `UserOperationContext`                            | `undefined`                             | `UserOperationContext` | `undefined` |
+| `TChain` _extends_ `Chain`                                             | `undefined`                             | `Chain`                | `undefined` |
+| `TEntryPointVersion` _extends_ `GetEntryPointFromAccount`\<`TAccount`> | `GetEntryPointFromAccount`\<`TAccount`> |
 
 ## Properties
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Property</th>
-      <th align="left">Type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        <a id="sendtransaction" /> `sendTransaction`
-      </td>
-
-      <td>
-        \<`TChainOverride`>(`args`, `overrides?`, `context?`) => `Promise`\<`Hex`>
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        <a id="sendtransactions" /> `sendTransactions`
-      </td>
-
-      <td>
-        (`args`) => `Promise`\<`Hex`>
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        <a id="senduseroperation" /> `sendUserOperation`
-      </td>
-
-      <td>
-        (`args`) => `Promise`\<`SendUserOperationResult`\<`TEntryPointVersion`>>
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        <a id="simulateuseroperation" /> `simulateUserOperation`
-      </td>
-
-      <td>
-        (`args`) => `Promise`\<[`SimulateUserOperationAssetChangesResponse`](SimulateUserOperationAssetChangesResponse.mdx)>
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Property                                                 | Type                                                                                                                 |
+| :------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------- |
+| <a id="sendtransaction" /> `sendTransaction`             | \<`TChainOverride`>(`args`, `overrides?`, `context?`) => `Promise`\<`Hex`>                                           |
+| <a id="sendtransactions" /> `sendTransactions`           | (`args`) => `Promise`\<`Hex`>                                                                                        |
+| <a id="senduseroperation" /> `sendUserOperation`         | (`args`) => `Promise`\<`SendUserOperationResult`\<`TEntryPointVersion`>>                                             |
+| <a id="simulateuseroperation" /> `simulateUserOperation` | (`args`) => `Promise`\<[`SimulateUserOperationAssetChangesResponse`](SimulateUserOperationAssetChangesResponse.mdx)> |

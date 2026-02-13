@@ -11,113 +11,32 @@ layout: reference
 type ClientMiddlewareFn<TContext> = <TAccount, C, TEntryPointVersion>(
   struct,
   args,
-) => Promise<Deferrable<UserOperationStruct<TEntryPointVersion>>>;
+) => Promise<accountLoupeActions<accountLoupeActions<TEntryPointVersion>>>;
 ```
 
-Defined in: [aa-sdk/core/src/middleware/types.ts:31](https://github.com/alchemyplatform/aa-sdk/blob/27e36329c103b4660886c9508b86d0a2c5c6c47e/aa-sdk/core/src/middleware/types.ts#L31)
+Defined in: [aa-sdk/core/src/middleware/types.ts:30](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/aa-sdk/core/src/middleware/types.ts#L30)
 
 ## Type Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Type Parameter</th>
-      <th align="left">Default type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `TContext` *extends* `UserOperationContext` | `undefined`
-      </td>
-
-      <td>
-        `UserOperationContext` | `undefined`
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Type Parameter       | Default type                                                                                |
+| :------------------- | :------------------------------------------------------------------------------------------ | ----------- | --- | ------------------------------------------------------------------------------------------- | ----------- |
+| `TContext` _extends_ | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx) | `undefined` |     | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx) | `undefined` |
 
 ## Type Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Type Parameter</th>
-      <th align="left">Default type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `TAccount` *extends* `SmartContractAccount`
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `C` *extends* `MiddlewareClient`
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TEntryPointVersion` *extends* `GetEntryPointFromAccount`\<`TAccount`>
-      </td>
-
-      <td>
-        `GetEntryPointFromAccount`\<`TAccount`>
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Type Parameter                                                                                                                          | Default type                                                                                             |
+| :-------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------- |
+| `TAccount` _extends_ [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)                        | -                                                                                                        |
+| `C` _extends_ [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)                               | -                                                                                                        |
+| `TEntryPointVersion` _extends_ [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`TAccount`> | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`TAccount`> |
 
 ## Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Parameter</th>
-      <th align="left">Type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `struct`
-      </td>
-
-      <td>
-        `Deferrable`\<`UserOperationStruct`\<`TEntryPointVersion`>>
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `args`
-      </td>
-
-      <td>
-        [`ClientMiddlewareArgs`](ClientMiddlewareArgs.mdx)\<`TAccount`, `C`, `TContext`, `TEntryPointVersion`>
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Parameter | Type                                                                                                                                                                                                             |
+| :-------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `struct`  | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<[`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`TEntryPointVersion`>> |
+| `args`    | [`ClientMiddlewareArgs`](ClientMiddlewareArgs.mdx)\<`TAccount`, `C`, `TContext`, `TEntryPointVersion`>                                                                                                           |
 
 ## Returns
 
-`Promise`\<`Deferrable`\<`UserOperationStruct`\<`TEntryPointVersion`>>>
+`Promise`\<[`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<[`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`TEntryPointVersion`>>>
