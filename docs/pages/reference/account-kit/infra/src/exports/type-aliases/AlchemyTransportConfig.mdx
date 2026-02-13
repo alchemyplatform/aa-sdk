@@ -13,12 +13,61 @@ type AlchemyTransportConfig =
   | (SplitTransportConfig & Never<AlchemyConnectionConfig> & object);
 ```
 
-Defined in: [account-kit/infra/src/alchemyTransport.ts:59](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/infra/src/alchemyTransport.ts#L59)
+Defined in: [account-kit/infra/src/alchemyTransport.ts:59](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/infra/src/alchemyTransport.ts#L59)
 
 ## Type Declaration
 
-| Name            | Type                                                     | Description                             |
-| :-------------- | :------------------------------------------------------- | :-------------------------------------- |
-| `fetchOptions?` | `NoUndefined`\<`HttpTransportConfig`\[`"fetchOptions"`]> | -                                       |
-| `retryCount?`   | `TransportConfig`\[`"retryCount"`]                       | The max number of times to retry.       |
-| `retryDelay?`   | `TransportConfig`\[`"retryDelay"`]                       | The base delay (in ms) between retries. |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Name</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `fetchOptions?`
+      </td>
+
+      <td>
+        `NoUndefined`\<`HttpTransportConfig`\[`"fetchOptions"`]>
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `retryCount?`
+      </td>
+
+      <td>
+        `TransportConfig`\[`"retryCount"`]
+      </td>
+
+      <td>
+        The max number of times to retry.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `retryDelay?`
+      </td>
+
+      <td>
+        `TransportConfig`\[`"retryDelay"`]
+      </td>
+
+      <td>
+        The base delay (in ms) between retries.
+      </td>
+    </tr>
+
+  </tbody>
+</table>

@@ -10,33 +10,47 @@ layout: reference
 ```ts
 type AccountConfig<TAccount> = TAccount extends "LightAccount"
   ? OmitSignerTransportChain<
-      accountLoupeActions<
+      CreateLightAccountParams<
         Transport,
         AlchemySigner,
-        accountLoupeActions<"LightAccount">
+        LightAccountVersion<"LightAccount">
       >
     >
   : TAccount extends "MultiOwnerLightAccount"
     ? OmitSignerTransportChain<
-        accountLoupeActions<
+        CreateMultiOwnerLightAccountParams<
           Transport,
           AlchemySigner,
-          accountLoupeActions<"MultiOwnerLightAccount">
+          LightAccountVersion<"MultiOwnerLightAccount">
         >
       >
     : TAccount extends "MultiOwnerModularAccount"
-      ? OmitSignerTransportChain<accountLoupeActions<Transport, AlchemySigner>>
+      ? OmitSignerTransportChain<
+          CreateMultiOwnerModularAccountParams<Transport, AlchemySigner>
+        >
       : TAccount extends "ModularAccountV2"
         ? OmitSignerTransportChain<
-            accountLoupeActions<Transport, AlchemySigner>
+            CreateModularAccountV2Params<Transport, AlchemySigner>
           >
         : never;
 ```
 
-Defined in: [account-kit/core/src/actions/createAccount.ts:28](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/core/src/actions/createAccount.ts#L28)
+Defined in: [account-kit/core/src/actions/createAccount.ts:28](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/core/src/actions/createAccount.ts#L28)
 
 ## Type Parameters
 
-| Type Parameter                                                            |
-| :------------------------------------------------------------------------ |
-| `TAccount` _extends_ [`SupportedAccountTypes`](SupportedAccountTypes.mdx) |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TAccount` *extends* [`SupportedAccountTypes`](SupportedAccountTypes.mdx)
+      </td>
+    </tr>
+  </tbody>
+</table>

@@ -13,20 +13,70 @@ function createMultisigModularAccount<TTransport, TSigner>(
 ): Promise<MultisigModularAccount<TSigner>>;
 ```
 
-Defined in: [account-kit/smart-contracts/src/msca/account/multisigAccount.ts:60](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/smart-contracts/src/msca/account/multisigAccount.ts#L60)
+Defined in: [account-kit/smart-contracts/src/msca/account/multisigAccount.ts:60](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/smart-contracts/src/msca/account/multisigAccount.ts#L60)
 
 ## Type Parameters
 
-| Type Parameter                                   | Default type                 |
-| :----------------------------------------------- | :--------------------------- |
-| `TTransport` _extends_ `Transport`               | `Transport`                  |
-| `TSigner` _extends_ `SmartAccountSigner`\<`any`> | `SmartAccountSigner`\<`any`> |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TTransport` *extends* `Transport`
+      </td>
+
+      <td>
+        `Transport`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TSigner` *extends* `SmartAccountSigner`\<`any`>
+      </td>
+
+      <td>
+        `SmartAccountSigner`\<`any`>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Parameters
 
-| Parameter | Type                                                                                                                     | Description                                             |
-| :-------- | :----------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------ |
-| `config`  | [`CreateMultisigModularAccountParams`](../type-aliases/CreateMultisigModularAccountParams.mdx)\<`TTransport`, `TSigner`> | The parameters for creating a multisig modular account. |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `config`
+      </td>
+
+      <td>
+        [`CreateMultisigModularAccountParams`](../type-aliases/CreateMultisigModularAccountParams.mdx)\<`TTransport`, `TSigner`>
+      </td>
+
+      <td>
+        The parameters for creating a multisig modular account.
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Returns
 

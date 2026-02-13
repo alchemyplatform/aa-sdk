@@ -11,7 +11,7 @@ layout: reference
 function useAuthenticate(mutationArgs?): UseAuthenticateResult;
 ```
 
-Defined in: [account-kit/react/src/hooks/useAuthenticate.ts:50](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/react/src/hooks/useAuthenticate.ts#L50)
+Defined in: [account-kit/react/src/hooks/useAuthenticate.ts:50](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/react/src/hooks/useAuthenticate.ts#L50)
 
 [Hook](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useAuthenticate.ts) that provides functions and state for authenticating a user using a signer. It includes methods for both synchronous and asynchronous mutations.
 Useful if building your own UI components and want to control the authentication flow.
@@ -35,9 +35,32 @@ const { authenticate, authenticateAsync, isPending, error } = useAuthenticate({
 
 ## Parameters
 
-| Parameter       | Type                                                                                                                                            | Description       |
-| :-------------- | :---------------------------------------------------------------------------------------------------------------------------------------------- | :---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `mutationArgs?` | `Partial`\<`Omit`\<`UseMutationOptions`\<[`User`](../../../signer/src/type-aliases/User.mdx), `Error`, `AuthParams`, `unknown`>, `"mutationFn"` | `"mutationKey"`>> | Optional mutation arguments to configure the authentication mutation. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useAuthenticate.ts#L15) |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `mutationArgs?`
+      </td>
+
+      <td>
+        `Partial`\<`Omit`\<`UseMutationOptions`\<[`User`](../../../signer/src/type-aliases/User.mdx), `Error`, `AuthParams`, `unknown`>, `"mutationFn"` | `"mutationKey"`>>
+      </td>
+
+      <td>
+        Optional mutation arguments to configure the authentication mutation. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useAuthenticate.ts#L15)
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Returns
 

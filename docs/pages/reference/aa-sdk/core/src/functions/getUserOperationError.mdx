@@ -15,25 +15,113 @@ function getUserOperationError<TTransport, TChain, TAccount>(
 ): Promise<void>;
 ```
 
-Defined in: [aa-sdk/core/src/actions/smartAccount/getUserOperationError.ts:28](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/aa-sdk/core/src/actions/smartAccount/getUserOperationError.ts#L28)
+Defined in: [aa-sdk/core/src/actions/smartAccount/getUserOperationError.ts:28](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/aa-sdk/core/src/actions/smartAccount/getUserOperationError.ts#L28)
 
 Retrieves the error message from an entrypoint for a User Operation.
 
 ## Type Parameters
 
-| Type Parameter                     | Default type |
-| :--------------------------------- | :----------- | ------------------------------------------------------------------ | ------- | ----------- | ------------------------------------------------------------------ |
-| `TTransport` _extends_ `Transport` | `Transport`  |
-| `TChain` _extends_ `undefined`     | `Chain`      | `undefined`                                                        | `Chain` |
-| `TAccount` _extends_               | `undefined`  | [`SmartContractAccount`](../type-aliases/SmartContractAccount.mdx) |         | `undefined` | [`SmartContractAccount`](../type-aliases/SmartContractAccount.mdx) |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TTransport` *extends* `Transport`
+      </td>
+
+      <td>
+        `Transport`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TChain` *extends* `undefined` | `Chain`
+      </td>
+
+      <td>
+        `undefined` | `Chain`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TAccount` *extends*
+        | `undefined`
+        | [`SmartContractAccount`](../type-aliases/SmartContractAccount.mdx)
+      </td>
+
+      <td>
+        | `undefined`
+        | [`SmartContractAccount`](../type-aliases/SmartContractAccount.mdx)
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Parameters
 
-| Parameter    | Type                                                               | Description                                      |
-| :----------- | :----------------------------------------------------------------- | :----------------------------------------------- |
-| `client`     | `BaseSmartAccountClient`\<`TTransport`, `TChain`, `TAccount`>      | the smart account client to use for RPC requests |
-| `request`    | [`UserOperationRequest`](../type-aliases/UserOperationRequest.mdx) | the uo request to get the error for              |
-| `entryPoint` | [`EntryPointDef`](../type-aliases/EntryPointDef.mdx)               | the entrypoint instance to send the uo to        |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `client`
+      </td>
+
+      <td>
+        `BaseSmartAccountClient`\<`TTransport`, `TChain`, `TAccount`>
+      </td>
+
+      <td>
+        the smart account client to use for RPC requests
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `request`
+      </td>
+
+      <td>
+        [`UserOperationRequest`](../type-aliases/UserOperationRequest.mdx)
+      </td>
+
+      <td>
+        the uo request to get the error for
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `entryPoint`
+      </td>
+
+      <td>
+        [`EntryPointDef`](../type-aliases/EntryPointDef.mdx)
+      </td>
+
+      <td>
+        the entrypoint instance to send the uo to
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Returns
 

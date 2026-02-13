@@ -18,20 +18,92 @@ type MultisigPluginActions<TAccount> = MultisigPluginActions_<
   : object;
 ```
 
-Defined in: [account-kit/smart-contracts/src/msca/plugins/multisig/extension.ts:26](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/smart-contracts/src/msca/plugins/multisig/extension.ts#L26)
+Defined in: [account-kit/smart-contracts/src/msca/plugins/multisig/extension.ts:26](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/smart-contracts/src/msca/plugins/multisig/extension.ts#L26)
 
 ## Type Declaration
 
-| Name                          | Type                                                                                                                                           |
-| :---------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------- |
-| `getThreshold()`              | (`params`) => `Promise`\<`bigint`>                                                                                                             |
-| `isOwnerOf()`                 | (`params`) => `Promise`\<`boolean`>                                                                                                            |
-| `proposeUserOperation()`      | (`params`) => `Promise`\<[`ProposeUserOperationResult`](ProposeUserOperationResult.mdx)\<`TAccount`, `GetEntryPointFromAccount`\<`TAccount`>>> |
-| `readOwners()`                | (`params`) => `Promise`\<`ReadonlyArray`\<[`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx)>>                                  |
-| `signMultisigUserOperation()` | (`params`) => `Promise`\<[`SignMultisigUserOperationResult`](SignMultisigUserOperationResult.mdx)>                                             |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Name</th>
+      <th align="left">Type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `getThreshold()`
+      </td>
+
+      <td>
+        (`params`) => `Promise`\<`bigint`>
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `isOwnerOf()`
+      </td>
+
+      <td>
+        (`params`) => `Promise`\<`boolean`>
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `proposeUserOperation()`
+      </td>
+
+      <td>
+        (`params`) => `Promise`\<[`ProposeUserOperationResult`](ProposeUserOperationResult.mdx)\<`TAccount`, `GetEntryPointFromAccount`\<`TAccount`>>>
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `readOwners()`
+      </td>
+
+      <td>
+        (`params`) => `Promise`\<`ReadonlyArray`\<[`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx)>>
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `signMultisigUserOperation()`
+      </td>
+
+      <td>
+        (`params`) => `Promise`\<[`SignMultisigUserOperationResult`](SignMultisigUserOperationResult.mdx)>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Type Parameters
 
-| Type Parameter                              | Default type |
-| :------------------------------------------ | :----------- | ---------------------- | ----------- |
-| `TAccount` _extends_ `SmartContractAccount` | `undefined`  | `SmartContractAccount` | `undefined` |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TAccount` *extends* `SmartContractAccount` | `undefined`
+      </td>
+
+      <td>
+        `SmartContractAccount` | `undefined`
+      </td>
+    </tr>
+
+  </tbody>
+</table>

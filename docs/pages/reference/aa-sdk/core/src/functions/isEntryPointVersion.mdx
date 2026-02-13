@@ -11,7 +11,7 @@ layout: reference
 function isEntryPointVersion(value): value is keyof EntryPointRegistry<Chain>;
 ```
 
-Defined in: [aa-sdk/core/src/entrypoint/index.ts:34](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/aa-sdk/core/src/entrypoint/index.ts#L34)
+Defined in: [aa-sdk/core/src/entrypoint/index.ts:34](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/aa-sdk/core/src/entrypoint/index.ts#L34)
 
 Checks if the given value is a valid key of the EntryPointRegistry.
 
@@ -26,9 +26,32 @@ const invalid = isEntryPointVersion("0.8.0");
 
 ## Parameters
 
-| Parameter | Type  | Description             |
-| :-------- | :---- | :---------------------- |
-| `value`   | `any` | The value to be checked |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `value`
+      </td>
+
+      <td>
+        `any`
+      </td>
+
+      <td>
+        The value to be checked
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Returns
 

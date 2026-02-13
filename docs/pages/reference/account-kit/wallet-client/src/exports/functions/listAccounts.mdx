@@ -21,7 +21,7 @@ function listAccounts(
 }>;
 ```
 
-Defined in: [account-kit/wallet-client/src/client/actions/listAccounts.ts:57](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/wallet-client/src/client/actions/listAccounts.ts#L57)
+Defined in: [account-kit/wallet-client/src/client/actions/listAccounts.ts:57](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/wallet-client/src/client/actions/listAccounts.ts#L57)
 
 Lists all smart accounts for a given signer using the wallet API client.
 
@@ -44,11 +44,60 @@ const nextPage = await client.listAccounts({
 
 ## Parameters
 
-| Parameter | Type                                                           | Description                                  |
-| :-------- | :------------------------------------------------------------- | :------------------------------------------- |
-| `client`  | `InnerWalletApiClient`                                         | The wallet API client to use for the request |
-| `signer`  | `SmartWalletSigner`                                            | The signer for which to list accounts        |
-| `params`  | [`ListAccountsParams`](../type-aliases/ListAccountsParams.mdx) | Parameters for listing accounts              |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `client`
+      </td>
+
+      <td>
+        `InnerWalletApiClient`
+      </td>
+
+      <td>
+        The wallet API client to use for the request
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `signer`
+      </td>
+
+      <td>
+        `SmartWalletSigner`
+      </td>
+
+      <td>
+        The signer for which to list accounts
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `params`
+      </td>
+
+      <td>
+        [`ListAccountsParams`](../type-aliases/ListAccountsParams.mdx)
+      </td>
+
+      <td>
+        Parameters for listing accounts
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Returns
 

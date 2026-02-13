@@ -70,19 +70,55 @@ function createMultiOwnerModularAccountClient<TSigner>(
 >;
 ```
 
-Defined in: [account-kit/smart-contracts/src/msca/client/client.ts:91](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/smart-contracts/src/msca/client/client.ts#L91)
+Defined in: [account-kit/smart-contracts/src/msca/client/client.ts:91](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/smart-contracts/src/msca/client/client.ts#L91)
 
 ### Type Parameters
 
-| Type Parameter                                   | Default type                 |
-| :----------------------------------------------- | :--------------------------- |
-| `TSigner` _extends_ `SmartAccountSigner`\<`any`> | `SmartAccountSigner`\<`any`> |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TSigner` *extends* `SmartAccountSigner`\<`any`>
+      </td>
+
+      <td>
+        `SmartAccountSigner`\<`any`>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ### Parameters
 
-| Parameter | Type                                                                                                                                                                                                                                                                                                                                       |
-| :-------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `params`  | `Omit`\<`CreateMultiOwnerModularAccountParams`\<[`HttpTransport`](../../../../aa-sdk/core/src/type-aliases/HttpTransport.mdx), `TSigner`>, `"transport"`> & `Omit`\<[`AlchemySmartAccountClientConfig`](../../../core/src/type-aliases/AlchemySmartAccountClientConfig.mdx)\<`Chain`, `LightAccount`\<`TSigner`>>, `"account"`> & `object` |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `params`
+      </td>
+
+      <td>
+        `Omit`\<[`CreateMultiOwnerModularAccountParams`](../../../core/src/type-aliases/CreateMultiOwnerModularAccountParams.mdx)\<[`HttpTransport`](../../../../aa-sdk/core/src/type-aliases/HttpTransport.mdx), `TSigner`>, `"transport"`> & `Omit`\<[`AlchemySmartAccountClientConfig`](../../../core/src/type-aliases/AlchemySmartAccountClientConfig.mdx)\<`Chain`, [`LightAccount`](../../../core/src/type-aliases/LightAccount.mdx)\<`TSigner`>>, `"account"`> & `object`
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ### Returns
 
@@ -117,21 +153,75 @@ function createMultiOwnerModularAccountClient<TTransport, TChain, TSigner>(
 >;
 ```
 
-Defined in: [account-kit/smart-contracts/src/msca/client/client.ts:107](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/smart-contracts/src/msca/client/client.ts#L107)
+Defined in: [account-kit/smart-contracts/src/msca/client/client.ts:107](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/smart-contracts/src/msca/client/client.ts#L107)
 
 ### Type Parameters
 
-| Type Parameter                                   | Default type                 |
-| :----------------------------------------------- | :--------------------------- | ----------- | ------- |
-| `TTransport` _extends_ `Transport`               | `Transport`                  |
-| `TChain` _extends_ `undefined`                   | `Chain`                      | `undefined` | `Chain` |
-| `TSigner` _extends_ `SmartAccountSigner`\<`any`> | `SmartAccountSigner`\<`any`> |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TTransport` *extends* `Transport`
+      </td>
+
+      <td>
+        `Transport`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TChain` *extends* `undefined` | `Chain`
+      </td>
+
+      <td>
+        `undefined` | `Chain`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TSigner` *extends* `SmartAccountSigner`\<`any`>
+      </td>
+
+      <td>
+        `SmartAccountSigner`\<`any`>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ### Parameters
 
-| Parameter | Type                                                                                                                                                                                   |
-| :-------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `args`    | `CreateMultiOwnerModularAccountClientParams`\<`TTransport`, `TChain`, `TSigner`> & `NotType`\<`TTransport`, [`AlchemyTransport`](../../../core/src/type-aliases/AlchemyTransport.mdx)> |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `args`
+      </td>
+
+      <td>
+        `CreateMultiOwnerModularAccountClientParams`\<`TTransport`, `TChain`, `TSigner`> & `NotType`\<`TTransport`, [`AlchemyTransport`](../../../core/src/type-aliases/AlchemyTransport.mdx)>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ### Returns
 

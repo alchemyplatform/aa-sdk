@@ -9,21 +9,75 @@ layout: reference
 
 ```ts
 type SignUserOperationParameters<TAccount, TEntryPointVersion, TContext> =
-  object & accountLoupeActions<TAccount> & GetContextParameter<TContext>;
+  object & GetAccountParameter<TAccount> & GetContextParameter<TContext>;
 ```
 
-Defined in: [aa-sdk/core/src/actions/smartAccount/types.ts:54](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/aa-sdk/core/src/actions/smartAccount/types.ts#L54)
+Defined in: [aa-sdk/core/src/actions/smartAccount/types.ts:54](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/aa-sdk/core/src/actions/smartAccount/types.ts#L54)
 
 ## Type Declaration
 
-| Name       | Type                                                                                                               |
-| :--------- | :----------------------------------------------------------------------------------------------------------------- |
-| `uoStruct` | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`TEntryPointVersion`> |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Name</th>
+      <th align="left">Type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `uoStruct`
+      </td>
+
+      <td>
+        `UserOperationStruct`\<`TEntryPointVersion`>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Type Parameters
 
-| Type Parameter                                                                                                                          | Default type                                                                                             |
-| :-------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------- | -------------------------------------------------- | ----------- | ------------------------------------------------------------------------------------------- | ----------- |
-| `TAccount` _extends_                                                                                                                    | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)              | `undefined`                                        |             | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx) | `undefined` |
-| `TEntryPointVersion` _extends_ [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`TAccount`> | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`TAccount`> |
-| `TContext` _extends_ [`UserOperationContext`](UserOperationContext.mdx)                                                                 | `undefined`                                                                                              | [`UserOperationContext`](UserOperationContext.mdx) | `undefined` |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TAccount` *extends* `SmartContractAccount` | `undefined`
+      </td>
+
+      <td>
+        `SmartContractAccount` | `undefined`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TEntryPointVersion` *extends* `GetEntryPointFromAccount`\<`TAccount`>
+      </td>
+
+      <td>
+        `GetEntryPointFromAccount`\<`TAccount`>
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TContext` *extends* [`UserOperationContext`](UserOperationContext.mdx) | `undefined`
+      </td>
+
+      <td>
+        [`UserOperationContext`](UserOperationContext.mdx) | `undefined`
+      </td>
+    </tr>
+
+  </tbody>
+</table>

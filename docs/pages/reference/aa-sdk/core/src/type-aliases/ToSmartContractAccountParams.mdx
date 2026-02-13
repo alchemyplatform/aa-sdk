@@ -13,31 +13,202 @@ type ToSmartContractAccountParams<Name, TTransport, TChain, TEntryPointVersion> 
   | Never<SigningMethods>;
 ```
 
-Defined in: [aa-sdk/core/src/account/smartContractAccount.ts:153](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/aa-sdk/core/src/account/smartContractAccount.ts#L153)
+Defined in: [aa-sdk/core/src/account/smartContractAccount.ts:153](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/aa-sdk/core/src/account/smartContractAccount.ts#L153)
 
 ## Type Declaration
 
-| Name                          | Type                                                                  |
-| :---------------------------- | :-------------------------------------------------------------------- | ------------------------- |
-| `accountAddress?`             | [`Address`](Address.mdx)                                              |
-| `chain`                       | `TChain`                                                              |
-| `encodeBatchExecute()?`       | (`txs`) => `Promise`\<`Hex`>                                          |
-| `encodeExecute()`             | (`tx`) => `Promise`\<`Hex`>                                           |
-| `encodeUpgradeToAndCall()?`   | (`params`) => `Promise`\<`Hex`>                                       |
-| `entryPoint`                  | [`EntryPointDef`](EntryPointDef.mdx)\<`TEntryPointVersion`, `TChain`> |
-| `getAccountInitCode()`        | () => `Promise`\<`Hex`>                                               |
-| `getDummySignature()`         | () => `Hex`                                                           | `Promise`\<`Hex`>         |
-| `getImplementationAddress()?` | () => `Promise`\<[`NullAddress`](NullAddress.mdx)                     | [`Address`](Address.mdx)> |
-| `getNonce()?`                 | (`nonceKey?`) => `Promise`\<`bigint`>                                 |
-| `signUserOperationHash()?`    | (`uoHash`) => `Promise`\<`Hex`>                                       |
-| `source`                      | `Name`                                                                |
-| `transport`                   | `TTransport`                                                          |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Name</th>
+      <th align="left">Type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `accountAddress?`
+      </td>
+
+      <td>
+        [`Address`](Address.mdx)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `chain`
+      </td>
+
+      <td>
+        `TChain`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `encodeBatchExecute()?`
+      </td>
+
+      <td>
+        (`txs`) => `Promise`\<`Hex`>
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `encodeExecute()`
+      </td>
+
+      <td>
+        (`tx`) => `Promise`\<`Hex`>
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `encodeUpgradeToAndCall()?`
+      </td>
+
+      <td>
+        (`params`) => `Promise`\<`Hex`>
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `entryPoint`
+      </td>
+
+      <td>
+        [`EntryPointDef`](EntryPointDef.mdx)\<`TEntryPointVersion`, `TChain`>
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `getAccountInitCode()`
+      </td>
+
+      <td>
+        () => `Promise`\<`Hex`>
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `getDummySignature()`
+      </td>
+
+      <td>
+        () => `Hex` | `Promise`\<`Hex`>
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `getImplementationAddress()?`
+      </td>
+
+      <td>
+        () => `Promise`\<[`NullAddress`](NullAddress.mdx) | [`Address`](Address.mdx)>
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `getNonce()?`
+      </td>
+
+      <td>
+        (`nonceKey?`) => `Promise`\<`bigint`>
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `signUserOperationHash()?`
+      </td>
+
+      <td>
+        (`uoHash`) => `Promise`\<`Hex`>
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `source`
+      </td>
+
+      <td>
+        `Name`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `transport`
+      </td>
+
+      <td>
+        `TTransport`
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Type Parameters
 
-| Type Parameter                                                              | Default type                                 |
-| :-------------------------------------------------------------------------- | :------------------------------------------- |
-| `Name` _extends_ `string`                                                   | `string`                                     |
-| `TTransport` _extends_ `Transport`                                          | `Transport`                                  |
-| `TChain` _extends_ `Chain`                                                  | `Chain`                                      |
-| `TEntryPointVersion` _extends_ [`EntryPointVersion`](EntryPointVersion.mdx) | [`EntryPointVersion`](EntryPointVersion.mdx) |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `Name` *extends* `string`
+      </td>
+
+      <td>
+        `string`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TTransport` *extends* `Transport`
+      </td>
+
+      <td>
+        `Transport`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TChain` *extends* `Chain`
+      </td>
+
+      <td>
+        `Chain`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TEntryPointVersion` *extends* [`EntryPointVersion`](EntryPointVersion.mdx)
+      </td>
+
+      <td>
+        [`EntryPointVersion`](EntryPointVersion.mdx)
+      </td>
+    </tr>
+
+  </tbody>
+</table>

@@ -9,17 +9,44 @@ layout: reference
 
 ```ts
 type GetSmartAccountClientParams<TChain, TAccount> = Omit<
-  AlchemySmartAccountClientConfig<TChain, accountLoupeActions<TAccount>>,
+  AlchemySmartAccountClientConfig<TChain, SupportedAccount<TAccount>>,
   "transport" | "account" | "chain"
 > &
   GetAccountParams<TAccount>;
 ```
 
-Defined in: [account-kit/core/src/actions/getSmartAccountClient.ts:37](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/core/src/actions/getSmartAccountClient.ts#L37)
+Defined in: [account-kit/core/src/actions/getSmartAccountClient.ts:37](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/core/src/actions/getSmartAccountClient.ts#L37)
 
 ## Type Parameters
 
-| Type Parameter                                                                     | Default type                                                  |
-| :--------------------------------------------------------------------------------- | :------------------------------------------------------------ | ------- | ----------- |
-| `TChain` _extends_ `Chain`                                                         | `undefined`                                                   | `Chain` | `undefined` |
-| `TAccount` _extends_ [`accountLoupeActions`](../variables/accountLoupeActions.mdx) | [`accountLoupeActions`](../variables/accountLoupeActions.mdx) |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TChain` *extends* `Chain` | `undefined`
+      </td>
+
+      <td>
+        `Chain` | `undefined`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TAccount` *extends* `SupportedAccountTypes`
+      </td>
+
+      <td>
+        `SupportedAccountTypes`
+      </td>
+    </tr>
+
+  </tbody>
+</table>

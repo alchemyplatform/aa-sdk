@@ -14,22 +14,74 @@ function getLightAccountVersionForAccount<TAccount>(
 ): Promise<LightAccountVersionConfig>;
 ```
 
-Defined in: [account-kit/smart-contracts/src/light-account/utils.ts:153](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/smart-contracts/src/light-account/utils.ts#L153)
+Defined in: [account-kit/smart-contracts/src/light-account/utils.ts:153](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/smart-contracts/src/light-account/utils.ts#L153)
 
 Get the light account version definition for the given light account and chain
 
 ## Type Parameters
 
-| Type Parameter                          | Description |
-| :-------------------------------------- | :---------- |
-| `TAccount` _extends_ `LightAccountBase` |             |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TAccount` *extends* `LightAccountBase`
+      </td>
+
+      <td />
+    </tr>
+
+  </tbody>
+</table>
 
 ## Parameters
 
-| Parameter | Type       | Description                              |
-| :-------- | :--------- | :--------------------------------------- |
-| `account` | `TAccount` | the light account to get the version for |
-| `chain`   | `Chain`    | the chain to get the version for         |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `account`
+      </td>
+
+      <td>
+        `TAccount`
+      </td>
+
+      <td>
+        the light account to get the version for
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `chain`
+      </td>
+
+      <td>
+        `Chain`
+      </td>
+
+      <td>
+        the chain to get the version for
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Returns
 

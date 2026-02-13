@@ -25,23 +25,122 @@ type CreateMultiOwnerModularAccountParams<
   EntryPointParameter<TEntryPointVersion, Chain>;
 ```
 
-Defined in: [account-kit/smart-contracts/src/msca/account/multiOwnerAccount.ts:35](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/smart-contracts/src/msca/account/multiOwnerAccount.ts#L35)
+Defined in: [account-kit/smart-contracts/src/msca/account/multiOwnerAccount.ts:35](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/smart-contracts/src/msca/account/multiOwnerAccount.ts#L35)
 
 ## Type Declaration
 
-| Name              | Type                                                                 |
-| :---------------- | :------------------------------------------------------------------- |
-| `accountAddress?` | [`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx)    |
-| `factoryAddress?` | [`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx)    |
-| `initCode?`       | `Hex`                                                                |
-| `owners?`         | [`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx)\[] |
-| `salt?`           | `bigint`                                                             |
-| `signer`          | `TSigner`                                                            |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Name</th>
+      <th align="left">Type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `accountAddress?`
+      </td>
+
+      <td>
+        [`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `factoryAddress?`
+      </td>
+
+      <td>
+        [`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `initCode?`
+      </td>
+
+      <td>
+        `Hex`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `owners?`
+      </td>
+
+      <td>
+        [`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx)\[]
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `salt?`
+      </td>
+
+      <td>
+        `bigint`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `signer`
+      </td>
+
+      <td>
+        `TSigner`
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Type Parameters
 
-| Type Parameter                           | Default type         |
-| :--------------------------------------- | :------------------- |
-| `TTransport` _extends_ `Transport`       | `Transport`          |
-| `TSigner` _extends_ `SmartAccountSigner` | `SmartAccountSigner` |
-| `TEntryPointVersion` _extends_ `"0.6.0"` | `"0.6.0"`            |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TTransport` *extends* `Transport`
+      </td>
+
+      <td>
+        `Transport`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TSigner` *extends* `SmartAccountSigner`
+      </td>
+
+      <td>
+        `SmartAccountSigner`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TEntryPointVersion` *extends* `"0.6.0"`
+      </td>
+
+      <td>
+        `"0.6.0"`
+      </td>
+    </tr>
+
+  </tbody>
+</table>

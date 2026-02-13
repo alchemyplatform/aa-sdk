@@ -102,13 +102,13 @@
   // TABLE FORMATTING
   // Controls how parameters, properties, and other data are displayed in tables
   // ============================================================================
-  "parametersFormat": "table",
-  "interfacePropertiesFormat": "table",
-  "classPropertiesFormat": "table",
-  "typeAliasPropertiesFormat": "table",
-  "enumMembersFormat": "table",
-  "propertyMembersFormat": "table",
-  "typeDeclarationFormat": "table",
+  "parametersFormat": "htmlTable",
+  "interfacePropertiesFormat": "htmlTable",
+  "classPropertiesFormat": "htmlTable",
+  "typeAliasPropertiesFormat": "htmlTable",
+  "enumMembersFormat": "htmlTable",
+  "propertyMembersFormat": "htmlTable",
+  "typeDeclarationFormat": "htmlTable",
   "indexFormat": "table",
   "tableColumnSettings": {
     "hideInherited": true,

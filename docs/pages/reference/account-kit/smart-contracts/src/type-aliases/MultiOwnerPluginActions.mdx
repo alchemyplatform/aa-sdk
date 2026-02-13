@@ -18,17 +18,62 @@ type MultiOwnerPluginActions<TAccount> = MultiOwnerPluginActions_<
   : object;
 ```
 
-Defined in: [account-kit/smart-contracts/src/msca/plugins/multi-owner/extension.ts:15](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/smart-contracts/src/msca/plugins/multi-owner/extension.ts#L15)
+Defined in: [account-kit/smart-contracts/src/msca/plugins/multi-owner/extension.ts:15](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/smart-contracts/src/msca/plugins/multi-owner/extension.ts#L15)
 
 ## Type Declaration
 
-| Name           | Type                                                                                                          |
-| :------------- | :------------------------------------------------------------------------------------------------------------ |
-| `isOwnerOf()`  | (`params`) => `Promise`\<`boolean`>                                                                           |
-| `readOwners()` | (`params`) => `Promise`\<`ReadonlyArray`\<[`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx)>> |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Name</th>
+      <th align="left">Type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `isOwnerOf()`
+      </td>
+
+      <td>
+        (`params`) => `Promise`\<`boolean`>
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `readOwners()`
+      </td>
+
+      <td>
+        (`params`) => `Promise`\<`ReadonlyArray`\<[`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx)>>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Type Parameters
 
-| Type Parameter                              | Default type |
-| :------------------------------------------ | :----------- | ---------------------- | ----------- |
-| `TAccount` _extends_ `SmartContractAccount` | `undefined`  | `SmartContractAccount` | `undefined` |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TAccount` *extends* `SmartContractAccount` | `undefined`
+      </td>
+
+      <td>
+        `SmartContractAccount` | `undefined`
+      </td>
+    </tr>
+
+  </tbody>
+</table>

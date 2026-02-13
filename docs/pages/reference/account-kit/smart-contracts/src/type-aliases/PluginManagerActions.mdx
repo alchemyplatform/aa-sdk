@@ -11,18 +11,72 @@ layout: reference
 type PluginManagerActions<TAccount, TEntryPointVersion> = object;
 ```
 
-Defined in: [account-kit/smart-contracts/src/msca/plugin-manager/decorator.ts:16](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/smart-contracts/src/msca/plugin-manager/decorator.ts#L16)
+Defined in: [account-kit/smart-contracts/src/msca/plugin-manager/decorator.ts:16](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/smart-contracts/src/msca/plugin-manager/decorator.ts#L16)
 
 ## Type Parameters
 
-| Type Parameter                                                         | Default type                            |
-| :--------------------------------------------------------------------- | :-------------------------------------- | ---------------------- | ----------- |
-| `TAccount` _extends_ `SmartContractAccount`                            | `undefined`                             | `SmartContractAccount` | `undefined` |
-| `TEntryPointVersion` _extends_ `GetEntryPointFromAccount`\<`TAccount`> | `GetEntryPointFromAccount`\<`TAccount`> |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TAccount` *extends* `SmartContractAccount` | `undefined`
+      </td>
+
+      <td>
+        `SmartContractAccount` | `undefined`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TEntryPointVersion` *extends* `GetEntryPointFromAccount`\<`TAccount`>
+      </td>
+
+      <td>
+        `GetEntryPointFromAccount`\<`TAccount`>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Properties
 
-| Property                                     | Type                                                                       |
-| :------------------------------------------- | :------------------------------------------------------------------------- |
-| <a id="installplugin" /> `installPlugin`     | (`params`) => `Promise`\<`SendUserOperationResult`\<`TEntryPointVersion`>> |
-| <a id="uninstallplugin" /> `uninstallPlugin` | (`params`) => `Promise`\<`SendUserOperationResult`\<`TEntryPointVersion`>> |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Property</th>
+      <th align="left">Type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        <a id="installplugin" /> `installPlugin`
+      </td>
+
+      <td>
+        (`params`) => `Promise`\<`SendUserOperationResult`\<`TEntryPointVersion`>>
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="uninstallplugin" /> `uninstallPlugin`
+      </td>
+
+      <td>
+        (`params`) => `Promise`\<`SendUserOperationResult`\<`TEntryPointVersion`>>
+      </td>
+    </tr>
+
+  </tbody>
+</table>

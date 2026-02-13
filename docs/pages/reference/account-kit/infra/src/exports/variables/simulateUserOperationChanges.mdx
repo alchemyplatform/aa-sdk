@@ -14,7 +14,7 @@ const simulateUserOperationChanges: <TChain, TAccount>(
 ) => Promise<SimulateUserOperationAssetChangesResponse>;
 ```
 
-Defined in: [account-kit/infra/src/actions/simulateUserOperationChanges.ts:30](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/infra/src/actions/simulateUserOperationChanges.ts#L30)
+Defined in: [account-kit/infra/src/actions/simulateUserOperationChanges.ts:30](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/infra/src/actions/simulateUserOperationChanges.ts#L30)
 
 Simulates user operation changes including asset changes for a specified user operation and returns the resulting state changes.
 
@@ -31,17 +31,80 @@ const response = await simulateUserOperationChanges(client, {
 
 ## Type Parameters
 
-| Type Parameter                              | Default type |
-| :------------------------------------------ | :----------- | ---------------------- | ----------- |
-| `TChain` _extends_ `Chain`                  | `undefined`  | `Chain`                | `undefined` |
-| `TAccount` _extends_ `SmartContractAccount` | `undefined`  | `SmartContractAccount` | `undefined` |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TChain` *extends* `Chain` | `undefined`
+      </td>
+
+      <td>
+        `Chain` | `undefined`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TAccount` *extends* `SmartContractAccount` | `undefined`
+      </td>
+
+      <td>
+        `SmartContractAccount` | `undefined`
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Parameters
 
-| Parameter | Type                                                                                                     | Description                                                                    |
-| :-------- | :------------------------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------- |
-| `client`  | `Client`\<`Transport`, `TChain`, `TAccount`, [`AlchemyRpcSchema`](../type-aliases/AlchemyRpcSchema.mdx)> | The client instance used to send the simulation request                        |
-| `args`    | `SendUserOperationParameters`\<`TAccount`>                                                               | The parameters of the user operation including the account and other overrides |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `client`
+      </td>
+
+      <td>
+        `Client`\<`Transport`, `TChain`, `TAccount`, [`AlchemyRpcSchema`](../type-aliases/AlchemyRpcSchema.mdx)>
+      </td>
+
+      <td>
+        The client instance used to send the simulation request
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `args`
+      </td>
+
+      <td>
+        `SendUserOperationParameters`\<`TAccount`>
+      </td>
+
+      <td>
+        The parameters of the user operation including the account and other overrides
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Returns
 

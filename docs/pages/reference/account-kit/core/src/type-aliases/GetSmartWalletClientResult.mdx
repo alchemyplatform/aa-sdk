@@ -9,14 +9,35 @@ layout: reference
 
 ```ts
 type GetSmartWalletClientResult<TAccount> =
-  | accountLoupeActions<TAccount>
+  | SmartWalletClient<TAccount>
   | undefined;
 ```
 
-Defined in: [account-kit/core/src/actions/getSmartWalletClient.ts:12](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/core/src/actions/getSmartWalletClient.ts#L12)
+Defined in: [account-kit/core/src/actions/getSmartWalletClient.ts:12](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/core/src/actions/getSmartWalletClient.ts#L12)
 
 ## Type Parameters
 
-| Type Parameter       | Default type                                                      |
-| :------------------- | :---------------------------------------------------------------- | ----------- | --- | ----------------------------------------------------------------- | ----------- |
-| `TAccount` _extends_ | [`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx) | `undefined` |     | [`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx) | `undefined` |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TAccount` *extends*
+        | [`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx)
+        | `undefined`
+      </td>
+
+      <td>
+        | [`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx)
+        | `undefined`
+      </td>
+    </tr>
+
+  </tbody>
+</table>

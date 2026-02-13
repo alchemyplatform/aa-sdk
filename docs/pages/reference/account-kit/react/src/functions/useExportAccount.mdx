@@ -11,7 +11,7 @@ layout: reference
 function useExportAccount(args?): UseExportAccountResult;
 ```
 
-Defined in: [account-kit/react/src/hooks/useExportAccount.ts:68](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/react/src/hooks/useExportAccount.ts#L68)
+Defined in: [account-kit/react/src/hooks/useExportAccount.ts:68](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/react/src/hooks/useExportAccount.ts#L68)
 
 A [hook](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useExportAccount.ts) used to export the private key for an account. It returns the mutation functions to kick off the export process, as well as a component to render the account recovery details in an iframe.
 What is returned is dependent on what you used most recently used to authenticate. If your session was initiated with a passkey, then a private key is returned. Otherwise, a seed phrase.
@@ -36,9 +36,32 @@ const {
 
 ## Parameters
 
-| Parameter | Type                                                                               | Description                                                                                                                                                               |
-| :-------- | :--------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `args?`   | [`UseExportAccountMutationArgs`](../type-aliases/UseExportAccountMutationArgs.mdx) | Optional arguments for the mutation and export parameters. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useExportAccount.ts#L11) |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `args?`
+      </td>
+
+      <td>
+        [`UseExportAccountMutationArgs`](../type-aliases/UseExportAccountMutationArgs.mdx)
+      </td>
+
+      <td>
+        Optional arguments for the mutation and export parameters. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useExportAccount.ts#L11)
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Returns
 
