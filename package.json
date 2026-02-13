@@ -18,7 +18,6 @@
     ]
   },
   "resolutions": {
-    "@alchemy/wallet-api-types": "link:/Users/jacob.hobbs/dev/alchemyplatform/wallet-server/types",
     "wagmi": "2.16.9",
     "viem": "^2.44.2",
     "@noble/hashes": "^1.4.0",

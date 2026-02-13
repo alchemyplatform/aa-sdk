@@ -71,8 +71,6 @@ export async function signPreparedCalls(
   const signAuthorizationCall = async (call: AuthorizationCall) => {
     const { signatureRequest: _signatureRequest, ...rest } = call;
 
-    // chainId/nonce are decoded (number) from PrepareCallsResult;
-    // signSignatureRequest handles both formats via Number().
     const signature = await signSignatureRequest(client, {
       type: "eip7702Auth",
       data: {

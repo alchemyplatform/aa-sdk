@@ -83,8 +83,10 @@ describe("viem action type compatibility", () => {
   });
 
   describe("getCapabilities", () => {
-    it("return type satisfies viem's GetCapabilitiesReturnType", () => {
-      expectTypeOf<GetCapabilitiesResult>().toExtend<GetCapabilitiesReturnType>();
+    it("return type satisfies viem's GetCapabilitiesReturnType<number>", () => {
+      expectTypeOf<GetCapabilitiesResult>().toExtend<
+        GetCapabilitiesReturnType<number>
+      >();
     });
 
     it("params accept viem-style input", () => {

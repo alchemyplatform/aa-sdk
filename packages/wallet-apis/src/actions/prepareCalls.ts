@@ -94,5 +94,5 @@ export async function prepareCalls(
   });
 
   LOGGER.debug("prepareCalls:done");
-  return Value.Decode(schema.response, rpcResp) satisfies PrepareCallsResult;
+  return Value.Decode(schema.response, rpcResp);
 }

@@ -81,7 +81,10 @@ export async function sendPreparedCalls(
           capabilities: toRpcCapabilities(capabilities),
         };
 
-  const rpcParams = Value.Encode(schema.request, fullParams);
+  const rpcParams = Value.Encode(
+    schema.request,
+    fullParams satisfies BaseSendPreparedCallsParams,
+  );
 
   const rpcResp = await client.request({
     method: "wallet_sendPreparedCalls",
@@ -89,8 +92,5 @@ export async function sendPreparedCalls(
   });
 
   LOGGER.debug("sendPreparedCalls:done");
-  return Value.Decode(
-    schema.response,
-    rpcResp,
-  ) satisfies SendPreparedCallsResult;
+  return Value.Decode(schema.response, rpcResp);
 }

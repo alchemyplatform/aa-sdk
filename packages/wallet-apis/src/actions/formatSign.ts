@@ -67,5 +67,5 @@ export async function formatSign(
   });
 
   LOGGER.debug("formatSign:done");
-  return Value.Decode(schema.response, rpcResp) satisfies FormatSignResult;
+  return Value.Decode(schema.response, rpcResp);
 }

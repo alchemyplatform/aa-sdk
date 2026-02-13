@@ -226,20 +226,25 @@
     viem "^2.32.0"
 
 "@alchemy/wallet-api-types@0.1.0-alpha.16":
-  version "0.0.0"
-  uid ""
+  version "0.1.0-alpha.16"
+  resolved "https://registry.yarnpkg.com/@alchemy/wallet-api-types/-/wallet-api-types-0.1.0-alpha.16.tgz#fab9908f22e37283b611cf2c08989e5a20632d91"
+  integrity sha512-hpBCyyYHvPSzXwYqNwpcvXyhovUCFXrwFk7+bvD+buHiGZUfld3/WTzXN64rVhOeU7u4psGUdQaKUuAgmNjiNg==
+  dependencies:
+    "@sinclair/typebox" "^0.34.33"
+    deep-equal "^2.2.3"
+    ox "^0.6.12"
+    viem "2.29.2"
 
-"@alchemy/wallet-api-types@^0.1.0-alpha.18":
-  version "0.0.0"
-  uid ""
-
-"@alchemy/wallet-api-types@link:../wallet-server/types":
-  version "0.0.0"
-  uid ""
-
-"@alchemy/wallet-api-types@link:/Users/jacob.hobbs/dev/alchemyplatform/wallet-server/types":
-  version "0.0.0"
-  uid ""
+"@alchemy/wallet-api-types@0.1.0-alpha.24", "@alchemy/wallet-api-types@^0.1.0-alpha.18", "@alchemy/wallet-api-types@^0.1.0-alpha.23":
+  version "0.1.0-alpha.24"
+  resolved "https://registry.yarnpkg.com/@alchemy/wallet-api-types/-/wallet-api-types-0.1.0-alpha.24.tgz#4b71803971fdaaa62d79d77916635ac29c7baa30"
+  integrity sha512-6xAuHggseh4GzCyAKJWX4/cLpdhaT9siQ7sYclENCM4RKU2Iz/KBz8p82/3R31s3ePGj6iGMAEGoWIuq4Rb6Fw==
+  dependencies:
+    "@alchemy/common" "0.0.0-alpha.13"
+    deep-equal "^2.2.3"
+    ox "^0.6.12"
+    typebox "^1.0.81"
+    viem "^2.32.0"
 
 "@alchemy/wallet-apis@0.0.0-alpha.12":
   version "0.0.0-alpha.12"
@@ -5910,6 +5915,11 @@
   version "0.33.22"
   resolved "https://registry.yarnpkg.com/@sinclair/typebox/-/typebox-0.33.22.tgz#3339d85172509095a8384cb4b44834a7c9309d86"
   integrity sha512-auUj4k+f4pyrIVf4GW5UKquSZFHJWri06QgARy9C0t9ZTjJLIuNIrr1yl9bWcJWJ1Gz1vOvYN1D+QPaIlNMVkQ==
+
+"@sinclair/typebox@^0.34.33":
+  version "0.34.48"
+  resolved "https://registry.yarnpkg.com/@sinclair/typebox/-/typebox-0.34.48.tgz#75b0ead87e59e1adbd6dccdc42bad4fddee73b59"
+  integrity sha512-kKJTNuK3AQOrgjjotVxMrCn1sUJwM76wMszfq1kdU4uYVJjvEWuFQ6HgvLt4Xz3fSmZlTOxJ/Ie13KnIcWQXFA==
 
 "@sindresorhus/merge-streams@^4.0.0":
   version "4.0.0"
@@ -22889,7 +22899,7 @@ vfile@^6.0.0, vfile@^6.0.3:
     "@types/unist" "^3.0.0"
     vfile-message "^4.0.0"
 
-viem@2.23.2, viem@2.x, viem@>=2.23.11, viem@>=2.29.0, viem@^2.1.1, viem@^2.21.35, viem@^2.21.40, viem@^2.27.2, viem@^2.29.2, viem@^2.31.7, viem@^2.32.0, viem@^2.44.2:
+viem@2.23.2, viem@2.29.2, viem@2.x, viem@>=2.23.11, viem@>=2.29.0, viem@^2.1.1, viem@^2.21.35, viem@^2.21.40, viem@^2.27.2, viem@^2.29.2, viem@^2.31.7, viem@^2.32.0, viem@^2.44.2:
   version "2.44.2"
   resolved "https://registry.yarnpkg.com/viem/-/viem-2.44.2.tgz#602798baa22338a4bc4790ca103facfbb2d8979d"
   integrity sha512-nHY872t/T3flLpVsnvQT/89bwbrJwxaL917FDv7Oxy4E5FWIFkokRQOKXG3P+hgl30QYVZxi9o2SUHLnebycxw==

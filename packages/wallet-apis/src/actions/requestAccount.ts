@@ -96,19 +96,17 @@ export async function requestAccount(
     };
   }
 
-  const rpcParams = Value.Encode(schema.request, args);
+  const rpcParams = Value.Encode(
+    schema.request,
+    args satisfies BaseRequestAccountParams,
+  );
 
   const rpcResp = await client.request({
     method: "wallet_requestAccount",
     params: [rpcParams],
   });
 
-  const resp = Value.Decode(
-    schema.response,
-    rpcResp,
-  ) as RequestAccountResult & {
-    accountAddress: Address;
-  };
+  const resp = Value.Decode(schema.response, rpcResp);
 
   client.internal?.setAccount({
     address: resp.accountAddress,

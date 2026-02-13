@@ -65,5 +65,5 @@ export async function prepareSign(
   });
 
   LOGGER.debug("prepareSign:done");
-  return Value.Decode(schema.response, rpcResp) satisfies PrepareSignResult;
+  return Value.Decode(schema.response, rpcResp);
 }
