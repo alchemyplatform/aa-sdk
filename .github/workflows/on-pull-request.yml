@@ -206,7 +206,8 @@ jobs:
           repo: alchemyplatform/rundler
           platform: linux
           tag: v0.11.0-alpha.2
-          cache: enable
+          # TODO: disabled caching on 2026.02.13 b/c of GH outage. re-enable later.
+          # cache: enable
 
       - name: Build Libraries
         env:
