@@ -9,7 +9,6 @@ import {
 } from "./sendPreparedCalls.js";
 import { signSignatureRequest } from "./signSignatureRequest.js";
 import type { SmartWalletSigner } from "../index.js";
-import { isWebAuthnSigner } from "../../utils.js";
 import { extractCapabilitiesForSending } from "../../internal/capabilities.js";
 
 export type SendCallsParams<
@@ -27,7 +26,7 @@ export type SendCallsResult = SendPreparedCallsResult;
  * </Note>
  *
  * @param {InnerWalletApiClient} client - The wallet API client to use for the request
- * @param {SmartAccountSigner | WebAuthnSigner} signer - The signer to use
+ * @param {SmartAccountSigner} signer - The signer to use
  * @param {PrepareCallsParams<TAccount>} params - Parameters for sending calls
  * @param {Array<{to: Address, data?: Hex, value?: Hex}>} params.calls - Array of contract calls to execute
  * @param {Address} [params.from] - The address to execute the calls from (required if the client wasn't initialized with an account)
@@ -65,11 +64,6 @@ export async function sendCalls<
   let calls = await prepareCalls(client, params);
 
   if (calls.type === "paymaster-permit") {
-    if (isWebAuthnSigner(signer)) {
-      throw new Error(
-        "WebAuthn signer is not currently supported for signing paymaster permit signatures",
-      );
-    }
     const signature = await signSignatureRequest(
       signer,
       calls.signatureRequest,
