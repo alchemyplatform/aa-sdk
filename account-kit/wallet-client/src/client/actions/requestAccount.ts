@@ -1,4 +1,4 @@
-import { BaseError, type SmartContractAccount } from "@aa-sdk/core";
+import type { SmartContractAccount } from "@aa-sdk/core";
 import type { Address } from "abitype";
 import deepEqual from "deep-equal";
 import { custom } from "viem";
@@ -6,15 +6,6 @@ import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
 import type { InnerWalletApiClient } from "../../types.js";
 import { createAccount } from "../../internal/account.js";
 import type { SmartWalletSigner } from "../index.js";
-import {
-  credentialToWebAuthnPublicKey,
-  isWebAuthnSigner,
-} from "../../utils.js";
-import type {
-  CreationOptionsByPublicKey,
-  CreationOptionsBySignerAddress,
-  WebAuthnPublicKey,
-} from "@alchemy/wallet-api-types";
 
 type RpcSchema = Extract<
   WalletServerRpcSchemaType,
@@ -26,11 +17,8 @@ type RpcSchema = Extract<
 >;
 
 export type RequestAccountParams = Omit<
-  Extract<
-    RpcSchema["Request"]["params"][0],
-    { signerAddress: Address } | { signerPublicKey: WebAuthnPublicKey }
-  >,
-  "signerAddress" | "signerPublicKey" | "includeCounterfactualInfo"
+  Extract<RpcSchema["Request"]["params"][0], { signerAddress: Address }>,
+  "signerAddress" | "includeCounterfactualInfo"
 > & { accountAddress?: Address };
 
 export type RequestAccountResult = SmartContractAccount;
@@ -41,7 +29,7 @@ export type RequestAccountResult = SmartContractAccount;
  * If an account already exists, the creationHint will be ignored.
  *
  * @param {InnerWalletApiClient} client - The wallet API client to use for the request
- * @param {SmartAccountSigner | WebAuthnSigner} signer - The signer that will be associated with the account
+ * @param {SmartAccountSigner} signer - The signer that will be associated with the account
  * @param {RequestAccountParams} [params] - Optional parameters for requesting a specific account
  * @param {string} [params.id] - Optional identifier for the account. If specified, a new account with this ID will be created even if one already exists for the signer
  * @param {object} [params.creationHint] - Optional hints to guide account creation. These are ignored if an account already exists
@@ -61,24 +49,6 @@ export async function requestAccount(
 ): Promise<RequestAccountResult> {
   const { creationHint = {} } = params ?? {};
 
-  if (isWebAuthnSigner(signer)) {
-    if (
-      creationHint.accountType &&
-      creationHint.accountType !== "mav2-webauthn"
-    ) {
-      throw new BaseError(
-        "WebAuthn signers are only supported with mav2-webauthn account type",
-      );
-    }
-  } else {
-    // non-webauthn signers do not support the "mav2-webauthn" account type
-    if (creationHint.accountType === "mav2-webauthn") {
-      throw new BaseError(
-        "ECDSA (secp256k1) signers are not supported with mav2-webauthn account type",
-      );
-    }
-  }
-
   const args = (
     (client.account && !params) || params?.accountAddress
       ? {
@@ -86,25 +56,12 @@ export async function requestAccount(
           includeCounterfactualInfo: true,
         }
       : {
-          ...(isWebAuthnSigner(signer)
+          signerAddress: await signer.getAddress(),
+          ...(creationHint
             ? {
-                signerPublicKey: {
-                  ...credentialToWebAuthnPublicKey(signer.credential),
-                  type: "webauthn-p256",
-                },
-                ...(creationHint
-                  ? { creationHint: creationHint as CreationOptionsByPublicKey }
-                  : {}),
+                creationHint,
               }
-            : {
-                signerAddress: await signer.getAddress(),
-                ...(creationHint
-                  ? {
-                      creationHint:
-                        creationHint as CreationOptionsBySignerAddress,
-                    }
-                  : {}),
-              }),
+            : {}),
           includeCounterfactualInfo: true,
         }
   ) satisfies RpcSchema["Request"]["params"][0];

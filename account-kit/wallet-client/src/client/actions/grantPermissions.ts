@@ -13,7 +13,6 @@ import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
 import { signSignatureRequest } from "./signSignatureRequest.js";
 import { metrics } from "../../metrics.js";
 import type { SmartWalletSigner } from "../index.js";
-import { isWebAuthnSigner } from "../../utils.js";
 
 type RpcSchema = Extract<
   WalletServerRpcSchemaType,
@@ -42,7 +41,7 @@ export type GrantPermissionsResult = {
  * This allows another key to perform operations on behalf of the account.
  *
  * @param {InnerWalletApiClient} client - The wallet API client to use for the request
- * @param {SmartAccountSigner | WebAuthnSigner} signer - The signer of the smart account
+ * @param {SmartAccountSigner} signer - The signer of the smart account
  * @param {GrantPermissionsParams} params - The parameters for granting permissions
  * @param {Address} [params.account] - The account address (required if client was not initialized with an account)
  * @param {number} params.expirySec - Unix timestamp when the permissions expire
@@ -106,12 +105,6 @@ export async function grantPermissions<
   const account = params.account ?? client.account?.address;
   if (!account) {
     throw new AccountNotFoundError();
-  }
-
-  if (isWebAuthnSigner(signer)) {
-    throw new Error(
-      "WebAuthn signer is not currently supported for grantPermissions",
-    );
   }
 
   const { sessionId, signatureRequest } = await client.request({

@@ -9,8 +9,6 @@ import {
 } from "viem";
 import { createSmartWalletClient, type SmartWalletClient } from "./index.js";
 import type { PrepareCallsParams } from "./actions/prepareCalls.js";
-import { SoftWebauthnDevice } from "~test/webauthn.js";
-import { createWebAuthnCredential } from "viem/account-abstraction";
 
 // We want to test both the "unroll each step" method and the full e2e "sendCalls" method.
 const sendVariants: Array<
@@ -287,84 +285,6 @@ describe("Client E2E Tests", () => {
       timeout: 45_000,
     },
   );
-
-  describe("webauthn wallet client tests", async () => {
-    const webauthnDevice = new SoftWebauthnDevice();
-
-    const credential = await createWebAuthnCredential({
-      rp: { id: "localhost", name: "localhost" },
-      createFn: (opts) => webauthnDevice.create(opts, "localhost"),
-      user: { name: "test", displayName: "test" },
-    });
-
-    const webauthClient = createSmartWalletClient({
-      transport,
-      chain: arbitrumSepolia,
-      signer: {
-        credential,
-        getFn: (opts) => webauthnDevice.get(opts, "localhost"),
-        rpId: "localhost",
-      },
-    });
-
-    it("should successfully request account with webauthn signer", async () => {
-      const account = await webauthClient.requestAccount({
-        creationHint: { accountType: "mav2-webauthn" },
-      });
-      expect(account.address).toBeDefined();
-    });
-
-    it("should infer account type from webauthn signer", async () => {
-      const account = await webauthClient.requestAccount();
-      expect(account.address).toBeDefined();
-    });
-
-    it("should successfully sign a message with webauthn signer", async () => {
-      const account = await webauthClient.requestAccount();
-      const message = "hello world";
-      const signature = await webauthClient.signMessage({ message });
-      const isValid = await publicClient.verifyMessage({
-        address: account.address,
-        message: "hello world",
-        signature,
-      });
-      expect(isValid).toBeTrue();
-    });
-
-    it("should successfully sign typed data with webauthn signer", async () => {
-      const account = await webauthClient.requestAccount();
-      const signature = await webauthClient.signTypedData(givenTypedData);
-      const isValid = await publicClient.verifyTypedData({
-        ...givenTypedData,
-        signature,
-        address: account.address,
-      });
-      expect(isValid).toBeTrue();
-    });
-
-    it(
-      "should successfully send a transaction with webauthn signer and paymaster",
-      async () => {
-        const account = await webauthClient.requestAccount();
-        const result = await webauthClient.sendCalls({
-          calls: [{ to: zeroAddress, value: "0x0" }],
-          from: account.address,
-          capabilities: {
-            // Signer is randomized, so we must sponsor the transaction
-            paymasterService: {
-              policyId: process.env.TEST_PAYMASTER_POLICY_ID!,
-            },
-          },
-        });
-
-        const waitForResult = await webauthClient.waitForCallsStatus({
-          id: result.id,
-        });
-        expect(waitForResult.status).toBe("success");
-      },
-      { timeout: 45_000 },
-    );
-  });
 
   const givenTypedData = {
     types: {
