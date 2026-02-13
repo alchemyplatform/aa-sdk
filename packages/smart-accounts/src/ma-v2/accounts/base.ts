@@ -22,10 +22,7 @@ import {
   entryPoint07Address,
   getUserOperationHash,
   toSmartAccount,
-  type WebAuthnAccount,
   type ToSmartAccountParameters,
-  estimateUserOperationGas,
-  type UserOperation,
 } from "viem/account-abstraction";
 import {
   getCode,
@@ -60,12 +57,9 @@ import {
 import { parseDeferredAction } from "../utils/deferredActions.js";
 import {
   pack1271Signature,
-  toWebAuthnSignature,
   toReplaySafeTypedData,
   packUOSignature,
-  WEBAUTHN_DUMMY_SIGNATURE,
 } from "../utils/signature.js";
-import { chainHas7212 } from "../../utils.js";
 import { InvalidDeferredActionNonceError } from "../../errors/InvalidDeferredActionNonceError.js";
 import { InvalidNonceKeyError } from "../../errors/InvalidNonceKeyError.js";
 import { InvalidEntityIdError } from "../../errors/InvalidEntityIdError.js";
@@ -105,7 +99,7 @@ export type ToModularAccountV2BaseParams<
   TTransport extends Transport = Transport,
 > = {
   client: Client<TTransport, Chain, JsonRpcAccount | LocalAccount | undefined>;
-  owner: JsonRpcAccount | LocalAccount | WebAuthnAccount;
+  owner: JsonRpcAccount | LocalAccount;
   accountAddress: Address;
   getFactoryArgs: () => Promise<{
     factory?: Address | undefined;
@@ -306,17 +300,12 @@ export async function toModularAccountV2Base<
       data: toReplaySafeTypedData({
         chainId: client.chain.id,
         hash,
-        ...(owner.type === "webAuthn"
-          ? {
-              address: DefaultModuleAddress.WEBAUTHN_VALIDATION,
+        ...(entityId === DEFAULT_OWNER_ENTITY_ID
+          ? { address: accountAddress }
+          : {
+              address: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
               salt: concatHex([`0x${"00".repeat(12)}`, accountAddress]),
-            }
-          : entityId === DEFAULT_OWNER_ENTITY_ID
-            ? { address: accountAddress }
-            : {
-                address: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
-                salt: concatHex([`0x${"00".repeat(12)}`, accountAddress]),
-              }),
+            }),
       }),
     };
   };
@@ -324,8 +313,7 @@ export async function toModularAccountV2Base<
   const formatSignature = async (signature: Hex): Promise<Hex> => {
     return pack1271Signature({
       entityId,
-      validationSignaturePrefix:
-        owner.type === "webAuthn" ? null : SignaturePrefix.EOA,
+      validationSignaturePrefix: SignaturePrefix.EOA,
       validationSignature: signature,
     });
   };
@@ -421,10 +409,6 @@ export async function toModularAccountV2Base<
     },
 
     async getStubSignature() {
-      if (owner.type === "webAuthn") {
-        return WEBAUTHN_DUMMY_SIGNATURE;
-      }
-
       const sig = packUOSignature({
         validationSignature:
           "0xfffffffffffffffffffffffffffffff0000000000000000000000000000000007aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1c",
@@ -437,13 +421,6 @@ export async function toModularAccountV2Base<
         type: "personal_sign",
         data: message,
       });
-
-      if (owner.type === "webAuthn") {
-        const validationSignature = toWebAuthnSignature(
-          await owner.sign({ hash: hashTypedData(data) }),
-        );
-        return formatSignature(validationSignature);
-      }
 
       const action = getAction(client, signTypedData, "signTypedData");
 
@@ -468,15 +445,6 @@ export async function toModularAccountV2Base<
         data: td as TypedDataDefinition, // TODO(v5): Try harder to satisfy this w/o casting.
       });
 
-      if (owner.type === "webAuthn") {
-        const validationSignature = toWebAuthnSignature(
-          await owner.sign({ hash: hashTypedData(data) }),
-        );
-        return isDeferredAction
-          ? validationSignature
-          : formatSignature(validationSignature);
-      }
-
       const action = getAction(client, signTypedData, "signTypedData");
 
       const signature = await action({
@@ -500,21 +468,6 @@ export async function toModularAccountV2Base<
         },
       });
 
-      if (owner.type === "webAuthn") {
-        const validationSignature = toWebAuthnSignature(
-          await owner.sign({
-            hash: hashMessage({ raw: hash }),
-          }),
-        );
-
-        const signature = deferredActionData
-          ? concatHex([deferredActionData, validationSignature])
-          : validationSignature;
-        deferredActionData = undefined; // clear once used
-        hasAssociatedExecHooks = false; // set to falsy value once used
-        return concatHex(["0xff", signature]);
-      }
-
       const signMessageAction = getAction(client, signMessage, "signMessage");
 
       const validationSignature = await signMessageAction({
@@ -534,35 +487,6 @@ export async function toModularAccountV2Base<
       hasAssociatedExecHooks = false; // set to falsy value once used
 
       return signature;
-    },
-
-    userOperation: {
-      estimateGas: async (uo) => {
-        if (owner.type !== "webAuthn") {
-          // Uses the default gas estimator.
-          // Note that we get 7702 support automatically from Viem.
-          return undefined;
-        }
-
-        const estimateGasAction = getAction(
-          client,
-          estimateUserOperationGas,
-          "estimateUserOperationGas",
-        );
-
-        const estimate = await estimateGasAction({
-          ...(uo as UserOperation<typeof entryPoint.version>),
-          entryPointAddress: entryPoint.address,
-        });
-
-        const buffer = (await chainHas7212(client)) ? 10000n : 300000n;
-
-        // TODO(v4): iterate numbers. Aim to have ~1000 gas buffer to account for longer authenticatorDatas and clientDataJSONs.
-        return {
-          ...estimate,
-          verificationGasLimit: estimate.verificationGasLimit + buffer,
-        };
-      },
     },
 
     extend: {

@@ -29,18 +29,12 @@ import {
 import {
   createBundlerClient,
   entryPoint07Abi,
-  createWebAuthnCredential,
-  toWebAuthnAccount,
-  type WebAuthnAccount,
   createPaymasterClient,
 } from "viem/account-abstraction";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import { getBalance, setBalance } from "viem/actions";
-import { parsePublicKey } from "webauthn-p256";
 import { localInstance } from "~test/instances.js";
 import { paymaster070 } from "~test/paymaster/paymaster070.js";
-import { SoftWebauthnDevice } from "~test/webauthn.js";
-import { WebAuthnValidationModule } from "../modules/webauthn-validation/module.js";
 import { toModularAccountV2 } from "./account.js";
 import { toLightAccount } from "../../light-account/accounts/account.js";
 import { deferralActions } from "../decorators/deferralActions.js";
@@ -58,9 +52,7 @@ import { TimeRangeModule } from "../modules/time-range-module/module.js";
 import { getMAV2UpgradeToData } from "../utils/account.js";
 import { packAccountGasLimits, packPaymasterData } from "../../utils.js";
 import { estimateFeesPerGas } from "@alchemy/aa-infra";
-import { toWebAuthnSignature } from "../utils/signature.js";
 import { raise } from "@alchemy/common";
-import * as WebAuthnP256 from "ox/WebAuthnP256";
 import { EXECUTE_USER_OP_SELECTOR } from "../utils/account.js";
 
 // Note: These tests maintain a shared state to not break the local-running rundler by desyncing the chain.
@@ -277,183 +269,6 @@ describe("MA v2 Account Tests", async () => {
     await expect(
       getBalance(client, { address: provider.account.address }),
     ).resolves.toEqual(startingBalance - sendAmount);
-  });
-
-  it(
-    "sends a simple UO with webauthn account",
-    { retry: 3, timeout: 30_000 },
-    async () => {
-      const credential = await givenWebauthnCredential();
-
-      const provider = await givenConnectedProvider({
-        signer: toWebAuthnAccount(credential),
-      });
-
-      await setBalance(localInstance.getClient(), {
-        address: provider.account.address,
-        value: parseEther("2"),
-      });
-
-      const hash = await provider.sendUserOperation({
-        calls: [
-          {
-            to: target,
-            value: sendAmount,
-            data: "0x",
-          },
-        ],
-      });
-
-      const startingAddressBalance = await getTargetBalance();
-
-      await provider.waitForUserOperationReceipt({ hash, timeout: 30_000 });
-
-      await expect(getTargetBalance()).resolves.toEqual(
-        startingAddressBalance + sendAmount,
-      );
-    },
-  );
-
-  it("installs WebAuthnValidationModule, sends UO on behalf of owner with webauthn session key", async () => {
-    const credential = await givenWebauthnCredential();
-
-    const provider = await givenConnectedProvider({
-      signer: toWebAuthnAccount(credential),
-    });
-
-    await setBalance(localInstance.getClient(), {
-      address: provider.account.address,
-      value: parseEther("2"),
-    });
-
-    const sessionKeyCredential = await givenWebauthnCredential();
-    const { x, y } = parsePublicKey(sessionKeyCredential.credential.publicKey);
-
-    // install webauthn validation module
-    const hash = await provider
-      .extend(installValidationActions)
-      .installValidation({
-        validationConfig: {
-          moduleAddress: DefaultModuleAddress.WEBAUTHN_VALIDATION,
-          entityId: 1,
-          isGlobal: true,
-          isSignatureValidation: true,
-          isUserOpValidation: true,
-        },
-        selectors: [],
-        installData: WebAuthnValidationModule.encodeOnInstallData({
-          entityId: 1,
-          x,
-          y,
-        }),
-        hooks: [],
-      });
-
-    // wait for the UserOperation to be mined
-    await provider.waitForUserOperationReceipt({ hash, timeout: 30_000 });
-
-    // create session key client
-    const sessionKeyClient = await givenConnectedProvider({
-      signer: toWebAuthnAccount(sessionKeyCredential),
-      accountAddress: provider.account.address,
-      signerEntity: { entityId: 1, isGlobalValidation: true },
-      // We don't need factory args here since we already installed the validation on-chain, which deployed the acct.
-    });
-
-    const sessionKeyHash = await sessionKeyClient.sendUserOperation({
-      calls: [
-        {
-          to: target,
-          value: sendAmount,
-          data: "0x",
-        },
-      ],
-    });
-
-    await sessionKeyClient.waitForUserOperationReceipt({
-      hash: sessionKeyHash,
-      timeout: 30_000,
-    });
-  });
-
-  it("successfully sign and validate a message with EIP-1271 using WebAuthn account", async () => {
-    const credential = await givenWebauthnCredential();
-
-    const provider = await givenConnectedProvider({
-      signer: toWebAuthnAccount(credential),
-    });
-
-    const message = "0xdecafbad";
-
-    // WebAuthn signMessage automatically wraps the message in EIP-712
-    // ReplaySafeHash format and returns a properly formatted signature.
-    const signature = await provider.account.signMessage({ message });
-
-    const publicClient = createPublicClient({
-      chain: localInstance.chain,
-      transport: custom(localInstance.getClient()),
-    });
-    const isValid = await publicClient.verifyMessage({
-      address: provider.account.address,
-      message,
-      signature,
-    });
-    expect(isValid).toBe(true);
-  });
-
-  it("successfully sign and validate typed data with EIP-1271 using WebAuthn account", async () => {
-    const credential = await givenWebauthnCredential();
-
-    const provider = await givenConnectedProvider({
-      signer: toWebAuthnAccount(credential),
-    });
-
-    const typedData = {
-      domain: {
-        name: "Ether Mail",
-        version: "1",
-        chainId: 1,
-        verifyingContract: "0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC",
-      },
-      types: {
-        Person: [
-          { name: "name", type: "string" },
-          { name: "wallet", type: "address" },
-        ],
-        Mail: [
-          { name: "from", type: "Person" },
-          { name: "to", type: "Person" },
-          { name: "contents", type: "string" },
-        ],
-      },
-      primaryType: "Mail",
-      message: {
-        from: {
-          name: "Cow",
-          wallet: "0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826",
-        },
-        to: {
-          name: "Bob",
-          wallet: "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
-        },
-        contents: "Hello, Bob!",
-      },
-    } as const;
-
-    // WebAuthn signTypedData automatically wraps the typed data in EIP-712
-    // ReplaySafeHash format and returns a properly formatted signature.
-    const signature = await provider.account.signTypedData(typedData);
-
-    const publicClient = createPublicClient({
-      chain: localInstance.chain,
-      transport: custom(localInstance.getClient()),
-    });
-    const isValid = await publicClient.verifyTypedData({
-      ...typedData,
-      address: provider.account.address,
-      signature,
-    });
-    expect(isValid).toBe(true);
   });
 
   it(
@@ -734,61 +549,6 @@ describe("MA v2 Account Tests", async () => {
           })
         : formattedSig;
 
-      const isValid = await publicClient.verifyMessage({
-        address: provider.account.address,
-        message,
-        signature,
-      });
-      expect(isValid).toBe(true);
-    },
-  );
-
-  it(
-    "should expose prepare and format functions that work using WebAuthn",
-    { retry: 3, timeout: 30_000 },
-    async () => {
-      const credential = await givenWebauthnCredential();
-
-      const provider = await givenConnectedProvider({
-        signer: toWebAuthnAccount(credential),
-      });
-
-      const message = "hello world";
-
-      const { type, data } = await provider.account.prepareSignature({
-        type: "personal_sign",
-        data: message,
-      });
-
-      if (type !== "eth_signTypedData_v4") {
-        throw new Error("Unexpected signature request type");
-      }
-
-      const webAuthnAccount = toWebAuthnAccount(credential);
-      const ownerSig = toWebAuthnSignature(
-        await webAuthnAccount.sign({ hash: hashTypedData(data) }),
-      );
-
-      // Viem's AA stack automatically serializes 6492 signatures whenever `SmartContractAccount.signMessage` is called,
-      // so we need to do that check separately when using prepare/format sign.
-      const [formattedSig, { factory, factoryData }] = await Promise.all([
-        provider.account.formatSignature(ownerSig),
-        provider.account.getFactoryArgs(),
-      ]);
-
-      const signature =
-        factory && factoryData
-          ? serializeErc6492Signature({
-              address: factory,
-              data: factoryData,
-              signature: formattedSig,
-            })
-          : formattedSig;
-
-      const publicClient = createPublicClient({
-        chain: localInstance.chain,
-        transport: custom(localInstance.getClient()),
-      });
       const isValid = await publicClient.verifyMessage({
         address: provider.account.address,
         message,
@@ -2317,21 +2077,6 @@ describe("MA v2 Account Tests", async () => {
     },
   );
 
-  const givenWebauthnCredential = async () => {
-    const webauthnDevice = new SoftWebauthnDevice();
-
-    const credential = await createWebAuthnCredential({
-      rp: { id: "localhost", name: "localhost" },
-      createFn: (opts) => webauthnDevice.create(opts, "localhost"),
-      user: { name: "test", displayName: "test" },
-    });
-
-    const getFn: WebAuthnP256.sign.Options["getFn"] = (opts) =>
-      webauthnDevice.get(opts, "localhost");
-
-    return { credential, getFn, rpId: "localhost" };
-  };
-
   const givenConnectedProvider = async ({
     signer,
     signerEntity,
@@ -2341,7 +2086,7 @@ describe("MA v2 Account Tests", async () => {
     deferredAction,
     mode,
   }: {
-    signer: LocalAccount | WebAuthnAccount;
+    signer: LocalAccount;
     signerEntity?: { entityId: number; isGlobalValidation: boolean };
     accountAddress?: Address;
     paymaster?: boolean;
