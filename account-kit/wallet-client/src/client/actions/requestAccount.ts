@@ -6,7 +6,6 @@ import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
 import type { InnerWalletApiClient } from "../../types.js";
 import { createAccount } from "../../internal/account.js";
 import type { SmartWalletSigner } from "../index.js";
-import type { CreationOptionsBySignerAddress } from "@alchemy/wallet-api-types";
 
 type RpcSchema = Extract<
   WalletServerRpcSchemaType,
@@ -60,7 +59,7 @@ export async function requestAccount(
           signerAddress: await signer.getAddress(),
           ...(creationHint
             ? {
-                creationHint: creationHint as CreationOptionsBySignerAddress,
+                creationHint,
               }
             : {}),
           includeCounterfactualInfo: true,
