@@ -109,7 +109,7 @@
     }
   },
   "lint-staged": {
-    "**/*.{mdx,js,jsx,ts,tsx}": [
+    "**/*.{mdx,js,jsx,ts,tsx,yaml,yml}": [
       "eslint --fix --max-warnings 0",
       "prettier --write"
     ]
