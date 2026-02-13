@@ -13,90 +13,22 @@ function toSmartContractAccount<Name, TTransport, TChain, TEntryPointVersion>(
 ): Promise<SmartContractAccount<Name, TEntryPointVersion>>;
 ```
 
-Defined in: [aa-sdk/core/src/account/smartContractAccount.ts:266](https://github.com/alchemyplatform/aa-sdk/blob/d80fd19bb3cae4767898ecbfdef74c0c8623f7c4/aa-sdk/core/src/account/smartContractAccount.ts#L266)
+Defined in: [aa-sdk/core/src/account/smartContractAccount.ts:266](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/aa-sdk/core/src/account/smartContractAccount.ts#L266)
 
 ## Type Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Type Parameter</th>
-      <th align="left">Default type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `Name` *extends* `string`
-      </td>
-
-      <td>
-        `string`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TTransport` *extends* `Transport`
-      </td>
-
-      <td>
-        `Transport`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TChain` *extends* `Chain`
-      </td>
-
-      <td>
-        `Chain`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TEntryPointVersion` *extends* keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase.mdx)\<`unknown`>
-      </td>
-
-      <td>
-        keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase.mdx)\<`unknown`>
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Type Parameter                                                                                                        | Default type                                                                           |
+| :-------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------- |
+| `Name` _extends_ `string`                                                                                             | `string`                                                                               |
+| `TTransport` _extends_ `Transport`                                                                                    | `Transport`                                                                            |
+| `TChain` _extends_ `Chain`                                                                                            | `Chain`                                                                                |
+| `TEntryPointVersion` _extends_ keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase.mdx)\<`unknown`> | keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase.mdx)\<`unknown`> |
 
 ## Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Parameter</th>
-      <th align="left">Type</th>
-      <th align="left">Description</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `params`
-      </td>
-
-      <td>
-        [`ToSmartContractAccountParams`](../type-aliases/ToSmartContractAccountParams.mdx)\<`Name`, `TTransport`, `TChain`, `TEntryPointVersion`>
-      </td>
-
-      <td>
-        the parameters required for converting to a smart contract account
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Parameter | Type                                                                                                                                      | Description                                                        |
+| :-------- | :---------------------------------------------------------------------------------------------------------------------------------------- | :----------------------------------------------------------------- |
+| `params`  | [`ToSmartContractAccountParams`](../type-aliases/ToSmartContractAccountParams.mdx)\<`Name`, `TTransport`, `TChain`, `TEntryPointVersion`> | the parameters required for converting to a smart contract account |
 
 ## Returns
 

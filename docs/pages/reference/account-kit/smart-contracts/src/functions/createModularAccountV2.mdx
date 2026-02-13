@@ -47,65 +47,20 @@ function createModularAccountV2<TTransport, TSigner>(
 ): Promise<ModularAccountV2<TSigner>>;
 ```
 
-Defined in: [account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts:87](https://github.com/alchemyplatform/aa-sdk/blob/d80fd19bb3cae4767898ecbfdef74c0c8623f7c4/account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts#L87)
+Defined in: [account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts:87](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts#L87)
 
 ### Type Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Type Parameter</th>
-      <th align="left">Default type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `TTransport` *extends* `Transport`
-      </td>
-
-      <td>
-        `Transport`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TSigner` *extends* `SmartAccountSigner`\<`any`>
-      </td>
-
-      <td>
-        `SmartAccountSigner`\<`any`>
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Type Parameter                                   | Default type                 |
+| :----------------------------------------------- | :--------------------------- |
+| `TTransport` _extends_ `Transport`               | `Transport`                  |
+| `TSigner` _extends_ `SmartAccountSigner`\<`any`> | `SmartAccountSigner`\<`any`> |
 
 ### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Parameter</th>
-      <th align="left">Type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `config`
-      </td>
-
-      <td>
-        [`CreateModularAccountV2Params`](../type-aliases/CreateModularAccountV2Params.mdx)\<`TTransport`, `TSigner`>
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Parameter | Type                                                                                                         |
+| :-------- | :----------------------------------------------------------------------------------------------------------- |
+| `config`  | [`CreateModularAccountV2Params`](../type-aliases/CreateModularAccountV2Params.mdx)\<`TTransport`, `TSigner`> |
 
 ### Returns
 
@@ -119,55 +74,19 @@ function createModularAccountV2<TTransport>(
 ): Promise<WebauthnModularAccountV2>;
 ```
 
-Defined in: [account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts:94](https://github.com/alchemyplatform/aa-sdk/blob/d80fd19bb3cae4767898ecbfdef74c0c8623f7c4/account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts#L94)
+Defined in: [account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts:94](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/smart-contracts/src/ma-v2/account/modularAccountV2.ts#L94)
 
 ### Type Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Type Parameter</th>
-      <th align="left">Default type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `TTransport` *extends* `Transport`
-      </td>
-
-      <td>
-        `Transport`
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Type Parameter                     | Default type |
+| :--------------------------------- | :----------- |
+| `TTransport` _extends_ `Transport` | `Transport`  |
 
 ### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Parameter</th>
-      <th align="left">Type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `config`
-      </td>
-
-      <td>
-        [`CreateWebauthnModularAccountV2Params`](../type-aliases/CreateWebauthnModularAccountV2Params.mdx)\<`TTransport`>
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Parameter | Type                                                                                                              |
+| :-------- | :---------------------------------------------------------------------------------------------------------------- |
+| `config`  | [`CreateWebauthnModularAccountV2Params`](../type-aliases/CreateWebauthnModularAccountV2Params.mdx)\<`TTransport`> |
 
 ### Returns
 

@@ -11,7 +11,7 @@ layout: reference
 const createBundlerClientFromExisting: <T>(client) => BundlerClient<T>;
 ```
 
-Defined in: [aa-sdk/core/src/client/bundlerClient.ts:46](https://github.com/alchemyplatform/aa-sdk/blob/d80fd19bb3cae4767898ecbfdef74c0c8623f7c4/aa-sdk/core/src/client/bundlerClient.ts#L46)
+Defined in: [aa-sdk/core/src/client/bundlerClient.ts:46](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/aa-sdk/core/src/client/bundlerClient.ts#L46)
 
 Creates a bundler client from an existing public client with the provided transport and chain.
 
@@ -27,56 +27,15 @@ const bundlerClient = createBundlerClientFromExisting(publicClient);
 
 ## Type Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Type Parameter</th>
-      <th align="left">Default type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `T` *extends* `Transport` | `FallbackTransport`
-      </td>
-
-      <td>
-        `Transport`
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Type Parameter            | Default type        |
+| :------------------------ | :------------------ | ----------- |
+| `T` _extends_ `Transport` | `FallbackTransport` | `Transport` |
 
 ## Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Parameter</th>
-      <th align="left">Type</th>
-      <th align="left">Description</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `client`
-      </td>
-
-      <td>
-        `PublicClient`\<`T`, `Chain`>
-      </td>
-
-      <td>
-        The existing public client to be extended with bundler actions
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Parameter | Type                          | Description                                                    |
+| :-------- | :---------------------------- | :------------------------------------------------------------- |
+| `client`  | `PublicClient`\<`T`, `Chain`> | The existing public client to be extended with bundler actions |
 
 ## Returns
 

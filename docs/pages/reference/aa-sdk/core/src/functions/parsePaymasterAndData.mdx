@@ -13,39 +13,15 @@ function parsePaymasterAndData(
 ): Pick<accountLoupeActions<"0.7.0">, "paymaster" | "paymasterData">;
 ```
 
-Defined in: [aa-sdk/core/src/utils/userop.ts:199](https://github.com/alchemyplatform/aa-sdk/blob/d80fd19bb3cae4767898ecbfdef74c0c8623f7c4/aa-sdk/core/src/utils/userop.ts#L199)
+Defined in: [aa-sdk/core/src/utils/userop.ts:199](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/aa-sdk/core/src/utils/userop.ts#L199)
 
 Utility method for parsing the paymaster address and paymasterData from the paymasterAndData hex string
 
 ## Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Parameter</th>
-      <th align="left">Type</th>
-      <th align="left">Description</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `paymasterAndData`
-      </td>
-
-      <td>
-        `` `0x${string}` ``
-      </td>
-
-      <td>
-        the paymaster and data hex string to parse.
-        The hex string refers to the paymasterAndData field of entrypoint v0.6 user operation request
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Parameter          | Type                | Description                                                                                                                               |
+| :----------------- | :------------------ | :---------------------------------------------------------------------------------------------------------------------------------------- |
+| `paymasterAndData` | `` `0x${string}` `` | the paymaster and data hex string to parse. The hex string refers to the paymasterAndData field of entrypoint v0.6 user operation request |
 
 ## Returns
 

@@ -11,92 +11,20 @@ layout: reference
 type UseClientActionsResult<TActions> = object;
 ```
 
-Defined in: [account-kit/react/src/hooks/useClientActions.ts:21](https://github.com/alchemyplatform/aa-sdk/blob/d80fd19bb3cae4767898ecbfdef74c0c8623f7c4/account-kit/react/src/hooks/useClientActions.ts#L21)
+Defined in: [account-kit/react/src/hooks/useClientActions.ts:21](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/react/src/hooks/useClientActions.ts#L21)
 
 ## Type Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Type Parameter</th>
-      <th align="left">Default type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `TActions` *extends* `object`
-      </td>
-
-      <td>
-        `object`
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Type Parameter                | Default type |
+| :---------------------------- | :----------- |
+| `TActions` _extends_ `object` | `object`     |
 
 ## Properties
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Property</th>
-      <th align="left">Type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        <a id="data" /> `data`
-      </td>
-
-      <td>
-        `ReturnType`\<`TActions`\[keyof `TActions`]> | `undefined`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        <a id="error" /> `error?`
-      </td>
-
-      <td>
-        `Error` | `null`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        <a id="executeaction" /> `executeAction`
-      </td>
-
-      <td>
-        \<`TFunctionName`>(`params`) => `void`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        <a id="executeactionasync" /> `executeActionAsync`
-      </td>
-
-      <td>
-        \<`TFunctionName`>(`params`) => `Promise`\<[`ExecuteableFunctionResult`](ExecuteableFunctionResult.mdx)\<`TFunctionName`>>
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        <a id="isexecutingaction" /> `isExecutingAction`
-      </td>
-
-      <td>
-        `boolean`
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Property                                           | Type                                                                                                                       |
+| :------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| <a id="data" /> `data`                             | `ReturnType`\<`TActions`\[keyof `TActions`]>                                                                               | `undefined` |
+| <a id="error" /> `error?`                          | `Error`                                                                                                                    | `null`      |
+| <a id="executeaction" /> `executeAction`           | \<`TFunctionName`>(`params`) => `void`                                                                                     |
+| <a id="executeactionasync" /> `executeActionAsync` | \<`TFunctionName`>(`params`) => `Promise`\<[`ExecuteableFunctionResult`](ExecuteableFunctionResult.mdx)\<`TFunctionName`>> |
+| <a id="isexecutingaction" /> `isExecutingAction`   | `boolean`                                                                                                                  |

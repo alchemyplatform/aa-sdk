@@ -11,31 +11,13 @@ layout: reference
 type AccountLoupeActions<TAccount> = object;
 ```
 
-Defined in: [account-kit/smart-contracts/src/msca/account-loupe/decorator.ts:17](https://github.com/alchemyplatform/aa-sdk/blob/d80fd19bb3cae4767898ecbfdef74c0c8623f7c4/account-kit/smart-contracts/src/msca/account-loupe/decorator.ts#L17)
+Defined in: [account-kit/smart-contracts/src/msca/account-loupe/decorator.ts:17](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/smart-contracts/src/msca/account-loupe/decorator.ts#L17)
 
 ## Type Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Type Parameter</th>
-      <th align="left">Default type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `TAccount` *extends* `SmartContractAccount` | `undefined`
-      </td>
-
-      <td>
-        `SmartContractAccount` | `undefined`
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Type Parameter                              | Default type |
+| :------------------------------------------ | :----------- | ---------------------- | ----------- |
+| `TAccount` _extends_ `SmartContractAccount` | `undefined`  | `SmartContractAccount` | `undefined` |
 
 ## Methods
 
@@ -45,31 +27,13 @@ Defined in: [account-kit/smart-contracts/src/msca/account-loupe/decorator.ts:17]
 getExecutionFunctionConfig(args): Promise<ExecutionFunctionConfig>;
 ```
 
-Defined in: [account-kit/smart-contracts/src/msca/account-loupe/decorator.ts:26](https://github.com/alchemyplatform/aa-sdk/blob/d80fd19bb3cae4767898ecbfdef74c0c8623f7c4/account-kit/smart-contracts/src/msca/account-loupe/decorator.ts#L26)
+Defined in: [account-kit/smart-contracts/src/msca/account-loupe/decorator.ts:26](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/smart-contracts/src/msca/account-loupe/decorator.ts#L26)
 
 #### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Parameter</th>
-      <th align="left">Type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `args`
-      </td>
-
-      <td>
-        `object` & `GetAccountParameter`\<`TAccount`>
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Parameter | Type                                          |
+| :-------- | :-------------------------------------------- |
+| `args`    | `object` & `GetAccountParameter`\<`TAccount`> |
 
 #### Returns
 
@@ -83,31 +47,13 @@ Defined in: [account-kit/smart-contracts/src/msca/account-loupe/decorator.ts:26]
 getExecutionHooks(args): Promise<readonly ExecutionHooks[]>;
 ```
 
-Defined in: [account-kit/smart-contracts/src/msca/account-loupe/decorator.ts:33](https://github.com/alchemyplatform/aa-sdk/blob/d80fd19bb3cae4767898ecbfdef74c0c8623f7c4/account-kit/smart-contracts/src/msca/account-loupe/decorator.ts#L33)
+Defined in: [account-kit/smart-contracts/src/msca/account-loupe/decorator.ts:33](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/smart-contracts/src/msca/account-loupe/decorator.ts#L33)
 
 #### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Parameter</th>
-      <th align="left">Type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `args`
-      </td>
-
-      <td>
-        `object` & `GetAccountParameter`\<`TAccount`>
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Parameter | Type                                          |
+| :-------- | :-------------------------------------------- |
+| `args`    | `object` & `GetAccountParameter`\<`TAccount`> |
 
 #### Returns
 
@@ -121,31 +67,13 @@ Defined in: [account-kit/smart-contracts/src/msca/account-loupe/decorator.ts:33]
 getInstalledPlugins(args): Promise<readonly `0x${string}`[]>;
 ```
 
-Defined in: [account-kit/smart-contracts/src/msca/account-loupe/decorator.ts:49](https://github.com/alchemyplatform/aa-sdk/blob/d80fd19bb3cae4767898ecbfdef74c0c8623f7c4/account-kit/smart-contracts/src/msca/account-loupe/decorator.ts#L49)
+Defined in: [account-kit/smart-contracts/src/msca/account-loupe/decorator.ts:49](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/smart-contracts/src/msca/account-loupe/decorator.ts#L49)
 
 #### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Parameter</th>
-      <th align="left">Type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `args`
-      </td>
-
-      <td>
-        `GetAccountParameter`\<`TAccount`>
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Parameter | Type                               |
+| :-------- | :--------------------------------- |
+| `args`    | `GetAccountParameter`\<`TAccount`> |
 
 #### Returns
 
@@ -159,31 +87,13 @@ Defined in: [account-kit/smart-contracts/src/msca/account-loupe/decorator.ts:49]
 getPreValidationHooks(args): Promise<readonly [readonly `0x${string}`[], readonly `0x${string}`[]]>;
 ```
 
-Defined in: [account-kit/smart-contracts/src/msca/account-loupe/decorator.ts:43](https://github.com/alchemyplatform/aa-sdk/blob/d80fd19bb3cae4767898ecbfdef74c0c8623f7c4/account-kit/smart-contracts/src/msca/account-loupe/decorator.ts#L43)
+Defined in: [account-kit/smart-contracts/src/msca/account-loupe/decorator.ts:43](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/smart-contracts/src/msca/account-loupe/decorator.ts#L43)
 
 #### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Parameter</th>
-      <th align="left">Type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `args`
-      </td>
-
-      <td>
-        `object` & `GetAccountParameter`\<`TAccount`>
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Parameter | Type                                          |
+| :-------- | :-------------------------------------------- |
+| `args`    | `object` & `GetAccountParameter`\<`TAccount`> |
 
 #### Returns
 

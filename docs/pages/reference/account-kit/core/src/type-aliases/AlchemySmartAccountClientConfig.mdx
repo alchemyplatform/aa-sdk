@@ -25,98 +25,17 @@ Defined in: account-kit/infra/dist/types/client/smartAccountClient.d.ts:10
 
 ## Type Declaration
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Name</th>
-      <th align="left">Type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `account?`
-      </td>
-
-      <td>
-        `account`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `policyId?`
-      </td>
-
-      <td>
-        `string` | `string`\[]
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `policyToken?`
-      </td>
-
-      <td>
-        [`PolicyToken`](PolicyToken.mdx)
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `useSimulation?`
-      </td>
-
-      <td>
-        `boolean`
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Name             | Type                             |
+| :--------------- | :------------------------------- | ----------- |
+| `account?`       | `account`                        |
+| `policyId?`      | `string`                         | `string`\[] |
+| `policyToken?`   | [`PolicyToken`](PolicyToken.mdx) |
+| `useSimulation?` | `boolean`                        |
 
 ## Type Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Type Parameter</th>
-      <th align="left">Default type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `chain` *extends* `Chain` | `undefined`
-      </td>
-
-      <td>
-        `Chain` | `undefined`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `account` *extends* `SmartContractAccount` | `undefined`
-      </td>
-
-      <td>
-        `SmartContractAccount` | `undefined`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `context` *extends* `UserOperationContext` | `undefined`
-      </td>
-
-      <td>
-        `UserOperationContext` | `undefined`
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Type Parameter                             | Default type |
+| :----------------------------------------- | :----------- | ---------------------- | ----------- |
+| `chain` _extends_ `Chain`                  | `undefined`  | `Chain`                | `undefined` |
+| `account` _extends_ `SmartContractAccount` | `undefined`  | `SmartContractAccount` | `undefined` |
+| `context` _extends_ `UserOperationContext` | `undefined`  | `UserOperationContext` | `undefined` |

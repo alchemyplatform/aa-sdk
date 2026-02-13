@@ -11,177 +11,20 @@ layout: reference
 type AlchemyAccountsUIConfig = object;
 ```
 
-Defined in: [account-kit/react/src/types.ts:5](https://github.com/alchemyplatform/aa-sdk/blob/d80fd19bb3cae4767898ecbfdef74c0c8623f7c4/account-kit/react/src/types.ts#L5)
+Defined in: [account-kit/react/src/types.ts:5](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/react/src/types.ts#L5)
 
 ## Properties
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Property</th>
-      <th align="left">Type</th>
-      <th align="left">Description</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        <a id="auth" /> `auth?`
-      </td>
-
-      <td>
-        `object`
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `auth.addPasskeyOnSignup?`
-      </td>
-
-      <td>
-        `boolean`
-      </td>
-
-      <td>
-        If this is true, then auth components will prompt users to add
-        a passkey after signing in for the first time
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `auth.header?`
-      </td>
-
-      <td>
-        `ReactNode`
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `auth.hideError?`
-      </td>
-
-      <td>
-        `boolean`
-      </td>
-
-      <td>
-        If hideError is true, then the auth component will not
-        render the global error component
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `auth.hideSignInText?`
-      </td>
-
-      <td>
-        `boolean`
-      </td>
-
-      <td>
-        Whether to show the "Sign in" header text in the first auth step
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `auth.onAuthSuccess?`
-      </td>
-
-      <td>
-        () => `void`
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `auth.sections`
-      </td>
-
-      <td>
-        [`AuthType`](AuthType.mdx)\[]\[]
-      </td>
-
-      <td>
-        Each section can contain multiple auth types which will be grouped together
-        and separated by an OR divider
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        <a id="illustrationstyle" /> `illustrationStyle?`
-      </td>
-
-      <td>
-        `"outline"` | `"linear"` | `"filled"` | `"flat"`
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        <a id="modalbaseclassname" /> `modalBaseClassName?`
-      </td>
-
-      <td>
-        `string`
-      </td>
-
-      <td>
-        This class name will be applied to any modals that are rendered
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        <a id="supporturl" /> `supportUrl?`
-      </td>
-
-      <td>
-        `string`
-      </td>
-
-      <td>
-        This is the URL that will be used to link to the support page
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        <a id="uimode" /> `uiMode?`
-      </td>
-
-      <td>
-        `"modal"` | `"embedded"`
-      </td>
-
-      <td>
-        Set to "embedded" if the auth component will be rendered within a parent
-        component in your UI. The default "modal" should be used if the auth component will be rendered in a modal overlay.
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Property                                            | Type                             | Description                                                                                                  |
+| :-------------------------------------------------- | :------------------------------- | :----------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | --- |
+| <a id="auth" /> `auth?`                             | `object`                         | -                                                                                                            |
+| `auth.addPasskeyOnSignup?`                          | `boolean`                        | If this is true, then auth components will prompt users to add a passkey after signing in for the first time |
+| `auth.header?`                                      | `ReactNode`                      | -                                                                                                            |
+| `auth.hideError?`                                   | `boolean`                        | If hideError is true, then the auth component will not render the global error component                     |
+| `auth.hideSignInText?`                              | `boolean`                        | Whether to show the "Sign in" header text in the first auth step                                             |
+| `auth.onAuthSuccess?`                               | () => `void`                     | -                                                                                                            |
+| `auth.sections`                                     | [`AuthType`](AuthType.mdx)\[]\[] | Each section can contain multiple auth types which will be grouped together and separated by an OR divider   |
+| <a id="illustrationstyle" /> `illustrationStyle?`   | `"outline"`                      | `"linear"`                                                                                                   | `"filled"`                                                                                                                                                                                   | `"flat"` | -   |
+| <a id="modalbaseclassname" /> `modalBaseClassName?` | `string`                         | This class name will be applied to any modals that are rendered                                              |
+| <a id="supporturl" /> `supportUrl?`                 | `string`                         | This is the URL that will be used to link to the support page                                                |
+| <a id="uimode" /> `uiMode?`                         | `"modal"`                        | `"embedded"`                                                                                                 | Set to "embedded" if the auth component will be rendered within a parent component in your UI. The default "modal" should be used if the auth component will be rendered in a modal overlay. |

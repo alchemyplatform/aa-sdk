@@ -17,7 +17,7 @@ function buildUserOperation<
 >(client_, args): Promise<UserOperationStruct<TEntryPointVersion>>;
 ```
 
-Defined in: [aa-sdk/core/src/actions/smartAccount/buildUserOperation.ts:42](https://github.com/alchemyplatform/aa-sdk/blob/d80fd19bb3cae4767898ecbfdef74c0c8623f7c4/aa-sdk/core/src/actions/smartAccount/buildUserOperation.ts#L42)
+Defined in: [aa-sdk/core/src/actions/smartAccount/buildUserOperation.ts:42](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/aa-sdk/core/src/actions/smartAccount/buildUserOperation.ts#L42)
 
 Builds a user operation using the provided client and operation parameters. Ensures that the account exists and the client is compatible.
 
@@ -40,113 +40,20 @@ const result = await client.buildUserOperation({
 
 ## Type Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Type Parameter</th>
-      <th align="left">Default type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `TTransport` *extends* `Transport`
-      </td>
-
-      <td>
-        `Transport`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TChain` *extends* `undefined` | `Chain`
-      </td>
-
-      <td>
-        `undefined` | `Chain`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TAccount` *extends*
-        | `undefined`
-        | [`SmartContractAccount`](../type-aliases/SmartContractAccount.mdx)
-      </td>
-
-      <td>
-        | `undefined`
-        | [`SmartContractAccount`](../type-aliases/SmartContractAccount.mdx)
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TContext` *extends* `any`
-      </td>
-
-      <td>
-        `any`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TEntryPointVersion` *extends* keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase.mdx)\<`unknown`>
-      </td>
-
-      <td>
-        [`GetEntryPointFromAccount`](../type-aliases/GetEntryPointFromAccount.mdx)\<`TAccount`>
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Type Parameter                                                                                                        | Default type                                                                            |
+| :-------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------- | ------------------------------------------------------------------ | ------- | ----------- | ------------------------------------------------------------------ |
+| `TTransport` _extends_ `Transport`                                                                                    | `Transport`                                                                             |
+| `TChain` _extends_ `undefined`                                                                                        | `Chain`                                                                                 | `undefined`                                                        | `Chain` |
+| `TAccount` _extends_                                                                                                  | `undefined`                                                                             | [`SmartContractAccount`](../type-aliases/SmartContractAccount.mdx) |         | `undefined` | [`SmartContractAccount`](../type-aliases/SmartContractAccount.mdx) |
+| `TContext` _extends_ `any`                                                                                            | `any`                                                                                   |
+| `TEntryPointVersion` _extends_ keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase.mdx)\<`unknown`> | [`GetEntryPointFromAccount`](../type-aliases/GetEntryPointFromAccount.mdx)\<`TAccount`> |
 
 ## Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Parameter</th>
-      <th align="left">Type</th>
-      <th align="left">Description</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `client_`
-      </td>
-
-      <td>
-        `Client`\<`TTransport`, `TChain`, `TAccount`>
-      </td>
-
-      <td>
-        the client instance used to build the user operation
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `args`
-      </td>
-
-      <td>
-        `BuildUserOperationParameters`\<`TAccount`, `TContext`, `TEntryPointVersion`>
-      </td>
-
-      <td>
-        the parameters required to build the user operation, including account, overrides, and context
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Parameter | Type                                                                          | Description                                                                                    |
+| :-------- | :---------------------------------------------------------------------------- | :--------------------------------------------------------------------------------------------- |
+| `client_` | `Client`\<`TTransport`, `TChain`, `TAccount`>                                 | the client instance used to build the user operation                                           |
+| `args`    | `BuildUserOperationParameters`\<`TAccount`, `TContext`, `TEntryPointVersion`> | the parameters required to build the user operation, including account, overrides, and context |
 
 ## Returns
 

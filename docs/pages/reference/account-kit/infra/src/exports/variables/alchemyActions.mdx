@@ -13,7 +13,7 @@ const alchemyActions: <TTransport, TChain, TAccount, TContext>(
 ) => AlchemySmartAccountClientActions<TAccount, TContext, TChain>;
 ```
 
-Defined in: [account-kit/infra/src/client/decorators/smartAccount.ts:72](https://github.com/alchemyplatform/aa-sdk/blob/d80fd19bb3cae4767898ecbfdef74c0c8623f7c4/account-kit/infra/src/client/decorators/smartAccount.ts#L72)
+Defined in: [account-kit/infra/src/client/decorators/smartAccount.ts:72](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/infra/src/client/decorators/smartAccount.ts#L72)
 
 Provides a set of actions for interacting with the Alchemy Smart Account client, including the ability to simulate user operations.
 
@@ -29,81 +29,18 @@ const clientWithAlchemyActions = client.extend(alchemyActions);
 
 ## Type Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Type Parameter</th>
-      <th align="left">Default type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `TTransport` *extends* `Transport`
-      </td>
-
-      <td>
-        `Transport`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TChain` *extends* `Chain` | `undefined`
-      </td>
-
-      <td>
-        `Chain` | `undefined`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TAccount` *extends* `SmartContractAccount` | `undefined`
-      </td>
-
-      <td>
-        `SmartContractAccount` | `undefined`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TContext` *extends* `UserOperationContext` | `undefined`
-      </td>
-
-      <td>
-        `UserOperationContext` | `undefined`
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Type Parameter                              | Default type |
+| :------------------------------------------ | :----------- | ---------------------- | ----------- |
+| `TTransport` _extends_ `Transport`          | `Transport`  |
+| `TChain` _extends_ `Chain`                  | `undefined`  | `Chain`                | `undefined` |
+| `TAccount` _extends_ `SmartContractAccount` | `undefined`  | `SmartContractAccount` | `undefined` |
+| `TContext` _extends_ `UserOperationContext` | `undefined`  | `UserOperationContext` | `undefined` |
 
 ## Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Parameter</th>
-      <th align="left">Type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `client`
-      </td>
-
-      <td>
-        `Client`\<`TTransport`, `TChain`, `TAccount`>
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Parameter | Type                                          |
+| :-------- | :-------------------------------------------- |
+| `client`  | `Client`\<`TTransport`, `TChain`, `TAccount`> |
 
 ## Returns
 

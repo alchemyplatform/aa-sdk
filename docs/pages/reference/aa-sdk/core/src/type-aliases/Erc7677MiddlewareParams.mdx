@@ -11,62 +11,17 @@ layout: reference
 type Erc7677MiddlewareParams<TContext, TEntryPointVersion> = object;
 ```
 
-Defined in: [aa-sdk/core/src/middleware/erc7677middleware.ts:59](https://github.com/alchemyplatform/aa-sdk/blob/d80fd19bb3cae4767898ecbfdef74c0c8623f7c4/aa-sdk/core/src/middleware/erc7677middleware.ts#L59)
+Defined in: [aa-sdk/core/src/middleware/erc7677middleware.ts:59](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/aa-sdk/core/src/middleware/erc7677middleware.ts#L59)
 
 ## Type Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Type Parameter</th>
-      <th align="left">Default type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `TContext` *extends* `Record`\<`string`, `any`> | `undefined`
-      </td>
-
-      <td>
-        `Record`\<`string`, `any`> | `undefined`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TEntryPointVersion` *extends* [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)
-      </td>
-
-      <td>
-        [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Type Parameter                                                                                                             | Default type                                                                                |
+| :------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------ | -------------------------- | ----------- |
+| `TContext` _extends_ `Record`\<`string`, `any`>                                                                            | `undefined`                                                                                 | `Record`\<`string`, `any`> | `undefined` |
+| `TEntryPointVersion` _extends_ [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx) | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx) |
 
 ## Properties
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Property</th>
-      <th align="left">Type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        <a id="context" /> `context?`
-      </td>
-
-      <td>
-        (`struct`, `args`) => `Promise`\<`TContext`> | `TContext`
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Property                      | Type                                         |
+| :---------------------------- | :------------------------------------------- | ---------- |
+| <a id="context" /> `context?` | (`struct`, `args`) => `Promise`\<`TContext`> | `TContext` |

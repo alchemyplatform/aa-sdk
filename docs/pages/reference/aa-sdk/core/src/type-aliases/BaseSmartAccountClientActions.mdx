@@ -16,208 +16,31 @@ type BaseSmartAccountClientActions<
 > = object & accountLoupeActions<TAccount> extends false ? object : object;
 ```
 
-Defined in: [aa-sdk/core/src/client/decorators/smartAccountClient.ts:59](https://github.com/alchemyplatform/aa-sdk/blob/d80fd19bb3cae4767898ecbfdef74c0c8623f7c4/aa-sdk/core/src/client/decorators/smartAccountClient.ts#L59)
+Defined in: [aa-sdk/core/src/client/decorators/smartAccountClient.ts:59](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/aa-sdk/core/src/client/decorators/smartAccountClient.ts#L59)
 
 ## Type Declaration
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Name</th>
-      <th align="left">Type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `buildUserOperation()`
-      </td>
-
-      <td>
-        (`args`) => `Promise`\<[`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`TEntryPointVersion`>>
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `buildUserOperationFromTx()`
-      </td>
-
-      <td>
-        (`args`, `overrides?`, `context?`) => `Promise`\<[`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`TEntryPointVersion`>>
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `buildUserOperationFromTxs()`
-      </td>
-
-      <td>
-        (`args`) => `Promise`\<[`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`TEntryPointVersion`>>
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `checkGasSponsorshipEligibility()`
-      </td>
-
-      <td>
-        \<`TContext`, `TEntryPointVersion`>(`args`) => `Promise`\<`CheckGasSponsorshipEligibilityResult`\<`TAccount`, `TEntryPointVersion`>>
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `dropAndReplaceUserOperation()`
-      </td>
-
-      <td>
-        (`args`) => `Promise`\<[`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`TEntryPointVersion`>>
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `sendTransaction()`
-      </td>
-
-      <td>
-        \<`TChainOverride`>(`args`, `overrides?`, `context?`) => `Promise`\<`Hex`>
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `sendTransactions()`
-      </td>
-
-      <td>
-        (`args`) => `Promise`\<`Hex`>
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `sendUserOperation()`
-      </td>
-
-      <td>
-        (`args`) => `Promise`\<[`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`TEntryPointVersion`>>
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `signMessage()`
-      </td>
-
-      <td>
-        (`args`) => `Promise`\<`Hex`>
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `signTypedData()`
-      </td>
-
-      <td>
-        \<`TTypedData`, `TPrimaryType`>(`args`) => `Promise`\<`Hex`>
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `signUserOperation()`
-      </td>
-
-      <td>
-        (`args`) => `Promise`\<[`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`TEntryPointVersion`>>
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `upgradeAccount()`
-      </td>
-
-      <td>
-        (`args`) => `Promise`\<`Hex`>
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `waitForUserOperationTransaction()`
-      </td>
-
-      <td>
-        (`args`) => `Promise`\<`Hex`>
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Name                                | Type                                                                                                                                                                 |
+| :---------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `buildUserOperation()`              | (`args`) => `Promise`\<[`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`TEntryPointVersion`>>                           |
+| `buildUserOperationFromTx()`        | (`args`, `overrides?`, `context?`) => `Promise`\<[`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`TEntryPointVersion`>> |
+| `buildUserOperationFromTxs()`       | (`args`) => `Promise`\<[`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`TEntryPointVersion`>>                           |
+| `checkGasSponsorshipEligibility()`  | \<`TContext`, `TEntryPointVersion`>(`args`) => `Promise`\<`CheckGasSponsorshipEligibilityResult`\<`TAccount`, `TEntryPointVersion`>>                                 |
+| `dropAndReplaceUserOperation()`     | (`args`) => `Promise`\<[`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`TEntryPointVersion`>>                           |
+| `sendTransaction()`                 | \<`TChainOverride`>(`args`, `overrides?`, `context?`) => `Promise`\<`Hex`>                                                                                           |
+| `sendTransactions()`                | (`args`) => `Promise`\<`Hex`>                                                                                                                                        |
+| `sendUserOperation()`               | (`args`) => `Promise`\<[`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`TEntryPointVersion`>>                           |
+| `signMessage()`                     | (`args`) => `Promise`\<`Hex`>                                                                                                                                        |
+| `signTypedData()`                   | \<`TTypedData`, `TPrimaryType`>(`args`) => `Promise`\<`Hex`>                                                                                                         |
+| `signUserOperation()`               | (`args`) => `Promise`\<[`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`TEntryPointVersion`>>                           |
+| `upgradeAccount()`                  | (`args`) => `Promise`\<`Hex`>                                                                                                                                        |
+| `waitForUserOperationTransaction()` | (`args`) => `Promise`\<`Hex`>                                                                                                                                        |
 
 ## Type Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Type Parameter</th>
-      <th align="left">Default type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `TChain` *extends* `Chain` | `undefined`
-      </td>
-
-      <td>
-        `Chain` | `undefined`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TAccount` *extends*
-        | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)
-        | `undefined`
-      </td>
-
-      <td>
-        | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)
-        | `undefined`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TContext` *extends*
-        | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)
-        | `undefined`
-      </td>
-
-      <td>
-        | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)
-        | `undefined`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TEntryPointVersion` *extends* [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`TAccount`>
-      </td>
-
-      <td>
-        [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`TAccount`>
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Type Parameter                                                                                                                          | Default type                                                                                             |
+| :-------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------- | ----------- | ----------- | ------------------------------------------------------------------------------------------- | ----------- |
+| `TChain` _extends_ `Chain`                                                                                                              | `undefined`                                                                                              | `Chain`     | `undefined` |
+| `TAccount` _extends_                                                                                                                    | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)              | `undefined` |             | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx) | `undefined` |
+| `TContext` _extends_                                                                                                                    | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)              | `undefined` |             | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx) | `undefined` |
+| `TEntryPointVersion` _extends_ [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`TAccount`> | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`TAccount`> |

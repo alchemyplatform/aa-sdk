@@ -11,7 +11,7 @@ layout: reference
 const alchemyFeeEstimator: (transport) => ClientMiddlewareFn;
 ```
 
-Defined in: [account-kit/infra/src/middleware/feeEstimator.ts:32](https://github.com/alchemyplatform/aa-sdk/blob/d80fd19bb3cae4767898ecbfdef74c0c8623f7c4/account-kit/infra/src/middleware/feeEstimator.ts#L32)
+Defined in: [account-kit/infra/src/middleware/feeEstimator.ts:32](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/infra/src/middleware/feeEstimator.ts#L32)
 
 Function that estimates the transaction fees using Alchemy methods for a given client.
 It fetches the latest block and estimates the max priority fee per gas, applying any overrides or fee options provided.
@@ -35,32 +35,9 @@ const client = createSmartAccountClient({
 
 ## Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Parameter</th>
-      <th align="left">Type</th>
-      <th align="left">Description</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `transport`
-      </td>
-
-      <td>
-        [`accountLoupeActions`](../../../../core/src/variables/accountLoupeActions.mdx)
-      </td>
-
-      <td>
-        An alchemy transport for making Alchemy specific RPC calls
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Parameter   | Type                                                                            | Description                                                |
+| :---------- | :------------------------------------------------------------------------------ | :--------------------------------------------------------- |
+| `transport` | [`accountLoupeActions`](../../../../core/src/variables/accountLoupeActions.mdx) | An alchemy transport for making Alchemy specific RPC calls |
 
 ## Returns
 

@@ -11,7 +11,7 @@ layout: reference
 function createConfig(props, ui?): any;
 ```
 
-Defined in: [account-kit/react/src/createConfig.ts:52](https://github.com/alchemyplatform/aa-sdk/blob/d80fd19bb3cae4767898ecbfdef74c0c8623f7c4/account-kit/react/src/createConfig.ts#L52)
+Defined in: [account-kit/react/src/createConfig.ts:52](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/react/src/createConfig.ts#L52)
 
 Wraps the `createConfig` that is exported from `@aa-sdk/core` to allow passing
 an additional argument, the configuration object for the Auth Components UI
@@ -46,46 +46,10 @@ export const queryClient = new QueryClient();
 
 ## Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Parameter</th>
-      <th align="left">Type</th>
-      <th align="left">Description</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `props`
-      </td>
-
-      <td>
-        `CreateConfigProps`
-      </td>
-
-      <td>
-        for creating an alchemy account config
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `ui?`
-      </td>
-
-      <td>
-        `any`
-      </td>
-
-      <td>
-        (optional) configuration to use for the Auth Components UI
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Parameter | Type                | Description                                                |
+| :-------- | :------------------ | :--------------------------------------------------------- |
+| `props`   | `CreateConfigProps` | for creating an alchemy account config                     |
+| `ui?`     | `any`               | (optional) configuration to use for the Auth Components UI |
 
 ## Returns
 

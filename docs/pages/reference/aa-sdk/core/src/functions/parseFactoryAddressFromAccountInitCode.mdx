@@ -13,7 +13,7 @@ function parseFactoryAddressFromAccountInitCode(
 ): [`0x${string}`, `0x${string}`];
 ```
 
-Defined in: [aa-sdk/core/src/account/smartContractAccount.ts:189](https://github.com/alchemyplatform/aa-sdk/blob/d80fd19bb3cae4767898ecbfdef74c0c8623f7c4/aa-sdk/core/src/account/smartContractAccount.ts#L189)
+Defined in: [aa-sdk/core/src/account/smartContractAccount.ts:189](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/aa-sdk/core/src/account/smartContractAccount.ts#L189)
 
 Parses the factory address and factory calldata from the provided account initialization code (initCode).
 
@@ -28,32 +28,9 @@ const [address, calldata] =
 
 ## Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Parameter</th>
-      <th align="left">Type</th>
-      <th align="left">Description</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `initCode`
-      </td>
-
-      <td>
-        `` `0x${string}` ``
-      </td>
-
-      <td>
-        The initialization code from which to parse the factory address and calldata
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Parameter  | Type                | Description                                                                  |
+| :--------- | :------------------ | :--------------------------------------------------------------------------- |
+| `initCode` | `` `0x${string}` `` | The initialization code from which to parse the factory address and calldata |
 
 ## Returns
 

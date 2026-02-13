@@ -11,92 +11,20 @@ layout: reference
 type Plugin<TAbi> = object;
 ```
 
-Defined in: [account-kit/smart-contracts/src/msca/plugins/types.ts:11](https://github.com/alchemyplatform/aa-sdk/blob/d80fd19bb3cae4767898ecbfdef74c0c8623f7c4/account-kit/smart-contracts/src/msca/plugins/types.ts#L11)
+Defined in: [account-kit/smart-contracts/src/msca/plugins/types.ts:11](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/smart-contracts/src/msca/plugins/types.ts#L11)
 
 ## Type Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Type Parameter</th>
-      <th align="left">Default type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `TAbi` *extends* `Abi`
-      </td>
-
-      <td>
-        `Abi`
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Type Parameter         | Default type |
+| :--------------------- | :----------- |
+| `TAbi` _extends_ `Abi` | `Abi`        |
 
 ## Properties
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Property</th>
-      <th align="left">Type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        <a id="getcontract" /> `getContract`
-      </td>
-
-      <td>
-        \<`C`>(`client`, `address?`) => `GetContractReturnType`\<`TAbi`, `PublicClient`, [`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx)>
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        <a id="meta" /> `meta`
-      </td>
-
-      <td>
-        `object`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `meta.addresses`
-      </td>
-
-      <td>
-        `Record`\<`number`, [`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx)>
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `meta.name`
-      </td>
-
-      <td>
-        `string`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `meta.version`
-      </td>
-
-      <td>
-        `string`
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Property                             | Type                                                                                                                                                |
+| :----------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <a id="getcontract" /> `getContract` | \<`C`>(`client`, `address?`) => `GetContractReturnType`\<`TAbi`, `PublicClient`, [`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx)> |
+| <a id="meta" /> `meta`               | `object`                                                                                                                                            |
+| `meta.addresses`                     | `Record`\<`number`, [`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx)>                                                              |
+| `meta.name`                          | `string`                                                                                                                                            |
+| `meta.version`                       | `string`                                                                                                                                            |

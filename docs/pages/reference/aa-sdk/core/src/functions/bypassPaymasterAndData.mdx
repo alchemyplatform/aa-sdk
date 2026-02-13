@@ -11,7 +11,7 @@ layout: reference
 function bypassPaymasterAndData<TEntryPointVersion>(overrides): boolean;
 ```
 
-Defined in: [aa-sdk/core/src/utils/userop.ts:166](https://github.com/alchemyplatform/aa-sdk/blob/d80fd19bb3cae4767898ecbfdef74c0c8623f7c4/aa-sdk/core/src/utils/userop.ts#L166)
+Defined in: [aa-sdk/core/src/utils/userop.ts:166](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/aa-sdk/core/src/utils/userop.ts#L166)
 
 Utility method for checking whether the middleware pipeline should
 bypass the paymaster middleware for the user operation with the given overrides,
@@ -19,56 +19,15 @@ either because the UserOp is paying for its own gas, or passing a specific payma
 
 ## Type Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Type Parameter</th>
-      <th align="left">Default type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `TEntryPointVersion` *extends* `EntryPointVersion`
-      </td>
-
-      <td>
-        `EntryPointVersion`
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Type Parameter                                     | Default type        |
+| :------------------------------------------------- | :------------------ |
+| `TEntryPointVersion` _extends_ `EntryPointVersion` | `EntryPointVersion` |
 
 ## Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Parameter</th>
-      <th align="left">Type</th>
-      <th align="left">Description</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `overrides`
-      </td>
-
-      <td>
-        `any`
-      </td>
-
-      <td>
-        the user operation overrides to check
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Parameter   | Type  | Description                           |
+| :---------- | :---- | :------------------------------------ |
+| `overrides` | `any` | the user operation overrides to check |
 
 ## Returns
 

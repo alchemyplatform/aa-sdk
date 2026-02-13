@@ -11,7 +11,7 @@ layout: reference
 function signMessage(client, signer, params): Promise<`0x${string}`>;
 ```
 
-Defined in: [account-kit/wallet-client/src/client/actions/signMessage.ts:31](https://github.com/alchemyplatform/aa-sdk/blob/d80fd19bb3cae4767898ecbfdef74c0c8623f7c4/account-kit/wallet-client/src/client/actions/signMessage.ts#L31)
+Defined in: [account-kit/wallet-client/src/client/actions/signMessage.ts:31](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/wallet-client/src/client/actions/signMessage.ts#L31)
 
 Signs a message using the smart account.
 This method requests the account associated with the signer and uses it to sign the message.
@@ -30,60 +30,11 @@ const signature = await client.signMessage({
 
 ## Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Parameter</th>
-      <th align="left">Type</th>
-      <th align="left">Description</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `client`
-      </td>
-
-      <td>
-        `InnerWalletApiClient`
-      </td>
-
-      <td>
-        The wallet API client to use for the request
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `signer`
-      </td>
-
-      <td>
-        `SmartWalletSigner`
-      </td>
-
-      <td>
-        The signer of the smart account
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `params`
-      </td>
-
-      <td>
-        [`SignMessageParams`](../type-aliases/SignMessageParams.mdx)
-      </td>
-
-      <td>
-        Parameters for signing the message
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Parameter | Type                                                         | Description                                  |
+| :-------- | :----------------------------------------------------------- | :------------------------------------------- |
+| `client`  | `InnerWalletApiClient`                                       | The wallet API client to use for the request |
+| `signer`  | `SmartWalletSigner`                                          | The signer of the smart account              |
+| `params`  | [`SignMessageParams`](../type-aliases/SignMessageParams.mdx) | Parameters for signing the message           |
 
 ## Returns
 

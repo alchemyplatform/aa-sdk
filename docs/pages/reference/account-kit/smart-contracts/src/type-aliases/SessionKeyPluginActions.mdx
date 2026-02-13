@@ -21,112 +21,22 @@ type SessionKeyPluginActions<TAccount, TEntryPointVersion> = Omit<
   : object;
 ```
 
-Defined in: [account-kit/smart-contracts/src/msca/plugins/session-key/extension.ts:23](https://github.com/alchemyplatform/aa-sdk/blob/d80fd19bb3cae4767898ecbfdef74c0c8623f7c4/account-kit/smart-contracts/src/msca/plugins/session-key/extension.ts#L23)
+Defined in: [account-kit/smart-contracts/src/msca/plugins/session-key/extension.ts:23](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/smart-contracts/src/msca/plugins/session-key/extension.ts#L23)
 
 ## Type Declaration
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Name</th>
-      <th align="left">Type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `addSessionKey()`
-      </td>
-
-      <td>
-        (`args`) => `Promise`\<`SendUserOperationResult`\<`TEntryPointVersion`>>
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `getAccountSessionKeys()`
-      </td>
-
-      <td>
-        (`args`) => `Promise`\<`ReadonlyArray`\<[`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx)>>
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `isAccountSessionKey()`
-      </td>
-
-      <td>
-        (`args`) => `Promise`\<`boolean`>
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `removeSessionKey()`
-      </td>
-
-      <td>
-        (`args`) => `Promise`\<`SendUserOperationResult`\<`TEntryPointVersion`>>
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `rotateSessionKey()`
-      </td>
-
-      <td>
-        (`args`) => `Promise`\<`SendUserOperationResult`\<`TEntryPointVersion`>>
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `updateSessionKeyPermissions()`
-      </td>
-
-      <td>
-        (`args`) => `Promise`\<`SendUserOperationResult`\<`TEntryPointVersion`>>
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Name                            | Type                                                                                                        |
+| :------------------------------ | :---------------------------------------------------------------------------------------------------------- |
+| `addSessionKey()`               | (`args`) => `Promise`\<`SendUserOperationResult`\<`TEntryPointVersion`>>                                    |
+| `getAccountSessionKeys()`       | (`args`) => `Promise`\<`ReadonlyArray`\<[`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx)>> |
+| `isAccountSessionKey()`         | (`args`) => `Promise`\<`boolean`>                                                                           |
+| `removeSessionKey()`            | (`args`) => `Promise`\<`SendUserOperationResult`\<`TEntryPointVersion`>>                                    |
+| `rotateSessionKey()`            | (`args`) => `Promise`\<`SendUserOperationResult`\<`TEntryPointVersion`>>                                    |
+| `updateSessionKeyPermissions()` | (`args`) => `Promise`\<`SendUserOperationResult`\<`TEntryPointVersion`>>                                    |
 
 ## Type Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Type Parameter</th>
-      <th align="left">Default type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `TAccount` *extends* `SmartContractAccount` | `undefined`
-      </td>
-
-      <td>
-        `SmartContractAccount` | `undefined`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TEntryPointVersion` *extends* `GetEntryPointFromAccount`\<`TAccount`>
-      </td>
-
-      <td>
-        `GetEntryPointFromAccount`\<`TAccount`>
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Type Parameter                                                         | Default type                            |
+| :--------------------------------------------------------------------- | :-------------------------------------- | ---------------------- | ----------- |
+| `TAccount` _extends_ `SmartContractAccount`                            | `undefined`                             | `SmartContractAccount` | `undefined` |
+| `TEntryPointVersion` _extends_ `GetEntryPointFromAccount`\<`TAccount`> | `GetEntryPointFromAccount`\<`TAccount`> |

@@ -13,7 +13,7 @@ const accountLoupeActions: <TTransport, TChain, TAccount>(
 ) => AccountLoupeActions<TAccount>;
 ```
 
-Defined in: [account-kit/smart-contracts/src/msca/account-loupe/decorator.ts:69](https://github.com/alchemyplatform/aa-sdk/blob/d80fd19bb3cae4767898ecbfdef74c0c8623f7c4/account-kit/smart-contracts/src/msca/account-loupe/decorator.ts#L69)
+Defined in: [account-kit/smart-contracts/src/msca/account-loupe/decorator.ts:69](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/smart-contracts/src/msca/account-loupe/decorator.ts#L69)
 
 Provides a set of actions for account loupe operations using the specified client.
 NOTE: this is already added to the client when using any of the Modular Account Clients.
@@ -29,76 +29,17 @@ const client = createSmartAccountClient(...).extend(accountLoupeActions);
 
 ## Type Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Type Parameter</th>
-      <th align="left">Default type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `TTransport` *extends* `Transport`
-      </td>
-
-      <td>
-        `Transport`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TChain` *extends* `Chain` | `undefined`
-      </td>
-
-      <td>
-        `Chain` | `undefined`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TAccount` *extends* `SmartContractAccount` | `undefined`
-      </td>
-
-      <td>
-        `SmartContractAccount` | `undefined`
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Type Parameter                              | Default type |
+| :------------------------------------------ | :----------- | ---------------------- | ----------- |
+| `TTransport` _extends_ `Transport`          | `Transport`  |
+| `TChain` _extends_ `Chain`                  | `undefined`  | `Chain`                | `undefined` |
+| `TAccount` _extends_ `SmartContractAccount` | `undefined`  | `SmartContractAccount` | `undefined` |
 
 ## Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Parameter</th>
-      <th align="left">Type</th>
-      <th align="left">Description</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `client`
-      </td>
-
-      <td>
-        `Client`\<`TTransport`, `TChain`, `TAccount`>
-      </td>
-
-      <td>
-        the client to be used for executing the account loupe actions
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Parameter | Type                                          | Description                                                   |
+| :-------- | :-------------------------------------------- | :------------------------------------------------------------ |
+| `client`  | `Client`\<`TTransport`, `TChain`, `TAccount`> | the client to be used for executing the account loupe actions |
 
 ## Returns
 

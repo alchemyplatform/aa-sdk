@@ -12,50 +12,12 @@ type BuildTransactionParameters<TAccount, TContext, TEntryPointVersion> =
   SendTransactionsParameters<TAccount, TContext, TEntryPointVersion>;
 ```
 
-Defined in: [aa-sdk/core/src/actions/smartAccount/types.ts:81](https://github.com/alchemyplatform/aa-sdk/blob/d80fd19bb3cae4767898ecbfdef74c0c8623f7c4/aa-sdk/core/src/actions/smartAccount/types.ts#L81)
+Defined in: [aa-sdk/core/src/actions/smartAccount/types.ts:81](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/aa-sdk/core/src/actions/smartAccount/types.ts#L81)
 
 ## Type Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Type Parameter</th>
-      <th align="left">Default type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `TAccount` *extends*
-        | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)
-        | `undefined`
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TContext` *extends* [`UserOperationContext`](UserOperationContext.mdx) | `undefined`
-      </td>
-
-      <td>
-        [`UserOperationContext`](UserOperationContext.mdx) | `undefined`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TEntryPointVersion` *extends* [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`TAccount`>
-      </td>
-
-      <td>
-        [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`TAccount`>
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Type Parameter                                                                                                                          | Default type                                                                                             |
+| :-------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------- | -------------------------------------------------- | ----------- |
+| `TAccount` _extends_                                                                                                                    | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)              | `undefined`                                        | -           |
+| `TContext` _extends_ [`UserOperationContext`](UserOperationContext.mdx)                                                                 | `undefined`                                                                                              | [`UserOperationContext`](UserOperationContext.mdx) | `undefined` |
+| `TEntryPointVersion` _extends_ [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`TAccount`> | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`TAccount`> |

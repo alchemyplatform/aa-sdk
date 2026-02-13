@@ -11,82 +11,19 @@ layout: reference
 type ClientActionParameters<TActions, TFunctionName, allArgs> = object;
 ```
 
-Defined in: [account-kit/react/src/hooks/useClientActions.ts:63](https://github.com/alchemyplatform/aa-sdk/blob/d80fd19bb3cae4767898ecbfdef74c0c8623f7c4/account-kit/react/src/hooks/useClientActions.ts#L63)
+Defined in: [account-kit/react/src/hooks/useClientActions.ts:63](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/react/src/hooks/useClientActions.ts#L63)
 
 ## Type Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Type Parameter</th>
-      <th align="left">Default type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `TActions` *extends* `object`
-      </td>
-
-      <td>
-        `object`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TFunctionName` *extends* [`ExecutableFunctionName`](ExecutableFunctionName.mdx)\<`TActions`>
-      </td>
-
-      <td>
-        [`ExecutableFunctionName`](ExecutableFunctionName.mdx)\<`TActions`>
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `allArgs`
-      </td>
-
-      <td>
-        [`ExecutableFunctionArgs`](ExecutableFunctionArgs.mdx)\<`TActions`, `TFunctionName` *extends* [`ExecutableFunctionName`](ExecutableFunctionName.mdx)\<`TActions`> ? `TFunctionName` : [`ExecutableFunctionName`](ExecutableFunctionName.mdx)\<`TActions`>>
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Type Parameter                                                                                | Default type                                                                                                                                                                                                                                               |
+| :-------------------------------------------------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `TActions` _extends_ `object`                                                                 | `object`                                                                                                                                                                                                                                                   |
+| `TFunctionName` _extends_ [`ExecutableFunctionName`](ExecutableFunctionName.mdx)\<`TActions`> | [`ExecutableFunctionName`](ExecutableFunctionName.mdx)\<`TActions`>                                                                                                                                                                                        |
+| `allArgs`                                                                                     | [`ExecutableFunctionArgs`](ExecutableFunctionArgs.mdx)\<`TActions`, `TFunctionName` _extends_ [`ExecutableFunctionName`](ExecutableFunctionName.mdx)\<`TActions`> ? `TFunctionName` : [`ExecutableFunctionName`](ExecutableFunctionName.mdx)\<`TActions`>> |
 
 ## Properties
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Property</th>
-      <th align="left">Type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        <a id="args" /> `args`
-      </td>
-
-      <td>
-        `allArgs`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        <a id="functionname" /> `functionName`
-      </td>
-
-      <td>
-        `TFunctionName`
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Property                               | Type            |
+| :------------------------------------- | :-------------- |
+| <a id="args" /> `args`                 | `allArgs`       |
+| <a id="functionname" /> `functionName` | `TFunctionName` |

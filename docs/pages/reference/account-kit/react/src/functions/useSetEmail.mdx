@@ -11,7 +11,7 @@ layout: reference
 function useSetEmail(mutationArgs?): UseSetEmailResult;
 ```
 
-Defined in: [account-kit/react/src/hooks/useSetEmail.ts:76](https://github.com/alchemyplatform/aa-sdk/blob/d80fd19bb3cae4767898ecbfdef74c0c8623f7c4/account-kit/react/src/hooks/useSetEmail.ts#L76)
+Defined in: [account-kit/react/src/hooks/useSetEmail.ts:76](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/react/src/hooks/useSetEmail.ts#L76)
 
 A custom hook to set an email address for an already authenticated account.
 
@@ -50,32 +50,9 @@ setEmail("user@example.com");
 
 ## Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Parameter</th>
-      <th align="left">Type</th>
-      <th align="left">Description</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `mutationArgs?`
-      </td>
-
-      <td>
-        `Partial`\<`Omit`\<`UseMutationOptions`\<`void`, `Error`, [`SetEmailParams`](../type-aliases/SetEmailParams.mdx), `unknown`>, `"mutationFn"` | `"mutationKey"`>>
-      </td>
-
-      <td>
-        Optional arguments for the setEmail mutation
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Parameter       | Type                                                                                                                                         | Description       |
+| :-------------- | :------------------------------------------------------------------------------------------------------------------------------------------- | :---------------- | -------------------------------------------- |
+| `mutationArgs?` | `Partial`\<`Omit`\<`UseMutationOptions`\<`void`, `Error`, [`SetEmailParams`](../type-aliases/SetEmailParams.mdx), `unknown`>, `"mutationFn"` | `"mutationKey"`>> | Optional arguments for the setEmail mutation |
 
 ## Returns
 

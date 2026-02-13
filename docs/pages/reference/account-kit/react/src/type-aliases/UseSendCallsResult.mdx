@@ -11,92 +11,20 @@ layout: reference
 type UseSendCallsResult<TEntryPointVersion> = object;
 ```
 
-Defined in: [account-kit/react/src/hooks/useSendCalls.ts:46](https://github.com/alchemyplatform/aa-sdk/blob/d80fd19bb3cae4767898ecbfdef74c0c8623f7c4/account-kit/react/src/hooks/useSendCalls.ts#L46)
+Defined in: [account-kit/react/src/hooks/useSendCalls.ts:46](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/react/src/hooks/useSendCalls.ts#L46)
 
 ## Type Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Type Parameter</th>
-      <th align="left">Default type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `TEntryPointVersion` *extends* `EntryPointVersion`
-      </td>
-
-      <td>
-        `EntryPointVersion`
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Type Parameter                                     | Default type        |
+| :------------------------------------------------- | :------------------ |
+| `TEntryPointVersion` _extends_ `EntryPointVersion` | `EntryPointVersion` |
 
 ## Properties
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Property</th>
-      <th align="left">Type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        <a id="error" /> `error`
-      </td>
-
-      <td>
-        `Error` | `null`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        <a id="issendingcalls" /> `isSendingCalls`
-      </td>
-
-      <td>
-        `boolean`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        <a id="sendcalls" /> `sendCalls`
-      </td>
-
-      <td>
-        `UseMutateFunction`\<`MutationResult`\<`TEntryPointVersion`>, `Error`, `MutationParams`, `unknown`>
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        <a id="sendcallsasync" /> `sendCallsAsync`
-      </td>
-
-      <td>
-        `UseMutateAsyncFunction`\<`MutationResult`\<`TEntryPointVersion`>, `Error`, `MutationParams`, `unknown`>
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        <a id="sendcallsresult" /> `sendCallsResult`
-      </td>
-
-      <td>
-        `MutationResult` | `undefined`
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Property                                     | Type                                                                                                     |
+| :------------------------------------------- | :------------------------------------------------------------------------------------------------------- | ----------- |
+| <a id="error" /> `error`                     | `Error`                                                                                                  | `null`      |
+| <a id="issendingcalls" /> `isSendingCalls`   | `boolean`                                                                                                |
+| <a id="sendcalls" /> `sendCalls`             | `UseMutateFunction`\<`MutationResult`\<`TEntryPointVersion`>, `Error`, `MutationParams`, `unknown`>      |
+| <a id="sendcallsasync" /> `sendCallsAsync`   | `UseMutateAsyncFunction`\<`MutationResult`\<`TEntryPointVersion`>, `Error`, `MutationParams`, `unknown`> |
+| <a id="sendcallsresult" /> `sendCallsResult` | `MutationResult`                                                                                         | `undefined` |

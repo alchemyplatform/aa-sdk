@@ -11,7 +11,7 @@ layout: reference
 function useAuthModal(): object;
 ```
 
-Defined in: [account-kit/react/src/hooks/useAuthModal.ts:31](https://github.com/alchemyplatform/aa-sdk/blob/d80fd19bb3cae4767898ecbfdef74c0c8623f7c4/account-kit/react/src/hooks/useAuthModal.ts#L31)
+Defined in: [account-kit/react/src/hooks/useAuthModal.ts:31](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/react/src/hooks/useAuthModal.ts#L31)
 
 A [hook](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useAuthModal.ts) that returns the open and close functions for the Auth Modal if uiConfig
 is enabled on the Account Provider
@@ -39,44 +39,8 @@ const ComponentWithAuthModal = () => {
 
 an object containing methods for opening or closing the auth modal. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useAuthModal.ts#L4)
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Name</th>
-      <th align="left">Type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `closeAuthModal()`
-      </td>
-
-      <td>
-        () => `void`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `isOpen`
-      </td>
-
-      <td>
-        `boolean`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `openAuthModal()`
-      </td>
-
-      <td>
-        () => `void`
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Name               | Type         |
+| :----------------- | :----------- |
+| `closeAuthModal()` | () => `void` |
+| `isOpen`           | `boolean`    |
+| `openAuthModal()`  | () => `void` |

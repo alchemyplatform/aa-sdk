@@ -13,7 +13,7 @@ const multisigPluginActions: <TTransport, TChain, TAccount>(
 ) => MultisigPluginActions<TAccount>;
 ```
 
-Defined in: [account-kit/smart-contracts/src/msca/plugins/multisig/extension.ts:74](https://github.com/alchemyplatform/aa-sdk/blob/d80fd19bb3cae4767898ecbfdef74c0c8623f7c4/account-kit/smart-contracts/src/msca/plugins/multisig/extension.ts#L74)
+Defined in: [account-kit/smart-contracts/src/msca/plugins/multisig/extension.ts:74](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/smart-contracts/src/msca/plugins/multisig/extension.ts#L74)
 
 Provides actions for managing a multisig plugin within the specified client, including reading owners, checking ownership, getting the threshold, proposing user operations, and signing multisig user operations.
 
@@ -27,76 +27,17 @@ const client = createModularAccountAlchemyClient(...).extend(multisigPluginActio
 
 ## Type Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Type Parameter</th>
-      <th align="left">Default type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `TTransport` *extends* `Transport`
-      </td>
-
-      <td>
-        `Transport`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TChain` *extends* `Chain` | `undefined`
-      </td>
-
-      <td>
-        `Chain` | `undefined`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TAccount` *extends* `SmartContractAccount` | `undefined`
-      </td>
-
-      <td>
-        `SmartContractAccount` | `undefined`
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Type Parameter                              | Default type |
+| :------------------------------------------ | :----------- | ---------------------- | ----------- |
+| `TTransport` _extends_ `Transport`          | `Transport`  |
+| `TChain` _extends_ `Chain`                  | `undefined`  | `Chain`                | `undefined` |
+| `TAccount` _extends_ `SmartContractAccount` | `undefined`  | `SmartContractAccount` | `undefined` |
 
 ## Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Parameter</th>
-      <th align="left">Type</th>
-      <th align="left">Description</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `client`
-      </td>
-
-      <td>
-        `Client`\<`TTransport`, `TChain`, `TAccount`>
-      </td>
-
-      <td>
-        The client instance configured with transport, chain, and account information
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Parameter | Type                                          | Description                                                                   |
+| :-------- | :-------------------------------------------- | :---------------------------------------------------------------------------- |
+| `client`  | `Client`\<`TTransport`, `TChain`, `TAccount`> | The client instance configured with transport, chain, and account information |
 
 ## Returns
 

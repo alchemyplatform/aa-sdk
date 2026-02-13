@@ -34,47 +34,11 @@ const client = createAlchemyPublicRpcClient({
 
 ## Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Parameter</th>
-      <th align="left">Type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `{ transport, chain, }`
-      </td>
-
-      <td>
-        \{ `chain`: `Chain` | `undefined`; `transport`: [`AlchemyTransport`](../type-aliases/AlchemyTransport.mdx); }
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `{ transport, chain, }.chain`
-      </td>
-
-      <td>
-        `Chain` | `undefined`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `{ transport, chain, }.transport`
-      </td>
-
-      <td>
-        [`AlchemyTransport`](../type-aliases/AlchemyTransport.mdx)
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Parameter                         | Type                                                       |
+| :-------------------------------- | :--------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| `{ transport, chain, }`           | \{ `chain`: `Chain`                                        | `undefined`; `transport`: [`AlchemyTransport`](../type-aliases/AlchemyTransport.mdx); } |
+| `{ transport, chain, }.chain`     | `Chain`                                                    | `undefined`                                                                             |
+| `{ transport, chain, }.transport` | [`AlchemyTransport`](../type-aliases/AlchemyTransport.mdx) |
 
 ## Returns
 

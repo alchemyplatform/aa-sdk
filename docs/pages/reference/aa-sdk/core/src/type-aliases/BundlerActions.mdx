@@ -11,7 +11,7 @@ layout: reference
 type BundlerActions = object;
 ```
 
-Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:53](https://github.com/alchemyplatform/aa-sdk/blob/d80fd19bb3cae4767898ecbfdef74c0c8623f7c4/aa-sdk/core/src/client/decorators/bundlerClient.ts#L53)
+Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:53](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/aa-sdk/core/src/client/decorators/bundlerClient.ts#L53)
 
 ## Methods
 
@@ -24,90 +24,23 @@ estimateUserOperationGas<TEntryPointVersion>(
    stateOverride?): Promise<UserOperationEstimateGasResponse<TEntryPointVersion>>;
 ```
 
-Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:62](https://github.com/alchemyplatform/aa-sdk/blob/d80fd19bb3cae4767898ecbfdef74c0c8623f7c4/aa-sdk/core/src/client/decorators/bundlerClient.ts#L62)
+Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:62](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/aa-sdk/core/src/client/decorators/bundlerClient.ts#L62)
 
 calls `eth_estimateUserOperationGas` and returns the result
 
 #### Type Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Type Parameter</th>
-      <th align="left">Default type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `TEntryPointVersion` *extends* keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase.mdx)\<`unknown`>
-      </td>
-
-      <td>
-        keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase.mdx)\<`unknown`>
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Type Parameter                                                                                                        | Default type                                                                           |
+| :-------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------- |
+| `TEntryPointVersion` _extends_ keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase.mdx)\<`unknown`> | keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase.mdx)\<`unknown`> |
 
 #### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Parameter</th>
-      <th align="left">Type</th>
-      <th align="left">Description</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `request`
-      </td>
-
-      <td>
-        [`UserOperationRequest`](UserOperationRequest.mdx)\<`TEntryPointVersion`>
-      </td>
-
-      <td>
-        the UserOperationRequest to estimate gas for
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `entryPoint`
-      </td>
-
-      <td>
-        `` `0x${string}` ``
-      </td>
-
-      <td>
-        the entry point address the op will be sent to
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `stateOverride?`
-      </td>
-
-      <td>
-        `StateOverride`
-      </td>
-
-      <td>
-        the state override to use for the estimation
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Parameter        | Type                                                                      | Description                                    |
+| :--------------- | :------------------------------------------------------------------------ | :--------------------------------------------- |
+| `request`        | [`UserOperationRequest`](UserOperationRequest.mdx)\<`TEntryPointVersion`> | the UserOperationRequest to estimate gas for   |
+| `entryPoint`     | `` `0x${string}` ``                                                       | the entry point address the op will be sent to |
+| `stateOverride?` | `StateOverride`                                                           | the state override to use for the estimation   |
 
 #### Returns
 
@@ -123,7 +56,7 @@ the gas estimates for the given response
 getSupportedEntryPoints(): Promise<`0x${string}`[]>;
 ```
 
-Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:109](https://github.com/alchemyplatform/aa-sdk/blob/d80fd19bb3cae4767898ecbfdef74c0c8623f7c4/aa-sdk/core/src/client/decorators/bundlerClient.ts#L109)
+Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:109](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/aa-sdk/core/src/client/decorators/bundlerClient.ts#L109)
 
 calls `eth_supportedEntryPoints` and returns the entry points the RPC supports
 
@@ -143,38 +76,15 @@ getUserOperationByHash(hash): Promise<
   | UserOperationResponse<EntryPointVersion>>;
 ```
 
-Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:90](https://github.com/alchemyplatform/aa-sdk/blob/d80fd19bb3cae4767898ecbfdef74c0c8623f7c4/aa-sdk/core/src/client/decorators/bundlerClient.ts#L90)
+Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:90](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/aa-sdk/core/src/client/decorators/bundlerClient.ts#L90)
 
 calls `eth_getUserOperationByHash` and returns the UserOperationResponse
 
 #### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Parameter</th>
-      <th align="left">Type</th>
-      <th align="left">Description</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `hash`
-      </td>
-
-      <td>
-        `` `0x${string}` ``
-      </td>
-
-      <td>
-        the hash of the UserOperation to fetch
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Parameter | Type                | Description                            |
+| :-------- | :------------------ | :------------------------------------- |
+| `hash`    | `` `0x${string}` `` | the hash of the UserOperation to fetch |
 
 #### Returns
 
@@ -192,52 +102,16 @@ calls `eth_getUserOperationByHash` and returns the UserOperationResponse
 getUserOperationReceipt(hash, tag?): Promise<null | UserOperationReceipt>;
 ```
 
-Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:99](https://github.com/alchemyplatform/aa-sdk/blob/d80fd19bb3cae4767898ecbfdef74c0c8623f7c4/aa-sdk/core/src/client/decorators/bundlerClient.ts#L99)
+Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:99](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/aa-sdk/core/src/client/decorators/bundlerClient.ts#L99)
 
 calls `eth_getUserOperationReceipt` and returns the UserOperationReceipt
 
 #### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Parameter</th>
-      <th align="left">Type</th>
-      <th align="left">Description</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `hash`
-      </td>
-
-      <td>
-        `` `0x${string}` ``
-      </td>
-
-      <td>
-        the hash of the UserOperation to get the receipt for
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `tag?`
-      </td>
-
-      <td>
-        `"latest"` | `"pending"`
-      </td>
-
-      <td>
-        if client want to get receipt for different block tag.
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Parameter | Type                | Description                                          |
+| :-------- | :------------------ | :--------------------------------------------------- | ------------------------------------------------------ |
+| `hash`    | `` `0x${string}` `` | the hash of the UserOperation to get the receipt for |
+| `tag?`    | `"latest"`          | `"pending"`                                          | if client want to get receipt for different block tag. |
 
 #### Returns
 
@@ -253,76 +127,22 @@ calls `eth_getUserOperationReceipt` and returns the UserOperationReceipt
 sendRawUserOperation<TEntryPointVersion>(request, entryPoint): Promise<`0x${string}`>;
 ```
 
-Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:77](https://github.com/alchemyplatform/aa-sdk/blob/d80fd19bb3cae4767898ecbfdef74c0c8623f7c4/aa-sdk/core/src/client/decorators/bundlerClient.ts#L77)
+Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:77](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/aa-sdk/core/src/client/decorators/bundlerClient.ts#L77)
 
 calls `eth_sendUserOperation` and returns the hash of the sent UserOperation
 
 #### Type Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Type Parameter</th>
-      <th align="left">Default type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `TEntryPointVersion` *extends* keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase.mdx)\<`unknown`>
-      </td>
-
-      <td>
-        keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase.mdx)\<`unknown`>
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Type Parameter                                                                                                        | Default type                                                                           |
+| :-------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------- |
+| `TEntryPointVersion` _extends_ keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase.mdx)\<`unknown`> | keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase.mdx)\<`unknown`> |
 
 #### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Parameter</th>
-      <th align="left">Type</th>
-      <th align="left">Description</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `request`
-      </td>
-
-      <td>
-        [`UserOperationRequest`](UserOperationRequest.mdx)\<`TEntryPointVersion`>
-      </td>
-
-      <td>
-        the UserOperationRequest to send
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `entryPoint`
-      </td>
-
-      <td>
-        `` `0x${string}` ``
-      </td>
-
-      <td>
-        the entry point address the op will be sent to
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Parameter    | Type                                                                      | Description                                    |
+| :----------- | :------------------------------------------------------------------------ | :--------------------------------------------- |
+| `request`    | [`UserOperationRequest`](UserOperationRequest.mdx)\<`TEntryPointVersion`> | the UserOperationRequest to send               |
+| `entryPoint` | `` `0x${string}` ``                                                       | the entry point address the op will be sent to |
 
 #### Returns
 

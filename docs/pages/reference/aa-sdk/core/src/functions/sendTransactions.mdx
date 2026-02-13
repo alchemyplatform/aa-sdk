@@ -14,7 +14,7 @@ function sendTransactions<TTransport, TChain, TAccount, TContext>(
 ): Promise<`0x${string}`>;
 ```
 
-Defined in: [aa-sdk/core/src/actions/smartAccount/sendTransactions.ts:36](https://github.com/alchemyplatform/aa-sdk/blob/d80fd19bb3cae4767898ecbfdef74c0c8623f7c4/aa-sdk/core/src/actions/smartAccount/sendTransactions.ts#L36)
+Defined in: [aa-sdk/core/src/actions/smartAccount/sendTransactions.ts:36](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/aa-sdk/core/src/actions/smartAccount/sendTransactions.ts#L36)
 
 Sends transactions using the provided client and transaction parameters. This function builds user operations from the transactions, sends them, and waits for the transaction to be mined.
 
@@ -37,103 +37,19 @@ const result = await client.sendTransactions({
 
 ## Type Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Type Parameter</th>
-      <th align="left">Default type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `TTransport` *extends* `Transport`
-      </td>
-
-      <td>
-        `Transport`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TChain` *extends* `undefined` | `Chain`
-      </td>
-
-      <td>
-        `undefined` | `Chain`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TAccount` *extends*
-        | `undefined`
-        | [`SmartContractAccount`](../type-aliases/SmartContractAccount.mdx)
-      </td>
-
-      <td>
-        | `undefined`
-        | [`SmartContractAccount`](../type-aliases/SmartContractAccount.mdx)
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TContext` *extends* `any`
-      </td>
-
-      <td>
-        `UserOperationContext`
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Type Parameter                     | Default type           |
+| :--------------------------------- | :--------------------- | ------------------------------------------------------------------ | ------- | ----------- | ------------------------------------------------------------------ |
+| `TTransport` _extends_ `Transport` | `Transport`            |
+| `TChain` _extends_ `undefined`     | `Chain`                | `undefined`                                                        | `Chain` |
+| `TAccount` _extends_               | `undefined`            | [`SmartContractAccount`](../type-aliases/SmartContractAccount.mdx) |         | `undefined` | [`SmartContractAccount`](../type-aliases/SmartContractAccount.mdx) |
+| `TContext` _extends_ `any`         | `UserOperationContext` |
 
 ## Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Parameter</th>
-      <th align="left">Type</th>
-      <th align="left">Description</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `client_`
-      </td>
-
-      <td>
-        `Client`\<`TTransport`, `TChain`, `TAccount`>
-      </td>
-
-      <td>
-        The client used to send the transactions
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `args`
-      </td>
-
-      <td>
-        `SendTransactionsParameters`\<`TAccount`, `TContext`>
-      </td>
-
-      <td>
-        The parameters for sending the transactions, including requests, overrides, account, and context
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Parameter | Type                                                  | Description                                                                                      |
+| :-------- | :---------------------------------------------------- | :----------------------------------------------------------------------------------------------- |
+| `client_` | `Client`\<`TTransport`, `TChain`, `TAccount`>         | The client used to send the transactions                                                         |
+| `args`    | `SendTransactionsParameters`\<`TAccount`, `TContext`> | The parameters for sending the transactions, including requests, overrides, account, and context |
 
 ## Returns
 

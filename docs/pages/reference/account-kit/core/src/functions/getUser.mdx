@@ -11,7 +11,7 @@ layout: reference
 function getUser(config): null | (User & object);
 ```
 
-Defined in: [account-kit/core/src/actions/getUser.ts:21](https://github.com/alchemyplatform/aa-sdk/blob/d80fd19bb3cae4767898ecbfdef74c0c8623f7c4/account-kit/core/src/actions/getUser.ts#L21)
+Defined in: [account-kit/core/src/actions/getUser.ts:21](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/core/src/actions/getUser.ts#L21)
 
 Returns the currently logged in user if using an SCA with the AlchemySigner
 or the connected EOA details.
@@ -27,32 +27,9 @@ const user = getUser(config);
 
 ## Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Parameter</th>
-      <th align="left">Type</th>
-      <th align="left">Description</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `config`
-      </td>
-
-      <td>
-        `AlchemyAccountsConfig`
-      </td>
-
-      <td>
-        the account config containing app state
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Parameter | Type                    | Description                             |
+| :-------- | :---------------------- | :-------------------------------------- |
+| `config`  | `AlchemyAccountsConfig` | the account config containing app state |
 
 ## Returns
 

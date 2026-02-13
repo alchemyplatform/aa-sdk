@@ -11,122 +11,23 @@ layout: reference
 type EntryPointDef<TEntryPointVersion, TChain, TAbi> = object;
 ```
 
-Defined in: [aa-sdk/core/src/entrypoint/types.ts:68](https://github.com/alchemyplatform/aa-sdk/blob/d80fd19bb3cae4767898ecbfdef74c0c8623f7c4/aa-sdk/core/src/entrypoint/types.ts#L68)
+Defined in: [aa-sdk/core/src/entrypoint/types.ts:68](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/aa-sdk/core/src/entrypoint/types.ts#L68)
 
 ## Type Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Type Parameter</th>
-      <th align="left">Default type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `TEntryPointVersion` *extends* [`EntryPointVersion`](EntryPointVersion.mdx)
-      </td>
-
-      <td>
-        [`EntryPointVersion`](EntryPointVersion.mdx)
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TChain` *extends* `Chain`
-      </td>
-
-      <td>
-        `Chain`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TAbi` *extends* `Abi` | readonly `unknown`\[]
-      </td>
-
-      <td>
-        `Abi`
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Type Parameter                                                              | Default type                                 |
+| :-------------------------------------------------------------------------- | :------------------------------------------- | ----- |
+| `TEntryPointVersion` _extends_ [`EntryPointVersion`](EntryPointVersion.mdx) | [`EntryPointVersion`](EntryPointVersion.mdx) |
+| `TChain` _extends_ `Chain`                                                  | `Chain`                                      |
+| `TAbi` _extends_ `Abi`                                                      | readonly `unknown`\[]                        | `Abi` |
 
 ## Properties
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Property</th>
-      <th align="left">Type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        <a id="abi" /> `abi`
-      </td>
-
-      <td>
-        `GetContractParameters`\<`Transport`, `TChain`, `Account`, `TAbi`>\[`"abi"`]
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        <a id="address" /> `address`
-      </td>
-
-      <td>
-        [`Address`](Address.mdx)
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        <a id="chain" /> `chain`
-      </td>
-
-      <td>
-        `TChain`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        <a id="getuseroperationhash" /> `getUserOperationHash`
-      </td>
-
-      <td>
-        (`request`) => `Hex`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        <a id="packuseroperation" /> `packUserOperation`
-      </td>
-
-      <td>
-        (`userOperation`) => `Hex`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        <a id="version" /> `version`
-      </td>
-
-      <td>
-        `TEntryPointVersion`
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Property                                               | Type                                                                         |
+| :----------------------------------------------------- | :--------------------------------------------------------------------------- |
+| <a id="abi" /> `abi`                                   | `GetContractParameters`\<`Transport`, `TChain`, `Account`, `TAbi`>\[`"abi"`] |
+| <a id="address" /> `address`                           | [`Address`](Address.mdx)                                                     |
+| <a id="chain" /> `chain`                               | `TChain`                                                                     |
+| <a id="getuseroperationhash" /> `getUserOperationHash` | (`request`) => `Hex`                                                         |
+| <a id="packuseroperation" /> `packUserOperation`       | (`userOperation`) => `Hex`                                                   |
+| <a id="version" /> `version`                           | `TEntryPointVersion`                                                         |

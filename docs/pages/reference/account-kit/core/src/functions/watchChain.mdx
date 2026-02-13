@@ -11,7 +11,7 @@ layout: reference
 function watchChain(config): (onChange) => any;
 ```
 
-Defined in: [account-kit/core/src/actions/watchChain.ts:19](https://github.com/alchemyplatform/aa-sdk/blob/d80fd19bb3cae4767898ecbfdef74c0c8623f7c4/account-kit/core/src/actions/watchChain.ts#L19)
+Defined in: [account-kit/core/src/actions/watchChain.ts:19](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/core/src/actions/watchChain.ts#L19)
 
 Allows you to subscribe to changes of the chain in the client store.
 
@@ -27,32 +27,9 @@ watchChain(config)(console.log);
 
 ## Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Parameter</th>
-      <th align="left">Type</th>
-      <th align="left">Description</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `config`
-      </td>
-
-      <td>
-        `AlchemyAccountsConfig`
-      </td>
-
-      <td>
-        the account config object
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Parameter | Type                    | Description               |
+| :-------- | :---------------------- | :------------------------ |
+| `config`  | `AlchemyAccountsConfig` | the account config object |
 
 ## Returns
 
@@ -64,27 +41,9 @@ a function which accepts an onChange callback that will be fired when the chain 
 
 ### Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Parameter</th>
-      <th align="left">Type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `onChange`
-      </td>
-
-      <td>
-        (`chain`) => `void`
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Parameter  | Type                |
+| :--------- | :------------------ |
+| `onChange` | (`chain`) => `void` |
 
 ### Returns
 

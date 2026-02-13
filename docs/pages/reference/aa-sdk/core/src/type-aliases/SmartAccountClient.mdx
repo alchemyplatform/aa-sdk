@@ -26,78 +26,15 @@ type SmartAccountClient<
 >;
 ```
 
-Defined in: [aa-sdk/core/src/client/smartAccountClient.ts:87](https://github.com/alchemyplatform/aa-sdk/blob/d80fd19bb3cae4767898ecbfdef74c0c8623f7c4/aa-sdk/core/src/client/smartAccountClient.ts#L87)
+Defined in: [aa-sdk/core/src/client/smartAccountClient.ts:87](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/aa-sdk/core/src/client/smartAccountClient.ts#L87)
 
 ## Type Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Type Parameter</th>
-      <th align="left">Default type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `transport` *extends* `Transport`
-      </td>
-
-      <td>
-        `Transport`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `chain` *extends* `Chain` | `undefined`
-      </td>
-
-      <td>
-        `Chain` | `undefined`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `account` *extends* [`SmartContractAccount`](SmartContractAccount.mdx) | `undefined`
-      </td>
-
-      <td>
-        [`SmartContractAccount`](SmartContractAccount.mdx) | `undefined`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `actions` *extends* `Record`\<`string`, `unknown`>
-      </td>
-
-      <td>
-        `Record`\<`string`, `unknown`>
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `rpcSchema` *extends* `RpcSchema`
-      </td>
-
-      <td>
-        [`SmartAccountClientRpcSchema`](SmartAccountClientRpcSchema.mdx)
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `context` *extends* [`UserOperationContext`](UserOperationContext.mdx) | `undefined`
-      </td>
-
-      <td>
-        [`UserOperationContext`](UserOperationContext.mdx) | `undefined`
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Type Parameter                                                         | Default type                                                     |
+| :--------------------------------------------------------------------- | :--------------------------------------------------------------- | -------------------------------------------------- | ----------- |
+| `transport` _extends_ `Transport`                                      | `Transport`                                                      |
+| `chain` _extends_ `Chain`                                              | `undefined`                                                      | `Chain`                                            | `undefined` |
+| `account` _extends_ [`SmartContractAccount`](SmartContractAccount.mdx) | `undefined`                                                      | [`SmartContractAccount`](SmartContractAccount.mdx) | `undefined` |
+| `actions` _extends_ `Record`\<`string`, `unknown`>                     | `Record`\<`string`, `unknown`>                                   |
+| `rpcSchema` _extends_ `RpcSchema`                                      | [`SmartAccountClientRpcSchema`](SmartAccountClientRpcSchema.mdx) |
+| `context` _extends_ [`UserOperationContext`](UserOperationContext.mdx) | `undefined`                                                      | [`UserOperationContext`](UserOperationContext.mdx) | `undefined` |

@@ -17,7 +17,7 @@ function alchemyGasManagerMiddleware(
 >;
 ```
 
-Defined in: [account-kit/infra/src/middleware/gasManager.ts:92](https://github.com/alchemyplatform/aa-sdk/blob/d80fd19bb3cae4767898ecbfdef74c0c8623f7c4/account-kit/infra/src/middleware/gasManager.ts#L92)
+Defined in: [account-kit/infra/src/middleware/gasManager.ts:92](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/infra/src/middleware/gasManager.ts#L92)
 
 Paymaster middleware factory that uses Alchemy's Gas Manager for sponsoring
 transactions. Adheres to the ERC-7677 standardized communication protocol.
@@ -37,60 +37,11 @@ const client = createSmartAccountClient({
 
 ## Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Parameter</th>
-      <th align="left">Type</th>
-      <th align="left">Description</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `policyId`
-      </td>
-
-      <td>
-        `string` | `string`\[]
-      </td>
-
-      <td>
-        The policyId (or list of policyIds) for Alchemy's gas manager
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `policyToken?`
-      </td>
-
-      <td>
-        [`PolicyToken`](../type-aliases/PolicyToken.mdx)
-      </td>
-
-      <td>
-        The policy token configuration
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `webhookData?`
-      </td>
-
-      <td>
-        `string`
-      </td>
-
-      <td>
-        The webhook data to include in the request
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Parameter      | Type                                             | Description                                |
+| :------------- | :----------------------------------------------- | :----------------------------------------- | ------------------------------------------------------------- |
+| `policyId`     | `string`                                         | `string`\[]                                | The policyId (or list of policyIds) for Alchemy's gas manager |
+| `policyToken?` | [`PolicyToken`](../type-aliases/PolicyToken.mdx) | The policy token configuration             |
+| `webhookData?` | `string`                                         | The webhook data to include in the request |
 
 ## Returns
 

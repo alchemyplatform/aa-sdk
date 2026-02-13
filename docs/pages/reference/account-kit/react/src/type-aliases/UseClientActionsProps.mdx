@@ -11,82 +11,19 @@ layout: reference
 type UseClientActionsProps<TTransport, TChain, TActions> = object;
 ```
 
-Defined in: [account-kit/react/src/hooks/useClientActions.ts:10](https://github.com/alchemyplatform/aa-sdk/blob/d80fd19bb3cae4767898ecbfdef74c0c8623f7c4/account-kit/react/src/hooks/useClientActions.ts#L10)
+Defined in: [account-kit/react/src/hooks/useClientActions.ts:10](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/react/src/hooks/useClientActions.ts#L10)
 
 ## Type Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Type Parameter</th>
-      <th align="left">Default type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `TTransport` *extends* `Transport`
-      </td>
-
-      <td>
-        `Transport`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TChain` *extends* `Chain` | `undefined`
-      </td>
-
-      <td>
-        `Chain` | `undefined`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TActions` *extends* `object`
-      </td>
-
-      <td>
-        `object`
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Type Parameter                     | Default type |
+| :--------------------------------- | :----------- | ------- | ----------- |
+| `TTransport` _extends_ `Transport` | `Transport`  |
+| `TChain` _extends_ `Chain`         | `undefined`  | `Chain` | `undefined` |
+| `TActions` _extends_ `object`      | `object`     |
 
 ## Properties
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Property</th>
-      <th align="left">Type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        <a id="actions" /> `actions`
-      </td>
-
-      <td>
-        (`client`) => `TActions`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        <a id="client" /> `client?`
-      </td>
-
-      <td>
-        [`accountLoupeActions`](../../../core/src/variables/accountLoupeActions.mdx)\<`TChain`, [`accountLoupeActions`](../../../core/src/variables/accountLoupeActions.mdx)>\[`"client"`]
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Property                     | Type                                                                                                                                                                               |
+| :--------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <a id="actions" /> `actions` | (`client`) => `TActions`                                                                                                                                                           |
+| <a id="client" /> `client?`  | [`accountLoupeActions`](../../../core/src/variables/accountLoupeActions.mdx)\<`TChain`, [`accountLoupeActions`](../../../core/src/variables/accountLoupeActions.mdx)>\[`"client"`] |

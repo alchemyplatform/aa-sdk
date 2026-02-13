@@ -13,62 +13,21 @@ function splitAggregatedSignature<TAccount>(
 ): Promise<SplitAggregateSignatureResult>;
 ```
 
-Defined in: [account-kit/smart-contracts/src/msca/plugins/multisig/utils/splitAggregatedSignature.ts:41](https://github.com/alchemyplatform/aa-sdk/blob/d80fd19bb3cae4767898ecbfdef74c0c8623f7c4/account-kit/smart-contracts/src/msca/plugins/multisig/utils/splitAggregatedSignature.ts#L41)
+Defined in: [account-kit/smart-contracts/src/msca/plugins/multisig/utils/splitAggregatedSignature.ts:41](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/smart-contracts/src/msca/plugins/multisig/utils/splitAggregatedSignature.ts#L41)
 
 Takes an aggregated signature and threshold and splits it into its components
 
 ## Type Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Type Parameter</th>
-      <th align="left">Default type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `TAccount` *extends* `undefined` | `SmartContractAccount`
-      </td>
-
-      <td>
-        `undefined` | `SmartContractAccount`
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Type Parameter                   | Default type           |
+| :------------------------------- | :--------------------- | ----------- | ---------------------- |
+| `TAccount` _extends_ `undefined` | `SmartContractAccount` | `undefined` | `SmartContractAccount` |
 
 ## Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Parameter</th>
-      <th align="left">Type</th>
-      <th align="left">Description</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `args`
-      </td>
-
-      <td>
-        `SplitAggregateSignatureParams`\<`TAccount`>
-      </td>
-
-      <td>
-        the arguments for the split
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Parameter | Type                                         | Description                 |
+| :-------- | :------------------------------------------- | :-------------------------- |
+| `args`    | `SplitAggregateSignatureParams`\<`TAccount`> | the arguments for the split |
 
 ## Returns
 

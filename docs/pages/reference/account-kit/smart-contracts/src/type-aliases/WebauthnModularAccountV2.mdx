@@ -15,68 +15,14 @@ type WebauthnModularAccountV2 = SmartContractAccount<
   object;
 ```
 
-Defined in: [account-kit/smart-contracts/src/ma-v2/account/common/modularAccountV2Base.ts:80](https://github.com/alchemyplatform/aa-sdk/blob/d80fd19bb3cae4767898ecbfdef74c0c8623f7c4/account-kit/smart-contracts/src/ma-v2/account/common/modularAccountV2Base.ts#L80)
+Defined in: [account-kit/smart-contracts/src/ma-v2/account/common/modularAccountV2Base.ts:80](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/smart-contracts/src/ma-v2/account/common/modularAccountV2Base.ts#L80)
 
 ## Type Declaration
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Name</th>
-      <th align="left">Type</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `encodeCallData()`
-      </td>
-
-      <td>
-        (`callData`) => `Promise`\<`Hex`>
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `getExecutionData()`
-      </td>
-
-      <td>
-        (`selector`) => `Promise`\<[`ExecutionDataView`](ExecutionDataView.mdx)>
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `getValidationData()`
-      </td>
-
-      <td>
-        (`args`) => `Promise`\<[`ValidationDataView`](ValidationDataView.mdx)>
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `params`
-      </td>
-
-      <td>
-        `ToWebAuthnAccountParameters`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `signerEntity`
-      </td>
-
-      <td>
-        [`SignerEntity`](SignerEntity.mdx)
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Name                  | Type                                                                     |
+| :-------------------- | :----------------------------------------------------------------------- |
+| `encodeCallData()`    | (`callData`) => `Promise`\<`Hex`>                                        |
+| `getExecutionData()`  | (`selector`) => `Promise`\<[`ExecutionDataView`](ExecutionDataView.mdx)> |
+| `getValidationData()` | (`args`) => `Promise`\<[`ValidationDataView`](ValidationDataView.mdx)>   |
+| `params`              | `ToWebAuthnAccountParameters`                                            |
+| `signerEntity`        | [`SignerEntity`](SignerEntity.mdx)                                       |

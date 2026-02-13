@@ -19,108 +19,15 @@ type BaseCreateConfigProps = RpcConnectionConfig &
   >;
 ```
 
-Defined in: [account-kit/core/src/types.ts:173](https://github.com/alchemyplatform/aa-sdk/blob/d80fd19bb3cae4767898ecbfdef74c0c8623f7c4/account-kit/core/src/types.ts#L173)
+Defined in: [account-kit/core/src/types.ts:173](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/core/src/types.ts#L173)
 
 ## Type Declaration
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Name</th>
-      <th align="left">Type</th>
-      <th align="left">Description</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `accountCreationHint?`
-      </td>
-
-      <td>
-        `NonNullable`\<`Parameters`\<[`accountLoupeActions`](../variables/accountLoupeActions.mdx)\[`"requestAccount"`]>\[`0`]>\[`"creationHint"`]
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `connectors?`
-      </td>
-
-      <td>
-        `CreateConnectorFn`\[]
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `enablePopupOauth?`
-      </td>
-
-      <td>
-        `boolean`
-      </td>
-
-      <td>
-        If set, calls `preparePopupOauth` immediately upon initializing the signer.
-        If you intend to use popup-based OAuth login, you must either set this
-        option to true or manually ensure that you call
-        `signer.preparePopupOauth()` at some point before the user interaction that
-        triggers the OAuth authentication flow.
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `sessionConfig?`
-      </td>
-
-      <td>
-        `AlchemySignerParams`\[`"sessionConfig"`] & `object`
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `ssr?`
-      </td>
-
-      <td>
-        `boolean`
-      </td>
-
-      <td>
-        Enable this parameter if you are using the config in an SSR setting (eg. NextJS)
-        Turing this setting on will disable automatic hydration of the client store
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `storage?`
-      </td>
-
-      <td>
-        `CreateStorageFn`
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Name                   | Type                                                                                                                                       | Description                                                                                                                                                                                                                                                                                                            |
+| :--------------------- | :----------------------------------------------------------------------------------------------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `accountCreationHint?` | `NonNullable`\<`Parameters`\<[`accountLoupeActions`](../variables/accountLoupeActions.mdx)\[`"requestAccount"`]>\[`0`]>\[`"creationHint"`] | -                                                                                                                                                                                                                                                                                                                      |
+| `connectors?`          | `CreateConnectorFn`\[]                                                                                                                     | -                                                                                                                                                                                                                                                                                                                      |
+| `enablePopupOauth?`    | `boolean`                                                                                                                                  | If set, calls `preparePopupOauth` immediately upon initializing the signer. If you intend to use popup-based OAuth login, you must either set this option to true or manually ensure that you call `signer.preparePopupOauth()` at some point before the user interaction that triggers the OAuth authentication flow. |
+| `sessionConfig?`       | `AlchemySignerParams`\[`"sessionConfig"`] & `object`                                                                                       | -                                                                                                                                                                                                                                                                                                                      |
+| `ssr?`                 | `boolean`                                                                                                                                  | Enable this parameter if you are using the config in an SSR setting (eg. NextJS) Turing this setting on will disable automatic hydration of the client store                                                                                                                                                           |
+| `storage?`             | `CreateStorageFn`                                                                                                                          | -                                                                                                                                                                                                                                                                                                                      |

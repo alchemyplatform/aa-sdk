@@ -37,60 +37,11 @@ const client = createSmartAccountClient({
 
 ## Parameters
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Parameter</th>
-      <th align="left">Type</th>
-      <th align="left">Description</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `policyId`
-      </td>
-
-      <td>
-        `string` | `string`\[]
-      </td>
-
-      <td>
-        The policyId (or list of policyIds) for Alchemy's gas manager
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `policyToken?`
-      </td>
-
-      <td>
-        [`PolicyToken`](../type-aliases/PolicyToken.mdx)
-      </td>
-
-      <td>
-        The policy token configuration
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `webhookData?`
-      </td>
-
-      <td>
-        `string`
-      </td>
-
-      <td>
-        The webhook data to include in the request
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+| Parameter      | Type                                             | Description                                |
+| :------------- | :----------------------------------------------- | :----------------------------------------- | ------------------------------------------------------------- |
+| `policyId`     | `string`                                         | `string`\[]                                | The policyId (or list of policyIds) for Alchemy's gas manager |
+| `policyToken?` | [`PolicyToken`](../type-aliases/PolicyToken.mdx) | The policy token configuration             |
+| `webhookData?` | `string`                                         | The webhook data to include in the request |
 
 ## Returns
 
