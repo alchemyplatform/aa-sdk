@@ -36,6 +36,7 @@ layout: reference
 | [ChainType](type-aliases/ChainType.mdx)                                                                           | -                                                                                                                                                                                                                  |
 | [ClientActionParameters](type-aliases/ClientActionParameters.mdx)                                                 | -                                                                                                                                                                                                                  |
 | [ConnectedUser](type-aliases/ConnectedUser.mdx)                                                                   | -                                                                                                                                                                                                                  |
+| [CreateConfigProps](type-aliases/CreateConfigProps.mdx)                                                           | -                                                                                                                                                                                                                  |
 | [ExecutableFunctionArgs](type-aliases/ExecutableFunctionArgs.mdx)                                                 | -                                                                                                                                                                                                                  |
 | [ExecutableFunctionName](type-aliases/ExecutableFunctionName.mdx)                                                 | -                                                                                                                                                                                                                  |
 | [ExecuteableFunctionResult](type-aliases/ExecuteableFunctionResult.mdx)                                           | -                                                                                                                                                                                                                  |
@@ -112,10 +113,11 @@ layout: reference
 
 ## Variables
 
-| Variable                                                     | Description |
-| :----------------------------------------------------------- | :---------- |
-| [AlchemyAccountContext](variables/AlchemyAccountContext.mdx) | -           |
-| [DEFAULT_UI_CONFIG](variables/DEFAULT_UI_CONFIG.mdx)         | -           |
+| Variable                                                     | Description                             |
+| :----------------------------------------------------------- | :-------------------------------------- |
+| [AlchemyAccountContext](variables/AlchemyAccountContext.mdx) | -                                       |
+| [cookieStorage](variables/cookieStorage.mdx)                 | Function to create cookie based Storage |
+| [DEFAULT_UI_CONFIG](variables/DEFAULT_UI_CONFIG.mdx)         | -                                       |
 
 ## Functions
 
@@ -177,15 +179,3 @@ layout: reference
 | [useUser](functions/useUser.mdx)                                                       | A React [hook](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useUser.ts) that returns the current user information, either from an External Owned Account (EOA) or from the client store. It uses the Alchemy account context and synchronizes with external store updates. The best way to check if user is logged in for both smart account contract users and EOA.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 | [useWaitForCallsStatus](functions/useWaitForCallsStatus.mdx)                           | Hook to wait for calls status to be confirmed. It will poll until the calls reach the desired status or until a timeout occurs.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
 | [useWaitForUserOperationTransaction](functions/useWaitForUserOperationTransaction.mdx) | Custom [hook](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useWaitForUserOperationTransaction.ts) to wait for a user operation transaction and manage its state (pending, error, result).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
-
-## References
-
-### cookieStorage
-
-Renames and re-exports [accountLoupeActions](../../core/src/variables/accountLoupeActions.mdx)
-
----
-
-### CreateConfigProps
-
-Renames and re-exports [accountLoupeActions](../../core/src/variables/accountLoupeActions.mdx)

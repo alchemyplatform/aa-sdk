@@ -414,7 +414,7 @@ function prepareCalls<TAccount>(client, params): Promise<
 } & object>;
 ```
 
-Defined in: [account-kit/wallet-client/src/client/actions/prepareCalls.ts:57](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/wallet-client/src/client/actions/prepareCalls.ts#L57)
+Defined in: [account-kit/wallet-client/src/client/actions/prepareCalls.ts:57](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/wallet-client/src/client/actions/prepareCalls.ts#L57)
 
 Prepares a set of contract calls for execution by building a user operation.
 Returns the built user operation and a signature request that needs to be signed
@@ -440,16 +440,70 @@ const result = await client.prepareCalls({
 
 ## Type Parameters
 
-| Type Parameter                   | Default type        |
-| :------------------------------- | :------------------ | ----------- | ------------------- |
-| `TAccount` _extends_ `undefined` | `` `0x${string}` `` | `undefined` | `` `0x${string}` `` |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TAccount` *extends* `undefined` | `` `0x${string}` ``
+      </td>
+
+      <td>
+        `undefined` | `` `0x${string}` ``
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Parameters
 
-| Parameter | Type                                                                        | Description                                  |
-| :-------- | :-------------------------------------------------------------------------- | :------------------------------------------- |
-| `client`  | `InnerWalletApiClient`                                                      | The wallet API client to use for the request |
-| `params`  | [`PrepareCallsParams`](../type-aliases/PrepareCallsParams.mdx)\<`TAccount`> | Parameters for preparing calls               |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `client`
+      </td>
+
+      <td>
+        `InnerWalletApiClient`
+      </td>
+
+      <td>
+        The wallet API client to use for the request
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `params`
+      </td>
+
+      <td>
+        [`PrepareCallsParams`](../type-aliases/PrepareCallsParams.mdx)\<`TAccount`>
+      </td>
+
+      <td>
+        Parameters for preparing calls
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Returns
 

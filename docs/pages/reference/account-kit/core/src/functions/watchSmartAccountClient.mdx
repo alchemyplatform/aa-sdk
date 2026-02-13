@@ -14,7 +14,7 @@ function watchSmartAccountClient<TAccount, TChain>(
 ): (onChange) => any;
 ```
 
-Defined in: [account-kit/core/src/actions/watchSmartAccountClient.ts:33](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/core/src/actions/watchSmartAccountClient.ts#L33)
+Defined in: [account-kit/core/src/actions/watchSmartAccountClient.ts:33](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/core/src/actions/watchSmartAccountClient.ts#L33)
 
 Watches for changes to the smart account client and triggers the provided callback when a change is detected.
 
@@ -30,17 +30,89 @@ watchSmartAccountClient({ type: "LightAccount" }, config)(console.log);
 
 ## Type Parameters
 
-| Type Parameter                               | Default type | Description                   |
-| :------------------------------------------- | :----------- | :---------------------------- | ------- | ------------- | ----------------- | --------- |
-| `TAccount` _extends_ `SupportedAccountTypes` | -            | extends SupportedAccountTypes |
-| `TChain` _extends_ `undefined`               | `Chain`      | `undefined`                   | `Chain` | extends Chain | undefined = Chain | undefined |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TAccount` *extends* `SupportedAccountTypes`
+      </td>
+
+      <td>
+        ‐
+      </td>
+
+      <td>
+        extends SupportedAccountTypes
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TChain` *extends* `undefined` | `Chain`
+      </td>
+
+      <td>
+        `undefined` | `Chain`
+      </td>
+
+      <td>
+        extends Chain | undefined = Chain | undefined
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Parameters
 
-| Parameter | Type                                                                                                    | Description                                                      |
-| :-------- | :------------------------------------------------------------------------------------------------------ | :--------------------------------------------------------------- |
-| `params`  | [`GetSmartAccountClientParams`](../type-aliases/GetSmartAccountClientParams.mdx)\<`TChain`, `TAccount`> | the parameters needed to get the smart account client            |
-| `config`  | `AlchemyAccountsConfig`                                                                                 | the configuration containing the client store and other settings |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `params`
+      </td>
+
+      <td>
+        [`GetSmartAccountClientParams`](../type-aliases/GetSmartAccountClientParams.mdx)\<`TChain`, `TAccount`>
+      </td>
+
+      <td>
+        the parameters needed to get the smart account client
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `config`
+      </td>
+
+      <td>
+        `AlchemyAccountsConfig`
+      </td>
+
+      <td>
+        the configuration containing the client store and other settings
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Returns
 
@@ -52,9 +124,27 @@ a function that accepts a callback to be called when the client changes and retu
 
 ### Parameters
 
-| Parameter  | Type                 |
-| :--------- | :------------------- |
-| `onChange` | (`client`) => `void` |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `onChange`
+      </td>
+
+      <td>
+        (`client`) => `void`
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ### Returns
 

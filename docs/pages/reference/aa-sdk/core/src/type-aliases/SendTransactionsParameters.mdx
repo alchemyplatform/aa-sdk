@@ -10,23 +10,77 @@ layout: reference
 ```ts
 type SendTransactionsParameters<TAccount, TContext, TEntryPointVersion> =
   object &
-    accountLoupeActions<TAccount> &
+    GetAccountParameter<TAccount> &
     GetContextParameter<TContext> &
-    accountLoupeActions<TEntryPointVersion>;
+    UserOperationOverridesParameter<TEntryPointVersion>;
 ```
 
-Defined in: [aa-sdk/core/src/actions/smartAccount/types.ts:68](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/aa-sdk/core/src/actions/smartAccount/types.ts#L68)
+Defined in: [aa-sdk/core/src/actions/smartAccount/types.ts:68](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/aa-sdk/core/src/actions/smartAccount/types.ts#L68)
 
 ## Type Declaration
 
-| Name       | Type                       |
-| :--------- | :------------------------- |
-| `requests` | `RpcTransactionRequest`\[] |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Name</th>
+      <th align="left">Type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `requests`
+      </td>
+
+      <td>
+        `RpcTransactionRequest`\[]
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Type Parameters
 
-| Type Parameter                                                                                                                          | Default type                                                                                             |
-| :-------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------- | -------------------------------------------------- | ----------- |
-| `TAccount` _extends_                                                                                                                    | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)              | `undefined`                                        | -           |
-| `TContext` _extends_ [`UserOperationContext`](UserOperationContext.mdx)                                                                 | `undefined`                                                                                              | [`UserOperationContext`](UserOperationContext.mdx) | `undefined` |
-| `TEntryPointVersion` _extends_ [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`TAccount`> | [`accountLoupeActions`](../../../../account-kit/core/src/variables/accountLoupeActions.mdx)\<`TAccount`> |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TAccount` *extends* `SmartContractAccount` | `undefined`
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TContext` *extends* [`UserOperationContext`](UserOperationContext.mdx) | `undefined`
+      </td>
+
+      <td>
+        [`UserOperationContext`](UserOperationContext.mdx) | `undefined`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TEntryPointVersion` *extends* `GetEntryPointFromAccount`\<`TAccount`>
+      </td>
+
+      <td>
+        `GetEntryPointFromAccount`\<`TAccount`>
+      </td>
+    </tr>
+
+  </tbody>
+</table>

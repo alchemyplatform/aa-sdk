@@ -22,7 +22,7 @@ function checkGasSponsorshipEligibility<TTransport, TChain, TAccount, TContext>(
 >;
 ```
 
-Defined in: [aa-sdk/core/src/actions/smartAccount/checkGasSponsorshipEligibility.ts:56](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/aa-sdk/core/src/actions/smartAccount/checkGasSponsorshipEligibility.ts#L56)
+Defined in: [aa-sdk/core/src/actions/smartAccount/checkGasSponsorshipEligibility.ts:56](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/aa-sdk/core/src/actions/smartAccount/checkGasSponsorshipEligibility.ts#L56)
 
 This function verifies the eligibility of the connected account for gas sponsorship concerning the upcoming `UserOperation` (UO) that is intended to be sent.
 Internally, this method invokes `buildUserOperation`, which navigates through the middleware pipeline, including the `PaymasterMiddleware`. Its purpose is to construct the UO struct meant for transmission to the bundler. Following the construction of the UO struct, this function verifies if the resulting structure contains a non-empty `paymasterAndData` field.
@@ -50,19 +50,103 @@ console.log(
 
 ## Type Parameters
 
-| Type Parameter                     | Default type |
-| :--------------------------------- | :----------- | ------------------------------------------------------------------ | ------- | ----------- | ------------------------------------------------------------------ |
-| `TTransport` _extends_ `Transport` | `Transport`  |
-| `TChain` _extends_ `undefined`     | `Chain`      | `undefined`                                                        | `Chain` |
-| `TAccount` _extends_               | `undefined`  | [`SmartContractAccount`](../type-aliases/SmartContractAccount.mdx) |         | `undefined` | [`SmartContractAccount`](../type-aliases/SmartContractAccount.mdx) |
-| `TContext` _extends_ `any`         | `any`        |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TTransport` *extends* `Transport`
+      </td>
+
+      <td>
+        `Transport`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TChain` *extends* `undefined` | `Chain`
+      </td>
+
+      <td>
+        `undefined` | `Chain`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TAccount` *extends*
+        | `undefined`
+        | [`SmartContractAccount`](../type-aliases/SmartContractAccount.mdx)
+      </td>
+
+      <td>
+        | `undefined`
+        | [`SmartContractAccount`](../type-aliases/SmartContractAccount.mdx)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TContext` *extends* `any`
+      </td>
+
+      <td>
+        `any`
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Parameters
 
-| Parameter | Type                                                   | Description                                                    |
-| :-------- | :----------------------------------------------------- | :------------------------------------------------------------- |
-| `client_` | `Client`\<`TTransport`, `TChain`, `TAccount`>          | the smart account client to use for making RPC calls           |
-| `args`    | `SendUserOperationParameters`\<`TAccount`, `TContext`> | containing the user operation, account, context, and overrides |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `client_`
+      </td>
+
+      <td>
+        `Client`\<`TTransport`, `TChain`, `TAccount`>
+      </td>
+
+      <td>
+        the smart account client to use for making RPC calls
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `args`
+      </td>
+
+      <td>
+        `SendUserOperationParameters`\<`TAccount`, `TContext`>
+      </td>
+
+      <td>
+        containing the user operation, account, context, and overrides
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Returns
 

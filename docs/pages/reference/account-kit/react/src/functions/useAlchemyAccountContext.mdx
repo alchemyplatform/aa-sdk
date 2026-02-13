@@ -11,7 +11,7 @@ layout: reference
 function useAlchemyAccountContext(override?): AlchemyAccountContextProps;
 ```
 
-Defined in: [account-kit/react/src/hooks/useAlchemyAccountContext.ts:21](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/react/src/hooks/useAlchemyAccountContext.ts#L21)
+Defined in: [account-kit/react/src/hooks/useAlchemyAccountContext.ts:21](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/react/src/hooks/useAlchemyAccountContext.ts#L21)
 
 Internal Only hook used to access the alchemy account context.
 This hook is meant to be consumed by other hooks exported by this package.
@@ -26,9 +26,32 @@ const { config, queryClient } = useAlchemyAccountContext();
 
 ## Parameters
 
-| Parameter   | Type                                                                           | Description                                                           |
-| :---------- | :----------------------------------------------------------------------------- | :-------------------------------------------------------------------- |
-| `override?` | [`AlchemyAccountContextProps`](../type-aliases/AlchemyAccountContextProps.mdx) | optional context override that can be used to return a custom context |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `override?`
+      </td>
+
+      <td>
+        [`AlchemyAccountContextProps`](../type-aliases/AlchemyAccountContextProps.mdx)
+      </td>
+
+      <td>
+        optional context override that can be used to return a custom context
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Returns
 

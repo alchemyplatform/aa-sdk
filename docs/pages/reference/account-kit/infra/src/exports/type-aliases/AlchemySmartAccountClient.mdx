@@ -13,13 +13,58 @@ type AlchemySmartAccountClient<chain, account, actions, context> = Prettify<
 >;
 ```
 
-Defined in: [account-kit/infra/src/client/smartAccountClient.ts:96](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/infra/src/client/smartAccountClient.ts#L96)
+Defined in: [account-kit/infra/src/client/smartAccountClient.ts:96](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/infra/src/client/smartAccountClient.ts#L96)
 
 ## Type Parameters
 
-| Type Parameter                                     | Default type                   |
-| :------------------------------------------------- | :----------------------------- | ---------------------- | ----------- |
-| `chain` _extends_ `Chain`                          | `undefined`                    | `Chain`                | `undefined` |
-| `account` _extends_ `SmartContractAccount`         | `undefined`                    | `SmartContractAccount` | `undefined` |
-| `actions` _extends_ `Record`\<`string`, `unknown`> | `Record`\<`string`, `unknown`> |
-| `context` _extends_ `UserOperationContext`         | `undefined`                    | `UserOperationContext` | `undefined` |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `chain` *extends* `Chain` | `undefined`
+      </td>
+
+      <td>
+        `Chain` | `undefined`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `account` *extends* `SmartContractAccount` | `undefined`
+      </td>
+
+      <td>
+        `SmartContractAccount` | `undefined`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `actions` *extends* `Record`\<`string`, `unknown`>
+      </td>
+
+      <td>
+        `Record`\<`string`, `unknown`>
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `context` *extends* `UserOperationContext` | `undefined`
+      </td>
+
+      <td>
+        `UserOperationContext` | `undefined`
+      </td>
+    </tr>
+
+  </tbody>
+</table>

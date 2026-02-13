@@ -11,20 +11,128 @@ layout: reference
 type AlchemyAccountsConfig = object;
 ```
 
-Defined in: [account-kit/core/src/types.ts:59](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/core/src/types.ts#L59)
+Defined in: [account-kit/core/src/types.ts:59](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/core/src/types.ts#L59)
 
 ## Properties
 
-| Property                                              | Type                                                                   |
-| :---------------------------------------------------- | :--------------------------------------------------------------------- | ---------- |
-| <a id="_internal" /> `_internal`                      | `object`                                                               |
-| `_internal.createSigner`                              | (`config`) => [`AlchemySigner`](AlchemySigner.mdx)                     |
-| `_internal.sessionLength`                             | `number`                                                               |
-| `_internal.ssr?`                                      | `boolean`                                                              |
-| `_internal.storageKey`                                | `string`                                                               |
-| `_internal.wagmiConfig`                               | `WagmiConfig`                                                          |
-| <a id="accountcreationhint" /> `accountCreationHint?` | [`CreateConfigProps`](CreateConfigProps.mdx)\[`"accountCreationHint"`] |
-| <a id="solana" /> `solana?`                           | `object`                                                               |
-| `solana.adapters?`                                    | `WalletAdapter`\[]                                                     | `"detect"` |
-| `solana.connection`                                   | `SolanaWeb3Connection`                                                 |
-| <a id="store" /> `store`                              | [`accountLoupeActions`](../variables/accountLoupeActions.mdx)          |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Property</th>
+      <th align="left">Type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        <a id="_internal" /> `_internal`
+      </td>
+
+      <td>
+        `object`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `_internal.createSigner`
+      </td>
+
+      <td>
+        (`config`) => [`AlchemySigner`](AlchemySigner.mdx)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `_internal.sessionLength`
+      </td>
+
+      <td>
+        `number`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `_internal.ssr?`
+      </td>
+
+      <td>
+        `boolean`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `_internal.storageKey`
+      </td>
+
+      <td>
+        `string`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `_internal.wagmiConfig`
+      </td>
+
+      <td>
+        `WagmiConfig`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="accountcreationhint" /> `accountCreationHint?`
+      </td>
+
+      <td>
+        [`CreateConfigProps`](CreateConfigProps.mdx)\[`"accountCreationHint"`]
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="solana" /> `solana?`
+      </td>
+
+      <td>
+        `object`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `solana.adapters?`
+      </td>
+
+      <td>
+        `WalletAdapter`\[] | `"detect"`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `solana.connection`
+      </td>
+
+      <td>
+        `SolanaWeb3Connection`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="store" /> `store`
+      </td>
+
+      <td>
+        `Store`
+      </td>
+    </tr>
+
+  </tbody>
+</table>

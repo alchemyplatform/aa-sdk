@@ -11,8 +11,8 @@ layout: reference
 type AlchemyRpcSchema = [
   {
     Method: "alchemy_simulateUserOperationAssetChanges";
-    Parameters: accountLoupeActions;
-    ReturnType: accountLoupeActions;
+    Parameters: SimulateUserOperationAssetChangesRequest;
+    ReturnType: SimulateUserOperationAssetChangesResponse;
   },
   {
     Method: "rundler_maxPriorityFeePerGas";
@@ -22,13 +22,13 @@ type AlchemyRpcSchema = [
   ...Erc7677RpcSchema<{ policyId: string }>,
   {
     Method: "alchemy_requestGasAndPaymasterAndData";
-    Parameters: accountLoupeActions;
-    ReturnType: accountLoupeActions;
+    Parameters: RequestGasAndPaymasterAndDataRequest;
+    ReturnType: RequestGasAndPaymasterAndDataResponse;
   },
   {
     Method: "alchemy_requestPaymasterTokenQuote";
-    Parameters: accountLoupeActions;
-    ReturnType: accountLoupeActions;
+    Parameters: RequestPaymasterTokenQuoteRequest;
+    ReturnType: RequestPaymasterTokenQuoteResponse;
   },
 ];
 ```

@@ -11,7 +11,7 @@ layout: reference
 function formatSignatures(signatures, usingMaxValues): `0x${string}`;
 ```
 
-Defined in: [account-kit/smart-contracts/src/msca/plugins/multisig/utils/formatSignatures.ts:15](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/smart-contracts/src/msca/plugins/multisig/utils/formatSignatures.ts#L15)
+Defined in: [account-kit/smart-contracts/src/msca/plugins/multisig/utils/formatSignatures.ts:15](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/smart-contracts/src/msca/plugins/multisig/utils/formatSignatures.ts#L15)
 
 Formats a collection of Signature objects into a single aggregated signature.
 The format is in the form of EOA_SIGS | CONTRACT_SIG_DATAS. The signatures are ordered
@@ -20,10 +20,55 @@ The OFFSET is used to fetch the signature data from the CONTRACT_SIG_DATAS.
 
 ## Parameters
 
-| Parameter        | Type           | Default value | Description                                                                                                       |
-| :--------------- | :------------- | :------------ | :---------------------------------------------------------------------------------------------------------------- |
-| `signatures`     | `Signature`\[] | `undefined`   | the array of Signature objects to combine into the correct aggregated signature format excluding the upper limits |
-| `usingMaxValues` | `boolean`      | `false`       | a boolean indicating wether or not the UserOperation is using the UPPER_LIMIT for the gas and fee values          |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Default value</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `signatures`
+      </td>
+
+      <td>
+        `Signature`\[]
+      </td>
+
+      <td>
+        `undefined`
+      </td>
+
+      <td>
+        the array of Signature objects to combine into the correct aggregated signature format excluding the upper limits
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `usingMaxValues`
+      </td>
+
+      <td>
+        `boolean`
+      </td>
+
+      <td>
+        `false`
+      </td>
+
+      <td>
+        a boolean indicating wether or not the UserOperation is using the UPPER\_LIMIT for the gas and fee values
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Returns
 

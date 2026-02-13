@@ -9,30 +9,66 @@ layout: reference
 
 ```ts
 type AlchemyMultisigAccountClientConfig<TSigner> = Omit<
-  accountLoupeActions<HttpTransport, TSigner>,
+  CreateMultisigModularAccountParams<HttpTransport, TSigner>,
   "transport"
 > &
   Omit<
     AlchemySmartAccountClientConfig<
       Chain,
-      accountLoupeActions<TSigner>,
-      accountLoupeActions
+      LightAccount<TSigner>,
+      MultisigUserOperationContext
     >,
     "account"
   > &
   object;
 ```
 
-Defined in: [account-kit/smart-contracts/src/msca/client/multiSigAlchemyClient.ts:21](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/smart-contracts/src/msca/client/multiSigAlchemyClient.ts#L21)
+Defined in: [account-kit/smart-contracts/src/msca/client/multiSigAlchemyClient.ts:21](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/smart-contracts/src/msca/client/multiSigAlchemyClient.ts#L21)
 
 ## Type Declaration
 
-| Name        | Type                                                                      |
-| :---------- | :------------------------------------------------------------------------ |
-| `transport` | [`AlchemyTransport`](../../../core/src/type-aliases/AlchemyTransport.mdx) |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Name</th>
+      <th align="left">Type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `transport`
+      </td>
+
+      <td>
+        [`AlchemyTransport`](../../../core/src/type-aliases/AlchemyTransport.mdx)
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Type Parameters
 
-| Type Parameter                           | Default type         |
-| :--------------------------------------- | :------------------- |
-| `TSigner` _extends_ `SmartAccountSigner` | `SmartAccountSigner` |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TSigner` *extends* `SmartAccountSigner`
+      </td>
+
+      <td>
+        `SmartAccountSigner`
+      </td>
+    </tr>
+
+  </tbody>
+</table>

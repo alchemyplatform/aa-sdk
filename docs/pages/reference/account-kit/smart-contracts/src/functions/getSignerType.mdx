@@ -11,7 +11,7 @@ layout: reference
 function getSignerType<TTransport, TChain>(params): Promise<SignerType>;
 ```
 
-Defined in: [account-kit/smart-contracts/src/msca/plugins/multisig/utils/getSignerType.ts:51](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/smart-contracts/src/msca/plugins/multisig/utils/getSignerType.ts#L51)
+Defined in: [account-kit/smart-contracts/src/msca/plugins/multisig/utils/getSignerType.ts:51](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/smart-contracts/src/msca/plugins/multisig/utils/getSignerType.ts#L51)
 
 Determines the type of signer (Externally Owned Account (EOA) or CONTRACT) based on the provided client, signature, and signer.
 
@@ -31,16 +31,66 @@ const signerType = await getSignerType({ client, signature, signer }); // EOA
 
 ## Type Parameters
 
-| Type Parameter                     | Default type |
-| :--------------------------------- | :----------- | ----------- | ------- |
-| `TTransport` _extends_ `Transport` | `Transport`  |
-| `TChain` _extends_ `undefined`     | `Chain`      | `undefined` | `Chain` |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TTransport` *extends* `Transport`
+      </td>
+
+      <td>
+        `Transport`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TChain` *extends* `undefined` | `Chain`
+      </td>
+
+      <td>
+        `undefined` | `Chain`
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Parameters
 
-| Parameter | Type                                           | Description                                                |
-| :-------- | :--------------------------------------------- | :--------------------------------------------------------- |
-| `params`  | `GetSignerTypeParams`\<`TTransport`, `TChain`> | the parameters including the client, signature, and signer |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `params`
+      </td>
+
+      <td>
+        `GetSignerTypeParams`\<`TTransport`, `TChain`>
+      </td>
+
+      <td>
+        the parameters including the client, signature, and signer
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Returns
 

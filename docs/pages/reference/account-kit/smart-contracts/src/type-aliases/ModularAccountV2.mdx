@@ -16,19 +16,82 @@ type ModularAccountV2<TSigner> = SmartContractAccountWithSigner<
   object;
 ```
 
-Defined in: [account-kit/smart-contracts/src/ma-v2/account/common/modularAccountV2Base.ts:69](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/smart-contracts/src/ma-v2/account/common/modularAccountV2Base.ts#L69)
+Defined in: [account-kit/smart-contracts/src/ma-v2/account/common/modularAccountV2Base.ts:69](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/smart-contracts/src/ma-v2/account/common/modularAccountV2Base.ts#L69)
 
 ## Type Declaration
 
-| Name                  | Type                                                                     |
-| :-------------------- | :----------------------------------------------------------------------- |
-| `encodeCallData()`    | (`callData`) => `Promise`\<`Hex`>                                        |
-| `getExecutionData()`  | (`selector`) => `Promise`\<[`ExecutionDataView`](ExecutionDataView.mdx)> |
-| `getValidationData()` | (`args`) => `Promise`\<[`ValidationDataView`](ValidationDataView.mdx)>   |
-| `signerEntity`        | [`SignerEntity`](SignerEntity.mdx)                                       |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Name</th>
+      <th align="left">Type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `encodeCallData()`
+      </td>
+
+      <td>
+        (`callData`) => `Promise`\<`Hex`>
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `getExecutionData()`
+      </td>
+
+      <td>
+        (`selector`) => `Promise`\<[`ExecutionDataView`](ExecutionDataView.mdx)>
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `getValidationData()`
+      </td>
+
+      <td>
+        (`args`) => `Promise`\<[`ValidationDataView`](ValidationDataView.mdx)>
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `signerEntity`
+      </td>
+
+      <td>
+        [`SignerEntity`](SignerEntity.mdx)
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Type Parameters
 
-| Type Parameter                           | Default type         |
-| :--------------------------------------- | :------------------- |
-| `TSigner` _extends_ `SmartAccountSigner` | `SmartAccountSigner` |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TSigner` *extends* `SmartAccountSigner`
+      </td>
+
+      <td>
+        `SmartAccountSigner`
+      </td>
+    </tr>
+
+  </tbody>
+</table>

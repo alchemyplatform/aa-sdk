@@ -47,20 +47,65 @@ function createModularAccountV2Client<TChain, TSigner>(
 ): Promise<AlchemySmartAccountClient<TChain, ModularAccountV2<TSigner>>>;
 ```
 
-Defined in: [account-kit/smart-contracts/src/ma-v2/client/client.ts:86](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/smart-contracts/src/ma-v2/client/client.ts#L86)
+Defined in: [account-kit/smart-contracts/src/ma-v2/client/client.ts:86](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/smart-contracts/src/ma-v2/client/client.ts#L86)
 
 ### Type Parameters
 
-| Type Parameter                                   | Default type                 |
-| :----------------------------------------------- | :--------------------------- |
-| `TChain` _extends_ `Chain`                       | `Chain`                      |
-| `TSigner` _extends_ `SmartAccountSigner`\<`any`> | `SmartAccountSigner`\<`any`> |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TChain` *extends* `Chain`
+      </td>
+
+      <td>
+        `Chain`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TSigner` *extends* `SmartAccountSigner`\<`any`>
+      </td>
+
+      <td>
+        `SmartAccountSigner`\<`any`>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ### Parameters
 
-| Parameter | Type                                                                                                                                                                                                          |
-| :-------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `args`    | [`CreateModularAccountV2AlchemyClientParams`](../type-aliases/CreateModularAccountV2AlchemyClientParams.mdx)\<[`AlchemyTransport`](../../../core/src/type-aliases/AlchemyTransport.mdx), `TChain`, `TSigner`> |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `args`
+      </td>
+
+      <td>
+        [`CreateModularAccountV2AlchemyClientParams`](../type-aliases/CreateModularAccountV2AlchemyClientParams.mdx)\<[`AlchemyTransport`](../../../core/src/type-aliases/AlchemyTransport.mdx), `TChain`, `TSigner`>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ### Returns
 
@@ -74,21 +119,75 @@ function createModularAccountV2Client<TTransport, TChain, TSigner>(
 ): Promise<ModularAccountV2Client<TSigner, TChain, TTransport>>;
 ```
 
-Defined in: [account-kit/smart-contracts/src/ma-v2/client/client.ts:97](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/smart-contracts/src/ma-v2/client/client.ts#L97)
+Defined in: [account-kit/smart-contracts/src/ma-v2/client/client.ts:97](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/smart-contracts/src/ma-v2/client/client.ts#L97)
 
 ### Type Parameters
 
-| Type Parameter                                   | Default type                 |
-| :----------------------------------------------- | :--------------------------- |
-| `TTransport` _extends_ `Transport`               | `Transport`                  |
-| `TChain` _extends_ `Chain`                       | `Chain`                      |
-| `TSigner` _extends_ `SmartAccountSigner`\<`any`> | `SmartAccountSigner`\<`any`> |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TTransport` *extends* `Transport`
+      </td>
+
+      <td>
+        `Transport`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TChain` *extends* `Chain`
+      </td>
+
+      <td>
+        `Chain`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TSigner` *extends* `SmartAccountSigner`\<`any`>
+      </td>
+
+      <td>
+        `SmartAccountSigner`\<`any`>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ### Parameters
 
-| Parameter | Type                                                                                                                               |
-| :-------- | :--------------------------------------------------------------------------------------------------------------------------------- |
-| `args`    | [`CreateModularAccountV2ClientParams`](../type-aliases/CreateModularAccountV2ClientParams.mdx)\<`TTransport`, `TChain`, `TSigner`> |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `args`
+      </td>
+
+      <td>
+        [`CreateModularAccountV2ClientParams`](../type-aliases/CreateModularAccountV2ClientParams.mdx)\<`TTransport`, `TChain`, `TSigner`>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ### Returns
 
@@ -102,20 +201,65 @@ function createModularAccountV2Client<TTransport, TChain>(
 ): Promise<WebauthnModularAccountV2Client<TChain, TTransport>>;
 ```
 
-Defined in: [account-kit/smart-contracts/src/ma-v2/client/client.ts:105](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/smart-contracts/src/ma-v2/client/client.ts#L105)
+Defined in: [account-kit/smart-contracts/src/ma-v2/client/client.ts:105](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/smart-contracts/src/ma-v2/client/client.ts#L105)
 
 ### Type Parameters
 
-| Type Parameter                     | Default type |
-| :--------------------------------- | :----------- |
-| `TTransport` _extends_ `Transport` | `Transport`  |
-| `TChain` _extends_ `Chain`         | `Chain`      |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+      <th align="left">Default type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TTransport` *extends* `Transport`
+      </td>
+
+      <td>
+        `Transport`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TChain` *extends* `Chain`
+      </td>
+
+      <td>
+        `Chain`
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ### Parameters
 
-| Parameter | Type                                                                                                                                    |
-| :-------- | :-------------------------------------------------------------------------------------------------------------------------------------- |
-| `args`    | [`CreateWebauthnModularAccountV2ClientParams`](../type-aliases/CreateWebauthnModularAccountV2ClientParams.mdx)\<`TTransport`, `TChain`> |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `args`
+      </td>
+
+      <td>
+        [`CreateWebauthnModularAccountV2ClientParams`](../type-aliases/CreateWebauthnModularAccountV2ClientParams.mdx)\<`TTransport`, `TChain`>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ### Returns
 

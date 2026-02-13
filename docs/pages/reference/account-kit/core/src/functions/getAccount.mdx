@@ -11,7 +11,7 @@ layout: reference
 function getAccount<TAccount>(params, config): GetAccountResult<TAccount>;
 ```
 
-Defined in: [account-kit/core/src/actions/getAccount.ts:34](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/core/src/actions/getAccount.ts#L34)
+Defined in: [account-kit/core/src/actions/getAccount.ts:34](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/core/src/actions/getAccount.ts#L34)
 
 Retrieves the account of the specified type from the client store based on the provided configuration.
 
@@ -32,16 +32,64 @@ const { account, status } = getAccount(
 
 ## Type Parameters
 
-| Type Parameter                                                                            |
-| :---------------------------------------------------------------------------------------- |
-| `TAccount` _extends_ [`SupportedAccountTypes`](../type-aliases/SupportedAccountTypes.mdx) |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Type Parameter</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TAccount` *extends* [`SupportedAccountTypes`](../type-aliases/SupportedAccountTypes.mdx)
+      </td>
+    </tr>
+  </tbody>
+</table>
 
 ## Parameters
 
-| Parameter | Type                                                                    | Description                                                   |
-| :-------- | :---------------------------------------------------------------------- | :------------------------------------------------------------ |
-| `params`  | [`GetAccountParams`](../type-aliases/GetAccountParams.mdx)\<`TAccount`> | The parameters containing the type of the account to retrieve |
-| `config`  | [`AlchemyAccountsConfig`](../type-aliases/AlchemyAccountsConfig.mdx)    | The configuration containing the client store                 |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `params`
+      </td>
+
+      <td>
+        [`GetAccountParams`](../type-aliases/GetAccountParams.mdx)\<`TAccount`>
+      </td>
+
+      <td>
+        The parameters containing the type of the account to retrieve
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `config`
+      </td>
+
+      <td>
+        [`AlchemyAccountsConfig`](../type-aliases/AlchemyAccountsConfig.mdx)
+      </td>
+
+      <td>
+        The configuration containing the client store
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 
 ## Returns
 

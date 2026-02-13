@@ -11,21 +11,138 @@ layout: reference
 type StoreState = object;
 ```
 
-Defined in: [account-kit/core/src/store/types.ts:82](https://github.com/alchemyplatform/aa-sdk/blob/3e18d9576e65cdac5cac073ca850cbc18ad72ff1/account-kit/core/src/store/types.ts#L82)
+Defined in: [account-kit/core/src/store/types.ts:82](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/core/src/store/types.ts#L82)
 
 ## Properties
 
-| Property                                             | Type                                                          |
-| :--------------------------------------------------- | :------------------------------------------------------------ | ------------------------------------------------------------------------ |
-| <a id="accountconfigs" /> `accountConfigs`           | `object`                                                      |
-| <a id="accounts" /> `accounts?`                      | `object`                                                      |
-| <a id="bundlerclient" /> `bundlerClient`             | [`ClientWithAlchemyMethods`](ClientWithAlchemyMethods.mdx)    |
-| <a id="chain" /> `chain`                             | `Chain`                                                       |
-| <a id="config" /> `config`                           | [`ClientStoreConfig`](ClientStoreConfig.mdx)                  |
-| <a id="connections" /> `connections`                 | `Map`\<`number`                                               | `string`, [`accountLoupeActions`](../variables/accountLoupeActions.mdx)> |
-| <a id="signer" /> `signer?`                          | [`accountLoupeActions`](../variables/accountLoupeActions.mdx) |
-| <a id="signerstatus" /> `signerStatus`               | [`SignerStatus`](SignerStatus.mdx)                            |
-| <a id="smartaccountclients" /> `smartAccountClients` | `object`                                                      |
-| <a id="smartwalletclients" /> `smartWalletClients`   | `object`                                                      |
-| <a id="solana" /> `solana?`                          | [`accountLoupeActions`](../variables/accountLoupeActions.mdx) |
-| <a id="user" /> `user?`                              | [`User`](../../../signer/src/type-aliases/User.mdx)           |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Property</th>
+      <th align="left">Type</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        <a id="accountconfigs" /> `accountConfigs`
+      </td>
+
+      <td>
+        `object`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="accounts" /> `accounts?`
+      </td>
+
+      <td>
+        `object`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="bundlerclient" /> `bundlerClient`
+      </td>
+
+      <td>
+        [`ClientWithAlchemyMethods`](ClientWithAlchemyMethods.mdx)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="chain" /> `chain`
+      </td>
+
+      <td>
+        `Chain`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="config" /> `config`
+      </td>
+
+      <td>
+        [`ClientStoreConfig`](ClientStoreConfig.mdx)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="connections" /> `connections`
+      </td>
+
+      <td>
+        `Map`\<`number` | `string`, `Connection`>
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="signer" /> `signer?`
+      </td>
+
+      <td>
+        `AlchemySigner`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="signerstatus" /> `signerStatus`
+      </td>
+
+      <td>
+        [`SignerStatus`](SignerStatus.mdx)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="smartaccountclients" /> `smartAccountClients`
+      </td>
+
+      <td>
+        `object`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="smartwalletclients" /> `smartWalletClients`
+      </td>
+
+      <td>
+        `object`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="solana" /> `solana?`
+      </td>
+
+      <td>
+        `SolanaConnection`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="user" /> `user?`
+      </td>
+
+      <td>
+        [`User`](../../../signer/src/type-aliases/User.mdx)
+      </td>
+    </tr>
+
+  </tbody>
+</table>
