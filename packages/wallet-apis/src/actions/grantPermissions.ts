@@ -3,18 +3,12 @@ import type { DistributiveOmit, InnerWalletApiClient } from "../types.ts";
 import { wallet_createSession as MethodSchema } from "@alchemy/wallet-api-types/rpc";
 import { signSignatureRequest } from "./signSignatureRequest.js";
 import { LOGGER } from "../logger.js";
-import type { StaticDecode } from "typebox";
 import { Value } from "typebox/value";
 import { resolveAddress, type AccountParam } from "../utils/resolve.js";
+import { methodSchema, type MethodParams } from "../utils/schema.js";
 
-const schema = {
-  request: MethodSchema.properties.Request.properties.params.items[0],
-  response: MethodSchema.properties.ReturnType,
-};
-
-// Runtime types.
-type Schema = StaticDecode<typeof MethodSchema>;
-type BaseCreateSessionParams = Schema["Request"]["params"][0];
+const schema = methodSchema(MethodSchema);
+type BaseCreateSessionParams = MethodParams<typeof MethodSchema>;
 
 export type GrantPermissionsParams = Prettify<
   DistributiveOmit<BaseCreateSessionParams, "account" | "chainId"> & {

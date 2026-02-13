@@ -8,18 +8,16 @@ import {
 } from "../utils/capabilities.js";
 import { resolveAddress, type AccountParam } from "../utils/resolve.js";
 import { wallet_prepareCalls as MethodSchema } from "@alchemy/wallet-api-types/rpc";
-import type { StaticDecode } from "typebox";
 import { Value } from "typebox/value";
+import {
+  methodSchema,
+  type MethodParams,
+  type MethodResponse,
+} from "../utils/schema.js";
 
-const schema = {
-  request: MethodSchema.properties.Request.properties.params.items[0],
-  response: MethodSchema.properties.ReturnType,
-};
-
-// Runtime types.
-type Schema = StaticDecode<typeof MethodSchema>;
-type BasePrepareCallsParams = Schema["Request"]["params"][0];
-type PrepareCallsResponse = Schema["ReturnType"];
+const schema = methodSchema(MethodSchema);
+type BasePrepareCallsParams = MethodParams<typeof MethodSchema>;
+type PrepareCallsResponse = MethodResponse<typeof MethodSchema>;
 
 export type PrepareCallsParams = Prettify<
   WithCapabilities<

@@ -5,17 +5,11 @@ import deepEqual from "deep-equal";
 import type { DistributiveOmit, InnerWalletApiClient } from "../types";
 import { LOGGER } from "../logger.js";
 import { isLocalAccount } from "../utils/assertions.js";
-import type { StaticDecode } from "typebox";
 import { Value } from "typebox/value";
+import { methodSchema, type MethodParams } from "../utils/schema.js";
 
-const schema = {
-  request: MethodSchema.properties.Request.properties.params.items[0],
-  response: MethodSchema.properties.ReturnType,
-};
-
-// Runtime types.
-type Schema = StaticDecode<typeof MethodSchema>;
-type BaseRequestAccountParams = Schema["Request"]["params"][0];
+const schema = methodSchema(MethodSchema);
+type BaseRequestAccountParams = MethodParams<typeof MethodSchema>;
 
 export type RequestAccountParams = Prettify<
   DistributiveOmit<

@@ -3,18 +3,16 @@ import { LOGGER } from "../logger.js";
 import type { Address, Prettify } from "viem";
 import { wallet_listAccounts as MethodSchema } from "@alchemy/wallet-api-types/rpc";
 import { isLocalAccount } from "../utils/assertions.js";
-import type { StaticDecode } from "typebox";
 import { Value } from "typebox/value";
+import {
+  methodSchema,
+  type MethodParams,
+  type MethodResponse,
+} from "../utils/schema.js";
 
-const schema = {
-  request: MethodSchema.properties.Request.properties.params.items[0],
-  response: MethodSchema.properties.ReturnType,
-};
-
-// Runtime types.
-type Schema = StaticDecode<typeof MethodSchema>;
-type BaseListAccountsParams = Schema["Request"]["params"][0];
-type ListAccountsResponse = Schema["ReturnType"];
+const schema = methodSchema(MethodSchema);
+type BaseListAccountsParams = MethodParams<typeof MethodSchema>;
+type ListAccountsResponse = MethodResponse<typeof MethodSchema>;
 
 export type ListAccountsParams = Prettify<
   DistributiveOmit<
