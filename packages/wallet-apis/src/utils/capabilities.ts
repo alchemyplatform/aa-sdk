@@ -34,13 +34,13 @@ export type WithCapabilities<T> = T extends {
     }
   : T;
 
-function isRpcCapabilities(
+function hasNoPaymasterField(
   value: object,
 ): value is RpcPrepareCallsCapabilities | RpcSendPreparedCallsCapabilities {
   return !("paymaster" in value);
 }
 
-function isResolvedCapabilities(
+function hasNoPaymasterServiceField(
   value: object,
 ): value is PrepareCallsCapabilities | SendPreparedCallsCapabilities {
   return !("paymasterService" in value);
@@ -65,7 +65,7 @@ export function toRpcCapabilities(
     paymaster !== undefined
       ? { ...rest, paymasterService: paymaster }
       : { ...rest };
-  if (isRpcCapabilities(result)) return result;
+  if (hasNoPaymasterField(result)) return result;
   return undefined;
 }
 
@@ -89,10 +89,10 @@ export function fromRpcCapabilities(
       paymasterService !== undefined
         ? { ...rest, paymaster: paymasterService }
         : { ...rest };
-    if (isResolvedCapabilities(result)) return result;
+    if (hasNoPaymasterServiceField(result)) return result;
     return undefined;
   }
-  if (isResolvedCapabilities(capabilities)) return capabilities;
+  if (hasNoPaymasterServiceField(capabilities)) return capabilities;
   return undefined;
 }
 
