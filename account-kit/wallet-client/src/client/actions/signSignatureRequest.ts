@@ -5,7 +5,6 @@ import type {
   TypedDataSignatureRequest,
   AuthorizationSignatureRequest,
   Eip7702UnsignedAuth,
-  UserOpSig,
   EcdsaSig,
 } from "@alchemy/wallet-api-types";
 import { vToYParity } from "ox/Signature";
@@ -21,7 +20,7 @@ export type SignSignatureRequestParams = WithoutRawPayload<
     })
 >;
 
-export type SignSignatureRequestResult = UserOpSig["signature"];
+export type SignSignatureRequestResult = EcdsaSig["signature"];
 
 /**
  * Signs a signature request using the provided signer.
