@@ -20,7 +20,7 @@ import { rundler } from "./rundler/instance";
 
 export const localInstance = defineInstance({
   chain: localhost,
-  forkBlockNumber: 10043061,
+  forkBlockNumber: 23456789, // must be after Pectra for EIP-7623
   forkUrl:
     process.env.VITEST_SEPOLIA_FORK_URL ??
     "https://ethereum-sepolia-rpc.publicnode.com",
