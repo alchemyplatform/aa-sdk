@@ -1,7 +1,4 @@
-import {
-  getCapabilities as viemGetCapabilities,
-  type GetCapabilitiesReturnType,
-} from "viem/actions";
+import { getCapabilities as viemGetCapabilities } from "viem/actions";
 import type { InnerWalletApiClient } from "../types.js";
 import { resolveAddress, type AccountParam } from "../utils/resolve.js";
 
@@ -10,7 +7,7 @@ export type GetCapabilitiesParams = {
   chainId?: number;
 };
 
-export type GetCapabilitiesResult = GetCapabilitiesReturnType<number>;
+export type GetCapabilitiesResult = Record<string, unknown>;
 
 /**
  * Gets the capabilities supported by the wallet for the given account.
@@ -41,10 +38,19 @@ export async function getCapabilities(
 
   const chainId = params?.chainId ?? client.chain.id;
 
-  const viemResult = await viemGetCapabilities(client, { account, chainId });
+  // Don't pass chainId to viem — the Alchemy API keys capabilities by a
+  // generic identifier (0) rather than the actual chain ID, so viem's
+  // chainId-based lookup would return undefined.
+  const viemResult = await viemGetCapabilities(client, { account });
+
+  // Look for capabilities matching the requested chainId, falling back to
+  // the generic "0" key that the Alchemy API uses.
+  const chainCaps = viemResult[chainId] ?? viemResult[0];
+
+  if (!chainCaps) return {};
 
   const result: Record<string, unknown> = {};
-  for (const [key, value] of Object.entries(viemResult)) {
+  for (const [key, value] of Object.entries(chainCaps)) {
     // Our paymaster capability interface is non-standard, so we rename it
     // from `paymasterService` to `paymaster` when used in our SDK client.
     if (key === "paymasterService") {

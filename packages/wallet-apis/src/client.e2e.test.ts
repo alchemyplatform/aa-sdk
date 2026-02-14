@@ -109,41 +109,39 @@ describe("Client E2E Tests", () => {
     });
     expect(capabilities).toMatchInlineSnapshot(`
       {
-        "0": {
-          "atomic": {
-            "status": "supported",
-          },
-          "eip7702Auth": {
-            "supported": true,
-          },
-          "gasParamsOverride": {
-            "supported": true,
-          },
-          "nonceOverride": {
-            "supported": true,
-          },
-          "paymaster": {
-            "supported": true,
-          },
-          "permissions": {
-            "keyTypes": [
-              "secp256k1",
-            ],
-            "permissionTypes": [
-              "native-token-transfer",
-              "erc20-token-transfer",
-              "gas-limit",
-              "contract-access",
-              "account-functions",
-              "functions-on-all-contracts",
-              "functions-on-contract",
-              "root",
-            ],
-            "signerTypes": [
-              "keys",
-            ],
-            "supported": true,
-          },
+        "atomic": {
+          "status": "supported",
+        },
+        "eip7702Auth": {
+          "supported": true,
+        },
+        "gasParamsOverride": {
+          "supported": true,
+        },
+        "nonceOverride": {
+          "supported": true,
+        },
+        "paymaster": {
+          "supported": true,
+        },
+        "permissions": {
+          "keyTypes": [
+            "secp256k1",
+          ],
+          "permissionTypes": [
+            "native-token-transfer",
+            "erc20-token-transfer",
+            "gas-limit",
+            "contract-access",
+            "account-functions",
+            "functions-on-all-contracts",
+            "functions-on-contract",
+            "root",
+          ],
+          "signerTypes": [
+            "keys",
+          ],
+          "supported": true,
         },
       }
     `);
@@ -476,41 +474,39 @@ describe("Client E2E Tests", () => {
 
       expect(capabilities).toMatchInlineSnapshot(`
         {
-          "0": {
-            "atomic": {
-              "status": "supported",
-            },
-            "eip7702Auth": {
-              "supported": true,
-            },
-            "gasParamsOverride": {
-              "supported": true,
-            },
-            "nonceOverride": {
-              "supported": true,
-            },
-            "paymaster": {
-              "supported": true,
-            },
-            "permissions": {
-              "keyTypes": [
-                "secp256k1",
-              ],
-              "permissionTypes": [
-                "native-token-transfer",
-                "erc20-token-transfer",
-                "gas-limit",
-                "contract-access",
-                "account-functions",
-                "functions-on-all-contracts",
-                "functions-on-contract",
-                "root",
-              ],
-              "signerTypes": [
-                "keys",
-              ],
-              "supported": true,
-            },
+          "atomic": {
+            "status": "supported",
+          },
+          "eip7702Auth": {
+            "supported": true,
+          },
+          "gasParamsOverride": {
+            "supported": true,
+          },
+          "nonceOverride": {
+            "supported": true,
+          },
+          "paymaster": {
+            "supported": true,
+          },
+          "permissions": {
+            "keyTypes": [
+              "secp256k1",
+            ],
+            "permissionTypes": [
+              "native-token-transfer",
+              "erc20-token-transfer",
+              "gas-limit",
+              "contract-access",
+              "account-functions",
+              "functions-on-all-contracts",
+              "functions-on-contract",
+              "root",
+            ],
+            "signerTypes": [
+              "keys",
+            ],
+            "supported": true,
           },
         }
       `);
