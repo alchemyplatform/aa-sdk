@@ -1,13 +1,5 @@
-import {
-  concatHex,
-  encodeAbiParameters,
-  toHex,
-  type Address,
-  type Hash,
-  type Hex,
-} from "viem";
+import { concatHex, toHex, type Address, type Hash, type Hex } from "viem";
 import { SignaturePrefix } from "../types.js";
-import { Signature, type WebAuthnP256 } from "ox";
 
 export type PackUOSignatureParams = {
   // orderedHookData: HookData[];
@@ -30,7 +22,7 @@ export const packUOSignature = ({
 // TODO(v4): direct call validation 1271
 export type Pack1271SignatureParams = {
   entityId: number;
-  validationSignaturePrefix: SignaturePrefix | null;
+  validationSignaturePrefix: SignaturePrefix;
   validationSignature: Hex;
 };
 
@@ -86,57 +78,3 @@ export function toReplaySafeTypedData({
     primaryType: "ReplaySafeHash" as const,
   };
 }
-/**
- * Wraps a P256 signature with the webauthn metadata.
- *
- * @param {ToWebAuthnSignatureParams} params - The parameters for wrapping a P256 signature with the webauthn metadata.
- * @returns {object} The wrapped P256 signature.
- */
-export function toWebAuthnSignature({
-  webauthn,
-  signature,
-}: {
-  webauthn: WebAuthnP256.SignMetadata;
-  signature: Hex;
-}) {
-  const { r, s } = Signature.fromHex(signature);
-
-  // If either index is undefined, derive them from the clientDataJSON string
-  const challengeIndex =
-    webauthn.challengeIndex ?? webauthn.clientDataJSON.indexOf('"challenge"');
-  const typeIndex =
-    webauthn.typeIndex ?? webauthn.clientDataJSON.indexOf('"type"');
-
-  return encodeAbiParameters(
-    [
-      {
-        name: "params",
-        type: "tuple",
-        components: [
-          { name: "authenticatorData", type: "bytes" },
-          { name: "clientDataJSON", type: "string" },
-          { name: "challengeIndex", type: "uint256" },
-          { name: "typeIndex", type: "uint256" },
-          { name: "r", type: "uint256" },
-          { name: "s", type: "uint256" },
-        ],
-      },
-    ],
-    [
-      {
-        authenticatorData: webauthn.authenticatorData,
-        clientDataJSON: webauthn.clientDataJSON,
-        challengeIndex: BigInt(challengeIndex),
-        typeIndex: BigInt(typeIndex),
-        r,
-        s,
-      },
-    ],
-  );
-}
-
-/**
- * A dummy WebAuthn signature used for gas estimation.
- */
-export const WEBAUTHN_DUMMY_SIGNATURE =
-  "0xff000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000c0000000000000000000000000000000000000000000000000000000000000012000000000000000000000000000000000000000000000000000000000000000170000000000000000000000000000000000000000000000000000000000000001949fc7c88032b9fcb5f6efc7a7b8c63668eae9871b765e23123bb473ff57aa831a7c0d9276168ebcc29f2875a0239cffdf2a9cd1c2007c5c77c071db9264df1d000000000000000000000000000000000000000000000000000000000000002549960de5880e8c687434170f6476605b8fe4aeb9a28632c7995cf3ba831d97630500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008a7b2274797065223a22776562617574686e2e676574222c226368616c6c656e6765223a2273496a396e6164474850596759334b7156384f7a4a666c726275504b474f716d59576f4d57516869467773222c226f726967696e223a2268747470733a2f2f7369676e2e636f696e626173652e636f6d222c2263726f73734f726967696e223a66616c73657d00000000000000000000000000000000000000000000";

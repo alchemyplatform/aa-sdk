@@ -14,9 +14,7 @@ import {
   entryPoint07Address,
   type EntryPointVersion,
 } from "viem/account-abstraction";
-import { parsePublicKey, serializePublicKey } from "webauthn-p256";
 import { accountFactoryAbi } from "./abis/accountFactoryAbi.js";
-import { webAuthnFactoryAbi } from "./abis/webAuthnFactoryAbi.js";
 import { DefaultAddress } from "./utils/account.js";
 import { getSenderFromFactoryData } from "../utils.js";
 
@@ -34,15 +32,10 @@ export type PredictModularAccountV2AddressParams = {
       type: "SMA";
       ownerAddress: Address;
     }
-  | {
-      type: "WebAuthn";
-      ownerPublicKey: Hex;
-      entityId: number;
-    }
 );
 
 /**
- * Predicts the address of a modular account V2 based on the provided parameters, which include factory address, salt, and implementation address. This function supports different types of accounts including "SMA", "MA", and "WebAuthn".
+ * Predicts the address of a modular account V2 based on the provided parameters, which include factory address, salt, and implementation address. This function supports different types of accounts including "SMA" and "MA".
  *
  * @example
  * ```ts
@@ -91,16 +84,6 @@ export function predictModularAccountV2Address(
           ),
           initcode: getProxyBytecode(implementationAddress),
         };
-      case "WebAuthn":
-        const { x, y } = parsePublicKey(params.ownerPublicKey);
-        return {
-          combinedSalt: getCombinedSaltWebAuthn(
-            { x, y },
-            salt,
-            params.entityId,
-          ),
-          initcode: getProxyBytecode(implementationAddress),
-        };
       default:
         return assertNever(params, "Unexpected MAv2 type");
     }
@@ -123,19 +106,6 @@ function getCombinedSaltK1(
     encodePacked(
       ["address", "uint256", "uint32"],
       [ownerAddress, salt, entityId],
-    ),
-  );
-}
-
-function getCombinedSaltWebAuthn(
-  ownerPublicKey: { x: bigint; y: bigint },
-  salt: bigint,
-  entityId: number,
-): Hex {
-  return keccak256(
-    encodePacked(
-      ["uint256", "uint256", "uint256", "uint32"],
-      [ownerPublicKey.x, ownerPublicKey.y, salt, entityId],
     ),
   );
 }
@@ -172,7 +142,7 @@ export type GetModularAccountV2AddressFromFactoryDataParams = {
 
 /**
  * Gets the modular account v2 address from factory data.
- * If the factory is a known default (SMA or WebAuthn), decodes the args and predicts without RPC.
+ * If the factory is a known default (SMA), decodes the args and predicts without RPC.
  * Otherwise falls back to calling the entry point's getSenderAddress.
  *
  * @param {GetModularAccountV2AddressFromFactoryDataParams} params - The parameters
@@ -203,32 +173,6 @@ export async function getModularAccountV2AddressFromFactoryData({
           salt: decodedSalt,
           type: "SMA",
           ownerAddress: decodedOwner,
-        });
-      }
-    } catch {
-      // Decode failed, fall through to RPC
-    }
-  }
-  // Try WebAuthn factory
-  if (isAddressEqual(factoryAddress, DefaultAddress.MAV2_FACTORY_WEBAUTHN)) {
-    try {
-      const decoded = decodeFunctionData({
-        abi: webAuthnFactoryAbi,
-        data: factoryData,
-      });
-      if (decoded.functionName === "createWebAuthnAccount") {
-        const [decodedOwnerX, decodedOwnerY, decodedSalt, decodedEntityId] =
-          decoded.args;
-        return predictModularAccountV2Address({
-          factoryAddress,
-          implementationAddress,
-          salt: decodedSalt,
-          type: "WebAuthn",
-          ownerPublicKey: serializePublicKey({
-            x: decodedOwnerX,
-            y: decodedOwnerY,
-          }),
-          entityId: decodedEntityId,
         });
       }
     } catch {

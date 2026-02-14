@@ -4,7 +4,11 @@ dotenv.config();
 import fetch from "node-fetch";
 import { setAutomine } from "viem/actions";
 import { beforeAll } from "vitest";
-import { poolId, rundlerBinaryPath } from "./src/constants.js";
+import {
+  poolId,
+  rundlerBinaryPath,
+  rundlerSignerAddresses,
+} from "./src/constants.js";
 import { localInstance } from "./src/instances.js";
 import { paymaster060 } from "./src/paymaster/paymaster060.js";
 import { paymaster070 } from "./src/paymaster/paymaster070.js";
@@ -28,6 +32,18 @@ beforeAll(async () => {
 
   const client = localInstance.getClient();
   await setAutomine(client, true);
+
+  // The default Anvil accounts have 7702 delegations on Sepolia, which causes
+  // the entry point's `beneficiary.call{value}` to revert when the bundler
+  // uses them as builder accounts. Clear delegations by resetting their code.
+  await Promise.all(
+    rundlerSignerAddresses.map((addr) =>
+      client.request({
+        method: "hardhat_setCode" as any,
+        params: [addr, "0x"],
+      }),
+    ),
+  );
 
   await paymaster060.deployPaymasterContract(client);
   await paymaster070.deployPaymasterContract(client);
