@@ -44,17 +44,19 @@ import {
   type GrantPermissionsParams,
   type GrantPermissionsResult,
 } from "../actions/grantPermissions.js";
+import {
+  getCapabilities,
+  type GetCapabilitiesParams,
+  type GetCapabilitiesResult,
+} from "../actions/getCapabilities.js";
 import type { InnerWalletApiClient } from "../types.js";
 import {
   getCallsStatus,
   waitForCallsStatus,
-  getCapabilities,
   type GetCallsStatusParameters,
   type GetCallsStatusReturnType,
   type WaitForCallsStatusParameters,
   type WaitForCallsStatusReturnType,
-  type GetCapabilitiesParameters,
-  type GetCapabilitiesReturnType,
 } from "viem/actions";
 
 export type SmartWalletActions = {
@@ -85,8 +87,8 @@ export type SmartWalletActions = {
     params: WaitForCallsStatusParameters,
   ) => Promise<WaitForCallsStatusReturnType>;
   getCapabilities: (
-    params?: GetCapabilitiesParameters | undefined,
-  ) => Promise<GetCapabilitiesReturnType>;
+    params?: GetCapabilitiesParams | undefined,
+  ) => Promise<GetCapabilitiesResult>;
 };
 
 /**
@@ -104,14 +106,14 @@ export const smartWalletActions = (
   prepareCalls: (params) => prepareCalls(client, params),
   listAccounts: (params) => listAccounts(client, params),
   sendPreparedCalls: (params) => sendPreparedCalls(client, params),
-  sendCalls: (params) => sendCalls(client, params), // TODO(v5): adapt this to fit viem's exact interface?
+  sendCalls: (params) => sendCalls(client, params),
   signSignatureRequest: (params) => signSignatureRequest(client, params),
   signPreparedCalls: (params) => signPreparedCalls(client, params),
   signMessage: (params) => signMessage(client, params),
   signTypedData: (params) => signTypedData(client, params),
   grantPermissions: (params) => grantPermissions(client, params),
+  getCapabilities: (params) => getCapabilities(client, params),
   // Viem methods.
   getCallsStatus: (params) => getCallsStatus(client, params),
   waitForCallsStatus: (params) => waitForCallsStatus(client, params),
-  getCapabilities: (params) => getCapabilities(client, params),
 });

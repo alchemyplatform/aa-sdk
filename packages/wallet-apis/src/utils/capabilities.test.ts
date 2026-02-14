@@ -1,8 +1,8 @@
-import type { PrepareCallsCapabilities } from "@alchemy/wallet-api-types/capabilities";
 import type { InnerWalletApiClient } from "../types.js";
 import {
   mergeClientCapabilities,
   extractCapabilitiesForSending,
+  type PrepareCallsCapabilities,
 } from "./capabilities.js";
 
 describe("mergeClientCapabilities", () => {
@@ -40,10 +40,10 @@ describe("mergeClientCapabilities", () => {
     expect(result).toBe(capabilities);
   });
 
-  it("returns capabilities unchanged when capabilities already has paymasterService", () => {
+  it("returns capabilities unchanged when capabilities already has paymaster", () => {
     const client = createMockClient(["policy-1", "policy-2"]);
     const capabilities: PrepareCallsCapabilities = {
-      paymasterService: { policyId: "existing-policy" },
+      paymaster: { policyId: "existing-policy" },
     };
 
     const result = mergeClientCapabilities(
@@ -67,7 +67,7 @@ describe("mergeClientCapabilities", () => {
 
     expect(result).toEqual({
       permissions: { context: "0x1234" },
-      paymasterService: { policyId: "single-policy" },
+      paymaster: { policyId: "single-policy" },
     });
   });
 
@@ -84,11 +84,11 @@ describe("mergeClientCapabilities", () => {
 
     expect(result).toEqual({
       permissions: { context: "0x1234" },
-      paymasterService: { policyIds: ["policy-1", "policy-2"] },
+      paymaster: { policyIds: ["policy-1", "policy-2"] },
     });
   });
 
-  it("adds paymasterService when client has single policyId and capabilities is undefined", () => {
+  it("adds paymaster when client has single policyId and capabilities is undefined", () => {
     const client = createMockClient(["single-policy"]);
 
     const result = mergeClientCapabilities(
@@ -97,7 +97,7 @@ describe("mergeClientCapabilities", () => {
     );
 
     expect(result).toEqual({
-      paymasterService: { policyId: "single-policy" },
+      paymaster: { policyId: "single-policy" },
     });
   });
 
@@ -120,7 +120,7 @@ describe("extractCapabilitiesForSending", () => {
     expect(result).toBeUndefined();
   });
 
-  it("returns undefined when capabilities has no permissions or paymasterService", () => {
+  it("returns undefined when capabilities has no permissions or paymaster", () => {
     const capabilities: PrepareCallsCapabilities = {
       gasParamsOverride: { callGasLimit: "0x5208" },
     };
@@ -139,20 +139,20 @@ describe("extractCapabilitiesForSending", () => {
 
     expect(result).toEqual({
       permissions: { context: "0x1234" },
-      paymasterService: undefined,
+      paymaster: undefined,
     });
   });
 
-  it("extracts paymasterService with policyId (already singular)", () => {
+  it("extracts paymaster with policyId (already singular)", () => {
     const capabilities: PrepareCallsCapabilities = {
-      paymasterService: { policyId: "my-policy" },
+      paymaster: { policyId: "my-policy" },
     };
 
     const result = extractCapabilitiesForSending(capabilities);
 
     expect(result).toEqual({
       permissions: undefined,
-      paymasterService: {
+      paymaster: {
         policyId: "my-policy",
         webhookData: undefined,
       },
@@ -161,14 +161,14 @@ describe("extractCapabilitiesForSending", () => {
 
   it("passes through policyIds when present", () => {
     const capabilities: PrepareCallsCapabilities = {
-      paymasterService: { policyIds: ["policy-1", "policy-2", "policy-3"] },
+      paymaster: { policyIds: ["policy-1", "policy-2", "policy-3"] },
     };
 
     const result = extractCapabilitiesForSending(capabilities);
 
     expect(result).toEqual({
       permissions: undefined,
-      paymasterService: {
+      paymaster: {
         policyIds: ["policy-1", "policy-2", "policy-3"],
         webhookData: undefined,
       },
@@ -177,7 +177,7 @@ describe("extractCapabilitiesForSending", () => {
 
   it("includes webhookData when present", () => {
     const capabilities: PrepareCallsCapabilities = {
-      paymasterService: {
+      paymaster: {
         policyId: "my-policy",
         webhookData: "webhook-data-123",
       },
@@ -187,17 +187,17 @@ describe("extractCapabilitiesForSending", () => {
 
     expect(result).toEqual({
       permissions: undefined,
-      paymasterService: {
+      paymaster: {
         policyId: "my-policy",
         webhookData: "webhook-data-123",
       },
     });
   });
 
-  it("extracts both permissions and paymasterService", () => {
+  it("extracts both permissions and paymaster", () => {
     const capabilities: PrepareCallsCapabilities = {
       permissions: { context: "0xabcd" },
-      paymasterService: {
+      paymaster: {
         policyId: "my-policy",
         webhookData: "some-data",
       },
@@ -209,16 +209,16 @@ describe("extractCapabilitiesForSending", () => {
 
     expect(result).toEqual({
       permissions: { context: "0xabcd" },
-      paymasterService: {
+      paymaster: {
         policyId: "my-policy",
         webhookData: "some-data",
       },
     });
   });
 
-  it("does not include extra fields from paymasterService", () => {
+  it("does not include extra fields from paymaster", () => {
     const capabilities: PrepareCallsCapabilities = {
-      paymasterService: {
+      paymaster: {
         policyId: "my-policy",
         onlyEstimation: true,
         erc20: {
@@ -231,7 +231,7 @@ describe("extractCapabilitiesForSending", () => {
 
     expect(result).toEqual({
       permissions: undefined,
-      paymasterService: {
+      paymaster: {
         policyId: "my-policy",
         webhookData: undefined,
       },

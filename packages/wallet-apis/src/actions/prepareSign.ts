@@ -1,27 +1,27 @@
-import type {
-  InnerWalletApiClient,
-  OptionalChainId,
-  OptionalFrom,
-} from "../types.ts";
-import { toHex, type Prettify } from "viem";
-import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
-import { AccountNotFoundError } from "@alchemy/common";
+import type { DistributiveOmit, InnerWalletApiClient } from "../types.ts";
+import { wallet_prepareSign as MethodSchema } from "@alchemy/wallet-api-types/rpc";
 import { LOGGER } from "../logger.js";
+import { resolveAddress, type AccountParam } from "../utils/resolve.js";
+import { Value } from "typebox/value";
+import {
+  methodSchema,
+  type MethodParams,
+  type MethodResponse,
+} from "../utils/schema.js";
 
-type RpcSchema = Extract<
-  WalletServerRpcSchemaType,
-  {
-    Request: {
-      method: "wallet_prepareSign";
-    };
-  }
->;
+const schema = methodSchema(MethodSchema);
+type BasePrepareSignParams = MethodParams<typeof MethodSchema>;
+type PrepareSignResponse = MethodResponse<typeof MethodSchema>;
 
-export type PrepareSignParams = Prettify<
-  OptionalFrom<OptionalChainId<RpcSchema["Request"]["params"][0]>>
->;
+export type PrepareSignParams = DistributiveOmit<
+  BasePrepareSignParams,
+  "from" | "chainId"
+> & {
+  account?: AccountParam;
+  chainId?: number;
+};
 
-export type PrepareSignResult = Prettify<RpcSchema["ReturnType"]>;
+export type PrepareSignResult = PrepareSignResponse;
 
 /**
  * Prepares a signature request for signing messages or transactions.
@@ -34,7 +34,7 @@ export type PrepareSignResult = Prettify<RpcSchema["ReturnType"]>;
  * ```ts
  * // Prepare a message to be signed
  * const result = await client.prepareSign({
- *    from: "0x1234...",
+ *    account: "0x1234...",
  *    type: "personal_sign",
  *    data: "Hello, world!",
  * });
@@ -44,23 +44,24 @@ export async function prepareSign(
   client: InnerWalletApiClient,
   params: PrepareSignParams,
 ): Promise<PrepareSignResult> {
-  const from = params.from ?? client.account?.address;
-  if (!from) {
-    LOGGER.warn("prepareSign:no-from", { hasClientAccount: !!client.account });
-    throw new AccountNotFoundError();
-  }
+  const from = params.account
+    ? resolveAddress(params.account)
+    : client.account.address;
 
   LOGGER.debug("prepareSign:start", { type: params.signatureRequest.type });
-  const res = await client.request({
+
+  const { account: _, chainId: __, ...rest } = params;
+  const rpcParams = Value.Encode(schema.request, {
+    ...rest,
+    from,
+    chainId: params.chainId ?? client.chain.id,
+  } satisfies BasePrepareSignParams);
+
+  const rpcResp = await client.request({
     method: "wallet_prepareSign",
-    params: [
-      {
-        ...params,
-        from,
-        chainId: params.chainId ?? toHex(client.chain.id),
-      },
-    ],
+    params: [rpcParams],
   });
+
   LOGGER.debug("prepareSign:done");
-  return res;
+  return Value.Decode(schema.response, rpcResp);
 }

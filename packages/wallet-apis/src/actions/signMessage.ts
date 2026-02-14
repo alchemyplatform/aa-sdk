@@ -1,19 +1,15 @@
-import {
-  type Address,
-  type Hex,
-  type Prettify,
-  type SignableMessage,
-} from "viem";
+import { type Hex, type Prettify, type SignableMessage } from "viem";
 import type { InnerWalletApiClient } from "../types.js";
 import { prepareSign } from "./prepareSign.js";
 import { signSignatureRequest } from "./signSignatureRequest.js";
 import { formatSign } from "./formatSign.js";
 import { signableMessageToJsonSafe } from "../utils/format.js";
 import { LOGGER } from "../logger.js";
+import { resolveAddress, type AccountParam } from "../utils/resolve.js";
 
 export type SignMessageParams = Prettify<{
   message: SignableMessage;
-  account?: Address;
+  account?: AccountParam;
 }>;
 
 export type SignMessageResult = Prettify<Hex>;
@@ -25,7 +21,7 @@ export type SignMessageResult = Prettify<Hex>;
  * @param {InnerWalletApiClient} client - The wallet API client to use for the request
  * @param {SignMessageParams} params - Parameters for signing the message
  * @param {SignableMessage} params.message - The message to sign using EIP-191. Can be a string, or object with raw bytes.
- * @param {Address} [params.account] - Optional account address to use for signing. If not provided, uses the client's current account.
+ * @param {AccountParam} [params.account] - Optional account to use for signing. Can be an address string or an object with an `address` property. If not provided, uses the client's current account.
  * @returns {Promise<SignMessageResult>} A Promise that resolves to the signed message as a hex string
  *
  * @example
@@ -41,13 +37,15 @@ export async function signMessage(
   client: InnerWalletApiClient,
   params: SignMessageParams,
 ): Promise<SignMessageResult> {
-  const accountAddress = params.account ?? client.account.address;
+  const accountAddress = params.account
+    ? resolveAddress(params.account)
+    : client.account.address;
   LOGGER.debug("signMessage:start", {
     hasExplicitAccount: params.account != null,
   });
 
   const prepared = await prepareSign(client, {
-    from: accountAddress,
+    account: accountAddress,
     signatureRequest: {
       type: "personal_sign",
       data: signableMessageToJsonSafe(params.message),
@@ -57,7 +55,7 @@ export async function signMessage(
   const signed = await signSignatureRequest(client, prepared.signatureRequest);
 
   const formatted = await formatSign(client, {
-    from: accountAddress,
+    account: accountAddress,
     signature: {
       type: "ecdsa",
       data: signed.data,

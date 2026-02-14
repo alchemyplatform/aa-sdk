@@ -1,5 +1,5 @@
-import type { Prettify } from "viem";
-import type { InnerWalletApiClient } from "../types.js";
+import type { Chain, Prettify } from "viem";
+import type { DistributiveOmit, InnerWalletApiClient } from "../types.js";
 import { prepareCalls, type PrepareCallsParams } from "./prepareCalls.js";
 import { signPreparedCalls } from "./signPreparedCalls.js";
 import {
@@ -8,9 +8,16 @@ import {
 } from "./sendPreparedCalls.js";
 import { LOGGER } from "../logger.js";
 import { signSignatureRequest } from "./signSignatureRequest.js";
-import { extractCapabilitiesForSending } from "../utils/capabilities.js";
+import {
+  extractCapabilitiesForSending,
+  fromRpcCapabilities,
+} from "../utils/capabilities.js";
 
-export type SendCallsParams = Prettify<PrepareCallsParams>;
+export type SendCallsParams = Prettify<
+  DistributiveOmit<PrepareCallsParams, "chainId"> & {
+    chain?: Pick<Chain, "id">;
+  }
+>;
 
 export type SendCallsResult = Prettify<SendPreparedCallsResult>;
 
@@ -21,9 +28,9 @@ export type SendCallsResult = Prettify<SendPreparedCallsResult>;
  * this directly without first calling `requestAccount`.
  *
  * @param {InnerWalletApiClient} client - The wallet API client to use for the request
- * @param {PrepareCallsParams} params - Parameters for sending calls
- * @param {Array<{to: Address, data?: Hex, value?: Hex}>} params.calls - Array of contract calls to execute
- * @param {Address} [params.from] - The address to execute the calls from. Defaults to the client's account (signer address via EIP-7702).
+ * @param {SendCallsParams} params - Parameters for sending calls
+ * @param {Array<{to: Address, data?: Hex, value?: bigint}>} params.calls - Array of contract calls to execute
+ * @param {AccountParam} [params.account] - The account to execute the calls from. Can be an address string or an object with an `address` property. Defaults to the client's account (signer address via EIP-7702).
  * @param {object} [params.capabilities] - Optional capabilities to include with the request.
  * @returns {Promise<SendPreparedCallsResult>} A Promise that resolves to the result containing the call ID.
  *
@@ -34,10 +41,10 @@ export type SendCallsResult = Prettify<SendPreparedCallsResult>;
  *   calls: [{
  *     to: "0x1234...",
  *     data: "0xabcdef...",
- *     value: "0x0"
+ *     value: 0n
  *   }],
  *   capabilities: {
- *     paymasterService: { policyId: "your-policy-id" }
+ *     paymaster: { policyId: "your-policy-id" }
  *   }
  * });
  *
@@ -57,7 +64,11 @@ export async function sendCalls(
     calls: params.calls?.length,
     hasCapabilities: !!params.capabilities,
   });
-  let calls = await prepareCalls(client, params);
+  const { chain, ...prepareCallsParams } = params;
+  let calls = await prepareCalls(client, {
+    ...prepareCallsParams,
+    ...(chain != null ? { chainId: chain.id } : {}),
+  });
 
   if (calls.type === "paymaster-permit") {
     const signature = await signSignatureRequest(
@@ -66,9 +77,10 @@ export async function sendCalls(
     );
 
     const secondCallParams = {
-      from: calls.modifiedRequest.from,
+      account: calls.modifiedRequest.from,
       calls: calls.modifiedRequest.calls,
-      capabilities: calls.modifiedRequest.capabilities,
+      chainId: calls.modifiedRequest.chainId,
+      capabilities: fromRpcCapabilities(calls.modifiedRequest.capabilities),
       // WebAuthn signatures are not supported for paymaster permits (throws above).
       paymasterPermitSignature: signature as Exclude<
         typeof signature,

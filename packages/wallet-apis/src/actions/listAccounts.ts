@@ -1,21 +1,22 @@
-import type { InnerWalletApiClient } from "../types.ts";
+import type { DistributiveOmit, InnerWalletApiClient } from "../types.ts";
 import { LOGGER } from "../logger.js";
 import type { Address, Prettify } from "viem";
-import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
+import { wallet_listAccounts as MethodSchema } from "@alchemy/wallet-api-types/rpc";
 import { isLocalAccount } from "../utils/assertions.js";
+import { Value } from "typebox/value";
+import {
+  methodSchema,
+  type MethodParams,
+  type MethodResponse,
+} from "../utils/schema.js";
 
-type RpcSchema = Extract<
-  WalletServerRpcSchemaType,
-  {
-    Request: {
-      method: "wallet_listAccounts";
-    };
-  }
->;
+const schema = methodSchema(MethodSchema);
+type BaseListAccountsParams = MethodParams<typeof MethodSchema>;
+type ListAccountsResponse = MethodResponse<typeof MethodSchema>;
 
 export type ListAccountsParams = Prettify<
-  Omit<
-    RpcSchema["Request"]["params"][0],
+  DistributiveOmit<
+    BaseListAccountsParams,
     "signerAddress" | "signerPublicKey"
   > & {
     signerAddress?: Address;
@@ -23,7 +24,7 @@ export type ListAccountsParams = Prettify<
   }
 >;
 
-export type ListAccountsResult = Prettify<RpcSchema["ReturnType"]>;
+export type ListAccountsResult = ListAccountsResponse;
 
 /**
  * Lists all smart accounts for a given signer using the wallet API client.
@@ -62,15 +63,21 @@ export async function listAccounts(
       : client.owner.account.address);
 
   LOGGER.debug("listAccounts:start", { hasAfter: !!params.after });
-  const res = await client.request({
+
+  const rpcParams = Value.Encode(schema.request, {
+    ...params,
+    signerAddress,
+  } satisfies BaseListAccountsParams);
+
+  const rpcResp = await client.request({
     method: "wallet_listAccounts",
-    params: [
-      {
-        ...params,
-        signerAddress,
-      },
-    ],
+    params: [rpcParams],
   });
+
+  const res = Value.Decode(
+    schema.response,
+    rpcResp,
+  ) satisfies ListAccountsResult;
   LOGGER.debug("listAccounts:done", { count: res.accounts.length });
 
   return res;

@@ -5,17 +5,27 @@ import {
   type Address,
   type WaitForCallsStatusReturnType,
 } from "viem";
-import type { PrepareCallsParams } from "./actions/prepareCalls.js";
+import type { UserOperation } from "viem/account-abstraction";
+import {
+  getCallsStatus,
+  getCapabilities,
+  sendCalls,
+  signMessage,
+  signTypedData,
+  waitForCallsStatus,
+} from "viem/actions";
+import type { SendCallsParams } from "./actions/sendCalls.js";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import { arbitrumSepolia } from "viem/chains";
 import { createSmartWalletClient } from "./client.js";
 import { apiTransport, publicTransport } from "./__tests__/setup.js";
+import { getAction } from "viem/utils";
 
 // We want to test both the "unroll each step" method and the full e2e "sendCalls" method.
 const sendVariants: Array<
   (
     client: ReturnType<typeof createSmartWalletClient>,
-    input: PrepareCallsParams,
+    input: SendCallsParams,
   ) => Promise<WaitForCallsStatusReturnType>
 > = [
   // Send calls
@@ -95,45 +105,43 @@ describe("Client E2E Tests", () => {
   it("should successfully get capabilities", async () => {
     const account = await client.requestAccount(); // Ensure account is known
     const capabilities = await client.getCapabilities({
-      account: account.address,
+      account,
     });
     expect(capabilities).toMatchInlineSnapshot(`
       {
-        "0": {
-          "atomic": {
-            "status": "supported",
-          },
-          "eip7702Auth": {
-            "supported": true,
-          },
-          "gasParamsOverride": {
-            "supported": true,
-          },
-          "nonceOverride": {
-            "supported": true,
-          },
-          "paymasterService": {
-            "supported": true,
-          },
-          "permissions": {
-            "keyTypes": [
-              "secp256k1",
-            ],
-            "permissionTypes": [
-              "native-token-transfer",
-              "erc20-token-transfer",
-              "gas-limit",
-              "contract-access",
-              "account-functions",
-              "functions-on-all-contracts",
-              "functions-on-contract",
-              "root",
-            ],
-            "signerTypes": [
-              "keys",
-            ],
-            "supported": true,
-          },
+        "atomic": {
+          "status": "supported",
+        },
+        "eip7702Auth": {
+          "supported": true,
+        },
+        "gasParamsOverride": {
+          "supported": true,
+        },
+        "nonceOverride": {
+          "supported": true,
+        },
+        "paymaster": {
+          "supported": true,
+        },
+        "permissions": {
+          "keyTypes": [
+            "secp256k1",
+          ],
+          "permissionTypes": [
+            "native-token-transfer",
+            "erc20-token-transfer",
+            "gas-limit",
+            "contract-access",
+            "account-functions",
+            "functions-on-all-contracts",
+            "functions-on-contract",
+            "root",
+          ],
+          "signerTypes": [
+            "keys",
+          ],
+          "supported": true,
         },
       }
     `);
@@ -144,7 +152,7 @@ describe("Client E2E Tests", () => {
     const message = "hello world";
     const signature = await client.signMessage({
       message,
-      account: account.address,
+      account,
     });
     const isValid = await publicClient.verifyMessage({
       address: account.address,
@@ -171,7 +179,7 @@ describe("Client E2E Tests", () => {
     const account = await client.requestAccount();
     const signature = await client.signTypedData({
       ...givenTypedData,
-      account: account.address,
+      account,
     });
     const isValid = await publicClient.verifyTypedData({
       ...givenTypedData,
@@ -200,7 +208,7 @@ describe("Client E2E Tests", () => {
     const message = "hello world";
     const signature = await client.signMessage({
       message,
-      account: account.address,
+      account,
     });
     const isValid = await publicClient.verifyMessage({
       address: account.address,
@@ -218,7 +226,7 @@ describe("Client E2E Tests", () => {
 
     const signature = await client.signTypedData({
       ...givenTypedData,
-      account: account.address,
+      account,
     });
 
     const isValid = await publicClient.verifyTypedData({
@@ -235,10 +243,10 @@ describe("Client E2E Tests", () => {
       const account = await client.requestAccount();
 
       const result = await sendVariant(client, {
-        calls: [{ to: zeroAddress, value: "0x0" }],
-        from: account.address,
+        calls: [{ to: zeroAddress, value: 0n }],
+        account,
         capabilities: {
-          paymasterService: {
+          paymaster: {
             policyId: process.env.TEST_PAYMASTER_POLICY_ID!,
           },
         },
@@ -254,10 +262,10 @@ describe("Client E2E Tests", () => {
     async (sendVariant) => {
       const account = await client.requestAccount();
       const result1 = await sendVariant(client, {
-        calls: [{ to: zeroAddress, value: "0x0" }],
-        from: account.address,
+        calls: [{ to: zeroAddress, value: 0n }],
+        account,
         capabilities: {
-          paymasterService: {
+          paymaster: {
             policyId: process.env.TEST_PAYMASTER_POLICY_ID!,
           },
         },
@@ -266,10 +274,10 @@ describe("Client E2E Tests", () => {
       expect(result1.status).toBe("success");
 
       const result2 = await sendVariant(client, {
-        calls: [{ to: zeroAddress, value: "0x0" }],
-        from: account.address,
+        calls: [{ to: zeroAddress, value: 0n }],
+        account,
         capabilities: {
-          paymasterService: {
+          paymaster: {
             policyId: process.env.TEST_PAYMASTER_POLICY_ID!,
           },
         },
@@ -301,10 +309,10 @@ describe("Client E2E Tests", () => {
       expect(account.address).toBe(_signer.address);
 
       const result = await sendVariant(_client, {
-        calls: [{ to: zeroAddress, value: "0x0" }],
-        from: account.address,
+        calls: [{ to: zeroAddress, value: 0n }],
+        account,
         capabilities: {
-          paymasterService: {
+          paymaster: {
             policyId: process.env.TEST_PAYMASTER_POLICY_ID!,
           },
         },
@@ -323,10 +331,10 @@ describe("Client E2E Tests", () => {
       const sessionKey = privateKeyToAccount(generatePrivateKey());
 
       const permissions = await client.grantPermissions({
-        account: account.address,
+        account,
         expirySec: Math.floor(Date.now() / 1000) + 60 * 60,
         key: {
-          publicKey: await sessionKey.address,
+          publicKey: sessionKey.address,
           type: "secp256k1",
         },
         permissions: [{ type: "root" }],
@@ -339,10 +347,10 @@ describe("Client E2E Tests", () => {
       });
 
       const result = await sendVariant(sessionKeyClient, {
-        calls: [{ to: zeroAddress, value: "0x0" }],
-        from: account.address,
+        calls: [{ to: zeroAddress, value: 0n }],
+        account,
         capabilities: {
-          paymasterService: {
+          paymaster: {
             policyId: process.env.TEST_PAYMASTER_POLICY_ID!,
           },
           permissions,
@@ -386,4 +394,235 @@ describe("Client E2E Tests", () => {
       contents: "Hello, Bob!",
     },
   } as const;
+
+  describe("viem action compatibility", () => {
+    it("can use viem's sendCalls and waitForCallsStatus actions via getAction", async () => {
+      const account = await client.requestAccount();
+
+      const { id: callId } = await getAction(
+        client,
+        sendCalls,
+        "sendCalls",
+      )({
+        calls: [{ to: zeroAddress, value: 0n }],
+        account,
+        capabilities: {
+          paymaster: { policyId: process.env.TEST_PAYMASTER_POLICY_ID! },
+        },
+      });
+
+      expect(callId).toBeDefined();
+      expect(typeof callId).toBe("string");
+
+      const result = await getAction(
+        client,
+        waitForCallsStatus,
+        "waitForCallsStatus",
+      )({ id: callId });
+      expect(result.status).toBe("success");
+    }, 60_000);
+
+    it("can use viem's signMessage action via getAction", async () => {
+      const account = await client.requestAccount();
+      const message = "hello from viem action";
+
+      const signature = await getAction(
+        client,
+        signMessage,
+        "signMessage",
+      )({
+        message,
+        account,
+      });
+
+      const isValid = await publicClient.verifyMessage({
+        address: account.address,
+        message,
+        signature,
+      });
+      expect(isValid).toBe(true);
+    });
+
+    it("can use viem's signTypedData action via getAction", async () => {
+      const account = await client.requestAccount();
+
+      const signature = await getAction(
+        client,
+        signTypedData,
+        "signTypedData",
+      )({
+        ...givenTypedData,
+        account,
+      });
+
+      const isValid = await publicClient.verifyTypedData({
+        ...givenTypedData,
+        signature,
+        address: account.address,
+      });
+      expect(isValid).toBe(true);
+    });
+
+    it("can use viem's getCapabilities action via getAction", async () => {
+      const account = await client.requestAccount();
+
+      const capabilities = await getAction(
+        client,
+        getCapabilities,
+        "getCapabilities",
+      )({ account });
+
+      expect(capabilities).toMatchInlineSnapshot(`
+        {
+          "atomic": {
+            "status": "supported",
+          },
+          "eip7702Auth": {
+            "supported": true,
+          },
+          "gasParamsOverride": {
+            "supported": true,
+          },
+          "nonceOverride": {
+            "supported": true,
+          },
+          "paymaster": {
+            "supported": true,
+          },
+          "permissions": {
+            "keyTypes": [
+              "secp256k1",
+            ],
+            "permissionTypes": [
+              "native-token-transfer",
+              "erc20-token-transfer",
+              "gas-limit",
+              "contract-access",
+              "account-functions",
+              "functions-on-all-contracts",
+              "functions-on-contract",
+              "root",
+            ],
+            "signerTypes": [
+              "keys",
+            ],
+            "supported": true,
+          },
+        }
+      `);
+    });
+
+    it("prepareCalls returns a UO satisfying viem's UserOperation type", async () => {
+      const account = await client.requestAccount();
+
+      const preparedCalls = await client.prepareCalls({
+        calls: [{ to: zeroAddress, value: 0n }],
+        account,
+        capabilities: {
+          paymaster: { policyId: process.env.TEST_PAYMASTER_POLICY_ID! },
+        },
+      });
+
+      expect(preparedCalls.type).toMatch(/^user-operation-v0(60|70)$/);
+
+      // Compile-time type check: prepared UO data + dummy signature is assignable to viem's UserOperation
+      if (preparedCalls.type === "user-operation-v060") {
+        const _uo: UserOperation<"0.6"> = {
+          ...preparedCalls.data,
+          signature: "0x",
+        };
+        expect(typeof _uo.sender).toBe("string");
+        expect(typeof _uo.nonce).toBe("bigint");
+        expect(typeof _uo.callGasLimit).toBe("bigint");
+      } else if (preparedCalls.type === "user-operation-v070") {
+        const _uo: UserOperation<"0.7"> = {
+          ...preparedCalls.data,
+          signature: "0x",
+        };
+        expect(typeof _uo.sender).toBe("string");
+        expect(typeof _uo.nonce).toBe("bigint");
+        expect(typeof _uo.callGasLimit).toBe("bigint");
+      }
+    });
+
+    it("sendPreparedCalls sends a UO satisfying viem's UserOperation type", async () => {
+      const account = await client.requestAccount();
+
+      const preparedCalls = await client.prepareCalls({
+        calls: [{ to: zeroAddress, value: 0n }],
+        account,
+        capabilities: {
+          paymaster: { policyId: process.env.TEST_PAYMASTER_POLICY_ID! },
+        },
+      });
+
+      const signedCalls = await client.signPreparedCalls(preparedCalls);
+
+      expect(signedCalls.type).toMatch(/^user-operation-v0(60|70)$/);
+
+      // Compile-time type check: signed UO data is assignable to viem's UserOperation.
+      // No manual narrowing needed — SignPreparedCallsResult guarantees secp256k1 hex signature.
+      if (signedCalls.type === "user-operation-v060") {
+        const _uo: UserOperation<"0.6"> = {
+          ...signedCalls.data,
+          signature: signedCalls.signature.data,
+        };
+        expect(_uo.signature).toMatch(/^0x/);
+        expect(_uo.signature.length).toBeGreaterThan(2);
+      } else if (signedCalls.type === "user-operation-v070") {
+        const _uo: UserOperation<"0.7"> = {
+          ...signedCalls.data,
+          signature: signedCalls.signature.data,
+        };
+        expect(_uo.signature).toMatch(/^0x/);
+        expect(_uo.signature.length).toBeGreaterThan(2);
+      }
+
+      const result = await client.sendPreparedCalls(signedCalls);
+      expect(result.id).toBeDefined();
+
+      const status = await client.waitForCallsStatus({ id: result.id });
+      expect(status.status).toBe("success");
+    }, 60_000);
+
+    it("can use viem's getCallsStatus action via getAction", async () => {
+      const account = await client.requestAccount();
+
+      const { id: callId } = await getAction(
+        client,
+        sendCalls,
+        "sendCalls",
+      )({
+        calls: [{ to: zeroAddress, value: 0n }],
+        account,
+        capabilities: {
+          paymaster: { policyId: process.env.TEST_PAYMASTER_POLICY_ID! },
+        },
+      });
+
+      // Check status immediately after sending — should be pending or already confirmed
+      const initialResult = await getAction(
+        client,
+        getCallsStatus,
+        "getCallsStatus",
+      )({ id: callId });
+      expect(initialResult.status).toMatch(/^(pending|confirmed|success)$/);
+
+      // Wait for confirmation
+      await getAction(
+        client,
+        waitForCallsStatus,
+        "waitForCallsStatus",
+      )({ id: callId });
+
+      // After waiting, status should be success
+      const finalResult = await getAction(
+        client,
+        getCallsStatus,
+        "getCallsStatus",
+      )({ id: callId });
+      expect(finalResult.status).toBe("success");
+      expect(finalResult.receipts).toBeDefined();
+    }, 60_000);
+  });
 });

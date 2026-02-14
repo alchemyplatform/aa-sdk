@@ -1,27 +1,27 @@
-import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
-import type {
-  InnerWalletApiClient,
-  OptionalChainId,
-  OptionalFrom,
-} from "../types.ts";
-import { toHex, type Prettify } from "viem";
-import { AccountNotFoundError } from "@alchemy/common";
+import type { Prettify } from "viem";
+import type { DistributiveOmit, InnerWalletApiClient } from "../types.ts";
+import { wallet_formatSign as MethodSchema } from "@alchemy/wallet-api-types/rpc";
 import { LOGGER } from "../logger.js";
+import { resolveAddress, type AccountParam } from "../utils/resolve.js";
+import { Value } from "typebox/value";
+import {
+  methodSchema,
+  type MethodParams,
+  type MethodResponse,
+} from "../utils/schema.js";
 
-type RpcSchema = Extract<
-  WalletServerRpcSchemaType,
-  {
-    Request: {
-      method: "wallet_formatSign";
-    };
+const schema = methodSchema(MethodSchema);
+type BaseFormatSignParams = MethodParams<typeof MethodSchema>;
+type FormatSignResponse = MethodResponse<typeof MethodSchema>;
+
+export type FormatSignParams = Prettify<
+  DistributiveOmit<BaseFormatSignParams, "from" | "chainId"> & {
+    account?: AccountParam;
+    chainId?: number;
   }
 >;
 
-export type FormatSignParams = Prettify<
-  OptionalFrom<OptionalChainId<RpcSchema["Request"]["params"][0]>>
->;
-
-export type FormatSignResult = Prettify<RpcSchema["ReturnType"]>;
+export type FormatSignResult = FormatSignResponse;
 
 /**
  * Formats a signature request for signing messages or transactions.
@@ -34,7 +34,7 @@ export type FormatSignResult = Prettify<RpcSchema["ReturnType"]>;
  * ```ts
  * // Formats a signature
  * const result = await client.formatSign({
- *    from: "0x1234...",
+ *    account: "0x1234...",
  *    signature: {
  *      type: "ecdsa",
  *      data: "0xabcd..."
@@ -46,18 +46,24 @@ export async function formatSign(
   client: InnerWalletApiClient,
   params: FormatSignParams,
 ): Promise<FormatSignResult> {
-  const from = params.from ?? client.account?.address;
-  if (!from) {
-    throw new AccountNotFoundError();
-  }
+  const from = params.account
+    ? resolveAddress(params.account)
+    : client.account.address;
 
   LOGGER.debug("formatSign:start");
-  const res = await client.request({
+
+  const { account: _, chainId: __, ...rest } = params;
+  const rpcParams = Value.Encode(schema.request, {
+    ...rest,
+    from,
+    chainId: params.chainId ?? client.chain.id,
+  } satisfies BaseFormatSignParams);
+
+  const rpcResp = await client.request({
     method: "wallet_formatSign",
-    params: [
-      { ...params, from, chainId: params.chainId ?? toHex(client.chain.id) },
-    ],
+    params: [rpcParams],
   });
+
   LOGGER.debug("formatSign:done");
-  return res;
+  return Value.Decode(schema.response, rpcResp);
 }
