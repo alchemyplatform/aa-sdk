@@ -260,6 +260,7 @@ export async function createModularAccountV2<
             salt,
             type: "SMA",
             ownerAddress: signerAddress,
+            // SMA type does not support custom entityId.
           });
 
         return {

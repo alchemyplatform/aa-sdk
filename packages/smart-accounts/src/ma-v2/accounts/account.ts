@@ -10,7 +10,6 @@ import {
   type Transport,
 } from "viem";
 import {
-  type WebAuthnAccount,
   type ToSmartAccountParameters,
   entryPoint07Address,
 } from "viem/account-abstraction";
@@ -20,9 +19,7 @@ import {
   getModularAccountV2AddressFromFactoryData,
   predictModularAccountV2Address,
 } from "../predictAddress.js";
-import { parsePublicKey } from "webauthn-p256";
 import { accountFactoryAbi } from "../abis/accountFactoryAbi.js";
-import { webAuthnFactoryAbi } from "../abis/webAuthnFactoryAbi.js";
 import { EntityIdOverrideError } from "../../errors/EntityIdOverrideError.js";
 import { InvalidOwnerError } from "../../errors/InvalidOwnerError.js";
 import { DEFAULT_OWNER_ENTITY_ID, DefaultAddress } from "../utils/account.js";
@@ -37,7 +34,7 @@ export type ToModularAccountV2Params<
   TMode extends Mode | undefined = Mode | undefined,
 > = {
   client: Client<Transport, Chain, JsonRpcAccount | LocalAccount | undefined>;
-  owner: JsonRpcAccount | LocalAccount | WebAuthnAccount;
+  owner: JsonRpcAccount | LocalAccount;
   deferredAction?: Hex;
   signerEntity?: SignerEntity;
   accountAddress?: Address;
@@ -92,19 +89,11 @@ export async function toModularAccountV2<TMode extends Mode = Mode>({
 
   const entityId = signerEntity?.entityId ?? DEFAULT_OWNER_ENTITY_ID;
 
-  const factoryAddress =
-    factory ??
-    (owner.type === "webAuthn"
-      ? DefaultAddress.MAV2_FACTORY_WEBAUTHN
-      : DefaultAddress.MAV2_FACTORY);
+  const factoryAddress = factory ?? DefaultAddress.MAV2_FACTORY;
 
   const implementationAddress =
     implementationAddress_ ??
-    (is7702
-      ? DefaultAddress.SMAV2_7702
-      : owner.type === "webAuthn"
-        ? DefaultAddress.MAV2
-        : DefaultAddress.SMAV2_BYTECODE);
+    (is7702 ? DefaultAddress.SMAV2_7702 : DefaultAddress.SMAV2_BYTECODE);
 
   const getFactoryArgs = async () => {
     if (is7702) {
@@ -117,20 +106,6 @@ export async function toModularAccountV2<TMode extends Mode = Mode>({
         factory: undefined,
         factoryData: undefined,
       } as const;
-    }
-
-    if (owner.type === "webAuthn") {
-      const { x, y } = parsePublicKey(owner.publicKey);
-      return {
-        factory: factoryAddress,
-        factoryData:
-          factoryData_ ??
-          encodeFunctionData({
-            abi: webAuthnFactoryAbi,
-            functionName: "createWebAuthnAccount",
-            args: [x, y, salt, entityId],
-          }),
-      };
     }
 
     return {
@@ -147,7 +122,7 @@ export async function toModularAccountV2<TMode extends Mode = Mode>({
 
   const accountAddress =
     accountAddress_ ??
-    (is7702 && owner.type !== "webAuthn"
+    (is7702
       ? owner.address
       : factoryData_
         ? await getModularAccountV2AddressFromFactoryData({
@@ -164,17 +139,8 @@ export async function toModularAccountV2<TMode extends Mode = Mode>({
             factoryAddress,
             implementationAddress,
             salt,
-            ...(owner.type === "webAuthn"
-              ? {
-                  type: "WebAuthn",
-                  ownerPublicKey: owner.publicKey,
-                  entityId,
-                }
-              : {
-                  type: "SMA", // `MA` is never used here since we only support deploying SMA & WebAuthn accounts.
-                  ownerAddress: owner.address,
-                  entityId,
-                }),
+            type: "SMA",
+            ownerAddress: owner.address,
           }));
 
   LOGGER.debug("toModularAccountV2:address-resolved", {

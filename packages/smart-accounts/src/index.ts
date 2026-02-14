@@ -78,7 +78,6 @@ export { installValidationActions } from "./ma-v2/decorators/installValidation.j
 export {
   semiModularAccountV2StaticImpl,
   semiModularAccount7702StaticImpl,
-  webAuthnModularAccountV2StaticImpl,
 } from "./ma-v2/mav2StaticImpl.js";
 export type * from "./ma-v2/mav2StaticImpl.js";
 
@@ -88,7 +87,6 @@ export { NativeTokenLimitModule } from "./ma-v2/modules/native-token-limit-modul
 export { PaymasterGuardModule } from "./ma-v2/modules/paymaster-guard-module/module.js";
 export { SingleSignerValidationModule } from "./ma-v2/modules/single-signer-validation/module.js";
 export { TimeRangeModule } from "./ma-v2/modules/time-range-module/module.js";
-export { WebAuthnValidationModule } from "./ma-v2/modules/webauthn-validation/module.js";
 
 export type * from "./ma-v2/permissionBuilder.js";
 export {
@@ -130,8 +128,6 @@ export {
   packUOSignature,
   pack1271Signature,
   toReplaySafeTypedData,
-  toWebAuthnSignature,
-  WEBAUTHN_DUMMY_SIGNATURE,
 } from "./ma-v2/utils/signature.js";
 
 // Errors
