@@ -22,7 +22,8 @@ describe("param overrides", () => {
       switch (method) {
         case "wallet_prepareCalls":
           return {
-            userOperation: {
+            type: "user-operation-v060",
+            data: {
               sender: "0x1234567890123456789012345678901234567890",
               nonce: "0x0",
               initCode: "0x",
@@ -33,22 +34,37 @@ describe("param overrides", () => {
               maxFeePerGas: "0x0",
               maxPriorityFeePerGas: "0x0",
               paymasterAndData: "0x",
-              signature: "0x",
             },
+            chainId: "0x1",
             signatureRequest: {
               type: "personal_sign",
-              data: "0x",
+              data: "0x1234",
+              rawPayload: "0x1234",
+            },
+            feePayment: {
+              sponsored: true,
+              tokenAddress: "0x0000000000000000000000000000000000000000",
+              maxAmount: "0x0",
             },
           };
         case "wallet_sendPreparedCalls":
           return {
-            id: "test-call-id",
+            id: "0xabcd",
+            preparedCallIds: ["0xabcd"],
+            details: {
+              type: "user-operation",
+              data: {
+                hash: "0xabcd",
+              },
+            },
           };
         case "wallet_prepareSign":
           return {
+            chainId: "0x1",
             signatureRequest: {
               type: "personal_sign",
-              data: "0x",
+              data: "0x1234",
+              rawPayload: "0x1234",
             },
           };
         case "wallet_formatSign":
@@ -58,9 +74,16 @@ describe("param overrides", () => {
         case "wallet_createSession":
           return {
             sessionId: "0x1234567890abcdef",
+            chainId: "0x1",
             signatureRequest: {
-              type: "personal_sign",
-              data: "0x",
+              type: "eth_signTypedData_v4",
+              data: {
+                domain: {},
+                types: { EIP712Domain: [] },
+                primaryType: "EIP712Domain",
+                message: {},
+              },
+              rawPayload: "0x1234",
             },
           };
         default:
