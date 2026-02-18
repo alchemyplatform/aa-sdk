@@ -107,44 +107,36 @@ describe("Client E2E Tests", () => {
     const capabilities = await client.getCapabilities({
       account,
     });
-    expect(capabilities).toMatchInlineSnapshot(`
-      {
-        "atomic": {
-          "status": "supported",
-        },
-        "eip7702Auth": {
-          "supported": true,
-        },
-        "gasParamsOverride": {
-          "supported": true,
-        },
-        "nonceOverride": {
-          "supported": true,
-        },
-        "paymaster": {
-          "supported": true,
-        },
-        "permissions": {
-          "keyTypes": [
-            "secp256k1",
-          ],
-          "permissionTypes": [
-            "native-token-transfer",
-            "erc20-token-transfer",
-            "gas-limit",
-            "contract-access",
-            "account-functions",
-            "functions-on-all-contracts",
-            "functions-on-contract",
-            "root",
-          ],
-          "signerTypes": [
-            "keys",
-          ],
-          "supported": true,
-        },
-      }
-    `);
+    expect(capabilities).toMatchObject({
+      atomic: { status: "supported" },
+      eip7702Auth: { supported: true },
+      gasParamsOverride: { supported: true },
+      nonceOverride: { supported: true },
+      paymaster: { supported: true },
+      permissions: {
+        keyTypes: ["secp256k1"],
+        permissionTypes: [
+          "native-token-transfer",
+          "erc20-token-transfer",
+          "gas-limit",
+          "contract-access",
+          "account-functions",
+          "functions-on-all-contracts",
+          "functions-on-contract",
+          "root",
+        ],
+        signerTypes: ["keys"],
+        supported: true,
+      },
+    });
+
+    // These capabilities are expected after next wallet server release — warn if missing
+    if (!("experimental_dataSuffix" in capabilities)) {
+      console.warn("[capabilities] experimental_dataSuffix not available");
+    }
+    if (!("stateOverride" in capabilities)) {
+      console.warn("[capabilities] stateOverride not available");
+    }
   });
 
   it("can correctly sign a message using sma-b account", async () => {
@@ -472,44 +464,36 @@ describe("Client E2E Tests", () => {
         "getCapabilities",
       )({ account });
 
-      expect(capabilities).toMatchInlineSnapshot(`
-        {
-          "atomic": {
-            "status": "supported",
-          },
-          "eip7702Auth": {
-            "supported": true,
-          },
-          "gasParamsOverride": {
-            "supported": true,
-          },
-          "nonceOverride": {
-            "supported": true,
-          },
-          "paymaster": {
-            "supported": true,
-          },
-          "permissions": {
-            "keyTypes": [
-              "secp256k1",
-            ],
-            "permissionTypes": [
-              "native-token-transfer",
-              "erc20-token-transfer",
-              "gas-limit",
-              "contract-access",
-              "account-functions",
-              "functions-on-all-contracts",
-              "functions-on-contract",
-              "root",
-            ],
-            "signerTypes": [
-              "keys",
-            ],
-            "supported": true,
-          },
-        }
-      `);
+      expect(capabilities).toMatchObject({
+        atomic: { status: "supported" },
+        eip7702Auth: { supported: true },
+        gasParamsOverride: { supported: true },
+        nonceOverride: { supported: true },
+        paymaster: { supported: true },
+        permissions: {
+          keyTypes: ["secp256k1"],
+          permissionTypes: [
+            "native-token-transfer",
+            "erc20-token-transfer",
+            "gas-limit",
+            "contract-access",
+            "account-functions",
+            "functions-on-all-contracts",
+            "functions-on-contract",
+            "root",
+          ],
+          signerTypes: ["keys"],
+          supported: true,
+        },
+      });
+
+      // These capabilities are expected after next wallet server release — warn if missing
+      if (!("experimental_dataSuffix" in capabilities)) {
+        console.warn("[capabilities] experimental_dataSuffix not available");
+      }
+      if (!("stateOverride" in capabilities)) {
+        console.warn("[capabilities] stateOverride not available");
+      }
     });
 
     it("prepareCalls returns a UO satisfying viem's UserOperation type", async () => {
