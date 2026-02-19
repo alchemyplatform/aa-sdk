@@ -3,9 +3,10 @@ import { LOGGER } from "../logger.js";
 import type { Address, Prettify } from "viem";
 import { wallet_listAccounts as MethodSchema } from "@alchemy/wallet-api-types/rpc";
 import { isLocalAccount } from "../utils/assertions.js";
-import { Value } from "typebox/value";
 import {
   methodSchema,
+  encode,
+  decode,
   type MethodParams,
   type MethodResponse,
 } from "../utils/schema.js";
@@ -64,20 +65,17 @@ export async function listAccounts(
 
   LOGGER.debug("listAccounts:start", { hasAfter: !!params.after });
 
-  const rpcParams = Value.Encode(schema.request, {
+  const rpcParams = encode(schema.request, {
     ...params,
     signerAddress,
-  } satisfies BaseListAccountsParams);
+  });
 
   const rpcResp = await client.request({
     method: "wallet_listAccounts",
     params: [rpcParams],
   });
 
-  const res = Value.Decode(
-    schema.response,
-    rpcResp,
-  ) satisfies ListAccountsResult;
+  const res = decode(schema.response, rpcResp);
   LOGGER.debug("listAccounts:done", { count: res.accounts.length });
 
   return res;

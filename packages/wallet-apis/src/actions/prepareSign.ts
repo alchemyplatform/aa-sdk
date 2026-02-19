@@ -2,9 +2,10 @@ import type { DistributiveOmit, InnerWalletApiClient } from "../types.ts";
 import { wallet_prepareSign as MethodSchema } from "@alchemy/wallet-api-types/rpc";
 import { LOGGER } from "../logger.js";
 import { resolveAddress, type AccountParam } from "../utils/resolve.js";
-import { Value } from "typebox/value";
 import {
   methodSchema,
+  encode,
+  decode,
   type MethodParams,
   type MethodResponse,
 } from "../utils/schema.js";
@@ -51,11 +52,11 @@ export async function prepareSign(
   LOGGER.debug("prepareSign:start", { type: params.signatureRequest.type });
 
   const { account: _, chainId: __, ...rest } = params;
-  const rpcParams = Value.Encode(schema.request, {
+  const rpcParams = encode(schema.request, {
     ...rest,
     from,
     chainId: params.chainId ?? client.chain.id,
-  } satisfies BasePrepareSignParams);
+  });
 
   const rpcResp = await client.request({
     method: "wallet_prepareSign",
@@ -63,5 +64,5 @@ export async function prepareSign(
   });
 
   LOGGER.debug("prepareSign:done");
-  return Value.Decode(schema.response, rpcResp);
+  return decode(schema.response, rpcResp);
 }

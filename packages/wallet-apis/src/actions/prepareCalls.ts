@@ -10,9 +10,10 @@ import {
 } from "../utils/capabilities.js";
 import { resolveAddress, type AccountParam } from "../utils/resolve.js";
 import { wallet_prepareCalls as MethodSchema } from "@alchemy/wallet-api-types/rpc";
-import { Value } from "typebox/value";
 import {
   methodSchema,
+  encode,
+  decode,
   type MethodParams,
   type MethodResponse,
 } from "../utils/schema.js";
@@ -96,12 +97,12 @@ export async function prepareCalls(
   });
 
   const { account: _, chainId: __, ...rest } = params;
-  const rpcParams = Value.Encode(schema.request, {
+  const rpcParams = encode(schema.request, {
     ...rest,
     chainId,
     from,
     capabilities: toRpcCapabilities(capabilities),
-  } satisfies BasePrepareCallsParams);
+  });
 
   const rpcResp = await client.request({
     method: "wallet_prepareCalls",
@@ -109,7 +110,7 @@ export async function prepareCalls(
   });
 
   LOGGER.debug("prepareCalls:done");
-  const decoded = Value.Decode(schema.response, rpcResp);
+  const decoded = decode(schema.response, rpcResp);
 
   // Transform paymaster-permit modifiedRequest from RPC format to client format:
   // - `from` (RPC) → `account` (client)
