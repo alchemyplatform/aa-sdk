@@ -96,15 +96,15 @@
   dependencies:
     viem "^2.32.0"
 
-"@alchemy/wallet-api-types@0.1.0-alpha.23":
-  version "0.1.0-alpha.23"
-  resolved "https://registry.yarnpkg.com/@alchemy/wallet-api-types/-/wallet-api-types-0.1.0-alpha.23.tgz#0abeb947a58230425102604eda9f372274751adc"
-  integrity sha512-ZScyKuS1u5s1xEy25pzWrr7cydB+VcWAAZLcPU9K+Bgp2XHSd0d9xhdYDGW5IztkGtxt92/EghXznK9OaeBFyQ==
+"@alchemy/wallet-api-types@0.1.0-alpha.25":
+  version "0.1.0-alpha.25"
+  resolved "https://registry.yarnpkg.com/@alchemy/wallet-api-types/-/wallet-api-types-0.1.0-alpha.25.tgz#4dd8294da5eba0b375200c63a1ddff088c5b58e0"
+  integrity sha512-jF5hAJiuLBVtS2RxFyAkbsvHygmBjxf5tmt4/CpsnYjdy5TfiU4H4XaY3ovY2sWO7S9g1Ucz4SvULWtG6hn2kA==
   dependencies:
     "@alchemy/common" "0.0.0-alpha.13"
     deep-equal "^2.2.3"
     ox "^0.6.12"
-    typebox "^1.0.75"
+    typebox "^1.0.81"
     viem "^2.32.0"
 
 "@alloc/quick-lru@^5.2.0":
@@ -25749,10 +25749,10 @@ type@^2.7.2:
   resolved "https://registry.npmjs.org/type/-/type-2.7.3.tgz"
   integrity sha512-8j+1QmAbPvLZow5Qpi6NCaN8FB60p/6x8/vfNqOk/hC+HuvFZhL4+WfekuhQLiqFZXOgQdrs3B+XxEmCc6b3FQ==
 
-typebox@^1.0.75:
-  version "1.0.79"
-  resolved "https://registry.yarnpkg.com/typebox/-/typebox-1.0.79.tgz#a74a1e630e235762077aeb0f925875116ccbf2c5"
-  integrity sha512-luG4ORaG70S8mK00kCQR3Ow2xXaqzHv03/PHJJGs9Mjg1Q+0k3Kwz6Z5ORjoqSwWl3ixDUKgJajZ2vvBGs3ECA==
+typebox@^1.0.81:
+  version "1.0.81"
+  resolved "https://registry.yarnpkg.com/typebox/-/typebox-1.0.81.tgz#5373248c993d0544ac76344ba51fd14e009a8787"
+  integrity sha512-bCslZUmZESHhBn4kHDghzH2oo3qu8m2W89xDLxQHv/aPvY4i81Nd1jvijlBp9wSpsVytDSfSoosbiBAjgsNb2Q==
 
 typed-array-buffer@^1.0.3:
   version "1.0.3"

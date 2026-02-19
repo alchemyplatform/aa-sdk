@@ -128,7 +128,6 @@ export async function createAccount(
         version: "v2.0.0",
         signer,
       });
-    case "MAv2.0.0-ma-webauthn":
     case "MAv1.0.0-MultiSig":
     case "MAv2.0.0-ma-ssv":
     case "unknown":
