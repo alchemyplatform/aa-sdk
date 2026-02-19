@@ -45,7 +45,7 @@ describe("encode", () => {
       }),
     ).toThrow(
       expect.objectContaining({
-        message: expect.stringMatching(/\/from.*received string/),
+        message: expect.stringMatching(/\/from.*received number/),
       }),
     );
   });

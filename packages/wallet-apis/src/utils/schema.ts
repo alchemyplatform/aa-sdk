@@ -41,13 +41,13 @@ export type MethodResponse<T extends RpcMethodSchema> = StaticDecode<
 
 function formatCodecError(
   schema: TSchema,
+  originalValue: unknown,
   cause: {
     errors: Array<{
       schemaPath: string;
       instancePath: string;
       message: string;
     }>;
-    value: unknown;
   },
 ): string {
   // Use only the first error — it's the most specific. Subsequent errors are
@@ -76,8 +76,8 @@ function formatCodecError(
   let receivedType: string | undefined;
   try {
     const received = error.instancePath
-      ? Pointer.Get(cause.value, error.instancePath)
-      : cause.value;
+      ? Pointer.Get(originalValue, error.instancePath)
+      : originalValue;
     receivedType = received === null ? "null" : typeof received;
   } catch {
     // instancePath may not resolve (e.g. missing property) — skip.
@@ -99,7 +99,7 @@ export function encode<const T extends TSchema>(
     return Value.Encode(schema, value);
   } catch (error) {
     if (error instanceof EncodeError) {
-      throw new BaseError(formatCodecError(schema, error.cause));
+      throw new BaseError(formatCodecError(schema, value, error.cause));
     }
     throw error;
   }
@@ -114,7 +114,7 @@ export function decode<const T extends TSchema>(
     return Value.Decode(schema, value);
   } catch (error) {
     if (error instanceof DecodeError) {
-      throw new BaseError(formatCodecError(schema, error.cause));
+      throw new BaseError(formatCodecError(schema, value, error.cause));
     }
     throw error;
   }
