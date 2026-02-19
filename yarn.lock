@@ -235,7 +235,18 @@
     ox "^0.6.12"
     viem "2.29.2"
 
-"@alchemy/wallet-api-types@0.1.0-alpha.24", "@alchemy/wallet-api-types@^0.1.0-alpha.18", "@alchemy/wallet-api-types@^0.1.0-alpha.23":
+"@alchemy/wallet-api-types@0.1.0-alpha.25":
+  version "0.1.0-alpha.25"
+  resolved "https://registry.yarnpkg.com/@alchemy/wallet-api-types/-/wallet-api-types-0.1.0-alpha.25.tgz#4dd8294da5eba0b375200c63a1ddff088c5b58e0"
+  integrity sha512-jF5hAJiuLBVtS2RxFyAkbsvHygmBjxf5tmt4/CpsnYjdy5TfiU4H4XaY3ovY2sWO7S9g1Ucz4SvULWtG6hn2kA==
+  dependencies:
+    "@alchemy/common" "0.0.0-alpha.13"
+    deep-equal "^2.2.3"
+    ox "^0.6.12"
+    typebox "^1.0.81"
+    viem "^2.32.0"
+
+"@alchemy/wallet-api-types@^0.1.0-alpha.18", "@alchemy/wallet-api-types@^0.1.0-alpha.23":
   version "0.1.0-alpha.24"
   resolved "https://registry.yarnpkg.com/@alchemy/wallet-api-types/-/wallet-api-types-0.1.0-alpha.24.tgz#4b71803971fdaaa62d79d77916635ac29c7baa30"
   integrity sha512-6xAuHggseh4GzCyAKJWX4/cLpdhaT9siQ7sYclENCM4RKU2Iz/KBz8p82/3R31s3ePGj6iGMAEGoWIuq4Rb6Fw==

@@ -8,10 +8,7 @@ import {
 } from "./sendPreparedCalls.js";
 import { LOGGER } from "../logger.js";
 import { signSignatureRequest } from "./signSignatureRequest.js";
-import {
-  extractCapabilitiesForSending,
-  fromRpcCapabilities,
-} from "../utils/capabilities.js";
+import { extractCapabilitiesForSending } from "../utils/capabilities.js";
 
 export type SendCallsParams = Prettify<
   DistributiveOmit<PrepareCallsParams, "chainId"> & {
@@ -77,10 +74,7 @@ export async function sendCalls(
     );
 
     const secondCallParams = {
-      account: calls.modifiedRequest.from,
-      calls: calls.modifiedRequest.calls,
-      chainId: calls.modifiedRequest.chainId,
-      capabilities: fromRpcCapabilities(calls.modifiedRequest.capabilities),
+      ...calls.modifiedRequest,
       // WebAuthn signatures are not supported for paymaster permits (throws above).
       paymasterPermitSignature: signature as Exclude<
         typeof signature,

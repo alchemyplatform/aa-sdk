@@ -1,8 +1,20 @@
-import type {
-  PrepareCallsCapabilities as RpcPrepareCallsCapabilities,
-  SendPreparedCallsCapabilities as RpcSendPreparedCallsCapabilities,
+import {
+  PrepareCallsCapabilities as PrepareCallsCapabilitiesSchema,
+  SendPreparedCallsCapabilities as SendPreparedCallsCapabilitiesSchema,
 } from "@alchemy/wallet-api-types/capabilities";
+import type { StaticDecode } from "typebox";
 import type { InnerWalletApiClient } from "../types.js";
+
+/**
+ * Decoded capabilities matching the schema shape (uses `paymasterService` key).
+ * `ResolveCapabilities` renames this to `paymaster` for client-facing types.
+ */
+type DecodedPrepareCallsCaps = StaticDecode<
+  typeof PrepareCallsCapabilitiesSchema
+>;
+type DecodedSendPreparedCallsCaps = StaticDecode<
+  typeof SendPreparedCallsCapabilitiesSchema
+>;
 
 /**
  * Renames `paymasterService` (RPC) to `paymaster` in a capabilities type. This
@@ -17,10 +29,10 @@ type ResolveCapabilities<T> = T extends {
   : T;
 
 export type PrepareCallsCapabilities =
-  ResolveCapabilities<RpcPrepareCallsCapabilities>;
+  ResolveCapabilities<DecodedPrepareCallsCaps>;
 
 export type SendPreparedCallsCapabilities =
-  ResolveCapabilities<RpcSendPreparedCallsCapabilities>;
+  ResolveCapabilities<DecodedSendPreparedCallsCaps>;
 
 /**
  * Transforms a type so that any `capabilities` field uses `paymaster`
@@ -36,7 +48,7 @@ export type WithCapabilities<T> = T extends {
 
 function hasNoPaymasterField(
   value: object,
-): value is RpcPrepareCallsCapabilities | RpcSendPreparedCallsCapabilities {
+): value is DecodedPrepareCallsCaps | DecodedSendPreparedCallsCaps {
   return !("paymaster" in value);
 }
 
@@ -51,14 +63,14 @@ function hasNoPaymasterServiceField(
  * for use with Value.Encode before sending to the RPC.
  *
  * @param {PrepareCallsCapabilities | SendPreparedCallsCapabilities | undefined} capabilities - Capabilities object containing a `paymaster` field
- * @returns {RpcPrepareCallsCapabilities | RpcSendPreparedCallsCapabilities | undefined} RPC capabilities with `paymasterService`, or undefined if input is undefined
+ * @returns {DecodedPrepareCallsCaps | DecodedSendPreparedCallsCaps | undefined} RPC capabilities with `paymasterService`, or undefined if input is undefined
  */
 export function toRpcCapabilities(
   capabilities:
     | PrepareCallsCapabilities
     | SendPreparedCallsCapabilities
     | undefined,
-): RpcPrepareCallsCapabilities | RpcSendPreparedCallsCapabilities | undefined {
+): DecodedPrepareCallsCaps | DecodedSendPreparedCallsCaps | undefined {
   if (!capabilities) return undefined;
   const { paymaster, ...rest } = capabilities;
   const result =
@@ -73,13 +85,13 @@ export function toRpcCapabilities(
  * Converts RPC capabilities (with `paymasterService`) from Value.Decode
  * to capabilities (with `paymaster`).
  *
- * @param {RpcPrepareCallsCapabilities | RpcSendPreparedCallsCapabilities | undefined} capabilities - RPC capabilities object containing a `paymasterService` field
+ * @param {DecodedPrepareCallsCaps | DecodedSendPreparedCallsCaps | undefined} capabilities - RPC capabilities object containing a `paymasterService` field
  * @returns {PrepareCallsCapabilities | SendPreparedCallsCapabilities | undefined} Capabilities with `paymaster`, or undefined if input is undefined
  */
 export function fromRpcCapabilities(
   capabilities:
-    | RpcPrepareCallsCapabilities
-    | RpcSendPreparedCallsCapabilities
+    | DecodedPrepareCallsCaps
+    | DecodedSendPreparedCallsCaps
     | undefined,
 ): PrepareCallsCapabilities | SendPreparedCallsCapabilities | undefined {
   if (!capabilities) return undefined;

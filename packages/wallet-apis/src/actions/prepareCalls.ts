@@ -1,9 +1,11 @@
-import type { Prettify } from "viem";
+import type { Address, Prettify } from "viem";
 import type { DistributiveOmit, InnerWalletApiClient } from "../types.ts";
 import { LOGGER } from "../logger.js";
 import {
+  fromRpcCapabilities,
   mergeClientCapabilities,
   toRpcCapabilities,
+  type PrepareCallsCapabilities,
   type WithCapabilities,
 } from "../utils/capabilities.js";
 import { resolveAddress, type AccountParam } from "../utils/resolve.js";
@@ -28,7 +30,22 @@ export type PrepareCallsParams = Prettify<
   >
 >;
 
-export type PrepareCallsResult = PrepareCallsResponse;
+/** The modifiedRequest in client format: `account` instead of `from`, SDK capabilities. */
+type ClientModifiedRequest = Prettify<
+  Omit<BasePrepareCallsParams, "from" | "capabilities"> & {
+    account: Address;
+    capabilities?: PrepareCallsCapabilities;
+  }
+>;
+
+export type PrepareCallsResult =
+  | Exclude<PrepareCallsResponse, { type: "paymaster-permit" }>
+  | (Omit<
+      Extract<PrepareCallsResponse, { type: "paymaster-permit" }>,
+      "modifiedRequest"
+    > & {
+      modifiedRequest: ClientModifiedRequest;
+    });
 
 /**
  * Prepares a set of contract calls for execution by building a user operation.
@@ -92,5 +109,23 @@ export async function prepareCalls(
   });
 
   LOGGER.debug("prepareCalls:done");
-  return Value.Decode(schema.response, rpcResp);
+  const decoded = Value.Decode(schema.response, rpcResp);
+
+  // Transform paymaster-permit modifiedRequest from RPC format to client format:
+  // - `from` (RPC) → `account` (client)
+  // - `capabilities.paymasterService` (RPC) → `capabilities.paymaster` (client)
+  if (decoded.type === "paymaster-permit") {
+    const { from, capabilities, ...restModifiedRequest } =
+      decoded.modifiedRequest;
+    return {
+      ...decoded,
+      modifiedRequest: {
+        ...restModifiedRequest,
+        account: from,
+        capabilities: fromRpcCapabilities(capabilities),
+      },
+    };
+  }
+
+  return decoded;
 }
