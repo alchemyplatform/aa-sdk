@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.84.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.84.0...v4.84.1) (2026-02-19)
+
+### Bug Fixes
+
+- revalidation workflow path prefix and batching ([#2344](https://github.com/alchemyplatform/aa-sdk/issues/2344)) ([2fe5105](https://github.com/alchemyplatform/aa-sdk/commit/2fe5105f3e206ae0a0b387d1e8388054295af61d))
+- use markdown tables in reference docs for responsive rendering ([#2343](https://github.com/alchemyplatform/aa-sdk/issues/2343)) ([6fba380](https://github.com/alchemyplatform/aa-sdk/commit/6fba380d2901f334fb70e71b7729bfa721544c96))
+
+### Reverts
+
+- switch reference docs back to htmlTable format ([#2345](https://github.com/alchemyplatform/aa-sdk/issues/2345)) ([212f694](https://github.com/alchemyplatform/aa-sdk/commit/212f6945b0a57436fe8f75cb2cc0bcb46464ad9e))
+
 # [4.84.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.83.2...v4.84.0) (2026-02-10)
 
 ### Features
