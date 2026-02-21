@@ -7,9 +7,10 @@ import {
   type WithCapabilities,
 } from "../utils/capabilities.js";
 import { wallet_sendPreparedCalls as MethodSchema } from "@alchemy/wallet-api-types/rpc";
-import { Value } from "typebox/value";
 import {
   methodSchema,
+  encode,
+  decode,
   type MethodParams,
   type MethodResponse,
 } from "../utils/schema.js";
@@ -79,10 +80,7 @@ export async function sendPreparedCalls(
           capabilities: toRpcCapabilities(capabilities),
         };
 
-  const rpcParams = Value.Encode(
-    schema.request,
-    fullParams satisfies BaseSendPreparedCallsParams,
-  );
+  const rpcParams = encode(schema.request, fullParams);
 
   const rpcResp = await client.request({
     method: "wallet_sendPreparedCalls",
@@ -90,5 +88,5 @@ export async function sendPreparedCalls(
   });
 
   LOGGER.debug("sendPreparedCalls:done");
-  return Value.Decode(schema.response, rpcResp);
+  return decode(schema.response, rpcResp);
 }

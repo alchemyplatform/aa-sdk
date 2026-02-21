@@ -3,9 +3,13 @@ import type { DistributiveOmit, InnerWalletApiClient } from "../types.ts";
 import { wallet_createSession as MethodSchema } from "@alchemy/wallet-api-types/rpc";
 import { signSignatureRequest } from "./signSignatureRequest.js";
 import { LOGGER } from "../logger.js";
-import { Value } from "typebox/value";
 import { resolveAddress, type AccountParam } from "../utils/resolve.js";
-import { methodSchema, type MethodParams } from "../utils/schema.js";
+import {
+  methodSchema,
+  encode,
+  decode,
+  type MethodParams,
+} from "../utils/schema.js";
 
 const schema = methodSchema(MethodSchema);
 type BaseCreateSessionParams = MethodParams<typeof MethodSchema>;
@@ -88,24 +92,18 @@ export async function grantPermissions(
   const chainId = params.chainId ?? client.chain.id;
 
   const { account: _, chainId: __, ...rest } = params;
-  const rpcParams = Value.Encode(schema.request, {
+  const rpcParams = encode(schema.request, {
     ...rest,
     account,
     chainId,
-  } satisfies BaseCreateSessionParams);
+  });
 
   const rpcResp = await client.request({
     method: "wallet_createSession",
     params: [rpcParams],
   });
 
-  const { sessionId, signatureRequest } = Value.Decode(
-    schema.response,
-    rpcResp,
-  ) satisfies {
-    sessionId: Hex;
-    signatureRequest: Parameters<typeof signSignatureRequest>[1];
-  };
+  const { sessionId, signatureRequest } = decode(schema.response, rpcResp);
 
   const signature = await signSignatureRequest(client, signatureRequest);
 

@@ -7,9 +7,10 @@ import {
 } from "../../utils/capabilities.js";
 import { resolveAddress, type AccountParam } from "../../utils/resolve.js";
 import { wallet_requestQuote_v0 as MethodSchema } from "@alchemy/wallet-api-types/rpc";
-import { Value } from "typebox/value";
 import {
   methodSchema,
+  encode,
+  decode,
   type MethodParams,
   type MethodResponse,
 } from "../../utils/schema.js";
@@ -84,17 +85,17 @@ export async function requestQuoteV0(
         );
 
   const { account: _, chainId: __, ...rest } = params;
-  const rpcParams = Value.Encode(schema.request, {
+  const rpcParams = encode(schema.request, {
     ...rest,
     chainId: params.chainId ?? client.chain.id,
     from,
     ...(capabilities && { capabilities: toRpcCapabilities(capabilities) }),
-  } satisfies BaseRequestQuoteV0Params);
+  });
 
   const rpcResp = await client.request({
     method: "wallet_requestQuote_v0",
     params: [rpcParams],
   });
 
-  return Value.Decode(schema.response, rpcResp);
+  return decode(schema.response, rpcResp);
 }

@@ -5,8 +5,12 @@ import deepEqual from "deep-equal";
 import type { DistributiveOmit, InnerWalletApiClient } from "../types";
 import { LOGGER } from "../logger.js";
 import { isLocalAccount } from "../utils/assertions.js";
-import { Value } from "typebox/value";
-import { methodSchema, type MethodParams } from "../utils/schema.js";
+import {
+  methodSchema,
+  encode,
+  decode,
+  type MethodParams,
+} from "../utils/schema.js";
 
 const schema = methodSchema(MethodSchema);
 type BaseRequestAccountParams = MethodParams<typeof MethodSchema>;
@@ -90,17 +94,14 @@ export async function requestAccount(
     };
   }
 
-  const rpcParams = Value.Encode(
-    schema.request,
-    args satisfies BaseRequestAccountParams,
-  );
+  const rpcParams = encode(schema.request, args);
 
   const rpcResp = await client.request({
     method: "wallet_requestAccount",
     params: [rpcParams],
   });
 
-  const resp = Value.Decode(schema.response, rpcResp);
+  const resp = decode(schema.response, rpcResp);
 
   client.internal?.setAccount({
     address: resp.accountAddress,
