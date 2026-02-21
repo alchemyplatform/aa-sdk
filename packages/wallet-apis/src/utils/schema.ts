@@ -39,27 +39,31 @@ export type MethodResponse<T extends RpcMethodSchema> = StaticDecode<
   T["properties"]["ReturnType"]
 >;
 
+/**
+ * Formats an {@link EncodeError} or {@link DecodeError} into a human-readable
+ * string describing what went wrong, including the JSON path and the schema's
+ * custom error message (if any).
+ *
+ * @param {TSchema} schema - The TypeBox schema that validation was run against.
+ * @param {EncodeError | DecodeError} error - The error thrown by {@link Value.Encode} or {@link Value.Decode}.
+ * @returns {string} A formatted error string prefixed with `"Invalid params"`.
+ */
 function formatCodecError(
   schema: TSchema,
-  originalValue: unknown,
-  cause: {
-    errors: Array<{
-      schemaPath: string;
-      instancePath: string;
-      message: string;
-    }>;
-  },
+  error: EncodeError | DecodeError,
 ): string {
   // Use only the first error — it's the most specific. Subsequent errors are
   // typically cascade noise from union/anyOf branches.
-  const error = cause.errors[0];
-  if (!error) return "Invalid params";
+  const causeError = error.cause.errors[0];
+  // errors is typed as an open array — guard against the (practically
+  // impossible) empty case.
+  if (!causeError) return "Invalid params";
 
-  const path = error.instancePath || "(root)";
+  const path = causeError.instancePath || "(root)";
 
   // Prefer the schema's custom errorMessage annotation over the generic locale message.
-  let message = error.message;
-  const schemaPointer = error.schemaPath.replace(/^#/, "");
+  let message = causeError.message;
+  const schemaPointer = causeError.schemaPath.replace(/^#/, "");
   if (schemaPointer) {
     const schemaNode = Pointer.Get(schema, schemaPointer);
     if (
@@ -72,22 +76,7 @@ function formatCodecError(
     }
   }
 
-  // Include the type of the received value for context.
-  let receivedType: string | undefined;
-  try {
-    const received = error.instancePath
-      ? Pointer.Get(originalValue, error.instancePath)
-      : originalValue;
-    receivedType = received === null ? "null" : typeof received;
-  } catch {
-    // instancePath may not resolve (e.g. missing property) — skip.
-  }
-
-  const detail = receivedType
-    ? `${path}: ${message} (received ${receivedType})`
-    : `${path}: ${message}`;
-
-  return `Invalid params: ${detail}`;
+  return `Invalid params: ${path}: ${message}`;
 }
 
 // Type-safe wrapper around `Value.Encode` with human-readable errors.
@@ -99,7 +88,7 @@ export function encode<const T extends TSchema>(
     return Value.Encode(schema, value);
   } catch (error) {
     if (error instanceof EncodeError) {
-      throw new BaseError(formatCodecError(schema, value, error.cause));
+      throw new BaseError(formatCodecError(schema, error), { cause: error });
     }
     throw error;
   }
@@ -114,7 +103,7 @@ export function decode<const T extends TSchema>(
     return Value.Decode(schema, value);
   } catch (error) {
     if (error instanceof DecodeError) {
-      throw new BaseError(formatCodecError(schema, value, error.cause));
+      throw new BaseError(formatCodecError(schema, error), { cause: error });
     }
     throw error;
   }
