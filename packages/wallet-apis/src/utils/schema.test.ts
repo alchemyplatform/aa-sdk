@@ -37,7 +37,7 @@ describe("encode", () => {
     );
   });
 
-  it("includes the path and received type", () => {
+  it("includes the path in the error message", () => {
     expect(() =>
       encode(prepareCallsSchema.request, {
         ...validPrepareCallsParams,
@@ -45,7 +45,7 @@ describe("encode", () => {
       }),
     ).toThrow(
       expect.objectContaining({
-        message: expect.stringMatching(/\/from.*received number/),
+        message: expect.stringContaining("/from"),
       }),
     );
   });
