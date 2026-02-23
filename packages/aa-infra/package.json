@@ -1,6 +1,6 @@
 {
   "name": "@alchemy/aa-infra",
-  "version": "0.0.0-alpha.20",
+  "version": "0.0.0-alpha.21",
   "description": "Alchemy Account Abstraction Infrastructure",
   "author": "Alchemy",
   "license": "MIT",
@@ -43,7 +43,7 @@
     "typescript-template": "*"
   },
   "dependencies": {
-    "@alchemy/common": "^0.0.0-alpha.20",
+    "@alchemy/common": "^0.0.0-alpha.21",
     "viem": "^2.44.2"
   },
   "publishConfig": {
