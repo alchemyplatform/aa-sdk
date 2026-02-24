@@ -181,8 +181,7 @@ function generatePackageSection(
   packageData: DirectoryItem,
   packagePath: string,
 ): YamlPackageSection {
-  const displayName =
-    PACKAGE_DISPLAY_NAMES[packageName] || packageName;
+  const displayName = PACKAGE_DISPLAY_NAMES[packageName] || packageName;
 
   const section: YamlPackageSection = {
     section: displayName,

@@ -22,22 +22,22 @@ This method requests the account associated with the signer and uses it to sign 
 // Sign typed data
 const signature = await client.signTypedData({
   domain: {
-    name: 'Example DApp',
-    version: '1',
+    name: "Example DApp",
+    version: "1",
     chainId: 1,
-    verifyingContract: '0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC'
+    verifyingContract: "0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC",
   },
   types: {
     Person: [
-      { name: 'name', type: 'string' },
-      { name: 'wallet', type: 'address' }
-    ]
+      { name: "name", type: "string" },
+      { name: "wallet", type: "address" },
+    ],
   },
-  primaryType: 'Person',
+  primaryType: "Person",
   message: {
-    name: 'John Doe',
-    wallet: '0xAaAaAaAaAaAaAaAaAaAAAAAAAAaaaAaAaAaaAaAa'
-  }
+    name: "John Doe",
+    wallet: "0xAaAaAaAaAaAaAaAaAaAAAAAAAAaaaAaAaAaaAaAa",
+  },
 });
 ```
 
@@ -1620,6 +1620,7 @@ const signature = await client.signTypedData({
         ‐
       </td>
     </tr>
+
   </tbody>
 </table>
 

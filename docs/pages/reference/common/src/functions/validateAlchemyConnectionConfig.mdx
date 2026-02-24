@@ -20,12 +20,12 @@ Validates an Alchemy connection configuration object.
 ```ts
 try {
   const config = validateAlchemyConnectionConfig({
-    apiKey: 'your-api-key'
+    apiKey: "your-api-key",
   });
   // config is now typed as AlchemyConnectionConfig
 } catch (error) {
   if (error instanceof ConnectionConfigError) {
-    console.error('Invalid config:', error.message);
+    console.error("Invalid config:", error.message);
   }
 }
 ```
@@ -55,6 +55,7 @@ try {
         The configuration object to validate
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -113,6 +114,7 @@ The validated configuration object
         Custom RPC URL (optional - defaults to chain's Alchemy URL)
       </td>
     </tr>
+
   </tbody>
 </table>
 

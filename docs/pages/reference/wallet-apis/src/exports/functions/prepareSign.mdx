@@ -77,9 +77,9 @@ Prepares a signature request for signing messages or transactions.
 ```ts
 // Prepare a message to be signed
 const result = await client.prepareSign({
-   account: "0x1234...",
-   type: "personal_sign",
-   data: "Hello, world!",
+  account: "0x1234...",
+  type: "personal_sign",
+  data: "Hello, world!",
 });
 ```
 
@@ -122,6 +122,7 @@ const result = await client.prepareSign({
         Parameters for preparing the signature request
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -129,8 +130,8 @@ const result = await client.prepareSign({
 
 `Promise`\<\{
 `chainId`: `number`;
-`signatureRequest`:   | \{
-`data`:   | `string`
+`signatureRequest`: | \{
+`data`: | `string`
 | \{
 `raw`: `` `0x${string}` ``;
 };

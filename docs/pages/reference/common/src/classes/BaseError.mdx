@@ -15,17 +15,17 @@ we want the errors here to point to our docs if we supply a docsPath though
 
 ## Extends
 
-* `BaseError`
+- `BaseError`
 
 ## Extended by
 
-* [`ChainNotFoundError`](ChainNotFoundError.mdx)
-* [`AccountNotFoundError`](AccountNotFoundError.mdx)
-* [`ConnectionConfigError`](ConnectionConfigError.mdx)
-* [`FetchError`](FetchError.mdx)
-* [`ServerError`](ServerError.mdx)
-* [`InvalidRequestError`](InvalidRequestError.mdx)
-* [`MethodUnsupportedError`](MethodUnsupportedError.mdx)
+- [`ChainNotFoundError`](ChainNotFoundError.mdx)
+- [`AccountNotFoundError`](AccountNotFoundError.mdx)
+- [`ConnectionConfigError`](ConnectionConfigError.mdx)
+- [`FetchError`](FetchError.mdx)
+- [`ServerError`](ServerError.mdx)
+- [`InvalidRequestError`](InvalidRequestError.mdx)
+- [`MethodUnsupportedError`](MethodUnsupportedError.mdx)
 
 ## Constructors
 
@@ -67,6 +67,7 @@ Defined in: [packages/common/src/errors/BaseError.ts:28](https://github.com/alch
         `BaseErrorParameters`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -77,7 +78,7 @@ Defined in: [packages/common/src/errors/BaseError.ts:28](https://github.com/alch
 #### Overrides
 
 ```ts
-ViemBaseError.constructor
+ViemBaseError.constructor;
 ```
 
 ## Properties
@@ -280,6 +281,7 @@ ViemBaseError.constructor
         not capture any frames.
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -293,7 +295,7 @@ ViemBaseError.constructor
 walk(): Error;
 ```
 
-Defined in: node\_modules/viem/\_types/errors/base.d.ts:26
+Defined in: node_modules/viem/\_types/errors/base.d.ts:26
 
 ##### Returns
 
@@ -302,7 +304,7 @@ Defined in: node\_modules/viem/\_types/errors/base.d.ts:26
 ##### Inherited from
 
 ```ts
-ViemBaseError.walk
+ViemBaseError.walk;
 ```
 
 #### Call Signature
@@ -311,7 +313,7 @@ ViemBaseError.walk
 walk(fn): Error | null;
 ```
 
-Defined in: node\_modules/viem/\_types/errors/base.d.ts:27
+Defined in: node_modules/viem/\_types/errors/base.d.ts:27
 
 ##### Parameters
 
@@ -333,6 +335,7 @@ Defined in: node\_modules/viem/\_types/errors/base.d.ts:27
         (`err`) => `boolean`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -343,10 +346,10 @@ Defined in: node\_modules/viem/\_types/errors/base.d.ts:27
 ##### Inherited from
 
 ```ts
-ViemBaseError.walk
+ViemBaseError.walk;
 ```
 
-***
+---
 
 ### captureStackTrace()
 
@@ -354,7 +357,7 @@ ViemBaseError.walk
 static captureStackTrace(targetObject, constructorOpt?): void;
 ```
 
-Defined in: node\_modules/@types/node/globals.d.ts:145
+Defined in: node_modules/@types/node/globals.d.ts:145
 
 Creates a `.stack` property on `targetObject`, which when accessed returns
 a string representing the location in the code at which
@@ -363,7 +366,7 @@ a string representing the location in the code at which
 ```js
 const myObject = {};
 Error.captureStackTrace(myObject);
-myObject.stack;  // Similar to `new Error().stack`
+myObject.stack; // Similar to `new Error().stack`
 ```
 
 The first line of the trace will be prefixed with
@@ -430,6 +433,7 @@ a();
         `Function`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -440,10 +444,10 @@ a();
 #### Inherited from
 
 ```ts
-ViemBaseError.captureStackTrace
+ViemBaseError.captureStackTrace;
 ```
 
-***
+---
 
 ### prepareStackTrace()
 
@@ -451,7 +455,7 @@ ViemBaseError.captureStackTrace
 static prepareStackTrace(err, stackTraces): any;
 ```
 
-Defined in: node\_modules/@types/node/globals.d.ts:149
+Defined in: node_modules/@types/node/globals.d.ts:149
 
 #### Parameters
 
@@ -483,6 +487,7 @@ Defined in: node\_modules/@types/node/globals.d.ts:149
         `CallSite`\[]
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -497,5 +502,5 @@ https://v8.dev/docs/stack-trace-api#customizing-stack-traces
 #### Inherited from
 
 ```ts
-ViemBaseError.prepareStackTrace
+ViemBaseError.prepareStackTrace;
 ```

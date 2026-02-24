@@ -19,7 +19,7 @@ Partial configuration is supported - unspecified fields retain their current val
 Configuration precedence (highest to lowest):
 
 1. Explicit setGlobalLoggerConfig calls
-2. ALCHEMY\_LOG\_LEVEL environment variable
+2. ALCHEMY_LOG_LEVEL environment variable
 3. Defaults (INFO in dev, ERROR in prod)
 
 ## Example
@@ -32,12 +32,12 @@ setGlobalLoggerConfig({ level: LogLevel.DEBUG });
 
 // Add custom sink
 setGlobalLoggerConfig({
-  sinks: [(entry) => console.log(JSON.stringify(entry))]
+  sinks: [(entry) => console.log(JSON.stringify(entry))],
 });
 
 // Filter to specific namespaces
 setGlobalLoggerConfig({
-  enabledNamespaces: ["aa-infra", "wallet-apis"]
+  enabledNamespaces: ["aa-infra", "wallet-apis"],
 });
 ```
 
@@ -66,6 +66,7 @@ setGlobalLoggerConfig({
         Partial configuration to apply
       </td>
     </tr>
+
   </tbody>
 </table>
 

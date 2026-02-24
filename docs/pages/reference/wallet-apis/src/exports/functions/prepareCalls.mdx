@@ -25,14 +25,16 @@ this directly without first calling `requestAccount`.
 ```ts
 // Prepare a sponsored user operation call (uses signer address via EIP-7702 by default)
 const result = await client.prepareCalls({
-  calls: [{
-    to: "0x1234...",
-    data: "0xabcdef...",
-    value: 0n
-  }],
+  calls: [
+    {
+      to: "0x1234...",
+      data: "0xabcdef...",
+      value: 0n,
+    },
+  ],
   capabilities: {
-    paymaster: { policyId: "your-policy-id" }
-  }
+    paymaster: { policyId: "your-policy-id" },
+  },
 });
 ```
 
@@ -145,6 +147,7 @@ const result = await client.prepareCalls({
         ‐
       </td>
     </tr>
+
   </tbody>
 </table>
 

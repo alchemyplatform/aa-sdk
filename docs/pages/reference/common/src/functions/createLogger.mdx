@@ -18,8 +18,8 @@ Loggers emit structured log entries to configured sinks (default: console).
 
 All log methods support:
 
-* String messages: `logger.info("message", { data })`
-* Lazy suppliers: `logger.debug(() => ["expensive", computeData()])` (only evaluated when level enabled)
+- String messages: `logger.info("message", { data })`
+- Lazy suppliers: `logger.debug(() => ["expensive", computeData()])` (only evaluated when level enabled)
 
 ## Example
 
@@ -29,7 +29,7 @@ import { createLogger } from "@alchemy/common";
 const logger = createLogger({
   package: "@alchemy/aa-infra",
   version: "1.0.0",
-  namespace: "aa-infra"
+  namespace: "aa-infra",
 });
 
 logger.info("processing request", { chainId: 1 });
@@ -69,6 +69,7 @@ await sendWithProfiling(op); // logs execution time at DEBUG level
         Logger configuration
       </td>
     </tr>
+
   </tbody>
 </table>
 

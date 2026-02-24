@@ -18,19 +18,23 @@ Most applications should use the default console sink.
 ## Example
 
 ```ts
-import { InMemorySink, setGlobalLoggerConfig, createLogger } from "@alchemy/common";
+import {
+  InMemorySink,
+  setGlobalLoggerConfig,
+  createLogger,
+} from "@alchemy/common";
 
 // In tests
 const sink = new InMemorySink();
 
 setGlobalLoggerConfig({
-  sinks: [sink.sink]
+  sinks: [sink.sink],
 });
 
 const logger = createLogger({
   package: "@alchemy/aa-infra",
   version: "1.0.0",
-  namespace: "aa-infra"
+  namespace: "aa-infra",
 });
 
 logger.info("test message");
@@ -87,6 +91,7 @@ Binds the sink method to the instance for use as a callback.
         Array of captured log entries
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -126,7 +131,7 @@ Clear all captured entries
 
 `void`
 
-***
+---
 
 ### getByLevel()
 
@@ -163,6 +168,7 @@ Get entries filtered by log level
         The log level to filter by (LogLevel.ERROR, LogLevel.INFO, etc.)
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -172,7 +178,7 @@ Get entries filtered by log level
 
 Array of log entries matching the specified level
 
-***
+---
 
 ### getByMessage()
 
@@ -209,6 +215,7 @@ Get entries filtered by message substring
         The substring to search for in log messages
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -218,7 +225,7 @@ Get entries filtered by message substring
 
 Array of log entries containing the substring in their message
 
-***
+---
 
 ### getByNamespace()
 
@@ -255,6 +262,7 @@ Get entries filtered by namespace
         The namespace to filter by (e.g., "aa-infra", "wallet-apis")
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -264,7 +272,7 @@ Get entries filtered by namespace
 
 Array of log entries matching the specified namespace
 
-***
+---
 
 ### latest()
 
@@ -282,7 +290,7 @@ Get the most recent log entry
 
 The latest log entry, or undefined if no entries have been captured
 
-***
+---
 
 ### sink()
 
@@ -320,6 +328,7 @@ Captures log entries into the internal array.
         The log entry to capture
       </td>
     </tr>
+
   </tbody>
 </table>
 
