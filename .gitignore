@@ -26,6 +26,9 @@ lerna-debug.log
 
 **/userop.json
 
+# TypeDoc generated media (source files copied for source links)
+docs/pages/reference/_media
+
 bin
 **/.turbo
 
