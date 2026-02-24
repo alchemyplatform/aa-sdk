@@ -9,7 +9,6 @@
   "workspaces": {
     "packages": [
       "templates/*",
-      "examples/*",
       "doc-gen",
       "docs",
       ".vitest",
@@ -22,34 +21,25 @@
     "viem": "^2.44.2",
     "@noble/hashes": "^1.4.0",
     "@noble/curves": "^1.4.0",
-    "zustand": "^5.0.0-rc.2",
-    "react-native": "0.76.5",
-    "react-native-config": "1.5.3",
-    "@react-native-community/cli": "15.0.1",
     "eslint-plugin-react-hooks": "4.6.0"
   },
   "scripts": {
     "generate": "turbo run generate",
     "postgenerate": "yarn lint:write",
     "preinstall": "yarn config set ignore-engines true",
-    "postinstall": "git submodule update --init --recursive && patch-package && turbo run build --filter='./templates/*' --filter='halp'",
+    "postinstall": "patch-package && turbo run build --filter='./templates/*' --filter='halp'",
     "build": "yarn build:libs",
     "postbuild": "yarn lint:write",
-    "build:libs": "turbo run build --filter='./templates/*' --filter='./packages/*' --filter='!./packages/wagmi-core'",
-    "build:demo": "turbo run build --filter=ui-demo --filter='./templates/*'",
-    "build:examples": "turbo run build",
+    "build:libs": "turbo run build --filter='./templates/*' --filter='./packages/*'",
     "clean": "yarn clean:turbo && yarn clean:node_modules",
     "clean:turbo": "turbo run clean",
     "clean:node_modules": "lerna clean -y && rm -rf node_modules",
-    "dev:ui": "turbo watch dev --filter='@account-kit/react' --filter=ui-demo",
-    "dev:docs": "turbo watch dev --filter=docs",
     "test": "vitest dev",
     "test:ci": "vitest run",
     "test:typecheck": "TYPECHECK=true vitest --typecheck --typecheck.only run",
     "lint:write": "eslint . --fix && prettier --log-level warn --write --ignore-unknown .",
     "lint:check": "eslint . && prettier --check .",
     "prepare": "husky install",
-    "docs:dev": "./docs/scripts/docs-dev.sh",
     "docs:sdk": "yarn build && typedoc && tsx scripts/generate-typedoc-yaml.ts",
     "version": "yarn build:libs"
   },
@@ -92,8 +82,7 @@
     "typescript": "^5.8.3",
     "viem": "^2.44.2",
     "vitest": "^2.1.9",
-    "wagmi": "2.16.9",
-    "webauthn-p256": "^0.0.10"
+    "wagmi": "2.16.9"
   },
   "commitlint": {
     "extends": [

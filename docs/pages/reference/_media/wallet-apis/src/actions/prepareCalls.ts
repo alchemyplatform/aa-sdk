@@ -1,0 +1,132 @@
+import type { Address, Prettify } from "viem";
+import type { DistributiveOmit, InnerWalletApiClient } from "../types.ts";
+import { LOGGER } from "../logger.js";
+import {
+  fromRpcCapabilities,
+  mergeClientCapabilities,
+  toRpcCapabilities,
+  type PrepareCallsCapabilities,
+  type WithCapabilities,
+} from "../utils/capabilities.js";
+import { resolveAddress, type AccountParam } from "../utils/resolve.js";
+import { wallet_prepareCalls as MethodSchema } from "@alchemy/wallet-api-types/rpc";
+import {
+  methodSchema,
+  encode,
+  decode,
+  type MethodParams,
+  type MethodResponse,
+} from "../utils/schema.js";
+
+const schema = methodSchema(MethodSchema);
+type BasePrepareCallsParams = MethodParams<typeof MethodSchema>;
+type PrepareCallsResponse = MethodResponse<typeof MethodSchema>;
+
+export type PrepareCallsParams = Prettify<
+  WithCapabilities<
+    DistributiveOmit<BasePrepareCallsParams, "from" | "chainId"> & {
+      account?: AccountParam;
+      chainId?: number;
+    }
+  >
+>;
+
+/** The modifiedRequest in client format: `account` instead of `from`, SDK capabilities. */
+type ClientModifiedRequest = Prettify<
+  Omit<BasePrepareCallsParams, "from" | "capabilities"> & {
+    account: Address;
+    capabilities?: PrepareCallsCapabilities;
+  }
+>;
+
+export type PrepareCallsResult =
+  | Exclude<PrepareCallsResponse, { type: "paymaster-permit" }>
+  | (Omit<
+      Extract<PrepareCallsResponse, { type: "paymaster-permit" }>,
+      "modifiedRequest"
+    > & {
+      modifiedRequest: ClientModifiedRequest;
+    });
+
+/**
+ * Prepares a set of contract calls for execution by building a user operation.
+ * Returns the built user operation and a signature request that needs to be signed
+ * before submitting to sendPreparedCalls.
+ *
+ * The client defaults to using EIP-7702 with the signer's address, so you can call
+ * this directly without first calling `requestAccount`.
+ *
+ * @param {InnerWalletApiClient} client - The wallet API client to use for the request
+ * @param {PrepareCallsParams} params - Parameters for preparing calls
+ * @param {Array<{to: Address, data?: Hex, value?: bigint}>} params.calls - Array of contract calls to execute
+ * @param {AccountParam} [params.account] - The account to execute the calls from. Can be an address string or an object with an `address` property. Defaults to the client's account (signer address via EIP-7702).
+ * @param {object} [params.capabilities] - Optional capabilities to include with the request
+ * @returns {Promise<PrepareCallsResult>} A Promise that resolves to the prepared calls result containing
+ * the user operation data and signature request
+ *
+ * @example
+ * ```ts
+ * // Prepare a sponsored user operation call (uses signer address via EIP-7702 by default)
+ * const result = await client.prepareCalls({
+ *   calls: [{
+ *     to: "0x1234...",
+ *     data: "0xabcdef...",
+ *     value: 0n
+ *   }],
+ *   capabilities: {
+ *     paymaster: { policyId: "your-policy-id" }
+ *   }
+ * });
+ * ```
+ */
+export async function prepareCalls(
+  client: InnerWalletApiClient,
+  params: PrepareCallsParams,
+): Promise<PrepareCallsResult> {
+  const from = params.account
+    ? resolveAddress(params.account)
+    : client.account.address;
+
+  const chainId = params.chainId ?? client.chain.id;
+
+  const capabilities = mergeClientCapabilities(client, params.capabilities);
+
+  LOGGER.debug("prepareCalls:start", {
+    callsCount: params.calls?.length,
+    hasCapabilities: !!params.capabilities,
+  });
+
+  const { account: _, chainId: __, ...rest } = params;
+  const rpcParams = encode(schema.request, {
+    ...rest,
+    chainId,
+    from,
+    capabilities: toRpcCapabilities(capabilities),
+  });
+
+  const rpcResp = await client.request({
+    method: "wallet_prepareCalls",
+    params: [rpcParams],
+  });
+
+  LOGGER.debug("prepareCalls:done");
+  const decoded = decode(schema.response, rpcResp);
+
+  // Transform paymaster-permit modifiedRequest from RPC format to client format:
+  // - `from` (RPC) → `account` (client)
+  // - `capabilities.paymasterService` (RPC) → `capabilities.paymaster` (client)
+  if (decoded.type === "paymaster-permit") {
+    const { from, capabilities, ...restModifiedRequest } =
+      decoded.modifiedRequest;
+    return {
+      ...decoded,
+      modifiedRequest: {
+        ...restModifiedRequest,
+        account: from,
+        capabilities: fromRpcCapabilities(capabilities),
+      },
+    };
+  }
+
+  return decoded;
+}

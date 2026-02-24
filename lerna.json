@@ -1,15 +1,23 @@
 {
   "$schema": "node_modules/lerna/schemas/lerna-schema.json",
-  "version": "4.47.0",
+  "version": "0.0.0-alpha.21",
   "npmClient": "yarn",
-  "conventionalCommits": true,
-  "changelog": true,
-  "packages": ["account-kit/*", "aa-sdk/*"],
+  "packages": [
+    "packages/aa-infra",
+    "packages/common",
+    "packages/smart-accounts",
+    "packages/wallet-apis"
+  ],
   "command": {
     "version": {
-      "message": "chore(release): publish %s [skip-ci]",
-      "forcePublish": true
+      "message": "chore(v5): publish alpha version %s [skip ci]",
+      "forcePublish": true,
+      "conventionalCommits": false,
+      "preid": "alpha"
+    },
+    "publish": {
+      "distTag": "alpha",
+      "access": "public"
     }
-  },
-  "granularPathspec": false
+  }
 }

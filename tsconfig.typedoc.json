@@ -12,7 +12,6 @@
     "packages/aa-infra/src/**/*",
     "packages/common/src/**/*",
     "packages/smart-accounts/src/**/*",
-    "packages/wagmi-core/src/**/*",
     "packages/wallet-apis/src/**/*"
   ],
   "exclude": [
