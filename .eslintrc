@@ -8,7 +8,6 @@
   "parserOptions": {
     "sourceType": "module"
   },
-  "ignorePatterns": ["docs-site/**"],
   "rules": {
     "import/extensions": ["error", "ignorePackages"],
     "jsdoc/tag-lines": [

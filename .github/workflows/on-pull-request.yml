@@ -37,27 +37,6 @@ jobs:
           TITLE: ${{ github.event.pull_request.title }}
         run: echo "$TITLE" | yarn commitlint
 
-  preview:
-    name: Generate Documentation Preview
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      deployments: write
-      pull-requests: write
-    outputs:
-      preview-url: ${{ steps.preview.outputs.preview-url }}
-    steps:
-      - name: Checkout aa-sdk
-        uses: actions/checkout@v4
-
-      - name: Generate Documentation Preview
-        id: preview
-        uses: ./.github/actions/preview-fern-docs
-        with:
-          github-token: ${{ github.token }}
-          fern-token: ${{ secrets.FERN_TOKEN }}
-          ref: ${{ github.head_ref }}
-
   lint_docs:
     name: Lint Documentation
     runs-on: ubuntu-latest
