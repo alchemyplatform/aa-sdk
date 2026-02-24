@@ -52,7 +52,6 @@
     "lint:check": "eslint . && prettier --check .",
     "lint:docs": "vale docs/**/*.mdx",
     "prepare": "husky install && yarn turbo prepare",
-    "docs:dev": "./docs/scripts/docs-dev.sh",
     "docs:broken-links": "lychee docs --root-dir /docs",
     "docs:sdk": "yarn build && typedoc && tsx scripts/generate-typedoc-yaml.ts",
     "version": "yarn build:libs"
@@ -109,8 +108,11 @@
     }
   },
   "lint-staged": {
-    "**/*.{mdx,js,jsx,ts,tsx,yaml,yml}": [
+    "**/*.{mdx,js,jsx,ts,tsx}": [
       "eslint --fix --max-warnings 0",
+      "prettier --write"
+    ],
+    "**/*.{yaml,yml}": [
       "prettier --write"
     ]
   }
