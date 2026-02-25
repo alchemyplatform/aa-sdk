@@ -42,4 +42,4 @@ npx turbo login --sso-team=alchemy-dot-com
 
 so that you can benefit from remote caching in your builds!
 
-We welcome contributions to `aa-sdk`. Please see our [contributing guidelines](CONTRIBUTING.md) for more information.
+We welcome contributions to `aa-sdk`. Please see our [contributing guidelines](https://github.com/alchemyplatform/aa-sdk/blob/main/CONTRIBUTING.md) for more information.
