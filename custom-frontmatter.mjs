@@ -220,10 +220,10 @@ export function load(app) {
     (page) => {
       if (!page.contents) return;
 
-      // Strip .mdx extension from all relative markdown links.
+      // Strip .mdx extension from relative markdown links.
       // The docs site uses extensionless slug-based URLs.
       page.contents = page.contents.replace(
-        /\]\(([^)]+?)\.mdx(#[^)]*)?\)/g,
+        /\]\((?!https?:\/\/)([^)]+?)\.mdx(#[^)]*)?\)/g,
         (_, path, anchor) => `](${path}${anchor || ""})`,
       );
 
@@ -235,7 +235,20 @@ export function load(app) {
       if (slug && isReadmeFile) {
         page.contents = page.contents.replace(
           /\]\((?!https?:\/\/|\/|#)([^)]+)\)/g,
-          (_, relPath) => `](/${slug}/${relPath})`,
+          (_, relPath) => {
+            // Normalize ./ and ../ segments in the resolved path
+            const segments = `${slug}/${relPath}`.split("/");
+            const normalized = [];
+            for (const seg of segments) {
+              if (seg === ".") continue;
+              if (seg === ".." && normalized.length > 0) {
+                normalized.pop();
+              } else {
+                normalized.push(seg);
+              }
+            }
+            return `](/${normalized.join("/")})`;
+          },
         );
       }
 
