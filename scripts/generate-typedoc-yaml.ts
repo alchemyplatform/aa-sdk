@@ -50,19 +50,18 @@ interface SDKReference {
   contents: YamlPackageSection[];
 }
 
-type PackageDisplayNames = Record<string, Record<string, string>>;
+type PackageDisplayNames = Record<string, string>;
 type TypeSections = Record<string, string>;
 
-const PACKAGE_DISPLAY_NAMES: PackageDisplayNames = {
-  packages: {
-    "aa-infra": "Infra",
-    // alchemy: "Alchemy SDK",
-    common: "Common",
-    "smart-accounts": "Smart Accounts",
-    "wagmi-core": "Wagmi Core",
-    "wallet-apis": "Wallet APIs",
-  },
+const PACKAGE_DISPLAY_NAMES: Record<string, string> = {
+  "aa-infra": "Infra",
+  common: "Common",
+  "smart-accounts": "Smart Accounts",
+  "wallet-apis": "Wallet APIs (BETA)",
 } as const;
+
+// TODO: Add other packages (aa-infra, common, smart-accounts) to the nav once they are stable
+const PACKAGES_INCLUDED_IN_NAV: string[] = ["wallet-apis"];
 
 const TYPE_SECTIONS: TypeSections = {
   functions: "Functions",
@@ -172,21 +171,17 @@ function isReactComponent(fileName: string, packageName: string): boolean {
 /**
  * Generate YAML structure for a package section
  *
- * @param {string} packageName - The main package name (aa-sdk, account-kit)
- * @param {string} subPackageName - The sub-package name (core, react, etc.)
+ * @param {string} packageName - The package name (aa-infra, common, etc.)
  * @param {DirectoryItem} packageData - The package data structure
  * @param {string} packagePath - The full package path
  * @returns {YamlPackageSection} The generated package section structure
  */
 function generatePackageSection(
   packageName: string,
-  subPackageName: string,
   packageData: DirectoryItem,
   packagePath: string,
 ): YamlPackageSection {
-  const displayName =
-    PACKAGE_DISPLAY_NAMES[packageName]?.[subPackageName] ||
-    `${packageName}/${subPackageName}`;
+  const displayName = PACKAGE_DISPLAY_NAMES[packageName] || packageName;
 
   const section: YamlPackageSection = {
     section: displayName,
@@ -246,14 +241,14 @@ function generatePackageSection(
 
       for (const item of typeDir.children) {
         if (item.type === "file") {
-          if (isReactComponent(item.name, subPackageName)) {
+          if (isReactComponent(item.name, packageName)) {
             components.push({
               page: toDisplayName(item.name),
               path: item.mdxPath,
             });
           } else if (
             item.name.startsWith("use") &&
-            (subPackageName === "react" || subPackageName === "react-native")
+            (packageName === "react" || packageName === "react-native")
           ) {
             hooks.push({
               page: toDisplayName(item.name),
@@ -327,42 +322,41 @@ function generateSDKReference(): SDKReference {
       continue;
     }
 
-    // Process each package within the top-level directory
-    for (const packageDir of topLevel.children) {
-      if (packageDir.type !== "directory") continue;
+    // Only include packages that are ready for the nav
+    if (!PACKAGES_INCLUDED_IN_NAV.includes(packageName)) {
+      continue;
+    }
 
-      const fullPackagePath = `${packageName}/${packageDir.name}/src`;
+    // Each top-level directory is a package (e.g., aa-infra, common)
+    // Look for src/ directly inside
+    let srcDir = topLevel.children.find(
+      (child): child is DirectoryItem =>
+        child.type === "directory" && child.name === "src",
+    );
 
-      let srcDir = packageDir.children.find(
+    if (!srcDir) continue;
+
+    // Handle special cases for packages which have exports subdirectory
+    let packagePath = `${packageName}/src`;
+    if (packageName === "wallet-apis" || packageName === "infra") {
+      const exportsDir = srcDir.children.find(
         (child): child is DirectoryItem =>
-          child.type === "directory" && child.name === "src",
+          child.type === "directory" && child.name === "exports",
       );
-
-      if (!srcDir) continue;
-
-      // Handle special cases for packages which have exports subdirectory
-      let actualPackagePath = fullPackagePath;
-      if (packageDir.name === "wallet-apis" || packageDir.name === "infra") {
-        const exportsDir = srcDir.children.find(
-          (child): child is DirectoryItem =>
-            child.type === "directory" && child.name === "exports",
-        );
-        if (exportsDir) {
-          srcDir = exportsDir;
-          actualPackagePath = `${packageName}/${packageDir.name}/src/exports`;
-        }
+      if (exportsDir) {
+        srcDir = exportsDir;
+        packagePath = `${packageName}/src/exports`;
       }
+    }
 
-      const packageSection = generatePackageSection(
-        packageName,
-        packageDir.name,
-        srcDir,
-        actualPackagePath,
-      );
+    const packageSection = generatePackageSection(
+      packageName,
+      srcDir,
+      packagePath,
+    );
 
-      if (packageSection.contents.length > 0) {
-        sdkReference.contents.push(packageSection);
-      }
+    if (packageSection.contents.length > 0) {
+      sdkReference.contents.push(packageSection);
     }
   }
 

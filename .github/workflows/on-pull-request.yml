@@ -3,21 +3,6 @@ on:
   pull_request:
 
 jobs:
-  changes:
-    name: Detect Changes
-    runs-on: ubuntu-latest
-    outputs:
-      docs: ${{ steps.filter.outputs.docs }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - uses: dorny/paths-filter@v3
-        id: filter
-        with:
-          filters: |
-            docs:
-              - 'docs/**/*.mdx'
-
   enforce_title:
     name: Enforce PR Title Format
     runs-on: ubuntu-latest
@@ -27,8 +12,6 @@ jobs:
         with:
           token: ${{ secrets.ALCHEMY_BOT_PAT }}
           fetch-depth: "0"
-          submodules: "recursive"
-
       - name: Setup
         uses: ./.github/actions/setup
 
@@ -36,27 +19,6 @@ jobs:
         env:
           TITLE: ${{ github.event.pull_request.title }}
         run: echo "$TITLE" | yarn commitlint
-
-  preview:
-    name: Generate Documentation Preview
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      deployments: write
-      pull-requests: write
-    outputs:
-      preview-url: ${{ steps.preview.outputs.preview-url }}
-    steps:
-      - name: Checkout aa-sdk
-        uses: actions/checkout@v4
-
-      - name: Generate Documentation Preview
-        id: preview
-        uses: ./.github/actions/preview-fern-docs
-        with:
-          github-token: ${{ github.token }}
-          fern-token: ${{ secrets.FERN_TOKEN }}
-          ref: ${{ github.head_ref }}
 
   # TODO: Add this back when we write docs for v5
   # lint_docs:
@@ -141,7 +103,6 @@ jobs:
         with:
           token: ${{ secrets.ALCHEMY_BOT_PAT }}
           fetch-depth: "0"
-          submodules: "recursive"
 
       - name: Setup
         uses: ./.github/actions/setup
@@ -177,7 +138,6 @@ jobs:
         with:
           token: ${{ secrets.ALCHEMY_BOT_PAT }}
           fetch-depth: "0"
-          submodules: "recursive"
       
       - name: Free up disk space
         run: |

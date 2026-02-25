@@ -11,10 +11,8 @@
   "files": [],
   "references": [
     { "path": "./packages/aa-infra" },
-    { "path": "./packages/alchemy" },
     { "path": "./packages/common" },
     { "path": "./packages/smart-accounts" },
-    { "path": "./packages/wagmi-core" },
     { "path": "./packages/wallet-apis" }
   ]
 }

@@ -20,7 +20,6 @@ export type SignTypedDataResult = Prettify<Hex>;
  * This method requests the account associated with the signer and uses it to sign the typed data.
  *
  * @param {InnerWalletApiClient} client - The wallet API client to use for the request
- * @param {SignerClient} signerClient - The wallet client to use for signing
  * @param {TypedDataDefinition} params - The typed data to sign, following EIP-712 format
  * @returns {Promise<SignTypedDataResult>} A Promise that resolves to the signature as a hex string
  *
