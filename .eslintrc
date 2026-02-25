@@ -8,7 +8,12 @@
   "parserOptions": {
     "sourceType": "module",
   },
-  "ignorePatterns": ["docs-site/**"],
+  "settings": {
+    "react": {
+      "version": "18.0",
+    },
+  },
+  "ignorePatterns": [],
   "rules": {
     "import/extensions": ["error", "ignorePackages"],
     "jsdoc/tag-lines": [

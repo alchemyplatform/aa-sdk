@@ -1,3 +1,0 @@
-beforeEach(() => {
-  localStorage.clear();
-});

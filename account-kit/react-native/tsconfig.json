@@ -1,8 +1,0 @@
-{
-  "extends": "typescript-template/base.json",
-  "compilerOptions": {
-    "jsx": "react-native",
-    "module": "ESNext",
-    "moduleResolution": "Bundler"
-  }
-}

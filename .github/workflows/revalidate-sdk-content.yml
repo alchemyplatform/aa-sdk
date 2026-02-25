@@ -1,0 +1,119 @@
+name: Revalidate SDK Content
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "docs/pages/**/*.md"
+      - "docs/pages/**/*.mdx"
+
+jobs:
+  revalidate-content:
+    name: Revalidate Changed Pages
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch full history to compare all commits in push
+
+      - name: Get changed MDX files
+        id: changed-files
+        run: |
+          # Get all MDX files changed in this push (handles multiple commits)
+          set +e
+          CHANGED_FILES=$(git diff --name-only \
+            "${{ github.event.before }}" "${{ github.event.after }}" \
+            -- 'docs/pages/**/*.md' 'docs/pages/**/*.mdx')
+          EXIT_CODE=$?
+          set -e
+
+          # Check for git errors
+          if [ $EXIT_CODE -ne 0 ]; then
+            echo "::error::git diff failed with exit code $EXIT_CODE"
+            exit 1
+          fi
+
+          # Handle empty result (no files changed)
+          if [ -z "$CHANGED_FILES" ]; then
+            echo "No MDX files changed in /docs/pages/ directory"
+            echo "filePaths=[]" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          # Strip docs/ prefix to get file paths matching Redis cache keys
+          # e.g., docs/pages/reference/... -> pages/reference/...
+          FILE_PATHS_JSON=$(echo "$CHANGED_FILES" | sed 's|^docs/||' | jq -R -s -c 'split("\n") | map(select(length > 0))')
+
+          FILE_COUNT=$(echo "$FILE_PATHS_JSON" | jq 'length')
+          echo "Found $FILE_COUNT changed files"
+          echo "filePaths=$FILE_PATHS_JSON" >> $GITHUB_OUTPUT
+
+      - name: Call revalidation API
+        if: steps.changed-files.outputs.filePaths != '[]'
+        run: |
+          ALL_PATHS='${{ steps.changed-files.outputs.filePaths }}'
+          TOTAL=$(echo "$ALL_PATHS" | jq 'length')
+          BATCH_SIZE=50
+          SUCCEEDED=0
+          FAILED=0
+          BATCH_NUM=0
+
+          echo "Revalidating $TOTAL files in batches of $BATCH_SIZE"
+
+          for ((i = 0; i < TOTAL; i += BATCH_SIZE)); do
+            BATCH_NUM=$((BATCH_NUM + 1))
+            BATCH=$(echo "$ALL_PATHS" | jq -c ".[$i:$((i + BATCH_SIZE))]")
+            CHUNK_SIZE=$(echo "$BATCH" | jq 'length')
+
+            echo ""
+            echo "=== Batch $BATCH_NUM ($CHUNK_SIZE paths, $((i + CHUNK_SIZE))/$TOTAL) ==="
+
+            PAYLOAD=$(jq -n --argjson paths "$BATCH" '{filePaths: $paths}')
+
+            HTTP_CODE=$(curl -X POST "${{ secrets.DOCS_SITE_URL }}/docs/api/revalidate/markdown" \
+              -H "Authorization: Bearer ${{ secrets.DOCS_SITE_API_KEY }}" \
+              -H "Content-Type: application/json" \
+              -d "$PAYLOAD" \
+              --max-time 120 \
+              -o response.json \
+              -w "%{http_code}" \
+              -s) || true
+
+            if [ "$HTTP_CODE" = "200" ]; then
+              SUCCESS=$(jq -r '.success' response.json)
+              if [ "$SUCCESS" = "true" ]; then
+                COUNT=$(jq -r '.revalidated | length' response.json)
+                echo "OK: $COUNT paths revalidated"
+                SUCCEEDED=$((SUCCEEDED + COUNT))
+              else
+                echo "::warning::Batch $BATCH_NUM: HTTP 200 but success=false"
+                jq -r '.errors[]?' response.json
+                ERRORS=$(jq -r '[.revalidated[] | select(.error)] | length' response.json)
+                SUCCEEDED=$((SUCCEEDED + CHUNK_SIZE - ERRORS))
+                FAILED=$((FAILED + ERRORS))
+              fi
+            else
+              echo "::error::Batch $BATCH_NUM: HTTP $HTTP_CODE"
+              jq '.' response.json 2>/dev/null || cat response.json 2>/dev/null || true
+              FAILED=$((FAILED + CHUNK_SIZE))
+            fi
+
+            if [ $((i + BATCH_SIZE)) -lt "$TOTAL" ]; then
+              sleep 2
+            fi
+          done
+
+          echo ""
+          echo "=== Done ==="
+          echo "Total: $TOTAL | Succeeded: $SUCCEEDED | Failed: $FAILED"
+
+          if [ "$FAILED" -gt 0 ]; then
+            echo "::error::$FAILED paths failed to revalidate"
+            exit 1
+          fi
+
+          echo "::notice::Successfully revalidated $SUCCEEDED files"
