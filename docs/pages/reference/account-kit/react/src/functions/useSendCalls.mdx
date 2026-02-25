@@ -13,7 +13,7 @@ function useSendCalls<TEntryPointVersion>(
 ): UseSendCallsResult<TEntryPointVersion>;
 ```
 
-Defined in: [account-kit/react/src/hooks/useSendCalls.ts:120](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/react/src/hooks/useSendCalls.ts#L120)
+Defined in: [account-kit/react/src/hooks/useSendCalls.ts:120](https://github.com/alchemyplatform/aa-sdk/blob/64e8cbabbf2fde59a17e85374123e899334dc927/account-kit/react/src/hooks/useSendCalls.ts#L120)
 
 Hook for sending calls to a smart account or EOA wallet.
 
@@ -52,6 +52,12 @@ await sendCallsAsync({
   ],
 });
 ```
+
+## Remarks
+
+- When connected to an EOA wallet, only single calls are supported (batch execution is not allowed)
+- For smart accounts, the returned `ids` are the prepared call IDs
+- For EOA wallets, the returned `ids` are transaction hashes
 
 ## Type Parameters
 
@@ -100,7 +106,7 @@ await sendCallsAsync({
       </td>
 
       <td>
-        [`UseSendCallsParams`](../type-aliases/UseSendCallsParams.mdx)
+        [`UseSendCallsParams`](../type-aliases/UseSendCallsParams)
       </td>
 
       <td>
@@ -113,7 +119,7 @@ await sendCallsAsync({
 
 ## Returns
 
-[`UseSendCallsResult`](../type-aliases/UseSendCallsResult.mdx)\<`TEntryPointVersion`>
+[`UseSendCallsResult`](../type-aliases/UseSendCallsResult)\<`TEntryPointVersion`>
 
 An object containing:
 
@@ -122,9 +128,3 @@ An object containing:
 - `sendCallsResult`: The result of the last successful call execution
 - `isSendingCalls`: Boolean indicating if calls are currently being sent
 - `error`: Error from the last failed call execution, if any
-
-## Description
-
-- When connected to an EOA wallet, only single calls are supported (batch execution is not allowed)
-- For smart accounts, the returned `ids` are the prepared call IDs
-- For EOA wallets, the returned `ids` are transaction hashes

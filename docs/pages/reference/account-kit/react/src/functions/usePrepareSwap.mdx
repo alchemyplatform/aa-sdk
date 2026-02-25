@@ -11,7 +11,7 @@ layout: reference
 function usePrepareSwap(params): UsePrepareSwapResult;
 ```
 
-Defined in: [account-kit/react/src/hooks/usePrepareSwap.ts:85](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/react/src/hooks/usePrepareSwap.ts#L85)
+Defined in: [account-kit/react/src/hooks/usePrepareSwap.ts:85](https://github.com/alchemyplatform/aa-sdk/blob/64e8cbabbf2fde59a17e85374123e899334dc927/account-kit/react/src/hooks/usePrepareSwap.ts#L85)
 
 Hook for requesting swap quotes from a smart account.
 
@@ -32,6 +32,12 @@ const quote = await prepareSwapAsync({
 });
 ```
 
+## Remarks
+
+- This hook only works with smart accounts and does not support EOA wallets
+- The hook handles the quote request step of the swap flow
+- The returned quote can be used with `useSignAndSendPreparedCalls` to complete the swap.
+
 ## Parameters
 
 <table>
@@ -50,7 +56,7 @@ const quote = await prepareSwapAsync({
       </td>
 
       <td>
-        [`UsePrepareSwapParams`](../type-aliases/UsePrepareSwapParams.mdx)
+        [`UsePrepareSwapParams`](../type-aliases/UsePrepareSwapParams)
       </td>
 
       <td>
@@ -63,7 +69,7 @@ const quote = await prepareSwapAsync({
 
 ## Returns
 
-[`UsePrepareSwapResult`](../type-aliases/UsePrepareSwapResult.mdx)
+[`UsePrepareSwapResult`](../type-aliases/UsePrepareSwapResult)
 
 An object containing:
 
@@ -72,9 +78,3 @@ An object containing:
 - `quote`: The result of the last successful quote request
 - `isPreparingSwap`: Boolean indicating if a quote is currently being requested
 - `error`: Error from the last failed quote request, if any
-
-## Description
-
-- This hook only works with smart accounts and does not support EOA wallets
-- The hook handles the quote request step of the swap flow
-- The returned quote can be used with `useSignAndSendPreparedCalls` to complete the swap.

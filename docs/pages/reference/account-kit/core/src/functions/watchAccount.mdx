@@ -11,7 +11,7 @@ layout: reference
 function watchAccount<TAccount>(type, config): (onChange) => any;
 ```
 
-Defined in: [account-kit/core/src/actions/watchAccount.ts:24](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/core/src/actions/watchAccount.ts#L24)
+Defined in: [account-kit/core/src/actions/watchAccount.ts:24](https://github.com/alchemyplatform/aa-sdk/blob/64e8cbabbf2fde59a17e85374123e899334dc927/account-kit/core/src/actions/watchAccount.ts#L24)
 
 Watches for changes to a specific type of account and triggers the provided callback function when changes occur.
 
@@ -38,7 +38,7 @@ watchAccount("LightAccount", config)(console.log);
   <tbody>
     <tr>
       <td>
-        `TAccount` *extends* [`SupportedAccountTypes`](../type-aliases/SupportedAccountTypes.mdx)
+        `TAccount` *extends* [`SupportedAccountTypes`](../type-aliases/SupportedAccountTypes)
       </td>
 
       <td>
@@ -81,7 +81,7 @@ watchAccount("LightAccount", config)(console.log);
       </td>
 
       <td>
-        [`AlchemyAccountsConfig`](../type-aliases/AlchemyAccountsConfig.mdx)
+        [`AlchemyAccountsConfig`](../type-aliases/AlchemyAccountsConfig)
       </td>
 
       <td>

@@ -13,7 +13,7 @@ function pluginManagerActions<TTransport, TChain, TAccount>(
 ): PluginManagerActions<TAccount>;
 ```
 
-Defined in: [account-kit/smart-contracts/src/msca/plugin-manager/decorator.ts:46](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/smart-contracts/src/msca/plugin-manager/decorator.ts#L46)
+Defined in: [account-kit/smart-contracts/src/msca/plugin-manager/decorator.ts:46](https://github.com/alchemyplatform/aa-sdk/blob/64e8cbabbf2fde59a17e85374123e899334dc927/account-kit/smart-contracts/src/msca/plugin-manager/decorator.ts#L46)
 
 Provides actions for managing plugins on a given client, including installing and uninstalling plugins.
 NOTE: this is provided by default when using a modular account client
@@ -40,21 +40,21 @@ const client = createSmartAccountClient(...).extend(pluginManagerActions);
   <tbody>
     <tr>
       <td>
-        `TTransport` *extends* `Transport`
+        `TTransport` *extends* [`Transport`](https://viem.sh)
       </td>
 
       <td>
-        `Transport`
+        [`Transport`](https://viem.sh)
       </td>
     </tr>
 
     <tr>
       <td>
-        `TChain` *extends* `undefined` | `Chain`
+        `TChain` *extends* `undefined` | [`Chain`](https://viem.sh)
       </td>
 
       <td>
-        `undefined` | `Chain`
+        `undefined` | [`Chain`](https://viem.sh)
       </td>
     </tr>
 
@@ -89,7 +89,7 @@ const client = createSmartAccountClient(...).extend(pluginManagerActions);
       </td>
 
       <td>
-        `Client`\<`TTransport`, `TChain`, `TAccount`>
+        [`Client`](https://viem.sh)\<`TTransport`, `TChain`, `TAccount`>
       </td>
 
       <td>
@@ -102,6 +102,6 @@ const client = createSmartAccountClient(...).extend(pluginManagerActions);
 
 ## Returns
 
-[`PluginManagerActions`](../type-aliases/PluginManagerActions.mdx)\<`TAccount`>
+[`PluginManagerActions`](../type-aliases/PluginManagerActions)\<`TAccount`>
 
 An object containing functions to install and uninstall plugins

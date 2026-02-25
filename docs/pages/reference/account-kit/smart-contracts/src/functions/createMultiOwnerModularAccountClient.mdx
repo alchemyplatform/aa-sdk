@@ -70,7 +70,7 @@ function createMultiOwnerModularAccountClient<TSigner>(
 >;
 ```
 
-Defined in: [account-kit/smart-contracts/src/msca/client/client.ts:91](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/smart-contracts/src/msca/client/client.ts#L91)
+Defined in: [account-kit/smart-contracts/src/msca/client/client.ts:91](https://github.com/alchemyplatform/aa-sdk/blob/64e8cbabbf2fde59a17e85374123e899334dc927/account-kit/smart-contracts/src/msca/client/client.ts#L91)
 
 ### Type Parameters
 
@@ -113,7 +113,7 @@ Defined in: [account-kit/smart-contracts/src/msca/client/client.ts:91](https://g
       </td>
 
       <td>
-        `Omit`\<[`CreateMultiOwnerModularAccountParams`](../../../core/src/type-aliases/CreateMultiOwnerModularAccountParams.mdx)\<[`HttpTransport`](../../../../aa-sdk/core/src/type-aliases/HttpTransport.mdx), `TSigner`>, `"transport"`> & `Omit`\<[`AlchemySmartAccountClientConfig`](../../../core/src/type-aliases/AlchemySmartAccountClientConfig.mdx)\<`Chain`, [`LightAccount`](../../../core/src/type-aliases/LightAccount.mdx)\<`TSigner`>>, `"account"`> & `object`
+        `Omit`\<`CreateMultiOwnerModularAccountParams`\<[`HttpTransport`](https://viem.sh), `TSigner`>, `"transport"`> & `Omit`\<`AlchemySmartAccountClientConfig`\<[`Chain`](https://viem.sh), `LightAccount`\<`TSigner`>>, `"account"`> & `object`
       </td>
     </tr>
 
@@ -122,7 +122,7 @@ Defined in: [account-kit/smart-contracts/src/msca/client/client.ts:91](https://g
 
 ### Returns
 
-`Promise`\<[`AlchemySmartAccountClient`](../../../core/src/type-aliases/AlchemySmartAccountClient.mdx)\<`undefined` | `Chain`, [`MultiOwnerModularAccount`](../type-aliases/MultiOwnerModularAccount.mdx)\<`TSigner`>, `ExecutionActions`\<[`MultiOwnerModularAccount`](../type-aliases/MultiOwnerModularAccount.mdx)\<`TSigner`>, `undefined`, keyof `EntryPointRegistryBase`\<`unknown`>> & `ManagementActions`\<[`MultiOwnerModularAccount`](../type-aliases/MultiOwnerModularAccount.mdx)\<`TSigner`>, `undefined`, keyof `EntryPointRegistryBase`\<`unknown`>> & `ReadAndEncodeActions`\<[`MultiOwnerModularAccount`](../type-aliases/MultiOwnerModularAccount.mdx)\<`TSigner`>> & `object` & `object` & [`PluginManagerActions`](../type-aliases/PluginManagerActions.mdx)\<[`MultiOwnerModularAccount`](../type-aliases/MultiOwnerModularAccount.mdx)\<`TSigner`>> & [`AccountLoupeActions`](../type-aliases/AccountLoupeActions.mdx)\<[`MultiOwnerModularAccount`](../type-aliases/MultiOwnerModularAccount.mdx)\<`TSigner`>>>>
+`Promise`\<`AlchemySmartAccountClient`\<`undefined` | [`Chain`](https://viem.sh), [`MultiOwnerModularAccount`](../type-aliases/MultiOwnerModularAccount)\<`TSigner`>, `ExecutionActions`\<[`MultiOwnerModularAccount`](../type-aliases/MultiOwnerModularAccount)\<`TSigner`>, `undefined`, keyof `EntryPointRegistryBase`\<`unknown`>> & `ManagementActions`\<[`MultiOwnerModularAccount`](../type-aliases/MultiOwnerModularAccount)\<`TSigner`>, `undefined`, keyof `EntryPointRegistryBase`\<`unknown`>> & `ReadAndEncodeActions`\<[`MultiOwnerModularAccount`](../type-aliases/MultiOwnerModularAccount)\<`TSigner`>> & `object` & `object` & [`PluginManagerActions`](../type-aliases/PluginManagerActions)\<[`MultiOwnerModularAccount`](../type-aliases/MultiOwnerModularAccount)\<`TSigner`>> & [`AccountLoupeActions`](../type-aliases/AccountLoupeActions)\<[`MultiOwnerModularAccount`](../type-aliases/MultiOwnerModularAccount)\<`TSigner`>>>>
 
 ## Call Signature
 
@@ -153,7 +153,7 @@ function createMultiOwnerModularAccountClient<TTransport, TChain, TSigner>(
 >;
 ```
 
-Defined in: [account-kit/smart-contracts/src/msca/client/client.ts:107](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/smart-contracts/src/msca/client/client.ts#L107)
+Defined in: [account-kit/smart-contracts/src/msca/client/client.ts:107](https://github.com/alchemyplatform/aa-sdk/blob/64e8cbabbf2fde59a17e85374123e899334dc927/account-kit/smart-contracts/src/msca/client/client.ts#L107)
 
 ### Type Parameters
 
@@ -168,21 +168,21 @@ Defined in: [account-kit/smart-contracts/src/msca/client/client.ts:107](https://
   <tbody>
     <tr>
       <td>
-        `TTransport` *extends* `Transport`
+        `TTransport` *extends* [`Transport`](https://viem.sh)
       </td>
 
       <td>
-        `Transport`
+        [`Transport`](https://viem.sh)
       </td>
     </tr>
 
     <tr>
       <td>
-        `TChain` *extends* `undefined` | `Chain`
+        `TChain` *extends* `undefined` | [`Chain`](https://viem.sh)
       </td>
 
       <td>
-        `undefined` | `Chain`
+        `undefined` | [`Chain`](https://viem.sh)
       </td>
     </tr>
 
@@ -216,7 +216,7 @@ Defined in: [account-kit/smart-contracts/src/msca/client/client.ts:107](https://
       </td>
 
       <td>
-        `CreateMultiOwnerModularAccountClientParams`\<`TTransport`, `TChain`, `TSigner`> & `NotType`\<`TTransport`, [`AlchemyTransport`](../../../core/src/type-aliases/AlchemyTransport.mdx)>
+        `CreateMultiOwnerModularAccountClientParams`\<`TTransport`, `TChain`, `TSigner`> & `NotType`\<`TTransport`, `AlchemyTransport`>
       </td>
     </tr>
 
@@ -225,4 +225,4 @@ Defined in: [account-kit/smart-contracts/src/msca/client/client.ts:107](https://
 
 ### Returns
 
-`Promise`\<`SmartAccountClient`\<`CustomTransport`, `Chain`, [`MultiOwnerModularAccount`](../type-aliases/MultiOwnerModularAccount.mdx)\<`TSigner`>, `ExecutionActions`\<[`MultiOwnerModularAccount`](../type-aliases/MultiOwnerModularAccount.mdx)\<`TSigner`>, `undefined`, keyof `EntryPointRegistryBase`\<`unknown`>> & `ManagementActions`\<[`MultiOwnerModularAccount`](../type-aliases/MultiOwnerModularAccount.mdx)\<`TSigner`>, `undefined`, keyof `EntryPointRegistryBase`\<`unknown`>> & `ReadAndEncodeActions`\<[`MultiOwnerModularAccount`](../type-aliases/MultiOwnerModularAccount.mdx)\<`TSigner`>> & `object` & `object` & [`PluginManagerActions`](../type-aliases/PluginManagerActions.mdx)\<[`MultiOwnerModularAccount`](../type-aliases/MultiOwnerModularAccount.mdx)\<`TSigner`>> & [`AccountLoupeActions`](../type-aliases/AccountLoupeActions.mdx)\<[`MultiOwnerModularAccount`](../type-aliases/MultiOwnerModularAccount.mdx)\<`TSigner`>>>>
+`Promise`\<`SmartAccountClient`\<[`CustomTransport`](https://viem.sh), [`Chain`](https://viem.sh), [`MultiOwnerModularAccount`](../type-aliases/MultiOwnerModularAccount)\<`TSigner`>, `ExecutionActions`\<[`MultiOwnerModularAccount`](../type-aliases/MultiOwnerModularAccount)\<`TSigner`>, `undefined`, keyof `EntryPointRegistryBase`\<`unknown`>> & `ManagementActions`\<[`MultiOwnerModularAccount`](../type-aliases/MultiOwnerModularAccount)\<`TSigner`>, `undefined`, keyof `EntryPointRegistryBase`\<`unknown`>> & `ReadAndEncodeActions`\<[`MultiOwnerModularAccount`](../type-aliases/MultiOwnerModularAccount)\<`TSigner`>> & `object` & `object` & [`PluginManagerActions`](../type-aliases/PluginManagerActions)\<[`MultiOwnerModularAccount`](../type-aliases/MultiOwnerModularAccount)\<`TSigner`>> & [`AccountLoupeActions`](../type-aliases/AccountLoupeActions)\<[`MultiOwnerModularAccount`](../type-aliases/MultiOwnerModularAccount)\<`TSigner`>>>>

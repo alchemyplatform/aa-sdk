@@ -19,7 +19,7 @@ type BaseSmartAccountClient<transport, chain, account, context> = Prettify<
 >;
 ```
 
-Defined in: [aa-sdk/core/src/client/smartAccountClient.ts:108](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/aa-sdk/core/src/client/smartAccountClient.ts#L108)
+Defined in: [aa-sdk/core/src/client/smartAccountClient.ts:108](https://github.com/alchemyplatform/aa-sdk/blob/64e8cbabbf2fde59a17e85374123e899334dc927/aa-sdk/core/src/client/smartAccountClient.ts#L108)
 
 ## Type Parameters
 
@@ -34,41 +34,41 @@ Defined in: [aa-sdk/core/src/client/smartAccountClient.ts:108](https://github.co
   <tbody>
     <tr>
       <td>
-        `transport` *extends* `Transport`
+        `transport` *extends* [`Transport`](https://viem.sh)
       </td>
 
       <td>
-        `Transport`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `chain` *extends* `Chain` | `undefined`
-      </td>
-
-      <td>
-        `Chain` | `undefined`
+        [`Transport`](https://viem.sh)
       </td>
     </tr>
 
     <tr>
       <td>
-        `account` *extends* [`SmartContractAccount`](SmartContractAccount.mdx) | `undefined`
+        `chain` *extends* [`Chain`](https://viem.sh) | `undefined`
       </td>
 
       <td>
-        [`SmartContractAccount`](SmartContractAccount.mdx) | `undefined`
+        [`Chain`](https://viem.sh) | `undefined`
       </td>
     </tr>
 
     <tr>
       <td>
-        `context` *extends* [`UserOperationContext`](UserOperationContext.mdx) | `undefined`
+        `account` *extends* [`SmartContractAccount`](SmartContractAccount) | `undefined`
       </td>
 
       <td>
-        [`UserOperationContext`](UserOperationContext.mdx) | `undefined`
+        [`SmartContractAccount`](SmartContractAccount) | `undefined`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `context` *extends* [`UserOperationContext`](UserOperationContext) | `undefined`
+      </td>
+
+      <td>
+        [`UserOperationContext`](UserOperationContext) | `undefined`
       </td>
     </tr>
 

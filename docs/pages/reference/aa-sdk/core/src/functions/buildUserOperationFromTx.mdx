@@ -22,7 +22,7 @@ function buildUserOperationFromTx<
 ): Promise<UserOperationStruct<TEntryPointVersion>>;
 ```
 
-Defined in: [aa-sdk/core/src/actions/smartAccount/buildUserOperationFromTx.ts:62](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/aa-sdk/core/src/actions/smartAccount/buildUserOperationFromTx.ts#L62)
+Defined in: [aa-sdk/core/src/actions/smartAccount/buildUserOperationFromTx.ts:62](https://github.com/alchemyplatform/aa-sdk/blob/64e8cbabbf2fde59a17e85374123e899334dc927/aa-sdk/core/src/actions/smartAccount/buildUserOperationFromTx.ts#L62)
 
 Performs `buildUserOperationFromTx` in batch and builds into a single, yet to be signed `UserOperation` (UO) struct. The output user operation struct will be filled with all gas fields (and paymaster data if a paymaster is used) based on the transactions data (`to`, `data`, `value`, `maxFeePerGas`, `maxPriorityFeePerGas`) computed using the configured `ClientMiddlewares` on the `SmartAccountClient`
 
@@ -70,11 +70,11 @@ const uoHash = await smartAccountClient.sendRawUserOperation({ request, entryPoi
   <tbody>
     <tr>
       <td>
-        `TChain` *extends* `undefined` | `Chain`
+        `TChain` *extends* `undefined` | [`Chain`](https://viem.sh)
       </td>
 
       <td>
-        `undefined` | `Chain`
+        `undefined` | [`Chain`](https://viem.sh)
       </td>
     </tr>
 
@@ -82,22 +82,22 @@ const uoHash = await smartAccountClient.sendRawUserOperation({ request, entryPoi
       <td>
         `TAccount` *extends*
         | `undefined`
-        | [`SmartContractAccount`](../type-aliases/SmartContractAccount.mdx)
+        | [`SmartContractAccount`](../type-aliases/SmartContractAccount)
       </td>
 
       <td>
         | `undefined`
-        | [`SmartContractAccount`](../type-aliases/SmartContractAccount.mdx)
+        | [`SmartContractAccount`](../type-aliases/SmartContractAccount)
       </td>
     </tr>
 
     <tr>
       <td>
-        `TChainOverride` *extends* `undefined` | `Chain`
+        `TChainOverride` *extends* `undefined` | [`Chain`](https://viem.sh)
       </td>
 
       <td>
-        `undefined` | `Chain`
+        `undefined` | [`Chain`](https://viem.sh)
       </td>
     </tr>
 
@@ -105,22 +105,22 @@ const uoHash = await smartAccountClient.sendRawUserOperation({ request, entryPoi
       <td>
         `TContext` *extends*
         | `undefined`
-        | [`UserOperationContext`](../type-aliases/UserOperationContext.mdx)
+        | [`UserOperationContext`](../type-aliases/UserOperationContext)
       </td>
 
       <td>
         | `undefined`
-        | [`UserOperationContext`](../type-aliases/UserOperationContext.mdx)
+        | [`UserOperationContext`](../type-aliases/UserOperationContext)
       </td>
     </tr>
 
     <tr>
       <td>
-        `TEntryPointVersion` *extends* keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase.mdx)\<`unknown`>
+        `TEntryPointVersion` *extends* keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase)\<`unknown`>
       </td>
 
       <td>
-        [`GetEntryPointFromAccount`](../type-aliases/GetEntryPointFromAccount.mdx)\<`TAccount`>
+        [`GetEntryPointFromAccount`](../type-aliases/GetEntryPointFromAccount)\<`TAccount`>
       </td>
     </tr>
 
@@ -145,7 +145,7 @@ const uoHash = await smartAccountClient.sendRawUserOperation({ request, entryPoi
       </td>
 
       <td>
-        `Client`\<`Transport`, `TChain`, `TAccount`>
+        [`Client`](https://viem.sh)\<[`Transport`](https://viem.sh), `TChain`, `TAccount`>
       </td>
 
       <td>
@@ -159,7 +159,7 @@ const uoHash = await smartAccountClient.sendRawUserOperation({ request, entryPoi
       </td>
 
       <td>
-        `SendTransactionParameters`\<`TChain`, `TAccount`, `TChainOverride`>
+        [`SendTransactionParameters`](https://viem.sh)\<`TChain`, `TAccount`, `TChainOverride`>
       </td>
 
       <td>
@@ -173,7 +173,7 @@ const uoHash = await smartAccountClient.sendRawUserOperation({ request, entryPoi
       </td>
 
       <td>
-        [`UserOperationOverrides`](../type-aliases/UserOperationOverrides.mdx)\<`TEntryPointVersion`>
+        [`UserOperationOverrides`](../type-aliases/UserOperationOverrides)\<`TEntryPointVersion`>
       </td>
 
       <td>
@@ -200,6 +200,6 @@ const uoHash = await smartAccountClient.sendRawUserOperation({ request, entryPoi
 
 ## Returns
 
-`Promise`\<[`UserOperationStruct`](../type-aliases/UserOperationStruct.mdx)\<`TEntryPointVersion`>>
+`Promise`\<[`UserOperationStruct`](../type-aliases/UserOperationStruct)\<`TEntryPointVersion`>>
 
 a Promise containing the built user operation

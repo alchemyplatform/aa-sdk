@@ -13,7 +13,7 @@ function createMultisigModularAccount<TTransport, TSigner>(
 ): Promise<MultisigModularAccount<TSigner>>;
 ```
 
-Defined in: [account-kit/smart-contracts/src/msca/account/multisigAccount.ts:60](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/smart-contracts/src/msca/account/multisigAccount.ts#L60)
+Defined in: [account-kit/smart-contracts/src/msca/account/multisigAccount.ts:60](https://github.com/alchemyplatform/aa-sdk/blob/64e8cbabbf2fde59a17e85374123e899334dc927/account-kit/smart-contracts/src/msca/account/multisigAccount.ts#L60)
 
 ## Type Parameters
 
@@ -28,11 +28,11 @@ Defined in: [account-kit/smart-contracts/src/msca/account/multisigAccount.ts:60]
   <tbody>
     <tr>
       <td>
-        `TTransport` *extends* `Transport`
+        `TTransport` *extends* [`Transport`](https://viem.sh)
       </td>
 
       <td>
-        `Transport`
+        [`Transport`](https://viem.sh)
       </td>
     </tr>
 
@@ -67,7 +67,7 @@ Defined in: [account-kit/smart-contracts/src/msca/account/multisigAccount.ts:60]
       </td>
 
       <td>
-        [`CreateMultisigModularAccountParams`](../type-aliases/CreateMultisigModularAccountParams.mdx)\<`TTransport`, `TSigner`>
+        [`CreateMultisigModularAccountParams`](../type-aliases/CreateMultisigModularAccountParams)\<`TTransport`, `TSigner`>
       </td>
 
       <td>
@@ -80,6 +80,6 @@ Defined in: [account-kit/smart-contracts/src/msca/account/multisigAccount.ts:60]
 
 ## Returns
 
-`Promise`\<[`MultisigModularAccount`](../type-aliases/MultisigModularAccount.mdx)\<`TSigner`>>
+`Promise`\<[`MultisigModularAccount`](../type-aliases/MultisigModularAccount)\<`TSigner`>>
 
 A promise that resolves to a `MultisigModularAccount` object containing the created account information and methods.

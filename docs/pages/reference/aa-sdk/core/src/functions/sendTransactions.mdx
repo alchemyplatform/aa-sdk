@@ -14,7 +14,7 @@ function sendTransactions<TTransport, TChain, TAccount, TContext>(
 ): Promise<`0x${string}`>;
 ```
 
-Defined in: [aa-sdk/core/src/actions/smartAccount/sendTransactions.ts:36](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/aa-sdk/core/src/actions/smartAccount/sendTransactions.ts#L36)
+Defined in: [aa-sdk/core/src/actions/smartAccount/sendTransactions.ts:36](https://github.com/alchemyplatform/aa-sdk/blob/64e8cbabbf2fde59a17e85374123e899334dc927/aa-sdk/core/src/actions/smartAccount/sendTransactions.ts#L36)
 
 Sends transactions using the provided client and transaction parameters. This function builds user operations from the transactions, sends them, and waits for the transaction to be mined.
 
@@ -48,21 +48,21 @@ const result = await client.sendTransactions({
   <tbody>
     <tr>
       <td>
-        `TTransport` *extends* `Transport`
+        `TTransport` *extends* [`Transport`](https://viem.sh)
       </td>
 
       <td>
-        `Transport`
+        [`Transport`](https://viem.sh)
       </td>
     </tr>
 
     <tr>
       <td>
-        `TChain` *extends* `undefined` | `Chain`
+        `TChain` *extends* `undefined` | [`Chain`](https://viem.sh)
       </td>
 
       <td>
-        `undefined` | `Chain`
+        `undefined` | [`Chain`](https://viem.sh)
       </td>
     </tr>
 
@@ -70,12 +70,12 @@ const result = await client.sendTransactions({
       <td>
         `TAccount` *extends*
         | `undefined`
-        | [`SmartContractAccount`](../type-aliases/SmartContractAccount.mdx)
+        | [`SmartContractAccount`](../type-aliases/SmartContractAccount)
       </td>
 
       <td>
         | `undefined`
-        | [`SmartContractAccount`](../type-aliases/SmartContractAccount.mdx)
+        | [`SmartContractAccount`](../type-aliases/SmartContractAccount)
       </td>
     </tr>
 
@@ -110,7 +110,7 @@ const result = await client.sendTransactions({
       </td>
 
       <td>
-        `Client`\<`TTransport`, `TChain`, `TAccount`>
+        [`Client`](https://viem.sh)\<`TTransport`, `TChain`, `TAccount`>
       </td>
 
       <td>

@@ -78,7 +78,7 @@ export type UseSignAndSendPreparedCallsResult = {
  * });
  * ```
  *
- * @description
+ * @remarks
  * - This hook only works with smart accounts and does not support EOA wallets
  * - The hook handles both signing and sending of prepared calls in a single operation
  * - The returned result contains the prepared call IDs

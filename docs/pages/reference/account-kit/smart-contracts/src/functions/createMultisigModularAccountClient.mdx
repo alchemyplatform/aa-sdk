@@ -75,7 +75,7 @@ function createMultisigModularAccountClient<TSigner>(
 >;
 ```
 
-Defined in: [account-kit/smart-contracts/src/msca/client/client.ts:201](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/smart-contracts/src/msca/client/client.ts#L201)
+Defined in: [account-kit/smart-contracts/src/msca/client/client.ts:201](https://github.com/alchemyplatform/aa-sdk/blob/64e8cbabbf2fde59a17e85374123e899334dc927/account-kit/smart-contracts/src/msca/client/client.ts#L201)
 
 ### Type Parameters
 
@@ -118,7 +118,7 @@ Defined in: [account-kit/smart-contracts/src/msca/client/client.ts:201](https://
       </td>
 
       <td>
-        [`AlchemyMultisigAccountClientConfig`](../type-aliases/AlchemyMultisigAccountClientConfig.mdx)\<`TSigner`>
+        [`AlchemyMultisigAccountClientConfig`](../type-aliases/AlchemyMultisigAccountClientConfig)\<`TSigner`>
       </td>
     </tr>
 
@@ -127,7 +127,7 @@ Defined in: [account-kit/smart-contracts/src/msca/client/client.ts:201](https://
 
 ### Returns
 
-`Promise`\<[`AlchemySmartAccountClient`](../../../core/src/type-aliases/AlchemySmartAccountClient.mdx)\<`undefined` | `Chain`, [`MultisigModularAccount`](../type-aliases/MultisigModularAccount.mdx)\<`TSigner`>, `ExecutionActions`\<[`MultisigModularAccount`](../type-aliases/MultisigModularAccount.mdx)\<`TSigner`>, [`MultisigUserOperationContext`](../type-aliases/MultisigUserOperationContext.mdx), keyof `EntryPointRegistryBase`\<`unknown`>> & `ManagementActions`\<[`MultisigModularAccount`](../type-aliases/MultisigModularAccount.mdx)\<`TSigner`>, [`MultisigUserOperationContext`](../type-aliases/MultisigUserOperationContext.mdx), keyof `EntryPointRegistryBase`\<`unknown`>> & `ReadAndEncodeActions`\<[`MultisigModularAccount`](../type-aliases/MultisigModularAccount.mdx)\<`TSigner`>> & `object` & `object` & [`PluginManagerActions`](../type-aliases/PluginManagerActions.mdx)\<[`MultisigModularAccount`](../type-aliases/MultisigModularAccount.mdx)\<`TSigner`>> & [`AccountLoupeActions`](../type-aliases/AccountLoupeActions.mdx)\<[`MultisigModularAccount`](../type-aliases/MultisigModularAccount.mdx)\<`TSigner`>>, [`MultisigUserOperationContext`](../type-aliases/MultisigUserOperationContext.mdx)>>
+`Promise`\<`AlchemySmartAccountClient`\<`undefined` | [`Chain`](https://viem.sh), [`MultisigModularAccount`](../type-aliases/MultisigModularAccount)\<`TSigner`>, `ExecutionActions`\<[`MultisigModularAccount`](../type-aliases/MultisigModularAccount)\<`TSigner`>, [`MultisigUserOperationContext`](../type-aliases/MultisigUserOperationContext), keyof `EntryPointRegistryBase`\<`unknown`>> & `ManagementActions`\<[`MultisigModularAccount`](../type-aliases/MultisigModularAccount)\<`TSigner`>, [`MultisigUserOperationContext`](../type-aliases/MultisigUserOperationContext), keyof `EntryPointRegistryBase`\<`unknown`>> & `ReadAndEncodeActions`\<[`MultisigModularAccount`](../type-aliases/MultisigModularAccount)\<`TSigner`>> & `object` & `object` & [`PluginManagerActions`](../type-aliases/PluginManagerActions)\<[`MultisigModularAccount`](../type-aliases/MultisigModularAccount)\<`TSigner`>> & [`AccountLoupeActions`](../type-aliases/AccountLoupeActions)\<[`MultisigModularAccount`](../type-aliases/MultisigModularAccount)\<`TSigner`>>, [`MultisigUserOperationContext`](../type-aliases/MultisigUserOperationContext)>>
 
 ## Call Signature
 
@@ -154,34 +154,13 @@ function createMultisigModularAccountClient<TTransport, TChain, TSigner>(
       object &
       PluginManagerActions<MultisigModularAccount<TSigner>> &
       AccountLoupeActions<MultisigModularAccount<TSigner>>,
-    [
-      {
-        Method: "eth_sendUserOperation";
-        Parameters: [UserOperationRequest, `0x${string}`];
-        ReturnType: `0x${string}`;
-      },
-      {
-        Method: "eth_estimateUserOperationGas";
-        Parameters: [UserOperationRequest, `0x${string}`, RpcStateOverride?];
-        ReturnType: UserOperationEstimateGasResponse;
-      },
-      {
-        Method: "eth_getUserOperationReceipt";
-        Parameters: [`0x${string}`, ("latest" | "pending")?];
-        ReturnType: null | UserOperationReceipt;
-      },
-      {
-        Method: "eth_getUserOperationByHash";
-        Parameters: [`0x${string}`];
-        ReturnType: null | UserOperationResponse<EntryPointVersion>;
-      },
-    ],
+    [{}, {}, {}, {}],
     MultisigUserOperationContext
   >
 >;
 ```
 
-Defined in: [account-kit/smart-contracts/src/msca/client/client.ts:216](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/smart-contracts/src/msca/client/client.ts#L216)
+Defined in: [account-kit/smart-contracts/src/msca/client/client.ts:216](https://github.com/alchemyplatform/aa-sdk/blob/64e8cbabbf2fde59a17e85374123e899334dc927/account-kit/smart-contracts/src/msca/client/client.ts#L216)
 
 ### Type Parameters
 
@@ -196,21 +175,21 @@ Defined in: [account-kit/smart-contracts/src/msca/client/client.ts:216](https://
   <tbody>
     <tr>
       <td>
-        `TTransport` *extends* `Transport`
+        `TTransport` *extends* [`Transport`](https://viem.sh)
       </td>
 
       <td>
-        `Transport`
+        [`Transport`](https://viem.sh)
       </td>
     </tr>
 
     <tr>
       <td>
-        `TChain` *extends* `undefined` | `Chain`
+        `TChain` *extends* `undefined` | [`Chain`](https://viem.sh)
       </td>
 
       <td>
-        `undefined` | `Chain`
+        `undefined` | [`Chain`](https://viem.sh)
       </td>
     </tr>
 
@@ -244,7 +223,7 @@ Defined in: [account-kit/smart-contracts/src/msca/client/client.ts:216](https://
       </td>
 
       <td>
-        `CreateMultisigModularAccountClientParams`\<`TTransport`, `TChain`, `TSigner`> & `NotType`\<`TTransport`, [`AlchemyTransport`](../../../core/src/type-aliases/AlchemyTransport.mdx)>
+        `CreateMultisigModularAccountClientParams`\<`TTransport`, `TChain`, `TSigner`> & `NotType`\<`TTransport`, `AlchemyTransport`>
       </td>
     </tr>
 
@@ -253,20 +232,8 @@ Defined in: [account-kit/smart-contracts/src/msca/client/client.ts:216](https://
 
 ### Returns
 
-`Promise`\<`SmartAccountClient`\<`CustomTransport`, `Chain`, [`MultisigModularAccount`](../type-aliases/MultisigModularAccount.mdx)\<`TSigner`>, `ExecutionActions`\<[`MultisigModularAccount`](../type-aliases/MultisigModularAccount.mdx)\<`TSigner`>, [`MultisigUserOperationContext`](../type-aliases/MultisigUserOperationContext.mdx), keyof `EntryPointRegistryBase`\<`unknown`>> & `ManagementActions`\<[`MultisigModularAccount`](../type-aliases/MultisigModularAccount.mdx)\<`TSigner`>, [`MultisigUserOperationContext`](../type-aliases/MultisigUserOperationContext.mdx), keyof `EntryPointRegistryBase`\<`unknown`>> & `ReadAndEncodeActions`\<[`MultisigModularAccount`](../type-aliases/MultisigModularAccount.mdx)\<`TSigner`>> & `object` & `object` & [`PluginManagerActions`](../type-aliases/PluginManagerActions.mdx)\<[`MultisigModularAccount`](../type-aliases/MultisigModularAccount.mdx)\<`TSigner`>> & [`AccountLoupeActions`](../type-aliases/AccountLoupeActions.mdx)\<[`MultisigModularAccount`](../type-aliases/MultisigModularAccount.mdx)\<`TSigner`>>, \[\{
-`Method`: `"eth_sendUserOperation"`;
-`Parameters`: \[`UserOperationRequest`, `` `0x${string}` ``];
-`ReturnType`: `` `0x${string}` ``;
+`Promise`\<`SmartAccountClient`\<[`CustomTransport`](https://viem.sh), [`Chain`](https://viem.sh), [`MultisigModularAccount`](../type-aliases/MultisigModularAccount)\<`TSigner`>, `ExecutionActions`\<[`MultisigModularAccount`](../type-aliases/MultisigModularAccount)\<`TSigner`>, [`MultisigUserOperationContext`](../type-aliases/MultisigUserOperationContext), keyof `EntryPointRegistryBase`\<`unknown`>> & `ManagementActions`\<[`MultisigModularAccount`](../type-aliases/MultisigModularAccount)\<`TSigner`>, [`MultisigUserOperationContext`](../type-aliases/MultisigUserOperationContext), keyof `EntryPointRegistryBase`\<`unknown`>> & `ReadAndEncodeActions`\<[`MultisigModularAccount`](../type-aliases/MultisigModularAccount)\<`TSigner`>> & `object` & `object` & [`PluginManagerActions`](../type-aliases/PluginManagerActions)\<[`MultisigModularAccount`](../type-aliases/MultisigModularAccount)\<`TSigner`>> & [`AccountLoupeActions`](../type-aliases/AccountLoupeActions)\<[`MultisigModularAccount`](../type-aliases/MultisigModularAccount)\<`TSigner`>>, \[\{
 }, \{
-`Method`: `"eth_estimateUserOperationGas"`;
-`Parameters`: \[`UserOperationRequest`, `` `0x${string}` ``, `RpcStateOverride`?];
-`ReturnType`: `UserOperationEstimateGasResponse`;
 }, \{
-`Method`: `"eth_getUserOperationReceipt"`;
-`Parameters`: \[`` `0x${string}` ``, (`"latest"` | `"pending"`)?];
-`ReturnType`: `null` | `UserOperationReceipt`;
 }, \{
-`Method`: `"eth_getUserOperationByHash"`;
-`Parameters`: \[`` `0x${string}` ``];
-`ReturnType`: `null` | `UserOperationResponse`\<`EntryPointVersion`>;
-}], [`MultisigUserOperationContext`](../type-aliases/MultisigUserOperationContext.mdx)>>
+}], [`MultisigUserOperationContext`](../type-aliases/MultisigUserOperationContext)>>

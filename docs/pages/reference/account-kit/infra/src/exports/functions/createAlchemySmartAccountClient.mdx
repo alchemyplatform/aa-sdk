@@ -13,7 +13,7 @@ function createAlchemySmartAccountClient<TChain, TAccount, TContext>(
 ): AlchemySmartAccountClient<TChain, TAccount, Record<string, never>, TContext>;
 ```
 
-Defined in: [account-kit/infra/src/client/smartAccountClient.ts:107](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/infra/src/client/smartAccountClient.ts#L107)
+Defined in: [account-kit/infra/src/client/smartAccountClient.ts:107](https://github.com/alchemyplatform/aa-sdk/blob/64e8cbabbf2fde59a17e85374123e899334dc927/account-kit/infra/src/client/smartAccountClient.ts#L107)
 
 ## Type Parameters
 
@@ -28,11 +28,11 @@ Defined in: [account-kit/infra/src/client/smartAccountClient.ts:107](https://git
   <tbody>
     <tr>
       <td>
-        `TChain` *extends* `Chain`
+        `TChain` *extends* [`Chain`](https://viem.sh)
       </td>
 
       <td>
-        `Chain`
+        [`Chain`](https://viem.sh)
       </td>
     </tr>
 
@@ -76,7 +76,7 @@ Defined in: [account-kit/infra/src/client/smartAccountClient.ts:107](https://git
       </td>
 
       <td>
-        [`AlchemySmartAccountClientConfig`](../type-aliases/AlchemySmartAccountClientConfig.mdx)\<`TChain`, `TAccount`, `TContext`>
+        [`AlchemySmartAccountClientConfig`](../type-aliases/AlchemySmartAccountClientConfig)\<`TChain`, `TAccount`, `TContext`>
       </td>
     </tr>
 
@@ -85,6 +85,6 @@ Defined in: [account-kit/infra/src/client/smartAccountClient.ts:107](https://git
 
 ## Returns
 
-[`AlchemySmartAccountClient`](../type-aliases/AlchemySmartAccountClient.mdx)\<`TChain`, `TAccount`, `Record`\<`string`, `never`>, `TContext`>
+[`AlchemySmartAccountClient`](../type-aliases/AlchemySmartAccountClient)\<`TChain`, `TAccount`, `Record`\<`string`, `never`>, `TContext`>
 
 An instance of `AlchemySmartAccountClient` configured based on the provided options

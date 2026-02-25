@@ -20,7 +20,7 @@ function buildUserOperationFromTxs<
 ): Promise<BuildUserOperationFromTransactionsResult<TEntryPointVersion>>;
 ```
 
-Defined in: [aa-sdk/core/src/actions/smartAccount/buildUserOperationFromTxs.ts:74](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/aa-sdk/core/src/actions/smartAccount/buildUserOperationFromTxs.ts#L74)
+Defined in: [aa-sdk/core/src/actions/smartAccount/buildUserOperationFromTxs.ts:74](https://github.com/alchemyplatform/aa-sdk/blob/64e8cbabbf2fde59a17e85374123e899334dc927/aa-sdk/core/src/actions/smartAccount/buildUserOperationFromTxs.ts#L74)
 
 Performs `buildUserOperationFromTx` in batch and builds into a single,
 yet to be signed `UserOperation` (UO) struct. The output user operation struct
@@ -85,21 +85,21 @@ const uoHash = await smartAccountClient.sendRawUserOperation({
   <tbody>
     <tr>
       <td>
-        `TTransport` *extends* `Transport`
+        `TTransport` *extends* [`Transport`](https://viem.sh)
       </td>
 
       <td>
-        `Transport`
+        [`Transport`](https://viem.sh)
       </td>
     </tr>
 
     <tr>
       <td>
-        `TChain` *extends* `undefined` | `Chain`
+        `TChain` *extends* `undefined` | [`Chain`](https://viem.sh)
       </td>
 
       <td>
-        `undefined` | `Chain`
+        `undefined` | [`Chain`](https://viem.sh)
       </td>
     </tr>
 
@@ -154,7 +154,7 @@ const uoHash = await smartAccountClient.sendRawUserOperation({
       </td>
 
       <td>
-        `Client`\<`TTransport`, `TChain`, `TAccount`>
+        [`Client`](https://viem.sh)\<`TTransport`, `TChain`, `TAccount`>
       </td>
 
       <td>

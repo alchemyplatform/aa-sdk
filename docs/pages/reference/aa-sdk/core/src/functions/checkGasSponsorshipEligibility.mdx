@@ -22,7 +22,7 @@ function checkGasSponsorshipEligibility<TTransport, TChain, TAccount, TContext>(
 >;
 ```
 
-Defined in: [aa-sdk/core/src/actions/smartAccount/checkGasSponsorshipEligibility.ts:56](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/aa-sdk/core/src/actions/smartAccount/checkGasSponsorshipEligibility.ts#L56)
+Defined in: [aa-sdk/core/src/actions/smartAccount/checkGasSponsorshipEligibility.ts:56](https://github.com/alchemyplatform/aa-sdk/blob/64e8cbabbf2fde59a17e85374123e899334dc927/aa-sdk/core/src/actions/smartAccount/checkGasSponsorshipEligibility.ts#L56)
 
 This function verifies the eligibility of the connected account for gas sponsorship concerning the upcoming `UserOperation` (UO) that is intended to be sent.
 Internally, this method invokes `buildUserOperation`, which navigates through the middleware pipeline, including the `PaymasterMiddleware`. Its purpose is to construct the UO struct meant for transmission to the bundler. Following the construction of the UO struct, this function verifies if the resulting structure contains a non-empty `paymasterAndData` field.
@@ -61,21 +61,21 @@ console.log(
   <tbody>
     <tr>
       <td>
-        `TTransport` *extends* `Transport`
+        `TTransport` *extends* [`Transport`](https://viem.sh)
       </td>
 
       <td>
-        `Transport`
+        [`Transport`](https://viem.sh)
       </td>
     </tr>
 
     <tr>
       <td>
-        `TChain` *extends* `undefined` | `Chain`
+        `TChain` *extends* `undefined` | [`Chain`](https://viem.sh)
       </td>
 
       <td>
-        `undefined` | `Chain`
+        `undefined` | [`Chain`](https://viem.sh)
       </td>
     </tr>
 
@@ -83,12 +83,12 @@ console.log(
       <td>
         `TAccount` *extends*
         | `undefined`
-        | [`SmartContractAccount`](../type-aliases/SmartContractAccount.mdx)
+        | [`SmartContractAccount`](../type-aliases/SmartContractAccount)
       </td>
 
       <td>
         | `undefined`
-        | [`SmartContractAccount`](../type-aliases/SmartContractAccount.mdx)
+        | [`SmartContractAccount`](../type-aliases/SmartContractAccount)
       </td>
     </tr>
 
@@ -123,7 +123,7 @@ console.log(
       </td>
 
       <td>
-        `Client`\<`TTransport`, `TChain`, `TAccount`>
+        [`Client`](https://viem.sh)\<`TTransport`, `TChain`, `TAccount`>
       </td>
 
       <td>
@@ -150,6 +150,6 @@ console.log(
 
 ## Returns
 
-`Promise`\<`CheckGasSponsorshipEligibilityResult`\<`TAccount`, [`GetEntryPointFromAccount`](../type-aliases/GetEntryPointFromAccount.mdx)\<`TAccount`, [`SmartContractAccount`](../type-aliases/SmartContractAccount.mdx)\<`string`, keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase.mdx)\<`unknown`>>>>>
+`Promise`\<`CheckGasSponsorshipEligibilityResult`\<`TAccount`, [`GetEntryPointFromAccount`](../type-aliases/GetEntryPointFromAccount)\<`TAccount`, [`SmartContractAccount`](../type-aliases/SmartContractAccount)\<`string`, keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase)\<`unknown`>>>>>
 
 a Promise containing a boolean indicating if the account is elgibile for sponsorship and the sponsored UO

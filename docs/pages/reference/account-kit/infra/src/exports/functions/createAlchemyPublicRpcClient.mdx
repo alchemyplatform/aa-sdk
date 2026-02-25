@@ -11,7 +11,7 @@ layout: reference
 function createAlchemyPublicRpcClient(params): ClientWithAlchemyMethods;
 ```
 
-Defined in: [account-kit/infra/src/client/rpcClient.ts:28](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/infra/src/client/rpcClient.ts#L28)
+Defined in: [account-kit/infra/src/client/rpcClient.ts:28](https://github.com/alchemyplatform/aa-sdk/blob/64e8cbabbf2fde59a17e85374123e899334dc927/account-kit/infra/src/client/rpcClient.ts#L28)
 
 Creates an Alchemy public RPC client with the provided chain, connection configuration, and optional fetch options. The client has alchemy methods and can dynamically update HTTP headers.
 
@@ -47,7 +47,7 @@ const client = createAlchemyPublicRpcClient({
       </td>
 
       <td>
-        \{ `chain`: `undefined` | `Chain`; `transport`: [`AlchemyTransport`](../type-aliases/AlchemyTransport.mdx); }
+        \{ `chain`: `undefined` | [`Chain`](https://viem.sh); `transport`: [`AlchemyTransport`](../type-aliases/AlchemyTransport); }
       </td>
 
       <td>
@@ -61,7 +61,7 @@ const client = createAlchemyPublicRpcClient({
       </td>
 
       <td>
-        `undefined` | `Chain`
+        `undefined` | [`Chain`](https://viem.sh)
       </td>
 
       <td>
@@ -75,7 +75,7 @@ const client = createAlchemyPublicRpcClient({
       </td>
 
       <td>
-        [`AlchemyTransport`](../type-aliases/AlchemyTransport.mdx)
+        [`AlchemyTransport`](../type-aliases/AlchemyTransport)
       </td>
 
       <td>
@@ -88,6 +88,6 @@ const client = createAlchemyPublicRpcClient({
 
 ## Returns
 
-[`ClientWithAlchemyMethods`](../type-aliases/ClientWithAlchemyMethods.mdx)
+[`ClientWithAlchemyMethods`](../type-aliases/ClientWithAlchemyMethods)
 
 A client object tailored with Alchemy methods and capabilities to interact with the blockchain

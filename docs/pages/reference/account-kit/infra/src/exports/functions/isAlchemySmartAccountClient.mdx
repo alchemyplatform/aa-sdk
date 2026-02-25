@@ -13,7 +13,7 @@ function isAlchemySmartAccountClient<TChain, TAccount>(
 ): client is AlchemySmartAccountClient<TChain, TAccount>;
 ```
 
-Defined in: [account-kit/infra/src/client/isAlchemySmartAccountClient.ts:20](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/infra/src/client/isAlchemySmartAccountClient.ts#L20)
+Defined in: [account-kit/infra/src/client/isAlchemySmartAccountClient.ts:20](https://github.com/alchemyplatform/aa-sdk/blob/64e8cbabbf2fde59a17e85374123e899334dc927/account-kit/infra/src/client/isAlchemySmartAccountClient.ts#L20)
 
 Checks if a given client is an Alchemy Smart Account Client. The goal of this check is to ensure that the client supports certain RPC methods.
 
@@ -40,11 +40,11 @@ if (isAlchemySmartAccountClient(client)) {
   <tbody>
     <tr>
       <td>
-        `TChain` *extends* `undefined` | `Chain`
+        `TChain` *extends* `undefined` | [`Chain`](https://viem.sh)
       </td>
 
       <td>
-        `undefined` | `Chain`
+        `undefined` | [`Chain`](https://viem.sh)
       </td>
     </tr>
 
@@ -79,7 +79,7 @@ if (isAlchemySmartAccountClient(client)) {
       </td>
 
       <td>
-        `Client`\<`Transport`, `TChain`, `TAccount`>
+        [`Client`](https://viem.sh)\<[`Transport`](https://viem.sh), `TChain`, `TAccount`>
       </td>
 
       <td>

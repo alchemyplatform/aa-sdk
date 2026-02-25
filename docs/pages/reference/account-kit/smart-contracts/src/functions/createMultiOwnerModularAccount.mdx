@@ -13,7 +13,7 @@ function createMultiOwnerModularAccount<TTransport, TSigner>(
 ): Promise<MultiOwnerModularAccount<TSigner>>;
 ```
 
-Defined in: [account-kit/smart-contracts/src/msca/account/multiOwnerAccount.ts:56](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/smart-contracts/src/msca/account/multiOwnerAccount.ts#L56)
+Defined in: [account-kit/smart-contracts/src/msca/account/multiOwnerAccount.ts:56](https://github.com/alchemyplatform/aa-sdk/blob/64e8cbabbf2fde59a17e85374123e899334dc927/account-kit/smart-contracts/src/msca/account/multiOwnerAccount.ts#L56)
 
 ## Type Parameters
 
@@ -28,11 +28,11 @@ Defined in: [account-kit/smart-contracts/src/msca/account/multiOwnerAccount.ts:5
   <tbody>
     <tr>
       <td>
-        `TTransport` *extends* `Transport`
+        `TTransport` *extends* [`Transport`](https://viem.sh)
       </td>
 
       <td>
-        `Transport`
+        [`Transport`](https://viem.sh)
       </td>
     </tr>
 
@@ -67,7 +67,7 @@ Defined in: [account-kit/smart-contracts/src/msca/account/multiOwnerAccount.ts:5
       </td>
 
       <td>
-        [`CreateMultiOwnerModularAccountParams`](../type-aliases/CreateMultiOwnerModularAccountParams.mdx)\<`TTransport`, `TSigner`>
+        [`CreateMultiOwnerModularAccountParams`](../type-aliases/CreateMultiOwnerModularAccountParams)\<`TTransport`, `TSigner`>
       </td>
 
       <td>
@@ -80,6 +80,6 @@ Defined in: [account-kit/smart-contracts/src/msca/account/multiOwnerAccount.ts:5
 
 ## Returns
 
-`Promise`\<[`MultiOwnerModularAccount`](../type-aliases/MultiOwnerModularAccount.mdx)\<`TSigner`>>
+`Promise`\<[`MultiOwnerModularAccount`](../type-aliases/MultiOwnerModularAccount)\<`TSigner`>>
 
 A promise that resolves to a `MultiOwnerModularAccount` object containing the created account information and methods

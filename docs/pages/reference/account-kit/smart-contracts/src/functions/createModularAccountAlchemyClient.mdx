@@ -33,7 +33,7 @@ function createModularAccountAlchemyClient<TSigner>(
 >;
 ```
 
-Defined in: [account-kit/smart-contracts/src/msca/client/alchemyClient.ts:28](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/smart-contracts/src/msca/client/alchemyClient.ts#L28)
+Defined in: [account-kit/smart-contracts/src/msca/client/alchemyClient.ts:28](https://github.com/alchemyplatform/aa-sdk/blob/64e8cbabbf2fde59a17e85374123e899334dc927/account-kit/smart-contracts/src/msca/client/alchemyClient.ts#L28)
 
 ## Type Parameters
 
@@ -76,7 +76,7 @@ Defined in: [account-kit/smart-contracts/src/msca/client/alchemyClient.ts:28](ht
       </td>
 
       <td>
-        [`AlchemyModularAccountClientConfig`](../type-aliases/AlchemyModularAccountClientConfig.mdx)\<`TSigner`>
+        [`AlchemyModularAccountClientConfig`](../type-aliases/AlchemyModularAccountClientConfig)\<`TSigner`>
       </td>
     </tr>
 
@@ -85,6 +85,6 @@ Defined in: [account-kit/smart-contracts/src/msca/client/alchemyClient.ts:28](ht
 
 ## Returns
 
-`Promise`\<[`AlchemySmartAccountClient`](../../../core/src/type-aliases/AlchemySmartAccountClient.mdx)\<`undefined` | `Chain`, [`MultiOwnerModularAccount`](../../../core/src/type-aliases/MultiOwnerModularAccount.mdx)\<`TSigner`>, `ExecutionActions`\<[`MultiOwnerModularAccount`](../../../core/src/type-aliases/MultiOwnerModularAccount.mdx)\<`TSigner`>, `undefined`, keyof `EntryPointRegistryBase`\<`unknown`>> & `ManagementActions`\<[`MultiOwnerModularAccount`](../../../core/src/type-aliases/MultiOwnerModularAccount.mdx)\<`TSigner`>, `undefined`, keyof `EntryPointRegistryBase`\<`unknown`>> & `ReadAndEncodeActions`\<[`MultiOwnerModularAccount`](../../../core/src/type-aliases/MultiOwnerModularAccount.mdx)\<`TSigner`>> & `object` & `object` & [`PluginManagerActions`](../../../core/src/type-aliases/PluginManagerActions.mdx)\<[`MultiOwnerModularAccount`](../../../core/src/type-aliases/MultiOwnerModularAccount.mdx)\<`TSigner`>> & [`AccountLoupeActions`](../../../core/src/type-aliases/AccountLoupeActions.mdx)\<[`MultiOwnerModularAccount`](../../../core/src/type-aliases/MultiOwnerModularAccount.mdx)\<`TSigner`>>>>
+`Promise`\<`AlchemySmartAccountClient`\<`undefined` | [`Chain`](https://viem.sh), `MultiOwnerModularAccount`\<`TSigner`>, `ExecutionActions`\<`MultiOwnerModularAccount`\<`TSigner`>, `undefined`, keyof `EntryPointRegistryBase`\<`unknown`>> & `ManagementActions`\<`MultiOwnerModularAccount`\<`TSigner`>, `undefined`, keyof `EntryPointRegistryBase`\<`unknown`>> & `ReadAndEncodeActions`\<`MultiOwnerModularAccount`\<`TSigner`>> & `object` & `object` & `PluginManagerActions`\<`MultiOwnerModularAccount`\<`TSigner`>> & `AccountLoupeActions`\<`MultiOwnerModularAccount`\<`TSigner`>>>>
 
 A promise that resolves to an `AlchemySmartAccountClient` configured with the desired plugins and actions

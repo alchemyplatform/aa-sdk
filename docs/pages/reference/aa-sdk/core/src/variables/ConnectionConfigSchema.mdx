@@ -21,13 +21,13 @@ const ConnectionConfigSchema: ZodIntersection<
         ZodTypeAny,
         {
           apiKey: string;
-          jwt?: undefined;
           rpcUrl?: undefined;
+          jwt?: undefined;
         },
         {
           apiKey: string;
-          jwt?: undefined;
           rpcUrl?: undefined;
+          jwt?: undefined;
         }
       >,
       ZodObject<
@@ -39,13 +39,13 @@ const ConnectionConfigSchema: ZodIntersection<
         "strip",
         ZodTypeAny,
         {
-          apiKey?: undefined;
           jwt: string;
+          apiKey?: undefined;
           rpcUrl?: undefined;
         },
         {
-          apiKey?: undefined;
           jwt: string;
+          apiKey?: undefined;
           rpcUrl?: undefined;
         }
       >,
@@ -58,14 +58,14 @@ const ConnectionConfigSchema: ZodIntersection<
         "strip",
         ZodTypeAny,
         {
+          rpcUrl: string;
           apiKey?: undefined;
           jwt?: undefined;
-          rpcUrl: string;
         },
         {
+          rpcUrl: string;
           apiKey?: undefined;
           jwt?: undefined;
-          rpcUrl: string;
         }
       >,
       ZodObject<
@@ -77,14 +77,14 @@ const ConnectionConfigSchema: ZodIntersection<
         "strip",
         ZodTypeAny,
         {
-          apiKey?: undefined;
-          jwt: string;
           rpcUrl: string;
+          jwt: string;
+          apiKey?: undefined;
         },
         {
-          apiKey?: undefined;
-          jwt: string;
           rpcUrl: string;
+          jwt: string;
+          apiKey?: undefined;
         }
       >,
     ]
@@ -105,4 +105,4 @@ const ConnectionConfigSchema: ZodIntersection<
 >;
 ```
 
-Defined in: [aa-sdk/core/src/client/schema.ts:22](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/aa-sdk/core/src/client/schema.ts#L22)
+Defined in: [aa-sdk/core/src/client/schema.ts:22](https://github.com/alchemyplatform/aa-sdk/blob/64e8cbabbf2fde59a17e85374123e899334dc927/aa-sdk/core/src/client/schema.ts#L22)

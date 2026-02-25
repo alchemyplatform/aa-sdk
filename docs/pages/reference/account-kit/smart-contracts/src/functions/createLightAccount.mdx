@@ -13,7 +13,7 @@ function createLightAccount<TTransport, TSigner, TLightAccountVersion>(
 ): Promise<LightAccount<TSigner, TLightAccountVersion>>;
 ```
 
-Defined in: [account-kit/smart-contracts/src/light-account/accounts/account.ts:75](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/smart-contracts/src/light-account/accounts/account.ts#L75)
+Defined in: [account-kit/smart-contracts/src/light-account/accounts/account.ts:75](https://github.com/alchemyplatform/aa-sdk/blob/64e8cbabbf2fde59a17e85374123e899334dc927/account-kit/smart-contracts/src/light-account/accounts/account.ts#L75)
 
 ## Type Parameters
 
@@ -28,11 +28,11 @@ Defined in: [account-kit/smart-contracts/src/light-account/accounts/account.ts:7
   <tbody>
     <tr>
       <td>
-        `TTransport` *extends* `Transport`
+        `TTransport` *extends* [`Transport`](https://viem.sh)
       </td>
 
       <td>
-        `Transport`
+        [`Transport`](https://viem.sh)
       </td>
     </tr>
 
@@ -77,7 +77,7 @@ Defined in: [account-kit/smart-contracts/src/light-account/accounts/account.ts:7
       </td>
 
       <td>
-        [`CreateLightAccountParams`](../type-aliases/CreateLightAccountParams.mdx)\<`TTransport`, `TSigner`, `TLightAccountVersion`>
+        [`CreateLightAccountParams`](../type-aliases/CreateLightAccountParams)\<`TTransport`, `TSigner`, `TLightAccountVersion`>
       </td>
 
       <td>
@@ -90,6 +90,6 @@ Defined in: [account-kit/smart-contracts/src/light-account/accounts/account.ts:7
 
 ## Returns
 
-`Promise`\<[`LightAccount`](../type-aliases/LightAccount.mdx)\<`TSigner`, `TLightAccountVersion`>>
+`Promise`\<[`LightAccount`](../type-aliases/LightAccount)\<`TSigner`, `TLightAccountVersion`>>
 
 A promise that resolves to a `LightAccount` object containing the created account information and methods

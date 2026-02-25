@@ -13,7 +13,7 @@ const smartAccountClientActions: <TTransport, TChain, TAccount, TContext>(
 ) => BaseSmartAccountClientActions<TChain, TAccount, TContext>;
 ```
 
-Defined in: [aa-sdk/core/src/client/decorators/smartAccountClient.ts:143](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/aa-sdk/core/src/client/decorators/smartAccountClient.ts#L143)
+Defined in: [aa-sdk/core/src/client/decorators/smartAccountClient.ts:143](https://github.com/alchemyplatform/aa-sdk/blob/64e8cbabbf2fde59a17e85374123e899334dc927/aa-sdk/core/src/client/decorators/smartAccountClient.ts#L143)
 
 Provides a set of smart account client actions to decorate the provided client. These actions include building and signing user operations, sending transactions, and more.
 
@@ -32,21 +32,21 @@ NOTE: this is already added to clients returned from `createSmartAccountClient`
   <tbody>
     <tr>
       <td>
-        `TTransport` *extends* `Transport`
+        `TTransport` *extends* [`Transport`](https://viem.sh)
       </td>
 
       <td>
-        `Transport`
+        [`Transport`](https://viem.sh)
       </td>
     </tr>
 
     <tr>
       <td>
-        `TChain` *extends* `Chain` | `undefined`
+        `TChain` *extends* [`Chain`](https://viem.sh) | `undefined`
       </td>
 
       <td>
-        `Chain` | `undefined`
+        [`Chain`](https://viem.sh) | `undefined`
       </td>
     </tr>
 
@@ -91,7 +91,7 @@ NOTE: this is already added to clients returned from `createSmartAccountClient`
       </td>
 
       <td>
-        `Client`\<`TTransport`, `TChain`, `TAccount`>
+        [`Client`](https://viem.sh)\<`TTransport`, `TChain`, `TAccount`>
       </td>
 
       <td>
@@ -104,6 +104,6 @@ NOTE: this is already added to clients returned from `createSmartAccountClient`
 
 ## Returns
 
-[`BaseSmartAccountClientActions`](../type-aliases/BaseSmartAccountClientActions.mdx)\<`TChain`, `TAccount`, `TContext`>
+[`BaseSmartAccountClientActions`](../type-aliases/BaseSmartAccountClientActions)\<`TChain`, `TAccount`, `TContext`>
 
 An object containing various smart account client actions

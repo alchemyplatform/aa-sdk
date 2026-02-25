@@ -16,83 +16,29 @@ const AlchemySignerParamsSchema: ZodObject<
     client:
       | AlchemySignerWebClient
       | {
-          connection:
-            | {
-                apiKey: string;
-                jwt?: undefined;
-                rpcUrl?: undefined;
-              }
-            | {
-                apiKey?: undefined;
-                jwt: string;
-                rpcUrl?: undefined;
-              }
-            | {
-                apiKey?: undefined;
-                jwt?: undefined;
-                rpcUrl: string;
-              }
-            | ({
-                apiKey?: undefined;
-                jwt: string;
-                rpcUrl: string;
-              } & object);
-          enablePopupOauth: boolean;
-          iframeConfig: {
-            iframeContainerId: string;
-            iframeElementId: string;
-          };
-          oauthCallbackUrl: string;
+          connection: {} | {} | {} | ({} & object);
+          iframeConfig: Object;
           rootOrgId: string;
+          oauthCallbackUrl: string;
+          enablePopupOauth: boolean;
           rpId?: string;
         };
-    sessionConfig?: {
-      expirationTimeMs: number;
-      sessionKey: string;
-      storage: "localStorage" | "sessionStorage" | Storage;
-    };
+    sessionConfig?: Object;
   },
   {
     client:
       | AlchemySignerWebClient
       | {
-          connection:
-            | {
-                apiKey: string;
-                jwt?: undefined;
-                rpcUrl?: undefined;
-              }
-            | {
-                apiKey?: undefined;
-                jwt: string;
-                rpcUrl?: undefined;
-              }
-            | {
-                apiKey?: undefined;
-                jwt?: undefined;
-                rpcUrl: string;
-              }
-            | ({
-                apiKey?: undefined;
-                jwt: string;
-                rpcUrl: string;
-              } & object);
-          enablePopupOauth?: boolean;
-          iframeConfig: {
-            iframeContainerId: string;
-            iframeElementId?: string;
-          };
-          oauthCallbackUrl?: string;
-          rootOrgId?: string;
+          connection: {} | {} | {} | ({} & object);
+          iframeConfig: Object;
           rpId?: string;
+          rootOrgId?: string;
+          oauthCallbackUrl?: string;
+          enablePopupOauth?: boolean;
         };
-    sessionConfig?: {
-      expirationTimeMs?: number;
-      sessionKey?: string;
-      storage?: "localStorage" | "sessionStorage" | Storage;
-    };
+    sessionConfig?: Object;
   }
 >;
 ```
 
-Defined in: [account-kit/signer/src/signer.ts:105](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/signer/src/signer.ts#L105)
+Defined in: [account-kit/signer/src/signer.ts:105](https://github.com/alchemyplatform/aa-sdk/blob/64e8cbabbf2fde59a17e85374123e899334dc927/account-kit/signer/src/signer.ts#L105)

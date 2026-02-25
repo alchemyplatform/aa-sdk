@@ -11,7 +11,7 @@ layout: reference
 function usePrepareCalls(params): UsePrepareCallsResult;
 ```
 
-Defined in: [account-kit/react/src/hooks/usePrepareCalls.ts:88](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/react/src/hooks/usePrepareCalls.ts#L88)
+Defined in: [account-kit/react/src/hooks/usePrepareCalls.ts:88](https://github.com/alchemyplatform/aa-sdk/blob/64e8cbabbf2fde59a17e85374123e899334dc927/account-kit/react/src/hooks/usePrepareCalls.ts#L88)
 
 Hook for preparing calls to a smart account.
 
@@ -38,6 +38,12 @@ await prepareCallsAsync({
 });
 ```
 
+## Remarks
+
+- This hook only works with smart accounts and does not support EOA wallets
+- The hook handles the preparation step of the Account Abstraction flow
+- Prepared calls must be signed, then can be used with `useSendPreparedCalls` to complete the execution
+
 ## Parameters
 
 <table>
@@ -56,7 +62,7 @@ await prepareCallsAsync({
       </td>
 
       <td>
-        [`UsePrepareCallsParams`](../type-aliases/UsePrepareCallsParams.mdx)
+        [`UsePrepareCallsParams`](../type-aliases/UsePrepareCallsParams)
       </td>
 
       <td>
@@ -69,7 +75,7 @@ await prepareCallsAsync({
 
 ## Returns
 
-[`UsePrepareCallsResult`](../type-aliases/UsePrepareCallsResult.mdx)
+[`UsePrepareCallsResult`](../type-aliases/UsePrepareCallsResult)
 
 An object containing:
 
@@ -78,9 +84,3 @@ An object containing:
 - `preparedCalls`: The result of the last successful call preparation
 - `isPreparingCalls`: Boolean indicating if calls are currently being prepared
 - `error`: Error from the last failed call preparation, if any
-
-## Description
-
-- This hook only works with smart accounts and does not support EOA wallets
-- The hook handles the preparation step of the Account Abstraction flow
-- Prepared calls must be signed, then can be used with `useSendPreparedCalls` to complete the execution

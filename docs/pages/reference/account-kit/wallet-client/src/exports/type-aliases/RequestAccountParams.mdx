@@ -11,19 +11,16 @@ layout: reference
 type RequestAccountParams = Omit<
   Extract<
     RpcSchema["Request"]["params"][0],
-    | {
-        signerAddress: Address;
-      }
-    | {
-        signerPublicKey: WebAuthnPublicKey;
-      }
+    {
+      signerAddress: Address;
+    }
   >,
-  "signerAddress" | "signerPublicKey" | "includeCounterfactualInfo"
+  "signerAddress" | "includeCounterfactualInfo"
 > &
   object;
 ```
 
-Defined in: [account-kit/wallet-client/src/client/actions/requestAccount.ts:28](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/wallet-client/src/client/actions/requestAccount.ts#L28)
+Defined in: [account-kit/wallet-client/src/client/actions/requestAccount.ts:19](https://github.com/alchemyplatform/aa-sdk/blob/64e8cbabbf2fde59a17e85374123e899334dc927/account-kit/wallet-client/src/client/actions/requestAccount.ts#L19)
 
 ## Type Declaration
 
@@ -42,7 +39,7 @@ Defined in: [account-kit/wallet-client/src/client/actions/requestAccount.ts:28](
       </td>
 
       <td>
-        [`Address`](../../../../../aa-sdk/core/src/type-aliases/Address.mdx)
+        [`Address`](https://abitype.dev)
       </td>
     </tr>
 

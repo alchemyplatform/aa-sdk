@@ -11,7 +11,7 @@ layout: reference
 function useAccount<TAccount>(params): UseAccountResult<TAccount>;
 ```
 
-Defined in: [account-kit/react/src/hooks/useAccount.ts:54](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/react/src/hooks/useAccount.ts#L54)
+Defined in: [account-kit/react/src/hooks/useAccount.ts:54](https://github.com/alchemyplatform/aa-sdk/blob/64e8cbabbf2fde59a17e85374123e899334dc927/account-kit/react/src/hooks/useAccount.ts#L54)
 
 [Hook](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useAccount.ts) to subscribe to account state and interactions, including creation, connection, and status monitoring. It synchronizes with external store updates and provides status-dependent results.
 The supported account types are: LightAccount, MultiOwnerLightAccount, MultiOwnerModularAccount, and ModularAccountV2. Primarily used to get the smart account address before deployment. Dependent on the signer: if the signer has not been initialized and authenticated, `address` and `isLoadingAccount` return null.
@@ -72,7 +72,7 @@ const { account, address, isLoadingAccount } = useAccount({
       </td>
 
       <td>
-        [`UseAccountProps`](../type-aliases/UseAccountProps.mdx)\<`TAccount`>
+        [`UseAccountProps`](../type-aliases/UseAccountProps)\<`TAccount`>
       </td>
 
       <td>
@@ -85,6 +85,6 @@ const { account, address, isLoadingAccount } = useAccount({
 
 ## Returns
 
-[`UseAccountResult`](../type-aliases/UseAccountResult.mdx)\<`TAccount`>
+[`UseAccountResult`](../type-aliases/UseAccountResult)\<`TAccount`>
 
 An object containing the account information, address, and loading state. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useAccount.ts#L22)

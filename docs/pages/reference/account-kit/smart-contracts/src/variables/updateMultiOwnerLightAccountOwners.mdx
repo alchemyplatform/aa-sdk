@@ -19,7 +19,7 @@ const updateMultiOwnerLightAccountOwners: <
 ) => Promise<Hex>;
 ```
 
-Defined in: [account-kit/smart-contracts/src/light-account/actions/updateOwners.ts:51](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/smart-contracts/src/light-account/actions/updateOwners.ts#L51)
+Defined in: [account-kit/smart-contracts/src/light-account/actions/updateOwners.ts:51](https://github.com/alchemyplatform/aa-sdk/blob/64e8cbabbf2fde59a17e85374123e899334dc927/account-kit/smart-contracts/src/light-account/actions/updateOwners.ts#L51)
 
 Updates the owners of a multi-owner light account. This includes adding new owners and removing existing ones.
 
@@ -57,21 +57,21 @@ const txHash = await updateOwners(lightAccountClient, {
   <tbody>
     <tr>
       <td>
-        `TTransport` *extends* `Transport`
+        `TTransport` *extends* [`Transport`](https://viem.sh)
       </td>
 
       <td>
-        `Transport`
+        [`Transport`](https://viem.sh)
       </td>
     </tr>
 
     <tr>
       <td>
-        `TChain` *extends* `Chain` | `undefined`
+        `TChain` *extends* [`Chain`](https://viem.sh) | `undefined`
       </td>
 
       <td>
-        `Chain` | `undefined`
+        [`Chain`](https://viem.sh) | `undefined`
       </td>
     </tr>
 
@@ -116,7 +116,7 @@ const txHash = await updateOwners(lightAccountClient, {
       </td>
 
       <td>
-        `Client`\<`TTransport`, `TChain`, `TAccount`>
+        [`Client`](https://viem.sh)\<`TTransport`, `TChain`, `TAccount`>
       </td>
 
       <td>
@@ -143,6 +143,6 @@ const txHash = await updateOwners(lightAccountClient, {
 
 ## Returns
 
-`Promise`\<`Hex`>
+`Promise`\<[`Hex`](https://viem.sh)>
 
 A promise that resolves to the transaction hash or the full transaction result if `waitForTxn` is `true`

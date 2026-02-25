@@ -13,7 +13,7 @@ function createSmartAccountClient<TTransport, TChain, TAccount, TContext>(
 ): SmartAccountClient<TTransport, TChain, TAccount>;
 ```
 
-Defined in: [aa-sdk/core/src/client/smartAccountClient.ts:131](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/aa-sdk/core/src/client/smartAccountClient.ts#L131)
+Defined in: [aa-sdk/core/src/client/smartAccountClient.ts:131](https://github.com/alchemyplatform/aa-sdk/blob/64e8cbabbf2fde59a17e85374123e899334dc927/aa-sdk/core/src/client/smartAccountClient.ts#L131)
 
 ## Type Parameters
 
@@ -28,21 +28,21 @@ Defined in: [aa-sdk/core/src/client/smartAccountClient.ts:131](https://github.co
   <tbody>
     <tr>
       <td>
-        `TTransport` *extends* `Transport`
+        `TTransport` *extends* [`Transport`](https://viem.sh)
       </td>
 
       <td>
-        `Transport`
+        [`Transport`](https://viem.sh)
       </td>
     </tr>
 
     <tr>
       <td>
-        `TChain` *extends* `undefined` | `Chain`
+        `TChain` *extends* `undefined` | [`Chain`](https://viem.sh)
       </td>
 
       <td>
-        `undefined` | `Chain`
+        `undefined` | [`Chain`](https://viem.sh)
       </td>
     </tr>
 
@@ -50,12 +50,12 @@ Defined in: [aa-sdk/core/src/client/smartAccountClient.ts:131](https://github.co
       <td>
         `TAccount` *extends*
         | `undefined`
-        | [`SmartContractAccount`](../type-aliases/SmartContractAccount.mdx)
+        | [`SmartContractAccount`](../type-aliases/SmartContractAccount)
       </td>
 
       <td>
         | `undefined`
-        | [`SmartContractAccount`](../type-aliases/SmartContractAccount.mdx)
+        | [`SmartContractAccount`](../type-aliases/SmartContractAccount)
       </td>
     </tr>
 
@@ -63,12 +63,12 @@ Defined in: [aa-sdk/core/src/client/smartAccountClient.ts:131](https://github.co
       <td>
         `TContext` *extends*
         | `undefined`
-        | [`UserOperationContext`](../type-aliases/UserOperationContext.mdx)
+        | [`UserOperationContext`](../type-aliases/UserOperationContext)
       </td>
 
       <td>
         | `undefined`
-        | [`UserOperationContext`](../type-aliases/UserOperationContext.mdx)
+        | [`UserOperationContext`](../type-aliases/UserOperationContext)
       </td>
     </tr>
 
@@ -93,7 +93,7 @@ Defined in: [aa-sdk/core/src/client/smartAccountClient.ts:131](https://github.co
       </td>
 
       <td>
-        \{ `account?`: `TAccount`; `addBreadCrumb?`: \<`T`>(`crumb`) => `T`; `cacheTime?`: `number`; `chain?`: `Chain` | `TChain`; `customMiddleware?`: [`ClientMiddlewareFn`](../type-aliases/ClientMiddlewareFn.mdx)\<`TContext`>; `dummyPaymasterAndData?`: [`ClientMiddlewareFn`](../type-aliases/ClientMiddlewareFn.mdx)\<`TContext`>; `feeEstimator?`: [`ClientMiddlewareFn`](../type-aliases/ClientMiddlewareFn.mdx)\<`TContext`>; `gasEstimator?`: [`ClientMiddlewareFn`](../type-aliases/ClientMiddlewareFn.mdx)\<`TContext`>; `key?`: `string`; `name?`: `string`; `opts?`: \{ `feeOptions?`: \{ `callGasLimit?`: \{ `max?`: `number` | `bigint` | `` `0x${string}` ``; `min?`: `number` | `bigint` | `` `0x${string}` ``; `multiplier?`: `number`; }; `maxFeePerGas?`: \{ `max?`: `number` | `bigint` | `` `0x${string}` ``; `min?`: `number` | `bigint` | `` `0x${string}` ``; `multiplier?`: `number`; }; `maxPriorityFeePerGas?`: \{ `max?`: `number` | `bigint` | `` `0x${string}` ``; `min?`: `number` | `bigint` | `` `0x${string}` ``; `multiplier?`: `number`; }; `paymasterPostOpGasLimit?`: \{ `max?`: `number` | `bigint` | `` `0x${string}` ``; `min?`: `number` | `bigint` | `` `0x${string}` ``; `multiplier?`: `number`; }; `paymasterVerificationGasLimit?`: \{ `max?`: `number` | `bigint` | `` `0x${string}` ``; `min?`: `number` | `bigint` | `` `0x${string}` ``; `multiplier?`: `number`; }; `preVerificationGas?`: \{ `max?`: `number` | `bigint` | `` `0x${string}` ``; `min?`: `number` | `bigint` | `` `0x${string}` ``; `multiplier?`: `number`; }; `verificationGasLimit?`: \{ `max?`: `number` | `bigint` | `` `0x${string}` ``; `min?`: `number` | `bigint` | `` `0x${string}` ``; `multiplier?`: `number`; }; }; `txMaxRetries?`: `number`; `txRetryIntervalMs?`: `number`; `txRetryMultiplier?`: `number`; }; `paymasterAndData?`: [`ClientMiddlewareFn`](../type-aliases/ClientMiddlewareFn.mdx)\<`TContext`>; `pollingInterval?`: `number`; `signUserOperation?`: [`ClientMiddlewareFn`](../type-aliases/ClientMiddlewareFn.mdx)\<`TContext`>; `transport`: `TTransport`; `type?`: `string`; `userOperationSimulator?`: [`ClientMiddlewareFn`](../type-aliases/ClientMiddlewareFn.mdx)\<`TContext`>; }
+        \{ `account?`: `TAccount`; `addBreadCrumb?`: \<`T`>(`crumb`) => `T`; `customMiddleware?`: [`ClientMiddlewareFn`](../type-aliases/ClientMiddlewareFn)\<`TContext`>; `dummyPaymasterAndData?`: [`ClientMiddlewareFn`](../type-aliases/ClientMiddlewareFn)\<`TContext`>; `feeEstimator?`: [`ClientMiddlewareFn`](../type-aliases/ClientMiddlewareFn)\<`TContext`>; `gasEstimator?`: [`ClientMiddlewareFn`](../type-aliases/ClientMiddlewareFn)\<`TContext`>; `opts?`: `Object`; `paymasterAndData?`: [`ClientMiddlewareFn`](../type-aliases/ClientMiddlewareFn)\<`TContext`>; `signUserOperation?`: [`ClientMiddlewareFn`](../type-aliases/ClientMiddlewareFn)\<`TContext`>; `userOperationSimulator?`: [`ClientMiddlewareFn`](../type-aliases/ClientMiddlewareFn)\<`TContext`>; }
       </td>
 
       <td>
@@ -133,45 +133,11 @@ Defined in: [aa-sdk/core/src/client/smartAccountClient.ts:131](https://github.co
 
     <tr>
       <td>
-        `config.cacheTime?`
-      </td>
-
-      <td>
-        `number`
-      </td>
-
-      <td>
-        Time (in ms) that cached data will remain in memory.
-
-        **Default**
-
-        ```ts
-        chain.blockTime / 3
-        ```
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `config.chain?`
-      </td>
-
-      <td>
-        `Chain` | `TChain`
-      </td>
-
-      <td>
-        Chain for the client.
-      </td>
-    </tr>
-
-    <tr>
-      <td>
         `config.customMiddleware?`
       </td>
 
       <td>
-        [`ClientMiddlewareFn`](../type-aliases/ClientMiddlewareFn.mdx)\<`TContext`>
+        [`ClientMiddlewareFn`](../type-aliases/ClientMiddlewareFn)\<`TContext`>
       </td>
 
       <td>
@@ -185,7 +151,7 @@ Defined in: [aa-sdk/core/src/client/smartAccountClient.ts:131](https://github.co
       </td>
 
       <td>
-        [`ClientMiddlewareFn`](../type-aliases/ClientMiddlewareFn.mdx)\<`TContext`>
+        [`ClientMiddlewareFn`](../type-aliases/ClientMiddlewareFn)\<`TContext`>
       </td>
 
       <td>
@@ -199,7 +165,7 @@ Defined in: [aa-sdk/core/src/client/smartAccountClient.ts:131](https://github.co
       </td>
 
       <td>
-        [`ClientMiddlewareFn`](../type-aliases/ClientMiddlewareFn.mdx)\<`TContext`>
+        [`ClientMiddlewareFn`](../type-aliases/ClientMiddlewareFn)\<`TContext`>
       </td>
 
       <td>
@@ -213,39 +179,11 @@ Defined in: [aa-sdk/core/src/client/smartAccountClient.ts:131](https://github.co
       </td>
 
       <td>
-        [`ClientMiddlewareFn`](../type-aliases/ClientMiddlewareFn.mdx)\<`TContext`>
+        [`ClientMiddlewareFn`](../type-aliases/ClientMiddlewareFn)\<`TContext`>
       </td>
 
       <td>
         ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `config.key?`
-      </td>
-
-      <td>
-        `string`
-      </td>
-
-      <td>
-        A key for the client.
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `config.name?`
-      </td>
-
-      <td>
-        `string`
-      </td>
-
-      <td>
-        A name for the client.
       </td>
     </tr>
 
@@ -255,459 +193,11 @@ Defined in: [aa-sdk/core/src/client/smartAccountClient.ts:131](https://github.co
       </td>
 
       <td>
-        \{ `feeOptions?`: \{ `callGasLimit?`: \{ `max?`: `number` | `bigint` | `` `0x${string}` ``; `min?`: `number` | `bigint` | `` `0x${string}` ``; `multiplier?`: `number`; }; `maxFeePerGas?`: \{ `max?`: `number` | `bigint` | `` `0x${string}` ``; `min?`: `number` | `bigint` | `` `0x${string}` ``; `multiplier?`: `number`; }; `maxPriorityFeePerGas?`: \{ `max?`: `number` | `bigint` | `` `0x${string}` ``; `min?`: `number` | `bigint` | `` `0x${string}` ``; `multiplier?`: `number`; }; `paymasterPostOpGasLimit?`: \{ `max?`: `number` | `bigint` | `` `0x${string}` ``; `min?`: `number` | `bigint` | `` `0x${string}` ``; `multiplier?`: `number`; }; `paymasterVerificationGasLimit?`: \{ `max?`: `number` | `bigint` | `` `0x${string}` ``; `min?`: `number` | `bigint` | `` `0x${string}` ``; `multiplier?`: `number`; }; `preVerificationGas?`: \{ `max?`: `number` | `bigint` | `` `0x${string}` ``; `min?`: `number` | `bigint` | `` `0x${string}` ``; `multiplier?`: `number`; }; `verificationGasLimit?`: \{ `max?`: `number` | `bigint` | `` `0x${string}` ``; `min?`: `number` | `bigint` | `` `0x${string}` ``; `multiplier?`: `number`; }; }; `txMaxRetries?`: `number`; `txRetryIntervalMs?`: `number`; `txRetryMultiplier?`: `number`; }
+        `Object`
       </td>
 
       <td>
         ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `config.opts.feeOptions?`
-      </td>
-
-      <td>
-        \{ `callGasLimit?`: \{ `max?`: `number` | `bigint` | `` `0x${string}` ``; `min?`: `number` | `bigint` | `` `0x${string}` ``; `multiplier?`: `number`; }; `maxFeePerGas?`: \{ `max?`: `number` | `bigint` | `` `0x${string}` ``; `min?`: `number` | `bigint` | `` `0x${string}` ``; `multiplier?`: `number`; }; `maxPriorityFeePerGas?`: \{ `max?`: `number` | `bigint` | `` `0x${string}` ``; `min?`: `number` | `bigint` | `` `0x${string}` ``; `multiplier?`: `number`; }; `paymasterPostOpGasLimit?`: \{ `max?`: `number` | `bigint` | `` `0x${string}` ``; `min?`: `number` | `bigint` | `` `0x${string}` ``; `multiplier?`: `number`; }; `paymasterVerificationGasLimit?`: \{ `max?`: `number` | `bigint` | `` `0x${string}` ``; `min?`: `number` | `bigint` | `` `0x${string}` ``; `multiplier?`: `number`; }; `preVerificationGas?`: \{ `max?`: `number` | `bigint` | `` `0x${string}` ``; `min?`: `number` | `bigint` | `` `0x${string}` ``; `multiplier?`: `number`; }; `verificationGasLimit?`: \{ `max?`: `number` | `bigint` | `` `0x${string}` ``; `min?`: `number` | `bigint` | `` `0x${string}` ``; `multiplier?`: `number`; }; }
-      </td>
-
-      <td>
-        Optional user operation fee options to be set globally at the provider level
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `config.opts.feeOptions.callGasLimit?`
-      </td>
-
-      <td>
-        \{ `max?`: `number` | `bigint` | `` `0x${string}` ``; `min?`: `number` | `bigint` | `` `0x${string}` ``; `multiplier?`: `number`; }
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `config.opts.feeOptions.callGasLimit.max?`
-      </td>
-
-      <td>
-        `number` | `bigint` | `` `0x${string}` ``
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `config.opts.feeOptions.callGasLimit.min?`
-      </td>
-
-      <td>
-        `number` | `bigint` | `` `0x${string}` ``
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `config.opts.feeOptions.callGasLimit.multiplier?`
-      </td>
-
-      <td>
-        `number`
-      </td>
-
-      <td>
-        Multiplier value with max precision of 4 decimal places
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `config.opts.feeOptions.maxFeePerGas?`
-      </td>
-
-      <td>
-        \{ `max?`: `number` | `bigint` | `` `0x${string}` ``; `min?`: `number` | `bigint` | `` `0x${string}` ``; `multiplier?`: `number`; }
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `config.opts.feeOptions.maxFeePerGas.max?`
-      </td>
-
-      <td>
-        `number` | `bigint` | `` `0x${string}` ``
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `config.opts.feeOptions.maxFeePerGas.min?`
-      </td>
-
-      <td>
-        `number` | `bigint` | `` `0x${string}` ``
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `config.opts.feeOptions.maxFeePerGas.multiplier?`
-      </td>
-
-      <td>
-        `number`
-      </td>
-
-      <td>
-        Multiplier value with max precision of 4 decimal places
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `config.opts.feeOptions.maxPriorityFeePerGas?`
-      </td>
-
-      <td>
-        \{ `max?`: `number` | `bigint` | `` `0x${string}` ``; `min?`: `number` | `bigint` | `` `0x${string}` ``; `multiplier?`: `number`; }
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `config.opts.feeOptions.maxPriorityFeePerGas.max?`
-      </td>
-
-      <td>
-        `number` | `bigint` | `` `0x${string}` ``
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `config.opts.feeOptions.maxPriorityFeePerGas.min?`
-      </td>
-
-      <td>
-        `number` | `bigint` | `` `0x${string}` ``
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `config.opts.feeOptions.maxPriorityFeePerGas.multiplier?`
-      </td>
-
-      <td>
-        `number`
-      </td>
-
-      <td>
-        Multiplier value with max precision of 4 decimal places
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `config.opts.feeOptions.paymasterPostOpGasLimit?`
-      </td>
-
-      <td>
-        \{ `max?`: `number` | `bigint` | `` `0x${string}` ``; `min?`: `number` | `bigint` | `` `0x${string}` ``; `multiplier?`: `number`; }
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `config.opts.feeOptions.paymasterPostOpGasLimit.max?`
-      </td>
-
-      <td>
-        `number` | `bigint` | `` `0x${string}` ``
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `config.opts.feeOptions.paymasterPostOpGasLimit.min?`
-      </td>
-
-      <td>
-        `number` | `bigint` | `` `0x${string}` ``
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `config.opts.feeOptions.paymasterPostOpGasLimit.multiplier?`
-      </td>
-
-      <td>
-        `number`
-      </td>
-
-      <td>
-        Multiplier value with max precision of 4 decimal places
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `config.opts.feeOptions.paymasterVerificationGasLimit?`
-      </td>
-
-      <td>
-        \{ `max?`: `number` | `bigint` | `` `0x${string}` ``; `min?`: `number` | `bigint` | `` `0x${string}` ``; `multiplier?`: `number`; }
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `config.opts.feeOptions.paymasterVerificationGasLimit.max?`
-      </td>
-
-      <td>
-        `number` | `bigint` | `` `0x${string}` ``
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `config.opts.feeOptions.paymasterVerificationGasLimit.min?`
-      </td>
-
-      <td>
-        `number` | `bigint` | `` `0x${string}` ``
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `config.opts.feeOptions.paymasterVerificationGasLimit.multiplier?`
-      </td>
-
-      <td>
-        `number`
-      </td>
-
-      <td>
-        Multiplier value with max precision of 4 decimal places
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `config.opts.feeOptions.preVerificationGas?`
-      </td>
-
-      <td>
-        \{ `max?`: `number` | `bigint` | `` `0x${string}` ``; `min?`: `number` | `bigint` | `` `0x${string}` ``; `multiplier?`: `number`; }
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `config.opts.feeOptions.preVerificationGas.max?`
-      </td>
-
-      <td>
-        `number` | `bigint` | `` `0x${string}` ``
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `config.opts.feeOptions.preVerificationGas.min?`
-      </td>
-
-      <td>
-        `number` | `bigint` | `` `0x${string}` ``
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `config.opts.feeOptions.preVerificationGas.multiplier?`
-      </td>
-
-      <td>
-        `number`
-      </td>
-
-      <td>
-        Multiplier value with max precision of 4 decimal places
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `config.opts.feeOptions.verificationGasLimit?`
-      </td>
-
-      <td>
-        \{ `max?`: `number` | `bigint` | `` `0x${string}` ``; `min?`: `number` | `bigint` | `` `0x${string}` ``; `multiplier?`: `number`; }
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `config.opts.feeOptions.verificationGasLimit.max?`
-      </td>
-
-      <td>
-        `number` | `bigint` | `` `0x${string}` ``
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `config.opts.feeOptions.verificationGasLimit.min?`
-      </td>
-
-      <td>
-        `number` | `bigint` | `` `0x${string}` ``
-      </td>
-
-      <td>
-        ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `config.opts.feeOptions.verificationGasLimit.multiplier?`
-      </td>
-
-      <td>
-        `number`
-      </td>
-
-      <td>
-        Multiplier value with max precision of 4 decimal places
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `config.opts.txMaxRetries?`
-      </td>
-
-      <td>
-        `number`
-      </td>
-
-      <td>
-        The maximum number of times to try fetching a transaction receipt before giving up (default: 5)
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `config.opts.txRetryIntervalMs?`
-      </td>
-
-      <td>
-        `number`
-      </td>
-
-      <td>
-        The interval in milliseconds to wait between retries while waiting for tx receipts (default: 2\_000)
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `config.opts.txRetryMultiplier?`
-      </td>
-
-      <td>
-        `number`
-      </td>
-
-      <td>
-        The multiplier on interval length to wait between retries while waiting for tx receipts (default: 1.5)
       </td>
     </tr>
 
@@ -717,31 +207,11 @@ Defined in: [aa-sdk/core/src/client/smartAccountClient.ts:131](https://github.co
       </td>
 
       <td>
-        [`ClientMiddlewareFn`](../type-aliases/ClientMiddlewareFn.mdx)\<`TContext`>
+        [`ClientMiddlewareFn`](../type-aliases/ClientMiddlewareFn)\<`TContext`>
       </td>
 
       <td>
         ‐
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `config.pollingInterval?`
-      </td>
-
-      <td>
-        `number`
-      </td>
-
-      <td>
-        Frequency (in ms) for polling enabled actions & events.
-
-        **Default**
-
-        ```ts
-        chain.blockTime / 3
-        ```
       </td>
     </tr>
 
@@ -751,7 +221,7 @@ Defined in: [aa-sdk/core/src/client/smartAccountClient.ts:131](https://github.co
       </td>
 
       <td>
-        [`ClientMiddlewareFn`](../type-aliases/ClientMiddlewareFn.mdx)\<`TContext`>
+        [`ClientMiddlewareFn`](../type-aliases/ClientMiddlewareFn)\<`TContext`>
       </td>
 
       <td>
@@ -761,39 +231,11 @@ Defined in: [aa-sdk/core/src/client/smartAccountClient.ts:131](https://github.co
 
     <tr>
       <td>
-        `config.transport`
-      </td>
-
-      <td>
-        `TTransport`
-      </td>
-
-      <td>
-        The RPC transport
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `config.type?`
-      </td>
-
-      <td>
-        `string`
-      </td>
-
-      <td>
-        The type of client.
-      </td>
-    </tr>
-
-    <tr>
-      <td>
         `config.userOperationSimulator?`
       </td>
 
       <td>
-        [`ClientMiddlewareFn`](../type-aliases/ClientMiddlewareFn.mdx)\<`TContext`>
+        [`ClientMiddlewareFn`](../type-aliases/ClientMiddlewareFn)\<`TContext`>
       </td>
 
       <td>
@@ -806,6 +248,6 @@ Defined in: [aa-sdk/core/src/client/smartAccountClient.ts:131](https://github.co
 
 ## Returns
 
-[`SmartAccountClient`](../type-aliases/SmartAccountClient.mdx)\<`TTransport`, `TChain`, `TAccount`>
+[`SmartAccountClient`](../type-aliases/SmartAccountClient)\<`TTransport`, `TChain`, `TAccount`>
 
 A smart account client capable of handling transactions, message signing, and other operations on a smart account

@@ -11,7 +11,7 @@ layout: reference
 function getUser(config): null | (User & object);
 ```
 
-Defined in: [account-kit/core/src/actions/getUser.ts:21](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/core/src/actions/getUser.ts#L21)
+Defined in: [account-kit/core/src/actions/getUser.ts:21](https://github.com/alchemyplatform/aa-sdk/blob/64e8cbabbf2fde59a17e85374123e899334dc927/account-kit/core/src/actions/getUser.ts#L21)
 
 Returns the currently logged in user if using an SCA with the AlchemySigner
 or the connected EOA details.
@@ -56,6 +56,6 @@ const user = getUser(config);
 
 ## Returns
 
-`null` | [`User`](../../../signer/src/type-aliases/User.mdx) & `object`
+`null` | [`User`](../../../signer/src/type-aliases/User) & `object`
 
 the user if the signer or an EOA are connected

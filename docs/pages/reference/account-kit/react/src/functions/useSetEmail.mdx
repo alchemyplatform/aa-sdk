@@ -11,7 +11,7 @@ layout: reference
 function useSetEmail(mutationArgs?): UseSetEmailResult;
 ```
 
-Defined in: [account-kit/react/src/hooks/useSetEmail.ts:76](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/react/src/hooks/useSetEmail.ts#L76)
+Defined in: [account-kit/react/src/hooks/useSetEmail.ts:76](https://github.com/alchemyplatform/aa-sdk/blob/64e8cbabbf2fde59a17e85374123e899334dc927/account-kit/react/src/hooks/useSetEmail.ts#L76)
 
 A custom hook to set an email address for an already authenticated account.
 
@@ -66,7 +66,7 @@ setEmail("user@example.com");
       </td>
 
       <td>
-        `Partial`\<`Omit`\<`UseMutationOptions`\<`void`, `Error`, [`SetEmailParams`](../type-aliases/SetEmailParams.mdx), `unknown`>, `"mutationFn"` | `"mutationKey"`>>
+        `Partial`\<`Omit`\<`UseMutationOptions`\<`void`, `Error`, [`SetEmailParams`](../type-aliases/SetEmailParams), `unknown`>, `"mutationFn"` | `"mutationKey"`>>
       </td>
 
       <td>
@@ -79,6 +79,6 @@ setEmail("user@example.com");
 
 ## Returns
 
-[`UseSetEmailResult`](../type-aliases/UseSetEmailResult.mdx)
+[`UseSetEmailResult`](../type-aliases/UseSetEmailResult)
 
 An object containing functions and state for setting the email

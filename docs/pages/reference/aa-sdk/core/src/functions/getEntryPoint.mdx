@@ -36,7 +36,7 @@ function getEntryPoint<TEntryPointVersion, TChain>(
 ): EntryPointDefRegistry<TChain>[TEntryPointVersion];
 ```
 
-Defined in: [aa-sdk/core/src/entrypoint/index.ts:40](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/aa-sdk/core/src/entrypoint/index.ts#L40)
+Defined in: [aa-sdk/core/src/entrypoint/index.ts:40](https://github.com/alchemyplatform/aa-sdk/blob/64e8cbabbf2fde59a17e85374123e899334dc927/aa-sdk/core/src/entrypoint/index.ts#L40)
 
 ### Type Parameters
 
@@ -51,21 +51,21 @@ Defined in: [aa-sdk/core/src/entrypoint/index.ts:40](https://github.com/alchemyp
   <tbody>
     <tr>
       <td>
-        `TEntryPointVersion` *extends* keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase.mdx)\<`unknown`>
+        `TEntryPointVersion` *extends* keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase)\<`unknown`>
       </td>
 
       <td>
-        `OneOf`\<`"0.6.0"`, keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase.mdx)\<`unknown`>>
+        `OneOf`\<`"0.6.0"`, keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase)\<`unknown`>>
       </td>
     </tr>
 
     <tr>
       <td>
-        `TChain` *extends* `Chain`
+        `TChain` *extends* [`Chain`](https://viem.sh)
       </td>
 
       <td>
-        `Chain`
+        [`Chain`](https://viem.sh)
       </td>
     </tr>
 
@@ -99,7 +99,7 @@ Defined in: [aa-sdk/core/src/entrypoint/index.ts:40](https://github.com/alchemyp
       </td>
 
       <td>
-        [`GetEntryPointOptions`](../type-aliases/GetEntryPointOptions.mdx)\<`TEntryPointVersion`>
+        [`GetEntryPointOptions`](../type-aliases/GetEntryPointOptions)\<`TEntryPointVersion`>
       </td>
     </tr>
 
@@ -108,7 +108,7 @@ Defined in: [aa-sdk/core/src/entrypoint/index.ts:40](https://github.com/alchemyp
 
 ### Returns
 
-[`EntryPointDefRegistry`](../interfaces/EntryPointDefRegistry.mdx)\<`TChain`>\[`TEntryPointVersion`]
+[`EntryPointDefRegistry`](../interfaces/EntryPointDefRegistry)\<`TChain`>\[`TEntryPointVersion`]
 
 ## Call Signature
 
@@ -119,7 +119,7 @@ function getEntryPoint<TEntryPointVersion, TChain>(
 ): EntryPointDefRegistry<TChain>[TEntryPointVersion];
 ```
 
-Defined in: [aa-sdk/core/src/entrypoint/index.ts:48](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/aa-sdk/core/src/entrypoint/index.ts#L48)
+Defined in: [aa-sdk/core/src/entrypoint/index.ts:48](https://github.com/alchemyplatform/aa-sdk/blob/64e8cbabbf2fde59a17e85374123e899334dc927/aa-sdk/core/src/entrypoint/index.ts#L48)
 
 ### Type Parameters
 
@@ -134,21 +134,21 @@ Defined in: [aa-sdk/core/src/entrypoint/index.ts:48](https://github.com/alchemyp
   <tbody>
     <tr>
       <td>
-        `TEntryPointVersion` *extends* `OneOf`\<`"0.6.0"`, keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase.mdx)\<`unknown`>>
+        `TEntryPointVersion` *extends* `OneOf`\<`"0.6.0"`, keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase)\<`unknown`>>
       </td>
 
       <td>
-        `OneOf`\<`"0.6.0"`, keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase.mdx)\<`unknown`>>
+        `OneOf`\<`"0.6.0"`, keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase)\<`unknown`>>
       </td>
     </tr>
 
     <tr>
       <td>
-        `TChain` *extends* `Chain`
+        `TChain` *extends* [`Chain`](https://viem.sh)
       </td>
 
       <td>
-        `Chain`
+        [`Chain`](https://viem.sh)
       </td>
     </tr>
 
@@ -182,7 +182,7 @@ Defined in: [aa-sdk/core/src/entrypoint/index.ts:48](https://github.com/alchemyp
       </td>
 
       <td>
-        [`GetEntryPointOptions`](../type-aliases/GetEntryPointOptions.mdx)\<`TEntryPointVersion`>
+        [`GetEntryPointOptions`](../type-aliases/GetEntryPointOptions)\<`TEntryPointVersion`>
       </td>
     </tr>
 
@@ -191,7 +191,7 @@ Defined in: [aa-sdk/core/src/entrypoint/index.ts:48](https://github.com/alchemyp
 
 ### Returns
 
-[`EntryPointDefRegistry`](../interfaces/EntryPointDefRegistry.mdx)\<`TChain`>\[`TEntryPointVersion`]
+[`EntryPointDefRegistry`](../interfaces/EntryPointDefRegistry)\<`TChain`>\[`TEntryPointVersion`]
 
 ## Call Signature
 
@@ -202,7 +202,7 @@ function getEntryPoint<TChain>(
 ): OneOf<"0.6.0", keyof EntryPointRegistryBase<unknown>>;
 ```
 
-Defined in: [aa-sdk/core/src/entrypoint/index.ts:57](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/aa-sdk/core/src/entrypoint/index.ts#L57)
+Defined in: [aa-sdk/core/src/entrypoint/index.ts:57](https://github.com/alchemyplatform/aa-sdk/blob/64e8cbabbf2fde59a17e85374123e899334dc927/aa-sdk/core/src/entrypoint/index.ts#L57)
 
 ### Type Parameters
 
@@ -217,11 +217,11 @@ Defined in: [aa-sdk/core/src/entrypoint/index.ts:57](https://github.com/alchemyp
   <tbody>
     <tr>
       <td>
-        `TChain` *extends* `Chain`
+        `TChain` *extends* [`Chain`](https://viem.sh)
       </td>
 
       <td>
-        `Chain`
+        [`Chain`](https://viem.sh)
       </td>
     </tr>
 
@@ -255,7 +255,7 @@ Defined in: [aa-sdk/core/src/entrypoint/index.ts:57](https://github.com/alchemyp
       </td>
 
       <td>
-        [`GetEntryPointOptions`](../type-aliases/GetEntryPointOptions.mdx)\<`OneOf`\<`"0.6.0"`, keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase.mdx)\<`unknown`>>>
+        [`GetEntryPointOptions`](../type-aliases/GetEntryPointOptions)\<`OneOf`\<`"0.6.0"`, keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase)\<`unknown`>>>
       </td>
     </tr>
 
@@ -264,4 +264,4 @@ Defined in: [aa-sdk/core/src/entrypoint/index.ts:57](https://github.com/alchemyp
 
 ### Returns
 
-`OneOf`\<`"0.6.0"`, keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase.mdx)\<`unknown`>>
+`OneOf`\<`"0.6.0"`, keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase)\<`unknown`>>

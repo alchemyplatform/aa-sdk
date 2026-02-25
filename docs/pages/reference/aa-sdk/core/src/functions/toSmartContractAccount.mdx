@@ -13,7 +13,7 @@ function toSmartContractAccount<Name, TTransport, TChain, TEntryPointVersion>(
 ): Promise<SmartContractAccount<Name, TEntryPointVersion>>;
 ```
 
-Defined in: [aa-sdk/core/src/account/smartContractAccount.ts:266](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/aa-sdk/core/src/account/smartContractAccount.ts#L266)
+Defined in: [aa-sdk/core/src/account/smartContractAccount.ts:266](https://github.com/alchemyplatform/aa-sdk/blob/64e8cbabbf2fde59a17e85374123e899334dc927/aa-sdk/core/src/account/smartContractAccount.ts#L266)
 
 ## Type Parameters
 
@@ -38,31 +38,31 @@ Defined in: [aa-sdk/core/src/account/smartContractAccount.ts:266](https://github
 
     <tr>
       <td>
-        `TTransport` *extends* `Transport`
+        `TTransport` *extends* [`Transport`](https://viem.sh)
       </td>
 
       <td>
-        `Transport`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TChain` *extends* `Chain`
-      </td>
-
-      <td>
-        `Chain`
+        [`Transport`](https://viem.sh)
       </td>
     </tr>
 
     <tr>
       <td>
-        `TEntryPointVersion` *extends* keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase.mdx)\<`unknown`>
+        `TChain` *extends* [`Chain`](https://viem.sh)
       </td>
 
       <td>
-        keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase.mdx)\<`unknown`>
+        [`Chain`](https://viem.sh)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TEntryPointVersion` *extends* keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase)\<`unknown`>
+      </td>
+
+      <td>
+        keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase)\<`unknown`>
       </td>
     </tr>
 
@@ -87,7 +87,7 @@ Defined in: [aa-sdk/core/src/account/smartContractAccount.ts:266](https://github
       </td>
 
       <td>
-        [`ToSmartContractAccountParams`](../type-aliases/ToSmartContractAccountParams.mdx)\<`Name`, `TTransport`, `TChain`, `TEntryPointVersion`>
+        [`ToSmartContractAccountParams`](../type-aliases/ToSmartContractAccountParams)\<`Name`, `TTransport`, `TChain`, `TEntryPointVersion`>
       </td>
 
       <td>
@@ -100,6 +100,6 @@ Defined in: [aa-sdk/core/src/account/smartContractAccount.ts:266](https://github
 
 ## Returns
 
-`Promise`\<[`SmartContractAccount`](../type-aliases/SmartContractAccount.mdx)\<`Name`, `TEntryPointVersion`>>
+`Promise`\<[`SmartContractAccount`](../type-aliases/SmartContractAccount)\<`Name`, `TEntryPointVersion`>>
 
 a promise that resolves to a SmartContractAccount object with methods and properties for interacting with the smart contract account

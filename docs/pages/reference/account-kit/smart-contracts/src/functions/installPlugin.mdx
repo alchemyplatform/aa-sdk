@@ -14,7 +14,7 @@ function installPlugin<TTransport, TChain, TAccount, TContext>(
 ): Promise<any>;
 ```
 
-Defined in: [account-kit/smart-contracts/src/msca/plugin-manager/installPlugin.ts:65](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/smart-contracts/src/msca/plugin-manager/installPlugin.ts#L65)
+Defined in: [account-kit/smart-contracts/src/msca/plugin-manager/installPlugin.ts:65](https://github.com/alchemyplatform/aa-sdk/blob/64e8cbabbf2fde59a17e85374123e899334dc927/account-kit/smart-contracts/src/msca/plugin-manager/installPlugin.ts#L65)
 
 Installs a plugin on a smart account via the client, sending the user operation with the appropriate parameters.
 NOTE: it's recommended to just use the installPlugin action returned from generated plugins
@@ -46,21 +46,21 @@ const hash = await installPlugin(client, {
   <tbody>
     <tr>
       <td>
-        `TTransport` *extends* `Transport`
+        `TTransport` *extends* [`Transport`](https://viem.sh)
       </td>
 
       <td>
-        `Transport`
+        [`Transport`](https://viem.sh)
       </td>
     </tr>
 
     <tr>
       <td>
-        `TChain` *extends* `undefined` | `Chain`
+        `TChain` *extends* `undefined` | [`Chain`](https://viem.sh)
       </td>
 
       <td>
-        `undefined` | `Chain`
+        `undefined` | [`Chain`](https://viem.sh)
       </td>
     </tr>
 
@@ -105,7 +105,7 @@ const hash = await installPlugin(client, {
       </td>
 
       <td>
-        `Client`\<`TTransport`, `TChain`, `TAccount`>
+        [`Client`](https://viem.sh)\<`TTransport`, `TChain`, `TAccount`>
       </td>
 
       <td>
@@ -119,7 +119,7 @@ const hash = await installPlugin(client, {
       </td>
 
       <td>
-        [`InstallPluginParams`](../type-aliases/InstallPluginParams.mdx)\<`TAccount`, `TContext`>
+        [`InstallPluginParams`](../type-aliases/InstallPluginParams)\<`TAccount`, `TContext`>
       </td>
 
       <td>
