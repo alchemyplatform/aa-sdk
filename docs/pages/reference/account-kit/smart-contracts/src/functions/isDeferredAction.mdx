@@ -14,7 +14,7 @@ function isDeferredAction<typedData, primaryType>(
 ): boolean;
 ```
 
-Defined in: [account-kit/smart-contracts/src/ma-v2/utils.ts:356](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/smart-contracts/src/ma-v2/utils.ts#L356)
+Defined in: [account-kit/smart-contracts/src/ma-v2/utils.ts:356](https://github.com/alchemyplatform/aa-sdk/blob/7a7d3b1bc384869e1ef108c39c1548652539c6bd/account-kit/smart-contracts/src/ma-v2/utils.ts#L356)
 
 Type guard to check if a TypedDataDefinition is a deferred action.
 
@@ -38,7 +38,7 @@ A deferred action has:
       <td>
         `typedData` *extends*
         | \{
-        \[`key`: `string`]: readonly `TypedDataParameter`\[];
+        \[`key`: `string`]: readonly [`TypedDataParameter`](https://abitype.dev)\[];
         \[`key`: `` `string[${string}]` ``]: `undefined`;
         \[`key`: `` `function[${string}]` ``]: `undefined`;
         \[`key`: `` `address[${string}]` ``]: `undefined`;
@@ -142,10 +142,19 @@ A deferred action has:
         \[`key`: `` `uint240[${string}]` ``]: `undefined`;
         \[`key`: `` `uint248[${string}]` ``]: `undefined`;
         \[`key`: `` `uint256[${string}]` ``]: `undefined`;
+        `string?`: `undefined`;
         `address?`: `undefined`;
         `bool?`: `undefined`;
         `bytes?`: `undefined`;
         `bytes1?`: `undefined`;
+        `bytes2?`: `undefined`;
+        `bytes3?`: `undefined`;
+        `bytes4?`: `undefined`;
+        `bytes5?`: `undefined`;
+        `bytes6?`: `undefined`;
+        `bytes7?`: `undefined`;
+        `bytes8?`: `undefined`;
+        `bytes9?`: `undefined`;
         `bytes10?`: `undefined`;
         `bytes11?`: `undefined`;
         `bytes12?`: `undefined`;
@@ -156,7 +165,6 @@ A deferred action has:
         `bytes17?`: `undefined`;
         `bytes18?`: `undefined`;
         `bytes19?`: `undefined`;
-        `bytes2?`: `undefined`;
         `bytes20?`: `undefined`;
         `bytes21?`: `undefined`;
         `bytes22?`: `undefined`;
@@ -167,16 +175,21 @@ A deferred action has:
         `bytes27?`: `undefined`;
         `bytes28?`: `undefined`;
         `bytes29?`: `undefined`;
-        `bytes3?`: `undefined`;
         `bytes30?`: `undefined`;
         `bytes31?`: `undefined`;
         `bytes32?`: `undefined`;
-        `bytes4?`: `undefined`;
-        `bytes5?`: `undefined`;
-        `bytes6?`: `undefined`;
-        `bytes7?`: `undefined`;
-        `bytes8?`: `undefined`;
-        `bytes9?`: `undefined`;
+        `int8?`: `undefined`;
+        `int16?`: `undefined`;
+        `int24?`: `undefined`;
+        `int32?`: `undefined`;
+        `int40?`: `undefined`;
+        `int48?`: `undefined`;
+        `int56?`: `undefined`;
+        `int64?`: `undefined`;
+        `int72?`: `undefined`;
+        `int80?`: `undefined`;
+        `int88?`: `undefined`;
+        `int96?`: `undefined`;
         `int104?`: `undefined`;
         `int112?`: `undefined`;
         `int120?`: `undefined`;
@@ -184,7 +197,6 @@ A deferred action has:
         `int136?`: `undefined`;
         `int144?`: `undefined`;
         `int152?`: `undefined`;
-        `int16?`: `undefined`;
         `int160?`: `undefined`;
         `int168?`: `undefined`;
         `int176?`: `undefined`;
@@ -195,21 +207,21 @@ A deferred action has:
         `int216?`: `undefined`;
         `int224?`: `undefined`;
         `int232?`: `undefined`;
-        `int24?`: `undefined`;
         `int240?`: `undefined`;
         `int248?`: `undefined`;
         `int256?`: `undefined`;
-        `int32?`: `undefined`;
-        `int40?`: `undefined`;
-        `int48?`: `undefined`;
-        `int56?`: `undefined`;
-        `int64?`: `undefined`;
-        `int72?`: `undefined`;
-        `int8?`: `undefined`;
-        `int80?`: `undefined`;
-        `int88?`: `undefined`;
-        `int96?`: `undefined`;
-        `string?`: `undefined`;
+        `uint8?`: `undefined`;
+        `uint16?`: `undefined`;
+        `uint24?`: `undefined`;
+        `uint32?`: `undefined`;
+        `uint40?`: `undefined`;
+        `uint48?`: `undefined`;
+        `uint56?`: `undefined`;
+        `uint64?`: `undefined`;
+        `uint72?`: `undefined`;
+        `uint80?`: `undefined`;
+        `uint88?`: `undefined`;
+        `uint96?`: `undefined`;
         `uint104?`: `undefined`;
         `uint112?`: `undefined`;
         `uint120?`: `undefined`;
@@ -217,7 +229,6 @@ A deferred action has:
         `uint136?`: `undefined`;
         `uint144?`: `undefined`;
         `uint152?`: `undefined`;
-        `uint16?`: `undefined`;
         `uint160?`: `undefined`;
         `uint168?`: `undefined`;
         `uint176?`: `undefined`;
@@ -228,20 +239,9 @@ A deferred action has:
         `uint216?`: `undefined`;
         `uint224?`: `undefined`;
         `uint232?`: `undefined`;
-        `uint24?`: `undefined`;
         `uint240?`: `undefined`;
         `uint248?`: `undefined`;
         `uint256?`: `undefined`;
-        `uint32?`: `undefined`;
-        `uint40?`: `undefined`;
-        `uint48?`: `undefined`;
-        `uint56?`: `undefined`;
-        `uint64?`: `undefined`;
-        `uint72?`: `undefined`;
-        `uint8?`: `undefined`;
-        `uint80?`: `undefined`;
-        `uint88?`: `undefined`;
-        `uint96?`: `undefined`;
         }
         | `Record`\<`string`, `unknown`>
       </td>
@@ -282,7 +282,7 @@ A deferred action has:
       </td>
 
       <td>
-        `TypedDataDefinition`\<`typedData`, `primaryType`>
+        [`TypedDataDefinition`](https://viem.sh)\<`typedData`, `primaryType`>
       </td>
 
       <td>

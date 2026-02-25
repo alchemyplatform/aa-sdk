@@ -11,7 +11,7 @@ layout: reference
 function createAccount<TAccount>(params, config): Promise<SupportedAccounts>;
 ```
 
-Defined in: [account-kit/core/src/actions/createAccount.ts:78](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/core/src/actions/createAccount.ts#L78)
+Defined in: [account-kit/core/src/actions/createAccount.ts:78](https://github.com/alchemyplatform/aa-sdk/blob/7a7d3b1bc384869e1ef108c39c1548652539c6bd/account-kit/core/src/actions/createAccount.ts#L78)
 
 Creates an account of a specified type using the provided parameters and configuration. Supports creating LightAccount and MultiOwnerModularAccount types.
 
@@ -42,7 +42,7 @@ const account = createAccount(
   <tbody>
     <tr>
       <td>
-        `TAccount` *extends* [`SupportedAccountTypes`](../type-aliases/SupportedAccountTypes.mdx)
+        `TAccount` *extends* [`SupportedAccountTypes`](../type-aliases/SupportedAccountTypes)
       </td>
     </tr>
   </tbody>
@@ -66,7 +66,7 @@ const account = createAccount(
       </td>
 
       <td>
-        [`CreateAccountParams`](../type-aliases/CreateAccountParams.mdx)\<`TAccount`>
+        [`CreateAccountParams`](../type-aliases/CreateAccountParams)\<`TAccount`>
       </td>
 
       <td>
@@ -80,7 +80,7 @@ const account = createAccount(
       </td>
 
       <td>
-        [`AlchemyAccountsConfig`](../type-aliases/AlchemyAccountsConfig.mdx)
+        [`AlchemyAccountsConfig`](../type-aliases/AlchemyAccountsConfig)
       </td>
 
       <td>
@@ -93,6 +93,6 @@ const account = createAccount(
 
 ## Returns
 
-`Promise`\<[`SupportedAccounts`](../type-aliases/SupportedAccounts.mdx)>
+`Promise`\<[`SupportedAccounts`](../type-aliases/SupportedAccounts)>
 
 A promise that resolves to the created account object

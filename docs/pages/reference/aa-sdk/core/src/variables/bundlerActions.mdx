@@ -11,7 +11,7 @@ layout: reference
 const bundlerActions: <TClient>(client) => BundlerActions;
 ```
 
-Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:121](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/aa-sdk/core/src/client/decorators/bundlerClient.ts#L121)
+Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:121](https://github.com/alchemyplatform/aa-sdk/blob/7a7d3b1bc384869e1ef108c39c1548652539c6bd/aa-sdk/core/src/client/decorators/bundlerClient.ts#L121)
 
 A viem client decorator that provides Bundler specific actions.
 These actions include estimating gas for user operations, sending raw user operations, retrieving user operations by hash, getting supported entry points, and getting user operation receipts.
@@ -30,7 +30,7 @@ NOTE: this is already added to the client returned from `createBundlerClient`
   <tbody>
     <tr>
       <td>
-        `TClient` *extends* `Client`\<`Transport`, `Chain` | `undefined`, `any`, \[`...PublicRpcSchema`, `...BundlerRpcSchema`]>
+        `TClient` *extends* [`Client`](https://viem.sh)\<[`Transport`](https://viem.sh), [`Chain`](https://viem.sh) | `undefined`, `any`, \[`...PublicRpcSchema`, `...BundlerRpcSchema`]>
       </td>
     </tr>
   </tbody>
@@ -67,6 +67,6 @@ NOTE: this is already added to the client returned from `createBundlerClient`
 
 ## Returns
 
-[`BundlerActions`](../type-aliases/BundlerActions.mdx)
+[`BundlerActions`](../type-aliases/BundlerActions)
 
 An object containing various bundler-related actions that can be executed using the provided client

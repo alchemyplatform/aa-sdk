@@ -17,7 +17,7 @@ function buildUserOperation<
 >(client_, args): Promise<UserOperationStruct<TEntryPointVersion>>;
 ```
 
-Defined in: [aa-sdk/core/src/actions/smartAccount/buildUserOperation.ts:42](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/aa-sdk/core/src/actions/smartAccount/buildUserOperation.ts#L42)
+Defined in: [aa-sdk/core/src/actions/smartAccount/buildUserOperation.ts:42](https://github.com/alchemyplatform/aa-sdk/blob/7a7d3b1bc384869e1ef108c39c1548652539c6bd/aa-sdk/core/src/actions/smartAccount/buildUserOperation.ts#L42)
 
 Builds a user operation using the provided client and operation parameters. Ensures that the account exists and the client is compatible.
 
@@ -51,21 +51,21 @@ const result = await client.buildUserOperation({
   <tbody>
     <tr>
       <td>
-        `TTransport` *extends* `Transport`
+        `TTransport` *extends* [`Transport`](https://viem.sh)
       </td>
 
       <td>
-        `Transport`
+        [`Transport`](https://viem.sh)
       </td>
     </tr>
 
     <tr>
       <td>
-        `TChain` *extends* `undefined` | `Chain`
+        `TChain` *extends* `undefined` | [`Chain`](https://viem.sh)
       </td>
 
       <td>
-        `undefined` | `Chain`
+        `undefined` | [`Chain`](https://viem.sh)
       </td>
     </tr>
 
@@ -73,12 +73,12 @@ const result = await client.buildUserOperation({
       <td>
         `TAccount` *extends*
         | `undefined`
-        | [`SmartContractAccount`](../type-aliases/SmartContractAccount.mdx)
+        | [`SmartContractAccount`](../type-aliases/SmartContractAccount)
       </td>
 
       <td>
         | `undefined`
-        | [`SmartContractAccount`](../type-aliases/SmartContractAccount.mdx)
+        | [`SmartContractAccount`](../type-aliases/SmartContractAccount)
       </td>
     </tr>
 
@@ -94,11 +94,11 @@ const result = await client.buildUserOperation({
 
     <tr>
       <td>
-        `TEntryPointVersion` *extends* keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase.mdx)\<`unknown`>
+        `TEntryPointVersion` *extends* keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase)\<`unknown`>
       </td>
 
       <td>
-        [`GetEntryPointFromAccount`](../type-aliases/GetEntryPointFromAccount.mdx)\<`TAccount`>
+        [`GetEntryPointFromAccount`](../type-aliases/GetEntryPointFromAccount)\<`TAccount`>
       </td>
     </tr>
 
@@ -123,7 +123,7 @@ const result = await client.buildUserOperation({
       </td>
 
       <td>
-        `Client`\<`TTransport`, `TChain`, `TAccount`>
+        [`Client`](https://viem.sh)\<`TTransport`, `TChain`, `TAccount`>
       </td>
 
       <td>
@@ -150,6 +150,6 @@ const result = await client.buildUserOperation({
 
 ## Returns
 
-`Promise`\<[`UserOperationStruct`](../type-aliases/UserOperationStruct.mdx)\<`TEntryPointVersion`>>
+`Promise`\<[`UserOperationStruct`](../type-aliases/UserOperationStruct)\<`TEntryPointVersion`>>
 
 a promise that resolves to a `UserOperationStruct` object containing the built user operation details

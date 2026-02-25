@@ -28,7 +28,7 @@ function createSmartAccountClientFromExisting<
 >;
 ```
 
-Defined in: [aa-sdk/core/src/client/smartAccountClient.ts:314](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/aa-sdk/core/src/client/smartAccountClient.ts#L314)
+Defined in: [aa-sdk/core/src/client/smartAccountClient.ts:314](https://github.com/alchemyplatform/aa-sdk/blob/7a7d3b1bc384869e1ef108c39c1548652539c6bd/aa-sdk/core/src/client/smartAccountClient.ts#L314)
 
 ## Type Parameters
 
@@ -43,21 +43,21 @@ Defined in: [aa-sdk/core/src/client/smartAccountClient.ts:314](https://github.co
   <tbody>
     <tr>
       <td>
-        `TTransport` *extends* `Transport`
+        `TTransport` *extends* [`Transport`](https://viem.sh)
       </td>
 
       <td>
-        `Transport`
+        [`Transport`](https://viem.sh)
       </td>
     </tr>
 
     <tr>
       <td>
-        `TChain` *extends* `undefined` | `Chain`
+        `TChain` *extends* `undefined` | [`Chain`](https://viem.sh)
       </td>
 
       <td>
-        `undefined` | `Chain`
+        `undefined` | [`Chain`](https://viem.sh)
       </td>
     </tr>
 
@@ -65,34 +65,34 @@ Defined in: [aa-sdk/core/src/client/smartAccountClient.ts:314](https://github.co
       <td>
         `TAccount` *extends*
         | `undefined`
-        | [`SmartContractAccount`](../type-aliases/SmartContractAccount.mdx)
+        | [`SmartContractAccount`](../type-aliases/SmartContractAccount)
       </td>
 
       <td>
         | `undefined`
-        | [`SmartContractAccount`](../type-aliases/SmartContractAccount.mdx)
+        | [`SmartContractAccount`](../type-aliases/SmartContractAccount)
       </td>
     </tr>
 
     <tr>
       <td>
-        `TClient` *extends* [`BundlerClient`](../type-aliases/BundlerClient.mdx)\<`TTransport`>
+        `TClient` *extends* [`BundlerClient`](../type-aliases/BundlerClient)\<`TTransport`>
       </td>
 
       <td>
-        [`BundlerClient`](../type-aliases/BundlerClient.mdx)\<`TTransport`>
+        [`BundlerClient`](../type-aliases/BundlerClient)\<`TTransport`>
       </td>
     </tr>
 
     <tr>
       <td>
-        `TActions` *extends* [`SmartAccountClientActions`](../type-aliases/SmartAccountClientActions.mdx)\<`TChain`, `TAccount`, `TContext`>
+        `TActions` *extends* [`SmartAccountClientActions`](../type-aliases/SmartAccountClientActions)\<`TChain`, `TAccount`, `TContext`>
       </td>
 
       <td>
-        [`SmartAccountClientActions`](../type-aliases/SmartAccountClientActions.mdx)\<`TChain`, `TAccount`,
+        [`SmartAccountClientActions`](../type-aliases/SmartAccountClientActions)\<`TChain`, `TAccount`,
         | `undefined`
-        | [`UserOperationContext`](../type-aliases/UserOperationContext.mdx)>
+        | [`UserOperationContext`](../type-aliases/UserOperationContext)>
       </td>
     </tr>
 
@@ -100,42 +100,42 @@ Defined in: [aa-sdk/core/src/client/smartAccountClient.ts:314](https://github.co
       <td>
         `TRpcSchema` *extends* \[\{
         `Method`: `"eth_sendUserOperation"`;
-        `Parameters`: \[[`UserOperationRequest`](../type-aliases/UserOperationRequest.mdx), `` `0x${string}` ``];
+        `Parameters`: \[[`UserOperationRequest`](../type-aliases/UserOperationRequest), `` `0x${string}` ``];
         `ReturnType`: `` `0x${string}` ``;
         }, \{
         `Method`: `"eth_estimateUserOperationGas"`;
-        `Parameters`: \[[`UserOperationRequest`](../type-aliases/UserOperationRequest.mdx), `` `0x${string}` ``, `RpcStateOverride`?];
-        `ReturnType`: [`UserOperationEstimateGasResponse`](../interfaces/UserOperationEstimateGasResponse.mdx);
+        `Parameters`: \[[`UserOperationRequest`](../type-aliases/UserOperationRequest), `` `0x${string}` ``, [`RpcStateOverride`](https://viem.sh)?];
+        `ReturnType`: [`UserOperationEstimateGasResponse`](../interfaces/UserOperationEstimateGasResponse);
         }, \{
         `Method`: `"eth_getUserOperationReceipt"`;
         `Parameters`: \[`` `0x${string}` ``, (`"latest"` | `"pending"`)?];
-        `ReturnType`: `null` | [`UserOperationReceipt`](../interfaces/UserOperationReceipt.mdx);
+        `ReturnType`: `null` | [`UserOperationReceipt`](../interfaces/UserOperationReceipt);
         }, \{
         `Method`: `"eth_getUserOperationByHash"`;
         `Parameters`: \[`` `0x${string}` ``];
         `ReturnType`:   | `null`
-        | [`UserOperationResponse`](../interfaces/UserOperationResponse.mdx)\<`EntryPointVersion`>;
+        | [`UserOperationResponse`](../interfaces/UserOperationResponse)\<`EntryPointVersion`>;
         }]
       </td>
 
       <td>
         \[\{
         `Method`: `"eth_sendUserOperation"`;
-        `Parameters`: \[[`UserOperationRequest`](../type-aliases/UserOperationRequest.mdx), `` `0x${string}` ``];
+        `Parameters`: \[[`UserOperationRequest`](../type-aliases/UserOperationRequest), `` `0x${string}` ``];
         `ReturnType`: `` `0x${string}` ``;
         }, \{
         `Method`: `"eth_estimateUserOperationGas"`;
-        `Parameters`: \[[`UserOperationRequest`](../type-aliases/UserOperationRequest.mdx), `` `0x${string}` ``, `RpcStateOverride`?];
-        `ReturnType`: [`UserOperationEstimateGasResponse`](../interfaces/UserOperationEstimateGasResponse.mdx);
+        `Parameters`: \[[`UserOperationRequest`](../type-aliases/UserOperationRequest), `` `0x${string}` ``, [`RpcStateOverride`](https://viem.sh)?];
+        `ReturnType`: [`UserOperationEstimateGasResponse`](../interfaces/UserOperationEstimateGasResponse);
         }, \{
         `Method`: `"eth_getUserOperationReceipt"`;
         `Parameters`: \[`` `0x${string}` ``, (`"latest"` | `"pending"`)?];
-        `ReturnType`: `null` | [`UserOperationReceipt`](../interfaces/UserOperationReceipt.mdx);
+        `ReturnType`: `null` | [`UserOperationReceipt`](../interfaces/UserOperationReceipt);
         }, \{
         `Method`: `"eth_getUserOperationByHash"`;
         `Parameters`: \[`` `0x${string}` ``];
         `ReturnType`:   | `null`
-        | [`UserOperationResponse`](../interfaces/UserOperationResponse.mdx)\<`EntryPointVersion`>;
+        | [`UserOperationResponse`](../interfaces/UserOperationResponse)\<`EntryPointVersion`>;
         }]
       </td>
     </tr>
@@ -144,12 +144,12 @@ Defined in: [aa-sdk/core/src/client/smartAccountClient.ts:314](https://github.co
       <td>
         `TContext` *extends*
         | `undefined`
-        | [`UserOperationContext`](../type-aliases/UserOperationContext.mdx)
+        | [`UserOperationContext`](../type-aliases/UserOperationContext)
       </td>
 
       <td>
         | `undefined`
-        | [`UserOperationContext`](../type-aliases/UserOperationContext.mdx)
+        | [`UserOperationContext`](../type-aliases/UserOperationContext)
       </td>
     </tr>
 
@@ -174,7 +174,7 @@ Defined in: [aa-sdk/core/src/client/smartAccountClient.ts:314](https://github.co
       </td>
 
       <td>
-        `Omit`\<\{ `account?`: `TAccount`; `addBreadCrumb?`: \<`T`>(`crumb`) => `T`; `cacheTime?`: `number`; `chain?`: `Chain` | `TChain`; `customMiddleware?`: [`ClientMiddlewareFn`](../type-aliases/ClientMiddlewareFn.mdx)\<`TContext`>; `dummyPaymasterAndData?`: [`ClientMiddlewareFn`](../type-aliases/ClientMiddlewareFn.mdx)\<`TContext`>; `feeEstimator?`: [`ClientMiddlewareFn`](../type-aliases/ClientMiddlewareFn.mdx)\<`TContext`>; `gasEstimator?`: [`ClientMiddlewareFn`](../type-aliases/ClientMiddlewareFn.mdx)\<`TContext`>; `key?`: `string`; `name?`: `string`; `opts?`: \{ `feeOptions?`: \{ `callGasLimit?`: \{ `max?`: `number` | `bigint` | `` `0x${(...)}` ``; `min?`: `number` | `bigint` | `` `0x${(...)}` ``; `multiplier?`: `number`; }; `maxFeePerGas?`: \{ `max?`: `number` | `bigint` | `` `0x${(...)}` ``; `min?`: `number` | `bigint` | `` `0x${(...)}` ``; `multiplier?`: `number`; }; `maxPriorityFeePerGas?`: \{ `max?`: `number` | `bigint` | `` `0x${(...)}` ``; `min?`: `number` | `bigint` | `` `0x${(...)}` ``; `multiplier?`: `number`; }; `paymasterPostOpGasLimit?`: \{ `max?`: `number` | `bigint` | `` `0x${(...)}` ``; `min?`: `number` | `bigint` | `` `0x${(...)}` ``; `multiplier?`: `number`; }; `paymasterVerificationGasLimit?`: \{ `max?`: `number` | `bigint` | `` `0x${(...)}` ``; `min?`: `number` | `bigint` | `` `0x${(...)}` ``; `multiplier?`: `number`; }; `preVerificationGas?`: \{ `max?`: `number` | `bigint` | `` `0x${(...)}` ``; `min?`: `number` | `bigint` | `` `0x${(...)}` ``; `multiplier?`: `number`; }; `verificationGasLimit?`: \{ `max?`: `number` | `bigint` | `` `0x${(...)}` ``; `min?`: `number` | `bigint` | `` `0x${(...)}` ``; `multiplier?`: `number`; }; }; `txMaxRetries?`: `number`; `txRetryIntervalMs?`: `number`; `txRetryMultiplier?`: `number`; }; `paymasterAndData?`: [`ClientMiddlewareFn`](../type-aliases/ClientMiddlewareFn.mdx)\<`TContext`>; `pollingInterval?`: `number`; `signUserOperation?`: [`ClientMiddlewareFn`](../type-aliases/ClientMiddlewareFn.mdx)\<`TContext`>; `transport`: `Transport`; `type?`: `string`; `userOperationSimulator?`: [`ClientMiddlewareFn`](../type-aliases/ClientMiddlewareFn.mdx)\<`TContext`>; }, `"chain"` | `"transport"`> & `object`
+        `Omit`\<\{ `account?`: `TAccount`; `addBreadCrumb?`: \<`T`>(`crumb`) => `T`; `customMiddleware?`: [`ClientMiddlewareFn`](../type-aliases/ClientMiddlewareFn)\<`TContext`>; `dummyPaymasterAndData?`: [`ClientMiddlewareFn`](../type-aliases/ClientMiddlewareFn)\<`TContext`>; `feeEstimator?`: [`ClientMiddlewareFn`](../type-aliases/ClientMiddlewareFn)\<`TContext`>; `gasEstimator?`: [`ClientMiddlewareFn`](../type-aliases/ClientMiddlewareFn)\<`TContext`>; `opts?`: `Object`; `paymasterAndData?`: [`ClientMiddlewareFn`](../type-aliases/ClientMiddlewareFn)\<`TContext`>; `signUserOperation?`: [`ClientMiddlewareFn`](../type-aliases/ClientMiddlewareFn)\<`TContext`>; `userOperationSimulator?`: [`ClientMiddlewareFn`](../type-aliases/ClientMiddlewareFn)\<`TContext`>; }, `"chain"` | `"transport"`> & `object`
       </td>
 
       <td>
@@ -187,6 +187,6 @@ Defined in: [aa-sdk/core/src/client/smartAccountClient.ts:314](https://github.co
 
 ## Returns
 
-[`SmartAccountClient`](../type-aliases/SmartAccountClient.mdx)\<`CustomTransport`, `TChain`, `TAccount`, `TActions`, `TRpcSchema`, `TContext`>
+[`SmartAccountClient`](../type-aliases/SmartAccountClient)\<[`CustomTransport`](https://viem.sh), `TChain`, `TAccount`, `TActions`, `TRpcSchema`, `TContext`>
 
 A smart account client created from the existing BundlerClient

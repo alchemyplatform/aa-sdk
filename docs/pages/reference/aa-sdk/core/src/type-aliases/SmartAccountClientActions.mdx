@@ -14,7 +14,7 @@ type SmartAccountClientActions<chain, account, context> =
     PublicActions;
 ```
 
-Defined in: [aa-sdk/core/src/client/smartAccountClient.ts:75](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/aa-sdk/core/src/client/smartAccountClient.ts#L75)
+Defined in: [aa-sdk/core/src/client/smartAccountClient.ts:75](https://github.com/alchemyplatform/aa-sdk/blob/7a7d3b1bc384869e1ef108c39c1548652539c6bd/aa-sdk/core/src/client/smartAccountClient.ts#L75)
 
 ## Type Parameters
 
@@ -29,31 +29,31 @@ Defined in: [aa-sdk/core/src/client/smartAccountClient.ts:75](https://github.com
   <tbody>
     <tr>
       <td>
-        `chain` *extends* `Chain` | `undefined`
+        `chain` *extends* [`Chain`](https://viem.sh) | `undefined`
       </td>
 
       <td>
-        `Chain` | `undefined`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `account` *extends* [`SmartContractAccount`](SmartContractAccount.mdx) | `undefined`
-      </td>
-
-      <td>
-        [`SmartContractAccount`](SmartContractAccount.mdx) | `undefined`
+        [`Chain`](https://viem.sh) | `undefined`
       </td>
     </tr>
 
     <tr>
       <td>
-        `context` *extends* [`UserOperationContext`](UserOperationContext.mdx) | `undefined`
+        `account` *extends* [`SmartContractAccount`](SmartContractAccount) | `undefined`
       </td>
 
       <td>
-        [`UserOperationContext`](UserOperationContext.mdx) | `undefined`
+        [`SmartContractAccount`](SmartContractAccount) | `undefined`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `context` *extends* [`UserOperationContext`](UserOperationContext) | `undefined`
+      </td>
+
+      <td>
+        [`UserOperationContext`](UserOperationContext) | `undefined`
       </td>
     </tr>
 

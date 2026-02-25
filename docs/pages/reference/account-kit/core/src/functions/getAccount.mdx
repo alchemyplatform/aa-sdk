@@ -11,7 +11,7 @@ layout: reference
 function getAccount<TAccount>(params, config): GetAccountResult<TAccount>;
 ```
 
-Defined in: [account-kit/core/src/actions/getAccount.ts:34](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/core/src/actions/getAccount.ts#L34)
+Defined in: [account-kit/core/src/actions/getAccount.ts:34](https://github.com/alchemyplatform/aa-sdk/blob/7a7d3b1bc384869e1ef108c39c1548652539c6bd/account-kit/core/src/actions/getAccount.ts#L34)
 
 Retrieves the account of the specified type from the client store based on the provided configuration.
 
@@ -42,7 +42,7 @@ const { account, status } = getAccount(
   <tbody>
     <tr>
       <td>
-        `TAccount` *extends* [`SupportedAccountTypes`](../type-aliases/SupportedAccountTypes.mdx)
+        `TAccount` *extends* [`SupportedAccountTypes`](../type-aliases/SupportedAccountTypes)
       </td>
     </tr>
   </tbody>
@@ -66,7 +66,7 @@ const { account, status } = getAccount(
       </td>
 
       <td>
-        [`GetAccountParams`](../type-aliases/GetAccountParams.mdx)\<`TAccount`>
+        [`GetAccountParams`](../type-aliases/GetAccountParams)\<`TAccount`>
       </td>
 
       <td>
@@ -80,7 +80,7 @@ const { account, status } = getAccount(
       </td>
 
       <td>
-        [`AlchemyAccountsConfig`](../type-aliases/AlchemyAccountsConfig.mdx)
+        [`AlchemyAccountsConfig`](../type-aliases/AlchemyAccountsConfig)
       </td>
 
       <td>
@@ -93,6 +93,6 @@ const { account, status } = getAccount(
 
 ## Returns
 
-[`GetAccountResult`](../type-aliases/GetAccountResult.mdx)\<`TAccount`>
+[`GetAccountResult`](../type-aliases/GetAccountResult)\<`TAccount`>
 
 The result which includes the account if found and its status

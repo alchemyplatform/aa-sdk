@@ -11,7 +11,7 @@ layout: reference
 type Plugin<TAbi> = object;
 ```
 
-Defined in: [account-kit/smart-contracts/src/msca/plugins/types.ts:11](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/smart-contracts/src/msca/plugins/types.ts#L11)
+Defined in: [account-kit/smart-contracts/src/msca/plugins/types.ts:11](https://github.com/alchemyplatform/aa-sdk/blob/7a7d3b1bc384869e1ef108c39c1548652539c6bd/account-kit/smart-contracts/src/msca/plugins/types.ts#L11)
 
 ## Type Parameters
 
@@ -26,11 +26,11 @@ Defined in: [account-kit/smart-contracts/src/msca/plugins/types.ts:11](https://g
   <tbody>
     <tr>
       <td>
-        `TAbi` *extends* `Abi`
+        `TAbi` *extends* [`Abi`](https://abitype.dev)
       </td>
 
       <td>
-        `Abi`
+        [`Abi`](https://abitype.dev)
       </td>
     </tr>
 
@@ -54,7 +54,7 @@ Defined in: [account-kit/smart-contracts/src/msca/plugins/types.ts:11](https://g
       </td>
 
       <td>
-        \<`C`>(`client`, `address?`) => `GetContractReturnType`\<`TAbi`, `PublicClient`, [`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx)>
+        \<`C`>(`client`, `address?`) => [`GetContractReturnType`](https://viem.sh)\<`TAbi`, [`PublicClient`](https://viem.sh), [`Address`](https://abitype.dev)>
       </td>
     </tr>
 
@@ -74,7 +74,7 @@ Defined in: [account-kit/smart-contracts/src/msca/plugins/types.ts:11](https://g
       </td>
 
       <td>
-        `Record`\<`number`, [`Address`](../../../../aa-sdk/core/src/type-aliases/Address.mdx)>
+        `Record`\<`number`, [`Address`](https://abitype.dev)>
       </td>
     </tr>
 

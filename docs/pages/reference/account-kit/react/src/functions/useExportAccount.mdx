@@ -11,7 +11,7 @@ layout: reference
 function useExportAccount(args?): UseExportAccountResult;
 ```
 
-Defined in: [account-kit/react/src/hooks/useExportAccount.ts:68](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/react/src/hooks/useExportAccount.ts#L68)
+Defined in: [account-kit/react/src/hooks/useExportAccount.ts:68](https://github.com/alchemyplatform/aa-sdk/blob/7a7d3b1bc384869e1ef108c39c1548652539c6bd/account-kit/react/src/hooks/useExportAccount.ts#L68)
 
 A [hook](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useExportAccount.ts) used to export the private key for an account. It returns the mutation functions to kick off the export process, as well as a component to render the account recovery details in an iframe.
 What is returned is dependent on what you used most recently used to authenticate. If your session was initiated with a passkey, then a private key is returned. Otherwise, a seed phrase.
@@ -52,7 +52,7 @@ const {
       </td>
 
       <td>
-        [`UseExportAccountMutationArgs`](../type-aliases/UseExportAccountMutationArgs.mdx)
+        [`UseExportAccountMutationArgs`](../type-aliases/UseExportAccountMutationArgs)
       </td>
 
       <td>
@@ -65,6 +65,6 @@ const {
 
 ## Returns
 
-[`UseExportAccountResult`](../type-aliases/UseExportAccountResult.mdx)
+[`UseExportAccountResult`](../type-aliases/UseExportAccountResult)
 
 An object containing the export state, possible error, and the export account function and component. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useExportAccount.ts#L32)\*

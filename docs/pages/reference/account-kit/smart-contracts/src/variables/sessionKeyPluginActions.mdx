@@ -13,7 +13,7 @@ const sessionKeyPluginActions: <TTransport, TChain, TAccount>(
 ) => SessionKeyPluginActions<TAccount>;
 ```
 
-Defined in: [account-kit/smart-contracts/src/msca/plugins/session-key/extension.ts:99](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/smart-contracts/src/msca/plugins/session-key/extension.ts#L99)
+Defined in: [account-kit/smart-contracts/src/msca/plugins/session-key/extension.ts:99](https://github.com/alchemyplatform/aa-sdk/blob/7a7d3b1bc384869e1ef108c39c1548652539c6bd/account-kit/smart-contracts/src/msca/plugins/session-key/extension.ts#L99)
 
 Creates actions for managing session keys in a smart contract associated with a client, including adding, removing, rotating, and updating session key permissions.
 
@@ -38,21 +38,21 @@ const client = createModularAccountAlchemyClient(...).extend(sessionKeyPluginAct
   <tbody>
     <tr>
       <td>
-        `TTransport` *extends* `Transport`
+        `TTransport` *extends* [`Transport`](https://viem.sh)
       </td>
 
       <td>
-        `Transport`
+        [`Transport`](https://viem.sh)
       </td>
     </tr>
 
     <tr>
       <td>
-        `TChain` *extends* `Chain` | `undefined`
+        `TChain` *extends* [`Chain`](https://viem.sh) | `undefined`
       </td>
 
       <td>
-        `Chain` | `undefined`
+        [`Chain`](https://viem.sh) | `undefined`
       </td>
     </tr>
 
@@ -87,7 +87,7 @@ const client = createModularAccountAlchemyClient(...).extend(sessionKeyPluginAct
       </td>
 
       <td>
-        `Client`\<`TTransport`, `TChain`, `TAccount`>
+        [`Client`](https://viem.sh)\<`TTransport`, `TChain`, `TAccount`>
       </td>
 
       <td>
@@ -100,6 +100,6 @@ const client = createModularAccountAlchemyClient(...).extend(sessionKeyPluginAct
 
 ## Returns
 
-[`SessionKeyPluginActions`](../type-aliases/SessionKeyPluginActions.mdx)\<`TAccount`>
+[`SessionKeyPluginActions`](../type-aliases/SessionKeyPluginActions)\<`TAccount`>
 
 An object containing methods for session key management and interaction with the smart contract

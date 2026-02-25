@@ -11,7 +11,7 @@ layout: reference
 function useConnectedUser(): UseConnectedUserResult;
 ```
 
-Defined in: [account-kit/react/src/hooks/useConnectedUser.ts:48](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/react/src/hooks/useConnectedUser.ts#L48)
+Defined in: [account-kit/react/src/hooks/useConnectedUser.ts:48](https://github.com/alchemyplatform/aa-sdk/blob/7a7d3b1bc384869e1ef108c39c1548652539c6bd/account-kit/react/src/hooks/useConnectedUser.ts#L48)
 
 A React hook that returns the currently connected user across external wallets (EVM or Solana)
 or the smart account user from the client store. It prioritizes the EVM wallet connection, then
@@ -41,6 +41,6 @@ if (user?.type === "eoa") {
 
 ## Returns
 
-[`UseConnectedUserResult`](../type-aliases/UseConnectedUserResult.mdx)
+[`UseConnectedUserResult`](../type-aliases/UseConnectedUserResult)
 
 The connected user, or `null` if no user is available. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useConnectedUser.ts)

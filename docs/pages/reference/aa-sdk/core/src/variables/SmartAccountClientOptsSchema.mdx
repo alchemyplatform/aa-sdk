@@ -10,256 +10,128 @@ layout: reference
 ```ts
 const SmartAccountClientOptsSchema: ZodObject<{
   feeOptions: ZodOptional<ZodObject<{
-     callGasLimit: ZodOptional<ZodOptional<ZodObject<{
-        max: ZodOptional<ZodOptional<...>>;
-        min: ZodOptional<ZodOptional<...>>;
-        multiplier: ZodOptional<ZodEffects<..., ..., ...>>;
-      }, "strict", ZodTypeAny, {
-        max?: number | bigint | `0x${(...)}`;
-        min?: number | bigint | `0x${(...)}`;
-        multiplier?: number;
-      }, {
-        max?: number | bigint | `0x${(...)}`;
-        min?: number | bigint | `0x${(...)}`;
-        multiplier?: number;
-     }>>>;
      maxFeePerGas: ZodOptional<ZodOptional<ZodObject<{
-        max: ZodOptional<ZodOptional<...>>;
         min: ZodOptional<ZodOptional<...>>;
+        max: ZodOptional<ZodOptional<...>>;
         multiplier: ZodOptional<ZodEffects<..., ..., ...>>;
       }, "strict", ZodTypeAny, {
-        max?: number | bigint | `0x${(...)}`;
         min?: number | bigint | `0x${(...)}`;
+        max?: number | bigint | `0x${(...)}`;
         multiplier?: number;
       }, {
-        max?: number | bigint | `0x${(...)}`;
         min?: number | bigint | `0x${(...)}`;
+        max?: number | bigint | `0x${(...)}`;
         multiplier?: number;
      }>>>;
      maxPriorityFeePerGas: ZodOptional<ZodOptional<ZodObject<{
-        max: ZodOptional<ZodOptional<...>>;
         min: ZodOptional<ZodOptional<...>>;
+        max: ZodOptional<ZodOptional<...>>;
         multiplier: ZodOptional<ZodEffects<..., ..., ...>>;
       }, "strict", ZodTypeAny, {
-        max?: number | bigint | `0x${(...)}`;
         min?: number | bigint | `0x${(...)}`;
+        max?: number | bigint | `0x${(...)}`;
         multiplier?: number;
       }, {
-        max?: number | bigint | `0x${(...)}`;
         min?: number | bigint | `0x${(...)}`;
+        max?: number | bigint | `0x${(...)}`;
         multiplier?: number;
      }>>>;
-     paymasterPostOpGasLimit: ZodOptional<ZodObject<{
-        max: ZodOptional<ZodOptional<ZodUnion<...>>>;
-        min: ZodOptional<ZodOptional<ZodUnion<...>>>;
-        multiplier: ZodOptional<ZodEffects<ZodNumber, number, number>>;
-      }, "strict", ZodTypeAny, {
-        max?: number | bigint | `0x${string}`;
-        min?: number | bigint | `0x${string}`;
-        multiplier?: number;
-      }, {
-        max?: number | bigint | `0x${string}`;
-        min?: number | bigint | `0x${string}`;
-        multiplier?: number;
-     }>>;
-     paymasterVerificationGasLimit: ZodOptional<ZodObject<{
-        max: ZodOptional<ZodOptional<ZodUnion<...>>>;
-        min: ZodOptional<ZodOptional<ZodUnion<...>>>;
-        multiplier: ZodOptional<ZodEffects<ZodNumber, number, number>>;
-      }, "strict", ZodTypeAny, {
-        max?: number | bigint | `0x${string}`;
-        min?: number | bigint | `0x${string}`;
-        multiplier?: number;
-      }, {
-        max?: number | bigint | `0x${string}`;
-        min?: number | bigint | `0x${string}`;
-        multiplier?: number;
-     }>>;
-     preVerificationGas: ZodOptional<ZodOptional<ZodObject<{
-        max: ZodOptional<ZodOptional<...>>;
+     callGasLimit: ZodOptional<ZodOptional<ZodObject<{
         min: ZodOptional<ZodOptional<...>>;
+        max: ZodOptional<ZodOptional<...>>;
         multiplier: ZodOptional<ZodEffects<..., ..., ...>>;
       }, "strict", ZodTypeAny, {
-        max?: number | bigint | `0x${(...)}`;
         min?: number | bigint | `0x${(...)}`;
+        max?: number | bigint | `0x${(...)}`;
         multiplier?: number;
       }, {
-        max?: number | bigint | `0x${(...)}`;
         min?: number | bigint | `0x${(...)}`;
+        max?: number | bigint | `0x${(...)}`;
         multiplier?: number;
      }>>>;
      verificationGasLimit: ZodOptional<ZodOptional<ZodObject<{
-        max: ZodOptional<ZodOptional<...>>;
         min: ZodOptional<ZodOptional<...>>;
+        max: ZodOptional<ZodOptional<...>>;
         multiplier: ZodOptional<ZodEffects<..., ..., ...>>;
       }, "strict", ZodTypeAny, {
-        max?: number | bigint | `0x${(...)}`;
         min?: number | bigint | `0x${(...)}`;
+        max?: number | bigint | `0x${(...)}`;
         multiplier?: number;
       }, {
-        max?: number | bigint | `0x${(...)}`;
         min?: number | bigint | `0x${(...)}`;
+        max?: number | bigint | `0x${(...)}`;
         multiplier?: number;
      }>>>;
+     preVerificationGas: ZodOptional<ZodOptional<ZodObject<{
+        min: ZodOptional<ZodOptional<...>>;
+        max: ZodOptional<ZodOptional<...>>;
+        multiplier: ZodOptional<ZodEffects<..., ..., ...>>;
+      }, "strict", ZodTypeAny, {
+        min?: number | bigint | `0x${(...)}`;
+        max?: number | bigint | `0x${(...)}`;
+        multiplier?: number;
+      }, {
+        min?: number | bigint | `0x${(...)}`;
+        max?: number | bigint | `0x${(...)}`;
+        multiplier?: number;
+     }>>>;
+     paymasterVerificationGasLimit: ZodOptional<ZodObject<{
+        min: ZodOptional<ZodOptional<ZodUnion<...>>>;
+        max: ZodOptional<ZodOptional<ZodUnion<...>>>;
+        multiplier: ZodOptional<ZodEffects<ZodNumber, number, number>>;
+      }, "strict", ZodTypeAny, {
+        min?: number | bigint | `0x${string}`;
+        max?: number | bigint | `0x${string}`;
+        multiplier?: number;
+      }, {
+        min?: number | bigint | `0x${string}`;
+        max?: number | bigint | `0x${string}`;
+        multiplier?: number;
+     }>>;
+     paymasterPostOpGasLimit: ZodOptional<ZodObject<{
+        min: ZodOptional<ZodOptional<ZodUnion<...>>>;
+        max: ZodOptional<ZodOptional<ZodUnion<...>>>;
+        multiplier: ZodOptional<ZodEffects<ZodNumber, number, number>>;
+      }, "strict", ZodTypeAny, {
+        min?: number | bigint | `0x${string}`;
+        max?: number | bigint | `0x${string}`;
+        multiplier?: number;
+      }, {
+        min?: number | bigint | `0x${string}`;
+        max?: number | bigint | `0x${string}`;
+        multiplier?: number;
+     }>>;
    }, "strict", ZodTypeAny, {
-     callGasLimit?: {
-        max?: number | bigint | `0x${string}`;
-        min?: number | bigint | `0x${string}`;
-        multiplier?: number;
-     };
-     maxFeePerGas?: {
-        max?: number | bigint | `0x${string}`;
-        min?: number | bigint | `0x${string}`;
-        multiplier?: number;
-     };
-     maxPriorityFeePerGas?: {
-        max?: number | bigint | `0x${string}`;
-        min?: number | bigint | `0x${string}`;
-        multiplier?: number;
-     };
-     paymasterPostOpGasLimit?: {
-        max?: number | bigint | `0x${string}`;
-        min?: number | bigint | `0x${string}`;
-        multiplier?: number;
-     };
-     paymasterVerificationGasLimit?: {
-        max?: number | bigint | `0x${string}`;
-        min?: number | bigint | `0x${string}`;
-        multiplier?: number;
-     };
-     preVerificationGas?: {
-        max?: number | bigint | `0x${string}`;
-        min?: number | bigint | `0x${string}`;
-        multiplier?: number;
-     };
-     verificationGasLimit?: {
-        max?: number | bigint | `0x${string}`;
-        min?: number | bigint | `0x${string}`;
-        multiplier?: number;
-     };
+     maxFeePerGas?: Object;
+     maxPriorityFeePerGas?: Object;
+     callGasLimit?: Object;
+     verificationGasLimit?: Object;
+     preVerificationGas?: Object;
+     paymasterVerificationGasLimit?: Object;
+     paymasterPostOpGasLimit?: Object;
    }, {
-     callGasLimit?: {
-        max?: number | bigint | `0x${string}`;
-        min?: number | bigint | `0x${string}`;
-        multiplier?: number;
-     };
-     maxFeePerGas?: {
-        max?: number | bigint | `0x${string}`;
-        min?: number | bigint | `0x${string}`;
-        multiplier?: number;
-     };
-     maxPriorityFeePerGas?: {
-        max?: number | bigint | `0x${string}`;
-        min?: number | bigint | `0x${string}`;
-        multiplier?: number;
-     };
-     paymasterPostOpGasLimit?: {
-        max?: number | bigint | `0x${string}`;
-        min?: number | bigint | `0x${string}`;
-        multiplier?: number;
-     };
-     paymasterVerificationGasLimit?: {
-        max?: number | bigint | `0x${string}`;
-        min?: number | bigint | `0x${string}`;
-        multiplier?: number;
-     };
-     preVerificationGas?: {
-        max?: number | bigint | `0x${string}`;
-        min?: number | bigint | `0x${string}`;
-        multiplier?: number;
-     };
-     verificationGasLimit?: {
-        max?: number | bigint | `0x${string}`;
-        min?: number | bigint | `0x${string}`;
-        multiplier?: number;
-     };
+     maxFeePerGas?: Object;
+     maxPriorityFeePerGas?: Object;
+     callGasLimit?: Object;
+     verificationGasLimit?: Object;
+     preVerificationGas?: Object;
+     paymasterVerificationGasLimit?: Object;
+     paymasterPostOpGasLimit?: Object;
   }>>;
   txMaxRetries: ZodDefault<ZodOptional<ZodNumber>>;
   txRetryIntervalMs: ZodDefault<ZodOptional<ZodNumber>>;
   txRetryMultiplier: ZodDefault<ZodOptional<ZodNumber>>;
 }, "strict", ZodTypeAny, {
-  feeOptions?: {
-     callGasLimit?: {
-        max?: number | bigint | `0x${string}`;
-        min?: number | bigint | `0x${string}`;
-        multiplier?: number;
-     };
-     maxFeePerGas?: {
-        max?: number | bigint | `0x${string}`;
-        min?: number | bigint | `0x${string}`;
-        multiplier?: number;
-     };
-     maxPriorityFeePerGas?: {
-        max?: number | bigint | `0x${string}`;
-        min?: number | bigint | `0x${string}`;
-        multiplier?: number;
-     };
-     paymasterPostOpGasLimit?: {
-        max?: number | bigint | `0x${string}`;
-        min?: number | bigint | `0x${string}`;
-        multiplier?: number;
-     };
-     paymasterVerificationGasLimit?: {
-        max?: number | bigint | `0x${string}`;
-        min?: number | bigint | `0x${string}`;
-        multiplier?: number;
-     };
-     preVerificationGas?: {
-        max?: number | bigint | `0x${string}`;
-        min?: number | bigint | `0x${string}`;
-        multiplier?: number;
-     };
-     verificationGasLimit?: {
-        max?: number | bigint | `0x${string}`;
-        min?: number | bigint | `0x${string}`;
-        multiplier?: number;
-     };
-  };
   txMaxRetries: number;
   txRetryIntervalMs: number;
   txRetryMultiplier: number;
+  feeOptions?: Object;
 }, {
-  feeOptions?: {
-     callGasLimit?: {
-        max?: number | bigint | `0x${string}`;
-        min?: number | bigint | `0x${string}`;
-        multiplier?: number;
-     };
-     maxFeePerGas?: {
-        max?: number | bigint | `0x${string}`;
-        min?: number | bigint | `0x${string}`;
-        multiplier?: number;
-     };
-     maxPriorityFeePerGas?: {
-        max?: number | bigint | `0x${string}`;
-        min?: number | bigint | `0x${string}`;
-        multiplier?: number;
-     };
-     paymasterPostOpGasLimit?: {
-        max?: number | bigint | `0x${string}`;
-        min?: number | bigint | `0x${string}`;
-        multiplier?: number;
-     };
-     paymasterVerificationGasLimit?: {
-        max?: number | bigint | `0x${string}`;
-        min?: number | bigint | `0x${string}`;
-        multiplier?: number;
-     };
-     preVerificationGas?: {
-        max?: number | bigint | `0x${string}`;
-        min?: number | bigint | `0x${string}`;
-        multiplier?: number;
-     };
-     verificationGasLimit?: {
-        max?: number | bigint | `0x${string}`;
-        min?: number | bigint | `0x${string}`;
-        multiplier?: number;
-     };
-  };
   txMaxRetries?: number;
   txRetryIntervalMs?: number;
   txRetryMultiplier?: number;
+  feeOptions?: Object;
 }>;
 ```
 
-Defined in: [aa-sdk/core/src/client/schema.ts:74](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/aa-sdk/core/src/client/schema.ts#L74)
+Defined in: [aa-sdk/core/src/client/schema.ts:74](https://github.com/alchemyplatform/aa-sdk/blob/7a7d3b1bc384869e1ef108c39c1548652539c6bd/aa-sdk/core/src/client/schema.ts#L74)

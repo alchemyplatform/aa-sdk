@@ -57,7 +57,7 @@ function createLightAccountClient<TSigner>(
 >;
 ```
 
-Defined in: [account-kit/smart-contracts/src/light-account/clients/client.ts:41](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/smart-contracts/src/light-account/clients/client.ts#L41)
+Defined in: [account-kit/smart-contracts/src/light-account/clients/client.ts:41](https://github.com/alchemyplatform/aa-sdk/blob/7a7d3b1bc384869e1ef108c39c1548652539c6bd/account-kit/smart-contracts/src/light-account/clients/client.ts#L41)
 
 ### Type Parameters
 
@@ -100,7 +100,7 @@ Defined in: [account-kit/smart-contracts/src/light-account/clients/client.ts:41]
       </td>
 
       <td>
-        `Omit`\<[`CreateLightAccountParams`](../../../core/src/type-aliases/CreateLightAccountParams.mdx)\<[`HttpTransport`](../../../../aa-sdk/core/src/type-aliases/HttpTransport.mdx), `TSigner`>, `"transport"`> & `Omit`\<[`AlchemySmartAccountClientConfig`](../../../core/src/type-aliases/AlchemySmartAccountClientConfig.mdx)\<`Chain`, [`LightAccount`](../../../core/src/type-aliases/LightAccount.mdx)\<`TSigner`>>, `"account"`> & `object`
+        `Omit`\<`CreateLightAccountParams`\<[`HttpTransport`](https://viem.sh), `TSigner`>, `"transport"`> & `Omit`\<`AlchemySmartAccountClientConfig`\<[`Chain`](https://viem.sh), `LightAccount`\<`TSigner`>>, `"account"`> & `object`
       </td>
     </tr>
 
@@ -109,7 +109,7 @@ Defined in: [account-kit/smart-contracts/src/light-account/clients/client.ts:41]
 
 ### Returns
 
-`Promise`\<[`AlchemySmartAccountClient`](../../../core/src/type-aliases/AlchemySmartAccountClient.mdx)\<`undefined` | `Chain`, [`LightAccount`](../../../core/src/type-aliases/LightAccount.mdx)\<`TSigner`>, [`LightAccountClientActions`](../type-aliases/LightAccountClientActions.mdx)\<`TSigner`>>>
+`Promise`\<`AlchemySmartAccountClient`\<`undefined` | [`Chain`](https://viem.sh), `LightAccount`\<`TSigner`>, [`LightAccountClientActions`](../type-aliases/LightAccountClientActions)\<`TSigner`>>>
 
 ## Call Signature
 
@@ -127,7 +127,7 @@ function createLightAccountClient<TChain, TSigner, TTransport>(
 >;
 ```
 
-Defined in: [account-kit/smart-contracts/src/light-account/clients/client.ts:54](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/smart-contracts/src/light-account/clients/client.ts#L54)
+Defined in: [account-kit/smart-contracts/src/light-account/clients/client.ts:54](https://github.com/alchemyplatform/aa-sdk/blob/7a7d3b1bc384869e1ef108c39c1548652539c6bd/account-kit/smart-contracts/src/light-account/clients/client.ts#L54)
 
 ### Type Parameters
 
@@ -142,11 +142,11 @@ Defined in: [account-kit/smart-contracts/src/light-account/clients/client.ts:54]
   <tbody>
     <tr>
       <td>
-        `TChain` *extends* `undefined` | `Chain`
+        `TChain` *extends* `undefined` | [`Chain`](https://viem.sh)
       </td>
 
       <td>
-        `undefined` | `Chain`
+        `undefined` | [`Chain`](https://viem.sh)
       </td>
     </tr>
 
@@ -162,11 +162,11 @@ Defined in: [account-kit/smart-contracts/src/light-account/clients/client.ts:54]
 
     <tr>
       <td>
-        `TTransport` *extends* `Transport`
+        `TTransport` *extends* [`Transport`](https://viem.sh)
       </td>
 
       <td>
-        `Transport`
+        [`Transport`](https://viem.sh)
       </td>
     </tr>
 
@@ -190,7 +190,7 @@ Defined in: [account-kit/smart-contracts/src/light-account/clients/client.ts:54]
       </td>
 
       <td>
-        `object` & `Omit`\<[`CreateLightAccountParams`](../../../core/src/type-aliases/CreateLightAccountParams.mdx)\<`TTransport`, `TSigner`>, `"chain"` | `"transport"`> & `Omit`\<\{ `account?`: `SmartContractAccount`; `addBreadCrumb?`: \<`T`>(`crumb`) => `T`; `cacheTime?`: `number`; `chain?`: `Chain` | `TChain`; `customMiddleware?`: `ClientMiddlewareFn`\<`undefined` | `UserOperationContext`>; `dummyPaymasterAndData?`: `ClientMiddlewareFn`\<`undefined` | `UserOperationContext`>; `feeEstimator?`: `ClientMiddlewareFn`\<`undefined` | `UserOperationContext`>; `gasEstimator?`: `ClientMiddlewareFn`\<`undefined` | `UserOperationContext`>; `key?`: `string`; `name?`: `string`; `opts?`: \{ `feeOptions?`: \{ `callGasLimit?`: \{ `max?`: `number` | `bigint` | `` `0x${(...)}` ``; `min?`: `number` | `bigint` | `` `0x${(...)}` ``; `multiplier?`: `number`; }; `maxFeePerGas?`: \{ `max?`: `number` | `bigint` | `` `0x${(...)}` ``; `min?`: `number` | `bigint` | `` `0x${(...)}` ``; `multiplier?`: `number`; }; `maxPriorityFeePerGas?`: \{ `max?`: `number` | `bigint` | `` `0x${(...)}` ``; `min?`: `number` | `bigint` | `` `0x${(...)}` ``; `multiplier?`: `number`; }; `paymasterPostOpGasLimit?`: \{ `max?`: `number` | `bigint` | `` `0x${(...)}` ``; `min?`: `number` | `bigint` | `` `0x${(...)}` ``; `multiplier?`: `number`; }; `paymasterVerificationGasLimit?`: \{ `max?`: `number` | `bigint` | `` `0x${(...)}` ``; `min?`: `number` | `bigint` | `` `0x${(...)}` ``; `multiplier?`: `number`; }; `preVerificationGas?`: \{ `max?`: `number` | `bigint` | `` `0x${(...)}` ``; `min?`: `number` | `bigint` | `` `0x${(...)}` ``; `multiplier?`: `number`; }; `verificationGasLimit?`: \{ `max?`: `number` | `bigint` | `` `0x${(...)}` ``; `min?`: `number` | `bigint` | `` `0x${(...)}` ``; `multiplier?`: `number`; }; }; `txMaxRetries?`: `number`; `txRetryIntervalMs?`: `number`; `txRetryMultiplier?`: `number`; }; `paymasterAndData?`: `ClientMiddlewareFn`\<`undefined` | `UserOperationContext`>; `pollingInterval?`: `number`; `signUserOperation?`: `ClientMiddlewareFn`\<`undefined` | `UserOperationContext`>; `transport`: `TTransport`; `type?`: `string`; `userOperationSimulator?`: `ClientMiddlewareFn`\<`undefined` | `UserOperationContext`>; }, `"account"` | `"chain"` | `"transport"`> & `NotType`\<`TTransport`, [`AlchemyTransport`](../../../core/src/type-aliases/AlchemyTransport.mdx)>
+        `object` & `Omit`\<`CreateLightAccountParams`\<`TTransport`, `TSigner`>, `"chain"` | `"transport"`> & `Omit`\<\{ }, `"account"` | `"chain"` | `"transport"`> & `NotType`\<`TTransport`, `AlchemyTransport`>
       </td>
     </tr>
 
@@ -199,4 +199,4 @@ Defined in: [account-kit/smart-contracts/src/light-account/clients/client.ts:54]
 
 ### Returns
 
-`Promise`\<`SmartAccountClient`\<`CustomTransport`, `TChain`, [`LightAccount`](../../../core/src/type-aliases/LightAccount.mdx)\<`TSigner`>, `SmartAccountClientActions`\<`Chain`, `SmartContractAccount`> & [`LightAccountClientActions`](../type-aliases/LightAccountClientActions.mdx)\<`TSigner`, [`LightAccount`](../../../core/src/type-aliases/LightAccount.mdx)\<`TSigner`>>>>
+`Promise`\<`SmartAccountClient`\<[`CustomTransport`](https://viem.sh), `TChain`, `LightAccount`\<`TSigner`>, `SmartAccountClientActions`\<[`Chain`](https://viem.sh), `SmartContractAccount`> & [`LightAccountClientActions`](../type-aliases/LightAccountClientActions)\<`TSigner`, `LightAccount`\<`TSigner`>>>>

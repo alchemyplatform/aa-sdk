@@ -11,7 +11,7 @@ layout: reference
 function useSignMessage(config): UseSignMessageResult;
 ```
 
-Defined in: [account-kit/react/src/hooks/useSignMessage.ts:73](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/react/src/hooks/useSignMessage.ts#L73)
+Defined in: [account-kit/react/src/hooks/useSignMessage.ts:73](https://github.com/alchemyplatform/aa-sdk/blob/7a7d3b1bc384869e1ef108c39c1548652539c6bd/account-kit/react/src/hooks/useSignMessage.ts#L73)
 
 Custom [hook](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useSignMessage.ts) to sign a message using the provided client.
 Provides a way to sign messages within the context of an account using Ethereum-specific signature in EIP-191 format. Uses `personal_sign` to sign arbitrary messages (usually strings). Accepts any plain message as input.
@@ -65,7 +65,7 @@ const result = await signMessage({ message: data });
       </td>
 
       <td>
-        [`UseSignMessageArgs`](../type-aliases/UseSignMessageArgs.mdx)
+        [`UseSignMessageArgs`](../type-aliases/UseSignMessageArgs)
       </td>
 
       <td>
@@ -78,6 +78,6 @@ const result = await signMessage({ message: data });
 
 ## Returns
 
-[`UseSignMessageResult`](../type-aliases/UseSignMessageResult.mdx)
+[`UseSignMessageResult`](../type-aliases/UseSignMessageResult)
 
 An object containing methods and state for signing messages. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useSignMessage.ts#L29)

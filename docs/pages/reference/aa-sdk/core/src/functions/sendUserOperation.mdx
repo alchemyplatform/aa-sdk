@@ -17,7 +17,7 @@ function sendUserOperation<
 >(client_, args): Promise<SendUserOperationResult<TEntryPointVersion>>;
 ```
 
-Defined in: [aa-sdk/core/src/actions/smartAccount/sendUserOperation.ts:39](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/aa-sdk/core/src/actions/smartAccount/sendUserOperation.ts#L39)
+Defined in: [aa-sdk/core/src/actions/smartAccount/sendUserOperation.ts:39](https://github.com/alchemyplatform/aa-sdk/blob/7a7d3b1bc384869e1ef108c39c1548652539c6bd/aa-sdk/core/src/actions/smartAccount/sendUserOperation.ts#L39)
 
 Sends a user operation or batch of user operations using the connected account. Before executing, sendUserOperation will run the user operation through the middleware pipeline.
 
@@ -49,21 +49,21 @@ const result = await createSmartAccountClient(...).sendUserOperation({
   <tbody>
     <tr>
       <td>
-        `TTransport` *extends* `Transport`
+        `TTransport` *extends* [`Transport`](https://viem.sh)
       </td>
 
       <td>
-        `Transport`
+        [`Transport`](https://viem.sh)
       </td>
     </tr>
 
     <tr>
       <td>
-        `TChain` *extends* `undefined` | `Chain`
+        `TChain` *extends* `undefined` | [`Chain`](https://viem.sh)
       </td>
 
       <td>
-        `undefined` | `Chain`
+        `undefined` | [`Chain`](https://viem.sh)
       </td>
     </tr>
 
@@ -71,12 +71,12 @@ const result = await createSmartAccountClient(...).sendUserOperation({
       <td>
         `TAccount` *extends*
         | `undefined`
-        | [`SmartContractAccount`](../type-aliases/SmartContractAccount.mdx)
+        | [`SmartContractAccount`](../type-aliases/SmartContractAccount)
       </td>
 
       <td>
         | `undefined`
-        | [`SmartContractAccount`](../type-aliases/SmartContractAccount.mdx)
+        | [`SmartContractAccount`](../type-aliases/SmartContractAccount)
       </td>
     </tr>
 
@@ -84,22 +84,22 @@ const result = await createSmartAccountClient(...).sendUserOperation({
       <td>
         `TContext` *extends*
         | `undefined`
-        | [`UserOperationContext`](../type-aliases/UserOperationContext.mdx)
+        | [`UserOperationContext`](../type-aliases/UserOperationContext)
       </td>
 
       <td>
         | `undefined`
-        | [`UserOperationContext`](../type-aliases/UserOperationContext.mdx)
+        | [`UserOperationContext`](../type-aliases/UserOperationContext)
       </td>
     </tr>
 
     <tr>
       <td>
-        `TEntryPointVersion` *extends* keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase.mdx)\<`unknown`>
+        `TEntryPointVersion` *extends* keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase)\<`unknown`>
       </td>
 
       <td>
-        [`GetEntryPointFromAccount`](../type-aliases/GetEntryPointFromAccount.mdx)\<`TAccount`>
+        [`GetEntryPointFromAccount`](../type-aliases/GetEntryPointFromAccount)\<`TAccount`>
       </td>
     </tr>
 
@@ -124,7 +124,7 @@ const result = await createSmartAccountClient(...).sendUserOperation({
       </td>
 
       <td>
-        `Client`\<`TTransport`, `TChain`, `TAccount`>
+        [`Client`](https://viem.sh)\<`TTransport`, `TChain`, `TAccount`>
       </td>
 
       <td>
@@ -151,6 +151,6 @@ const result = await createSmartAccountClient(...).sendUserOperation({
 
 ## Returns
 
-`Promise`\<[`SendUserOperationResult`](../type-aliases/SendUserOperationResult.mdx)\<`TEntryPointVersion`>>
+`Promise`\<[`SendUserOperationResult`](../type-aliases/SendUserOperationResult)\<`TEntryPointVersion`>>
 
 a Promise containing the result of the user operation

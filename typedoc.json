@@ -73,6 +73,19 @@
   },
 
   // ============================================================================
+  // EXTERNAL SYMBOL LINK MAPPINGS
+  // Maps external package symbols to docs URLs (or "#" to suppress warnings)
+  // ============================================================================
+  "externalSymbolLinkMappings": {
+    "viem": {
+      "*": "https://viem.sh"
+    },
+    "abitype": {
+      "*": "https://abitype.dev"
+    }
+  },
+
+  // ============================================================================
   // CONTENT FORMATTING
   // Controls how code and content is formatted in the output
   // ============================================================================

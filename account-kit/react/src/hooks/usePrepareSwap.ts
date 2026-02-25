@@ -77,7 +77,7 @@ export type UsePrepareSwapResult = {
  * });
  * ```
  *
- * @description
+ * @remarks
  * - This hook only works with smart accounts and does not support EOA wallets
  * - The hook handles the quote request step of the swap flow
  * - The returned quote can be used with `useSignAndSendPreparedCalls` to complete the swap.

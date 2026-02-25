@@ -1,4 +1,4 @@
-import { ReflectionKind } from "typedoc";
+import { ReflectionKind, DeclarationReflection } from "typedoc";
 import { MarkdownPageEvent } from "typedoc-plugin-markdown";
 
 /**
@@ -44,7 +44,54 @@ function extractPackageFromUrl(url) {
  *
  * @param {import('typedoc-plugin-markdown').MarkdownApplication} app
  */
+/**
+ * Check if a reflection's source is exclusively from external locations
+ * (compiled dist/ files or node_modules/), indicating it is either a
+ * re-export or an inherited member from an external package.
+ *
+ * @param {import('typedoc').Reflection} reflection
+ * @returns {boolean}
+ */
+function isExternalSource(reflection) {
+  const sources = reflection.sources;
+  return (
+    sources?.length > 0 &&
+    sources.every(
+      (s) =>
+        s.fileName.includes("/dist/") || s.fileName.includes("node_modules/"),
+    )
+  );
+}
+
 export function load(app) {
+  // Remove reflections sourced from external locations (dist/ or node_modules/)
+  // after conversion so that:
+  // 1. Re-exports don't get duplicate pages (originals in source packages remain)
+  // 2. Inherited members from external packages (viem, @types/node) are excluded
+  app.converter.on("resolveEnd", (context) => {
+    const project = context.project;
+    const toRemove = [];
+
+    for (const reflection of Object.values(project.reflections)) {
+      if (
+        reflection instanceof DeclarationReflection &&
+        isExternalSource(reflection)
+      ) {
+        toRemove.push(reflection);
+      }
+    }
+
+    for (const reflection of toRemove) {
+      project.removeReflection(reflection);
+    }
+
+    if (toRemove.length > 0) {
+      console.log(
+        `Removed ${toRemove.length} reflections sourced from external locations (dist/, node_modules/)`,
+      );
+    }
+  });
+
   // Handle frontmatter generation
   app.renderer.on(
     MarkdownPageEvent.BEGIN,
@@ -166,12 +213,31 @@ export function load(app) {
     },
   );
 
-  // Handle adding auto-generated comment to final content
+  // Handle post-processing: auto-generated comment + link fixes
   app.renderer.on(
     MarkdownPageEvent.END,
     /** @param {import('typedoc-plugin-markdown').MarkdownPageEvent} page - The markdown page event containing content to modify */
     (page) => {
       if (!page.contents) return;
+
+      // Strip .mdx extension from all relative markdown links.
+      // The docs site uses extensionless slug-based URLs.
+      page.contents = page.contents.replace(
+        /\]\(([^)]+?)\.mdx(#[^)]*)?\)/g,
+        (_, path, anchor) => `](${path}${anchor || ""})`,
+      );
+
+      // For README/index pages, convert relative links to absolute slug paths.
+      // Without this, relative links resolve from the parent path because the
+      // slug (e.g. wallets/reference/aa-sdk/core) has no trailing slash.
+      const slug = page.frontmatter?.slug;
+      const isReadmeFile = page.url && page.url.endsWith("README.mdx");
+      if (slug && isReadmeFile) {
+        page.contents = page.contents.replace(
+          /\]\((?!https?:\/\/|\/|#)([^)]+)\)/g,
+          (_, relPath) => `](/${slug}/${relPath})`,
+        );
+      }
 
       const frontmatterMatch = page.contents.match(/^(---\n[\s\S]*?\n---\n)/);
       if (frontmatterMatch) {

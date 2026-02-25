@@ -11,7 +11,7 @@ layout: reference
 type SupportedEntryPoint<TEntryPointVersion, TChain, TAbi> = object;
 ```
 
-Defined in: [aa-sdk/core/src/entrypoint/types.ts:23](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/aa-sdk/core/src/entrypoint/types.ts#L23)
+Defined in: [aa-sdk/core/src/entrypoint/types.ts:23](https://github.com/alchemyplatform/aa-sdk/blob/7a7d3b1bc384869e1ef108c39c1548652539c6bd/aa-sdk/core/src/entrypoint/types.ts#L23)
 
 ## Type Parameters
 
@@ -26,31 +26,31 @@ Defined in: [aa-sdk/core/src/entrypoint/types.ts:23](https://github.com/alchemyp
   <tbody>
     <tr>
       <td>
-        `TEntryPointVersion` *extends* [`EntryPointVersion`](EntryPointVersion.mdx)
+        `TEntryPointVersion` *extends* [`EntryPointVersion`](EntryPointVersion)
       </td>
 
       <td>
-        [`EntryPointVersion`](EntryPointVersion.mdx)
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TChain` *extends* `Chain`
-      </td>
-
-      <td>
-        `Chain`
+        [`EntryPointVersion`](EntryPointVersion)
       </td>
     </tr>
 
     <tr>
       <td>
-        `TAbi` *extends* `Abi` | readonly `unknown`\[]
+        `TChain` *extends* [`Chain`](https://viem.sh)
       </td>
 
       <td>
-        `Abi`
+        [`Chain`](https://viem.sh)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TAbi` *extends* [`Abi`](https://abitype.dev) | readonly `unknown`\[]
+      </td>
+
+      <td>
+        [`Abi`](https://abitype.dev)
       </td>
     </tr>
 
@@ -75,7 +75,7 @@ Defined in: [aa-sdk/core/src/entrypoint/types.ts:23](https://github.com/alchemyp
       </td>
 
       <td>
-        `GetContractParameters`\<`Transport`, `TChain`, `Account`, `TAbi`>\[`"abi"`]
+        [`GetContractParameters`](https://viem.sh)\<[`Transport`](https://viem.sh), `TChain`, [`Account`](https://viem.sh), `TAbi`>\[`"abi"`]
       </td>
 
       <td>
@@ -89,7 +89,7 @@ Defined in: [aa-sdk/core/src/entrypoint/types.ts:23](https://github.com/alchemyp
       </td>
 
       <td>
-        `Record`\<`TChain`\[`"id"`] | `"default"`, [`Address`](Address.mdx)>
+        `Record`\<`TChain`\[`"id"`] | `"default"`, [`Address`](https://abitype.dev)>
       </td>
 
       <td>
@@ -103,7 +103,7 @@ Defined in: [aa-sdk/core/src/entrypoint/types.ts:23](https://github.com/alchemyp
       </td>
 
       <td>
-        (`request`, `entryPointAddress`, `chainId`) => `Hash`
+        (`request`, `entryPointAddress`, `chainId`) => [`Hash`](https://viem.sh)
       </td>
 
       <td>
@@ -117,7 +117,7 @@ Defined in: [aa-sdk/core/src/entrypoint/types.ts:23](https://github.com/alchemyp
       </td>
 
       <td>
-        (`userOperation`) => `Hex`
+        (`userOperation`) => [`Hex`](https://viem.sh)
       </td>
 
       <td>

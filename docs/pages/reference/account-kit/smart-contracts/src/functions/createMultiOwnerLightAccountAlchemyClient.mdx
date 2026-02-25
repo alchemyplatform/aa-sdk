@@ -19,7 +19,7 @@ function createMultiOwnerLightAccountAlchemyClient<TSigner>(
 >;
 ```
 
-Defined in: [account-kit/smart-contracts/src/light-account/clients/multiOwnerAlchemyClient.ts:25](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/smart-contracts/src/light-account/clients/multiOwnerAlchemyClient.ts#L25)
+Defined in: [account-kit/smart-contracts/src/light-account/clients/multiOwnerAlchemyClient.ts:25](https://github.com/alchemyplatform/aa-sdk/blob/7a7d3b1bc384869e1ef108c39c1548652539c6bd/account-kit/smart-contracts/src/light-account/clients/multiOwnerAlchemyClient.ts#L25)
 
 ## Type Parameters
 
@@ -62,7 +62,7 @@ Defined in: [account-kit/smart-contracts/src/light-account/clients/multiOwnerAlc
       </td>
 
       <td>
-        [`AlchemyMultiOwnerLightAccountClientConfig`](../type-aliases/AlchemyMultiOwnerLightAccountClientConfig.mdx)\<`TSigner`>
+        [`AlchemyMultiOwnerLightAccountClientConfig`](../type-aliases/AlchemyMultiOwnerLightAccountClientConfig)\<`TSigner`>
       </td>
     </tr>
 
@@ -71,6 +71,6 @@ Defined in: [account-kit/smart-contracts/src/light-account/clients/multiOwnerAlc
 
 ## Returns
 
-`Promise`\<[`AlchemySmartAccountClient`](../../../core/src/type-aliases/AlchemySmartAccountClient.mdx)\<`undefined` | `Chain`, [`MultiOwnerLightAccount`](../../../core/src/type-aliases/MultiOwnerLightAccount.mdx)\<`TSigner`>, [`MultiOwnerLightAccountClientActions`](../../../core/src/type-aliases/MultiOwnerLightAccountClientActions.mdx)\<`TSigner`>>>
+`Promise`\<`AlchemySmartAccountClient`\<`undefined` | [`Chain`](https://viem.sh), `MultiOwnerLightAccount`\<`TSigner`>, `MultiOwnerLightAccountClientActions`\<`TSigner`>>>
 
 A promise that resolves to an `AlchemySmartAccountClient` object containing the created account information and methods

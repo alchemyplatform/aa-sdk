@@ -13,7 +13,7 @@ const accountLoupeActions: <TTransport, TChain, TAccount>(
 ) => AccountLoupeActions<TAccount>;
 ```
 
-Defined in: [account-kit/smart-contracts/src/msca/account-loupe/decorator.ts:69](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/smart-contracts/src/msca/account-loupe/decorator.ts#L69)
+Defined in: [account-kit/smart-contracts/src/msca/account-loupe/decorator.ts:69](https://github.com/alchemyplatform/aa-sdk/blob/7a7d3b1bc384869e1ef108c39c1548652539c6bd/account-kit/smart-contracts/src/msca/account-loupe/decorator.ts#L69)
 
 Provides a set of actions for account loupe operations using the specified client.
 NOTE: this is already added to the client when using any of the Modular Account Clients.
@@ -40,21 +40,21 @@ const client = createSmartAccountClient(...).extend(accountLoupeActions);
   <tbody>
     <tr>
       <td>
-        `TTransport` *extends* `Transport`
+        `TTransport` *extends* [`Transport`](https://viem.sh)
       </td>
 
       <td>
-        `Transport`
+        [`Transport`](https://viem.sh)
       </td>
     </tr>
 
     <tr>
       <td>
-        `TChain` *extends* `Chain` | `undefined`
+        `TChain` *extends* [`Chain`](https://viem.sh) | `undefined`
       </td>
 
       <td>
-        `Chain` | `undefined`
+        [`Chain`](https://viem.sh) | `undefined`
       </td>
     </tr>
 
@@ -89,7 +89,7 @@ const client = createSmartAccountClient(...).extend(accountLoupeActions);
       </td>
 
       <td>
-        `Client`\<`TTransport`, `TChain`, `TAccount`>
+        [`Client`](https://viem.sh)\<`TTransport`, `TChain`, `TAccount`>
       </td>
 
       <td>
@@ -102,6 +102,6 @@ const client = createSmartAccountClient(...).extend(accountLoupeActions);
 
 ## Returns
 
-[`AccountLoupeActions`](../type-aliases/AccountLoupeActions.mdx)\<`TAccount`>
+[`AccountLoupeActions`](../type-aliases/AccountLoupeActions)\<`TAccount`>
 
 an object containing account loupe actions like `getExecutionFunctionConfig`, `getExecutionHooks`, `getPreValidationHooks`, and `getInstalledPlugins`

@@ -1,7 +1,7 @@
 // borrowed from viem
 
 /**
- * @description Constructs a type by excluding `undefined` from `T`.
+ * Constructs a type by excluding `undefined` from `T`.
  *
  * @example
  * NoUndefined<string | undefined>
@@ -10,7 +10,8 @@
 export type NoUndefined<T> = T extends undefined ? never : T;
 // borrowed from viem
 /**
- * @description Checks if T is `undefined`
+ * Checks if T is `undefined`
+ *
  * @param T - Type to check
  * @example
  * type Result = IsUndefined<undefined>
@@ -31,7 +32,7 @@ export type RequiredBy<TType, TKeys extends keyof TType> = Required<
   Omit<TType, TKeys>;
 
 /**
- * @description Combines members of an intersection into a readable type.
+ * Combines members of an intersection into a readable type.
  *
  * @see https://twitter.com/mattpocockuk/status/1622730173446557697?s=20&t=NdpAcmEFXY01xkqU3KO0Mg
  * @example

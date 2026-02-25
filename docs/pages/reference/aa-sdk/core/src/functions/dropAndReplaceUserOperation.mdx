@@ -17,7 +17,7 @@ function dropAndReplaceUserOperation<
 >(client_, args): Promise<SendUserOperationResult<TEntryPointVersion>>;
 ```
 
-Defined in: [aa-sdk/core/src/actions/smartAccount/dropAndReplaceUserOperation.ts:50](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/aa-sdk/core/src/actions/smartAccount/dropAndReplaceUserOperation.ts#L50)
+Defined in: [aa-sdk/core/src/actions/smartAccount/dropAndReplaceUserOperation.ts:50](https://github.com/alchemyplatform/aa-sdk/blob/7a7d3b1bc384869e1ef108c39c1548652539c6bd/aa-sdk/core/src/actions/smartAccount/dropAndReplaceUserOperation.ts#L50)
 
 Drops an existing user operation and replaces it with a new one while ensuring the appropriate fees and overrides are applied.
 
@@ -50,21 +50,21 @@ const result = await client.dropAndReplaceUserOperation({
   <tbody>
     <tr>
       <td>
-        `TTransport` *extends* `Transport`
+        `TTransport` *extends* [`Transport`](https://viem.sh)
       </td>
 
       <td>
-        `Transport`
+        [`Transport`](https://viem.sh)
       </td>
     </tr>
 
     <tr>
       <td>
-        `TChain` *extends* `undefined` | `Chain`
+        `TChain` *extends* `undefined` | [`Chain`](https://viem.sh)
       </td>
 
       <td>
-        `undefined` | `Chain`
+        `undefined` | [`Chain`](https://viem.sh)
       </td>
     </tr>
 
@@ -119,7 +119,7 @@ const result = await client.dropAndReplaceUserOperation({
       </td>
 
       <td>
-        `Client`\<`TTransport`, `TChain`, `TAccount`>
+        [`Client`](https://viem.sh)\<`TTransport`, `TChain`, `TAccount`>
       </td>
 
       <td>

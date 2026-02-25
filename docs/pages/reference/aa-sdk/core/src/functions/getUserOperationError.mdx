@@ -15,7 +15,7 @@ function getUserOperationError<TTransport, TChain, TAccount>(
 ): Promise<void>;
 ```
 
-Defined in: [aa-sdk/core/src/actions/smartAccount/getUserOperationError.ts:28](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/aa-sdk/core/src/actions/smartAccount/getUserOperationError.ts#L28)
+Defined in: [aa-sdk/core/src/actions/smartAccount/getUserOperationError.ts:28](https://github.com/alchemyplatform/aa-sdk/blob/7a7d3b1bc384869e1ef108c39c1548652539c6bd/aa-sdk/core/src/actions/smartAccount/getUserOperationError.ts#L28)
 
 Retrieves the error message from an entrypoint for a User Operation.
 
@@ -32,21 +32,21 @@ Retrieves the error message from an entrypoint for a User Operation.
   <tbody>
     <tr>
       <td>
-        `TTransport` *extends* `Transport`
+        `TTransport` *extends* [`Transport`](https://viem.sh)
       </td>
 
       <td>
-        `Transport`
+        [`Transport`](https://viem.sh)
       </td>
     </tr>
 
     <tr>
       <td>
-        `TChain` *extends* `undefined` | `Chain`
+        `TChain` *extends* `undefined` | [`Chain`](https://viem.sh)
       </td>
 
       <td>
-        `undefined` | `Chain`
+        `undefined` | [`Chain`](https://viem.sh)
       </td>
     </tr>
 
@@ -54,12 +54,12 @@ Retrieves the error message from an entrypoint for a User Operation.
       <td>
         `TAccount` *extends*
         | `undefined`
-        | [`SmartContractAccount`](../type-aliases/SmartContractAccount.mdx)
+        | [`SmartContractAccount`](../type-aliases/SmartContractAccount)
       </td>
 
       <td>
         | `undefined`
-        | [`SmartContractAccount`](../type-aliases/SmartContractAccount.mdx)
+        | [`SmartContractAccount`](../type-aliases/SmartContractAccount)
       </td>
     </tr>
 
@@ -98,7 +98,7 @@ Retrieves the error message from an entrypoint for a User Operation.
       </td>
 
       <td>
-        [`UserOperationRequest`](../type-aliases/UserOperationRequest.mdx)
+        [`UserOperationRequest`](../type-aliases/UserOperationRequest)
       </td>
 
       <td>
@@ -112,7 +112,7 @@ Retrieves the error message from an entrypoint for a User Operation.
       </td>
 
       <td>
-        [`EntryPointDef`](../type-aliases/EntryPointDef.mdx)
+        [`EntryPointDef`](../type-aliases/EntryPointDef)
       </td>
 
       <td>

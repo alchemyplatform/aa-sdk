@@ -11,7 +11,7 @@ layout: reference
 function requestAccount(client, signer, params?): Promise<RequestAccountResult>;
 ```
 
-Defined in: [account-kit/wallet-client/src/client/actions/requestAccount.ts:57](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/wallet-client/src/client/actions/requestAccount.ts#L57)
+Defined in: [account-kit/wallet-client/src/client/actions/requestAccount.ts:45](https://github.com/alchemyplatform/aa-sdk/blob/7a7d3b1bc384869e1ef108c39c1548652539c6bd/account-kit/wallet-client/src/client/actions/requestAccount.ts#L45)
 
 Requests an account for the provided signer using the wallet API client.
 If an account already exists for the signer, it will always return that account unless a new ID is specified.
@@ -71,7 +71,7 @@ const account = await client.requestAccount(signer);
       </td>
 
       <td>
-        [`RequestAccountParams`](../type-aliases/RequestAccountParams.mdx)
+        [`RequestAccountParams`](../type-aliases/RequestAccountParams)
       </td>
 
       <td>
@@ -84,6 +84,6 @@ const account = await client.requestAccount(signer);
 
 ## Returns
 
-`Promise`\<[`RequestAccountResult`](../type-aliases/RequestAccountResult.mdx)>
+`Promise`\<[`RequestAccountResult`](../type-aliases/RequestAccountResult)>
 
 A Promise that resolves to a SmartContractAccount instance

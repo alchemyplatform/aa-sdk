@@ -11,7 +11,7 @@ layout: reference
 type BundlerActions = object;
 ```
 
-Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:53](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/aa-sdk/core/src/client/decorators/bundlerClient.ts#L53)
+Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:53](https://github.com/alchemyplatform/aa-sdk/blob/7a7d3b1bc384869e1ef108c39c1548652539c6bd/aa-sdk/core/src/client/decorators/bundlerClient.ts#L53)
 
 ## Methods
 
@@ -24,7 +24,7 @@ estimateUserOperationGas<TEntryPointVersion>(
    stateOverride?): Promise<UserOperationEstimateGasResponse<TEntryPointVersion>>;
 ```
 
-Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:62](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/aa-sdk/core/src/client/decorators/bundlerClient.ts#L62)
+Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:62](https://github.com/alchemyplatform/aa-sdk/blob/7a7d3b1bc384869e1ef108c39c1548652539c6bd/aa-sdk/core/src/client/decorators/bundlerClient.ts#L62)
 
 calls `eth_estimateUserOperationGas` and returns the result
 
@@ -41,11 +41,11 @@ calls `eth_estimateUserOperationGas` and returns the result
   <tbody>
     <tr>
       <td>
-        `TEntryPointVersion` *extends* keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase.mdx)\<`unknown`>
+        `TEntryPointVersion` *extends* keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase)\<`unknown`>
       </td>
 
       <td>
-        keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase.mdx)\<`unknown`>
+        keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase)\<`unknown`>
       </td>
     </tr>
 
@@ -70,7 +70,7 @@ calls `eth_estimateUserOperationGas` and returns the result
       </td>
 
       <td>
-        [`UserOperationRequest`](UserOperationRequest.mdx)\<`TEntryPointVersion`>
+        [`UserOperationRequest`](UserOperationRequest)\<`TEntryPointVersion`>
       </td>
 
       <td>
@@ -98,7 +98,7 @@ calls `eth_estimateUserOperationGas` and returns the result
       </td>
 
       <td>
-        `StateOverride`
+        [`StateOverride`](https://viem.sh)
       </td>
 
       <td>
@@ -111,7 +111,7 @@ calls `eth_estimateUserOperationGas` and returns the result
 
 #### Returns
 
-`Promise`\<[`UserOperationEstimateGasResponse`](../interfaces/UserOperationEstimateGasResponse.mdx)\<`TEntryPointVersion`>>
+`Promise`\<[`UserOperationEstimateGasResponse`](../interfaces/UserOperationEstimateGasResponse)\<`TEntryPointVersion`>>
 
 the gas estimates for the given response
 
@@ -123,7 +123,7 @@ the gas estimates for the given response
 getSupportedEntryPoints(): Promise<`0x${string}`[]>;
 ```
 
-Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:109](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/aa-sdk/core/src/client/decorators/bundlerClient.ts#L109)
+Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:109](https://github.com/alchemyplatform/aa-sdk/blob/7a7d3b1bc384869e1ef108c39c1548652539c6bd/aa-sdk/core/src/client/decorators/bundlerClient.ts#L109)
 
 calls `eth_supportedEntryPoints` and returns the entry points the RPC supports
 
@@ -143,7 +143,7 @@ getUserOperationByHash(hash): Promise<
   | UserOperationResponse<EntryPointVersion>>;
 ```
 
-Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:90](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/aa-sdk/core/src/client/decorators/bundlerClient.ts#L90)
+Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:90](https://github.com/alchemyplatform/aa-sdk/blob/7a7d3b1bc384869e1ef108c39c1548652539c6bd/aa-sdk/core/src/client/decorators/bundlerClient.ts#L90)
 
 calls `eth_getUserOperationByHash` and returns the UserOperationResponse
 
@@ -180,7 +180,7 @@ calls `eth_getUserOperationByHash` and returns the UserOperationResponse
 
 `Promise`\<
 | `null`
-| [`UserOperationResponse`](../interfaces/UserOperationResponse.mdx)\<`EntryPointVersion`>>
+| [`UserOperationResponse`](../interfaces/UserOperationResponse)\<`EntryPointVersion`>>
 
 - the user operation if found or null
 
@@ -192,7 +192,7 @@ calls `eth_getUserOperationByHash` and returns the UserOperationResponse
 getUserOperationReceipt(hash, tag?): Promise<null | UserOperationReceipt>;
 ```
 
-Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:99](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/aa-sdk/core/src/client/decorators/bundlerClient.ts#L99)
+Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:99](https://github.com/alchemyplatform/aa-sdk/blob/7a7d3b1bc384869e1ef108c39c1548652539c6bd/aa-sdk/core/src/client/decorators/bundlerClient.ts#L99)
 
 calls `eth_getUserOperationReceipt` and returns the UserOperationReceipt
 
@@ -241,7 +241,7 @@ calls `eth_getUserOperationReceipt` and returns the UserOperationReceipt
 
 #### Returns
 
-`Promise`\<`null` | [`UserOperationReceipt`](../interfaces/UserOperationReceipt.mdx)>
+`Promise`\<`null` | [`UserOperationReceipt`](../interfaces/UserOperationReceipt)>
 
 - a user operation receipt or null if not found
 
@@ -253,7 +253,7 @@ calls `eth_getUserOperationReceipt` and returns the UserOperationReceipt
 sendRawUserOperation<TEntryPointVersion>(request, entryPoint): Promise<`0x${string}`>;
 ```
 
-Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:77](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/aa-sdk/core/src/client/decorators/bundlerClient.ts#L77)
+Defined in: [aa-sdk/core/src/client/decorators/bundlerClient.ts:77](https://github.com/alchemyplatform/aa-sdk/blob/7a7d3b1bc384869e1ef108c39c1548652539c6bd/aa-sdk/core/src/client/decorators/bundlerClient.ts#L77)
 
 calls `eth_sendUserOperation` and returns the hash of the sent UserOperation
 
@@ -270,11 +270,11 @@ calls `eth_sendUserOperation` and returns the hash of the sent UserOperation
   <tbody>
     <tr>
       <td>
-        `TEntryPointVersion` *extends* keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase.mdx)\<`unknown`>
+        `TEntryPointVersion` *extends* keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase)\<`unknown`>
       </td>
 
       <td>
-        keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase.mdx)\<`unknown`>
+        keyof [`EntryPointRegistryBase`](../interfaces/EntryPointRegistryBase)\<`unknown`>
       </td>
     </tr>
 
@@ -299,7 +299,7 @@ calls `eth_sendUserOperation` and returns the hash of the sent UserOperation
       </td>
 
       <td>
-        [`UserOperationRequest`](UserOperationRequest.mdx)\<`TEntryPointVersion`>
+        [`UserOperationRequest`](UserOperationRequest)\<`TEntryPointVersion`>
       </td>
 
       <td>

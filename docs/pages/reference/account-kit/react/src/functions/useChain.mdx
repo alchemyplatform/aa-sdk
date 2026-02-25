@@ -11,7 +11,7 @@ layout: reference
 function useChain(mutationArgs?): UseChainResult;
 ```
 
-Defined in: [account-kit/react/src/hooks/useChain.ts:51](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/react/src/hooks/useChain.ts#L51)
+Defined in: [account-kit/react/src/hooks/useChain.ts:51](https://github.com/alchemyplatform/aa-sdk/blob/7a7d3b1bc384869e1ef108c39c1548652539c6bd/account-kit/react/src/hooks/useChain.ts#L51)
 
 A [hook](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useChain.ts) that returns the current chain as well as a function to set the chain.
 Note: when calling `setChain` the chain that's passed in must be defined in
@@ -62,7 +62,7 @@ function ComponentUsingChain() {
       </td>
 
       <td>
-        `Partial`\<`Omit`\<`UseMutationOptions`\<`void`, `Error`, \{ `chain`: `Chain`; }, `unknown`>, `"mutationFn"` | `"mutationKey"`>>
+        `Partial`\<`Omit`\<`UseMutationOptions`\<`void`, `Error`, \{ `chain`: [`Chain`](https://viem.sh); }, `unknown`>, `"mutationFn"` | `"mutationKey"`>>
       </td>
 
       <td>
@@ -75,6 +75,6 @@ function ComponentUsingChain() {
 
 ## Returns
 
-[`UseChainResult`](../interfaces/UseChainResult.mdx)
+[`UseChainResult`](../interfaces/UseChainResult)
 
 an object containing the current chain and a function to set the chain as well as loading state of setting the chain. [ref](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/react/src/hooks/useChain.ts#L16)

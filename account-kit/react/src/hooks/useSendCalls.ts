@@ -111,7 +111,7 @@ export type UseSendCallsResult<
  * });
  * ```
  *
- * @description
+ * @remarks
  * - When connected to an EOA wallet, only single calls are supported (batch execution is not allowed)
  * - For smart accounts, the returned `ids` are the prepared call IDs
  * - For EOA wallets, the returned `ids` are transaction hashes

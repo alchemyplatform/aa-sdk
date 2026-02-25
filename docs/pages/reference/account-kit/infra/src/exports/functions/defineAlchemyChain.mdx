@@ -11,7 +11,7 @@ layout: reference
 function defineAlchemyChain(params): Chain;
 ```
 
-Defined in: [account-kit/infra/src/chains.ts:56](https://github.com/alchemyplatform/aa-sdk/blob/6fba380d2901f334fb70e71b7729bfa721544c96/account-kit/infra/src/chains.ts#L56)
+Defined in: [account-kit/infra/src/chains.ts:56](https://github.com/alchemyplatform/aa-sdk/blob/7a7d3b1bc384869e1ef108c39c1548652539c6bd/account-kit/infra/src/chains.ts#L56)
 
 Defines an Alchemy chain configuration by adding an Alchemy-specific RPC base URL to the chain's RPC URLs.
 
@@ -45,7 +45,7 @@ const chain = defineAlchemyChain({
       </td>
 
       <td>
-        \{ `chain`: `Chain`; `rpcBaseUrl`: `string`; }
+        \{ `chain`: [`Chain`](https://viem.sh); `rpcBaseUrl`: `string`; }
       </td>
 
       <td>
@@ -59,7 +59,7 @@ const chain = defineAlchemyChain({
       </td>
 
       <td>
-        `Chain`
+        [`Chain`](https://viem.sh)
       </td>
 
       <td>
@@ -86,6 +86,6 @@ const chain = defineAlchemyChain({
 
 ## Returns
 
-`Chain`
+[`Chain`](https://viem.sh)
 
 The updated chain configuration with the Alchemy RPC URL added

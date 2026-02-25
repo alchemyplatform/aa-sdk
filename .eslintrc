@@ -10,6 +10,12 @@
   },
   "rules": {
     "import/extensions": ["error", "ignorePackages"],
+    "jsdoc/check-tag-names": [
+      "error",
+      {
+        "definedTags": ["remarks"] // remarks is valid in TSDoc
+      }
+    ],
     "jsdoc/tag-lines": [
       "error",
       "any",

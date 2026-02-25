@@ -80,7 +80,7 @@ export type UsePrepareCallsResult = {
  * });
  * ```
  *
- * @description
+ * @remarks
  * - This hook only works with smart accounts and does not support EOA wallets
  * - The hook handles the preparation step of the Account Abstraction flow
  * - Prepared calls must be signed, then can be used with `useSendPreparedCalls` to complete the execution
