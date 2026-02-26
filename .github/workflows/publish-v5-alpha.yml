@@ -74,16 +74,6 @@ jobs:
       - name: Build V5 Packages
         run: yarn build:libs
 
-      # Swap to v5 lerna config temporarily
-      - name: Setup V5 Lerna Config
-        run: |
-          if [ ! -f lerna-v5.json ]; then
-            echo "ERROR: lerna-v5.json not found. This file is required for v5 publishing."
-            exit 1
-          fi
-          mv lerna.json lerna-v4.json.tmp
-          mv lerna-v5.json lerna.json
-
       # Dry run to see what would be published
       - name: Dry Run - Show what would be published
         if: ${{ inputs.publish == false }}
@@ -100,13 +90,6 @@ jobs:
           npx lerna ls --long
           echo ""
           echo "=== To actually publish, re-run with 'publish' checkbox checked ==="
-
-      # Restore lerna config after dry run
-      - name: Dry Run - Restore Lerna Config
-        if: ${{ inputs.publish == false }}
-        run: |
-          mv lerna.json lerna-v5.json
-          mv lerna-v4.json.tmp lerna.json
 
       # Auto-increment prerelease version
       - name: Increment Version
@@ -138,8 +121,9 @@ jobs:
       - name: Commit Version Changes
         if: ${{ inputs.publish }}
         run: |
+          NEW_VERSION=$(node -p "require('./lerna.json').version")
           git add -A
-          git commit --no-verify -m "chore: bump versions for alpha publish [skip ci]"
+          git commit --no-verify -m "chore(v5): publish alpha version $NEW_VERSION [skip ci]"
 
       # Publish packages from the updated package.json versions
       - name: Publish V5 Alpha to NPM
@@ -166,35 +150,14 @@ jobs:
             echo "lerna_published=true" >> $GITHUB_ENV
           fi
 
-      # Restore lerna configs to their original names for committing
-      - name: Restore Lerna Config Names
-        if: ${{ inputs.publish }}
-        run: |
-          mv lerna.json lerna-v5.json
-          mv lerna-v4.json.tmp lerna.json
-
-      # Format lerna-v5.json to satisfy Prettier checks
-      - name: Format Lerna Config
-        if: ${{ inputs.publish }}
-        run: npx prettier --write lerna-v5.json
-
-      # Amend commit with restored lerna configs and create tag
-      - name: Amend Commit and Tag Changes
+      # Tag the version commit
+      - name: Tag Changes
         if: ${{ inputs.publish && env.lerna_published == 'true' }}
         shell: bash
         run: |
-          # Get the new version from lerna-v5.json
-          NEW_VERSION=$(node -p "require('./lerna-v5.json').version")
+          NEW_VERSION=$(node -p "require('./lerna.json').version")
           echo "Published version: $NEW_VERSION"
 
-          # Stage the restored lerna configs and removal of tmp file
-          git add lerna.json lerna-v5.json
-          git add -u  # This stages the deletion of lerna-v4.json.tmp
-
-          # Amend the previous commit to include the restored lerna configs
-          git commit --amend --no-verify -m "chore(v5): publish alpha version $NEW_VERSION [skip ci]"
-
-          # Create tag for the release
           TAG_NAME="v$NEW_VERSION"
           echo "Creating tag: $TAG_NAME"
           git tag -a "$TAG_NAME" -m "v$NEW_VERSION"
