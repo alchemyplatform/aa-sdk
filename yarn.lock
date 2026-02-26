@@ -19,10 +19,10 @@
   dependencies:
     viem "^2.32.0"
 
-"@alchemy/wallet-api-types@0.1.0-alpha.25":
-  version "0.1.0-alpha.25"
-  resolved "https://registry.yarnpkg.com/@alchemy/wallet-api-types/-/wallet-api-types-0.1.0-alpha.25.tgz#4dd8294da5eba0b375200c63a1ddff088c5b58e0"
-  integrity sha512-jF5hAJiuLBVtS2RxFyAkbsvHygmBjxf5tmt4/CpsnYjdy5TfiU4H4XaY3ovY2sWO7S9g1Ucz4SvULWtG6hn2kA==
+"@alchemy/wallet-api-types@0.1.0-alpha.26":
+  version "0.1.0-alpha.26"
+  resolved "https://registry.yarnpkg.com/@alchemy/wallet-api-types/-/wallet-api-types-0.1.0-alpha.26.tgz#4206754f6ec687d5cc7c400ee9d602b33d66448d"
+  integrity sha512-bOA7BNMyYEDPoNC/f9gAPqmOfALioRnfQhipIhP8nRLyvsFC9cadBZyhf3s1nsccIonfqXn9LlbclZEMfzz49g==
   dependencies:
     "@alchemy/common" "0.0.0-alpha.13"
     deep-equal "^2.2.3"
