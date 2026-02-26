@@ -1,8 +1,10 @@
-import type { Prettify } from "viem";
+import type { Address, Prettify } from "viem";
 import type { DistributiveOmit, InnerWalletApiClient } from "../../types.ts";
 import {
+  fromRpcCapabilities,
   mergeClientCapabilities,
   toRpcCapabilities,
+  type PrepareCallsCapabilities,
   type WithCapabilities,
 } from "../../utils/capabilities.js";
 import { resolveAddress, type AccountParam } from "../../utils/resolve.js";
@@ -28,7 +30,28 @@ export type RequestQuoteV0Params = Prettify<
   >
 >;
 
-export type RequestQuoteV0Result = RequestQuoteV0Response;
+/** The modifiedRequest in client format: `account` instead of `from`, SDK capabilities. */
+type ClientModifiedRequest = Prettify<
+  Omit<
+    Extract<
+      RequestQuoteV0Response,
+      { type: "paymaster-permit" }
+    >["modifiedRequest"],
+    "from" | "capabilities"
+  > & {
+    account: Address;
+    capabilities?: PrepareCallsCapabilities;
+  }
+>;
+
+export type RequestQuoteV0Result =
+  | Exclude<RequestQuoteV0Response, { type: "paymaster-permit" }>
+  | (Omit<
+      Extract<RequestQuoteV0Response, { type: "paymaster-permit" }>,
+      "modifiedRequest"
+    > & {
+      modifiedRequest: ClientModifiedRequest;
+    });
 
 /**
  * Requests a quote for a token swap, returning either prepared calls for smart wallets
@@ -97,5 +120,23 @@ export async function requestQuoteV0(
     params: [rpcParams],
   });
 
-  return decode(schema.response, rpcResp);
+  const decoded = decode(schema.response, rpcResp);
+
+  // Transform paymaster-permit modifiedRequest from RPC format to client format:
+  // - `from` (RPC) → `account` (client)
+  // - `capabilities.paymasterService` (RPC) → `capabilities.paymaster` (client)
+  if ("type" in decoded && decoded.type === "paymaster-permit") {
+    const { from, capabilities, ...restModifiedRequest } =
+      decoded.modifiedRequest;
+    return {
+      ...decoded,
+      modifiedRequest: {
+        ...restModifiedRequest,
+        account: from,
+        capabilities: fromRpcCapabilities(capabilities),
+      },
+    };
+  }
+
+  return decoded;
 }
