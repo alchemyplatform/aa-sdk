@@ -1,0 +1,140 @@
+.wallet-connect-container {
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 2rem;
+  margin-bottom: 1rem;
+}
+
+.wallet-connect-container h3 {
+  margin-top: 0;
+  color: #495057;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.connected-wallet {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: white;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.wallet-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.wallet-icon {
+  font-size: 2rem;
+}
+
+.wallet-details p {
+  margin: 0.25rem 0;
+}
+
+.wallet-name {
+  font-weight: 600;
+  color: #212529;
+}
+
+.wallet-address {
+  font-family: monospace;
+  font-size: 0.875rem;
+  color: #6c757d;
+  word-break: break-all;
+}
+
+.chain-info {
+  font-size: 0.75rem;
+  color: #868e96;
+}
+
+.disconnect-btn {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: background-color 0.2s;
+}
+
+.disconnect-btn:hover:not(:disabled) {
+  background-color: #c82333;
+}
+
+.disconnect-btn:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+
+.wallet-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.wallet-btn {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: white;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 1rem;
+  width: 100%;
+  justify-content: flex-start;
+}
+
+.wallet-btn:hover:not(:disabled) {
+  border-color: #007bff;
+  box-shadow: 0 2px 4px rgba(0, 123, 255, 0.1);
+}
+
+.wallet-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.wallet-btn .wallet-icon {
+  font-size: 1.5rem;
+}
+
+.wallet-btn .wallet-name {
+  font-weight: 500;
+  color: #212529;
+  flex: 1;
+  text-align: left;
+}
+
+.connecting {
+  color: #007bff;
+  font-style: italic;
+  font-size: 0.875rem;
+}
+
+/* Specific wallet button styles */
+.metamask {
+  border-left: 4px solid #f6851b;
+}
+
+.coinbase {
+  border-left: 4px solid #0052ff;
+}
+
+.walletconnect {
+  border-left: 4px solid #3b99fc;
+}
+
+.injected {
+  border-left: 4px solid #7c3aed;
+}
