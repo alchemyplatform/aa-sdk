@@ -88,6 +88,19 @@
       "files": ["packages/**/*"],
       "rules": {
         "no-warning-comments": "off",
+        "no-restricted-syntax": [
+          "error",
+          {
+            "selector": "ThrowStatement > NewExpression[callee.name='Error']",
+            "message": "Do not throw plain Error. Use BaseError or a more specific error subclass instead.",
+          },
+        ],
+      },
+    },
+    {
+      "files": ["packages/**/*.test.ts", "packages/**/*.test-d.ts", "packages/**/test-utils/**/*", "packages/**/__tests__/**/*"],
+      "rules": {
+        "no-restricted-syntax": "off",
       },
     },
   ],

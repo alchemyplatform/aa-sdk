@@ -2,6 +2,7 @@
  * Internal registry mapping chain IDs to Alchemy RPC base URLs.
  * This replaces the need for custom chain exports with embedded Alchemy URLs.
  */
+// TODO(v5): write a script in ws-tools to automatically update this based on chain-config.
 export const ALCHEMY_RPC_MAPPING: Record<number, string> = {
   // Ethereum networks
   1: "https://eth-mainnet.g.alchemy.com/v2", // mainnet
