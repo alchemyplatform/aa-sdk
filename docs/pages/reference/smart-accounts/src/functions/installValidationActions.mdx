@@ -15,7 +15,7 @@ function installValidationActions<TTransport, TChain, TAccount>(
 >;
 ```
 
-Defined in: [packages/smart-accounts/src/ma-v2/decorators/installValidation.ts:111](https://github.com/alchemyplatform/aa-sdk/blob/67dcfd9e7fbe4dace8001af7087f2cbdfb7789a4/packages/smart-accounts/src/ma-v2/decorators/installValidation.ts#L111)
+Defined in: [packages/smart-accounts/src/ma-v2/decorators/installValidation.ts:111](https://github.com/alchemyplatform/aa-sdk/blob/v5.x.x/packages/smart-accounts/src/ma-v2/decorators/installValidation.ts#L111)
 
 Provides validation installation and uninstallation functionalities for a MA v2 client, ensuring compatibility with `SmartAccountClient`.
 
@@ -71,31 +71,31 @@ await client.uninstallValidation({
   <tbody>
     <tr>
       <td>
-        `TTransport` *extends* `Transport`
+        `TTransport` *extends* [`Transport`](https://viem.sh)
       </td>
 
       <td>
-        `Transport`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TChain` *extends* `Chain` | `undefined`
-      </td>
-
-      <td>
-        `Chain` | `undefined`
+        [`Transport`](https://viem.sh)
       </td>
     </tr>
 
     <tr>
       <td>
-        `TAccount` *extends* `SmartAccount` | `undefined`
+        `TChain` *extends* [`Chain`](https://viem.sh) | `undefined`
       </td>
 
       <td>
-        `SmartAccount` | `undefined`
+        [`Chain`](https://viem.sh) | `undefined`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TAccount` *extends* [`SmartAccount`](https://viem.sh) | `undefined`
+      </td>
+
+      <td>
+        [`SmartAccount`](https://viem.sh) | `undefined`
       </td>
     </tr>
 
@@ -120,7 +120,7 @@ await client.uninstallValidation({
       </td>
 
       <td>
-        `Client`\<`TTransport`, `TChain`, `TAccount`>
+        [`Client`](https://viem.sh)\<`TTransport`, `TChain`, `TAccount`>
       </td>
 
       <td>
@@ -133,6 +133,6 @@ await client.uninstallValidation({
 
 ## Returns
 
-[`InstallValidationActions`](../type-aliases/InstallValidationActions)\<`IsUndefined`\<`TAccount`> _extends_ `true` ? `undefined` : [`ModularAccountV2`](../type-aliases/ModularAccountV2)>
+[`InstallValidationActions`](../type-aliases/InstallValidationActions)\<[`IsUndefined`](https://viem.sh)\<`TAccount`> _extends_ `true` ? `undefined` : [`ModularAccountV2`](../type-aliases/ModularAccountV2)>
 
 - An object containing two methods, `installValidation` and `uninstallValidation`.

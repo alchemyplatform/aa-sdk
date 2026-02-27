@@ -19,7 +19,7 @@ type ToMultiOwnerModularAccountV1Params = object &
 };
 ```
 
-Defined in: [packages/smart-accounts/src/ma-v1/accounts/multi-owner-account.ts:37](https://github.com/alchemyplatform/aa-sdk/blob/67dcfd9e7fbe4dace8001af7087f2cbdfb7789a4/packages/smart-accounts/src/ma-v1/accounts/multi-owner-account.ts#L37)
+Defined in: [packages/smart-accounts/src/ma-v1/accounts/multi-owner-account.ts:37](https://github.com/alchemyplatform/aa-sdk/blob/v5.x.x/packages/smart-accounts/src/ma-v1/accounts/multi-owner-account.ts#L37)
 
 ## Type Declaration
 
@@ -38,7 +38,7 @@ Defined in: [packages/smart-accounts/src/ma-v1/accounts/multi-owner-account.ts:3
       </td>
 
       <td>
-        `Address`
+        [`Address`](https://abitype.dev)
       </td>
     </tr>
 
@@ -48,7 +48,10 @@ Defined in: [packages/smart-accounts/src/ma-v1/accounts/multi-owner-account.ts:3
       </td>
 
       <td>
-        `Client`\<`Transport`, `Chain`, `JsonRpcAccount` | `LocalAccount` | `undefined`>
+        [`Client`](https://viem.sh)\<[`Transport`](https://viem.sh), [`Chain`](https://viem.sh),
+        | [`JsonRpcAccount`](https://viem.sh)
+        | [`LocalAccount`](https://viem.sh)
+        | `undefined`>
       </td>
     </tr>
 
@@ -58,7 +61,7 @@ Defined in: [packages/smart-accounts/src/ma-v1/accounts/multi-owner-account.ts:3
       </td>
 
       <td>
-        `Address`
+        [`Address`](https://abitype.dev)
       </td>
     </tr>
 
@@ -68,7 +71,7 @@ Defined in: [packages/smart-accounts/src/ma-v1/accounts/multi-owner-account.ts:3
       </td>
 
       <td>
-        \[`OneOf`\<`JsonRpcAccount` | `LocalAccount`>, `...{ address: Address }[]`]
+        \[[`OneOf`](https://viem.sh)\<[`JsonRpcAccount`](https://viem.sh) | [`LocalAccount`](https://viem.sh)>, `...{ address: Address }[]`]
       </td>
     </tr>
 
