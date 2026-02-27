@@ -9,16 +9,10 @@
     "skipLibCheck": true
   },
   "include": [
-    "aa-sdk/core/src/**/*",
-    "aa-sdk/ethers/src/**/*",
-    "account-kit/infra/src/**/*",
-    "account-kit/signer/src/**/*",
-    "account-kit/wallet-client/src/**/*",
-    "account-kit/core/src/**/*",
-    "account-kit/react/src/**/*",
-    "account-kit/react-native/src/**/*",
-    "account-kit/smart-contracts/src/**/*",
-    "account-kit/rn-signer/src/**/*"
+    "packages/aa-infra/src/**/*",
+    "packages/common/src/**/*",
+    "packages/smart-accounts/src/**/*",
+    "packages/wallet-apis/src/**/*"
   ],
   "exclude": [
     "**/*.test.ts",

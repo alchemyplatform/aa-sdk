@@ -1,0 +1,50 @@
+{
+  "name": "halp",
+  "version": "0.0.1",
+  "description": "This is a local CLI that contains various commands to make it easier to build within this repo.",
+  "author": "Alchemy",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "main": "./dist/esm/exports/index.js",
+  "types": "./dist/types/exports/index.d.ts",
+  "typings": "./dist/types/exports/index.d.ts",
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "src/**/*.ts",
+    "!dist/**/*.tsbuildinfo",
+    "!vitest.config.ts",
+    "!.env",
+    "!src/**/*.test.ts",
+    "!src/**/*.test-d.ts",
+    "!src/__tests__/**/*"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/types/exports/index.d.ts",
+      "default": "./dist/esm/exports/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "halp": "./dist/esm/cli.js"
+  },
+  "scripts": {
+    "build": "yarn clean && yarn build:esm && yarn build:types",
+    "build:esm": "tsc --project tsconfig.build.json --outDir ./dist/esm",
+    "build:types": "tsc --project tsconfig.build.json --declarationDir ./dist/types --emitDeclarationOnly --declaration --declarationMap",
+    "postbuild": "chmod +x ./dist/esm/cli.js && npm link",
+    "clean": "rm -rf ./dist"
+  },
+  "devDependencies": {
+    "typescript-template": "*"
+  },
+  "dependencies": {
+    "@inquirer/prompts": "^7.5.3",
+    "chalk": "^5.4.1",
+    "commander": "^14.0.0",
+    "dedent": "^1.6.0",
+    "listr2": "^8.3.3"
+  }
+}

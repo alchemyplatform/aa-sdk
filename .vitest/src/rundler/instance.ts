@@ -2,6 +2,7 @@ import getPort from "get-port";
 
 import { defineInstance } from "prool";
 import { execa } from "prool/processes";
+import { rundlerSignerKeys } from "../constants";
 import { toArgs } from "./toArgs";
 
 export type RundlerParameters = {
@@ -133,12 +134,6 @@ export type RundlerParameters = {
   mempoolConfigPath?: string;
 
   /**
-   * Disables entry point version v0.6.
-   * @default false
-   */
-  disableEntryPointV0_6?: boolean;
-
-  /**
    * The number of builder accounts to use for entry point version v0.6.
    *
    * @default 1
@@ -146,16 +141,28 @@ export type RundlerParameters = {
   numBuildersV0_6?: number;
 
   /**
-   * Disables entry point version v0.7.
-   * @default false
-   */
-  disableEntryPointV0_7?: boolean;
-
-  /**
    * The number of builder accounts to use for entry point version v0.7.
    * @default 1
    */
   numBuildersV0_7?: number;
+
+  /**
+   * The number of builder accounts to use for entry point version v0.8.
+   * @default 1
+   */
+  numBuildersV0_8?: number;
+
+  /**
+   * The number of builder accounts to use for entry point version v0.9.
+   * @default 1
+   */
+  numBuildersV0_9?: number;
+
+  /**
+   * The entry points to enable.
+   * @default "v0.7"
+   */
+  enabledEntryPoints?: ("v0.6" | "v0.7" | "v0.8" | "v0.9")[];
 
   metrics?: {
     /**
@@ -428,7 +435,7 @@ export type RundlerParameters = {
 export const rundler = defineInstance((parameters?: RundlerParameters) => {
   const {
     binary = "rundler",
-    logLevel = "debug",
+    logLevel = "info",
     chainId,
     ...args
   } = (parameters ?? {}) as RundlerParameters;
@@ -450,22 +457,12 @@ export const rundler = defineInstance((parameters?: RundlerParameters) => {
     async start({ port = args.rpc?.port ?? 3000 }, options) {
       const args_ = {
         ...args,
+        enabledEntryPoints: ["v0.6", "v0.7", "v0.8", "v0.9"],
         builder: {
           ...args.builder,
         },
         signer: {
-          privateKeys: args.signer?.privateKeys ?? [
-            "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80",
-            "0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d",
-            "0x5de4111afa1a4b94908f83103eb1f1706367c2e68ca870fc3fb9a804cdab365a",
-            "0x7c852118294e51e653712a81e05800f419141751be58f605c371e15141b007a6",
-            "0x47e179ec197488593b187f80a00eb0da91f1b9d0b13f8733639f19c30a34926a",
-            "0x8b3a350cf5c34c9194ca85829a2df0ec3153be0318b5e2d3348e872092edffba",
-            "0x92db14e403b83dfe3df233f83dfa3a0d7096f21ca9b0d6d6b8d88b2b4ec1564e",
-            "0x4bbbf85ce3377467afe5d46f804f221813b2bb87f24d81f60f1fcdbf7cbf4356",
-            "0xdbda1821b80551c9d65939329250298aa3472ba22feea921c0cf5d620ea67b97",
-            "0x2a871d0798f97d79848a013d4936a73bf4cc922c825d33c1cf7073dff6d409c6",
-          ],
+          privateKeys: args.signer?.privateKeys ?? [...rundlerSignerKeys],
         },
         maxVerificationGas: args.maxVerificationGas ?? 10000000,
         network: args.network ?? "dev",

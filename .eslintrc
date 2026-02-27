@@ -2,38 +2,44 @@
   "extends": ["react-app", "plugin:jsdoc/recommended-typescript-error"],
   "env": {
     "es2021": true,
-    "node": true
+    "node": true,
   },
   "plugins": ["import", "eslint-rules"],
   "parserOptions": {
-    "sourceType": "module"
+    "sourceType": "module",
   },
+  "settings": {
+    "react": {
+      "version": "18.0",
+    },
+  },
+  "ignorePatterns": [],
   "rules": {
     "import/extensions": ["error", "ignorePackages"],
     "jsdoc/check-tag-names": [
       "error",
       {
-        "definedTags": ["remarks"] // remarks is valid in TSDoc
-      }
+        "definedTags": ["remarks"], // remarks is valid in TSDoc
+      },
     ],
     "jsdoc/tag-lines": [
       "error",
       "any",
       {
-        "startLines": 1
-      }
+        "startLines": 1,
+      },
     ],
     "jsdoc/require-returns": [
       "error",
       {
-        "enableFixer": true
-      }
+        "enableFixer": true,
+      },
     ],
     "jsdoc/require-param": [
       "error",
       {
-        "enableFixer": true
-      }
+        "enableFixer": true,
+      },
     ],
     "jsdoc/require-param-type": "error",
     "jsdoc/require-returns-type": "error",
@@ -46,76 +52,43 @@
         "tags": {
           "example": {
             "message": "Example tags must provide a code block with a language identifier.",
-            "match": "```(js|javascript|ts|tsx)([\\s\\S]*)```"
-          }
-        }
-      }
+            "match": "```(js|javascript|ts|tsx)([\\s\\S]*)```",
+          },
+        },
+      },
     ],
     "eslint-rules/require-jsdoc-on-reexported-functions": [
       "error",
       {
-        "fixBatchSize": 0
-      }
-    ]
+        "fixBatchSize": 0,
+      },
+    ],
+    "no-warning-comments": [
+      "warn",
+      { "terms": ["TODO(v5)"], "location": "anywhere" },
+    ],
   },
   "overrides": [
-    {
-      "files": [
-        "site/snippets/**/*.ts",
-        "site/snippets/**/*.tsx",
-        "**/site/**/*.mdx"
-      ],
-      "rules": {
-        "@typescript-eslint/no-unused-vars": "off",
-        "import/extensions": ["off", "ignorePackages"],
-        "jsdoc/require-jsdoc": "off"
-      }
-    },
     {
       "files": ["**/*.mdx"],
       "extends": ["plugin:mdx/recommended"],
       "rules": {
         "import/extensions": ["off", "ignorePackages"],
         "react/jsx-no-undef": "off",
-        "jsx-a11y/anchor-has-content": "off",
-        "jsx-a11y/anchor-is-valid": "off"
-      }
+      },
     },
     {
-      "files": ["account-kit/wallet-client/**/*.ts"],
-      "excludedFiles": ["account-kit/wallet-client/dist/**"],
+      "files": ["docs/pages/reference/**/*.mdx"],
       "rules": {
-        "@typescript-eslint/consistent-type-imports": [
-          "error",
-          {
-            "fixStyle": "inline-type-imports"
-          }
-        ],
-        "@typescript-eslint/no-import-type-side-effects": "error",
-        // Typebox imports break React Native bundling, so we restrict imports from wallet-api-types to type-only.
-        "@typescript-eslint/no-restricted-imports": [
-          "error",
-          {
-            "paths": [
-              {
-                "name": "@alchemy/wallet-api-types",
-                "message": "Only type imports are allowed from @alchemy/wallet-api-types to prevent React Native bundle issues. Use 'import type' instead.",
-                "allowTypeImports": true
-              },
-              {
-                "name": "@alchemy/wallet-api-types/rpc",
-                "message": "Only type imports are allowed from @alchemy/wallet-api-types/rpc to prevent React Native bundle issues. Use 'import type' instead.",
-                "allowTypeImports": true
-              },
-              {
-                "name": "@alchemy/wallet-api-types/capabilities",
-                "message": "Only type imports are allowed from @alchemy/wallet-api-types/capabilities to prevent React Native bundle issues. Use 'import type' instead.",
-                "allowTypeImports": true
-              }
-            ]
-          }
-        ]
-      }
-    }
-  ]
+        "jsx-a11y/anchor-has-content": "off",
+        "jsx-a11y/anchor-is-valid": "off",
+      },
+    },
+    {
+      "files": ["packages/**/*"],
+      "rules": {
+        "no-warning-comments": "off",
+      },
+    },
+  ],
 }

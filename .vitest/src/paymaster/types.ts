@@ -1,8 +1,7 @@
-import type { UserOperationRequest } from "@aa-sdk/core";
-import type { Address, Client, Hex } from "viem";
+import type { Address, Client, Hex, RpcUserOperation } from "viem";
 
 export type Paymaster = {
-  entryPointVersion: "0.6.0" | "0.7.0";
+  entryPointVersion: "0.6.0" | "0.7.0" | "0.8.0";
   entryPointAddress: Address;
   getPaymasterStubData: () =>
     | {
@@ -10,7 +9,7 @@ export type Paymaster = {
       }
     | { paymaster: Address; paymasterData: Hex };
   getPaymasterData: (
-    uo: UserOperationRequest,
+    uo: RpcUserOperation,
     client: Client & { mode: "anvil" },
   ) => Promise<
     { paymasterAndData: Hex } | { paymaster: Address; paymasterData: Hex }
@@ -31,4 +30,5 @@ export type Paymaster = {
     bytecode: Hex;
     calldata: Hex;
   };
+  isV07Abi: boolean;
 };

@@ -4,14 +4,7 @@ site/.vitepress/cache/**/*
 .github/*
 /.nx/cache
 
-/examples/*
-!/examples/ui-demo
-/examples/ui-demo/contracts
-/examples/ui-demo/.next/*
-
 **/.turbo/*
-account-kit/rn-signer/lib/*
-account-kit/java/*
 **/android/generated/*
 **/ios/generated/*
 **/build/*
@@ -20,7 +13,3 @@ account-kit/java/*
 **/vendor/*
 **/test-results/*
 **/playwright-report/*
-
-/docs-site/**
-
-.eslintrc

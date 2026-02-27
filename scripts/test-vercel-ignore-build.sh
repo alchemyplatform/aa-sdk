@@ -12,7 +12,7 @@ if [ "$GITHUB_TOKEN" = "YOUR_GITHUB_TOKEN_HERE" ]; then
   echo "Error: GITHUB_TOKEN is set to the placeholder value. Please replace it with your actual GitHub token." >&2
   exit 1
 fi
-export SKIP_BUILD_FOR_BRANCH="moldy/v5-base"
+export SKIP_BUILD_FOR_BRANCH="v5.x.x"
 
 # Now run your actual script
 echo "=== Running Vercel ignore script with simulated environment ==="

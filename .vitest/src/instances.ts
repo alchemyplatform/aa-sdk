@@ -3,41 +3,35 @@ dotenv.config();
 
 import getPort from "get-port";
 import { createServer } from "prool";
-import { anvil } from "prool/instances";
-import { createClient, http, type Chain, type ClientConfig } from "viem";
+import { anvil, type AnvilParameters } from "prool/instances";
+import {
+  createClient,
+  http,
+  type Chain,
+  type ClientConfig,
+  custom,
+  type CustomTransport,
+  type Transport,
+} from "viem";
 import { localhost } from "viem/chains";
-import { split } from "../../aa-sdk/core/src/transport/split";
 import { poolId, rundlerBinaryPath } from "./constants";
 import { paymasterTransport } from "./paymaster/transport";
 import { rundler } from "./rundler/instance";
 
-export const local060Instance = defineInstance({
+export const localInstance = defineInstance({
   chain: localhost,
-  forkBlockNumber: 6381303,
+  forkBlockNumber: 10043061,
   forkUrl:
     process.env.VITEST_SEPOLIA_FORK_URL ??
     "https://ethereum-sepolia-rpc.publicnode.com",
-  entryPointVersion: "0.6.0",
-  anvilPort: 8545,
-  bundlerPort: 8645,
-});
-
-export const local070Instance = defineInstance({
-  chain: localhost,
-  forkBlockNumber: 8805588,
-  forkUrl:
-    process.env.VITEST_SEPOLIA_FORK_URL ??
-    "https://ethereum-sepolia-rpc.publicnode.com",
-  entryPointVersion: "0.7.0",
-  anvilPort: 8345,
-  bundlerPort: 8445,
+  anvilPort: 18545,
+  bundlerPort: 18546,
 });
 
 type DefineInstanceParams = {
   chain: Chain;
   forkUrl: string;
   forkBlockNumber?: number;
-  entryPointVersion: "0.6.0" | "0.7.0";
   anvilPort: number;
   bundlerPort: number;
   useLocalRunningInstance?: boolean;
@@ -56,11 +50,44 @@ const bundlerMethods = [
   "rundler_maxPriorityFeePerGas",
 ];
 
+const split = (params: {
+  overrides: {
+    methods: string[];
+    transport: Transport;
+  }[];
+  fallback: Transport;
+}): CustomTransport => {
+  const overrideMap = params.overrides.reduce((accum, curr) => {
+    curr.methods.forEach((method) => {
+      if (accum.has(method) && accum.get(method) !== curr.transport) {
+        throw new Error(
+          "A method cannot be handled by more than one transport",
+        );
+      }
+
+      accum.set(method, curr.transport);
+    });
+
+    return accum;
+  }, new Map<string, Transport>());
+
+  return (opts) =>
+    custom({
+      request: async (args) => {
+        const transportOverride = overrideMap.get(args.method);
+        if (transportOverride != null) {
+          return transportOverride(opts).request(args);
+        }
+
+        return params.fallback(opts).request(args);
+      },
+    })(opts);
+};
+
 function defineInstance(params: DefineInstanceParams) {
   const {
     anvilPort,
     bundlerPort,
-    entryPointVersion,
     forkUrl,
     forkBlockNumber,
     chain: chain_,
@@ -137,6 +164,9 @@ function defineInstance(params: DefineInstanceParams) {
       forkUrl: forkUrl,
       forkBlockNumber,
       chainId: chain.id,
+      // "Prague" isn't an available option here since Anvil
+      // hasn't been updated for a while, but it works fine.
+      hardfork: "Prague" as AnvilParameters["hardfork"],
     }),
     port: anvilPort,
   });
@@ -146,9 +176,6 @@ function defineInstance(params: DefineInstanceParams) {
       rundler(
         {
           binary: rundlerBinaryPath,
-          // ...(entryPointVersion === "0.6.0"
-          //   ? { disableEntryPointV0_7: true }
-          //   : { disableEntryPointV0_6: true }),
           nodeHttp: `http://127.0.0.1:${anvilPort}/${key}`,
           rpc: {
             api: "eth,rundler,debug",

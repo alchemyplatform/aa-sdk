@@ -1,6 +1,0 @@
-[test]
-include = ["src/**/*.test.ts", "src/**/*.spec.ts"]
-exclude = ["node_modules", "dist"]
-
-[test.timeout]
-default = "10s"

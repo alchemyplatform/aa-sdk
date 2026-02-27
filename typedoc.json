@@ -6,16 +6,10 @@
   // Defines what TypeScript files and modules to process
   // ============================================================================
   "entryPoints": [
-    "aa-sdk/core/src/index.ts",
-    "aa-sdk/ethers/src/index.ts",
-    "account-kit/infra/src/exports/index.ts",
-    "account-kit/signer/src/index.ts",
-    "account-kit/wallet-client/src/exports/index.ts",
-    "account-kit/core/src/index.ts",
-    "account-kit/react/src/index.ts",
-    "account-kit/react-native/src/index.ts",
-    "account-kit/smart-contracts/src/index.ts",
-    "account-kit/rn-signer/src/index.tsx"
+    "packages/aa-infra/src/index.ts",
+    "packages/common/src/index.ts",
+    "packages/smart-accounts/src/index.ts",
+    "packages/wallet-apis/src/exports/index.ts"
   ],
   "entryPointStrategy": "expand",
   "tsconfig": "./tsconfig.typedoc.json",
