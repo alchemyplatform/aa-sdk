@@ -9,7 +9,6 @@
   "workspaces": {
     "packages": [
       "templates/*",
-      "doc-gen",
       "docs",
       ".vitest",
       "halp",
