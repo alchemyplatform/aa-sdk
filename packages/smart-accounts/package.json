@@ -44,7 +44,7 @@
   },
   "dependencies": {
     "@alchemy/common": "^0.0.0-alpha.23",
-    "viem": "^2.44.2"
+    "viem": "^2.45.0"
   },
   "publishConfig": {
     "access": "public",
