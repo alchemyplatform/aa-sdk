@@ -52,7 +52,7 @@ export const predictMultiOwnerModularAccountV1Address = ({
     throw new BaseError("Owners array cannot be empty");
   }
   if (ownerAddresses.length > 100) {
-    throw new Error("Maximum 100 owners on creation");
+    throw new BaseError("Maximum 100 owners on creation");
   }
 
   const combinedSalt = getCombinedSalt(salt, ownerAddresses);

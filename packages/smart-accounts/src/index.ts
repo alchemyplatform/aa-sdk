@@ -1,7 +1,5 @@
 export type * from "./types.js";
 
-export { chainHas7212 } from "./utils.js";
-
 // LightAccount
 export type * from "./light-account/accounts/account.js";
 export { toLightAccount } from "./light-account/accounts/account.js";

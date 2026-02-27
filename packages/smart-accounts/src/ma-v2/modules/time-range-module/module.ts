@@ -2,6 +2,7 @@ import { encodeAbiParameters, type Address, type Hex } from "viem";
 
 import { timeRangeModuleAbi } from "./abis/timeRangeModuleAbi.js";
 import { HookType, type HookConfig } from "../../types.js";
+import { BaseError } from "@alchemy/common";
 
 export const TimeRangeModule = {
   abi: timeRangeModuleAbi,
@@ -14,13 +15,13 @@ export const TimeRangeModule = {
     address: Address,
   ): { hookConfig: HookConfig; initData: Hex } => {
     if (installArgs.validUntil > 2 ** 48 - 1) {
-      throw new Error(
+      throw new BaseError(
         "TimeRangeModule.buildHook: validUntil > type(uint48).max",
       );
     }
 
     if (installArgs.validAfter > 2 ** 48 - 1) {
-      throw new Error(
+      throw new BaseError(
         "TimeRangeModule.buildHook: validAfter > type(uint48).max",
       );
     }
