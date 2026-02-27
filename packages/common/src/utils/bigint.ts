@@ -1,3 +1,5 @@
+import { BaseError } from "../errors/BaseError.js";
+
 /**
  * BigNumberish represents values that can be converted to BigInt
  */
@@ -42,7 +44,7 @@ export const bigIntMultiply = (
   roundingMode: RoundingMode = RoundingMode.ROUND_UP,
 ) => {
   if (!isValidMultiplier({ multiplier })) {
-    throw new Error(
+    throw new BaseError(
       "bigIntMultiply requires a multiplier validated number as the second argument (max 4 decimal places)",
     );
   }
@@ -65,7 +67,7 @@ export const bigIntMultiply = (
  */
 export const bigIntMax = (...args: bigint[]): bigint => {
   if (!args.length) {
-    throw new Error("bigIntMax requires at least one argument");
+    throw new BaseError("bigIntMax requires at least one argument");
   }
 
   return args.reduce((m, c) => (m > c ? m : c));

@@ -5,7 +5,7 @@ import {
   getSupportedChainIds,
   ALCHEMY_RPC_MAPPING,
 } from "../../src/transport/chainRegistry.js";
-import { sepolia, mainnet, arbitrum, avalanche } from "viem/chains";
+import { sepolia, mainnet, arbitrum, fantom } from "viem/chains";
 
 describe("Chain Registry Tests", () => {
   describe("getAlchemyRpcUrl", () => {
@@ -15,7 +15,7 @@ describe("Chain Registry Tests", () => {
     });
 
     it("should return undefined for unsupported chain", () => {
-      const url = getAlchemyRpcUrl(avalanche.id);
+      const url = getAlchemyRpcUrl(fantom.id);
       expect(url).toBeUndefined();
     });
 
@@ -33,7 +33,7 @@ describe("Chain Registry Tests", () => {
     });
 
     it("should return false for unsupported chains", () => {
-      expect(isChainSupported(avalanche.id)).toBe(false);
+      expect(isChainSupported(fantom.id)).toBe(false);
       expect(isChainSupported(999999)).toBe(false);
     });
 

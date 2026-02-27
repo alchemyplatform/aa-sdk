@@ -6,6 +6,7 @@ import {
   type Hex,
 } from "viem";
 import { LightAccountAbi_v1 } from "../abis/LightAccountAbi_v1.js";
+import { BaseError } from "@alchemy/common";
 
 // Conveniently, all variants of LA up to v2.0.0 use the same function signatures for `execute` and `executeBatch`.
 
@@ -59,7 +60,7 @@ export function decodeCallsLA(data: Hex, accountAddress: Address): Call[] {
       const [targets, values, datas] = decoded.args;
 
       if (targets.length !== values.length || targets.length !== datas.length) {
-        throw new Error("Invalid arguments for executeBatch");
+        throw new BaseError("Invalid arguments for executeBatch");
       }
 
       return targets.map((to, index) => ({
@@ -73,7 +74,7 @@ export function decodeCallsLA(data: Hex, accountAddress: Address): Call[] {
     const [targets, datas] = decoded.args;
 
     if (targets.length !== datas.length) {
-      throw new Error("Invalid arguments for executeBatch");
+      throw new BaseError("Invalid arguments for executeBatch");
     }
 
     return targets.map((to, index) => ({

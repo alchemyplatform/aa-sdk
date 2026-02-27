@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import { avalanche, sepolia } from "viem/chains";
+import { fantom, sepolia } from "viem/chains";
 import {
   alchemyTransport,
   isAlchemyTransport,
@@ -129,8 +129,8 @@ describe("Alchemy Transport Tests", () => {
 
     it("should throw error when chain is not supported by Alchemy", () => {
       const transport = alchemyTransport({ apiKey: "test-key" });
-      expect(() => transport({ chain: avalanche })).toThrowError(
-        `Chain ${avalanche.id} (${avalanche.name}) is not supported by Alchemy`,
+      expect(() => transport({ chain: fantom })).toThrowError(
+        `Chain ${fantom.id} (${fantom.name}) is not supported by Alchemy`,
       );
     });
 
@@ -348,9 +348,9 @@ describe("Alchemy Transport Tests", () => {
 
   it("should correctly do runtime validation when chain is not supported by Alchemy", () => {
     expect(() =>
-      alchemyTransport({ apiKey: "some_key" })({ chain: avalanche }),
+      alchemyTransport({ apiKey: "some_key" })({ chain: fantom }),
     ).toThrowError(
-      `Chain ${avalanche.id} (${avalanche.name}) is not supported by Alchemy`,
+      `Chain ${fantom.id} (${fantom.name}) is not supported by Alchemy`,
     );
   });
 
@@ -388,11 +388,11 @@ describe("Alchemy Transport Tests", () => {
       const transport = alchemyTransport({ apiKey: "test-key" });
 
       try {
-        transport({ chain: avalanche });
+        transport({ chain: fantom });
         expect.fail("Should have thrown an error");
       } catch (error: any) {
         expect(error.message).toContain(
-          `Chain ${avalanche.id} (${avalanche.name}) is not supported by Alchemy`,
+          `Chain ${fantom.id} (${fantom.name}) is not supported by Alchemy`,
         );
         expect(error.message).toContain("alchemyTransport({ url:");
         expect(error.message).toContain("defineChain({ rpcUrls: { alchemy:");
