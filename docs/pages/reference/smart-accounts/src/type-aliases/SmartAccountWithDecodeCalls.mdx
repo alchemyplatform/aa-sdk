@@ -12,7 +12,7 @@ type SmartAccountWithDecodeCalls<TImplementation> =
   SmartAccount<TImplementation> & object;
 ```
 
-Defined in: [packages/smart-accounts/src/types.ts:27](https://github.com/alchemyplatform/aa-sdk/blob/67dcfd9e7fbe4dace8001af7087f2cbdfb7789a4/packages/smart-accounts/src/types.ts#L27)
+Defined in: [packages/smart-accounts/src/types.ts:27](https://github.com/alchemyplatform/aa-sdk/blob/v5.x.x/packages/smart-accounts/src/types.ts#L27)
 
 Helper type that converts a SmartAccount type to have a required `decodeCalls` function.
 This is useful for account implementations that always provide the `decodeCalls` functionality.
@@ -34,7 +34,7 @@ This is useful for account implementations that always provide the `decodeCalls`
       </td>
 
       <td>
-        `NonNullable`\<`SmartAccount`\<`TImplementation`>\[`"decodeCalls"`]>
+        `NonNullable`\<[`SmartAccount`](https://viem.sh)\<`TImplementation`>\[`"decodeCalls"`]>
       </td>
     </tr>
 
@@ -53,7 +53,7 @@ This is useful for account implementations that always provide the `decodeCalls`
   <tbody>
     <tr>
       <td>
-        `TImplementation` *extends* `SmartAccountImplementation`
+        `TImplementation` *extends* [`SmartAccountImplementation`](https://viem.sh)
       </td>
     </tr>
   </tbody>

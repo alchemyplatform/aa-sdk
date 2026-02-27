@@ -11,7 +11,7 @@ layout: reference
 type ToModularAccountV1BaseParams<TTransport> = object;
 ```
 
-Defined in: [packages/smart-accounts/src/ma-v1/accounts/base.ts:51](https://github.com/alchemyplatform/aa-sdk/blob/67dcfd9e7fbe4dace8001af7087f2cbdfb7789a4/packages/smart-accounts/src/ma-v1/accounts/base.ts#L51)
+Defined in: [packages/smart-accounts/src/ma-v1/accounts/base.ts:51](https://github.com/alchemyplatform/aa-sdk/blob/v5.x.x/packages/smart-accounts/src/ma-v1/accounts/base.ts#L51)
 
 ## Type Parameters
 
@@ -26,11 +26,11 @@ Defined in: [packages/smart-accounts/src/ma-v1/accounts/base.ts:51](https://gith
   <tbody>
     <tr>
       <td>
-        `TTransport` *extends* `Transport`
+        `TTransport` *extends* [`Transport`](https://viem.sh)
       </td>
 
       <td>
-        `Transport`
+        [`Transport`](https://viem.sh)
       </td>
     </tr>
 
@@ -54,7 +54,7 @@ Defined in: [packages/smart-accounts/src/ma-v1/accounts/base.ts:51](https://gith
       </td>
 
       <td>
-        `Address`
+        [`Address`](https://abitype.dev)
       </td>
     </tr>
 
@@ -64,7 +64,7 @@ Defined in: [packages/smart-accounts/src/ma-v1/accounts/base.ts:51](https://gith
       </td>
 
       <td>
-        `Client`\<`TTransport`, `Chain`, `JsonRpcAccount` | `LocalAccount` | `undefined`>
+        [`Client`](https://viem.sh)\<`TTransport`, [`Chain`](https://viem.sh), | [`JsonRpcAccount`](https://viem.sh) | [`LocalAccount`](https://viem.sh) | `undefined`>
       </td>
     </tr>
 
@@ -74,7 +74,7 @@ Defined in: [packages/smart-accounts/src/ma-v1/accounts/base.ts:51](https://gith
       </td>
 
       <td>
-        (`msg`) => `Promise`\<`TypedDataDefinition`>
+        (`msg`) => `Promise`\<[`TypedDataDefinition`](https://viem.sh)>
       </td>
     </tr>
 
@@ -84,7 +84,7 @@ Defined in: [packages/smart-accounts/src/ma-v1/accounts/base.ts:51](https://gith
       </td>
 
       <td>
-        () => `Promise`\<\{ `factory?`: `Address`; `factoryData?`: `Hex`; }>
+        () => `Promise`\<\{ `factory?`: [`Address`](https://abitype.dev); `factoryData?`: [`Hex`](https://viem.sh); }>
       </td>
     </tr>
 
@@ -94,7 +94,7 @@ Defined in: [packages/smart-accounts/src/ma-v1/accounts/base.ts:51](https://gith
       </td>
 
       <td>
-        `JsonRpcAccount` | `LocalAccount`
+        [`JsonRpcAccount`](https://viem.sh) | [`LocalAccount`](https://viem.sh)
       </td>
     </tr>
 

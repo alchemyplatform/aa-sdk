@@ -12,7 +12,7 @@ type GetAccountParameter<TAccount, TAccountOverride> =
   IsUndefined<TAccount> extends true ? object : object;
 ```
 
-Defined in: [packages/smart-accounts/src/types.ts:15](https://github.com/alchemyplatform/aa-sdk/blob/67dcfd9e7fbe4dace8001af7087f2cbdfb7789a4/packages/smart-accounts/src/types.ts#L15)
+Defined in: [packages/smart-accounts/src/types.ts:15](https://github.com/alchemyplatform/aa-sdk/blob/v5.x.x/packages/smart-accounts/src/types.ts#L15)
 
 ## Type Parameters
 
@@ -27,21 +27,21 @@ Defined in: [packages/smart-accounts/src/types.ts:15](https://github.com/alchemy
   <tbody>
     <tr>
       <td>
-        `TAccount` *extends* `SmartAccount` | `undefined`
+        `TAccount` *extends* [`SmartAccount`](https://viem.sh) | `undefined`
       </td>
 
       <td>
-        `SmartAccount` | `undefined`
+        [`SmartAccount`](https://viem.sh) | `undefined`
       </td>
     </tr>
 
     <tr>
       <td>
-        `TAccountOverride` *extends* `SmartAccount`
+        `TAccountOverride` *extends* [`SmartAccount`](https://viem.sh)
       </td>
 
       <td>
-        `SmartAccount`
+        [`SmartAccount`](https://viem.sh)
       </td>
     </tr>
 

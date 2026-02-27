@@ -15,7 +15,7 @@ function singleOwnerLightAccountActions<TTransport, TChain, TAccount>(
 >;
 ```
 
-Defined in: [packages/smart-accounts/src/light-account/decorators/singleOwner.ts:30](https://github.com/alchemyplatform/aa-sdk/blob/67dcfd9e7fbe4dace8001af7087f2cbdfb7789a4/packages/smart-accounts/src/light-account/decorators/singleOwner.ts#L30)
+Defined in: [packages/smart-accounts/src/light-account/decorators/singleOwner.ts:30](https://github.com/alchemyplatform/aa-sdk/blob/v5.x.x/packages/smart-accounts/src/light-account/decorators/singleOwner.ts#L30)
 
 A decorator that can be used with viem's bundler client to add light account actions to the client
 
@@ -32,31 +32,31 @@ A decorator that can be used with viem's bundler client to add light account act
   <tbody>
     <tr>
       <td>
-        `TTransport` *extends* `Transport`
+        `TTransport` *extends* [`Transport`](https://viem.sh)
       </td>
 
       <td>
-        `Transport`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TChain` *extends* `Chain` | `undefined`
-      </td>
-
-      <td>
-        `Chain` | `undefined`
+        [`Transport`](https://viem.sh)
       </td>
     </tr>
 
     <tr>
       <td>
-        `TAccount` *extends* `SmartAccount` | `undefined`
+        `TChain` *extends* [`Chain`](https://viem.sh) | `undefined`
       </td>
 
       <td>
-        `SmartAccount` | `undefined`
+        [`Chain`](https://viem.sh) | `undefined`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TAccount` *extends* [`SmartAccount`](https://viem.sh) | `undefined`
+      </td>
+
+      <td>
+        [`SmartAccount`](https://viem.sh) | `undefined`
       </td>
     </tr>
 
@@ -81,7 +81,7 @@ A decorator that can be used with viem's bundler client to add light account act
       </td>
 
       <td>
-        `Client`\<`TTransport`, `TChain`, `TAccount`>
+        [`Client`](https://viem.sh)\<`TTransport`, `TChain`, `TAccount`>
       </td>
 
       <td>
@@ -94,6 +94,6 @@ A decorator that can be used with viem's bundler client to add light account act
 
 ## Returns
 
-[`LightAccountActions`](../type-aliases/LightAccountActions)\<`IsUndefined`\<`TAccount`> _extends_ `true` ? `undefined` : [`LightAccount`](../type-aliases/LightAccount)>
+[`LightAccountActions`](../type-aliases/LightAccountActions)\<[`IsUndefined`](https://viem.sh)\<`TAccount`> _extends_ `true` ? `undefined` : [`LightAccount`](../type-aliases/LightAccount)>
 
 An object containing the available light account actions

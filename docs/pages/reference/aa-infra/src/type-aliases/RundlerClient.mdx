@@ -17,7 +17,7 @@ type RundlerClient<transport, chain, account> = BundlerClient<
 >;
 ```
 
-Defined in: [packages/aa-infra/src/estimateFeesPerGas.ts:20](https://github.com/alchemyplatform/aa-sdk/blob/67dcfd9e7fbe4dace8001af7087f2cbdfb7789a4/packages/aa-infra/src/estimateFeesPerGas.ts#L20)
+Defined in: [packages/aa-infra/src/estimateFeesPerGas.ts:20](https://github.com/alchemyplatform/aa-sdk/blob/v5.x.x/packages/aa-infra/src/estimateFeesPerGas.ts#L20)
 
 ## Type Parameters
 
@@ -32,31 +32,31 @@ Defined in: [packages/aa-infra/src/estimateFeesPerGas.ts:20](https://github.com/
   <tbody>
     <tr>
       <td>
-        `transport` *extends* `Transport`
+        `transport` *extends* [`Transport`](https://viem.sh)
       </td>
 
       <td>
-        `Transport`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `chain` *extends* `Chain` | `undefined`
-      </td>
-
-      <td>
-        `Chain` | `undefined`
+        [`Transport`](https://viem.sh)
       </td>
     </tr>
 
     <tr>
       <td>
-        `account` *extends* `SmartAccount` | `undefined`
+        `chain` *extends* [`Chain`](https://viem.sh) | `undefined`
       </td>
 
       <td>
-        `SmartAccount` | `undefined`
+        [`Chain`](https://viem.sh) | `undefined`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `account` *extends* [`SmartAccount`](https://viem.sh) | `undefined`
+      </td>
+
+      <td>
+        [`SmartAccount`](https://viem.sh) | `undefined`
       </td>
     </tr>
 
