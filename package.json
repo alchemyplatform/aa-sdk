@@ -39,6 +39,7 @@
     "lint:write": "eslint . --fix && prettier --log-level warn --write --ignore-unknown .",
     "lint:check": "eslint . && prettier --check .",
     "prepare": "husky install",
+    "docs:broken-links": "lychee docs --root-dir /docs",
     "docs:sdk": "yarn build && typedoc && tsx scripts/generate-typedoc-yaml.ts",
     "version": "yarn build:libs"
   },

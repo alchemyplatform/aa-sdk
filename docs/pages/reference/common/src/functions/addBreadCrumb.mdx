@@ -11,7 +11,7 @@ layout: reference
 function addBreadCrumb(client, breadcrumb): Client<AlchemyTransport>;
 ```
 
-Defined in: [packages/common/src/actions/addBreadCrumb.ts:20](https://github.com/alchemyplatform/aa-sdk/blob/0a825ddbbbae3b213cce3d75775aa11253736fd6/packages/common/src/actions/addBreadCrumb.ts#L20)
+Defined in: [packages/common/src/actions/addBreadCrumb.ts:20](https://github.com/alchemyplatform/aa-sdk/blob/67dcfd9e7fbe4dace8001af7087f2cbdfb7789a4/packages/common/src/actions/addBreadCrumb.ts#L20)
 
 TODO: need to figure out if there's a better way than this...
 This adds a tracing breadcrumb to the client during requests.
@@ -37,7 +37,7 @@ That method works by taking a fallback, looking up the action on the client, if 
       </td>
 
       <td>
-        `Client`\<[`AlchemyTransport`](../type-aliases/AlchemyTransport.mdx)>
+        `Client`\<[`AlchemyTransport`](../type-aliases/AlchemyTransport)>
       </td>
 
       <td>
@@ -64,6 +64,6 @@ That method works by taking a fallback, looking up the action on the client, if 
 
 ## Returns
 
-`Client`\<[`AlchemyTransport`](../type-aliases/AlchemyTransport.mdx)>
+`Client`\<[`AlchemyTransport`](../type-aliases/AlchemyTransport)>
 
 a client with the transport updated to include the breadcrumb
