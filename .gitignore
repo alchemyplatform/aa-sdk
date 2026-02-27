@@ -38,6 +38,9 @@ vocs.config.tsx.timestamp-*.mjs
 bin
 **/.turbo
 
+# TypeDoc generated media (source files copied for source links)
+docs/pages/reference/_media
+
 # Turborepo
 .turbo
 
