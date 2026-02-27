@@ -22,6 +22,7 @@ export { sendTransaction } from "./actions/smartAccount/sendTransaction.js";
 export { sendTransactions } from "./actions/smartAccount/sendTransactions.js";
 export { sendUserOperation } from "./actions/smartAccount/sendUserOperation.js";
 export type * from "./actions/smartAccount/types.js";
+export { waitForUserOperationReceipt } from "./actions/smartAccount/waitForUserOperationReceipt.js";
 export { waitForUserOperationTransaction } from "./actions/smartAccount/waitForUserOperationTransacation.js";
 export type * from "./client/bundlerClient.js";
 export {
