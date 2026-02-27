@@ -16,7 +16,7 @@
       "preid": "beta"
     },
     "publish": {
-      "distTag": "alpha",
+      "distTag": "latest",
       "access": "public"
     }
   }
