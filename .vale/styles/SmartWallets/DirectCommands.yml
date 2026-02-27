@@ -1,0 +1,22 @@
+# Direct commands rule
+# Enforces direct, confident commands as required in CONTRIBUTING.md
+
+extends: existence
+message: "Use direct commands. Say '%s' instead"
+level: warning
+ignorecase: true
+
+# Indirect command patterns that should be direct
+tokens:
+  - 'you\s+need\s+to\s+install'
+  - 'you\s+should\s+install'
+  - 'you\s+need\s+to\s+create'
+  - 'you\s+should\s+create'
+  - 'you\s+need\s+to\s+configure'
+  - 'you\s+should\s+configure'
+  - 'you\s+need\s+to\s+set'
+  - 'you\s+should\s+set'
+  - 'you\s+may\s+want\s+to'
+  - 'you\s+might\s+want\s+to'
+  - 'you\s+can\s+optionally'
+  - 'it\s+is\s+recommended\s+to'

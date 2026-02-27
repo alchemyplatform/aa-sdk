@@ -46,3 +46,7 @@ jsconfig.json
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+.claude/settings.local.json
+
+.lycheecache

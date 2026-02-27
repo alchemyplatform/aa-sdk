@@ -12,7 +12,8 @@
   "include": ["src"],
   "compilerOptions": {
     "sourceMap": true,
-    "module": "nodenext",
-    "moduleResolution": "nodenext"
+    "jsx": "react-jsx",
+    "module": "es2022",
+    "target": "es2022"
   }
 }
