@@ -19,8 +19,8 @@
     "jsdoc/check-tag-names": [
       "error",
       {
-        "definedTags": ["remarks"] // remarks is valid in TSDoc
-      }
+        "definedTags": ["remarks"], // remarks is valid in TSDoc
+      },
     ],
     "jsdoc/tag-lines": [
       "error",
@@ -90,41 +90,5 @@
         "no-warning-comments": "off",
       },
     },
-    {
-      "files": ["account-kit/wallet-client/**/*.ts"],
-      "excludedFiles": ["account-kit/wallet-client/dist/**"],
-      "rules": {
-        "@typescript-eslint/consistent-type-imports": [
-          "error",
-          {
-            "fixStyle": "inline-type-imports"
-          }
-        ],
-        "@typescript-eslint/no-import-type-side-effects": "error",
-        // Typebox imports break React Native bundling, so we restrict imports from wallet-api-types to type-only.
-        "@typescript-eslint/no-restricted-imports": [
-          "error",
-          {
-            "paths": [
-              {
-                "name": "@alchemy/wallet-api-types",
-                "message": "Only type imports are allowed from @alchemy/wallet-api-types to prevent React Native bundle issues. Use 'import type' instead.",
-                "allowTypeImports": true
-              },
-              {
-                "name": "@alchemy/wallet-api-types/rpc",
-                "message": "Only type imports are allowed from @alchemy/wallet-api-types/rpc to prevent React Native bundle issues. Use 'import type' instead.",
-                "allowTypeImports": true
-              },
-              {
-                "name": "@alchemy/wallet-api-types/capabilities",
-                "message": "Only type imports are allowed from @alchemy/wallet-api-types/capabilities to prevent React Native bundle issues. Use 'import type' instead.",
-                "allowTypeImports": true
-              }
-            ]
-          }
-        ]
-      }
-    }
-  ]
+  ],
 }
