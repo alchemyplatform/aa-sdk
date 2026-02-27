@@ -38,6 +38,7 @@
     "test:typecheck": "TYPECHECK=true vitest --typecheck --typecheck.only run",
     "lint:write": "eslint . --fix && prettier --log-level warn --write --ignore-unknown .",
     "lint:check": "eslint . && prettier --check .",
+    "lint:docs": "vale docs/**/*.mdx",
     "prepare": "husky install",
     "docs:broken-links": "lychee docs --root-dir /docs",
     "docs:sdk": "yarn build && typedoc && tsx scripts/generate-typedoc-yaml.ts",
