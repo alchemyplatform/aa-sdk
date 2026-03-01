@@ -1,9 +1,10 @@
 ---
 name: Feature request
 about: Suggest an idea for this project
-title: "FR: <My Feature Request>"
-labels: feature request, needs-triage
-assignees: ""
+title: 'FR: <My Feature Request>'
+labels: ''
+assignees: ''
+
 ---
 
 **Is your feature request related to a problem? Please describe.**
