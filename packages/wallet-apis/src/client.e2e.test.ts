@@ -1,8 +1,11 @@
 import { vi } from "vitest";
 import {
   createPublicClient,
+  encodeFunctionData,
+  erc20Abi,
   zeroAddress,
   type Address,
+  type Hex,
   type WaitForCallsStatusReturnType,
 } from "viem";
 import type { UserOperation } from "viem/account-abstraction";
@@ -353,6 +356,107 @@ describe("Client E2E Tests", () => {
     },
     60_000,
   );
+
+  describe("ERC-20 Paymaster Tests", () => {
+    const USDC_ARB_SEPOLIA =
+      "0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d" as const;
+    const ERC20_PAYMASTER_ADDRESS = process.env
+      .TEST_ERC20_PAYMASTER_ADDRESS! as Address;
+    const HALF_DOLLAR_USDC = 500_000n; // $0.50 USDC (6 decimals)
+
+    const erc20Signer = privateKeyToAccount(
+      process.env.TEST_ERC20_PAYMASTER_PRIVATE_KEY! as Hex,
+    );
+    const erc20Client = createSmartWalletClient({
+      transport: apiTransport,
+      chain: arbitrumSepolia,
+      signer: erc20Signer,
+    });
+
+    afterEach(async () => {
+      // Reset paymaster approval to 0 using gas-sponsored paymaster
+      const { id } = await erc20Client.sendCalls({
+        calls: [
+          {
+            to: USDC_ARB_SEPOLIA,
+            data: encodeFunctionData({
+              abi: erc20Abi,
+              functionName: "approve",
+              args: [ERC20_PAYMASTER_ADDRESS, 0n],
+            }),
+          },
+        ],
+        capabilities: {
+          paymaster: { policyId: process.env.TEST_PAYMASTER_POLICY_ID! },
+        },
+      });
+      const result = await erc20Client.waitForCallsStatus({ id });
+      expect(result.status).toBe("success");
+    }, 60_000);
+
+    it("should send a UO with post-op ERC-20 paymaster", async () => {
+      const { id } = await erc20Client.sendCalls({
+        calls: [{ to: zeroAddress, value: 0n }],
+        capabilities: {
+          paymaster: {
+            policyId: process.env.TEST_ERC20_POSTOP_POLICY_ID!,
+            erc20: {
+              tokenAddress: USDC_ARB_SEPOLIA,
+              postOpSettings: {
+                autoApprove: {
+                  below: HALF_DOLLAR_USDC,
+                  amount: HALF_DOLLAR_USDC,
+                },
+              },
+            },
+          },
+        },
+      });
+      const result = await erc20Client.waitForCallsStatus({ id });
+      expect(result.status).toBe("success");
+    }, 60_000);
+
+    it("should send a UO with pre-op ERC-20 paymaster", async () => {
+      const { id } = await erc20Client.sendCalls({
+        calls: [{ to: zeroAddress, value: 0n }],
+        capabilities: {
+          paymaster: {
+            policyId: process.env.TEST_ERC20_PREOP_POLICY_ID!,
+            erc20: {
+              tokenAddress: USDC_ARB_SEPOLIA,
+              preOpSettings: {
+                autoPermit: {
+                  below: HALF_DOLLAR_USDC,
+                  amount: HALF_DOLLAR_USDC,
+                },
+              },
+            },
+          },
+        },
+      });
+      const result = await erc20Client.waitForCallsStatus({ id });
+      expect(result.status).toBe("success");
+    }, 60_000);
+
+    it("should send a UO with exact approval ERC-20 paymaster", async () => {
+      const { id } = await erc20Client.sendCalls({
+        calls: [{ to: zeroAddress, value: 0n }],
+        capabilities: {
+          paymaster: {
+            policyId: process.env.TEST_ERC20_POSTOP_POLICY_ID!,
+            erc20: {
+              tokenAddress: USDC_ARB_SEPOLIA,
+              postOpSettings: {
+                autoApprove: true,
+              },
+            },
+          },
+        },
+      });
+      const result = await erc20Client.waitForCallsStatus({ id });
+      expect(result.status).toBe("success");
+    }, 60_000);
+  });
 
   const givenTypedData = {
     types: {
