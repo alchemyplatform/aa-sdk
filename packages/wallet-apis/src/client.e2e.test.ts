@@ -19,7 +19,7 @@ import {
 } from "viem/actions";
 import type { SendCallsParams } from "./actions/sendCalls.js";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
-import { arbitrumSepolia } from "viem/chains";
+import { arbitrumSepolia, baseSepolia } from "viem/chains";
 import { createSmartWalletClient } from "./client.js";
 import { apiTransport, publicTransport } from "./__tests__/setup.js";
 import { getAction } from "viem/utils";
@@ -358,8 +358,8 @@ describe("Client E2E Tests", () => {
   );
 
   describe("ERC-20 Paymaster Tests", () => {
-    const USDC_ARB_SEPOLIA =
-      "0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d" as const;
+    const USDC_BASE_SEPOLIA =
+      "0x036CbD53842c5426634e7929541eC2318f3dCF7e" as const;
     const ERC20_PAYMASTER_ADDRESS = process.env
       .TEST_ERC20_PAYMASTER_ADDRESS! as Address;
     const HALF_DOLLAR_USDC = 500_000n; // $0.50 USDC (6 decimals)
@@ -369,7 +369,7 @@ describe("Client E2E Tests", () => {
     );
     const erc20Client = createSmartWalletClient({
       transport: apiTransport,
-      chain: arbitrumSepolia,
+      chain: baseSepolia,
       signer: erc20Signer,
     });
 
@@ -378,7 +378,7 @@ describe("Client E2E Tests", () => {
       const { id } = await erc20Client.sendCalls({
         calls: [
           {
-            to: USDC_ARB_SEPOLIA,
+            to: USDC_BASE_SEPOLIA,
             data: encodeFunctionData({
               abi: erc20Abi,
               functionName: "approve",
@@ -401,7 +401,7 @@ describe("Client E2E Tests", () => {
           paymaster: {
             policyId: process.env.TEST_ERC20_POSTOP_POLICY_ID!,
             erc20: {
-              tokenAddress: USDC_ARB_SEPOLIA,
+              tokenAddress: USDC_BASE_SEPOLIA,
               postOpSettings: {
                 autoApprove: {
                   below: HALF_DOLLAR_USDC,
@@ -423,7 +423,7 @@ describe("Client E2E Tests", () => {
           paymaster: {
             policyId: process.env.TEST_ERC20_PREOP_POLICY_ID!,
             erc20: {
-              tokenAddress: USDC_ARB_SEPOLIA,
+              tokenAddress: USDC_BASE_SEPOLIA,
               preOpSettings: {
                 autoPermit: {
                   below: HALF_DOLLAR_USDC,
@@ -445,7 +445,7 @@ describe("Client E2E Tests", () => {
           paymaster: {
             policyId: process.env.TEST_ERC20_POSTOP_POLICY_ID!,
             erc20: {
-              tokenAddress: USDC_ARB_SEPOLIA,
+              tokenAddress: USDC_BASE_SEPOLIA,
               postOpSettings: {
                 autoApprove: true,
               },
