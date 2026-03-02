@@ -360,8 +360,8 @@ describe("Client E2E Tests", () => {
   describe("ERC-20 Paymaster Tests", () => {
     const USDC_ARB_SEPOLIA =
       "0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d" as const;
-    const ERC20_PAYMASTER_ADDRESS =
-      "0x3f222Df6aB18C1E10d0Ec136503c3B0dfd929048" as const;
+    const ERC20_PAYMASTER_ADDRESS = process.env
+      .TEST_ERC20_PAYMASTER_ADDRESS! as Address;
     const HALF_DOLLAR_USDC = 500_000n; // $0.50 USDC (6 decimals)
 
     const erc20Signer = privateKeyToAccount(
@@ -371,12 +371,6 @@ describe("Client E2E Tests", () => {
       transport: apiTransport,
       chain: arbitrumSepolia,
       signer: erc20Signer,
-    });
-
-    let erc20Account: Awaited<ReturnType<typeof erc20Client.requestAccount>>;
-
-    beforeAll(async () => {
-      erc20Account = await erc20Client.requestAccount();
     });
 
     afterEach(async () => {
@@ -392,7 +386,6 @@ describe("Client E2E Tests", () => {
             }),
           },
         ],
-        account: erc20Account,
         capabilities: {
           paymaster: { policyId: process.env.TEST_PAYMASTER_POLICY_ID! },
         },
@@ -404,7 +397,6 @@ describe("Client E2E Tests", () => {
     it("should send a UO with post-op ERC-20 paymaster", async () => {
       const { id } = await erc20Client.sendCalls({
         calls: [{ to: zeroAddress, value: 0n }],
-        account: erc20Account,
         capabilities: {
           paymaster: {
             policyId: process.env.TEST_ERC20_POSTOP_POLICY_ID!,
@@ -427,7 +419,6 @@ describe("Client E2E Tests", () => {
     it("should send a UO with pre-op ERC-20 paymaster", async () => {
       const { id } = await erc20Client.sendCalls({
         calls: [{ to: zeroAddress, value: 0n }],
-        account: erc20Account,
         capabilities: {
           paymaster: {
             policyId: process.env.TEST_ERC20_PREOP_POLICY_ID!,
@@ -450,7 +441,6 @@ describe("Client E2E Tests", () => {
     it("should send a UO with exact approval ERC-20 paymaster", async () => {
       const { id } = await erc20Client.sendCalls({
         calls: [{ to: zeroAddress, value: 0n }],
-        account: erc20Account,
         capabilities: {
           paymaster: {
             policyId: process.env.TEST_ERC20_POSTOP_POLICY_ID!,
