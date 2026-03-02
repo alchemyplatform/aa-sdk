@@ -1,4 +1,4 @@
-name: Publish V5 Alpha Packages
+name: Publish V5 Beta Packages
 
 # workflow dispatch requires a maintainer to go to the Actions tab and manually trigger the workflow
 on:
@@ -18,12 +18,12 @@ permissions:
 
 # Allow only one concurrent publish
 concurrency:
-  group: publish-v5-alpha
+  group: publish-v5-beta
   cancel-in-progress: false
 
 jobs:
-  publish_v5_alpha:
-    name: Build and Publish V5 Alpha
+  publish_v5_beta:
+    name: Build and Publish V5 Beta
     runs-on: ubuntu-latest
 
     # Needed for Publishing
@@ -32,11 +32,11 @@ jobs:
       packages: write
 
     steps:
-      # Always checkout moldy/v5-base, regardless of which branch the workflow file lives on
-      - name: Checkout moldy/v5-base branch
+      # Always checkout v5.x.x, regardless of which branch the workflow file lives on
+      - name: Checkout v5.x.x branch
         uses: actions/checkout@v3
         with:
-          ref: moldy/v5-base
+          ref: v5.x.x
           token: ${{ secrets.ALCHEMY_BOT_PAT }}
           fetch-depth: "0"
           submodules: "recursive"
@@ -83,7 +83,7 @@ jobs:
           echo ""
           CURRENT_VERSION=$(node -p "require('./lerna.json').version")
           echo "Current version: $CURRENT_VERSION"
-          NEXT_VERSION=$(npx semver $CURRENT_VERSION -i prerelease --preid alpha)
+          NEXT_VERSION=$(npx semver $CURRENT_VERSION -i prerelease --preid beta)
           echo "Next version:    $NEXT_VERSION"
           echo ""
           echo "Packages that would be published:"
@@ -98,7 +98,7 @@ jobs:
         run: |
           echo "Auto-incrementing prerelease version..."
           npx lerna version prerelease \
-            --preid alpha \
+            --preid beta \
             --no-push \
             --no-git-tag-version \
             --yes \
@@ -123,16 +123,15 @@ jobs:
         run: |
           NEW_VERSION=$(node -p "require('./lerna.json').version")
           git add -A
-          git commit --no-verify -m "chore(v5): publish alpha version $NEW_VERSION [skip ci]"
+          git commit --no-verify -m "chore(v5): publish beta version $NEW_VERSION [skip ci]"
 
       # Publish packages from the updated package.json versions
-      - name: Publish V5 Alpha to NPM
+      - name: Publish V5 Beta to NPM
         if: ${{ inputs.publish }}
         shell: bash
         run: |
           set +e
           npx lerna publish from-package \
-            --dist-tag alpha \
             --no-private \
             --no-verify-access \
             --yes \
@@ -165,9 +164,9 @@ jobs:
           echo "has_changes=true" >> $GITHUB_ENV
           echo "new_version=$NEW_VERSION" >> $GITHUB_ENV
 
-      # Push commit and tags to moldy/v5-base
-      - name: Push Changes to moldy/v5-base
+      # Push commit and tags to v5.x.x
+      - name: Push Changes to v5.x.x
         if: ${{ inputs.publish && env.lerna_published == 'true' && env.has_changes == 'true' }}
         run: |
-          git push origin HEAD:moldy/v5-base --follow-tags
-          echo "Successfully pushed version ${{ env.new_version }} to moldy/v5-base"
+          git push origin HEAD:v5.x.x --follow-tags
+          echo "Successfully pushed version ${{ env.new_version }} to v5.x.x"
