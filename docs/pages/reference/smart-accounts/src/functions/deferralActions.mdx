@@ -11,7 +11,7 @@ layout: reference
 function deferralActions<TTransport, TChain, TAccount>(client): DeferralActions;
 ```
 
-Defined in: [packages/smart-accounts/src/ma-v2/decorators/deferralActions.ts:77](https://github.com/alchemyplatform/aa-sdk/blob/67dcfd9e7fbe4dace8001af7087f2cbdfb7789a4/packages/smart-accounts/src/ma-v2/decorators/deferralActions.ts#L77)
+Defined in: [packages/smart-accounts/src/ma-v2/decorators/deferralActions.ts:77](https://github.com/alchemyplatform/aa-sdk/blob/v5.x.x/packages/smart-accounts/src/ma-v2/decorators/deferralActions.ts#L77)
 
 Provides deferred action functionalities for a MA v2 client, ensuring compatibility with `SmartAccountClient`.
 
@@ -28,31 +28,31 @@ Provides deferred action functionalities for a MA v2 client, ensuring compatibil
   <tbody>
     <tr>
       <td>
-        `TTransport` *extends* `Transport`
+        `TTransport` *extends* [`Transport`](https://viem.sh)
       </td>
 
       <td>
-        `Transport`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TChain` *extends* `Chain`
-      </td>
-
-      <td>
-        `Chain`
+        [`Transport`](https://viem.sh)
       </td>
     </tr>
 
     <tr>
       <td>
-        `TAccount` *extends* `SmartAccount`
+        `TChain` *extends* [`Chain`](https://viem.sh)
       </td>
 
       <td>
-        `SmartAccount`
+        [`Chain`](https://viem.sh)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TAccount` *extends* [`SmartAccount`](https://viem.sh)
+      </td>
+
+      <td>
+        [`SmartAccount`](https://viem.sh)
       </td>
     </tr>
 
@@ -77,7 +77,7 @@ Provides deferred action functionalities for a MA v2 client, ensuring compatibil
       </td>
 
       <td>
-        `Client`\<`TTransport`, `TChain`, `TAccount`>
+        [`Client`](https://viem.sh)\<`TTransport`, `TChain`, `TAccount`>
       </td>
 
       <td>

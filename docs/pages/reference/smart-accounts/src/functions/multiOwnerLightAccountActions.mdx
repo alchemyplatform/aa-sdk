@@ -15,7 +15,7 @@ function multiOwnerLightAccountActions<TTransport, TChain, TAccount>(
 >;
 ```
 
-Defined in: [packages/smart-accounts/src/light-account/decorators/multiOwner.ts:36](https://github.com/alchemyplatform/aa-sdk/blob/67dcfd9e7fbe4dace8001af7087f2cbdfb7789a4/packages/smart-accounts/src/light-account/decorators/multiOwner.ts#L36)
+Defined in: [packages/smart-accounts/src/light-account/decorators/multiOwner.ts:36](https://github.com/alchemyplatform/aa-sdk/blob/v5.x.x/packages/smart-accounts/src/light-account/decorators/multiOwner.ts#L36)
 
 Generates client actions for a multi-owner light account, including the ability to update owners.
 
@@ -32,31 +32,31 @@ Generates client actions for a multi-owner light account, including the ability 
   <tbody>
     <tr>
       <td>
-        `TTransport` *extends* `Transport`
+        `TTransport` *extends* [`Transport`](https://viem.sh)
       </td>
 
       <td>
-        `Transport`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TChain` *extends* `Chain` | `undefined`
-      </td>
-
-      <td>
-        `Chain` | `undefined`
+        [`Transport`](https://viem.sh)
       </td>
     </tr>
 
     <tr>
       <td>
-        `TAccount` *extends* `SmartAccount` | `undefined`
+        `TChain` *extends* [`Chain`](https://viem.sh) | `undefined`
       </td>
 
       <td>
-        `SmartAccount` | `undefined`
+        [`Chain`](https://viem.sh) | `undefined`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TAccount` *extends* [`SmartAccount`](https://viem.sh) | `undefined`
+      </td>
+
+      <td>
+        [`SmartAccount`](https://viem.sh) | `undefined`
       </td>
     </tr>
 
@@ -81,7 +81,7 @@ Generates client actions for a multi-owner light account, including the ability 
       </td>
 
       <td>
-        `Client`\<`TTransport`, `TChain`, `TAccount`>
+        [`Client`](https://viem.sh)\<`TTransport`, `TChain`, `TAccount`>
       </td>
 
       <td>
@@ -94,6 +94,6 @@ Generates client actions for a multi-owner light account, including the ability 
 
 ## Returns
 
-[`MultiOwnerLightAccountActions`](../type-aliases/MultiOwnerLightAccountActions)\<`IsUndefined`\<`TAccount`> _extends_ `true` ? `undefined` : [`MultiOwnerLightAccount`](../type-aliases/MultiOwnerLightAccount)>
+[`MultiOwnerLightAccountActions`](../type-aliases/MultiOwnerLightAccountActions)\<[`IsUndefined`](https://viem.sh)\<`TAccount`> _extends_ `true` ? `undefined` : [`MultiOwnerLightAccount`](../type-aliases/MultiOwnerLightAccount)>
 
 An object containing the client actions specifically for a multi-owner light account

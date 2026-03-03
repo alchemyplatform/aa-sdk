@@ -196,3 +196,10 @@ jobs:
 
       - name: Typecheck Test
         run: yarn test:typecheck
+
+      - name: Check SDK reference docs are up to date
+        run: |
+          yarn docs:sdk
+          yarn lint:write
+          git diff --exit-code docs/pages/reference/ || \
+            (echo "::error::SDK reference docs are out of date. Run 'yarn docs:sdk' and commit the changes." && exit 1)

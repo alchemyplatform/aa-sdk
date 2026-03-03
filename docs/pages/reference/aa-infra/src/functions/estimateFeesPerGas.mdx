@@ -16,7 +16,7 @@ function estimateFeesPerGas<TTransport, TChain, TAccount>(
 }>;
 ```
 
-Defined in: [packages/aa-infra/src/estimateFeesPerGas.ts:57](https://github.com/alchemyplatform/aa-sdk/blob/67dcfd9e7fbe4dace8001af7087f2cbdfb7789a4/packages/aa-infra/src/estimateFeesPerGas.ts#L57)
+Defined in: [packages/aa-infra/src/estimateFeesPerGas.ts:57](https://github.com/alchemyplatform/aa-sdk/blob/v5.x.x/packages/aa-infra/src/estimateFeesPerGas.ts#L57)
 
 A custom `estimateFeesPerGas` function for viem bundler clients to use `rundler_maxPriorityFeePerGas` for priority fee estimation.
 
@@ -54,31 +54,36 @@ const bundler = createBundlerClient({
   <tbody>
     <tr>
       <td>
-        `TTransport` *extends* `Transport`
+        `TTransport` *extends* [`Transport`](https://viem.sh)
       </td>
 
       <td>
-        `Transport`
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `TChain` *extends* `Chain` | `undefined`
-      </td>
-
-      <td>
-        `Chain` | `undefined`
+        [`Transport`](https://viem.sh)
       </td>
     </tr>
 
     <tr>
       <td>
-        `TAccount` *extends* `SmartAccount` | `Account` | `undefined`
+        `TChain` *extends* [`Chain`](https://viem.sh) | `undefined`
       </td>
 
       <td>
-        `SmartAccount` | `Account` | `undefined`
+        [`Chain`](https://viem.sh) | `undefined`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TAccount` *extends*
+        | [`SmartAccount`](https://viem.sh)
+        | [`Account`](https://viem.sh)
+        | `undefined`
+      </td>
+
+      <td>
+        | [`SmartAccount`](https://viem.sh)
+        | [`Account`](https://viem.sh)
+        | `undefined`
       </td>
     </tr>
 
@@ -103,7 +108,7 @@ const bundler = createBundlerClient({
       </td>
 
       <td>
-        \{ `account?`: `SmartAccount`; `bundlerClient`: `Client`\<`TTransport`, `TChain`, `TAccount`>; `userOperation?`: `UserOperationRequest`; }
+        \{ `account?`: [`SmartAccount`](https://viem.sh); `bundlerClient`: [`Client`](https://viem.sh)\<`TTransport`, `TChain`, `TAccount`>; `userOperation?`: [`UserOperationRequest`](https://viem.sh); }
       </td>
 
       <td>
@@ -117,7 +122,7 @@ const bundler = createBundlerClient({
       </td>
 
       <td>
-        `SmartAccount`
+        [`SmartAccount`](https://viem.sh)
       </td>
 
       <td>
@@ -131,7 +136,7 @@ const bundler = createBundlerClient({
       </td>
 
       <td>
-        `Client`\<`TTransport`, `TChain`, `TAccount`>
+        [`Client`](https://viem.sh)\<`TTransport`, `TChain`, `TAccount`>
       </td>
 
       <td>
@@ -145,7 +150,7 @@ const bundler = createBundlerClient({
       </td>
 
       <td>
-        `UserOperationRequest`
+        [`UserOperationRequest`](https://viem.sh)
       </td>
 
       <td>

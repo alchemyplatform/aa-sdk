@@ -19,7 +19,7 @@ type ToModularAccountV2Params<TMode> = object & TMode extends "7702" ? object : 
 };
 ```
 
-Defined in: [packages/smart-accounts/src/ma-v2/accounts/account.ts:33](https://github.com/alchemyplatform/aa-sdk/blob/67dcfd9e7fbe4dace8001af7087f2cbdfb7789a4/packages/smart-accounts/src/ma-v2/accounts/account.ts#L33)
+Defined in: [packages/smart-accounts/src/ma-v2/accounts/account.ts:33](https://github.com/alchemyplatform/aa-sdk/blob/v5.x.x/packages/smart-accounts/src/ma-v2/accounts/account.ts#L33)
 
 ## Type Declaration
 
@@ -38,7 +38,7 @@ Defined in: [packages/smart-accounts/src/ma-v2/accounts/account.ts:33](https://g
       </td>
 
       <td>
-        `Address`
+        [`Address`](https://abitype.dev)
       </td>
     </tr>
 
@@ -48,7 +48,10 @@ Defined in: [packages/smart-accounts/src/ma-v2/accounts/account.ts:33](https://g
       </td>
 
       <td>
-        `Client`\<`Transport`, `Chain`, `JsonRpcAccount` | `LocalAccount` | `undefined`>
+        [`Client`](https://viem.sh)\<[`Transport`](https://viem.sh), [`Chain`](https://viem.sh),
+        | [`JsonRpcAccount`](https://viem.sh)
+        | [`LocalAccount`](https://viem.sh)
+        | `undefined`>
       </td>
     </tr>
 
@@ -58,7 +61,7 @@ Defined in: [packages/smart-accounts/src/ma-v2/accounts/account.ts:33](https://g
       </td>
 
       <td>
-        `Hex`
+        [`Hex`](https://viem.sh)
       </td>
     </tr>
 
@@ -78,7 +81,7 @@ Defined in: [packages/smart-accounts/src/ma-v2/accounts/account.ts:33](https://g
       </td>
 
       <td>
-        `JsonRpcAccount` | `LocalAccount`
+        [`JsonRpcAccount`](https://viem.sh) | [`LocalAccount`](https://viem.sh)
       </td>
     </tr>
 
