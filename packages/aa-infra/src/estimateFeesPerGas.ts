@@ -12,7 +12,7 @@ import type {
   SmartAccount,
   BundlerClient,
 } from "viem/account-abstraction";
-import { bigIntMultiply } from "@alchemy/common";
+import { BaseError, bigIntMultiply } from "@alchemy/common";
 import type { RundlerRpcSchema } from "./schema.js";
 import { InvalidHexValueError } from "./errors.js";
 
@@ -92,10 +92,12 @@ export async function estimateFeesPerGas<
 
   const baseFeePerGas = block.baseFeePerGas;
   if (baseFeePerGas == null) {
-    throw new Error("baseFeePerGas is null");
+    throw new BaseError("baseFeePerGas is null");
   }
   if (maxPriorityFeePerGasHex == null) {
-    throw new Error("rundler_maxPriorityFeePerGas returned null or undefined");
+    throw new BaseError(
+      "rundler_maxPriorityFeePerGas returned null or undefined",
+    );
   }
   if (!isHex(maxPriorityFeePerGasHex)) {
     throw new InvalidHexValueError(maxPriorityFeePerGasHex);

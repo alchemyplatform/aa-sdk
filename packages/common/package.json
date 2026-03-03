@@ -1,6 +1,6 @@
 {
   "name": "@alchemy/common",
-  "version": "0.0.0-alpha.23",
+  "version": "5.0.0-beta.1",
   "description": "A collection of interfaces and utilities to be used by other Alchemy packages",
   "author": "Alchemy",
   "license": "MIT",
@@ -31,6 +31,11 @@
       "types": "./dist/types/chains.d.ts",
       "import": "./dist/esm/chains.js",
       "default": "./dist/esm/chains.js"
+    },
+    "./internal": {
+      "types": "./dist/types/internal.d.ts",
+      "import": "./dist/esm/internal.js",
+      "default": "./dist/esm/internal.js"
     },
     "./package.json": "./package.json"
   },

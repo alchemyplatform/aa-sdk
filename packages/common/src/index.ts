@@ -1,7 +1,7 @@
-// http
-export type * from "./rest/restClient.js";
-export type * from "./rest/types.js";
-export { AlchemyRestClient } from "./rest/restClient.js";
+// http -- TODO(v5): not currently exported
+// export type * from "./rest/restClient.js";
+// export type * from "./rest/types.js";
+// export { AlchemyRestClient } from "./rest/restClient.js";
 
 // transport
 export type * from "./transport/alchemy.js";
@@ -20,7 +20,6 @@ export { assertNever } from "./utils/assertNever.js";
 export { raise } from "./utils/raise.js";
 export { bigIntMultiply, bigIntMax } from "./utils/bigint.js";
 export { lowerAddress } from "./utils/lowerAddress.js";
-export { createEip1193HandlerFactory } from "./utils/createEip1193HandlerFactory.js";
 
 // config
 export type { AlchemyConnectionConfig } from "./transport/connectionSchema.js";
@@ -39,22 +38,3 @@ export { FetchError } from "./errors/FetchError.js";
 export { ServerError } from "./errors/ServerError.js";
 export { InvalidRequestError } from "./errors/InvalidRequestError.js";
 export { MethodUnsupportedError } from "./errors/MethodUnsupportedError.js";
-
-// actions
-export type * from "./actions/addBreadCrumb.js";
-export { addBreadCrumb } from "./actions/addBreadCrumb.js";
-
-// chains (convenience exports for Alchemy-supported chains)
-export * from "./chains.js";
-
-// diagnostics logging
-export { createLogger } from "./logging/logger.js";
-export {
-  setGlobalLoggerConfig,
-  getGlobalLoggerConfig,
-  LogLevel,
-  isLevelEnabled,
-  isNamespaceEnabled,
-} from "./logging/config.js";
-export type { DiagnosticsLogger } from "./logging/logger.js";
-export { InMemorySink } from "./logging/sinks.js";
