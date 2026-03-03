@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { sepolia, mainnet, arbitrum, avalanche } from "viem/chains";
+import { sepolia, mainnet, arbitrum, fantom } from "viem/chains";
 import { alchemyTransport } from "../../src/transport/alchemy.js";
 import { getAlchemyRpcUrl } from "../../src/transport/chainRegistry.js";
 import { defineChain } from "viem";
@@ -28,8 +28,8 @@ describe("Registry Integration Tests", () => {
     it("should reject unsupported chains with helpful error", () => {
       const transport = alchemyTransport({ apiKey: "test-key" });
 
-      expect(() => transport({ chain: avalanche })).toThrowError(
-        `Chain ${avalanche.id} (${avalanche.name}) is not supported by Alchemy`,
+      expect(() => transport({ chain: fantom })).toThrowError(
+        `Chain ${fantom.id} (${fantom.name}) is not supported by Alchemy`,
       );
     });
 

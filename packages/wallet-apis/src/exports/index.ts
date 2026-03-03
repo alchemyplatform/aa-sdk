@@ -39,6 +39,6 @@ export type {
 export type * from "../client.js";
 export { createSmartWalletClient } from "../client.js";
 
-// Transport
+// Transport.
 export type * from "../transport.js";
 export { alchemyWalletTransport } from "../transport.js";
