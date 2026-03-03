@@ -13,6 +13,6 @@
     "viem": "^2.45.0"
   },
   "dependencies": {
-    "@alchemy/common": "^0.0.0-alpha.17"
+    "@alchemy/common": "^5.0.0-beta.0"
   }
 }

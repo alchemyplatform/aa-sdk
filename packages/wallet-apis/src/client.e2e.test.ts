@@ -1,8 +1,11 @@
 import { vi } from "vitest";
 import {
   createPublicClient,
+  encodeFunctionData,
+  erc20Abi,
   zeroAddress,
   type Address,
+  type Hex,
   type WaitForCallsStatusReturnType,
 } from "viem";
 import type { UserOperation } from "viem/account-abstraction";
@@ -16,7 +19,7 @@ import {
 } from "viem/actions";
 import type { SendCallsParams } from "./actions/sendCalls.js";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
-import { arbitrumSepolia } from "viem/chains";
+import { arbitrumSepolia, baseSepolia } from "viem/chains";
 import { createSmartWalletClient } from "./client.js";
 import { apiTransport, publicTransport } from "./__tests__/setup.js";
 import { getAction } from "viem/utils";
@@ -353,6 +356,107 @@ describe("Client E2E Tests", () => {
     },
     60_000,
   );
+
+  describe("ERC-20 Paymaster Tests", () => {
+    const USDC_BASE_SEPOLIA =
+      "0x036CbD53842c5426634e7929541eC2318f3dCF7e" as const;
+    const ERC20_PAYMASTER_ADDRESS = process.env
+      .TEST_ERC20_PAYMASTER_ADDRESS! as Address;
+    const HALF_DOLLAR_USDC = 500_000n; // $0.50 USDC (6 decimals)
+
+    const erc20Signer = privateKeyToAccount(
+      process.env.TEST_ERC20_PAYMASTER_PRIVATE_KEY! as Hex,
+    );
+    const erc20Client = createSmartWalletClient({
+      transport: apiTransport,
+      chain: baseSepolia,
+      signer: erc20Signer,
+    });
+
+    afterEach(async () => {
+      // Reset paymaster approval to 0 using gas-sponsored paymaster
+      const { id } = await erc20Client.sendCalls({
+        calls: [
+          {
+            to: USDC_BASE_SEPOLIA,
+            data: encodeFunctionData({
+              abi: erc20Abi,
+              functionName: "approve",
+              args: [ERC20_PAYMASTER_ADDRESS, 0n],
+            }),
+          },
+        ],
+        capabilities: {
+          paymaster: { policyId: process.env.TEST_PAYMASTER_POLICY_ID! },
+        },
+      });
+      const result = await erc20Client.waitForCallsStatus({ id });
+      expect(result.status).toBe("success");
+    }, 60_000);
+
+    it("should send a UO with post-op ERC-20 paymaster", async () => {
+      const { id } = await erc20Client.sendCalls({
+        calls: [{ to: zeroAddress, value: 0n }],
+        capabilities: {
+          paymaster: {
+            policyId: process.env.TEST_ERC20_POSTOP_POLICY_ID!,
+            erc20: {
+              tokenAddress: USDC_BASE_SEPOLIA,
+              postOpSettings: {
+                autoApprove: {
+                  below: HALF_DOLLAR_USDC,
+                  amount: HALF_DOLLAR_USDC,
+                },
+              },
+            },
+          },
+        },
+      });
+      const result = await erc20Client.waitForCallsStatus({ id });
+      expect(result.status).toBe("success");
+    }, 60_000);
+
+    it("should send a UO with pre-op ERC-20 paymaster", async () => {
+      const { id } = await erc20Client.sendCalls({
+        calls: [{ to: zeroAddress, value: 0n }],
+        capabilities: {
+          paymaster: {
+            policyId: process.env.TEST_ERC20_PREOP_POLICY_ID!,
+            erc20: {
+              tokenAddress: USDC_BASE_SEPOLIA,
+              preOpSettings: {
+                autoPermit: {
+                  below: HALF_DOLLAR_USDC,
+                  amount: HALF_DOLLAR_USDC,
+                },
+              },
+            },
+          },
+        },
+      });
+      const result = await erc20Client.waitForCallsStatus({ id });
+      expect(result.status).toBe("success");
+    }, 60_000);
+
+    it("should send a UO with exact approval ERC-20 paymaster", async () => {
+      const { id } = await erc20Client.sendCalls({
+        calls: [{ to: zeroAddress, value: 0n }],
+        capabilities: {
+          paymaster: {
+            policyId: process.env.TEST_ERC20_POSTOP_POLICY_ID!,
+            erc20: {
+              tokenAddress: USDC_BASE_SEPOLIA,
+              postOpSettings: {
+                autoApprove: true,
+              },
+            },
+          },
+        },
+      });
+      const result = await erc20Client.waitForCallsStatus({ id });
+      expect(result.status).toBe("success");
+    }, 60_000);
+  });
 
   const givenTypedData = {
     types: {
