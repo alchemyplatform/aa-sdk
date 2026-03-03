@@ -42,6 +42,12 @@
   "fileExtension": ".mdx",
 
   // ============================================================================
+  // SOURCE LINK CONFIGURATION
+  // Controls how source links are generated in documentation
+  // ============================================================================
+  "gitRevision": "main",
+
+  // ============================================================================
   // PLUGIN CONFIGURATION
   // TypeDoc plugins and their settings for markdown generation
   // ============================================================================
