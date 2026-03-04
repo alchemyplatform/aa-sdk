@@ -747,6 +747,10 @@ navigation:
                     path: wallets/pages/reference/account-kit/infra/src/exports/variables/celoMainnet.mdx
                   - page: celoSepolia
                     path: wallets/pages/reference/account-kit/infra/src/exports/variables/celoSepolia.mdx
+                  - page: cronos
+                    path: wallets/pages/reference/account-kit/infra/src/exports/variables/cronos.mdx
+                  - page: cronosTestnet
+                    path: wallets/pages/reference/account-kit/infra/src/exports/variables/cronosTestnet.mdx
                   - page: edgeMainnet
                     path: wallets/pages/reference/account-kit/infra/src/exports/variables/edgeMainnet.mdx
                   - page: fraxtal
