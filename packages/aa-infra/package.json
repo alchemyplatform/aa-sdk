@@ -39,10 +39,13 @@
     "test:run": "vitest run"
   },
   "devDependencies": {
-    "typescript-template": "*"
+    "typescript-template": "*",
+    "viem": "^2.45.0"
   },
   "dependencies": {
-    "@alchemy/common": "^5.0.0-beta.1",
+    "@alchemy/common": "^5.0.0-beta.1"
+  },
+  "peerDependencies": {
     "viem": "^2.45.0"
   },
   "publishConfig": {

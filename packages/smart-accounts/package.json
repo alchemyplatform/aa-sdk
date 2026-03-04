@@ -40,10 +40,13 @@
   },
   "devDependencies": {
     "@alchemy/aa-infra": "^5.0.0-beta.1",
-    "typescript-template": "*"
+    "typescript-template": "*",
+    "viem": "^2.45.0"
   },
   "dependencies": {
-    "@alchemy/common": "^5.0.0-beta.1",
+    "@alchemy/common": "^5.0.0-beta.1"
+  },
+  "peerDependencies": {
     "viem": "^2.45.0"
   },
   "publishConfig": {
