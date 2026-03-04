@@ -49,9 +49,10 @@
     "test:run": "vitest run"
   },
   "devDependencies": {
-    "typescript-template": "*"
+    "typescript-template": "*",
+    "viem": "^2.45.0"
   },
-  "dependencies": {
+  "peerDependencies": {
     "viem": "^2.45.0"
   },
   "publishConfig": {
