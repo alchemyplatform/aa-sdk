@@ -27,6 +27,8 @@ import {
   worldchainSepolia as vwcs,
   hyperliquid as vhyperliquid,
   hyperliquidEvmTestnet as vhyperliquidEvmTestnet,
+  cronos as vCronos,
+  cronosTestnet as vCronosTesnet,
 } from "viem/chains";
 
 export type AlchemyChainConfig = {
@@ -907,6 +909,26 @@ export const hyperliquidEvmTestnet: Chain = {
     ...vhyperliquidEvmTestnet.rpcUrls,
     alchemy: {
       http: ["https://hyperliquid-testnet.g.alchemy.com/v2"],
+    },
+  },
+};
+
+export const cronos: Chain = {
+  ...vCronos,
+  rpcUrls: {
+    ...vCronos.rpcUrls,
+    alchemy: {
+      http: ["https://cronos-mainnet.g.alchemy.com/v2"],
+    },
+  },
+};
+
+export const cronosTestnet: Chain = {
+  ...vCronosTesnet,
+  rpcUrls: {
+    ...vCronosTesnet.rpcUrls,
+    alchemy: {
+      http: ["https://cronos-testnet.g.alchemy.com/v2"],
     },
   },
 };
