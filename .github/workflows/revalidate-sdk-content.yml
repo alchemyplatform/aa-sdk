@@ -89,14 +89,11 @@ jobs:
         if: steps.changed-files.outputs.filePaths != '[]'
         run: |
           ALL_PATHS='${{ steps.changed-files.outputs.filePaths }}'
-          FRONTMATTER_CHANGED='${{ steps.changed-files.outputs.frontmatterChanged }}'
           TOTAL=$(echo "$ALL_PATHS" | jq 'length')
           BATCH_SIZE=50
           SUCCEEDED=0
           FAILED=0
           BATCH_NUM=0
-          REINDEX_CHECKED=false
-          REINDEX_FAILED=false
 
           echo "Revalidating $TOTAL files in batches of $BATCH_SIZE"
 
@@ -104,17 +101,11 @@ jobs:
             BATCH_NUM=$((BATCH_NUM + 1))
             BATCH=$(echo "$ALL_PATHS" | jq -c ".[$i:$((i + BATCH_SIZE))]")
             CHUNK_SIZE=$(echo "$BATCH" | jq 'length')
-            INCLUDE_REINDEX=false
 
             echo ""
             echo "=== Batch $BATCH_NUM ($CHUNK_SIZE paths, $((i + CHUNK_SIZE))/$TOTAL) ==="
 
-            if [ "$FRONTMATTER_CHANGED" = "true" ] && [ "$REINDEX_CHECKED" = "false" ]; then
-              INCLUDE_REINDEX=true
-              PAYLOAD=$(jq -n --argjson paths "$BATCH" '{filePaths: $paths, frontmatterChanged: true}')
-            else
-              PAYLOAD=$(jq -n --argjson paths "$BATCH" '{filePaths: $paths}')
-            fi
+            PAYLOAD=$(jq -n --argjson paths "$BATCH" '{filePaths: $paths}')
 
             HTTP_CODE=$(curl -X POST "${{ secrets.DOCS_SITE_URL }}/docs/api/revalidate/markdown" \
               -H "Authorization: Bearer ${{ secrets.DOCS_SITE_API_KEY }}" \
@@ -144,18 +135,6 @@ jobs:
               FAILED=$((FAILED + CHUNK_SIZE))
             fi
 
-            if [ "$INCLUDE_REINDEX" = "true" ]; then
-              REINDEX_CHECKED=true
-              REINDEX_TRIGGERED=$(jq -r '.reindexTriggered.triggered // "false"' response.json 2>/dev/null || echo "false")
-              if [ "$REINDEX_TRIGGERED" != "true" ]; then
-                REINDEX_FAILED=true
-                REINDEX_ERROR=$(jq -r '.reindexTriggered.error // "Reindex trigger failed or was not returned by API"' response.json 2>/dev/null || echo "Unable to parse reindex response")
-                echo "::error::Reindex requested but not triggered: $REINDEX_ERROR"
-              else
-                echo "✅ Reindex workflow trigger acknowledged"
-              fi
-            fi
-
             if [ $((i + BATCH_SIZE)) -lt "$TOTAL" ]; then
               sleep 2
             fi
@@ -170,9 +149,15 @@ jobs:
             exit 1
           fi
 
-          if [ "$REINDEX_FAILED" = "true" ]; then
-            echo "::error::Frontmatter changed, but reindex was not successfully triggered"
-            exit 1
-          fi
-
           echo "::notice::Successfully revalidated $SUCCEEDED files"
+
+      - name: Trigger reindex if frontmatter changed
+        if: steps.changed-files.outputs.frontmatterChanged == 'true'
+        run: |
+          echo "Frontmatter changes detected, triggering SDK content indexer..."
+          curl -f -X POST \
+            -H "Authorization: Bearer ${{ secrets.DOCS_GH_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/alchemyplatform/docs/dispatches \
+            -d '{"event_type":"index-sdk-references","client_payload":{"source":"alchemyplatform/aa-sdk","ref":"${{ github.ref }}","sha":"${{ github.sha }}"}}'
+          echo "::notice::✅ Triggered index-sdk-references in docs repo"
