@@ -117,6 +117,11 @@ jobs:
             fi
           done
 
+      # Format version changes so committed files pass lint checks
+      - name: Format Version Changes
+        if: ${{ inputs.publish }}
+        run: yarn lint:write
+
       # Commit version changes so lerna publish doesn't complain about uncommitted changes
       - name: Commit Version Changes
         if: ${{ inputs.publish }}
