@@ -211,7 +211,7 @@ export async function toModularAccountV1Base<
       );
       const { type, data } = await prepareSignature({
         type: "eth_signTypedData_v4",
-        data: params as TypedDataDefinition, // TODO(v5): try harder to avoid this cast?
+        data: params as TypedDataDefinition,
       });
       return type === "personal_sign"
         ? signMessageAction({ account: owner, message: data })

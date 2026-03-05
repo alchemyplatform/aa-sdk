@@ -7,16 +7,6 @@ export { toLightAccount } from "./light-account/accounts/account.js";
 export type * from "./light-account/accounts/multi-owner-account.js";
 export { toMultiOwnerLightAccount } from "./light-account/accounts/multi-owner-account.js";
 
-// TODO(v5): Something to consider for v5 - can we cut the exports for the account-specific actions
-// from the public interface, and just consume these internally with account + rely on the standard
-// bundlerClient actions for performing state writes (i.e. rotating owners)? I'm not sure it's useful
-// to consumers outside of attaching to instances of a client with the right action.
-export type * from "./light-account/decorators/singleOwner.js";
-export { singleOwnerLightAccountActions } from "./light-account/decorators/singleOwner.js";
-
-export type * from "./light-account/decorators/multiOwner.js";
-export { multiOwnerLightAccountActions } from "./light-account/decorators/multiOwner.js";
-
 export type * from "./light-account/predictAddress.js";
 export {
   predictLightAccountAddress,
@@ -46,9 +36,6 @@ export { toModularAccountV1Base } from "./ma-v1/accounts/base.js";
 
 export type * from "./ma-v1/accounts/multi-owner-account.js";
 export { toMultiOwnerModularAccountV1 } from "./ma-v1/accounts/multi-owner-account.js";
-
-export type * from "./ma-v1/decorators/multiOwner.js";
-export { multiOwnerModularAccountV1Actions } from "./ma-v1/decorators/multiOwner.js";
 
 export type * from "./ma-v1/predictAddress.js";
 export { predictMultiOwnerModularAccountV1Address } from "./ma-v1/predictAddress.js";

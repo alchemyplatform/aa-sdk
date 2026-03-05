@@ -16,7 +16,6 @@ import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import { setBalance } from "viem/actions";
 import { accounts } from "~test/constants.js";
 import { localInstance } from "~test/instances.js";
-import { singleOwnerLightAccountActions } from "../decorators/singleOwner.js";
 import type { LightAccountVersion } from "../registry.js";
 import { AccountVersionRegistry } from "../registry.js";
 import { toLightAccount } from "./account.js";
@@ -436,8 +435,15 @@ describe("Light Account Tests", () => {
         // create new signer and transfer ownership
         const newOwner = privateKeyToAccount(generatePrivateKey());
 
-        const hash = await throwawayClient.transferOwnership({
-          newOwner: newOwner.address,
+        const hash = await throwawayClient.sendUserOperation({
+          calls: [
+            {
+              to: throwawayClient.account.address,
+              data: throwawayClient.account.encodeTransferOwnership(
+                newOwner.address,
+              ),
+            },
+          ],
         });
 
         await throwawayClient.waitForUserOperationReceipt({ hash });
@@ -456,10 +462,6 @@ describe("Light Account Tests", () => {
       100000,
     );
   });
-
-  // TODO(v5): implement test for upgrading account to MSCA?
-
-  // TODO(v5): implement test for upgrading account to MAv2 (prob will do this in the MAv2 tests)
 
   it("should derive correct address from factoryData without accountAddress", async () => {
     // First create an account normally to get expected address and factory data
@@ -521,6 +523,6 @@ describe("Light Account Tests", () => {
       userOperation: {
         estimateFeesPerGas,
       },
-    }).extend((client) => singleOwnerLightAccountActions(client));
+    });
   };
 });

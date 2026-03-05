@@ -13,8 +13,7 @@ import type { HookConfig, ValidationConfig } from "../types.js";
 import type { ModularAccountV2 } from "../accounts/account.js";
 import type { GetAccountParameter } from "../../types.js";
 import { semiModularAccountBytecodeAbi } from "../abis/semiModularAccountBytecodeAbi.js";
-import { type SmartAccount, sendUserOperation } from "viem/account-abstraction";
-import { getAction } from "viem/utils";
+import type { SmartAccount } from "viem/account-abstraction";
 import { AccountNotFoundError } from "@alchemy/common";
 import { EntityIdOverrideError } from "../../errors/EntityIdOverrideError.js";
 import {
@@ -54,33 +53,26 @@ export type InstallValidationActions<
   encodeInstallValidation: (
     args: InstallValidationParams<TAccount>,
   ) => Promise<Hex>;
-  installValidation: (args: InstallValidationParams<TAccount>) => Promise<Hex>;
   encodeUninstallValidation: (
-    args: UninstallValidationParams<TAccount>,
-  ) => Promise<Hex>;
-  uninstallValidation: (
     args: UninstallValidationParams<TAccount>,
   ) => Promise<Hex>;
 };
 
-// TODO(v5): update jsdoc
 /**
- * Provides validation installation and uninstallation functionalities for a MA v2 client, ensuring compatibility with `SmartAccountClient`.
+ * Provides validation installation and uninstallation encoding functionalities for a MA v2 client.
  *
  * @example
  * ```ts
- * import { createModularAccountV2Client, installValidationActions, getDefaultSingleSignerValidationModuleAddress, SingleSignerValidationModule } from "@alchemy/smart-accounts";
+ * import { installValidationActions, SingleSignerValidationModule } from "@alchemy/smart-accounts";
  * import { Address } from "viem";
  *
  * const client = (await createModularAccountV2Client({ ... })).extend(installValidationActions);
  * const sessionKeyAddress: Address = "0x1234";
  * const sessionKeyEntityId: number = 1;
  *
- * await client.installValidation({
+ * const callData = await client.encodeInstallValidation({
  *   validationConfig: {
- *     moduleAddress: getDefaultSingleSignerValidationModuleAddress(
- *       client.chain
- *     ),
+ *     moduleAddress: getDefaultSingleSignerValidationModuleAddress(client.chain),
  *     entityId: sessionKeyEntityId,
  *     isGlobal: true,
  *     isSignatureValidation: false,
@@ -94,19 +86,11 @@ export type InstallValidationActions<
  *   hooks: [],
  * });
  *
- * await client.uninstallValidation({
- *   moduleAddress: sessionKeyAddress,
- *   entityId: sessionKeyEntityId,
- *   uninstallData: SingleSignerValidationModule.encodeOnUninstallData({
- *     entityId: sessionKeyEntityId,
- *   }),
- *   hookUninstallDatas: [],
- * });
- *
+ * await client.sendUserOperation({ callData, account });
  * ```
  *
- * @param {object} client - The client instance which provides account and sendUserOperation functionality.
- * @returns {object} - An object containing two methods, `installValidation` and `uninstallValidation`.
+ * @param {object} client - The client instance which provides account functionality.
+ * @returns {object} - An object containing `encodeInstallValidation` and `encodeUninstallValidation`.
  */
 export function installValidationActions<
   TTransport extends Transport = Transport,
@@ -194,64 +178,5 @@ export function installValidationActions<
   return {
     encodeInstallValidation,
     encodeUninstallValidation,
-    installValidation: async (args) => {
-      const {
-        validationConfig,
-        selectors,
-        installData,
-        hooks,
-        account = client.account,
-      } = args;
-
-      if (!account || !isModularAccountV2(account)) {
-        throw new AccountNotFoundError();
-      }
-
-      const callData = await encodeInstallValidation({
-        validationConfig,
-        selectors,
-        installData,
-        hooks,
-        account,
-      });
-
-      const action = getAction(client, sendUserOperation, "sendUserOperation");
-      const result = await action({
-        callData,
-        account,
-      });
-
-      return result;
-    },
-
-    uninstallValidation: async (args) => {
-      const {
-        moduleAddress,
-        entityId,
-        uninstallData,
-        hookUninstallDatas,
-        account = client.account,
-      } = args;
-
-      if (!account || !isModularAccountV2(account)) {
-        throw new AccountNotFoundError();
-      }
-
-      const callData = await encodeUninstallValidation({
-        moduleAddress,
-        entityId,
-        uninstallData,
-        hookUninstallDatas,
-        account,
-      });
-
-      const action = getAction(client, sendUserOperation, "sendUserOperation");
-      const result = await action({
-        callData,
-        account,
-      });
-
-      return result;
-    },
   };
 }
