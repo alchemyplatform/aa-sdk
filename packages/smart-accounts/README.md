@@ -15,12 +15,10 @@ npm install @alchemy/smart-accounts @alchemy/common viem
 - **`toLightAccount`** - Single-owner LightAccount
 - **`toMultiOwnerLightAccount`** - Multi-owner variant
 - **`predictLightAccountAddress`** / **`predictMultiOwnerLightAccountAddress`** - Counterfactual address prediction
-- **`singleOwnerLightAccountActions`** / **`multiOwnerLightAccountActions`** - Client decorators
 
 ### Modular Account v1 (ERC-6900)
 
 - **`toMultiOwnerModularAccountV1`** - Account constructor
-- **`multiOwnerModularAccountV1Actions`** - Client decorator
 - **`predictMultiOwnerModularAccountV1Address`** - Address prediction
 
 ### Modular Account v2

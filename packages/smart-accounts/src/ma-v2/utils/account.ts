@@ -64,8 +64,6 @@ export async function getMAV2UpgradeToData(
   return {
     implAddress: DefaultAddress.SMAV2_STORAGE,
     initializationData: initData,
-    // TODO(v5): do we need `createModularAccountV2FromExisting()` in the return type here like we had in v4 or no?
-    // Almost certainly not, but we need to clean up other parts in SDK for client-side upgrades.
   };
 }
 

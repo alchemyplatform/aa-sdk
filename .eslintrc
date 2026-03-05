@@ -63,10 +63,6 @@
         "fixBatchSize": 0,
       },
     ],
-    "no-warning-comments": [
-      "warn",
-      { "terms": ["TODO(v5)"], "location": "anywhere" },
-    ],
   },
   "overrides": [
     {
@@ -98,7 +94,12 @@
       },
     },
     {
-      "files": ["packages/**/*.test.ts", "packages/**/*.test-d.ts", "packages/**/test-utils/**/*", "packages/**/__tests__/**/*"],
+      "files": [
+        "packages/**/*.test.ts",
+        "packages/**/*.test-d.ts",
+        "packages/**/test-utils/**/*",
+        "packages/**/__tests__/**/*",
+      ],
       "rules": {
         "no-restricted-syntax": "off",
       },
