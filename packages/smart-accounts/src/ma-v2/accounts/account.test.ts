@@ -58,6 +58,9 @@ import { EXECUTE_USER_OP_SELECTOR } from "../utils/account.js";
 // Note: These tests maintain a shared state to not break the local-running rundler by desyncing the chain.
 describe("MA v2 Account Tests", async () => {
   const VALID_1271_SIG_MAGIC_BYTES = "0x1626ba7e";
+  const EXECUTE_SELECTOR = "0xb61d27f6" as Hex; // execute(address,uint256,bytes)
+  const EXECUTE_BATCH_SELECTOR = "0x34fcd5be" as Hex; // executeBatch(Call[])
+  const INSTALL_VALIDATION_SELECTOR = "0x1bbf564c" as Hex; // installValidation(bytes25,bytes4[],bytes,bytes[])
 
   let client: ReturnType<typeof localInstance.getClient> &
     ReturnType<typeof publicActions> &
@@ -295,11 +298,11 @@ describe("MA v2 Account Tests", async () => {
         validationConfig: {
           moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
           entityId: 1,
-          isGlobal: true,
+          isGlobal: false,
           isSignatureValidation: true,
           isUserOpValidation: true,
         },
-        selectors: [],
+        selectors: [EXECUTE_SELECTOR, EXECUTE_BATCH_SELECTOR],
         installData: SingleSignerValidationModule.encodeOnInstallData({
           entityId: 1,
           signer: sessionKey.address,
@@ -326,7 +329,7 @@ describe("MA v2 Account Tests", async () => {
       const sessionKeyClient = await givenConnectedProvider({
         signer: sessionKey,
         accountAddress: provider.account.address,
-        signerEntity: { entityId: 1, isGlobalValidation: true },
+        signerEntity: { entityId: 1, isGlobalValidation: false },
       });
 
       const sessionKeySig = await sessionKeyClient.account.signMessage({
@@ -366,11 +369,11 @@ describe("MA v2 Account Tests", async () => {
         validationConfig: {
           moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
           entityId: 1,
-          isGlobal: true,
+          isGlobal: false,
           isSignatureValidation: true,
           isUserOpValidation: true,
         },
-        selectors: [],
+        selectors: [EXECUTE_SELECTOR, EXECUTE_BATCH_SELECTOR],
         installData: SingleSignerValidationModule.encodeOnInstallData({
           entityId: 1,
           signer: sessionKey.address,
@@ -438,7 +441,7 @@ describe("MA v2 Account Tests", async () => {
       const sessionKeyClient = await givenConnectedProvider({
         signer: sessionKey,
         accountAddress: provider.account.address,
-        signerEntity: { entityId: 1, isGlobalValidation: true },
+        signerEntity: { entityId: 1, isGlobalValidation: false },
       });
 
       const sessionKeySignature =
@@ -572,11 +575,11 @@ describe("MA v2 Account Tests", async () => {
       validationConfig: {
         moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
         entityId: 1,
-        isGlobal: true,
+        isGlobal: false,
         isSignatureValidation: true,
         isUserOpValidation: true,
       },
-      selectors: [],
+      selectors: [EXECUTE_SELECTOR, EXECUTE_BATCH_SELECTOR],
       installData: SingleSignerValidationModule.encodeOnInstallData({
         entityId: 1,
         signer: sessionKey.address,
@@ -592,7 +595,7 @@ describe("MA v2 Account Tests", async () => {
     const sessionKeyClient = await givenConnectedProvider({
       signer: sessionKey,
       accountAddress: provider.account.address,
-      signerEntity: { entityId: 1, isGlobalValidation: true },
+      signerEntity: { entityId: 1, isGlobalValidation: false },
     });
 
     const sessionKeyHash = await sessionKeyClient.sendUserOperation({
@@ -849,7 +852,7 @@ describe("MA v2 Account Tests", async () => {
       });
 
       // Test variables
-      const isGlobalValidation = true;
+      const isGlobalValidation = false;
       const { entityId, nonce } = await provider.getEntityIdAndNonce({
         isGlobalValidation: isGlobalValidation,
       });
@@ -863,7 +866,7 @@ describe("MA v2 Account Tests", async () => {
           isSignatureValidation: true,
           isUserOpValidation: true,
         },
-        selectors: [],
+        selectors: [EXECUTE_SELECTOR, EXECUTE_BATCH_SELECTOR],
         installData: SingleSignerValidationModule.encodeOnInstallData({
           entityId: entityId,
           signer: sessionKey.address,
@@ -940,16 +943,21 @@ describe("MA v2 Account Tests", async () => {
 
       const sessionKeyEntityId = 1;
 
-      // First, install a session key
+      // First, install a session key with installValidation access
+      // (needed to sign deferred actions that install other keys)
       const hash = await provider.installValidation({
         validationConfig: {
           moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
           entityId: sessionKeyEntityId,
-          isGlobal: true,
+          isGlobal: false,
           isSignatureValidation: true,
           isUserOpValidation: true,
         },
-        selectors: [],
+        selectors: [
+          EXECUTE_SELECTOR,
+          EXECUTE_BATCH_SELECTOR,
+          INSTALL_VALIDATION_SELECTOR,
+        ],
         installData: SingleSignerValidationModule.encodeOnInstallData({
           entityId: sessionKeyEntityId,
           signer: sessionKey.address,
@@ -966,7 +974,7 @@ describe("MA v2 Account Tests", async () => {
           accountAddress: provider.account.address,
           signerEntity: {
             entityId: sessionKeyEntityId,
-            isGlobalValidation: true,
+            isGlobalValidation: false,
           },
         })
       )
@@ -1051,11 +1059,11 @@ describe("MA v2 Account Tests", async () => {
       validationConfig: {
         moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
         entityId: 1,
-        isGlobal: true,
+        isGlobal: false,
         isSignatureValidation: true,
         isUserOpValidation: true,
       },
-      selectors: [],
+      selectors: [EXECUTE_SELECTOR, EXECUTE_BATCH_SELECTOR],
       installData: SingleSignerValidationModule.encodeOnInstallData({
         entityId: 1,
         signer: sessionKey.address,
@@ -1083,7 +1091,7 @@ describe("MA v2 Account Tests", async () => {
     const sessionKeyClient = await givenConnectedProvider({
       signer: sessionKey,
       accountAddress: provider.account.address,
-      signerEntity: { entityId: 1, isGlobalValidation: true },
+      signerEntity: { entityId: 1, isGlobalValidation: false },
     });
 
     await expect(
@@ -1123,11 +1131,11 @@ describe("MA v2 Account Tests", async () => {
       validationConfig: {
         moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
         entityId: 1,
-        isGlobal: true,
+        isGlobal: false,
         isSignatureValidation: true,
         isUserOpValidation: true,
       },
-      selectors: [],
+      selectors: [EXECUTE_SELECTOR, EXECUTE_BATCH_SELECTOR],
       installData: SingleSignerValidationModule.encodeOnInstallData({
         entityId: 1,
         signer: sessionKey.address,
@@ -1155,7 +1163,7 @@ describe("MA v2 Account Tests", async () => {
         signer: sessionKey,
         accountAddress: provider.account.address,
         paymaster: true,
-        signerEntity: { entityId: 1, isGlobalValidation: true },
+        signerEntity: { entityId: 1, isGlobalValidation: false },
       })
     ).extend(installValidationActions);
 
@@ -1219,11 +1227,11 @@ describe("MA v2 Account Tests", async () => {
       validationConfig: {
         moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
         entityId: 1,
-        isGlobal: true,
+        isGlobal: false,
         isSignatureValidation: true,
         isUserOpValidation: true,
       },
-      selectors: [],
+      selectors: [EXECUTE_SELECTOR, EXECUTE_BATCH_SELECTOR],
       installData: SingleSignerValidationModule.encodeOnInstallData({
         entityId: 1,
         signer: sessionKey.address,
@@ -1251,7 +1259,7 @@ describe("MA v2 Account Tests", async () => {
       await givenConnectedProvider({
         signer: sessionKey,
         accountAddress: provider.account.address,
-        signerEntity: { entityId: 1, isGlobalValidation: true },
+        signerEntity: { entityId: 1, isGlobalValidation: false },
       })
     ).extend(installValidationActions);
 
@@ -1301,11 +1309,11 @@ describe("MA v2 Account Tests", async () => {
       validationConfig: {
         moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
         entityId: 1,
-        isGlobal: true,
+        isGlobal: false,
         isSignatureValidation: true,
         isUserOpValidation: true,
       },
-      selectors: [],
+      selectors: [EXECUTE_SELECTOR, EXECUTE_BATCH_SELECTOR],
       installData: SingleSignerValidationModule.encodeOnInstallData({
         entityId: 1,
         signer: sessionKey.address,
@@ -1320,7 +1328,7 @@ describe("MA v2 Account Tests", async () => {
       await givenConnectedProvider({
         signer: sessionKey,
         accountAddress: provider.account.address,
-        signerEntity: { entityId: 1, isGlobalValidation: true },
+        signerEntity: { entityId: 1, isGlobalValidation: false },
       })
     ).extend(installValidationActions);
 
@@ -1358,7 +1366,7 @@ describe("MA v2 Account Tests", async () => {
       validationConfig: {
         moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
         entityId: 1,
-        isGlobal: true,
+        isGlobal: false,
         isSignatureValidation: true,
         isUserOpValidation: true,
       },
@@ -1460,11 +1468,11 @@ describe("MA v2 Account Tests", async () => {
         validationConfig: {
           moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
           entityId: 1,
-          isGlobal: true,
+          isGlobal: false,
           isSignatureValidation: true,
           isUserOpValidation: true,
         },
-        selectors: [],
+        selectors: [EXECUTE_SELECTOR, EXECUTE_BATCH_SELECTOR],
         installData: SingleSignerValidationModule.encodeOnInstallData({
           entityId: 1,
           signer: sessionKey.address,
@@ -1503,7 +1511,7 @@ describe("MA v2 Account Tests", async () => {
         await givenConnectedProvider({
           signer: sessionKey,
           accountAddress: provider.account.address,
-          signerEntity: { entityId: 1, isGlobalValidation: true },
+          signerEntity: { entityId: 1, isGlobalValidation: false },
         })
       ).extend(installValidationActions);
 
@@ -1573,7 +1581,7 @@ describe("MA v2 Account Tests", async () => {
       await givenConnectedProvider({
         signer: sessionKey,
         accountAddress: provider.account.address,
-        signerEntity: { entityId: 1, isGlobalValidation: true },
+        signerEntity: { entityId: 1, isGlobalValidation: false },
       })
     ).extend(installValidationActions);
 
@@ -1587,11 +1595,11 @@ describe("MA v2 Account Tests", async () => {
       validationConfig: {
         moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
         entityId: 1,
-        isGlobal: true,
+        isGlobal: false,
         isSignatureValidation: true,
         isUserOpValidation: true,
       },
-      selectors: [],
+      selectors: [EXECUTE_SELECTOR, EXECUTE_BATCH_SELECTOR],
       installData: SingleSignerValidationModule.encodeOnInstallData({
         entityId: 1,
         signer: sessionKey.address,
@@ -1700,7 +1708,7 @@ describe("MA v2 Account Tests", async () => {
       await givenConnectedProvider({
         signer: sessionKey,
         accountAddress: provider.account.address,
-        signerEntity: { entityId: 2, isGlobalValidation: true },
+        signerEntity: { entityId: 2, isGlobalValidation: false },
       })
     ).extend(installValidationActions);
 
@@ -1714,11 +1722,11 @@ describe("MA v2 Account Tests", async () => {
       validationConfig: {
         moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
         entityId: 2,
-        isGlobal: true,
+        isGlobal: false,
         isSignatureValidation: true,
         isUserOpValidation: true,
       },
-      selectors: [],
+      selectors: [EXECUTE_SELECTOR, EXECUTE_BATCH_SELECTOR],
       installData: SingleSignerValidationModule.encodeOnInstallData({
         entityId: 2,
         signer: sessionKey.address,
