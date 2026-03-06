@@ -50,6 +50,7 @@
   },
   "devDependencies": {
     "@types/deep-equal": "^1.0.4",
+    "abitype": "^1.0.0",
     "typescript-template": "*",
     "viem": "^2.45.0"
   },
