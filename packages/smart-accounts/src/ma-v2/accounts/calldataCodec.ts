@@ -84,7 +84,7 @@ export function decodeCallsMAv2(data: Hex, accountAddress: Address): Call[] {
   return [
     {
       to: accountAddress,
-      data,
+      data: trimmedData,
     },
   ];
 }

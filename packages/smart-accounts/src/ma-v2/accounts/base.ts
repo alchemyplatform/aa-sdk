@@ -331,7 +331,7 @@ export async function toModularAccountV2Base<
         if (isAddressEqual(call.to, accountAddress)) {
           // If the call is to the account itself, we need to avoid wrapping it in an `execute` call.
 
-          if (call.data === undefined) {
+          if (call.data == null) {
             throw new BaseError("Data is required for an account self-call.");
           }
 
