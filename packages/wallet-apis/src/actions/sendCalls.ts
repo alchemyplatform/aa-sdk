@@ -10,8 +10,10 @@ import { LOGGER } from "../logger.js";
 import { signSignatureRequest } from "./signSignatureRequest.js";
 import { extractCapabilitiesForSending } from "../utils/capabilities.js";
 
-export type SendCallsParams = Prettify<
-  DistributiveOmit<PrepareCallsParams, "chainId"> & {
+export type SendCallsParams<
+  calls extends readonly unknown[] = readonly unknown[],
+> = Prettify<
+  DistributiveOmit<PrepareCallsParams<calls>, "chainId"> & {
     chain?: Pick<Chain, "id">;
   }
 >;
@@ -53,28 +55,28 @@ export type SendCallsResult = Prettify<SendPreparedCallsResult>;
  * from the user. It is recommended to use the `prepareCalls` action instead to manually handle the permit signature.
  * </Note>
  */
-export async function sendCalls(
+export async function sendCalls<const calls extends readonly unknown[]>(
   client: InnerWalletApiClient,
-  params: SendCallsParams,
+  params: SendCallsParams<calls>,
 ): Promise<SendCallsResult> {
   LOGGER.info("sendCalls:start", {
     calls: params.calls?.length,
     hasCapabilities: !!params.capabilities,
   });
   const { chain, ...prepareCallsParams } = params;
-  let calls = await prepareCalls(client, {
+  let prepared = await prepareCalls(client, {
     ...prepareCallsParams,
     ...(chain != null ? { chainId: chain.id } : {}),
   });
 
-  if (calls.type === "paymaster-permit") {
+  if (prepared.type === "paymaster-permit") {
     const signature = await signSignatureRequest(
       client,
-      calls.signatureRequest,
+      prepared.signatureRequest,
     );
 
     const secondCallParams = {
-      ...calls.modifiedRequest,
+      ...prepared.modifiedRequest,
       // WebAuthn signatures are not supported for paymaster permits (throws above).
       paymasterPermitSignature: signature as Exclude<
         typeof signature,
@@ -82,10 +84,10 @@ export async function sendCalls(
       >,
     };
 
-    calls = await prepareCalls(client, secondCallParams);
+    prepared = await prepareCalls(client, secondCallParams);
   }
 
-  const signedCalls = await signPreparedCalls(client, calls);
+  const signedCalls = await signPreparedCalls(client, prepared);
 
   const sendPreparedCallsCapabilities = extractCapabilitiesForSending(
     params.capabilities,
