@@ -1,5 +1,6 @@
-import { type Address, type Call } from "viem";
+import { type Address, type Call, encodeFunctionData } from "viem";
 import { encodeCallsLA, decodeCallsLA } from "./calldataCodec.js";
+import { LightAccountAbi_v1 } from "../abis/LightAccountAbi_v1.js";
 
 const accountAddress: Address = "0x1111111111111111111111111111111111111111";
 const targetAddress: Address = "0x2222222222222222222222222222222222222222";
@@ -84,8 +85,11 @@ describe("LightAccount calldataCodec", () => {
     expect(decoded).toEqual(calls);
   });
 
-  it("should decode unrecognized selector as self-call", () => {
-    const data = "0x12345678";
+  it("should decode non-execute ABI function as self-call", () => {
+    const data = encodeFunctionData({
+      abi: LightAccountAbi_v1,
+      functionName: "domainSeparator",
+    });
     const decoded = decodeCallsLA(data, accountAddress);
 
     expect(decoded).toEqual([

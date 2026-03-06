@@ -1,6 +1,7 @@
-import { type Address, type Call, concatHex } from "viem";
+import { type Address, type Call, concatHex, encodeFunctionData } from "viem";
 import { encodeCallsMAv2, decodeCallsMAv2 } from "./calldataCodec.js";
 import { EXECUTE_USER_OP_SELECTOR } from "../utils/account.js";
+import { modularAccountAbi } from "../abis/modularAccountAbi.js";
 
 const accountAddress: Address = "0x1111111111111111111111111111111111111111";
 const targetAddress: Address = "0x2222222222222222222222222222222222222222";
@@ -81,8 +82,11 @@ describe("ModularAccountV2 calldataCodec", () => {
     expect(decoded).toEqual(calls);
   });
 
-  it("should decode unrecognized selector as self-call", () => {
-    const data = "0x12345678";
+  it("should decode non-execute ABI function as self-call", () => {
+    const data = encodeFunctionData({
+      abi: modularAccountAbi,
+      functionName: "accountId",
+    });
     const decoded = decodeCallsMAv2(data, accountAddress);
 
     expect(decoded).toEqual([

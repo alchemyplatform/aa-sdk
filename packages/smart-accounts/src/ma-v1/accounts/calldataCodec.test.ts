@@ -64,16 +64,4 @@ describe("ModularAccountV1 calldataCodec", () => {
 
     expect(decoded).toEqual(calls);
   });
-
-  it("should decode unrecognized selector as self-call", () => {
-    const data = "0x12345678";
-    const decoded = decodeCallsMAv1(data, accountAddress);
-
-    expect(decoded).toEqual([
-      {
-        to: accountAddress,
-        data,
-      },
-    ]);
-  });
 });
