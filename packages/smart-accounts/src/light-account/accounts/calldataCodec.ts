@@ -12,6 +12,8 @@ import { BaseError } from "@alchemy/common";
 
 /**
  * Encodes an array of calls into LightAccount calldata for `execute` or `executeBatch`.
+ * Used internally by the LightAccount SmartAccount implementation. Typically not needed
+ * directly unless you have an advanced use case.
  *
  * @param {Call[]} calls The calls to encode.
  * @returns {Hex} The encoded calldata.
@@ -49,6 +51,8 @@ export function encodeCallsLA(calls: readonly Call[]): Hex {
 
 /**
  * Decodes LightAccount calldata back into an array of calls.
+ * Used internally by the LightAccount SmartAccount implementation. Typically not needed
+ * directly unless you have an advanced use case.
  *
  * @param {Hex} data The calldata to decode.
  * @param {Address} accountAddress The account address, used as the `to` for unrecognized selectors.

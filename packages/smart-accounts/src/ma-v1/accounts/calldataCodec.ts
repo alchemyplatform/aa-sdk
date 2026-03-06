@@ -10,6 +10,8 @@ import { BaseError } from "@alchemy/common";
 
 /**
  * Encodes an array of calls into ModularAccountV1 calldata for `execute` or `executeBatch`.
+ * Used internally by the ModularAccountV1 SmartAccount implementation. Typically not needed
+ * directly unless you have an advanced use case.
  *
  * @param {Call[]} calls The calls to encode.
  * @returns {Hex} The encoded calldata.
@@ -42,6 +44,8 @@ export function encodeCallsMAv1(calls: readonly Call[]): Hex {
 
 /**
  * Decodes ModularAccountV1 calldata back into an array of calls.
+ * Used internally by the ModularAccountV1 SmartAccount implementation. Typically not needed
+ * directly unless you have an advanced use case.
  *
  * @param {Hex} data The calldata to decode.
  * @param {Address} accountAddress The account address, used as the `to` for unrecognized selectors.
