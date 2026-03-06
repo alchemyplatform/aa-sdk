@@ -19,10 +19,6 @@ import { BaseError } from "@alchemy/common";
  * @returns {Hex} The encoded calldata.
  */
 export function encodeCallsLA(calls: readonly Call[]): Hex {
-  if (!calls.length) {
-    throw new BaseError("No calls to encode.");
-  }
-
   if (calls.length === 1) {
     return encodeFunctionData({
       abi: LightAccountAbi_v1,
