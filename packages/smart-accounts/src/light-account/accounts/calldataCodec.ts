@@ -10,7 +10,19 @@ import { BaseError } from "@alchemy/common";
 
 // Conveniently, all variants of LA up to v2.0.0 use the same function signatures for `execute` and `executeBatch`.
 
+/**
+ * Encodes an array of calls into LightAccount calldata for `execute` or `executeBatch`.
+ * Used internally by the LightAccount SmartAccount implementation. Typically not needed
+ * directly unless you have an advanced use case.
+ *
+ * @param {Call[]} calls The calls to encode.
+ * @returns {Hex} The encoded calldata.
+ */
 export function encodeCallsLA(calls: readonly Call[]): Hex {
+  if (!calls.length) {
+    throw new BaseError("No calls to encode.");
+  }
+
   if (calls.length === 1) {
     return encodeFunctionData({
       abi: LightAccountAbi_v1,
@@ -37,6 +49,15 @@ export function encodeCallsLA(calls: readonly Call[]): Hex {
   });
 }
 
+/**
+ * Decodes LightAccount calldata back into an array of calls.
+ * Used internally by the LightAccount SmartAccount implementation. Typically not needed
+ * directly unless you have an advanced use case.
+ *
+ * @param {Hex} data The calldata to decode.
+ * @param {Address} accountAddress The account address, used as the `to` for unrecognized selectors.
+ * @returns {Call[]} The decoded calls.
+ */
 export function decodeCallsLA(data: Hex, accountAddress: Address): Call[] {
   const decoded = decodeFunctionData({
     abi: LightAccountAbi_v1,

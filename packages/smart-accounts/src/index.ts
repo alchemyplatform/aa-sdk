@@ -33,6 +33,11 @@ export {
 } from "./light-account/utils.js";
 
 export {
+  encodeCallsLA,
+  decodeCallsLA,
+} from "./light-account/accounts/calldataCodec.js";
+
+export {
   lightAccountStaticImplV1_0_1,
   lightAccountStaticImplV1_0_2,
   lightAccountStaticImplV1_1_0,
@@ -60,12 +65,22 @@ export {
   DefaultMaV1PluginAddress,
 } from "./ma-v1/account.js";
 
+export {
+  encodeCallsMAv1,
+  decodeCallsMAv1,
+} from "./ma-v1/accounts/calldataCodec.js";
+
 // ModularAccountV2
 export type * from "./ma-v2/accounts/account.js";
 export { toModularAccountV2 } from "./ma-v2/accounts/account.js";
 
 export type * from "./ma-v2/accounts/base.js";
 export { toModularAccountV2Base } from "./ma-v2/accounts/base.js";
+
+export {
+  encodeCallsMAv2,
+  decodeCallsMAv2,
+} from "./ma-v2/accounts/calldataCodec.js";
 
 export type * from "./ma-v2/decorators/deferralActions.js";
 export { deferralActions } from "./ma-v2/decorators/deferralActions.js";
