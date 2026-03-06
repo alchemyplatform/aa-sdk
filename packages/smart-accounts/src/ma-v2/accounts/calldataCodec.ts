@@ -8,7 +8,6 @@ import {
 import { sliceHex } from "viem/utils";
 import { modularAccountAbi } from "../abis/modularAccountAbi.js";
 import { EXECUTE_USER_OP_SELECTOR } from "../utils/account.js";
-import { BaseError } from "@alchemy/common";
 
 /**
  * Encodes an array of calls into ModularAccountV2 calldata for `execute` or `executeBatch`.
@@ -19,10 +18,6 @@ import { BaseError } from "@alchemy/common";
  * @returns {Hex} The encoded calldata.
  */
 export function encodeCallsMAv2(calls: readonly Call[]): Hex {
-  if (!calls.length) {
-    throw new BaseError("No calls to encode.");
-  }
-
   if (calls.length === 1) {
     return encodeFunctionData({
       abi: modularAccountAbi,

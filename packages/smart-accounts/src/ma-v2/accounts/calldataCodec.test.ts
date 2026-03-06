@@ -8,10 +8,6 @@ const targetAddress: Address = "0x2222222222222222222222222222222222222222";
 const targetAddress2: Address = "0x3333333333333333333333333333333333333333";
 
 describe("ModularAccountV2 calldataCodec", () => {
-  it("should throw on empty calls", () => {
-    expect(() => encodeCallsMAv2([])).toThrow("No calls to encode.");
-  });
-
   it("should roundtrip a single call", () => {
     const calls: Call[] = [
       {
