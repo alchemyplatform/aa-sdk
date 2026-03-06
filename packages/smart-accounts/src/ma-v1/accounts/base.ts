@@ -8,7 +8,6 @@ import {
   type Transport,
   type Hash,
   type TypedDataDefinition,
-  encodeFunctionData,
 } from "viem";
 import {
   entryPoint06Abi,
@@ -21,16 +20,15 @@ import type {
   SignatureRequest,
   SmartAccountWithDecodeCalls,
 } from "../../types.js";
-import { IStandardExecutorAbi } from "../abis/IStandardExecutor.js";
 import { signMessage, signTypedData } from "viem/actions";
 import {
-  decodeFunctionData,
   getAction,
   hashMessage,
   hashTypedData,
   isAddressEqual,
 } from "viem/utils";
 import { BaseError } from "@alchemy/common";
+import { encodeCallsMAv1, decodeCallsMAv1 } from "./calldataCodec.js";
 
 type MaV1AccountType = "MultiOwnerModularAccountV1"; // Currently no SDK v5 support for "MultiSigModularAccountV1".
 
@@ -112,10 +110,6 @@ export async function toModularAccountV1Base<
     },
 
     async encodeCalls(calls) {
-      if (!calls.length) {
-        throw new BaseError("No calls to encode.");
-      }
-
       if (calls.length === 1) {
         const call = calls[0];
 
@@ -127,59 +121,14 @@ export async function toModularAccountV1Base<
 
           return call.data;
         }
-
-        return encodeFunctionData({
-          abi: IStandardExecutorAbi,
-          functionName: "execute",
-          args: [call.to, call.value ?? 0n, call.data ?? "0x"],
-        });
       }
 
-      return encodeFunctionData({
-        abi: IStandardExecutorAbi,
-        functionName: "executeBatch",
-        args: [
-          calls.map((call) => ({
-            target: call.to,
-            value: call.value ?? 0n,
-            data: call.data ?? "0x",
-          })),
-        ],
-      });
+      return encodeCallsMAv1(calls);
     },
 
     // Inverse of `encodeCalls`.
     async decodeCalls(data) {
-      const decoded = decodeFunctionData({
-        abi: IStandardExecutorAbi,
-        data,
-      });
-
-      if (decoded.functionName === "execute") {
-        return [
-          {
-            to: decoded.args[0],
-            value: decoded.args[1],
-            data: decoded.args[2],
-          },
-        ];
-      }
-
-      if (decoded.functionName === "executeBatch") {
-        return decoded.args[0].map((call) => ({
-          to: call.target,
-          value: call.value,
-          data: call.data,
-        }));
-      }
-
-      // If the data is not for an `execute` or `executeBatch` call, we treat it as a single call to the account itself.
-      return [
-        {
-          to: accountAddress,
-          data,
-        },
-      ];
+      return decodeCallsMAv1(data, accountAddress);
     },
 
     async getStubSignature() {
