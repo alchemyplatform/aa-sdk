@@ -157,7 +157,7 @@ importers:
         specifier: ^3.0.1
         version: 3.0.1
       node-fetch:
-        specifier: ^3.3.0
+        specifier: ^3.3.1
         version: 3.3.2
       prool:
         specifier: ^0.0.15
