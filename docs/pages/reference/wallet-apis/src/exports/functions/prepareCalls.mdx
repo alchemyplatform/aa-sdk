@@ -70,11 +70,53 @@ const result = await client.prepareCalls({
       </td>
 
       <td>
-        `Object`
+        \{ `account?`: `AccountParam`; `capabilities?`: `Omit`\<\{ }, `"paymasterService"`> & `object`; `chainId?`: `number`; }
       </td>
 
       <td>
         Parameters for preparing calls
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `params.account?`
+      </td>
+
+      <td>
+        `AccountParam`
+      </td>
+
+      <td>
+        The account to execute the calls from. Can be an address string or an object with an `address` property. Defaults to the client's account (signer address via EIP-7702).
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `params.capabilities?`
+      </td>
+
+      <td>
+        `Omit`\<\{ }, `"paymasterService"`> & `object`
+      </td>
+
+      <td>
+        Optional capabilities to include with the request
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `params.chainId?`
+      </td>
+
+      <td>
+        `number`
+      </td>
+
+      <td>
+        ‐
       </td>
     </tr>
 

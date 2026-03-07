@@ -60,11 +60,39 @@ const signature = await client.signMessage({
       </td>
 
       <td>
-        `Object`
+        \{ `account?`: `AccountParam`; `message`: [`SignableMessage`](https://viem.sh); }
       </td>
 
       <td>
         Parameters for signing the message
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `params.account?`
+      </td>
+
+      <td>
+        `AccountParam`
+      </td>
+
+      <td>
+        Optional account to use for signing. Can be an address string or an object with an `address` property. If not provided, uses the client's current account.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `params.message`
+      </td>
+
+      <td>
+        [`SignableMessage`](https://viem.sh)
+      </td>
+
+      <td>
+        The message to sign using EIP-191. Can be a string, or object with raw bytes.
       </td>
     </tr>
 

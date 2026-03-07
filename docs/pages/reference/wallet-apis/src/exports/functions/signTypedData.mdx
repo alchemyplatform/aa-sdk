@@ -73,11 +73,39 @@ const signature = await client.signTypedData({
       </td>
 
       <td>
-        `Object`
+        \{ `account?`: `AccountParam`; `message`: `Record`\<`string`, `unknown`>; }
       </td>
 
       <td>
         The typed data to sign, following EIP-712 format
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `params.account?`
+      </td>
+
+      <td>
+        `AccountParam`
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `params.message`
+      </td>
+
+      <td>
+        `Record`\<`string`, `unknown`>
+      </td>
+
+      <td>
+        ‐
       </td>
     </tr>
 
