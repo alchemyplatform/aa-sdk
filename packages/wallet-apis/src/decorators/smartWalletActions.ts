@@ -63,11 +63,15 @@ export type SmartWalletActions = {
   requestAccount: (
     params?: RequestAccountParams,
   ) => Promise<RequestAccountResult>;
-  prepareCalls: (params: PrepareCallsParams) => Promise<PrepareCallsResult>;
+  prepareCalls: <const calls extends readonly unknown[]>(
+    params: PrepareCallsParams<calls>,
+  ) => Promise<PrepareCallsResult>;
   sendPreparedCalls: (
     params: SendPreparedCallsParams,
   ) => Promise<SendPreparedCallsResult>;
-  sendCalls: (params: SendCallsParams) => Promise<SendCallsResult>;
+  sendCalls: <const calls extends readonly unknown[]>(
+    params: SendCallsParams<calls>,
+  ) => Promise<SendCallsResult>;
   listAccounts: (params: ListAccountsParams) => Promise<ListAccountsResult>;
   signSignatureRequest: (
     params: SignSignatureRequestParams,

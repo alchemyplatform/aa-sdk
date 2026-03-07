@@ -1,4 +1,5 @@
-import type { Address, Prettify } from "viem";
+import type { Narrow } from "abitype";
+import type { Address, Call, Calls, Prettify } from "viem";
 import type { DistributiveOmit, InnerWalletApiClient } from "../types.ts";
 import { LOGGER } from "../logger.js";
 import {
@@ -8,6 +9,7 @@ import {
   type PrepareCallsCapabilities,
   type WithCapabilities,
 } from "../utils/capabilities.js";
+import { encodeCalls } from "../utils/encodeCalls.js";
 import { resolveAddress, type AccountParam } from "../utils/resolve.js";
 import { wallet_prepareCalls as MethodSchema } from "@alchemy/wallet-api-types/rpc";
 import {
@@ -22,11 +24,14 @@ const schema = methodSchema(MethodSchema);
 type BasePrepareCallsParams = MethodParams<typeof MethodSchema>;
 type PrepareCallsResponse = MethodResponse<typeof MethodSchema>;
 
-export type PrepareCallsParams = Prettify<
+export type PrepareCallsParams<
+  calls extends readonly unknown[] = readonly unknown[],
+> = Prettify<
   WithCapabilities<
-    DistributiveOmit<BasePrepareCallsParams, "from" | "chainId"> & {
+    DistributiveOmit<BasePrepareCallsParams, "from" | "chainId" | "calls"> & {
       account?: AccountParam;
       chainId?: number;
+      calls: Calls<Narrow<calls>>;
     }
   >
 >;
@@ -79,9 +84,9 @@ export type PrepareCallsResult =
  * });
  * ```
  */
-export async function prepareCalls(
+export async function prepareCalls<const calls extends readonly unknown[]>(
   client: InnerWalletApiClient,
-  params: PrepareCallsParams,
+  params: PrepareCallsParams<calls>,
 ): Promise<PrepareCallsResult> {
   const from = params.account
     ? resolveAddress(params.account)
@@ -96,9 +101,12 @@ export async function prepareCalls(
     hasCapabilities: !!params.capabilities,
   });
 
-  const { account: _, chainId: __, ...rest } = params;
+  const encodedCalls = encodeCalls(params.calls as readonly Call[]);
+
+  const { account: _, chainId: __, calls: ___, ...rest } = params;
   const rpcParams = encode(schema.request, {
     ...rest,
+    calls: encodedCalls,
     chainId,
     from,
     capabilities: toRpcCapabilities(capabilities),
