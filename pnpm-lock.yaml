@@ -32,6 +32,9 @@ importers:
       add:
         specifier: ^2.0.6
         version: 2.0.6
+      dotenv:
+        specifier: ^16.4.5
+        version: 16.6.1
       dotenv-cli:
         specifier: ^7.4.2
         version: 7.4.4
