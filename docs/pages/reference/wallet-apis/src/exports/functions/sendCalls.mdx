@@ -76,53 +76,11 @@ from the user. It is recommended to use the `prepareCalls` action instead to man
       </td>
 
       <td>
-        \{ `account?`: `AccountParam`; `capabilities?`: `Omit`\<\{ }, `"paymasterService"`> & `object`; `chain?`: `Pick`\<[`Chain`](https://viem.sh), `"id"`>; }
+        `Object`
       </td>
 
       <td>
         Parameters for sending calls
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `params.account?`
-      </td>
-
-      <td>
-        `AccountParam`
-      </td>
-
-      <td>
-        The account to execute the calls from. Can be an address string or an object with an `address` property. Defaults to the client's account (signer address via EIP-7702).
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `params.capabilities?`
-      </td>
-
-      <td>
-        `Omit`\<\{ }, `"paymasterService"`> & `object`
-      </td>
-
-      <td>
-        Optional capabilities to include with the request.
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `params.chain?`
-      </td>
-
-      <td>
-        `Pick`\<[`Chain`](https://viem.sh), `"id"`>
-      </td>
-
-      <td>
-        ‐
       </td>
     </tr>
 
