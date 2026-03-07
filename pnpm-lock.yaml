@@ -157,7 +157,7 @@ importers:
         specifier: ^3.0.1
         version: 3.0.1
       node-fetch:
-        specifier: ^3.3.1
+        specifier: ^3.3.0
         version: 3.3.2
       prool:
         specifier: ^0.0.15
@@ -213,7 +213,7 @@ importers:
   packages/common:
     dependencies:
       zod:
-        specifier: ^3.23.8
+        specifier: ^3.23.0
         version: 3.25.76
     devDependencies:
       typescript-template:
@@ -298,7 +298,7 @@ importers:
         specifier: ^3.0.5
         version: 3.0.5
       "@types/estree":
-        specifier: ^1.0.5
+        specifier: ^1.0.0
         version: 1.0.8
       typescript-template:
         specifier: workspace:*

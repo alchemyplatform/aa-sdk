@@ -118,7 +118,7 @@ jobs:
       # Format version changes so committed files pass lint checks
       - name: Format Version Changes
         if: ${{ inputs.publish }}
-        run: pnpm run lint:write
+        run: pnpm prettier --write --ignore-unknown .
 
       # Commit version changes so lerna publish doesn't complain about uncommitted changes
       - name: Commit Version Changes

@@ -6,7 +6,6 @@ import {
   type Hex,
 } from "viem";
 import { IStandardExecutorAbi } from "../abis/IStandardExecutor.js";
-import { BaseError } from "@alchemy/common";
 
 /**
  * Encodes an array of calls into ModularAccountV1 calldata for `execute` or `executeBatch`.
@@ -17,10 +16,6 @@ import { BaseError } from "@alchemy/common";
  * @returns {Hex} The encoded calldata.
  */
 export function encodeCallsMAv1(calls: readonly Call[]): Hex {
-  if (!calls.length) {
-    throw new BaseError("No calls to encode.");
-  }
-
   if (calls.length === 1) {
     return encodeFunctionData({
       abi: IStandardExecutorAbi,
