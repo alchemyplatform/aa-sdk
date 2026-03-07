@@ -52,6 +52,9 @@
     "typescript-template": "*",
     "viem": "^2.45.0"
   },
+  "dependencies": {
+    "zod": "^3.23.0"
+  },
   "peerDependencies": {
     "viem": "^2.45.0"
   },

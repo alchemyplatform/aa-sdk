@@ -25,6 +25,7 @@
   },
   "devDependencies": {
     "@types/eslint-utils": "^3.0.5",
+    "@types/estree": "^1.0.0",
     "typescript-template": "*"
   },
   "dependencies": {

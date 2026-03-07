@@ -38,6 +38,7 @@
     "clean": "rm -rf ./dist"
   },
   "devDependencies": {
+    "@types/node": "^22.0.0",
     "typescript-template": "*"
   },
   "dependencies": {
