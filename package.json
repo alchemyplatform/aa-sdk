@@ -5,32 +5,24 @@
   "engines": {
     "node": ">=18.16"
   },
-  "packageManager": "yarn@1.22.22",
-  "workspaces": {
-    "packages": [
-      "templates/*",
-      "docs",
-      ".vitest",
-      "halp",
-      "packages/*"
-    ]
-  },
-  "resolutions": {
-    "wagmi": "2.16.9",
-    "viem": "^2.45.0",
-    "@noble/hashes": "^1.4.0",
-    "@noble/curves": "^1.4.0",
-    "eslint-plugin-react-hooks": "4.6.0"
+  "packageManager": "pnpm@9.15.4",
+  "pnpm": {
+    "overrides": {
+      "wagmi": "2.16.9",
+      "viem": "^2.45.0",
+      "@noble/hashes": "^1.4.0",
+      "@noble/curves": "^1.4.0",
+      "eslint-plugin-react-hooks": "4.6.0"
+    }
   },
   "scripts": {
     "generate": "turbo run generate",
-    "postgenerate": "yarn lint:write",
-    "preinstall": "yarn config set ignore-engines true",
-    "postinstall": "patch-package && turbo run build --filter='./templates/*' --filter='halp'",
-    "build": "yarn build:libs",
-    "postbuild": "yarn lint:write",
+    "postgenerate": "pnpm run lint:write",
+    "postinstall": "turbo run build --filter='./templates/*' --filter='halp'",
+    "build": "pnpm run build:libs",
+    "postbuild": "pnpm run lint:write",
     "build:libs": "turbo run build --filter='./templates/*' --filter='./packages/*'",
-    "clean": "yarn clean:turbo && yarn clean:node_modules",
+    "clean": "pnpm run clean:turbo && pnpm run clean:node_modules",
     "clean:turbo": "turbo run clean",
     "clean:node_modules": "lerna clean -y && rm -rf node_modules",
     "test": "vitest dev",
@@ -41,8 +33,8 @@
     "lint:docs": "vale docs/**/*.mdx",
     "prepare": "husky install",
     "docs:broken-links": "lychee docs --root-dir /docs",
-    "docs:sdk": "yarn build && typedoc && tsx scripts/generate-typedoc-yaml.ts",
-    "version": "yarn build:libs"
+    "docs:sdk": "pnpm run build && typedoc && tsx scripts/generate-typedoc-yaml.ts",
+    "version": "pnpm run build:libs"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.6.3",
@@ -56,11 +48,11 @@
     "eslint-config-react-app": "^7.0.1",
     "eslint-formatter-github": "1.1.4",
     "eslint-formatter-rdjson": "^1.0.6",
-    "eslint-plugin-eslint-rules": "*",
+    "eslint-plugin-eslint-rules": "workspace:*",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-jsdoc": "^48.2.3",
     "eslint-plugin-mdx": "^3.1.5",
-    "halp": "*",
+    "halp": "workspace:*",
     "husky": "^8.0.0",
     "is-ci": "^3.0.1",
     "jiti": "^2.4.2",
@@ -71,8 +63,6 @@
     "markdownlint": "^0.38.0",
     "mdx2vast": "^0.3.0",
     "node-fetch": "^3.3.1",
-    "patch-package": "^8.0.0",
-    "postinstall-postinstall": "^2.1.0",
     "prettier": "3.3.3",
     "prool": "^0.0.15",
     "remark-mdx": "^3.1.1",

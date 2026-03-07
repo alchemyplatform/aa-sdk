@@ -4,15 +4,18 @@
   "private": true,
   "type": "module",
   "devDependencies": {
+    "dotenv": "^16.4.5",
+    "get-port": "^7.0.0",
+    "node-fetch": "^3.3.1",
     "@types/is-ci": "^3.0.4",
     "cbor": "^10.0.3",
     "is-ci": "^3.0.1",
     "prool": "^0.0.15",
     "tar": "^7.4.1",
-    "typescript-template": "*",
+    "typescript-template": "workspace:*",
     "viem": "^2.45.0"
   },
   "dependencies": {
-    "@alchemy/common": "^5.0.0-beta.0"
+    "@alchemy/common": "workspace:*"
   }
 }
