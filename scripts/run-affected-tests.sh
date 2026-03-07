@@ -9,7 +9,7 @@ echo "Analyzing packages affected by changes from $BASE_BRANCH..."
 
 # Use turbo dry-run to identify which packages need testing
 # This includes both changed packages and their dependents
-TURBO_OUTPUT=$(yarn turbo run test:run --filter="./packages/*" --filter="[origin/$BASE_BRANCH...HEAD]" --dry-run 2>&1)
+TURBO_OUTPUT=$(pnpm turbo run test:run --filter="./packages/*" --filter="[origin/$BASE_BRANCH...HEAD]" --dry-run 2>&1)
 
 # Extract directories of packages that have test:run tasks
 # 1. Find lines like "@alchemy/package-name#test:run"
@@ -42,9 +42,9 @@ for dir in $AFFECTED_DIRS; do
 done
 
 echo ""
-echo "Running tests with: yarn vitest run$PROJECT_FLAGS"
+echo "Running tests with: pnpm vitest run$PROJECT_FLAGS"
 echo ""
 
 # Run tests for affected packages in a single vitest process
 # This avoids port conflicts from multiple vitest instances
-yarn vitest run $PROJECT_FLAGS
+pnpm vitest run $PROJECT_FLAGS
