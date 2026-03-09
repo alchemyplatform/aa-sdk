@@ -52,12 +52,12 @@ jobs:
           echo "Disk space after cleanup:"
           df -h
 
+      - name: Setup
+        uses: ./.github/actions/setup
+
       # Clear pnpm store to avoid stale workspace resolution from other branches
       - name: Clear pnpm store
         run: pnpm store prune
-
-      - name: Setup
-        uses: ./.github/actions/setup
 
       - name: Set Github User Details
         run: |
@@ -67,7 +67,7 @@ jobs:
       - name: Set NPM Permissions
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> .npmrc
+        run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
 
       - name: Build V5 Packages
         run: pnpm run build:libs
