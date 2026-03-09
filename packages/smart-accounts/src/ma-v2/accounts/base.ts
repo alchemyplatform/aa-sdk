@@ -380,7 +380,7 @@ export async function toModularAccountV2Base<
 
       const { data } = await prepareSignature({
         type: "eth_signTypedData_v4",
-        data: td as TypedDataDefinition, // TODO(v5): Try harder to satisfy this w/o casting.
+        data: td as TypedDataDefinition,
       });
 
       const action = getAction(client, signTypedData, "signTypedData");

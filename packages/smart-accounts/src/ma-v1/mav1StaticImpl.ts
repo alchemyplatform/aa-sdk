@@ -14,8 +14,6 @@ export type MultiOwnerModularAccountV1FactoryArgs = {
 
 /**
  * Static implementation logic for ModularAccountV1.
- *
- * TODO(v5): update JSDoc format when doc-gen supports structs or records.
  */
 export const multiOwnerModularAccountStaticImpl: StaticSmartAccountImplementation<
   false,

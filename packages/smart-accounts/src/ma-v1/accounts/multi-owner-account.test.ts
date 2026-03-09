@@ -24,7 +24,6 @@ import {
 } from "viem/account-abstraction";
 import { estimateFeesPerGas } from "@alchemy/aa-infra";
 import { toMultiOwnerModularAccountV1 } from "./multi-owner-account.js";
-import { multiOwnerModularAccountV1Actions } from "../decorators/multiOwner.js";
 import { setBalance } from "viem/actions";
 
 // Note: These tests maintain a shared state to not break the local-running rundler by desyncing the chain.
@@ -236,9 +235,16 @@ describe("MA v1 Account Tests", async () => {
         value: parseEther("10"),
       });
 
-      const hash = await throwawayClient.updateOwners({
-        ownersToAdd: [signer.address, ...otherOwners.map((o) => o.address)],
-        ownersToRemove: [throwawaySigner.address],
+      const hash = await throwawayClient.sendUserOperation({
+        calls: [
+          {
+            to: throwawayClient.account.address,
+            data: throwawayClient.account.encodeUpdateOwners(
+              [signer.address, ...otherOwners.map((o) => o.address)],
+              [throwawaySigner.address],
+            ),
+          },
+        ],
       });
 
       await throwawayClient.waitForUserOperationReceipt({ hash });
@@ -425,7 +431,7 @@ describe("MA v1 Account Tests", async () => {
       userOperation: {
         estimateFeesPerGas,
       },
-    }).extend(multiOwnerModularAccountV1Actions);
+    });
   };
 
   const sortOwners = (owners: Address[] | readonly Address[]): Address[] =>

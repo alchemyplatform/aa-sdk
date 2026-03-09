@@ -128,7 +128,6 @@ export async function toLightAccountBase<
     ).map((x) => x.accountImplementation);
 
     const getStorageAtAction = getAction(client, getStorageAt, "getStorageAt");
-    // TODO(v5): This is a super fragile workflow, and we should consider not supporting this on the SmartAccount level in v5.
     const storage = await getStorageAtAction({
       address: accountAddress,
       slot: EIP1967_PROXY_IMPL_STORAGE_SLOT,
