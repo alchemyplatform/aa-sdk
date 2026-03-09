@@ -6,7 +6,10 @@
   "devDependencies": {
     "@types/is-ci": "^3.0.4",
     "cbor": "^10.0.3",
+    "dotenv": "^16.4.5",
+    "get-port": "^7.0.0",
     "is-ci": "^3.0.1",
+    "node-fetch": "^3.3.0",
     "prool": "^0.0.15",
     "tar": "^7.4.1",
     "typescript-template": "*",

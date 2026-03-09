@@ -13,7 +13,8 @@
   "compilerOptions": {
     "sourceMap": true,
     "jsx": "react-jsx",
-    "module": "es2022",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
     "target": "es2022"
   }
 }
