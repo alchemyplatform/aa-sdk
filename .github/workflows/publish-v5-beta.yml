@@ -52,14 +52,12 @@ jobs:
           echo "Disk space after cleanup:"
           df -h
 
-      # Clear yarn cache to avoid stale workspace resolution from other branches
-      - name: Clear Yarn Cache
-        run: yarn cache clean
-
       - name: Setup
         uses: ./.github/actions/setup
-        with:
-          use-android-cache: false
+
+      # Clear pnpm store to avoid stale workspace resolution from other branches
+      - name: Clear pnpm store
+        run: pnpm store prune
 
       - name: Set Github User Details
         run: |
@@ -72,7 +70,7 @@ jobs:
         run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
 
       - name: Build V5 Packages
-        run: yarn build:libs
+        run: pnpm run build:libs
 
       # Dry run to see what would be published
       - name: Dry Run - Show what would be published
@@ -120,7 +118,7 @@ jobs:
       # Format version changes so committed files pass lint checks
       - name: Format Version Changes
         if: ${{ inputs.publish }}
-        run: yarn prettier --write --ignore-unknown .
+        run: pnpm prettier --write --ignore-unknown .
 
       # Commit version changes so lerna publish doesn't complain about uncommitted changes
       - name: Commit Version Changes

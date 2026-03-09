@@ -19,7 +19,6 @@ tsconfig*.tsbuildinfo
 .env.test.local
 .env.production.local
 .envrc
-.npmrc
 yarn-error.log
 lerna-debug.log
 .tool-versions
@@ -39,13 +38,6 @@ bin
 .vscode/
 jsconfig.json
 
-# Yarn
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/sdks
-!.yarn/versions
 
 .claude/settings.local.json
 
