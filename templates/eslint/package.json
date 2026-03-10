@@ -25,7 +25,8 @@
   },
   "devDependencies": {
     "@types/eslint-utils": "^3.0.5",
-    "typescript-template": "*"
+    "@types/estree": "^1.0.0",
+    "typescript-template": "workspace:*"
   },
   "dependencies": {
     "@es-joy/jsdoccomment": "^0.50.2",

@@ -31,14 +31,15 @@
     "halp": "./dist/esm/cli.js"
   },
   "scripts": {
-    "build": "yarn clean && yarn build:esm && yarn build:types",
+    "build": "pnpm run clean && pnpm run build:esm && pnpm run build:types",
     "build:esm": "tsc --project tsconfig.build.json --outDir ./dist/esm",
     "build:types": "tsc --project tsconfig.build.json --declarationDir ./dist/types --emitDeclarationOnly --declaration --declarationMap",
     "postbuild": "chmod +x ./dist/esm/cli.js && npm link",
     "clean": "rm -rf ./dist"
   },
   "devDependencies": {
-    "typescript-template": "*"
+    "@types/node": "^22.0.0",
+    "typescript-template": "workspace:*"
   },
   "dependencies": {
     "@inquirer/prompts": "^7.5.3",

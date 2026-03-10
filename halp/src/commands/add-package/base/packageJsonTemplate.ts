@@ -32,7 +32,7 @@ export function packageJsonTemplate(packageName: string, description: string) {
     },
     scripts: {
       prebuild: "tsx ./inject-version.ts",
-      build: "yarn clean && yarn build:esm && yarn build:types",
+      build: "pnpm run clean && pnpm run build:esm && pnpm run build:types",
       "build:esm": "tsc --project tsconfig.build.json --outDir ./dist/esm",
       "build:types":
         "tsc --project tsconfig.build.json --declarationDir ./dist/types --emitDeclarationOnly --declaration --declarationMap",
@@ -41,10 +41,10 @@ export function packageJsonTemplate(packageName: string, description: string) {
       "test:run": "vitest run",
     },
     devDependencies: {
-      "typescript-template": "*",
+      "typescript-template": "workspace:*",
     },
     dependencies: {
-      "@alchemy/common": "^0.0.0-alpha.10",
+      "@alchemy/common": "workspace:*",
       viem: "2.29.2",
     },
     publishConfig: {

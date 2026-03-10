@@ -41,7 +41,7 @@ For complete installation instructions and troubleshooting, visit the official F
 Once Anvil is installed, you can run the tests using:
 
 ```bash
-yarn test
+pnpm test
 ```
 
 The test infrastructure will automatically start and manage Anvil instances as needed.

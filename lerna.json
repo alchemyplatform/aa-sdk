@@ -1,7 +1,7 @@
 {
   "$schema": "node_modules/lerna/schemas/lerna-schema.json",
-  "version": "5.0.0-beta.2",
-  "npmClient": "yarn",
+  "version": "5.0.0-beta.6",
+  "npmClient": "pnpm",
   "packages": [
     "packages/aa-infra",
     "packages/common",

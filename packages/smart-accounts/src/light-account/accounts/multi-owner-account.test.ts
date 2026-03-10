@@ -20,7 +20,6 @@ import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import { setBalance } from "viem/actions";
 import { accounts, poolId } from "~test/constants.js";
 import { localInstance } from "~test/instances.js";
-import { multiOwnerLightAccountActions } from "../decorators/multiOwner.js";
 import type { LightAccountVersion } from "../registry.js";
 import { toMultiOwnerLightAccount } from "./multi-owner-account.js";
 import { estimateFeesPerGas } from "@alchemy/aa-infra";
@@ -253,9 +252,16 @@ describe.sequential("MultiOwner Light Account Tests", () => {
       chain: client.chain,
     });
 
-    const hash = await throwawayClient.updateOwners({
-      ownersToAdd: [newOwner.account.address],
-      ownersToRemove: [throwawaySigner.account.address],
+    const hash = await throwawayClient.sendUserOperation({
+      calls: [
+        {
+          to: throwawayClient.account.address,
+          data: throwawayClient.account.encodeUpdateOwners(
+            [newOwner.account.address],
+            [throwawaySigner.account.address],
+          ),
+        },
+      ],
     });
 
     await throwawayClient.waitForUserOperationReceipt({ hash });
@@ -270,8 +276,6 @@ describe.sequential("MultiOwner Light Account Tests", () => {
     expect(newOwnerAddresses).not.toContain(throwawaySigner.account.address);
     expect(newOwnerAddresses).toContain(newOwner.account.address);
   }, 100000);
-
-  // TODO(v5): implement test for upgrading account to MSCA?
 
   const givenConnectedProvider = async ({
     signer,
@@ -317,6 +321,6 @@ describe.sequential("MultiOwner Light Account Tests", () => {
       userOperation: {
         estimateFeesPerGas,
       },
-    }).extend(multiOwnerLightAccountActions);
+    });
   };
 });

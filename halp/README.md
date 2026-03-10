@@ -4,10 +4,10 @@ This is a local CLI that contains various commands to make it easier to build wi
 
 ## Usage
 
-Make sure to `yarn install` from the root of the repo first.
+Make sure to `pnpm install` from the root of the repo first.
 
 ```
-yarn halp [command] [...options]
+pnpm halp [command] [...options]
 ```
 
 ## Commands

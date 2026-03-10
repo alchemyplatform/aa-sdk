@@ -294,7 +294,7 @@ describe("MA v2 Account Tests", async () => {
       });
 
       // UO deploys the account to test 1271 against
-      const hash = await provider.installValidation({
+      const callData = await provider.encodeInstallValidation({
         validationConfig: {
           moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
           entityId: 1,
@@ -308,6 +308,10 @@ describe("MA v2 Account Tests", async () => {
           signer: sessionKey.address,
         }),
         hooks: [],
+      });
+      const hash = await provider.sendUserOperation({
+        callData,
+        account: provider.account,
       });
 
       await provider.waitForUserOperationReceipt({ hash, timeout: 30_000 });
@@ -365,7 +369,7 @@ describe("MA v2 Account Tests", async () => {
       });
 
       // UO deploys the account to test 1271 against
-      const hash = await provider.installValidation({
+      const callData = await provider.encodeInstallValidation({
         validationConfig: {
           moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
           entityId: 1,
@@ -379,6 +383,10 @@ describe("MA v2 Account Tests", async () => {
           signer: sessionKey.address,
         }),
         hooks: [],
+      });
+      const hash = await provider.sendUserOperation({
+        callData,
+        account: provider.account,
       });
 
       await provider.waitForUserOperationReceipt({ hash, timeout: 30_000 });
@@ -571,7 +579,7 @@ describe("MA v2 Account Tests", async () => {
       value: parseEther("2"),
     });
 
-    const hash = await provider.installValidation({
+    const callData = await provider.encodeInstallValidation({
       validationConfig: {
         moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
         entityId: 1,
@@ -585,6 +593,10 @@ describe("MA v2 Account Tests", async () => {
         signer: sessionKey.address,
       }),
       hooks: [],
+    });
+    const hash = await provider.sendUserOperation({
+      callData,
+      account: provider.account,
     });
 
     await provider.waitForUserOperationReceipt({ hash, timeout: 30_000 });
@@ -945,7 +957,7 @@ describe("MA v2 Account Tests", async () => {
 
       // First, install a session key with installValidation access
       // (needed to sign deferred actions that install other keys)
-      const hash = await provider.installValidation({
+      const callData = await provider.encodeInstallValidation({
         validationConfig: {
           moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
           entityId: sessionKeyEntityId,
@@ -963,6 +975,10 @@ describe("MA v2 Account Tests", async () => {
           signer: sessionKey.address,
         }),
         hooks: [],
+      });
+      const hash = await provider.sendUserOperation({
+        callData,
+        account: provider.account,
       });
 
       await provider.waitForUserOperationReceipt({ hash, timeout: 30_000 });
@@ -1055,7 +1071,7 @@ describe("MA v2 Account Tests", async () => {
       value: parseEther("2"),
     });
 
-    const hash = await provider.installValidation({
+    const callData = await provider.encodeInstallValidation({
       validationConfig: {
         moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
         entityId: 1,
@@ -1070,16 +1086,24 @@ describe("MA v2 Account Tests", async () => {
       }),
       hooks: [],
     });
+    const hash = await provider.sendUserOperation({
+      callData,
+      account: provider.account,
+    });
 
     await provider.waitForUserOperationReceipt({ hash, timeout: 30_000 });
 
-    const hash2 = await provider.uninstallValidation({
+    const callData2 = await provider.encodeUninstallValidation({
       moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
       entityId: 1,
       uninstallData: SingleSignerValidationModule.encodeOnUninstallData({
         entityId: 1,
       }),
       hookUninstallDatas: [],
+    });
+    const hash2 = await provider.sendUserOperation({
+      callData: callData2,
+      account: provider.account,
     });
 
     await provider.waitForUserOperationReceipt({
@@ -1127,7 +1151,7 @@ describe("MA v2 Account Tests", async () => {
       paymaster: paymaster,
     });
 
-    const hash = await provider.installValidation({
+    const callData = await provider.encodeInstallValidation({
       validationConfig: {
         moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
         entityId: 1,
@@ -1152,6 +1176,10 @@ describe("MA v2 Account Tests", async () => {
           initData: hookInstallData,
         },
       ],
+    });
+    const hash = await provider.sendUserOperation({
+      callData,
+      account: provider.account,
     });
 
     // verify hook installation succeeded
@@ -1188,13 +1216,17 @@ describe("MA v2 Account Tests", async () => {
       entityId: 1,
     });
 
-    const hash3 = await provider.uninstallValidation({
+    const callData3 = await provider.encodeUninstallValidation({
       moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
       entityId: 1,
       uninstallData: SingleSignerValidationModule.encodeOnUninstallData({
         entityId: 1,
       }),
       hookUninstallDatas: [hookUninstallData],
+    });
+    const hash3 = await provider.sendUserOperation({
+      callData: callData3,
+      account: provider.account,
     });
 
     // verify uninstall
@@ -1223,7 +1255,7 @@ describe("MA v2 Account Tests", async () => {
       paymaster: paymaster,
     });
 
-    const hash = await provider.installValidation({
+    const callData = await provider.encodeInstallValidation({
       validationConfig: {
         moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
         entityId: 1,
@@ -1248,6 +1280,10 @@ describe("MA v2 Account Tests", async () => {
           initData: hookInstallData,
         },
       ],
+    });
+    const hash = await provider.sendUserOperation({
+      callData,
+      account: provider.account,
     });
 
     // verify hook installation succeeded
@@ -1279,13 +1315,17 @@ describe("MA v2 Account Tests", async () => {
       entityId: 1,
     });
 
-    const hash2 = await provider.uninstallValidation({
+    const callData2 = await provider.encodeUninstallValidation({
       moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
       entityId: 1,
       uninstallData: SingleSignerValidationModule.encodeOnUninstallData({
         entityId: 1,
       }),
       hookUninstallDatas: [hookUninstallData],
+    });
+    const hash2 = await provider.sendUserOperation({
+      callData: callData2,
+      account: provider.account,
     });
 
     // verify uninstall
@@ -1305,7 +1345,7 @@ describe("MA v2 Account Tests", async () => {
     });
 
     // install validation module
-    const hash = await provider.installValidation({
+    const callData = await provider.encodeInstallValidation({
       validationConfig: {
         moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
         entityId: 1,
@@ -1319,6 +1359,10 @@ describe("MA v2 Account Tests", async () => {
         signer: sessionKey.address,
       }),
       hooks: [],
+    });
+    const hash = await provider.sendUserOperation({
+      callData,
+      account: provider.account,
     });
 
     await provider.waitForUserOperationReceipt({ hash, timeout: 30_000 });
@@ -1362,7 +1406,7 @@ describe("MA v2 Account Tests", async () => {
     });
 
     // install hook
-    const hash3 = await provider.installValidation({
+    const callData3 = await provider.encodeInstallValidation({
       validationConfig: {
         moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
         entityId: 1,
@@ -1384,6 +1428,10 @@ describe("MA v2 Account Tests", async () => {
           initData: hookInstallData,
         },
       ],
+    });
+    const hash3 = await provider.sendUserOperation({
+      callData: callData3,
+      account: provider.account,
     });
 
     await provider.waitForUserOperationReceipt({
@@ -1434,13 +1482,17 @@ describe("MA v2 Account Tests", async () => {
       ],
     });
 
-    const hash5 = await provider.uninstallValidation({
+    const callData5 = await provider.encodeUninstallValidation({
       moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
       entityId: 1,
       uninstallData: SingleSignerValidationModule.encodeOnUninstallData({
         entityId: 1,
       }),
       hookUninstallDatas: [hookUninstallData],
+    });
+    const hash5 = await provider.sendUserOperation({
+      callData: callData5,
+      account: provider.account,
     });
 
     await provider.waitForUserOperationReceipt({
@@ -1464,7 +1516,7 @@ describe("MA v2 Account Tests", async () => {
 
       const spendLimit = parseEther("0.5");
 
-      const hash = await provider.installValidation({
+      const callData = await provider.encodeInstallValidation({
         validationConfig: {
           moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
           entityId: 1,
@@ -1502,6 +1554,10 @@ describe("MA v2 Account Tests", async () => {
             initData: "0x",
           },
         ],
+      });
+      const hash = await provider.sendUserOperation({
+        callData,
+        account: provider.account,
       });
 
       await provider.waitForUserOperationReceipt({ hash, timeout: 30_000 });
@@ -1543,7 +1599,7 @@ describe("MA v2 Account Tests", async () => {
         }),
       ).rejects.toThrowError();
 
-      const hash5 = await provider.uninstallValidation({
+      const callData5 = await provider.encodeUninstallValidation({
         moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
         entityId: 1,
         uninstallData: SingleSignerValidationModule.encodeOnUninstallData({
@@ -1555,6 +1611,10 @@ describe("MA v2 Account Tests", async () => {
           }),
           "0x",
         ],
+      });
+      const hash5 = await provider.sendUserOperation({
+        callData: callData5,
+        account: provider.account,
       });
 
       await provider.waitForUserOperationReceipt({
@@ -1591,7 +1651,7 @@ describe("MA v2 Account Tests", async () => {
       validUntil: 1934507101,
     });
 
-    const hash = await provider.installValidation({
+    const callData = await provider.encodeInstallValidation({
       validationConfig: {
         moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
         entityId: 1,
@@ -1616,6 +1676,10 @@ describe("MA v2 Account Tests", async () => {
           initData: hookInstallData,
         },
       ],
+    });
+    const hash = await provider.sendUserOperation({
+      callData,
+      account: provider.account,
     });
 
     // verify hook installation succeeded
@@ -1718,7 +1782,7 @@ describe("MA v2 Account Tests", async () => {
       validUntil: 1934507101,
     });
 
-    const hash = await provider.installValidation({
+    const callData = await provider.encodeInstallValidation({
       validationConfig: {
         moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
         entityId: 2,
@@ -1743,6 +1807,10 @@ describe("MA v2 Account Tests", async () => {
           initData: hookInstallData,
         },
       ],
+    });
+    const hash = await provider.sendUserOperation({
+      callData,
+      account: provider.account,
     });
 
     // verify hook installation succeeded
@@ -1873,7 +1941,7 @@ describe("MA v2 Account Tests", async () => {
     }
 
     // deploy the account and install at entity id 1 with global validation
-    const hash = await newClient.installValidation({
+    const callData = await newClient.encodeInstallValidation({
       validationConfig: {
         moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
         entityId: 1,
@@ -1887,6 +1955,10 @@ describe("MA v2 Account Tests", async () => {
         signer: sessionKey.address,
       }),
       hooks: [],
+    });
+    const hash = await newClient.sendUserOperation({
+      callData,
+      account: newClient.account,
     });
     await newClient.waitForUserOperationReceipt({ hash, timeout: 30_000 });
 
@@ -1904,7 +1976,7 @@ describe("MA v2 Account Tests", async () => {
     );
 
     // deploy the account and install some entity ids with selector validation
-    const hash2 = await newClient.installValidation({
+    const callData2 = await newClient.encodeInstallValidation({
       validationConfig: {
         moduleAddress: DefaultModuleAddress.SINGLE_SIGNER_VALIDATION,
         entityId: 2,
@@ -1918,6 +1990,10 @@ describe("MA v2 Account Tests", async () => {
         signer: sessionKey.address,
       }),
       hooks: [],
+    });
+    const hash2 = await newClient.sendUserOperation({
+      callData: callData2,
+      account: newClient.account,
     });
     await newClient.waitForUserOperationReceipt({
       hash: hash2,
@@ -1993,12 +2069,40 @@ describe("MA v2 Account Tests", async () => {
       ],
     });
 
-    await lightAccountClient.waitForUserOperationReceipt({
+    const receipt = await lightAccountClient.waitForUserOperationReceipt({
       hash,
       timeout: 30_000,
     });
 
-    // TODO(v5): should we verify anything here? v4 test did not.
+    expect(receipt.success).toBe(true);
+
+    // Verify the upgraded account works as MAv2 by sending a UO
+    const mav2Provider = await givenConnectedProvider({
+      signer: owner,
+      accountAddress: lightAccount.address,
+    });
+
+    const startingAddressBalance = await getTargetBalance();
+
+    const mav2Hash = await mav2Provider.sendUserOperation({
+      calls: [
+        {
+          to: target,
+          value: sendAmount,
+          data: "0x",
+        },
+      ],
+    });
+
+    const mav2Receipt = await mav2Provider.waitForUserOperationReceipt({
+      hash: mav2Hash,
+      timeout: 30_000,
+    });
+
+    expect(mav2Receipt.success).toBe(true);
+    await expect(getTargetBalance()).resolves.toEqual(
+      startingAddressBalance + sendAmount,
+    );
   });
 
   it(

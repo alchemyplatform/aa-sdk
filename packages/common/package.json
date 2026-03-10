@@ -1,6 +1,6 @@
 {
   "name": "@alchemy/common",
-  "version": "5.0.0-beta.2",
+  "version": "5.0.0-beta.6",
   "description": "A collection of interfaces and utilities to be used by other Alchemy packages",
   "author": "Alchemy",
   "license": "MIT",
@@ -41,7 +41,7 @@
   },
   "scripts": {
     "prebuild": "tsx ./inject-version.ts",
-    "build": "yarn clean && yarn build:esm && yarn build:types",
+    "build": "pnpm run clean && pnpm run build:esm && pnpm run build:types",
     "build:esm": "tsc --project tsconfig.build.json --outDir ./dist/esm",
     "build:types": "tsc --project tsconfig.build.json --declarationDir ./dist/types --emitDeclarationOnly --declaration --declarationMap",
     "clean": "rm -rf ./dist",
@@ -49,8 +49,11 @@
     "test:run": "vitest run"
   },
   "devDependencies": {
-    "typescript-template": "*",
+    "typescript-template": "workspace:*",
     "viem": "^2.45.0"
+  },
+  "dependencies": {
+    "zod": "^3.23.0"
   },
   "peerDependencies": {
     "viem": "^2.45.0"

@@ -36,8 +36,6 @@ const semiModularAccountBase = {
 
 /**
  * Static implementation logic for SemiModularAccountV2.
- *
- * TODO(v5): update JSDoc format when doc-gen supports structs or records.
  */
 export const semiModularAccountV2StaticImpl: SemiModularAccountV2StaticImpl = {
   ...semiModularAccountBase,
@@ -73,8 +71,6 @@ export type SemiModularAccount7702StaticImpl = StaticSmartAccountImplementation<
 
 /**
  * Static implementation logic for SemiModularAccount7702.
- *
- * TODO(v5): update JSDoc format when doc-gen supports structs or records.
  */
 export const semiModularAccount7702StaticImpl: SemiModularAccount7702StaticImpl =
   {

@@ -15,25 +15,23 @@ function installValidationActions<TTransport, TChain, TAccount>(
 >;
 ```
 
-Defined in: [packages/smart-accounts/src/ma-v2/decorators/installValidation.ts:111](https://github.com/alchemyplatform/aa-sdk/blob/v5.x.x/packages/smart-accounts/src/ma-v2/decorators/installValidation.ts#L111)
+Defined in: [packages/smart-accounts/src/ma-v2/decorators/installValidation.ts:95](https://github.com/alchemyplatform/aa-sdk/blob/v5.x.x/packages/smart-accounts/src/ma-v2/decorators/installValidation.ts#L95)
 
-Provides validation installation and uninstallation functionalities for a MA v2 client, ensuring compatibility with `SmartAccountClient`.
+Provides validation installation and uninstallation encoding functionalities for a MA v2 client.
 
 ## Example
 
 ```ts
-import { createModularAccountV2Client, installValidationActions, getDefaultSingleSignerValidationModuleAddress, SingleSignerValidationModule } from "@alchemy/smart-accounts";
+import { installValidationActions, SingleSignerValidationModule } from "@alchemy/smart-accounts";
 import { Address } from "viem";
 
 const client = (await createModularAccountV2Client({ ... })).extend(installValidationActions);
 const sessionKeyAddress: Address = "0x1234";
 const sessionKeyEntityId: number = 1;
 
-await client.installValidation({
+const callData = await client.encodeInstallValidation({
   validationConfig: {
-    moduleAddress: getDefaultSingleSignerValidationModuleAddress(
-      client.chain
-    ),
+    moduleAddress: getDefaultSingleSignerValidationModuleAddress(client.chain),
     entityId: sessionKeyEntityId,
     isGlobal: true,
     isSignatureValidation: false,
@@ -47,15 +45,7 @@ await client.installValidation({
   hooks: [],
 });
 
-await client.uninstallValidation({
-  moduleAddress: sessionKeyAddress,
-  entityId: sessionKeyEntityId,
-  uninstallData: SingleSignerValidationModule.encodeOnUninstallData({
-    entityId: sessionKeyEntityId,
-  }),
-  hookUninstallDatas: [],
-});
-
+await client.sendUserOperation({ callData, account });
 ```
 
 ## Type Parameters
@@ -81,21 +71,21 @@ await client.uninstallValidation({
 
     <tr>
       <td>
-        `TChain` *extends* [`Chain`](https://viem.sh) | `undefined`
+        `TChain` *extends* `undefined` | [`Chain`](https://viem.sh)
       </td>
 
       <td>
-        [`Chain`](https://viem.sh) | `undefined`
+        `undefined` | [`Chain`](https://viem.sh)
       </td>
     </tr>
 
     <tr>
       <td>
-        `TAccount` *extends* [`SmartAccount`](https://viem.sh) | `undefined`
+        `TAccount` *extends* `undefined` | [`SmartAccount`](https://viem.sh)
       </td>
 
       <td>
-        [`SmartAccount`](https://viem.sh) | `undefined`
+        `undefined` | [`SmartAccount`](https://viem.sh)
       </td>
     </tr>
 
@@ -124,7 +114,7 @@ await client.uninstallValidation({
       </td>
 
       <td>
-        The client instance which provides account and sendUserOperation functionality.
+        The client instance which provides account functionality.
       </td>
     </tr>
 
@@ -135,4 +125,4 @@ await client.uninstallValidation({
 
 [`InstallValidationActions`](../type-aliases/InstallValidationActions)\<[`IsUndefined`](https://viem.sh)\<`TAccount`> _extends_ `true` ? `undefined` : [`ModularAccountV2`](../type-aliases/ModularAccountV2)>
 
-- An object containing two methods, `installValidation` and `uninstallValidation`.
+- An object containing `encodeInstallValidation` and `encodeUninstallValidation`.

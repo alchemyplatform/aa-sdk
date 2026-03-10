@@ -8,7 +8,6 @@ import {
   type Transport,
   concat,
   concatHex,
-  encodeFunctionData,
   hashMessage,
   hashTypedData,
   type TypedDataDefinition,
@@ -42,12 +41,7 @@ import type {
   SignatureRequest,
   SmartAccountWithDecodeCalls,
 } from "../../types.js";
-import {
-  decodeFunctionData,
-  getAction,
-  isAddressEqual,
-  sliceHex,
-} from "viem/utils";
+import { getAction, isAddressEqual } from "viem/utils";
 import {
   DEFAULT_OWNER_ENTITY_ID,
   DefaultModuleAddress,
@@ -64,6 +58,7 @@ import { InvalidDeferredActionNonceError } from "../../errors/InvalidDeferredAct
 import { InvalidNonceKeyError } from "../../errors/InvalidNonceKeyError.js";
 import { InvalidEntityIdError } from "../../errors/InvalidEntityIdError.js";
 import { is7702Delegated } from "../../utils.js";
+import { encodeCallsMAv2, decodeCallsMAv2 } from "./calldataCodec.js";
 
 export type ValidationDataParams =
   | {
@@ -336,76 +331,19 @@ export async function toModularAccountV2Base<
         if (isAddressEqual(call.to, accountAddress)) {
           // If the call is to the account itself, we need to avoid wrapping it in an `execute` call.
 
-          if (call.data === undefined) {
+          if (call.data == null) {
             throw new BaseError("Data is required for an account self-call.");
           }
 
           return encodeCallData(call.data);
         }
-
-        return encodeCallData(
-          encodeFunctionData({
-            abi: modularAccountAbi,
-            functionName: "execute",
-            args: [call.to, call.value ?? 0n, call.data ?? "0x"],
-          }),
-        );
       }
 
-      return encodeCallData(
-        encodeFunctionData({
-          abi: modularAccountAbi,
-          functionName: "executeBatch",
-          args: [
-            calls.map((call) => ({
-              target: call.to,
-              data: call.data ?? "0x",
-              value: call.value ?? 0n,
-            })),
-          ],
-        }),
-      );
+      return encodeCallData(encodeCallsMAv2(calls));
     },
 
     async decodeCalls(data) {
-      // Inverse of `encodeCalls`.
-      // Trim the EXECUTE_USER_OP_SELECTOR if it is present.
-      const trimmedData = data
-        .toLowerCase()
-        .startsWith(EXECUTE_USER_OP_SELECTOR.toLowerCase())
-        ? sliceHex(data, 4)
-        : data;
-
-      const decoded = decodeFunctionData({
-        abi: modularAccountAbi,
-        data: trimmedData,
-      });
-
-      if (decoded.functionName === "execute") {
-        return [
-          {
-            to: decoded.args[0],
-            value: decoded.args[1],
-            data: decoded.args[2],
-          },
-        ];
-      }
-
-      if (decoded.functionName === "executeBatch") {
-        return decoded.args[0].map((call) => ({
-          to: call.target,
-          value: call.value,
-          data: call.data,
-        }));
-      }
-
-      // If the data is not for an `execute` or `executeBatch` call, we treat it as a single call to the account itself.
-      return [
-        {
-          to: accountAddress,
-          data,
-        },
-      ];
+      return decodeCallsMAv2(data, accountAddress);
     },
 
     async getStubSignature() {
@@ -442,7 +380,7 @@ export async function toModularAccountV2Base<
 
       const { data } = await prepareSignature({
         type: "eth_signTypedData_v4",
-        data: td as TypedDataDefinition, // TODO(v5): Try harder to satisfy this w/o casting.
+        data: td as TypedDataDefinition,
       });
 
       const action = getAction(client, signTypedData, "signTypedData");

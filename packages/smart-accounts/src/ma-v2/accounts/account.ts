@@ -27,7 +27,7 @@ import { LOGGER } from "../../logger.js";
 
 type Mode = "default" | "7702";
 
-// TODO(v5): does this need to be extended w/ any more methods like LightAccount does?
+// This may be extended in the future with additional MAv2-specific methods.
 export type ModularAccountV2 = ModularAccountV2Base & {};
 
 export type ToModularAccountV2Params<
@@ -193,6 +193,6 @@ export async function toModularAccountV2<TMode extends Mode = Mode>({
 
   return {
     ...base,
-    // TODO(v5): does this need to be extended w/ any more methods like LightAccount does?
+    // This may be extended in the future with additional MAv2-specific methods.
   };
 }
