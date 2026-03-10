@@ -24,6 +24,17 @@ const schema = methodSchema(MethodSchema);
 type BasePrepareCallsParams = MethodParams<typeof MethodSchema>;
 type PrepareCallsResponse = MethodResponse<typeof MethodSchema>;
 
+type ExcludeDataSuffix<T> = T extends readonly []
+  ? readonly []
+  : T extends readonly [infer Call, ...infer Rest]
+    ? readonly [
+        DistributiveOmit<Call, "dataSuffix">,
+        ...ExcludeDataSuffix<Rest>,
+      ]
+    : T extends readonly (infer Call)[]
+      ? readonly DistributiveOmit<Call, "dataSuffix">[]
+      : never;
+
 export type PrepareCallsParams<
   calls extends readonly unknown[] = readonly unknown[],
 > = Prettify<
@@ -31,7 +42,7 @@ export type PrepareCallsParams<
     DistributiveOmit<BasePrepareCallsParams, "from" | "chainId" | "calls"> & {
       account?: AccountParam;
       chainId?: number;
-      calls: Calls<Narrow<calls>>;
+      calls: ExcludeDataSuffix<Calls<Narrow<calls>>>;
     }
   >
 >;

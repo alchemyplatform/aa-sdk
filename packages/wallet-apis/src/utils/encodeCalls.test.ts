@@ -48,6 +48,35 @@ describe("encodeCalls", () => {
     expect(result[1]!.to).toBe(to);
   });
 
+  it("rejects dataSuffix on an encoded call", () => {
+    const to = "0x1234567890abcdef1234567890abcdef12345678" as const;
+
+    expect(() =>
+      encodeCalls([{ to, data: "0xdeadbeef", dataSuffix: "0xc0ffee" }]),
+    ).toThrow(
+      "`dataSuffix` on individual calls is not supported. Use `capabilities.experimental_dataSuffix` instead.",
+    );
+  });
+
+  it("rejects dataSuffix on an abi-style call", () => {
+    const to = "0x1234567890abcdef1234567890abcdef12345678" as const;
+    const args = ["0x000000000000000000000000000000000000dead", 1000n] as const;
+
+    expect(() =>
+      encodeCalls([
+        {
+          to,
+          abi: erc20Abi,
+          functionName: "transfer",
+          args,
+          dataSuffix: "0xc0ffee",
+        },
+      ]),
+    ).toThrow(
+      "`dataSuffix` on individual calls is not supported. Use `capabilities.experimental_dataSuffix` instead.",
+    );
+  });
+
   it("preserves value on both call types", () => {
     const to = "0x1234567890abcdef1234567890abcdef12345678" as const;
 
