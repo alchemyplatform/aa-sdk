@@ -10,7 +10,7 @@ experimental:
 navigation:
   - tab: wallets
     layout:
-      - section: SDK Reference
+      - section: SDK Reference (v5.x.x)
         contents:
           - section: Wallet APIs (BETA)
             path: wallets/pages/reference/wallet-apis/src/exports/README.mdx

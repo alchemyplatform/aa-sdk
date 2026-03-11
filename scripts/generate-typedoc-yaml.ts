@@ -46,7 +46,7 @@ interface YamlPackageSection {
 }
 
 interface SDKReference {
-  section: "SDK Reference";
+  section: "SDK Reference (v5.x.x)";
   contents: YamlPackageSection[];
 }
 
@@ -309,7 +309,7 @@ function generateSDKReference(): SDKReference {
 
   const structure = scanDirectory(TYPEDOC_DIR);
   const sdkReference: SDKReference = {
-    section: "SDK Reference",
+    section: "SDK Reference (v5.x.x)",
     contents: [],
   };
 
@@ -380,7 +380,7 @@ function updateDocsYml(sdkReference: SDKReference): void {
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
 
-    if (line.includes("section: SDK Reference")) {
+    if (line.includes("section: SDK Reference (v5.x.x)")) {
       startIndex = i;
       // Calculate the indentation level of the SDK Reference section
       currentIndent = line.search(/\S/) / 2;
@@ -402,7 +402,9 @@ function updateDocsYml(sdkReference: SDKReference): void {
   }
 
   if (startIndex === -1) {
-    throw new Error('Could not find "SDK Reference" section in docs.yml');
+    throw new Error(
+      'Could not find "SDK Reference (v5.x.x)" section in docs.yml',
+    );
   }
 
   if (endIndex === -1) {
