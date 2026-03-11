@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.86.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.84.1...v4.86.0) (2026-03-11)
+
+### Bug Fixes
+
+- **ci:** run prettier on lerna config ([#2389](https://github.com/alchemyplatform/aa-sdk/issues/2389)) ([67358d3](https://github.com/alchemyplatform/aa-sdk/commit/67358d312a0401805c4d1d06a7dad3a87c8019b8))
+
+### Features
+
+- **cronos:** add cronos to infra chains ([#2377](https://github.com/alchemyplatform/aa-sdk/issues/2377)) ([ff53f85](https://github.com/alchemyplatform/aa-sdk/commit/ff53f855fd487827a1fc674bcd38fd66d48b8c05))
+
 # [4.85.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.84.1...v4.85.0) (2026-03-11)
 
 ### Bug Fixes
