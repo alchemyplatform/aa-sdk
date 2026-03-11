@@ -10,7 +10,7 @@ import yaml from "js-yaml";
  * and directly updates the docs.yml file by replacing the existing SDK Reference section.
  */
 
-const TYPEDOC_DIR = "./docs/pages/reference";
+const TYPEDOC_DIR = "./docs/pages/reference/v5";
 const DOCS_YML_FILE = "./docs/docs.yml";
 
 interface FileItem {
@@ -114,7 +114,7 @@ function scanDirectory(dirPath: string, basePath: string = ""): ScanItem[] {
         type: "file",
         name: nameWithoutExt,
         path: relativePath.replace(".mdx", ""),
-        mdxPath: `wallets/pages/reference/${relativePath}`,
+        mdxPath: `wallets/pages/reference/v5/${relativePath}`,
       });
     }
   }
@@ -185,7 +185,7 @@ function generatePackageSection(
 
   const section: YamlPackageSection = {
     section: displayName,
-    path: `wallets/pages/reference/${packagePath}/README.mdx`,
+    path: `wallets/pages/reference/v5/${packagePath}/README.mdx`,
     contents: [],
   };
 
