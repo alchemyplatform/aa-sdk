@@ -5,7 +5,7 @@ High-level viem-style client for Alchemy's Smart Wallet APIs. Provides EIP-7702 
 ## Installation
 
 ```bash
-npm install @alchemy/wallet-apis @alchemy/common viem
+npm install @alchemy/wallet-apis viem
 ```
 
 ## Key Exports
