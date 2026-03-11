@@ -19,6 +19,7 @@ tsconfig*.tsbuildinfo
 .env.test.local
 .env.production.local
 .envrc
+.npmrc
 yarn-error.log
 lerna-debug.log
 .tool-versions
