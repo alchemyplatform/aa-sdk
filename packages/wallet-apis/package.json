@@ -1,6 +1,6 @@
 {
   "name": "@alchemy/wallet-apis",
-  "version": "5.0.0-beta.6",
+  "version": "5.0.0-beta.7",
   "description": "Alchemy Wallet APIs",
   "author": "Alchemy",
   "license": "MIT",
@@ -49,8 +49,8 @@
     "test:run": "vitest run"
   },
   "devDependencies": {
-    "abitype": "^1.0.0",
     "@types/deep-equal": "^1.0.4",
+    "abitype": "^1.0.0",
     "typescript-template": "workspace:*",
     "viem": "^2.45.0"
   },
