@@ -37,7 +37,7 @@
     "preinstall": "yarn config set ignore-engines true",
     "postinstall": "git submodule update --init --recursive && patch-package && turbo run build --filter='./templates/*'",
     "build": "yarn build:libs --filter='!@account-kit/react-native-signer-example'",
-    "build:libs": "turbo run build --filter='@account-kit/*' --filter='@aa-sdk/*' --filter='./templates/*'",
+    "build:libs": "turbo run build --filter='@account-kit/*' --filter='@aa-sdk/*' --filter='./templates/*' --filter='!@account-kit/react-native-signer-example'",
     "build:demo": "turbo run build --filter=ui-demo --filter='./templates/*'",
     "build:examples": "turbo run build",
     "clean": "yarn clean:turbo && yarn clean:node_modules",
