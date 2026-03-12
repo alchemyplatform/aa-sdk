@@ -204,11 +204,14 @@ jobs:
           # legitimate v4 deletions (e.g. removed APIs, config changes).
           V5_PACKAGES="wallet-apis"
           for pkg in $V5_PACKAGES; do
-            DELETED=$(git diff --name-only --diff-filter=D "docs/pages/reference/$pkg/")
-            if [ -n "$DELETED" ]; then
-              echo "Restoring v5 reference files for $pkg:"
-              echo "$DELETED"
-              echo "$DELETED" | xargs git checkout HEAD --
+            # Only check for deleted files if the package dir was tracked by git
+            if git ls-tree -d --name-only HEAD "docs/pages/reference/$pkg" > /dev/null 2>&1; then
+              DELETED=$(git diff --name-only --diff-filter=D "docs/pages/reference/$pkg/")
+              if [ -n "$DELETED" ]; then
+                echo "Restoring v5 reference files for $pkg:"
+                echo "$DELETED"
+                echo "$DELETED" | xargs git checkout HEAD --
+              fi
             fi
           done
           git diff --exit-code docs/pages/reference/ || \
