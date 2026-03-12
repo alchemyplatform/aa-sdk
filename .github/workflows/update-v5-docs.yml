@@ -82,6 +82,11 @@ jobs:
             }
           ")
 
+          if [ -z "$PACKAGES" ]; then
+            echo "::error::Failed to parse PACKAGES_INCLUDED_IN_NAV from generate-typedoc-yaml.ts"
+            exit 1
+          fi
+
           echo "Copying v5 reference docs for packages: $PACKAGES"
 
           for pkg in $PACKAGES; do
