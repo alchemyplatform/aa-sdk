@@ -192,3 +192,4 @@ jobs:
       version: ${{ needs.publish_v5_beta.outputs.new_version }}
     secrets:
       ALCHEMY_BOT_PAT: ${{ secrets.ALCHEMY_BOT_PAT }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
