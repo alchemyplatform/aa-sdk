@@ -205,8 +205,8 @@ jobs:
           V5_PACKAGES="wallet-apis"
           for pkg in $V5_PACKAGES; do
             # Only check for deleted files if the package dir was tracked by git
-            if git ls-tree -d --name-only HEAD "docs/pages/reference/$pkg" > /dev/null 2>&1; then
-              DELETED=$(git diff --name-only --diff-filter=D "docs/pages/reference/$pkg/")
+            if git cat-file -e "HEAD:docs/pages/reference/$pkg" 2>/dev/null; then
+              DELETED=$(git diff --name-only --diff-filter=D -- "docs/pages/reference/$pkg/")
               if [ -n "$DELETED" ]; then
                 echo "Restoring v5 reference files for $pkg:"
                 echo "$DELETED"
