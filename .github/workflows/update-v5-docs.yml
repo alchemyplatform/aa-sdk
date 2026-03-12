@@ -75,7 +75,7 @@ jobs:
           PACKAGES=$(node -e "
             const fs = require('fs');
             const content = fs.readFileSync('scripts/generate-typedoc-yaml.ts', 'utf-8');
-            const match = content.match(/PACKAGES_INCLUDED_IN_NAV[^[]*\[([^\]]*)\]/);
+            const match = content.match(/PACKAGES_INCLUDED_IN_NAV[^=]*=\s*\[([^\]]*)\]/);
             if (match) {
               const pkgs = match[1].match(/['\"]([^'\"]+)['\"]/g).map(s => s.replace(/['\"/]/g, ''));
               console.log(pkgs.join(' '));
