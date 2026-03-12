@@ -12,6 +12,8 @@ on:
     secrets:
       ALCHEMY_BOT_PAT:
         required: true
+      OPENAI_API_KEY:
+        required: true
 
   # Can also be triggered manually
   workflow_dispatch:
@@ -34,6 +36,8 @@ jobs:
   update_v5_docs:
     name: Generate V5 Docs and Create PR
     runs-on: ubuntu-latest
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 
     steps:
       - name: Checkout v5.x.x branch
