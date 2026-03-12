@@ -1787,3 +1787,106 @@ navigation:
                     path: wallets/pages/reference/account-kit/wallet-client/src/exports/type-aliases/SmartWalletClient.mdx
                   - page: SmartWalletClientParams
                     path: wallets/pages/reference/account-kit/wallet-client/src/exports/type-aliases/SmartWalletClientParams.mdx
+          - section: Wallet APIs (BETA)
+            path: wallets/pages/reference/wallet-apis/src/exports/README.mdx
+            contents:
+              - section: Functions
+                contents:
+                  - page: alchemyWalletTransport
+                    path: wallets/pages/reference/wallet-apis/src/exports/functions/alchemyWalletTransport.mdx
+                  - page: createSmartWalletClient
+                    path: wallets/pages/reference/wallet-apis/src/exports/functions/createSmartWalletClient.mdx
+                  - page: formatSign
+                    path: wallets/pages/reference/wallet-apis/src/exports/functions/formatSign.mdx
+                  - page: getCapabilities
+                    path: wallets/pages/reference/wallet-apis/src/exports/functions/getCapabilities.mdx
+                  - page: grantPermissions
+                    path: wallets/pages/reference/wallet-apis/src/exports/functions/grantPermissions.mdx
+                  - page: listAccounts
+                    path: wallets/pages/reference/wallet-apis/src/exports/functions/listAccounts.mdx
+                  - page: prepareCalls
+                    path: wallets/pages/reference/wallet-apis/src/exports/functions/prepareCalls.mdx
+                  - page: prepareSign
+                    path: wallets/pages/reference/wallet-apis/src/exports/functions/prepareSign.mdx
+                  - page: requestAccount
+                    path: wallets/pages/reference/wallet-apis/src/exports/functions/requestAccount.mdx
+                  - page: sendCalls
+                    path: wallets/pages/reference/wallet-apis/src/exports/functions/sendCalls.mdx
+                  - page: sendPreparedCalls
+                    path: wallets/pages/reference/wallet-apis/src/exports/functions/sendPreparedCalls.mdx
+                  - page: signMessage
+                    path: wallets/pages/reference/wallet-apis/src/exports/functions/signMessage.mdx
+                  - page: signPreparedCalls
+                    path: wallets/pages/reference/wallet-apis/src/exports/functions/signPreparedCalls.mdx
+                  - page: signSignatureRequest
+                    path: wallets/pages/reference/wallet-apis/src/exports/functions/signSignatureRequest.mdx
+                  - page: signTypedData
+                    path: wallets/pages/reference/wallet-apis/src/exports/functions/signTypedData.mdx
+                  - page: smartWalletActions
+                    path: wallets/pages/reference/wallet-apis/src/exports/functions/smartWalletActions.mdx
+              - section: Type Aliases
+                contents:
+                  - page: AlchemyWalletTransport
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/AlchemyWalletTransport.mdx
+                  - page: BaseWalletClient
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/BaseWalletClient.mdx
+                  - page: CreateSmartWalletClientParams
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/CreateSmartWalletClientParams.mdx
+                  - page: FormatSignParams
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/FormatSignParams.mdx
+                  - page: FormatSignResult
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/FormatSignResult.mdx
+                  - page: GetCapabilitiesParams
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/GetCapabilitiesParams.mdx
+                  - page: GetCapabilitiesResult
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/GetCapabilitiesResult.mdx
+                  - page: GrantPermissionsParams
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/GrantPermissionsParams.mdx
+                  - page: GrantPermissionsResult
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/GrantPermissionsResult.mdx
+                  - page: ListAccountsParams
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/ListAccountsParams.mdx
+                  - page: ListAccountsResult
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/ListAccountsResult.mdx
+                  - page: PrepareCallsParams
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/PrepareCallsParams.mdx
+                  - page: PrepareCallsResult
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/PrepareCallsResult.mdx
+                  - page: PrepareSignParams
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/PrepareSignParams.mdx
+                  - page: PrepareSignResult
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/PrepareSignResult.mdx
+                  - page: RequestAccountParams
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/RequestAccountParams.mdx
+                  - page: RequestAccountResult
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/RequestAccountResult.mdx
+                  - page: SendCallsParams
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SendCallsParams.mdx
+                  - page: SendCallsResult
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SendCallsResult.mdx
+                  - page: SendPreparedCallsParams
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SendPreparedCallsParams.mdx
+                  - page: SendPreparedCallsResult
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SendPreparedCallsResult.mdx
+                  - page: SignMessageParams
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SignMessageParams.mdx
+                  - page: SignMessageResult
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SignMessageResult.mdx
+                  - page: SignPreparedCallsParams
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SignPreparedCallsParams.mdx
+                  - page: SignPreparedCallsResult
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SignPreparedCallsResult.mdx
+                  - page: SignSignatureRequestParams
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SignSignatureRequestParams.mdx
+                  - page: SignSignatureRequestResult
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SignSignatureRequestResult.mdx
+                  - page: SignTypedDataParams
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SignTypedDataParams.mdx
+                  - page: SignTypedDataResult
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SignTypedDataResult.mdx
+                  - page: SignerClient
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SignerClient.mdx
+                  - page: SmartWalletActions
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SmartWalletActions.mdx
+                  - page: SmartWalletClient
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SmartWalletClient.mdx
