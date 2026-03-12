@@ -425,6 +425,33 @@ function updateDocsYml(sdkReference: SDKReference): void {
     `Found SDK Reference section from line ${startIndex + 1} to ${endIndex}`,
   );
 
+  // Preserve any externally-managed sections (e.g. v5 docs merged from another branch).
+  // These are sections whose display names don't match any known v4 package.
+  const v4DisplayNames = new Set(
+    Object.values(PACKAGE_DISPLAY_NAMES).flatMap((pkg) => Object.values(pkg)),
+  );
+  const existingBlock = lines
+    .slice(startIndex, endIndex)
+    .map((line) => {
+      const baseIndent = "  ".repeat(currentIndent);
+      return line.startsWith(baseIndent) ? line.slice(baseIndent.length) : line;
+    })
+    .join("\n");
+  const existingSdkRef = yaml.load(existingBlock) as
+    | { section: string; contents?: { section: string }[] }[]
+    | null;
+  const externalSections =
+    existingSdkRef?.[0]?.contents?.filter(
+      (s) => !v4DisplayNames.has(s.section),
+    ) ?? [];
+
+  if (externalSections.length > 0) {
+    console.log(
+      `Preserving ${externalSections.length} external section(s): ${externalSections.map((s) => s.section).join(", ")}`,
+    );
+    sdkReference.contents.push(...(externalSections as YamlPackageSection[]));
+  }
+
   const sdkReferenceYaml = yaml.dump([sdkReference], {
     indent: 2,
     lineWidth: -1, // Disable line wrapping
