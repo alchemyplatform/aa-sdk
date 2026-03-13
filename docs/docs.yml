@@ -12,7 +12,7 @@ navigation:
     layout:
       - section: SDK Reference
         contents:
-          - section: Wallet APIs (BETA)
+          - section: Wallet APIs (beta)
             path: wallets/pages/reference/wallet-apis/src/exports/README.mdx
             contents:
               - section: Functions
