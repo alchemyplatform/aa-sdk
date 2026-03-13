@@ -168,6 +168,7 @@ export function load(app) {
       const isReadmeFile = page.url && page.url.endsWith("README.mdx");
       if (isReadmeFile) {
         title = title.replace(/\/src\/exports$/, "").replace(/\/src$/, "");
+        title = `@alchemy/${title}`;
         description = description
           .replace(/\/src\/exports/g, "")
           .replace(/\/src/g, "");
