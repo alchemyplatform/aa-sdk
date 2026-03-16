@@ -1787,7 +1787,7 @@ navigation:
                     path: wallets/pages/reference/account-kit/wallet-client/src/exports/type-aliases/SmartWalletClient.mdx
                   - page: SmartWalletClientParams
                     path: wallets/pages/reference/account-kit/wallet-client/src/exports/type-aliases/SmartWalletClientParams.mdx
-          - section: Wallet APIs (BETA)
+          - section: Wallet APIs (beta)
             path: wallets/pages/reference/wallet-apis/src/exports/README.mdx
             contents:
               - section: Functions
