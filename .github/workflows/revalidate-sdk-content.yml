@@ -41,8 +41,39 @@ jobs:
           if [ -z "$CHANGED_FILES" ]; then
             echo "No MDX files changed in /docs/pages/ directory"
             echo "filePaths=[]" >> $GITHUB_OUTPUT
+            echo "frontmatterChanged=false" >> $GITHUB_OUTPUT
             exit 0
           fi
+
+          # Detect whether any changed file has frontmatter changes
+          FRONTMATTER_CHANGED=false
+          extract_frontmatter() {
+            local ref="$1"
+            local path="$2"
+
+            if ! git cat-file -e "${ref}:${path}" 2>/dev/null; then
+              return 0
+            fi
+
+            git show "${ref}:${path}" | awk '
+              NR == 1 && $0 != "---" { exit }
+              NR == 1 && $0 == "---" { in_frontmatter = 1; next }
+              in_frontmatter && $0 == "---" { exit }
+              in_frontmatter { print }
+            '
+          }
+
+          while IFS= read -r FILE; do
+            [ -z "$FILE" ] && continue
+            OLD_FRONTMATTER=$(extract_frontmatter "${{ github.event.before }}" "$FILE")
+            NEW_FRONTMATTER=$(extract_frontmatter "${{ github.event.after }}" "$FILE")
+
+            if [ "$OLD_FRONTMATTER" != "$NEW_FRONTMATTER" ]; then
+              FRONTMATTER_CHANGED=true
+              echo "Frontmatter changed in: $FILE"
+              break
+            fi
+          done <<< "$CHANGED_FILES"
 
           # Strip docs/ prefix to get file paths matching Redis cache keys
           # e.g., docs/pages/reference/... -> pages/reference/...
@@ -50,7 +81,9 @@ jobs:
 
           FILE_COUNT=$(echo "$FILE_PATHS_JSON" | jq 'length')
           echo "Found $FILE_COUNT changed files"
+          echo "frontmatterChanged: $FRONTMATTER_CHANGED"
           echo "filePaths=$FILE_PATHS_JSON" >> $GITHUB_OUTPUT
+          echo "frontmatterChanged=$FRONTMATTER_CHANGED" >> $GITHUB_OUTPUT
 
       - name: Call revalidation API
         if: steps.changed-files.outputs.filePaths != '[]'
@@ -117,3 +150,14 @@ jobs:
           fi
 
           echo "::notice::Successfully revalidated $SUCCEEDED files"
+
+      - name: Trigger reindex if frontmatter changed
+        if: steps.changed-files.outputs.frontmatterChanged == 'true'
+        run: |
+          echo "Frontmatter changes detected, triggering SDK content indexer..."
+          curl -f -X POST \
+            -H "Authorization: Bearer ${{ secrets.DOCS_GH_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/alchemyplatform/docs/dispatches \
+            -d '{"event_type":"index-sdk-references","client_payload":{"source":"alchemyplatform/aa-sdk","ref":"${{ github.ref }}","sha":"${{ github.sha }}"}}'
+          echo "::notice::✅ Triggered index-sdk-references in docs repo"
