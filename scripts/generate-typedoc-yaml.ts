@@ -57,10 +57,11 @@ const PACKAGE_DISPLAY_NAMES: Record<string, string> = {
   "aa-infra": "Infra",
   common: "Common",
   "smart-accounts": "Smart Accounts",
-  "wallet-apis": "Wallet APIs (BETA)",
+  "wallet-apis": "Wallet APIs (beta)",
 } as const;
 
 // TODO: Add other packages (aa-infra, common, smart-accounts) to the nav once they are stable
+// Be sure to keep in sync w/ SDK_PATH_REGEX in the `docs-site` repo.
 const PACKAGES_INCLUDED_IN_NAV: string[] = ["wallet-apis"];
 
 const TYPE_SECTIONS: TypeSections = {
@@ -440,9 +441,51 @@ function updateDocsYml(sdkReference: SDKReference): void {
   console.log(`✅ Updated ${DOCS_YML_FILE} with new SDK Reference structure`);
 }
 
+/** Short package descriptions injected into the top of each generated README.mdx */
+const PACKAGE_DESCRIPTIONS: Record<string, string> = {
+  "wallet-apis": `> **Beta** — This package replaces \`@account-kit/wallet-client\`. See the [migration guide](https://www.alchemy.com/docs/wallets/resources/migration-v5).`,
+};
+
+/**
+ * Inject package descriptions into typedoc-generated README.mdx files.
+ * Inserts after the frontmatter block, before the typedoc-generated content.
+ */
+function injectPackageReadmes(): void {
+  for (const [packageName, description] of Object.entries(
+    PACKAGE_DESCRIPTIONS,
+  )) {
+    const hasExports = ["wallet-apis", "infra"].includes(packageName);
+    const readmeMdxPath = hasExports
+      ? path.join(TYPEDOC_DIR, packageName, "src", "exports", "README.mdx")
+      : path.join(TYPEDOC_DIR, packageName, "src", "README.mdx");
+
+    if (!fs.existsSync(readmeMdxPath)) continue;
+
+    const mdxContent = fs.readFileSync(readmeMdxPath, "utf-8");
+
+    // Split on end of frontmatter (---\n)
+    const frontmatterEnd = mdxContent.indexOf(
+      "---\n",
+      mdxContent.indexOf("---\n") + 1,
+    );
+    if (frontmatterEnd === -1) continue;
+
+    const splitAt = frontmatterEnd + 4;
+    const frontmatter = mdxContent.slice(0, splitAt);
+    const typedocContent = mdxContent.slice(splitAt);
+
+    const newContent = `${frontmatter}\n${description}\n${typedocContent}`;
+    fs.writeFileSync(readmeMdxPath, newContent);
+
+    console.log(`📝 Injected description into ${readmeMdxPath}`);
+  }
+}
+
 function main(): void {
   try {
     console.log("Generating SDK Reference structure...");
+
+    injectPackageReadmes();
 
     const sdkReference = generateSDKReference();
 
