@@ -36,12 +36,19 @@ jobs:
       new_version: ${{ steps.tag.outputs.new_version }}
 
     steps:
+      - name: Generate app token
+        id: app-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.PR_BYPASSER_APP_ID }}
+          private-key: ${{ secrets.PR_BYPASSER_PRIVATE_KEY }}
+
       # Always checkout v5.x.x, regardless of which branch the workflow file lives on
       - name: Checkout v5.x.x branch
         uses: actions/checkout@v3
         with:
           ref: v5.x.x
-          token: ${{ secrets.ALCHEMY_BOT_PAT }}
+          token: ${{ steps.app-token.outputs.token }}
           fetch-depth: "0"
           submodules: "recursive"
 
@@ -191,5 +198,4 @@ jobs:
     with:
       version: ${{ needs.publish_v5_beta.outputs.new_version }}
     secrets:
-      ALCHEMY_BOT_PAT: ${{ secrets.ALCHEMY_BOT_PAT }}
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
