@@ -239,12 +239,17 @@ function resolveTypeBoxTypes(context, project, checker) {
   let fixedCount = 0;
   const reflections = Object.values(project.reflections);
 
-  // Build a lookup of type alias reflections by name
+  // Only fix types in the wallet-apis package (TypeBox-derived types)
+  const isWalletApis = (r) =>
+    r.sources?.some((s) => s.fileName.includes("wallet-apis/"));
+
+  // Build a lookup of type alias reflections by name (wallet-apis only)
   const typeAliasMap = new Map();
   for (const r of reflections) {
     if (
       r instanceof DeclarationReflection &&
-      r.kind === ReflectionKind.TypeAlias
+      r.kind === ReflectionKind.TypeAlias &&
+      isWalletApis(r)
     ) {
       typeAliasMap.set(r.name, r);
     }
@@ -254,7 +259,8 @@ function resolveTypeBoxTypes(context, project, checker) {
   for (const reflection of reflections) {
     if (
       !(reflection instanceof DeclarationReflection) ||
-      reflection.kind !== ReflectionKind.TypeAlias
+      reflection.kind !== ReflectionKind.TypeAlias ||
+      !isWalletApis(reflection)
     ) {
       continue;
     }
@@ -302,20 +308,22 @@ function resolveTypeBoxTypes(context, project, checker) {
   for (const reflection of reflections) {
     if (
       !(reflection instanceof DeclarationReflection) ||
-      reflection.kind !== ReflectionKind.Function
+      reflection.kind !== ReflectionKind.Function ||
+      !isWalletApis(reflection)
     ) {
       continue;
     }
 
     for (const sig of reflection.signatures ?? []) {
-      // Fix return type: Promise<{}>
+      // Fix return type: replace inline expansion with named type reference
+      // Triggers for both empty ({}) and expanded ReflectionTypes
       if (
         sig.type?.type === "reference" &&
         sig.type.name === "Promise" &&
         sig.type.typeArguments?.length === 1
       ) {
         const innerArg = sig.type.typeArguments[0];
-        if (isEmptyObjectType(innerArg)) {
+        if (innerArg.type === "reflection") {
           // Use the TS checker to find the actual return type name
           const funcSym = context.getSymbolFromReflection(reflection);
           if (funcSym) {

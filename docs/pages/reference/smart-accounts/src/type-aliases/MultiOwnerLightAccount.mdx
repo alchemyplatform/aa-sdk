@@ -11,10 +11,8 @@ layout: reference
 type MultiOwnerLightAccount = LightAccountBase<
   "MultiOwnerLightAccount",
   "v2.0.0"
-> & {
-  encodeUpdateOwners: (ownersToAdd, ownersToRemove) => Hex;
-  getOwnerAddresses: () => Promise<readonly Address[]>;
-};
+> &
+  object;
 ```
 
 Defined in: [packages/smart-accounts/src/light-account/accounts/multi-owner-account.ts:25](https://github.com/alchemyplatform/aa-sdk/blob/v5.x.x/packages/smart-accounts/src/light-account/accounts/multi-owner-account.ts#L25)

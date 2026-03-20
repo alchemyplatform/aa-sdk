@@ -17,12 +17,7 @@ type SendPreparedCallsParams =
     | { type: "authorization"; data: { address: `0x${string}`; nonce: number; }; chainId: number; } & { signature: { type: "secp256k1"; data: `0x${string}`; } | { type: "ecdsa"; data: `0x${string}`; }; })[];
   chainId?: undefined | number;
   callId?: undefined | `0x${string}`;
-  capabilities?:   | undefined
-     | {
-     permissions?: { context: `0x${string}`; } | { signature: `0x${string}`; sessionId: `0x${string}`; } | undefined;
-   } & {
-     paymaster?: ({ policyId: string; } & { webhookData?: string | undefined; }) | ({ policyIds: string[]; } & { webhookData?: string | undefined; }) | undefined;
-   };
+  capabilities?: undefined | object & object;
 }
   | {
   type: "user-operation-v060";
@@ -48,12 +43,7 @@ type SendPreparedCallsParams =
   };
   chainId?: undefined | number;
   callId?: undefined | `0x${string}`;
-  capabilities?:   | undefined
-     | {
-     permissions?: { context: `0x${string}`; } | { signature: `0x${string}`; sessionId: `0x${string}`; } | undefined;
-   } & {
-     paymaster?: ({ policyId: string; } & { webhookData?: string | undefined; }) | ({ policyIds: string[]; } & { webhookData?: string | undefined; }) | undefined;
-   };
+  capabilities?: undefined | object & object;
 }
   | {
   type: "user-operation-v070";
@@ -83,12 +73,7 @@ type SendPreparedCallsParams =
   };
   chainId?: undefined | number;
   callId?: undefined | `0x${string}`;
-  capabilities?:   | undefined
-     | {
-     permissions?: { context: `0x${string}`; } | { signature: `0x${string}`; sessionId: `0x${string}`; } | undefined;
-   } & {
-     paymaster?: ({ policyId: string; } & { webhookData?: string | undefined; }) | ({ policyIds: string[]; } & { webhookData?: string | undefined; }) | undefined;
-   };
+  capabilities?: undefined | object & object;
 };
 ```
 

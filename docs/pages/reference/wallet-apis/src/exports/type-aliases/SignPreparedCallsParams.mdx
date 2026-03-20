@@ -171,11 +171,7 @@ type SignPreparedCallsParams =
    };
   modifiedRequest: {
      chainId: number;
-     calls: {
-        value?: bigint | undefined;
-        data?: `0x${string}` | undefined;
-        to: `0x${string}`;
-     }[];
+     calls: object[];
      paymasterPermitSignature?:   | undefined
         | {
         type: "secp256k1";
