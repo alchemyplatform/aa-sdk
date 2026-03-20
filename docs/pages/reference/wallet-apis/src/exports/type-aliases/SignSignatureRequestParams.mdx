@@ -12,7 +12,9 @@ type SignSignatureRequestParams = Prettify<
   WithoutRawPayload<
     | PersonalSignSignatureRequest
     | TypedDataSignatureRequest
-    | (AuthorizationSignatureRequest & object)
+    | (AuthorizationSignatureRequest & {
+        data: StaticDecode<typeof Eip7702UnsignedAuth>;
+      })
   >
 >;
 ```

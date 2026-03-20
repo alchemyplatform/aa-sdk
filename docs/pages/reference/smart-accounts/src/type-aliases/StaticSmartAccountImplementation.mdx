@@ -15,11 +15,26 @@ type StaticSmartAccountImplementation<
   entryPointAbi,
   accountAbi,
   factoryAbi,
-> = object & eip7702 extends false
-  ? object
-  : object & eip7702 extends true
-    ? object
-    : object;
+> = {
+  accountAbi: accountAbi;
+  entryPoint: {
+    abi: entryPointAbi;
+    address: Address;
+    version: entryPointVersion;
+  };
+} & eip7702 extends false
+  ? {
+      accountImplementation: Address;
+      factoryAbi: factoryAbi;
+      factoryAddress: Address;
+      getFactoryData: (factoryArgs) => Hex;
+      predictAccountAddress: (factoryArgs) => Address;
+    }
+  : {} & eip7702 extends true
+    ? {
+        delegationAddress: Address;
+      }
+    : {};
 ```
 
 Defined in: [packages/smart-accounts/src/types.ts:43](https://github.com/alchemyplatform/aa-sdk/blob/v5.x.x/packages/smart-accounts/src/types.ts#L43)
@@ -51,7 +66,11 @@ Defined in: [packages/smart-accounts/src/types.ts:43](https://github.com/alchemy
       </td>
 
       <td>
-        `object`
+        \{
+        `abi`: `entryPointAbi`;
+        `address`: [`Address`](https://abitype.dev);
+        `version`: `entryPointVersion`;
+        }
       </td>
     </tr>
 
@@ -121,11 +140,13 @@ Defined in: [packages/smart-accounts/src/types.ts:43](https://github.com/alchemy
 
     <tr>
       <td>
-        `factoryArgs` *extends* `object`
+        `factoryArgs` *extends* \{
+        }
       </td>
 
       <td>
-        `object`
+        \{
+        }
       </td>
     </tr>
 

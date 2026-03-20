@@ -1,5 +1,19 @@
-import { ReflectionKind, DeclarationReflection } from "typedoc";
+import {
+  ReflectionKind,
+  DeclarationReflection,
+  ReflectionType,
+  ReferenceType,
+  IntrinsicType,
+  ArrayType,
+  UnionType,
+  LiteralType,
+  IntersectionType,
+  TupleType,
+  ReflectionFlag,
+  UnknownType,
+} from "typedoc";
 import { MarkdownPageEvent } from "typedoc-plugin-markdown";
+import ts from "typescript";
 
 /**
  * Determine if a function should be categorized as a component (React components)
@@ -63,6 +77,384 @@ function isExternalSource(reflection) {
   );
 }
 
+/**
+ * Convert a TypeScript type from the checker into a TypeDoc Type.
+ * Handles common patterns and falls back to a string representation.
+ *
+ * @param {import('typescript').TypeChecker} checker
+ * @param {import('typescript').Type} tsType
+ * @param {import('typedoc').DeclarationReflection} parent - Parent reflection for nested objects
+ * @param {import('typedoc').ProjectReflection} project
+ * @param {number} depth - Recursion depth guard
+ * @returns {import('typedoc').Type}
+ */
+function tsTypeToTypeDoc(checker, tsType, parent, project, depth = 0) {
+  if (depth > 4) {
+    return new UnknownType(checker.typeToString(tsType));
+  }
+
+  const typeStr = checker.typeToString(tsType);
+
+  // Intrinsic / primitive types
+  const intrinsics = [
+    "string",
+    "number",
+    "bigint",
+    "boolean",
+    "undefined",
+    "null",
+    "void",
+    "never",
+    "any",
+    "unknown",
+    "symbol",
+  ];
+  if (intrinsics.includes(typeStr)) {
+    return new IntrinsicType(typeStr);
+  }
+
+  // String/number/boolean literal types
+  if (tsType.isStringLiteral()) {
+    return new LiteralType(tsType.value);
+  }
+  if (tsType.isNumberLiteral()) {
+    return new LiteralType(tsType.value);
+  }
+  if (typeStr === "true") return new LiteralType(true);
+  if (typeStr === "false") return new LiteralType(false);
+
+  // Union types
+  if (tsType.isUnion()) {
+    const members = tsType.types.map((t) =>
+      tsTypeToTypeDoc(checker, t, parent, project, depth + 1),
+    );
+    return new UnionType(members);
+  }
+
+  // Intersection types
+  if (tsType.isIntersection()) {
+    const members = tsType.types.map((t) =>
+      tsTypeToTypeDoc(checker, t, parent, project, depth + 1),
+    );
+    return new IntersectionType(members);
+  }
+
+  // Array types
+  if (checker.isArrayType(tsType)) {
+    const typeArgs = checker.getTypeArguments(tsType);
+    if (typeArgs.length > 0) {
+      const elementType = tsTypeToTypeDoc(
+        checker,
+        typeArgs[0],
+        parent,
+        project,
+        depth + 1,
+      );
+      return new ArrayType(elementType);
+    }
+  }
+
+  // Tuple types
+  if (checker.isTupleType(tsType)) {
+    const typeArgs = checker.getTypeArguments(tsType);
+    const elements = typeArgs.map((t) =>
+      tsTypeToTypeDoc(checker, t, parent, project, depth + 1),
+    );
+    return new TupleType(elements);
+  }
+
+  // Template literal types (e.g., `0x${string}`)
+  if (tsType.flags & ts.TypeFlags.TemplateLiteral) {
+    // TypeDoc's TemplateLiteralType expects head + tail pairs
+    // For simplicity, use the string representation
+    return new UnknownType(typeStr);
+  }
+
+  // Object types with properties
+  const props = checker.getPropertiesOfType(tsType);
+  const callSigs = tsType.getCallSignatures();
+  if (props.length > 0 && callSigs.length === 0) {
+    const typeLiteral = new DeclarationReflection(
+      "__type",
+      ReflectionKind.TypeLiteral,
+      parent,
+    );
+    for (const prop of props) {
+      const propDecl = new DeclarationReflection(
+        prop.name,
+        ReflectionKind.Property,
+        typeLiteral,
+      );
+      const propType = checker.getTypeOfSymbol(prop);
+      propDecl.type = tsTypeToTypeDoc(
+        checker,
+        propType,
+        typeLiteral,
+        project,
+        depth + 1,
+      );
+      // Mark optional properties
+      if (prop.flags & ts.SymbolFlags.Optional) {
+        propDecl.flags.setFlag(ReflectionFlag.Optional, true);
+      }
+      typeLiteral.children ??= [];
+      typeLiteral.children.push(propDecl);
+    }
+    return new ReflectionType(typeLiteral);
+  }
+
+  // Fallback: use the checker's string representation
+  return new UnknownType(typeStr);
+}
+
+/**
+ * Check if a TypeDoc type represents an empty/broken object ({} or Object)
+ *
+ * @param {import('typedoc').Type | undefined} type
+ * @returns {boolean}
+ */
+function isEmptyObjectType(type) {
+  if (!type) return false;
+  if (type.type === "reflection") {
+    const decl = type.declaration;
+    return (
+      !decl?.children?.length &&
+      !decl?.signatures?.length &&
+      !decl?.indexSignatures?.length
+    );
+  }
+  return false;
+}
+
+/**
+ * Resolve TypeBox-derived types that TypeDoc couldn't resolve.
+ * Fixes type aliases (detail pages) and function signatures.
+ *
+ * @param {import('typedoc').Context} context
+ * @param {import('typedoc').ProjectReflection} project
+ * @param {import('typescript').TypeChecker} checker
+ * @returns {number} Number of types fixed
+ */
+function resolveTypeBoxTypes(context, project, checker) {
+  let fixedCount = 0;
+  const reflections = Object.values(project.reflections);
+
+  // Build a lookup of type alias reflections by name
+  const typeAliasMap = new Map();
+  for (const r of reflections) {
+    if (
+      r instanceof DeclarationReflection &&
+      r.kind === ReflectionKind.TypeAlias
+    ) {
+      typeAliasMap.set(r.name, r);
+    }
+  }
+
+  // Step 1: Fix type alias reflections that have empty/broken types
+  for (const reflection of reflections) {
+    if (
+      !(reflection instanceof DeclarationReflection) ||
+      reflection.kind !== ReflectionKind.TypeAlias
+    ) {
+      continue;
+    }
+
+    // Check if the current type is empty or is a reference to something that
+    // TypeDoc couldn't resolve
+    const currentType = reflection.type;
+    const isEmpty =
+      isEmptyObjectType(currentType) ||
+      (currentType?.type === "reference" &&
+        currentType.typeArguments?.some(isEmptyObjectType));
+
+    // Also check reference targets that themselves are empty
+    const isRefToEmpty =
+      currentType?.type === "reference" &&
+      !currentType.typeArguments?.length &&
+      currentType.reflection instanceof DeclarationReflection &&
+      isEmptyObjectType(currentType.reflection.type);
+
+    if (!isEmpty && !isRefToEmpty) {
+      // Check if it's a reference whose target we can't inspect
+      // (e.g., SendPreparedCallsResponse which is an unexported alias)
+      if (currentType?.type !== "reference" || currentType.reflection) {
+        continue;
+      }
+    }
+
+    const sym = context.getSymbolFromReflection(reflection);
+    if (!sym) continue;
+
+    const tsType = checker.getDeclaredTypeOfSymbol(sym);
+    const props = checker.getPropertiesOfType(tsType);
+    if (props.length === 0) continue;
+
+    // Build a proper ReflectionType from the TS checker
+    const newType = tsTypeToTypeDoc(checker, tsType, reflection, project);
+    if (newType.type !== "unknown") {
+      reflection.type = newType;
+      fixedCount++;
+    }
+  }
+
+  // Step 2: Fix function return types — replace empty ReflectionType in
+  // Promise<{}> with a ReferenceType to the named result type
+  for (const reflection of reflections) {
+    if (
+      !(reflection instanceof DeclarationReflection) ||
+      reflection.kind !== ReflectionKind.Function
+    ) {
+      continue;
+    }
+
+    for (const sig of reflection.signatures ?? []) {
+      // Fix return type: Promise<{}>
+      if (
+        sig.type?.type === "reference" &&
+        sig.type.name === "Promise" &&
+        sig.type.typeArguments?.length === 1
+      ) {
+        const innerArg = sig.type.typeArguments[0];
+        if (isEmptyObjectType(innerArg)) {
+          // Use the TS checker to find the actual return type name
+          const funcSym = context.getSymbolFromReflection(reflection);
+          if (funcSym) {
+            const funcType = checker.getTypeOfSymbol(funcSym);
+            const callSigs = funcType.getCallSignatures();
+            if (callSigs.length > 0) {
+              const returnType = checker.getReturnTypeOfSignature(callSigs[0]);
+              // Check if it's Promise<T>
+              if (returnType.symbol?.name === "Promise") {
+                const typeArgs = checker.getTypeArguments(returnType);
+                if (typeArgs.length > 0) {
+                  const innerType = typeArgs[0];
+                  // Try to find the named type alias
+                  let aliasName = innerType.aliasSymbol?.name;
+
+                  // If aliasSymbol is lost (e.g., through Prettify), check the
+                  // function's return type annotation for a named reference
+                  if (!aliasName || !typeAliasMap.has(aliasName)) {
+                    const funcDecl = funcSym.getDeclarations()?.[0];
+                    if (funcDecl && funcDecl.type) {
+                      // Return type annotation: Promise<SomeType>
+                      const retNode = funcDecl.type;
+                      if (
+                        ts.isTypeReferenceNode(retNode) &&
+                        retNode.typeArguments?.length === 1
+                      ) {
+                        const innerNode = retNode.typeArguments[0];
+                        if (ts.isTypeReferenceNode(innerNode)) {
+                          aliasName = innerNode.typeName.getText();
+                        }
+                      }
+                    }
+                  }
+
+                  const targetReflection = aliasName
+                    ? typeAliasMap.get(aliasName)
+                    : null;
+
+                  if (targetReflection) {
+                    // Replace with a reference to the named type
+                    sig.type.typeArguments[0] =
+                      ReferenceType.createResolvedReference(
+                        aliasName,
+                        targetReflection,
+                        project,
+                      );
+                    fixedCount++;
+                  } else {
+                    // No named type found — inline the resolved type
+                    const resolved = tsTypeToTypeDoc(
+                      checker,
+                      innerType,
+                      reflection,
+                      project,
+                    );
+                    if (resolved.type !== "unknown") {
+                      sig.type.typeArguments[0] = resolved;
+                      fixedCount++;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+
+      // Fix parameter types: use TS checker to restore named types
+      // TypeDoc may render params as "Object" when it can't resolve Prettify<T>
+      // or other mapped types. Check all non-reference params against the checker.
+      const funcSym2 = context.getSymbolFromReflection(reflection);
+      if (funcSym2 && sig.parameters?.length) {
+        const funcType2 = checker.getTypeOfSymbol(funcSym2);
+        const callSigs2 = funcType2.getCallSignatures();
+        if (callSigs2.length > 0) {
+          const tsParams = callSigs2[0].getParameters();
+          for (let i = 0; i < sig.parameters.length; i++) {
+            const param = sig.parameters[i];
+            const tsParam = tsParams[i];
+            if (!tsParam) continue;
+
+            // Skip params that already have a proper reference type
+            if (param.type?.type === "reference" && param.type.reflection) {
+              continue;
+            }
+
+            const paramType = checker.getTypeOfSymbol(tsParam);
+
+            // Try to get the named type from the parameter's type annotation
+            // (aliasSymbol is lost when Prettify<T> expands the type)
+            let aliasName = paramType.aliasSymbol?.name;
+            if (!aliasName || !typeAliasMap.has(aliasName)) {
+              const paramDecl = tsParam.getDeclarations()?.[0];
+              if (paramDecl && ts.isParameter(paramDecl) && paramDecl.type) {
+                if (ts.isTypeReferenceNode(paramDecl.type)) {
+                  aliasName = paramDecl.type.typeName.getText();
+                }
+              }
+            }
+
+            const targetReflection = aliasName
+              ? typeAliasMap.get(aliasName)
+              : null;
+
+            if (targetReflection) {
+              param.type = ReferenceType.createResolvedReference(
+                aliasName,
+                targetReflection,
+                project,
+              );
+              fixedCount++;
+            } else if (
+              isEmptyObjectType(param.type) ||
+              (param.type?.type === "intrinsic" && param.type.name === "Object")
+            ) {
+              // Inline the resolved type as a fallback
+              const props = checker.getPropertiesOfType(paramType);
+              if (props.length > 0) {
+                const resolved = tsTypeToTypeDoc(
+                  checker,
+                  paramType,
+                  reflection,
+                  project,
+                );
+                if (resolved.type !== "unknown") {
+                  param.type = resolved;
+                  fixedCount++;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  return fixedCount;
+}
+
 export function load(app) {
   // Remove reflections sourced from external locations (dist/ or node_modules/)
   // after conversion so that:
@@ -89,6 +481,27 @@ export function load(app) {
       console.log(
         `Removed ${toRemove.length} reflections sourced from external locations (dist/, node_modules/)`,
       );
+    }
+
+    // --- Resolve TypeBox-derived types using the TS checker ---
+    // TypeDoc can't resolve StaticDecode<T> from TypeBox, so types derived
+    // via MethodResponse/MethodParams appear as {} or Object. We use the TS
+    // checker to get the actual resolved properties and build proper TypeDoc
+    // reflections.
+    let checker;
+    try {
+      checker = context.programs[0].getTypeChecker();
+    } catch {
+      // No checker available — skip type resolution
+    }
+
+    if (checker) {
+      const fixedTypes = resolveTypeBoxTypes(context, project, checker);
+      if (fixedTypes > 0) {
+        console.log(
+          `Resolved ${fixedTypes} TypeBox-derived types using TS checker`,
+        );
+      }
     }
   });
 

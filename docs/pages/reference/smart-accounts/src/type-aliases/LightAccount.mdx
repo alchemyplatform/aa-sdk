@@ -11,8 +11,10 @@ layout: reference
 type LightAccount<TLightAccountVersion> = LightAccountBase<
   "LightAccount",
   TLightAccountVersion
-> &
-  object;
+> & {
+  encodeTransferOwnership: (newOwner) => Hex;
+  getOwnerAddress: () => Promise<Address>;
+};
 ```
 
 Defined in: [packages/smart-accounts/src/light-account/accounts/account.ts:34](https://github.com/alchemyplatform/aa-sdk/blob/v5.x.x/packages/smart-accounts/src/light-account/accounts/account.ts#L34)

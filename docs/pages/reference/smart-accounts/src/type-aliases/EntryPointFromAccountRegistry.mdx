@@ -15,7 +15,11 @@ type EntryPointFromAccountRegistry<TLightAccountType, TLightAccountVersion> =
     infer _factoryArgs,
     infer entryPointAbi
   >
-    ? (typeof AccountVersionRegistry)[TLightAccountType][TLightAccountVersion]["entryPoint"] extends object
+    ? (typeof AccountVersionRegistry)[TLightAccountType][TLightAccountVersion]["entryPoint"] extends {
+        abi: entryPointAbi;
+        address: Address;
+        version: entryPointVersion;
+      }
       ? (typeof AccountVersionRegistry)[TLightAccountType][TLightAccountVersion]["entryPoint"]
       : never
     : never;

@@ -93,7 +93,7 @@
   "useCodeBlocks": true,
   "sanitizeComments": true,
   "typePrintWidth": 80,
-  "expandObjects": false,
+  "expandObjects": true,
   "expandParameters": false,
 
   // ============================================================================
