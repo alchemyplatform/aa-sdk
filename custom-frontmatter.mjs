@@ -306,24 +306,58 @@ function resolveTypeBoxTypes(context, project, checker) {
     }
     if (props.length === 0) continue;
 
-    // Build a proper ReflectionType from the TS checker
-    const newType = tsTypeToTypeDoc(checker, resolvedType, reflection, project);
-    if (newType.type !== "unknown") {
-      reflection.type = newType;
-      fixedCount++;
-      // Store the checker's type string for code block fixups —
-      // TypeDoc renders ReflectionType as `object` in code blocks
-      if (newType.type === "reflection") {
-        codeBlockFixes.set(
-          reflection.name,
-          checker.typeToString(
-            resolvedType,
-            undefined,
-            ts.TypeFormatFlags.MultilineObjectLiterals |
-              ts.TypeFormatFlags.NoTruncation |
-              ts.TypeFormatFlags.InTypeAlias,
-          ),
+    // If the reflection already has children (TypeDoc resolved the properties
+    // but rendered the code block as `object`), don't replace the type —
+    // just store a code block fix. Creating a new ReflectionType with children
+    // would duplicate the property anchors (causing `-1` suffixes).
+    const hasExistingChildren =
+      reflection.children?.length > 0 ||
+      (reflection.type?.type === "reflection" &&
+        reflection.type.declaration?.children?.length > 0);
+
+    if (hasExistingChildren) {
+      // Prefer the original source text (preserves named type references)
+      // over the checker's typeToString (which expands everything).
+      let codeBlockStr;
+      const cbSym = context.getSymbolFromReflection(reflection);
+      const cbDecl = cbSym?.getDeclarations()?.[0];
+      if (cbDecl && ts.isTypeAliasDeclaration(cbDecl) && cbDecl.type) {
+        codeBlockStr = cbDecl.type.getText();
+      }
+      if (!codeBlockStr) {
+        codeBlockStr = checker.typeToString(
+          resolvedType,
+          undefined,
+          ts.TypeFormatFlags.MultilineObjectLiterals |
+            ts.TypeFormatFlags.NoTruncation |
+            ts.TypeFormatFlags.InTypeAlias,
         );
+      }
+      codeBlockFixes.set(reflection.name, codeBlockStr);
+      fixedCount++;
+    } else {
+      // No existing children — build a proper ReflectionType from the TS checker
+      const newType = tsTypeToTypeDoc(
+        checker,
+        resolvedType,
+        reflection,
+        project,
+      );
+      if (newType.type !== "unknown") {
+        reflection.type = newType;
+        fixedCount++;
+        if (newType.type === "reflection") {
+          codeBlockFixes.set(
+            reflection.name,
+            checker.typeToString(
+              resolvedType,
+              undefined,
+              ts.TypeFormatFlags.MultilineObjectLiterals |
+                ts.TypeFormatFlags.NoTruncation |
+                ts.TypeFormatFlags.InTypeAlias,
+            ),
+          );
+        }
       }
     }
   }
