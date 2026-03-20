@@ -198,6 +198,4 @@ jobs:
     with:
       version: ${{ needs.publish_v5_beta.outputs.new_version }}
     secrets:
-      PR_BYPASSER_APP_ID: ${{ secrets.PR_BYPASSER_APP_ID }}
-      PR_BYPASSER_PRIVATE_KEY: ${{ secrets.PR_BYPASSER_PRIVATE_KEY }}
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
