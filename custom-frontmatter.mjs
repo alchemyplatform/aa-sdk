@@ -281,9 +281,16 @@ function resolveTypeBoxTypes(context, project, checker) {
       isEmptyObjectType(currentType.reflection.type);
 
     if (!isEmpty && !isRefToEmpty) {
-      // Check if it's a reference whose target we can't inspect
-      // (e.g., SendPreparedCallsResponse which is an unexported alias)
-      if (currentType?.type !== "reference" || currentType.reflection) {
+      // Only also try to resolve unresolved references to internal types
+      // (e.g., SendPreparedCallsResponse which is an unexported alias).
+      // Skip external references (viem Client, etc.) — they have typeArguments
+      // or a package property indicating they're from an external library.
+      const isUnresolvedInternal =
+        currentType?.type === "reference" &&
+        !currentType.reflection &&
+        !currentType.package &&
+        !currentType.typeArguments?.length;
+      if (!isUnresolvedInternal) {
         continue;
       }
     }
