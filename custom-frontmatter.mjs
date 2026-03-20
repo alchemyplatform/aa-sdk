@@ -233,10 +233,12 @@ function isEmptyObjectType(type) {
  * @param {import('typedoc').Context} context
  * @param {import('typedoc').ProjectReflection} project
  * @param {import('typescript').TypeChecker} checker
- * @returns {number} Number of types fixed
+ * @returns {{ count: number, codeBlockFixes: Map<string, string> }}
  */
 function resolveTypeBoxTypes(context, project, checker) {
   let fixedCount = 0;
+  // Map of type alias name → checker type string for code block fixups
+  const codeBlockFixes = new Map();
   const reflections = Object.values(project.reflections);
 
   // Only fix types in the wallet-apis package (TypeBox-derived types)
@@ -265,48 +267,64 @@ function resolveTypeBoxTypes(context, project, checker) {
       continue;
     }
 
-    // Check if the current type is empty or is a reference to something that
-    // TypeDoc couldn't resolve
+    // Check if the current type needs fixing:
+    // 1. No type at all (null/undefined)
+    // 2. Empty object type ({}) — TypeDoc couldn't resolve TypeBox types
+    // 3. Wrapped in Prettify/utility types that collapse inner types to `object`
+    // 4. Unresolved internal reference — unexported alias TypeDoc can't follow
     const currentType = reflection.type;
-    const isEmpty =
+    const needsFix =
+      // No type at all
+      !currentType ||
+      // Entirely collapsed to `object` intrinsic
+      (currentType?.type === "intrinsic" && currentType.name === "object") ||
+      // Empty object type ({})
       isEmptyObjectType(currentType) ||
       (currentType?.type === "reference" &&
-        currentType.typeArguments?.some(isEmptyObjectType));
-
-    // Also check reference targets that themselves are empty
-    const isRefToEmpty =
-      currentType?.type === "reference" &&
-      !currentType.typeArguments?.length &&
-      currentType.reflection instanceof DeclarationReflection &&
-      isEmptyObjectType(currentType.reflection.type);
-
-    if (!isEmpty && !isRefToEmpty) {
-      // Only also try to resolve unresolved references to internal types
-      // (e.g., SendPreparedCallsResponse which is an unexported alias).
-      // Skip external references (viem Client, etc.) — they have typeArguments
-      // or a package property indicating they're from an external library.
-      const isUnresolvedInternal =
-        currentType?.type === "reference" &&
+        currentType.typeArguments?.some(isEmptyObjectType)) ||
+      // Unresolved internal reference (no package, no type args)
+      (currentType?.type === "reference" &&
         !currentType.reflection &&
         !currentType.package &&
-        !currentType.typeArguments?.length;
-      if (!isUnresolvedInternal) {
-        continue;
-      }
-    }
+        !currentType.typeArguments?.length);
+
+    if (!needsFix) continue;
 
     const sym = context.getSymbolFromReflection(reflection);
     if (!sym) continue;
 
     const tsType = checker.getDeclaredTypeOfSymbol(sym);
-    const props = checker.getPropertiesOfType(tsType);
+    let props = checker.getPropertiesOfType(tsType);
+
+    // For types wrapped in Prettify or other mapped types, getDeclaredType
+    // may return the mapped type itself. Try getTypeOfSymbol to get the
+    // fully resolved structural type instead.
+    let resolvedType = tsType;
+    if (props.length === 0) {
+      resolvedType = checker.getTypeOfSymbol(sym);
+      props = checker.getPropertiesOfType(resolvedType);
+    }
     if (props.length === 0) continue;
 
     // Build a proper ReflectionType from the TS checker
-    const newType = tsTypeToTypeDoc(checker, tsType, reflection, project);
+    const newType = tsTypeToTypeDoc(checker, resolvedType, reflection, project);
     if (newType.type !== "unknown") {
       reflection.type = newType;
       fixedCount++;
+      // Store the checker's type string for code block fixups —
+      // TypeDoc renders ReflectionType as `object` in code blocks
+      if (newType.type === "reflection") {
+        codeBlockFixes.set(
+          reflection.name,
+          checker.typeToString(
+            resolvedType,
+            undefined,
+            ts.TypeFormatFlags.MultilineObjectLiterals |
+              ts.TypeFormatFlags.NoTruncation |
+              ts.TypeFormatFlags.InTypeAlias,
+          ),
+        );
+      }
     }
   }
 
@@ -467,7 +485,132 @@ function resolveTypeBoxTypes(context, project, checker) {
     }
   }
 
-  return fixedCount;
+  // Step 3: Fix method signatures inside type alias reflections
+  // (e.g. SmartWalletActions) — TypeDoc expands TypeBox-derived param/return
+  // types inline instead of keeping the named type references.
+  for (const reflection of reflections) {
+    if (
+      !(reflection instanceof DeclarationReflection) ||
+      reflection.kind !== ReflectionKind.TypeAlias ||
+      !isWalletApis(reflection) ||
+      reflection.type?.type !== "reflection"
+    ) {
+      continue;
+    }
+
+    const decl = reflection.type.declaration;
+    if (!decl?.children?.length) continue;
+
+    // Get the TS AST declaration for this type alias
+    const sym = context.getSymbolFromReflection(reflection);
+    if (!sym) continue;
+    const symDecls = sym.getDeclarations();
+    if (!symDecls?.length) continue;
+    const typeAliasDecl = symDecls[0];
+    if (!ts.isTypeAliasDeclaration(typeAliasDecl)) continue;
+    const typeLiteral = typeAliasDecl.type;
+    if (!ts.isTypeLiteralNode(typeLiteral)) continue;
+
+    // Map member name → AST PropertySignature
+    const memberAstMap = new Map();
+    for (const member of typeLiteral.members) {
+      if (ts.isPropertySignature(member) && member.name) {
+        memberAstMap.set(member.name.getText(), member);
+      }
+    }
+
+    for (const child of decl.children) {
+      const astMember = memberAstMap.get(child.name);
+      if (!astMember?.type || !ts.isFunctionTypeNode(astMember.type)) continue;
+      const funcTypeNode = astMember.type;
+
+      for (const sig of child.signatures ?? []) {
+        // Fix return type: replace expanded type with named reference
+        if (
+          sig.type?.type === "reference" &&
+          sig.type.name === "Promise" &&
+          sig.type.typeArguments?.length === 1
+        ) {
+          const innerArg = sig.type.typeArguments[0];
+          if (
+            innerArg.type === "reflection" ||
+            (innerArg.type === "intrinsic" && innerArg.name === "object")
+          ) {
+            const retNode = funcTypeNode.type;
+            if (
+              ts.isTypeReferenceNode(retNode) &&
+              retNode.typeArguments?.length === 1
+            ) {
+              const innerNode = retNode.typeArguments[0];
+              if (ts.isTypeReferenceNode(innerNode)) {
+                const aliasName = innerNode.typeName.getText();
+                const target = typeAliasMap.get(aliasName);
+                if (target) {
+                  sig.type.typeArguments[0] =
+                    ReferenceType.createResolvedReference(
+                      aliasName,
+                      target,
+                      project,
+                    );
+                  fixedCount++;
+                }
+              }
+            }
+          }
+        }
+
+        // Fix parameter types: replace expanded types with named references
+        if (sig.parameters?.length) {
+          for (let i = 0; i < sig.parameters.length; i++) {
+            const param = sig.parameters[i];
+            // Skip params already resolved to a reference
+            if (param.type?.type === "reference" && param.type.reflection) {
+              continue;
+            }
+
+            const astParam = funcTypeNode.parameters[i];
+            if (!astParam?.type) continue;
+
+            // Handle optional param: T | undefined — unwrap to check the ref
+            let typeNode = astParam.type;
+            if (ts.isUnionTypeNode(typeNode)) {
+              // Find the non-undefined type in the union
+              const nonUndef = typeNode.types.find(
+                (t) =>
+                  !(
+                    t.kind === ts.SyntaxKind.UndefinedKeyword ||
+                    (ts.isLiteralTypeNode(t) &&
+                      t.literal.kind === ts.SyntaxKind.UndefinedKeyword)
+                  ),
+              );
+              if (nonUndef) typeNode = nonUndef;
+            }
+
+            if (!ts.isTypeReferenceNode(typeNode)) continue;
+            const aliasName = typeNode.typeName.getText();
+            const target = typeAliasMap.get(aliasName);
+            if (target) {
+              param.type = ReferenceType.createResolvedReference(
+                aliasName,
+                target,
+                project,
+              );
+              fixedCount++;
+            }
+          }
+        }
+      }
+    }
+
+    // Generate a clean code block from the source AST instead of letting
+    // TypeDoc expand all the TypeBox-derived types inline
+    const sourceText = typeLiteral.getText();
+    if (sourceText) {
+      codeBlockFixes.set(reflection.name, sourceText);
+    }
+  }
+
+  return { count: fixedCount, codeBlockFixes };
 }
 
 export function load(app) {
@@ -511,12 +654,14 @@ export function load(app) {
     }
 
     if (checker) {
-      const fixedTypes = resolveTypeBoxTypes(context, project, checker);
-      if (fixedTypes > 0) {
+      const result = resolveTypeBoxTypes(context, project, checker);
+      if (result.count > 0) {
         console.log(
-          `Resolved ${fixedTypes} TypeBox-derived types using TS checker`,
+          `Resolved ${result.count} TypeBox-derived types using TS checker`,
         );
       }
+      // Store code block fixes for use during markdown rendering
+      app._codeBlockFixes = result.codeBlockFixes;
     }
   });
 
@@ -679,6 +824,43 @@ export function load(app) {
             return `](/${normalized.join("/")})`;
           },
         );
+      }
+
+      // Clean up collapsed `object` placeholders in wallet-apis type pages.
+      // TypeDoc collapses inline types it can't resolve to `object`, e.g.:
+      //   Prettify<TypedDataDefinition & object>  →  Prettify<TypedDataDefinition>
+      //   AuthorizationSignatureRequest & object   →  AuthorizationSignatureRequest
+      if (page.url?.includes("wallet-apis/")) {
+        // Remove `& object` from intersections (within code blocks and inline code)
+        page.contents = page.contents.replace(
+          /\s*&\s*object(?=[>);,\s\n\]}])/g,
+          "",
+        );
+        // Remove `object & ` prefix
+        page.contents = page.contents.replace(/object\s*&\s*(?=[A-Z{])/g, "");
+
+        // Fix code blocks using stored type strings from the TS checker/AST.
+        // Handles two cases:
+        // 1. Simple types: `= object;` → expanded object literal
+        // 2. Complex types (SmartWalletActions): full expanded block → source AST
+        const fixes = app._codeBlockFixes;
+        if (fixes && page.model?.name && fixes.has(page.model.name)) {
+          let typeStr = fixes.get(page.model.name);
+          // Source AST strings (Step 3) have real newlines; checker strings
+          // (Step 1) are single-line with 4-space pseudo-indent — reformat those.
+          if (!typeStr.includes("\n")) {
+            typeStr = typeStr
+              .replace(/\{\s+/g, "{\n  ")
+              .replace(/;\s{2,}/g, ";\n  ")
+              .replace(/;\s*\}/g, ";\n}")
+              .replace(/\n  \}/g, "\n}");
+          }
+          // Replace the entire code block body after `type Name =`
+          page.contents = page.contents.replace(
+            /^(```ts\ntype \w+(?:<[^>]*>)? =) [\s\S]*?^```/m,
+            `$1 ${typeStr};\n\`\`\``,
+          );
+        }
       }
 
       const frontmatterMatch = page.contents.match(/^(---\n[\s\S]*?\n---\n)/);
