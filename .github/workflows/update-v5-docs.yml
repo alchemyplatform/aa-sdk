@@ -224,4 +224,4 @@ jobs:
           # Force-update the branch to the signed commit
           gh api "repos/$REPO/git/refs/heads/$BRANCH_NAME" -X PATCH \
             -f sha="$NEW_SHA" \
-            -f force=true
+            -F force=true
