@@ -10,8 +10,6 @@ on:
         type: string
         default: ""
     secrets:
-      ALCHEMY_BOT_PAT:
-        required: true
       OPENAI_API_KEY:
         required: true
 
@@ -44,7 +42,6 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: v5.x.x
-          token: ${{ secrets.ALCHEMY_BOT_PAT }}
           fetch-depth: "0"
           submodules: "recursive"
 
@@ -70,7 +67,6 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: main
-          token: ${{ secrets.ALCHEMY_BOT_PAT }}
           path: main-branch
 
       - name: Copy V5 reference docs to main branch
@@ -111,7 +107,7 @@ jobs:
 
       - name: Create PR for V5 docs update
         env:
-          GH_TOKEN: ${{ secrets.ALCHEMY_BOT_PAT }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           cd main-branch
 
