@@ -80,11 +80,16 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
 
-      # Lerna publish will, compute the new version, update files, run precommit hooks, tag, publish, and push change log
+      # Lerna publish will compute the new version, update files, run precommit hooks, tag, and publish to NPM
       - name: Publish using Lerna
         if: inputs.publish
         env:
           API_KEY: ${{ secrets.API_KEY }}
           JAVA_OPTS: "-XX:MaxHeapSize=6g"
         shell: bash
-        run: yarn lerna publish --conventional-commits --no-private --yes --no-verify-access
+        run: yarn lerna publish --conventional-commits --no-private --yes --no-verify-access --no-push
+
+      # Push version commit and tags to main
+      - name: Push Changes to main
+        if: inputs.publish
+        run: git push --follow-tags origin main
