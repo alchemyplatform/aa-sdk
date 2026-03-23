@@ -197,4 +197,7 @@ jobs:
         run: |
           cd main-branch
           git commit --allow-empty -m "ci: trigger checks"
+          # Clear the extraheader that actions/checkout sets — it overrides URL
+          # credentials with GITHUB_TOKEN, which won't trigger workflows.
+          git config --unset-all http.https://github.com/.extraheader
           git push --force https://x-access-token:${{ steps.app-token.outputs.token }}@github.com/${{ github.repository }}.git "${{ env.branch_name }}"
