@@ -1,6 +1,6 @@
 {
   "name": "@alchemy/common",
-  "version": "5.0.0-beta.14",
+  "version": "5.0.0-beta.15",
   "description": "A collection of interfaces and utilities to be used by other Alchemy packages",
   "author": "Alchemy",
   "license": "MIT",
