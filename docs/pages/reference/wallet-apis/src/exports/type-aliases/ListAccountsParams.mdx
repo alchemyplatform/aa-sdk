@@ -9,11 +9,7 @@ layout: reference
 
 ```ts
 type ListAccountsParams = Prettify<
-  DistributiveOmit<
-    BaseListAccountsParams,
-    "signerAddress" | "signerPublicKey"
-  > &
-    object
+  DistributiveOmit<BaseListAccountsParams, "signerAddress" | "signerPublicKey">
 >;
 ```
 
