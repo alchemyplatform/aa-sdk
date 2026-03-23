@@ -9,9 +9,7 @@ layout: reference
 
 ```ts
 type PrepareCallsParams = Prettify<
-  WithCapabilities<
-    DistributiveOmit<BasePrepareCallsParams, "from" | "chainId"> & object
-  >
+  WithCapabilities<DistributiveOmit<BasePrepareCallsParams, "from" | "chainId">>
 >;
 ```
 
