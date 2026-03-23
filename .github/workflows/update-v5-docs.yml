@@ -189,15 +189,39 @@ jobs:
               --head "$BRANCH_NAME"
           fi
 
-      # Push an empty commit with the app token to trigger CI on the PR.
-      # GITHUB_TOKEN events don't trigger workflows, so this re-push as the
-      # app fires the pull_request:synchronize event and kicks off checks.
-      - name: Trigger CI on PR
+      # Replace the unsigned commit with a signed one via the GitHub API
+      # (using the app token). The API auto-signs commits, and because the
+      # push comes from the app it fires pull_request:synchronize, which
+      # kicks off CI — GITHUB_TOKEN events don't trigger workflows.
+      - name: Replace with signed commit and trigger CI
         if: env.has_changes == 'true'
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
-          cd main-branch
-          git commit --allow-empty -m "ci: trigger checks"
-          # Clear the extraheader that actions/checkout sets — it overrides URL
-          # credentials with GITHUB_TOKEN, which won't trigger workflows.
-          git config --unset-all http.https://github.com/.extraheader
-          git push --force https://x-access-token:${{ steps.app-token.outputs.token }}@github.com/${{ github.repository }}.git "${{ env.branch_name }}"
+          BRANCH_NAME="${{ env.branch_name }}"
+          VERSION="${{ env.version }}"
+          REPO="${{ github.repository }}"
+
+          # Get the tree from the unsigned commit (contains all the docs changes)
+          CURRENT_SHA=$(gh api "repos/$REPO/git/ref/heads/$BRANCH_NAME" --jq '.object.sha')
+          TREE_SHA=$(gh api "repos/$REPO/git/commits/$CURRENT_SHA" --jq '.tree.sha')
+
+          # Get main HEAD as parent (this branch was created from main)
+          MAIN_SHA=$(gh api "repos/$REPO/git/ref/heads/main" --jq '.object.sha')
+
+          COMMIT_MSG="docs: update v5 SDK reference docs"
+          if [ -n "$VERSION" ]; then
+            COMMIT_MSG="$COMMIT_MSG for $VERSION"
+          fi
+
+          # Create a signed commit with the same tree via the API
+          NEW_SHA=$(gh api "repos/$REPO/git/commits" -X POST \
+            -f message="$COMMIT_MSG" \
+            -f tree="$TREE_SHA" \
+            -f "parents[]=$MAIN_SHA" \
+            --jq '.sha')
+
+          # Force-update the branch to the signed commit
+          gh api "repos/$REPO/git/refs/heads/$BRANCH_NAME" -X PATCH \
+            -f sha="$NEW_SHA" \
+            -f force=true
