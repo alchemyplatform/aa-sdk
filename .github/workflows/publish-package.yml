@@ -89,25 +89,19 @@ jobs:
         shell: bash
         run: yarn lerna publish --conventional-commits --no-private --yes --no-verify-access --no-push
 
-      # Push version commit and tags via GitHub API
+      # Push tags via git (uploads git objects to remote), then update branch ref via API
       - name: Push Changes to main
         if: inputs.publish
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
+          # Push tags first - this uploads all git objects (commits, trees, blobs) to the remote
+          git push origin --tags
+
+          # Update main branch ref via API (objects now exist on remote)
           COMMIT_SHA=$(git rev-parse HEAD)
           echo "Updating main to $COMMIT_SHA"
           gh api repos/alchemyplatform/aa-sdk/git/refs/heads/main \
             -X PATCH \
             -f sha="$COMMIT_SHA" \
             -F force=false
-
-          # Push tags
-          for tag in $(git tag --points-at HEAD); do
-            TAG_SHA=$(git rev-parse "$tag")
-            echo "Creating tag $tag -> $TAG_SHA"
-            gh api repos/alchemyplatform/aa-sdk/git/refs \
-              -X POST \
-              -f ref="refs/tags/$tag" \
-              -f sha="$TAG_SHA"
-          done
