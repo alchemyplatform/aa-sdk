@@ -12,6 +12,10 @@ on:
     secrets:
       OPENAI_API_KEY:
         required: true
+      PR_BYPASSER_APP_ID:
+        required: true
+      PR_BYPASSER_PRIVATE_KEY:
+        required: true
 
   # Can also be triggered manually
   workflow_dispatch:
@@ -105,9 +109,14 @@ jobs:
             --v5-docs-yml docs/docs.yml \
             --main-docs-yml main-branch/docs/docs.yml
 
-      - name: Create PR for V5 docs update
-        env:
-          GH_TOKEN: ${{ github.token }}
+      - name: Generate app token
+        id: app-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.PR_BYPASSER_APP_ID }}
+          private-key: ${{ secrets.PR_BYPASSER_PRIVATE_KEY }}
+
+      - name: Commit and push docs branch
         run: |
           cd main-branch
 
@@ -126,8 +135,13 @@ jobs:
           # Check if there are changes to commit
           if git diff --cached --quiet; then
             echo "No docs changes detected, skipping PR creation"
+            echo "has_changes=false" >> $GITHUB_ENV
             exit 0
           fi
+
+          echo "has_changes=true" >> $GITHUB_ENV
+          echo "branch_name=$BRANCH_NAME" >> $GITHUB_ENV
+          echo "version=$VERSION" >> $GITHUB_ENV
 
           COMMIT_MSG="docs: update v5 SDK reference docs"
           if [ -n "$VERSION" ]; then
@@ -135,7 +149,18 @@ jobs:
           fi
           git commit -m "$COMMIT_MSG"
 
-          git push --force origin "$BRANCH_NAME"
+          # Push with app token to trigger CI
+          git push --force https://x-access-token:${{ steps.app-token.outputs.token }}@github.com/${{ github.repository }}.git "$BRANCH_NAME"
+
+      - name: Create or update PR
+        if: env.has_changes == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cd main-branch
+
+          BRANCH_NAME="${{ env.branch_name }}"
+          VERSION="${{ env.version }}"
 
           # Check if PR already exists
           EXISTING_PR=$(gh pr list --head "$BRANCH_NAME" --base main --state open --json number --jq '.[0].number')
