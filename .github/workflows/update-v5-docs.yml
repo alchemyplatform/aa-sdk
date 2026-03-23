@@ -149,8 +149,8 @@ jobs:
           fi
           git commit -m "$COMMIT_MSG"
 
-          # Push with app token to trigger CI
-          git push --force https://x-access-token:${{ steps.app-token.outputs.token }}@github.com/${{ github.repository }}.git "$BRANCH_NAME"
+          # Push with default token to create the branch
+          git push --force origin "$BRANCH_NAME"
 
       - name: Create or update PR
         if: env.has_changes == 'true'
@@ -188,3 +188,13 @@ jobs:
               --base main \
               --head "$BRANCH_NAME"
           fi
+
+      # Push an empty commit with the app token to trigger CI on the PR.
+      # GITHUB_TOKEN events don't trigger workflows, so this re-push as the
+      # app fires the pull_request:synchronize event and kicks off checks.
+      - name: Trigger CI on PR
+        if: env.has_changes == 'true'
+        run: |
+          cd main-branch
+          git commit --allow-empty -m "ci: trigger checks"
+          git push --force https://x-access-token:${{ steps.app-token.outputs.token }}@github.com/${{ github.repository }}.git "${{ env.branch_name }}"
