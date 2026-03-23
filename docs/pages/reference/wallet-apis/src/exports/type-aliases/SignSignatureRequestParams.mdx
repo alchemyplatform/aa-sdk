@@ -12,7 +12,7 @@ type SignSignatureRequestParams = Prettify<
   WithoutRawPayload<
     | PersonalSignSignatureRequest
     | TypedDataSignatureRequest
-    | (AuthorizationSignatureRequest & object)
+    | AuthorizationSignatureRequest
   >
 >;
 ```
