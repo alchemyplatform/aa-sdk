@@ -80,32 +80,11 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
 
-      # Lerna publish will compute the new version, update files, run precommit hooks, tag, and publish to NPM
+      # Lerna publish will compute the new version, update files, run precommit hooks, tag, publish, and push
       - name: Publish using Lerna
         if: inputs.publish
         env:
           API_KEY: ${{ secrets.API_KEY }}
           JAVA_OPTS: "-XX:MaxHeapSize=6g"
         shell: bash
-        run: yarn lerna publish --conventional-commits --no-private --yes --no-verify-access --no-push
-
-      # Push to a temp branch (uploads git objects), update main via API, then clean up
-      - name: Push Changes to main
-        if: inputs.publish
-        env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
-        run: |
-          COMMIT_SHA=$(git rev-parse HEAD)
-
-          # Push to a temporary unprotected branch to upload all git objects + tags
-          git push origin HEAD:refs/heads/tmp-lerna-publish --follow-tags
-
-          # Update main branch ref via API (objects now exist on remote)
-          echo "Updating main to $COMMIT_SHA"
-          gh api repos/alchemyplatform/aa-sdk/git/refs/heads/main \
-            -X PATCH \
-            -f sha="$COMMIT_SHA" \
-            -F force=false
-
-          # Clean up temp branch
-          git push origin --delete tmp-lerna-publish
+        run: yarn lerna publish --conventional-commits --no-private --yes --no-verify-access
