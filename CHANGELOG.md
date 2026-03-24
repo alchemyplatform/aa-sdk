@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.86.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.86.0...v4.86.1) (2026-03-24)
+
+### Bug Fixes
+
+- **ci:** add stub gha for v5 publishing, stricter v5 pkg reference ([#2401](https://github.com/alchemyplatform/aa-sdk/issues/2401)) ([0301c92](https://github.com/alchemyplatform/aa-sdk/commit/0301c92bd8ee07dab88a5717facd30f1dfd94bd3))
+
 # [4.86.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.84.1...v4.86.0) (2026-03-11)
 
 ### Bug Fixes
