@@ -1607,22 +1607,6 @@ export abstract class BaseSignerClient<
    * @param {MultiOwnerExportPrivateKeyParams} opts the parameters for the export
    * @returns {Promise<string>} the private key
    */
-  public experimental_multiOwnerExportPrivateKey = async (
-    opts: MultiOwnerExportPrivateKeyParams,
-  ): Promise<string> => {
-    return this.exportPrivateKey({
-      type: opts.type,
-      client: this.experimental_createMultiOwnerTurnkeyClient(),
-      orgId: opts.orgId,
-    });
-  };
-
-  /**
-   * Exports a private key for a given account in a multi-owner org
-   *
-   * @param {MultiOwnerExportPrivateKeyParams} opts the parameters for the export
-   * @returns {Promise<string>} the private key
-   */
   public experimental_multiOwnerExportPrivateKeyEncrypted = async (
     opts: MultiOwnerExportPrivateKeyParams & { encryptWith: string },
   ): Promise<ExportPrivateKeyEncryptedResult> => {
