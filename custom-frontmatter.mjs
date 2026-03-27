@@ -27,29 +27,20 @@ function isReactComponent(fileName, packageName) {
 }
 
 /**
- * Extract package name from URL path
+ * Parse the package segment and fully-qualified npm package name from a URL path.
  *
  * @param {string} url - The page URL
- * @returns {string|null} The package name (e.g., 'react', 'react-native', 'core')
+ * @returns {{ packageName: string, npmPackage: string } | null}
+ *   packageName – short segment used for categorisation (e.g. 'react')
+ *   npmPackage  – scoped npm name (e.g. '@account-kit/react')
  */
-function extractPackageFromUrl(url) {
+function parsePackageFromUrl(url) {
   if (!url) return null;
 
-  const match = url.match(/^(?:account-kit|aa-sdk)\/([^/]+)\//);
-  return match ? match[1] : null;
-}
+  const match = url.match(/^(account-kit|aa-sdk)\/([^/]+)\//);
+  if (!match) return null;
 
-/**
- * Extract the npm package name from URL path (e.g. '@aa-sdk/core')
- *
- * @param {string} url - The page URL
- * @returns {string|null} The npm package name
- */
-function extractNpmPackageFromUrl(url) {
-  if (!url) return null;
-
-  const match = url.match(/^(aa-sdk|account-kit)\/([^/]+)\//);
-  return match ? `@${match[1]}/${match[2]}` : null;
+  return { packageName: match[2], npmPackage: `@${match[1]}/${match[2]}` };
 }
 
 /**
@@ -62,8 +53,8 @@ function extractNpmPackageFromUrl(url) {
  * (compiled dist/ files or node_modules/), indicating it is either a
  * re-export or an inherited member from an external package.
  *
- * @param {import('typedoc').Reflection} reflection
- * @returns {boolean}
+ * @param {import('typedoc').Reflection} reflection - The reflection to check
+ * @returns {boolean} True if all sources are from dist/ or node_modules/
  */
 function isExternalSource(reflection) {
   const sources = reflection.sources;
@@ -115,8 +106,9 @@ export function load(app) {
       let title = page.model.name;
 
       // Extract package name from URL for categorization
-      const packageName = extractPackageFromUrl(page.url);
-      const npmPackage = extractNpmPackageFromUrl(page.url);
+      const parsed = parsePackageFromUrl(page.url);
+      const packageName = parsed?.packageName ?? null;
+      const npmPackage = parsed?.npmPackage ?? null;
 
       if (page.model.kind === ReflectionKind.Class) {
         title = page.model.name;
@@ -258,7 +250,7 @@ export function load(app) {
       const slug = page.frontmatter?.slug;
       const isReadmeFile = page.url && page.url.endsWith("README.mdx");
       if (slug && isReadmeFile) {
-        const packageName = extractPackageFromUrl(page.url);
+        const packageName = parsePackageFromUrl(page.url)?.packageName ?? null;
         page.contents = page.contents.replace(
           /\]\((?!https?:\/\/|\/|#)([^)]+)\)/g,
           (_, relPath) => {
