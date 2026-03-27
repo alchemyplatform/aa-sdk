@@ -40,6 +40,19 @@ function extractPackageFromUrl(url) {
 }
 
 /**
+ * Extract the npm package name from URL path (e.g. '@aa-sdk/core')
+ *
+ * @param {string} url - The page URL
+ * @returns {string|null} The npm package name
+ */
+function extractNpmPackageFromUrl(url) {
+  if (!url) return null;
+
+  const match = url.match(/^(aa-sdk|account-kit)\/([^/]+)\//);
+  return match ? `@${match[1]}/${match[2]}` : null;
+}
+
+/**
  * Custom plugin to generate frontmatter with title, description, and slug
  *
  * @param {import('typedoc-plugin-markdown').MarkdownApplication} app
@@ -103,6 +116,7 @@ export function load(app) {
 
       // Extract package name from URL for categorization
       const packageName = extractPackageFromUrl(page.url);
+      const npmPackage = extractNpmPackageFromUrl(page.url);
 
       if (page.model.kind === ReflectionKind.Class) {
         title = page.model.name;
@@ -164,8 +178,15 @@ export function load(app) {
         }
       }
 
-      // For README.mdx files, remove "/src" and "/src/exports" from title and description
+      // Qualify non-README titles with the npm package name to avoid duplicate
+      // <title> tags across packages (e.g. same function in @aa-sdk/core and
+      // @account-kit/core would otherwise both render as "functionName | Alchemy Docs").
       const isReadmeFile = page.url && page.url.endsWith("README.mdx");
+      if (!isReadmeFile && npmPackage) {
+        title = `${title} | ${npmPackage}`;
+      }
+
+      // For README.mdx files, remove "/src" and "/src/exports" from title and description
       if (isReadmeFile) {
         title = title.replace(/\/src\/exports$/, "").replace(/\/src$/, "");
         description = description
