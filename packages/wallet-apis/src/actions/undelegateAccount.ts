@@ -1,4 +1,4 @@
-import type { Hex, Prettify } from "viem";
+import type { Prettify } from "viem";
 import type { InnerWalletApiClient } from "../types.js";
 import { LOGGER } from "../logger.js";
 import { resolveAddress, type AccountParam } from "../utils/resolve.js";
@@ -81,7 +81,7 @@ export async function undelegateAccount(
   const { type: _, signatureRequest: __, ...rest } = prepared;
   const sendRpcParams = encode(sendSchema.request, {
     ...rest,
-    signature: signature as { type: "secp256k1"; data: Hex },
+    signature,
   });
 
   const sendRpcResp = await client.request({
