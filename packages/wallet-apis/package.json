@@ -56,7 +56,7 @@
   },
   "dependencies": {
     "@alchemy/common": "workspace:*",
-    "@alchemy/wallet-api-types": "0.1.0-alpha.26",
+    "@alchemy/wallet-api-types": "link:/Users/jacob.hobbs/dev/alchemyplatform/wallet-server/types",
     "deep-equal": "^2.2.3",
     "ox": "^0.11.1",
     "typebox": "^1.0.81"

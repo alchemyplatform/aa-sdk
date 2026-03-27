@@ -25,6 +25,8 @@ export type * from "../actions/signSignatureRequest.js";
 export { signSignatureRequest } from "../actions/signSignatureRequest.js";
 export type * from "../actions/signTypedData.js";
 export { signTypedData } from "../actions/signTypedData.js";
+export type * from "../actions/undelegateAccount.js";
+export { undelegateAccount } from "../actions/undelegateAccount.js";
 
 // Decorators.
 export type * from "../decorators/smartWalletActions.js";
