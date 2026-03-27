@@ -182,8 +182,12 @@ export function load(app) {
       // <title> tags across packages (e.g. same function in @aa-sdk/core and
       // @account-kit/core would otherwise both render as "functionName | Alchemy Docs").
       const isReadmeFile = page.url && page.url.endsWith("README.mdx");
+      const hasFallbackDescription = !page.model.comment?.summary?.length;
       if (!isReadmeFile && npmPackage) {
         title = `${title} | ${npmPackage}`;
+        if (hasFallbackDescription) {
+          description = `${description} from ${npmPackage}`;
+        }
       }
 
       // For README.mdx files, remove "/src" and "/src/exports" from title and description
