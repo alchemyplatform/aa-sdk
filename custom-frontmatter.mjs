@@ -233,6 +233,7 @@ export function load(app) {
       const slug = page.frontmatter?.slug;
       const isReadmeFile = page.url && page.url.endsWith("README.mdx");
       if (slug && isReadmeFile) {
+        const packageName = extractPackageFromUrl(page.url);
         page.contents = page.contents.replace(
           /\]\((?!https?:\/\/|\/|#)([^)]+)\)/g,
           (_, relPath) => {
@@ -247,7 +248,27 @@ export function load(app) {
                 normalized.push(seg);
               }
             }
-            return `](/${normalized.join("/")})`;
+            let resolvedPath = normalized.join("/");
+
+            // Apply the same hooks/components path rewrite used for individual
+            // page slugs so README links match the actual page slugs.
+            const fnMatch = resolvedPath.match(/\/functions\/([^/]+)$/);
+            if (fnMatch) {
+              const fnName = fnMatch[1];
+              if (isReactComponent(fnName, packageName)) {
+                resolvedPath = resolvedPath.replace(
+                  /\/functions\//,
+                  "/components/",
+                );
+              } else if (
+                fnName.startsWith("use") &&
+                (packageName === "react" || packageName === "react-native")
+              ) {
+                resolvedPath = resolvedPath.replace(/\/functions\//, "/hooks/");
+              }
+            }
+
+            return `](/${resolvedPath})`;
           },
         );
       }

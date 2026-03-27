@@ -38,7 +38,7 @@
   // Controls where and how documentation files are generated
   // ============================================================================
   "out": "./docs/pages/reference",
-  "cleanOutputDir": true,
+  "cleanOutputDir": false,
   "fileExtension": ".mdx",
 
   // ============================================================================
