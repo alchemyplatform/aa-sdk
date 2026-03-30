@@ -27,7 +27,8 @@ export type SignPreparedCallsResult =
       >[];
     }
   | Signed<Extract<PrepareCallsResult, { type: "user-operation-v060" }>>
-  | Signed<Extract<PrepareCallsResult, { type: "user-operation-v070" }>>;
+  | Signed<Extract<PrepareCallsResult, { type: "user-operation-v070" }>>
+  | Signed<Extract<PrepareCallsResult, { type: "authorization" }>>;
 
 // Decoded types derived from PrepareCallsResult (numbers/bigints, not hex strings)
 type ArrayCallData = Extract<
@@ -124,6 +125,18 @@ export async function signPreparedCalls(
   ) {
     const res = await signUserOperationCall(params);
     LOGGER.debug("signPreparedCalls:single-userOp:ok");
+    return res;
+  } else if (params.type === "authorization") {
+    const { signatureRequest: _signatureRequest, ...rest } = params;
+    const signature = await signSignatureRequest(client, {
+      type: "eip7702Auth",
+      data: {
+        ...rest.data,
+        chainId: params.chainId,
+      },
+    });
+    const res = { ...rest, signature };
+    LOGGER.debug("signPreparedCalls:single-authorization:ok");
     return res;
   } else if (params.type === "paymaster-permit") {
     LOGGER.warn("signPreparedCalls:invalid-call-type", { type: params.type });

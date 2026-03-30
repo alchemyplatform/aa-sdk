@@ -3,8 +3,8 @@ import type { InnerWalletApiClient } from "../types.js";
 import { LOGGER } from "../logger.js";
 import { resolveAddress, type AccountParam } from "../utils/resolve.js";
 import {
-  wallet_prepareUndelegation as PrepareMethodSchema,
-  wallet_sendUndelegation as SendMethodSchema,
+  wallet_prepareCalls as PrepareMethodSchema,
+  wallet_sendPreparedCalls as SendMethodSchema,
 } from "@alchemy/wallet-api-types/rpc";
 import {
   methodSchema,
@@ -13,21 +13,23 @@ import {
   type MethodResponse,
 } from "../utils/schema.js";
 import { signSignatureRequest } from "./signSignatureRequest.js";
+import { BaseError } from "@alchemy/common";
 
 const prepareSchema = methodSchema(PrepareMethodSchema);
 const sendSchema = methodSchema(SendMethodSchema);
 
-type SendUndelegationResponse = MethodResponse<typeof SendMethodSchema>;
+type SendPreparedCallsResponse = MethodResponse<typeof SendMethodSchema>;
 
 export type UndelegateAccountParams = Prettify<{
   account?: AccountParam;
   chainId?: number;
 }>;
 
-export type UndelegateAccountResult = Prettify<SendUndelegationResponse>;
+export type UndelegateAccountResult = Prettify<SendPreparedCallsResponse>;
 
 /**
  * Prepares, signs, and sends an EIP-7702 undelegation to remove delegation from an EOA.
+ * Gas is sponsored by Alchemy (requires Enterprise plan).
  *
  * @param {InnerWalletApiClient} client - The wallet API client to use for the request
  * @param {UndelegateAccountParams} params - Parameters for undelegating the account
@@ -45,26 +47,38 @@ export async function undelegateAccount(
   client: InnerWalletApiClient,
   params?: UndelegateAccountParams,
 ): Promise<UndelegateAccountResult> {
-  const account = params?.account
+  const from = params?.account
     ? resolveAddress(params.account)
     : client.account.address;
 
   const chainId = params?.chainId ?? client.chain.id;
 
-  LOGGER.info("undelegateAccount:start", { account, chainId });
+  LOGGER.info("undelegateAccount:start", { account: from, chainId });
 
-  // Step 1: Prepare undelegation
+  // Step 1: Prepare — wallet_prepareCalls with zero-address delegation, no calls
   const prepareRpcParams = encode(prepareSchema.request, {
-    account,
+    from,
     chainId,
+    capabilities: {
+      eip7702Auth: {
+        delegation: "0x0000000000000000000000000000000000000000",
+      },
+    },
   });
 
   const prepareRpcResp = await client.request({
-    method: "wallet_prepareUndelegation",
+    method: "wallet_prepareCalls",
     params: [prepareRpcParams],
   });
 
   const prepared = decode(prepareSchema.response, prepareRpcResp);
+
+  if (prepared.type !== "authorization") {
+    throw new BaseError(
+      `Unexpected response type from wallet_prepareCalls: expected "authorization", got "${prepared.type}"`,
+    );
+  }
+
   LOGGER.debug("undelegateAccount:prepared");
 
   // Step 2: Sign the authorization
@@ -75,17 +89,18 @@ export async function undelegateAccount(
       chainId: prepared.chainId,
     },
   });
+
   LOGGER.debug("undelegateAccount:signed");
 
-  // Step 3: Send the signed undelegation
-  const { type: _, signatureRequest: __, ...rest } = prepared;
+  // Step 3: Send — wallet_sendPreparedCalls with the signed authorization
+  const { signatureRequest: _, ...rest } = prepared;
   const sendRpcParams = encode(sendSchema.request, {
     ...rest,
     signature,
   });
 
   const sendRpcResp = await client.request({
-    method: "wallet_sendUndelegation",
+    method: "wallet_sendPreparedCalls",
     params: [sendRpcParams],
   });
 
