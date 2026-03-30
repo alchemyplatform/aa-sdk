@@ -7,6 +7,7 @@ import {
   recoverPublicKey,
   serializeSignature,
   sha256,
+  toHex,
   fromHex,
   type Address,
   type Hex,
@@ -16,6 +17,7 @@ import {
   OAuthProvidersError,
   UnsupportedFeatureError,
 } from "../errors.js";
+import { decryptExportBundle } from "@turnkey/crypto";
 import { getDefaultProviderCustomization } from "../oauth.js";
 import type { OauthMode } from "../signer.js";
 import { base64UrlEncode } from "../utils/base64UrlEncode.js";
@@ -59,6 +61,7 @@ import type {
 import { VERSION } from "../version.js";
 import { secp256k1 } from "@noble/curves/secp256k1";
 import { Point } from "@noble/secp256k1";
+import { p256 } from "@noble/curves/p256";
 
 export interface BaseSignerClientParams {
   stamper: TurnkeyClient["stamper"];
@@ -1560,6 +1563,42 @@ export abstract class BaseSignerClient<
       ciphertext: signedData.ciphertext,
       encapsulatedKey: signedData.encappedPublic,
     };
+  };
+
+  /**
+   * Exports a private key for a given account
+   *
+   * @param {ExportPrivateKeyParams} opts the parameters for the export
+   * @returns {Promise<string>} the private key
+   */
+  public exportPrivateKey = async (
+    opts: ExportPrivateKeyParams,
+  ): Promise<string> => {
+    if (!this.user) {
+      throw new NotAuthenticatedError();
+    }
+
+    const targetPrivateKey = p256.utils.randomPrivateKey();
+    const targetPublicKey = p256.getPublicKey(targetPrivateKey, false);
+    const orgId = opts.orgId ?? this.user.orgId;
+    const keyFormat = opts.type === "ETHEREUM" ? "HEXADECIMAL" : "SOLANA";
+
+    const { exportBundle } = await this.exportPrivateKeyEncrypted({
+      type: opts.type,
+      client: opts.client ?? this.turnkeyClient,
+      orgId: orgId,
+      encryptWith: toHex(targetPublicKey).slice(2),
+    });
+
+    const decrypted = await decryptExportBundle({
+      exportBundle,
+      embeddedKey: toHex(targetPrivateKey).slice(2),
+      organizationId: orgId,
+      returnMnemonic: false,
+      keyFormat,
+    });
+
+    return decrypted;
   };
 
   /**
