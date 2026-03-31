@@ -16,16 +16,12 @@ function estimateFeesPerGas<TTransport, TChain, TAccount>(
 }>;
 ```
 
-Defined in: [packages/aa-infra/src/estimateFeesPerGas.ts:57](https://github.com/alchemyplatform/aa-sdk/blob/v5.x.x/packages/aa-infra/src/estimateFeesPerGas.ts#L57)
+Defined in: [packages/aa-infra/src/estimateFeesPerGas.ts:50](https://github.com/alchemyplatform/aa-sdk/blob/v5.x.x/packages/aa-infra/src/estimateFeesPerGas.ts#L50)
 
-A custom `estimateFeesPerGas` function for viem bundler clients to use `rundler_maxPriorityFeePerGas` for priority fee estimation.
+A custom `estimateFeesPerGas` function for viem bundler clients to use `rundler_getUserOperationGasPrice` for fee estimation.
 
-It fetches:
-
-1. `baseFeePerGas` from the latest block.
-2. `maxPriorityFeePerGas` via `rundler_maxPriorityFeePerGas`.
-
-It then returns `maxFeePerGas = baseFee * 1.5 + priority` (aligns with viem default).
+It fetches gas price via `rundler_getUserOperationGasPrice` and returns the
+`suggested.maxFeePerGas` and `suggested.maxPriorityFeePerGas` values directly.
 
 ## Example
 
