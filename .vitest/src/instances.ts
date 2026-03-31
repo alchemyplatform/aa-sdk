@@ -48,6 +48,7 @@ const bundlerMethods = [
   "debug_bundler_clearState",
   "debug_bundler_setBundlingMode",
   "rundler_maxPriorityFeePerGas",
+  "rundler_getUserOperationGasPrice",
 ];
 
 const split = (params: {
