@@ -37,7 +37,7 @@
     "preinstall": "yarn config set ignore-engines true",
     "postinstall": "git submodule update --init --recursive && patch-package && turbo run build --filter='./templates/*'",
     "build": "yarn build:libs --filter='!@account-kit/react-native-signer-example'",
-    "build:libs": "turbo run build --filter='@account-kit/*' --filter='@aa-sdk/*' --filter='./templates/*'",
+    "build:libs": "turbo run build --filter='@account-kit/*' --filter='@aa-sdk/*' --filter='./templates/*' --filter='!@account-kit/react-native-signer-example'",
     "build:demo": "turbo run build --filter=ui-demo --filter='./templates/*'",
     "build:examples": "turbo run build",
     "clean": "yarn clean:turbo && yarn clean:node_modules",
@@ -53,7 +53,8 @@
     "lint:docs": "vale docs/**/*.mdx",
     "prepare": "husky install && yarn turbo prepare",
     "docs:broken-links": "lychee docs --root-dir /docs",
-    "docs:sdk": "yarn build && typedoc && tsx scripts/generate-typedoc-yaml.ts",
+    "docs:clean": "rm -rf docs/pages/reference/README.mdx docs/pages/reference/modules.mdx docs/pages/reference/aa-sdk docs/pages/reference/account-kit docs/pages/reference/_media",
+    "docs:sdk": "yarn build && yarn docs:clean && typedoc && tsx scripts/generate-typedoc-yaml.ts",
     "version": "yarn build:libs"
   },
   "devDependencies": {

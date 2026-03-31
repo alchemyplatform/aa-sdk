@@ -3,6 +3,38 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.87.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.86.1...v4.87.0) (2026-03-30)
+
+### Features
+
+- add key export helper ([#2434](https://github.com/alchemyplatform/aa-sdk/issues/2434)) ([b5e49e8](https://github.com/alchemyplatform/aa-sdk/commit/b5e49e8ccd0c062dc766e3add72f33d9167c98bc))
+
+## [4.86.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.86.0...v4.86.1) (2026-03-24)
+
+### Bug Fixes
+
+- **ci:** add stub gha for v5 publishing, stricter v5 pkg reference ([#2401](https://github.com/alchemyplatform/aa-sdk/issues/2401)) ([0301c92](https://github.com/alchemyplatform/aa-sdk/commit/0301c92bd8ee07dab88a5717facd30f1dfd94bd3))
+
+# [4.86.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.84.1...v4.86.0) (2026-03-11)
+
+### Bug Fixes
+
+- **ci:** run prettier on lerna config ([#2389](https://github.com/alchemyplatform/aa-sdk/issues/2389)) ([67358d3](https://github.com/alchemyplatform/aa-sdk/commit/67358d312a0401805c4d1d06a7dad3a87c8019b8))
+
+### Features
+
+- **cronos:** add cronos to infra chains ([#2377](https://github.com/alchemyplatform/aa-sdk/issues/2377)) ([ff53f85](https://github.com/alchemyplatform/aa-sdk/commit/ff53f855fd487827a1fc674bcd38fd66d48b8c05))
+
+# [4.85.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.84.1...v4.85.0) (2026-03-11)
+
+### Bug Fixes
+
+- **ci:** run prettier on lerna config ([#2389](https://github.com/alchemyplatform/aa-sdk/issues/2389)) ([67358d3](https://github.com/alchemyplatform/aa-sdk/commit/67358d312a0401805c4d1d06a7dad3a87c8019b8))
+
+### Features
+
+- **cronos:** add cronos to infra chains ([#2377](https://github.com/alchemyplatform/aa-sdk/issues/2377)) ([ff53f85](https://github.com/alchemyplatform/aa-sdk/commit/ff53f855fd487827a1fc674bcd38fd66d48b8c05))
+
 ## [4.84.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.84.0...v4.84.1) (2026-02-19)
 
 ### Bug Fixes

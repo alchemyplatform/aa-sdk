@@ -25,7 +25,6 @@ jobs:
       - name: "Checkout files"
         uses: actions/checkout@v3
         with:
-          token: ${{ secrets.ALCHEMY_BOT_PAT }}
           fetch-depth: "0"
           submodules: "recursive"
 
@@ -46,7 +45,6 @@ jobs:
       - name: "Checkout files"
         uses: actions/checkout@v3
         with:
-          token: ${{ secrets.ALCHEMY_BOT_PAT }}
           fetch-depth: "0"
           submodules: "recursive"
 
@@ -78,7 +76,6 @@ jobs:
       - name: "Checkout files"
         uses: actions/checkout@v3
         with:
-          token: ${{ secrets.ALCHEMY_BOT_PAT }}
           fetch-depth: "0"
           submodules: "recursive"
 
@@ -104,11 +101,7 @@ jobs:
   lint:
     name: Lint
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pull-requests: write
     env:
-      REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.ALCHEMY_BOT_PAT }}
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
       TURBO_TEAM: ${{ vars.TURBO_TEAM }}
@@ -116,7 +109,6 @@ jobs:
       - name: "Checkout files"
         uses: actions/checkout@v3
         with:
-          token: ${{ secrets.ALCHEMY_BOT_PAT }}
           fetch-depth: "0"
           submodules: "recursive"
 
@@ -126,14 +118,6 @@ jobs:
       - name: Build eslint plugin
         run: |
           cd templates/eslint && yarn build
-
-      - uses: reviewdog/action-setup@v1
-        with:
-          reviewdog_version: latest
-
-      - name: Run eslint with reviewdog
-        run: |
-          npx --no-install -c "eslint -f=rdjson ." | reviewdog -f=rdjson -reporter=github-pr-review -filter-mode=added -tee
 
       - name: Run eslint for errors
         run: yarn lint:check
@@ -150,10 +134,9 @@ jobs:
       - name: "Checkout files"
         uses: actions/checkout@v3
         with:
-          token: ${{ secrets.ALCHEMY_BOT_PAT }}
           fetch-depth: "0"
           submodules: "recursive"
-      
+
       - name: Free up disk space
         run: |
           echo "Disk space before cleanup:"
@@ -199,6 +182,21 @@ jobs:
         run: |
           yarn docs:sdk
           yarn lint:write
+          # Restore v5 reference files that typedoc's cleanOutputDir deleted.
+          # Only restore files under known v5 package directories to avoid masking
+          # legitimate v4 deletions (e.g. removed APIs, config changes).
+          V5_PACKAGES="wallet-apis"
+          for pkg in $V5_PACKAGES; do
+            # Only check for deleted files if the package dir was tracked by git
+            if git cat-file -e "HEAD:docs/pages/reference/$pkg" 2>/dev/null; then
+              DELETED=$(git diff --name-only --diff-filter=D -- "docs/pages/reference/$pkg/")
+              if [ -n "$DELETED" ]; then
+                echo "Restoring v5 reference files for $pkg:"
+                echo "$DELETED"
+                echo "$DELETED" | xargs git checkout HEAD --
+              fi
+            fi
+          done
           git diff --exit-code docs/pages/reference/ || \
             (echo "::error::SDK reference docs are out of date. Run 'yarn docs:sdk' and commit the changes." && exit 1)
 
@@ -214,7 +212,6 @@ jobs:
       - name: "Checkout files"
         uses: actions/checkout@v3
         with:
-          token: ${{ secrets.ALCHEMY_BOT_PAT }}
           fetch-depth: "0"
           submodules: "recursive"
 
