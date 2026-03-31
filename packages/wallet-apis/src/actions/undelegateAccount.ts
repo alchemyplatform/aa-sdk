@@ -14,6 +14,7 @@ import {
 } from "../utils/schema.js";
 import { signSignatureRequest } from "./signSignatureRequest.js";
 import { BaseError } from "@alchemy/common";
+import { mergeClientCapabilities } from "../utils/capabilities.js";
 
 const prepareSchema = methodSchema(PrepareMethodSchema);
 const sendSchema = methodSchema(SendMethodSchema);
@@ -23,6 +24,11 @@ type SendPreparedCallsResponse = MethodResponse<typeof SendMethodSchema>;
 export type UndelegateAccountParams = Prettify<{
   account?: AccountParam;
   chainId?: number;
+  capabilities?: {
+    paymaster?: {
+      policyId: string;
+    };
+  };
 }>;
 
 export type UndelegateAccountResult = Prettify<SendPreparedCallsResponse>;
@@ -31,10 +37,16 @@ export type UndelegateAccountResult = Prettify<SendPreparedCallsResponse>;
  * Prepares, signs, and sends an EIP-7702 undelegation to remove delegation from an EOA.
  * Gas is sponsored by Alchemy (requires Enterprise plan).
  *
+ * A BSO (Bundler Sponsorship Override) policy ID must be provided either via
+ * `params.capabilities.paymaster.policyId` or pre-configured on the client via `policyIds`.
+ *
  * @param {InnerWalletApiClient} client - The wallet API client to use for the request
  * @param {UndelegateAccountParams} params - Parameters for undelegating the account
  * @param {AccountParam} [params.account] - The account to undelegate. Defaults to the client's account (signer address).
  * @param {number} [params.chainId] - The chain ID. Defaults to the client's chain.
+ * @param {object} [params.capabilities] - Optional capabilities. If omitted, falls back to the policy ID(s) set on the client.
+ * @param {object} [params.capabilities.paymaster] - Paymaster capabilities. Requires a BSO policy ID.
+ * @param {string} [params.capabilities.paymaster.policyId] - The BSO policy ID to use for gas sponsorship.
  * @returns {Promise<UndelegateAccountResult>} A Promise that resolves to the result containing the call ID.
  *
  * @example
@@ -53,6 +65,8 @@ export async function undelegateAccount(
 
   const chainId = params?.chainId ?? client.chain.id;
 
+  const capabilities = mergeClientCapabilities(client, params?.capabilities);
+
   LOGGER.info("undelegateAccount:start", { account: from, chainId });
 
   // Step 1: Prepare — wallet_prepareCalls with zero-address delegation, no calls
@@ -60,6 +74,7 @@ export async function undelegateAccount(
     from,
     chainId,
     capabilities: {
+      ...capabilities,
       eip7702Auth: {
         delegation: "0x0000000000000000000000000000000000000000",
       },
