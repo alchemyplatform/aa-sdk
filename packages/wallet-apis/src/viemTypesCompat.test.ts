@@ -50,7 +50,7 @@ describe("viem action type compatibility", () => {
         SendCallsParams["account"]
       >();
       expectTypeOf<Concrete["calls"][number]>().toExtend<
-        SendCallsParams["calls"][number]
+        NonNullable<SendCallsParams["calls"]>[number]
       >();
       // viem's Capabilities is `{ [key: string]: any } & { paymasterService?: ... }`.
       // Our capabilities has a more specific shape; verify it satisfies Record<string, unknown>.
