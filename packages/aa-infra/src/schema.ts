@@ -6,4 +6,21 @@ type RundlerMaxPriorityFeePerGasSchema = {
   ReturnType: Hex;
 };
 
-export type RundlerRpcSchema = [RundlerMaxPriorityFeePerGasSchema];
+type RundlerGetUserOperationGasPriceSchema = {
+  Method: "rundler_getUserOperationGasPrice";
+  Parameters: [];
+  ReturnType: {
+    priorityFee: Hex;
+    baseFee: Hex;
+    blockNumber: Hex;
+    suggested: {
+      maxPriorityFeePerGas: Hex;
+      maxFeePerGas: Hex;
+    };
+  };
+};
+
+export type RundlerRpcSchema = [
+  RundlerMaxPriorityFeePerGasSchema,
+  RundlerGetUserOperationGasPriceSchema,
+];

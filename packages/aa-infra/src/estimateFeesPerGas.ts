@@ -1,7 +1,5 @@
-import { getBlock } from "viem/actions";
 import {
   type Client,
-  isHex,
   type Transport,
   type Chain,
   hexToBigInt,
@@ -12,9 +10,7 @@ import type {
   SmartAccount,
   BundlerClient,
 } from "viem/account-abstraction";
-import { BaseError, bigIntMultiply } from "@alchemy/common";
 import type { RundlerRpcSchema } from "./schema.js";
-import { InvalidHexValueError } from "./errors.js";
 
 // Extend client with Rundler rpc schema.
 export type RundlerClient<
@@ -30,13 +26,10 @@ export type RundlerClient<
 >;
 
 /**
- * A custom `estimateFeesPerGas` function for viem bundler clients to use `rundler_maxPriorityFeePerGas` for priority fee estimation.
+ * A custom `estimateFeesPerGas` function for viem bundler clients to use `rundler_getUserOperationGasPrice` for fee estimation.
  *
- * It fetches:
- * 1. `baseFeePerGas` from the latest block.
- * 2. `maxPriorityFeePerGas` via `rundler_maxPriorityFeePerGas`.
- *
- * It then returns `maxFeePerGas = baseFee * 1.5 + priority` (aligns with viem default).
+ * It fetches gas price via `rundler_getUserOperationGasPrice` and returns the
+ * `suggested.maxFeePerGas` and `suggested.maxPriorityFeePerGas` values directly.
  *
  * @param {RundlerClient} bundlerClient Bundler client with the rundler RPC method.
  * @returns {Promise<{maxFeePerGas: bigint, maxPriorityFeePerGas: bigint}>} Estimated fee values.
@@ -79,39 +72,13 @@ export async function estimateFeesPerGas<
   // See: https://github.com/wevm/viem/blob/d18b3b27/src/account-abstraction/actions/bundler/prepareUserOperation.ts#L355
   const rundlerClient = bundlerClient as unknown as RundlerClient;
 
-  const [block, maxPriorityFeePerGasHex] = await Promise.all([
-    // If the node rpc url is different from the bundler url, the public
-    // client should be passed in when creating the bundler client, which
-    // we can access here for public actions.
-    getBlock(rundlerClient.client ?? rundlerClient, { blockTag: "latest" }),
-    rundlerClient.request({
-      method: "rundler_maxPriorityFeePerGas",
-      params: [],
-    }),
-  ]);
-
-  const baseFeePerGas = block.baseFeePerGas;
-  if (baseFeePerGas == null) {
-    throw new BaseError("baseFeePerGas is null");
-  }
-  if (maxPriorityFeePerGasHex == null) {
-    throw new BaseError(
-      "rundler_maxPriorityFeePerGas returned null or undefined",
-    );
-  }
-  if (!isHex(maxPriorityFeePerGasHex)) {
-    throw new InvalidHexValueError(maxPriorityFeePerGasHex);
-  }
-  const maxPriorityFeePerGas = hexToBigInt(maxPriorityFeePerGasHex);
-
-  const bufferedMaxPriorityFeePerGas = bigIntMultiply(
-    maxPriorityFeePerGas,
-    1.5,
-  );
+  const { suggested } = await rundlerClient.request({
+    method: "rundler_getUserOperationGasPrice",
+    params: [],
+  });
 
   return {
-    maxPriorityFeePerGas: bufferedMaxPriorityFeePerGas,
-    maxFeePerGas:
-      bigIntMultiply(baseFeePerGas, 1.5) + bufferedMaxPriorityFeePerGas,
+    maxPriorityFeePerGas: hexToBigInt(suggested.maxPriorityFeePerGas),
+    maxFeePerGas: hexToBigInt(suggested.maxFeePerGas),
   };
 }
