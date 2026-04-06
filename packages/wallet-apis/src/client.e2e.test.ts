@@ -500,6 +500,7 @@ describe("Client E2E Tests", () => {
         transport: apiTransport,
         chain: baseSepolia,
         signer: _signer,
+        policyIds: [process.env.TEST_BSO_POLICY_ID!],
       });
 
       // First, delegate via a 7702 sendCalls so there's a delegation to remove.
