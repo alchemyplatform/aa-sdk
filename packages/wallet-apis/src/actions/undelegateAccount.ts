@@ -1,4 +1,4 @@
-import { zeroAddress, type Prettify } from "viem";
+import { zeroAddress, type Chain, type Prettify } from "viem";
 import type { InnerWalletApiClient } from "../types.js";
 import { LOGGER } from "../logger.js";
 import { resolveAddress, type AccountParam } from "../utils/resolve.js";
@@ -6,7 +6,7 @@ import { sendCalls, type SendCallsResult } from "./sendCalls.js";
 
 export type UndelegateAccountParams = Prettify<{
   account?: AccountParam;
-  chainId?: number;
+  chain?: Pick<Chain, "id">;
   capabilities?: {
     paymaster?: {
       policyId: string;
@@ -26,7 +26,7 @@ export type UndelegateAccountResult = Prettify<SendCallsResult>;
  * @param {InnerWalletApiClient} client - The wallet API client to use for the request
  * @param {UndelegateAccountParams} params - Parameters for undelegating the account
  * @param {AccountParam} [params.account] - The account to undelegate. Defaults to the client's account (signer address).
- * @param {number} [params.chainId] - The chain ID. Defaults to the client's chain.
+ * @param {object} [params.chain] - The chain. Defaults to the client's chain.
  * @param {object} [params.capabilities] - Optional capabilities. If omitted, falls back to the policy ID(s) set on the client.
  * @param {object} [params.capabilities.paymaster] - Paymaster capabilities. Requires a BSO policy ID.
  * @param {string} [params.capabilities.paymaster.policyId] - The BSO policy ID to use for gas sponsorship.
@@ -48,13 +48,13 @@ export async function undelegateAccount(
 
   LOGGER.info("undelegateAccount:start", {
     account,
-    chainId: params?.chainId,
+    chain: params?.chain,
   });
 
   const result = await sendCalls(client, {
     calls: [],
     account,
-    ...(params?.chainId != null ? { chain: { id: params.chainId } } : {}),
+    ...(params?.chain != null ? { chain: params.chain } : {}),
     capabilities: {
       ...params?.capabilities,
       eip7702Auth: {
