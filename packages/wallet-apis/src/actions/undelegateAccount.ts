@@ -1,19 +1,12 @@
-import type { Prettify } from "viem";
+import { zeroAddress, type Chain, type Prettify } from "viem";
 import type { InnerWalletApiClient } from "../types.js";
 import { LOGGER } from "../logger.js";
 import { resolveAddress, type AccountParam } from "../utils/resolve.js";
-import { prepareCalls } from "./prepareCalls.js";
-import { signPreparedCalls } from "./signPreparedCalls.js";
-import {
-  sendPreparedCalls,
-  type SendPreparedCallsResult,
-} from "./sendPreparedCalls.js";
-import { BaseError } from "@alchemy/common";
-import { extractCapabilitiesForSending } from "../utils/capabilities.js";
+import { sendCalls, type SendCallsResult } from "./sendCalls.js";
 
 export type UndelegateAccountParams = Prettify<{
   account?: AccountParam;
-  chainId?: number;
+  chain?: Pick<Chain, "id">;
   capabilities?: {
     paymaster?: {
       policyId: string;
@@ -21,7 +14,7 @@ export type UndelegateAccountParams = Prettify<{
   };
 }>;
 
-export type UndelegateAccountResult = Prettify<SendPreparedCallsResult>;
+export type UndelegateAccountResult = Prettify<SendCallsResult>;
 
 /**
  * Prepares, signs, and sends an EIP-7702 undelegation to remove delegation from an EOA.
@@ -33,7 +26,7 @@ export type UndelegateAccountResult = Prettify<SendPreparedCallsResult>;
  * @param {InnerWalletApiClient} client - The wallet API client to use for the request
  * @param {UndelegateAccountParams} params - Parameters for undelegating the account
  * @param {AccountParam} [params.account] - The account to undelegate. Defaults to the client's account (signer address).
- * @param {number} [params.chainId] - The chain ID. Defaults to the client's chain.
+ * @param {object} [params.chain] - The chain. Defaults to the client's chain.
  * @param {object} [params.capabilities] - Optional capabilities. If omitted, falls back to the policy ID(s) set on the client.
  * @param {object} [params.capabilities.paymaster] - Paymaster capabilities. Requires a BSO policy ID.
  * @param {string} [params.capabilities.paymaster.policyId] - The BSO policy ID to use for gas sponsorship.
@@ -55,41 +48,19 @@ export async function undelegateAccount(
 
   LOGGER.info("undelegateAccount:start", {
     account,
-    chainId: params?.chainId,
+    chain: params?.chain,
   });
 
-  // Step 1: Prepare — zero-address delegation means "undelegate"
-  const prepared = await prepareCalls(client, {
+  const result = await sendCalls(client, {
     calls: [],
     account,
-    ...(params?.chainId != null ? { chainId: params.chainId } : {}),
+    ...(params?.chain != null ? { chain: params.chain } : {}),
     capabilities: {
       ...params?.capabilities,
       eip7702Auth: {
-        delegation: "0x0000000000000000000000000000000000000000",
+        delegation: zeroAddress,
       },
     },
-  });
-
-  if (prepared.type !== "authorization") {
-    throw new BaseError(
-      `Unexpected response type from wallet_prepareCalls: expected "authorization", got "${prepared.type}"`,
-    );
-  }
-
-  LOGGER.debug("undelegateAccount:prepared");
-
-  // Step 2: Sign
-  const signedCalls = await signPreparedCalls(client, prepared);
-
-  LOGGER.debug("undelegateAccount:signed");
-
-  // Step 3: Send
-  const sendCapabilities = extractCapabilitiesForSending(params?.capabilities);
-
-  const result = await sendPreparedCalls(client, {
-    ...signedCalls,
-    ...(sendCapabilities != null ? { capabilities: sendCapabilities } : {}),
   });
 
   LOGGER.info("undelegateAccount:done", { id: result.id });
