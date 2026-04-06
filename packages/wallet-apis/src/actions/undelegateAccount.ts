@@ -1,15 +1,8 @@
-import type { Prettify } from "viem";
+import { zeroAddress, type Prettify } from "viem";
 import type { InnerWalletApiClient } from "../types.js";
 import { LOGGER } from "../logger.js";
 import { resolveAddress, type AccountParam } from "../utils/resolve.js";
-import { prepareCalls } from "./prepareCalls.js";
-import { signPreparedCalls } from "./signPreparedCalls.js";
-import {
-  sendPreparedCalls,
-  type SendPreparedCallsResult,
-} from "./sendPreparedCalls.js";
-import { BaseError } from "@alchemy/common";
-import { extractCapabilitiesForSending } from "../utils/capabilities.js";
+import { sendCalls, type SendCallsResult } from "./sendCalls.js";
 
 export type UndelegateAccountParams = Prettify<{
   account?: AccountParam;
@@ -21,7 +14,7 @@ export type UndelegateAccountParams = Prettify<{
   };
 }>;
 
-export type UndelegateAccountResult = Prettify<SendPreparedCallsResult>;
+export type UndelegateAccountResult = Prettify<SendCallsResult>;
 
 /**
  * Prepares, signs, and sends an EIP-7702 undelegation to remove delegation from an EOA.
@@ -58,38 +51,16 @@ export async function undelegateAccount(
     chainId: params?.chainId,
   });
 
-  // Step 1: Prepare — zero-address delegation means "undelegate"
-  const prepared = await prepareCalls(client, {
+  const result = await sendCalls(client, {
     calls: [],
     account,
-    ...(params?.chainId != null ? { chainId: params.chainId } : {}),
+    ...(params?.chainId != null ? { chain: { id: params.chainId } } : {}),
     capabilities: {
       ...params?.capabilities,
       eip7702Auth: {
-        delegation: "0x0000000000000000000000000000000000000000",
+        delegation: zeroAddress,
       },
     },
-  });
-
-  if (prepared.type !== "authorization") {
-    throw new BaseError(
-      `Unexpected response type from wallet_prepareCalls: expected "authorization", got "${prepared.type}"`,
-    );
-  }
-
-  LOGGER.debug("undelegateAccount:prepared");
-
-  // Step 2: Sign
-  const signedCalls = await signPreparedCalls(client, prepared);
-
-  LOGGER.debug("undelegateAccount:signed");
-
-  // Step 3: Send
-  const sendCapabilities = extractCapabilitiesForSending(params?.capabilities);
-
-  const result = await sendPreparedCalls(client, {
-    ...signedCalls,
-    ...(sendCapabilities != null ? { capabilities: sendCapabilities } : {}),
   });
 
   LOGGER.info("undelegateAccount:done", { id: result.id });
