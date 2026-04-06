@@ -1824,6 +1824,8 @@ navigation:
                     path: wallets/pages/reference/wallet-apis/src/exports/functions/signTypedData.mdx
                   - page: smartWalletActions
                     path: wallets/pages/reference/wallet-apis/src/exports/functions/smartWalletActions.mdx
+                  - page: undelegateAccount
+                    path: wallets/pages/reference/wallet-apis/src/exports/functions/undelegateAccount.mdx
               - section: Type Aliases
                 contents:
                   - page: AlchemyWalletTransport
@@ -1890,3 +1892,7 @@ navigation:
                     path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SmartWalletActions.mdx
                   - page: SmartWalletClient
                     path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SmartWalletClient.mdx
+                  - page: UndelegateAccountParams
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/UndelegateAccountParams.mdx
+                  - page: UndelegateAccountResult
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/UndelegateAccountResult.mdx
