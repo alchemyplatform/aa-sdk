@@ -491,6 +491,48 @@ describe("Client E2E Tests", () => {
     },
   } as const;
 
+  describe("undelegateAccount", () => {
+    it("should prepare, sign, and send an undelegation on base sepolia", async () => {
+      // Use a fresh signer on base sepolia (staging-only feature).
+      const _signer = privateKeyToAccount(generatePrivateKey());
+
+      const _client = createSmartWalletClient({
+        transport: apiTransport,
+        chain: baseSepolia,
+        signer: _signer,
+      });
+
+      // First, delegate via a 7702 sendCalls so there's a delegation to remove.
+      const account = await _client.requestAccount({
+        creationHint: { accountType: "7702" },
+      });
+      expect(account.address).toBe(_signer.address);
+
+      const sendResult = await _client.sendCalls({
+        calls: [{ to: zeroAddress, value: 0n }],
+        account,
+        capabilities: {
+          paymaster: {
+            policyId: process.env.TEST_PAYMASTER_POLICY_ID!,
+          },
+        },
+      });
+      const sendStatus = await _client.waitForCallsStatus({
+        id: sendResult.id,
+      });
+      expect(sendStatus.status).toBe("success");
+
+      // Now undelegate.
+      const undelegateResult = await _client.undelegateAccount();
+      expect(undelegateResult.id).toBeDefined();
+
+      const undelegateStatus = await _client.waitForCallsStatus({
+        id: undelegateResult.id,
+      });
+      expect(undelegateStatus.status).toBe("success");
+    }, 120_000);
+  });
+
   describe("viem action compatibility", () => {
     it("can use viem's sendCalls and waitForCallsStatus actions via getAction", async () => {
       const account = await client.requestAccount();

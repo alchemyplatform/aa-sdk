@@ -38,10 +38,13 @@ type SmartWalletActions = {
   getCapabilities: (
     params?: GetCapabilitiesParams | undefined,
   ) => Promise<GetCapabilitiesResult>;
+  undelegateAccount: (
+    params?: UndelegateAccountParams,
+  ) => Promise<UndelegateAccountResult>;
 };
 ```
 
-Defined in: [packages/wallet-apis/src/decorators/smartWalletActions.ts:62](https://github.com/alchemyplatform/aa-sdk/blob/v5.x.x/packages/wallet-apis/src/decorators/smartWalletActions.ts#L62)
+Defined in: [packages/wallet-apis/src/decorators/smartWalletActions.ts:67](https://github.com/alchemyplatform/aa-sdk/blob/v5.x.x/packages/wallet-apis/src/decorators/smartWalletActions.ts#L67)
 
 ## Properties
 
@@ -171,6 +174,16 @@ Defined in: [packages/wallet-apis/src/decorators/smartWalletActions.ts:62](https
 
       <td>
         (`params`) => `Promise`\<[`Hex`](https://viem.sh)>
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="undelegateaccount" /> `undelegateAccount`
+      </td>
+
+      <td>
+        (`params?`) => `Promise`\<[`UndelegateAccountResult`](UndelegateAccountResult)>
       </td>
     </tr>
 

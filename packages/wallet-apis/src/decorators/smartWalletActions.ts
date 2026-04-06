@@ -49,6 +49,11 @@ import {
   type GetCapabilitiesParams,
   type GetCapabilitiesResult,
 } from "../actions/getCapabilities.js";
+import {
+  undelegateAccount,
+  type UndelegateAccountParams,
+  type UndelegateAccountResult,
+} from "../actions/undelegateAccount.js";
 import type { InnerWalletApiClient } from "../types.js";
 import {
   getCallsStatus,
@@ -89,6 +94,9 @@ export type SmartWalletActions = {
   getCapabilities: (
     params?: GetCapabilitiesParams | undefined,
   ) => Promise<GetCapabilitiesResult>;
+  undelegateAccount: (
+    params?: UndelegateAccountParams,
+  ) => Promise<UndelegateAccountResult>;
 };
 
 /**
@@ -113,6 +121,7 @@ export const smartWalletActions = (
   signTypedData: (params) => signTypedData(client, params),
   grantPermissions: (params) => grantPermissions(client, params),
   getCapabilities: (params) => getCapabilities(client, params),
+  undelegateAccount: (params) => undelegateAccount(client, params),
   // Viem methods.
   getCallsStatus: (params) => getCallsStatus(client, params),
   waitForCallsStatus: (params) => waitForCallsStatus(client, params),
