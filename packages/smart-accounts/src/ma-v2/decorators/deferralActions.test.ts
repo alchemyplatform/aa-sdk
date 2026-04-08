@@ -26,7 +26,7 @@ import {
   type Permission,
 } from "../permissionBuilder.js";
 import { RootPermissionOnlyError } from "../../errors/permissionBuilderErrors.js";
-import { buildDeferredActionDigest } from "../utils/deferredActions.js";
+import { encodeDeferredActionWithSignature } from "../utils/deferredActions.js";
 import { SignaturePrefix } from "../types.js";
 import { packAccountGasLimits, packPaymasterData } from "../../utils.js";
 import { estimateFeesPerGas } from "@alchemy/aa-infra";
@@ -38,7 +38,7 @@ describe("MA v2 deferral actions tests", async () => {
 
   let owner: LocalAccount;
   let sessionKey: LocalAccount;
-  let deferredActionDigest: Hex;
+  let deferredActionPayload: Hex;
   let accountAddress: Address;
   let factoryArgs: { factory?: Address; factoryData?: Hex } | undefined;
 
@@ -63,7 +63,7 @@ describe("MA v2 deferral actions tests", async () => {
       isGlobalValidation: true,
     });
 
-    const { typedData, fullPreSignatureDeferredActionDigest } =
+    const { typedData, fullPreSignatureDeferredActionPayload } =
       await new PermissionBuilder({
         client: provider,
         key: {
@@ -83,8 +83,8 @@ describe("MA v2 deferral actions tests", async () => {
 
     const sig = await owner.signTypedData(typedData);
 
-    deferredActionDigest = buildDeferredActionDigest({
-      fullPreSignatureDeferredActionDigest,
+    deferredActionPayload = encodeDeferredActionWithSignature({
+      fullPreSignatureDeferredActionPayload,
       // Note: If signing w/ the owner's actual EOA instead of the `provider.account`,
       // this must prepended with `SignaturePrefix.EOA` (0x00).
       sig: concatHex([SignaturePrefix.EOA, sig]),
@@ -101,7 +101,7 @@ describe("MA v2 deferral actions tests", async () => {
       const sessionKeyClient = await givenConnectedProvider({
         signer: sessionKey,
         accountAddress,
-        deferredAction: deferredActionDigest,
+        deferredAction: deferredActionPayload,
         factoryArgs,
       });
 
@@ -155,7 +155,7 @@ describe("MA v2 deferral actions tests", async () => {
       const sessionKeyClient = await givenConnectedProvider({
         signer: sessionKey,
         accountAddress,
-        deferredAction: deferredActionDigest,
+        deferredAction: deferredActionPayload,
         factoryArgs,
       });
 
@@ -181,7 +181,7 @@ describe("MA v2 deferral actions tests", async () => {
       const sessionKeyClient2 = await givenConnectedProvider({
         signer: sessionKey,
         accountAddress,
-        deferredAction: deferredActionDigest,
+        deferredAction: deferredActionPayload,
         factoryArgs,
       });
 
@@ -304,7 +304,7 @@ describe("MA v2 deferral actions tests", async () => {
 
     const deadline = Math.round(Date.now() / 1000 + 10);
 
-    const { typedData, fullPreSignatureDeferredActionDigest } =
+    const { typedData, fullPreSignatureDeferredActionPayload } =
       await new PermissionBuilder({
         client: provider.extend(deferralActions),
         key: {
@@ -328,8 +328,8 @@ describe("MA v2 deferral actions tests", async () => {
     const deferredValidationSig = await owner.signTypedData(typedData);
 
     // Build the full hex to prepend to the UO signature
-    const deferredActionDigest = buildDeferredActionDigest({
-      fullPreSignatureDeferredActionDigest,
+    const deferredActionPayload = encodeDeferredActionWithSignature({
+      fullPreSignatureDeferredActionPayload,
       // Note: If signing w/ the owner's actual EOA instead of the `provider.account`,
       // this must prepended with `SignaturePrefix.EOA` (0x00).
       sig: concatHex([SignaturePrefix.EOA, deferredValidationSig]),
@@ -339,7 +339,7 @@ describe("MA v2 deferral actions tests", async () => {
     const sessionKeyClient = await givenConnectedProvider({
       signer: sessionKey,
       accountAddress,
-      deferredAction: deferredActionDigest,
+      deferredAction: deferredActionPayload,
       factoryArgs,
     });
 

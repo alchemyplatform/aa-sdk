@@ -44,7 +44,7 @@ import { buildFullNonceKey, DefaultModuleAddress } from "../utils/account.js";
 import { semiModularAccountBytecodeAbi } from "../abis/semiModularAccountBytecodeAbi.js";
 import { SingleSignerValidationModule } from "../modules/single-signer-validation/module.js";
 import { PermissionBuilder, PermissionType } from "../permissionBuilder.js";
-import { buildDeferredActionDigest } from "../utils/deferredActions.js";
+import { encodeDeferredActionWithSignature } from "../utils/deferredActions.js";
 import { PaymasterGuardModule } from "../modules/paymaster-guard-module/module.js";
 import { AllowlistModule } from "../modules/allowlist-module/module.js";
 import { NativeTokenLimitModule } from "../modules/native-token-limit-module/module.js";
@@ -653,7 +653,7 @@ describe("MA v2 Account Tests", async () => {
 
       // Must be built with the client that's going to sign the deferred action
       // OR a client with the same set signer entity as the signing client (entityId + isGlobal)
-      const { typedData, fullPreSignatureDeferredActionDigest } =
+      const { typedData, fullPreSignatureDeferredActionPayload } =
         await new PermissionBuilder({
           client: provider,
           key: {
@@ -685,8 +685,8 @@ describe("MA v2 Account Tests", async () => {
       const deferredValidationSig = await owner.signTypedData(typedData);
 
       // Build the full hex to prepend to the UO signature
-      const deferredActionDigest = buildDeferredActionDigest({
-        fullPreSignatureDeferredActionDigest,
+      const deferredActionPayload = encodeDeferredActionWithSignature({
+        fullPreSignatureDeferredActionPayload,
         sig: concatHex([SignaturePrefix.EOA, deferredValidationSig]),
       });
 
@@ -695,7 +695,7 @@ describe("MA v2 Account Tests", async () => {
         signer: sessionKey,
         accountAddress: provider.account.address,
         factoryArgs: await provider.account.getFactoryArgs(),
-        deferredAction: deferredActionDigest,
+        deferredAction: deferredActionPayload,
       });
 
       // Send the UserOp
@@ -771,7 +771,7 @@ describe("MA v2 Account Tests", async () => {
 
       // Must be built with the client that's going to sign the deferred action
       // OR a client with the same set signer entity as the signing client (entityId + isGlobal)
-      const { typedData, fullPreSignatureDeferredActionDigest } =
+      const { typedData, fullPreSignatureDeferredActionPayload } =
         await new PermissionBuilder({
           client: provider,
           key: {
@@ -796,8 +796,8 @@ describe("MA v2 Account Tests", async () => {
       const deferredValidationSig = await owner.signTypedData(typedData);
 
       // Build the full hex to prepend to the UO signature
-      const deferredActionDigest = buildDeferredActionDigest({
-        fullPreSignatureDeferredActionDigest,
+      const deferredActionPayload = encodeDeferredActionWithSignature({
+        fullPreSignatureDeferredActionPayload,
         // Note: If signing w/ the owner's actual EOA instead of the `provider.account`,
         // this must prepended with `SignaturePrefix.EOA` (0x00).
         sig: concatHex([SignaturePrefix.EOA, deferredValidationSig]),
@@ -808,7 +808,7 @@ describe("MA v2 Account Tests", async () => {
         signer: sessionKey,
         accountAddress: provider.account.address,
         factoryArgs: await provider.account.getFactoryArgs(),
-        deferredAction: deferredActionDigest,
+        deferredAction: deferredActionPayload,
         // No need for entity id here since it's contained within the deferred action.
       });
 
@@ -895,22 +895,22 @@ describe("MA v2 Account Tests", async () => {
 
       const deferredValidationSig = await owner.signTypedData(typedData);
 
-      const fullPreSignatureDeferredActionDigest =
-        provider.buildPreSignatureDeferredActionDigest({
+      const fullPreSignatureDeferredActionPayload =
+        provider.buildPreSignatureDeferredActionPayload({
           typedData,
         });
 
       // Build the full hex to prepend to the UO signature
-      const deferredActionDigest = buildDeferredActionDigest({
-        fullPreSignatureDeferredActionDigest,
+      const deferredActionPayload = encodeDeferredActionWithSignature({
+        fullPreSignatureDeferredActionPayload,
         sig: concatHex([SignaturePrefix.EOA, deferredValidationSig]),
       });
 
-      // preExecHooks 00, nonce, deferredActionDigest
+      // preExecHooks 00, nonce, deferredActionPayload
       const fullDeferredAction = concatHex([
         "0x00",
         toHex(nonce, { size: 32 }),
-        deferredActionDigest,
+        deferredActionPayload,
       ]);
 
       // Initialize the session key client corresponding to the session key we will install in the deferred action
@@ -1005,7 +1005,7 @@ describe("MA v2 Account Tests", async () => {
 
       // Must be built with the client that's going to sign the deferred action
       // OR a client with the same set signer entity as the signing client (entityId + isGlobal)
-      const { typedData, fullPreSignatureDeferredActionDigest } =
+      const { typedData, fullPreSignatureDeferredActionPayload } =
         await new PermissionBuilder({
           client: sessionKeyClient,
           key: {
@@ -1031,8 +1031,8 @@ describe("MA v2 Account Tests", async () => {
         await sessionKeyClient.account.signTypedData(typedData);
 
       // Build the full hex to prepend to the UO signature
-      const deferredActionDigest = buildDeferredActionDigest({
-        fullPreSignatureDeferredActionDigest,
+      const deferredActionPayload = encodeDeferredActionWithSignature({
+        fullPreSignatureDeferredActionPayload,
         sig: deferredValidationSig,
       });
 
@@ -1041,7 +1041,7 @@ describe("MA v2 Account Tests", async () => {
         signer: sessionKey2,
         accountAddress: provider.account.address,
         factoryArgs: await provider.account.getFactoryArgs(),
-        deferredAction: deferredActionDigest,
+        deferredAction: deferredActionPayload,
       });
 
       // Send the UserOp (provider/client only used for account address & entrypoint)
