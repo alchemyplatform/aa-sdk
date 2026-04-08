@@ -685,7 +685,7 @@ describe("MA v2 Account Tests", async () => {
       const deferredValidationSig = await owner.signTypedData(typedData);
 
       // Build the full hex to prepend to the UO signature
-      const deferredActionPayload = encodeDeferredActionWithSignature({
+      const deferredAction = encodeDeferredActionWithSignature({
         fullPreSignatureDeferredActionPayload,
         sig: concatHex([SignaturePrefix.EOA, deferredValidationSig]),
       });
@@ -695,7 +695,7 @@ describe("MA v2 Account Tests", async () => {
         signer: sessionKey,
         accountAddress: provider.account.address,
         factoryArgs: await provider.account.getFactoryArgs(),
-        deferredAction: deferredActionPayload,
+        deferredAction,
       });
 
       // Send the UserOp
@@ -796,7 +796,7 @@ describe("MA v2 Account Tests", async () => {
       const deferredValidationSig = await owner.signTypedData(typedData);
 
       // Build the full hex to prepend to the UO signature
-      const deferredActionPayload = encodeDeferredActionWithSignature({
+      const deferredAction = encodeDeferredActionWithSignature({
         fullPreSignatureDeferredActionPayload,
         // Note: If signing w/ the owner's actual EOA instead of the `provider.account`,
         // this must prepended with `SignaturePrefix.EOA` (0x00).
@@ -808,7 +808,7 @@ describe("MA v2 Account Tests", async () => {
         signer: sessionKey,
         accountAddress: provider.account.address,
         factoryArgs: await provider.account.getFactoryArgs(),
-        deferredAction: deferredActionPayload,
+        deferredAction,
         // No need for entity id here since it's contained within the deferred action.
       });
 
@@ -901,16 +901,16 @@ describe("MA v2 Account Tests", async () => {
         });
 
       // Build the full hex to prepend to the UO signature
-      const deferredActionPayload = encodeDeferredActionWithSignature({
+      const signedDeferredActionPayload = encodeDeferredActionWithSignature({
         fullPreSignatureDeferredActionPayload,
         sig: concatHex([SignaturePrefix.EOA, deferredValidationSig]),
       });
 
       // preExecHooks 00, nonce, deferredActionPayload
-      const fullDeferredAction = concatHex([
+      const deferredAction = concatHex([
         "0x00",
         toHex(nonce, { size: 32 }),
-        deferredActionPayload,
+        signedDeferredActionPayload,
       ]);
 
       // Initialize the session key client corresponding to the session key we will install in the deferred action
@@ -918,7 +918,7 @@ describe("MA v2 Account Tests", async () => {
         signer: sessionKey,
         accountAddress: provider.account.address,
         factoryArgs: await provider.account.getFactoryArgs(),
-        deferredAction: fullDeferredAction,
+        deferredAction,
       });
 
       // Build the full UO with the deferred action signature prepend (provider/client only used for account address & entrypoint)
@@ -1031,7 +1031,7 @@ describe("MA v2 Account Tests", async () => {
         await sessionKeyClient.account.signTypedData(typedData);
 
       // Build the full hex to prepend to the UO signature
-      const deferredActionPayload = encodeDeferredActionWithSignature({
+      const deferredAction = encodeDeferredActionWithSignature({
         fullPreSignatureDeferredActionPayload,
         sig: deferredValidationSig,
       });
@@ -1041,7 +1041,7 @@ describe("MA v2 Account Tests", async () => {
         signer: sessionKey2,
         accountAddress: provider.account.address,
         factoryArgs: await provider.account.getFactoryArgs(),
-        deferredAction: deferredActionPayload,
+        deferredAction,
       });
 
       // Send the UserOp (provider/client only used for account address & entrypoint)
