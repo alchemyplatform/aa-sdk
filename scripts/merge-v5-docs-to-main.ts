@@ -183,8 +183,8 @@ function main(): void {
     `Including v5 sections: ${filteredV5Contents.map((c: any) => c.section).join(", ")}`,
   );
 
-  // Merge: main (v4) sections + v5 sections
-  const mergedContents = [...filteredMainContents, ...filteredV5Contents];
+  // Merge: v5 sections first (beta), then main (v4) sections
+  const mergedContents = [...filteredV5Contents, ...filteredMainContents];
 
   // Build the merged SDK Reference structure
   const mergedSdkReference = {
