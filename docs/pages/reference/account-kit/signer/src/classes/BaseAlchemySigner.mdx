@@ -1,5 +1,5 @@
 ---
-title: BaseAlchemySigner
+title: BaseAlchemySigner | @account-kit/signer
 description: Base abstract class for Alchemy Signer, providing authentication and session management for smart accounts. Implements the `SmartAccountAuthenticator` interface and handles various signer events.
 slug: wallets/reference/account-kit/signer/classes/BaseAlchemySigner
 layout: reference
@@ -252,6 +252,28 @@ registers listeners and initializes the session manager to manage session state.
 
         await signer.disconnect();
         ```
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="exportprivatekey" /> `exportPrivateKey`
+      </td>
+
+      <td>
+        `TClient`\[`"exportPrivateKey"`]
+      </td>
+
+      <td>
+        `undefined`
+      </td>
+
+      <td>
+        Exports a private key for a given account
+
+        **Param**
+
+        the parameters for the export
       </td>
     </tr>
 
@@ -823,7 +845,7 @@ registers listeners and initializes the session manager to manage session state.
 addOauthProvider(args): Promise<OauthProviderInfo>;
 ```
 
-Defined in: [account-kit/signer/src/base.ts:1270](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/signer/src/base.ts#L1270)
+Defined in: [account-kit/signer/src/base.ts:1280](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/signer/src/base.ts#L1280)
 
 Handles OAuth authentication by augmenting the provided arguments with a type and performing authentication based on the OAuth mode (either using redirect or popup).
 
@@ -870,7 +892,7 @@ A promise that resolves to an `OauthProviderInfo` object containing provider inf
 protected fetchConfig(): Promise<SignerConfig>;
 ```
 
-Defined in: [account-kit/signer/src/base.ts:1892](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/signer/src/base.ts#L1892)
+Defined in: [account-kit/signer/src/base.ts:1902](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/signer/src/base.ts#L1902)
 
 #### Returns
 
@@ -934,7 +956,7 @@ SmartAccountAuthenticator.getAuthDetails;
 getConfig(): Promise<SignerConfig>;
 ```
 
-Defined in: [account-kit/signer/src/base.ts:1884](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/signer/src/base.ts#L1884)
+Defined in: [account-kit/signer/src/base.ts:1894](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/signer/src/base.ts#L1894)
 
 Returns the signer configuration while fetching it if it's not already initialized.
 
@@ -1196,7 +1218,7 @@ the organization id for the user if they exist
 protected initConfig(): Promise<SignerConfig>;
 ```
 
-Defined in: [account-kit/signer/src/base.ts:1874](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/signer/src/base.ts#L1874)
+Defined in: [account-kit/signer/src/base.ts:1884](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/signer/src/base.ts#L1884)
 
 #### Returns
 
@@ -1210,7 +1232,7 @@ Defined in: [account-kit/signer/src/base.ts:1874](https://github.com/alchemyplat
 listAuthMethods(): Promise<AuthMethods>;
 ```
 
-Defined in: [account-kit/signer/src/base.ts:1315](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/signer/src/base.ts#L1315)
+Defined in: [account-kit/signer/src/base.ts:1325](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/signer/src/base.ts#L1325)
 
 Retrieves a list of auth methods associated with the authenticated user.
 
@@ -1361,7 +1383,7 @@ using popup-based OAuth
 removeOauthProvider(providerId): Promise<any>;
 ```
 
-Defined in: [account-kit/signer/src/base.ts:1302](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/signer/src/base.ts#L1302)
+Defined in: [account-kit/signer/src/base.ts:1312](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/signer/src/base.ts#L1312)
 
 Removes an OAuth provider by its ID if the user is authenticated.
 
@@ -1530,7 +1552,7 @@ If the user is not authenticated
 toSolanaSigner(): SolanaSigner;
 ```
 
-Defined in: [account-kit/signer/src/base.ts:1133](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/signer/src/base.ts#L1133)
+Defined in: [account-kit/signer/src/base.ts:1143](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/signer/src/base.ts#L1143)
 
 Creates a new instance of `SolanaSigner` using the provided inner value.
 This requires the signer to be authenticated first
@@ -1568,7 +1590,7 @@ A new instance of `SolanaSigner`
 toViemAccount(): Object;
 ```
 
-Defined in: [account-kit/signer/src/base.ts:1089](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/signer/src/base.ts#L1089)
+Defined in: [account-kit/signer/src/base.ts:1099](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/signer/src/base.ts#L1099)
 
 This method lets you adapt your AlchemySigner to a viem LocalAccount, which
 will let you use the signer as an EOA directly.
@@ -1610,7 +1632,7 @@ if your signer is not authenticated
 validateMultiFactors(params): Promise<User>;
 ```
 
-Defined in: [account-kit/signer/src/base.ts:1815](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/signer/src/base.ts#L1815)
+Defined in: [account-kit/signer/src/base.ts:1825](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/signer/src/base.ts#L1825)
 
 Validates MFA factors that were required during authentication.
 This function should be called after MFA is required and the user has provided their MFA code.

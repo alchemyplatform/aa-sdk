@@ -35,6 +35,14 @@ type SignPreparedCallsResult =
           type: "user-operation-v070";
         }
       >
+    >
+  | Signed<
+      Extract<
+        PrepareCallsResult,
+        {
+          type: "authorization";
+        }
+      >
     >;
 ```
 

@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.87.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.86.1...v4.87.0) (2026-03-30)
+
+### Features
+
+- add key export helper ([#2434](https://github.com/alchemyplatform/aa-sdk/issues/2434)) ([b5e49e8](https://github.com/alchemyplatform/aa-sdk/commit/b5e49e8ccd0c062dc766e3add72f33d9167c98bc))
+
 ## [4.86.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.86.0...v4.86.1) (2026-03-24)
 
 ### Bug Fixes

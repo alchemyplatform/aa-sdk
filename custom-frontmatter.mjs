@@ -27,16 +27,20 @@ function isReactComponent(fileName, packageName) {
 }
 
 /**
- * Extract package name from URL path
+ * Parse the package segment and fully-qualified npm package name from a URL path.
  *
  * @param {string} url - The page URL
- * @returns {string|null} The package name (e.g., 'react', 'react-native', 'core')
+ * @returns {{ packageName: string, npmPackage: string } | null}
+ *   packageName – short segment used for categorisation (e.g. 'react')
+ *   npmPackage  – scoped npm name (e.g. '@account-kit/react')
  */
-function extractPackageFromUrl(url) {
+function parsePackageFromUrl(url) {
   if (!url) return null;
 
-  const match = url.match(/^(?:account-kit|aa-sdk)\/([^/]+)\//);
-  return match ? match[1] : null;
+  const match = url.match(/^(account-kit|aa-sdk)\/([^/]+)\//);
+  if (!match) return null;
+
+  return { packageName: match[2], npmPackage: `@${match[1]}/${match[2]}` };
 }
 
 /**
@@ -49,8 +53,8 @@ function extractPackageFromUrl(url) {
  * (compiled dist/ files or node_modules/), indicating it is either a
  * re-export or an inherited member from an external package.
  *
- * @param {import('typedoc').Reflection} reflection
- * @returns {boolean}
+ * @param {import('typedoc').Reflection} reflection - The reflection to check
+ * @returns {boolean} True if all sources are from dist/ or node_modules/
  */
 function isExternalSource(reflection) {
   const sources = reflection.sources;
@@ -102,7 +106,9 @@ export function load(app) {
       let title = page.model.name;
 
       // Extract package name from URL for categorization
-      const packageName = extractPackageFromUrl(page.url);
+      const parsed = parsePackageFromUrl(page.url);
+      const packageName = parsed?.packageName ?? null;
+      const npmPackage = parsed?.npmPackage ?? null;
 
       if (page.model.kind === ReflectionKind.Class) {
         title = page.model.name;
@@ -164,8 +170,19 @@ export function load(app) {
         }
       }
 
-      // For README.mdx files, remove "/src" and "/src/exports" from title and description
+      // Qualify non-README titles with the npm package name to avoid duplicate
+      // <title> tags across packages (e.g. same function in @aa-sdk/core and
+      // @account-kit/core would otherwise both render as "functionName | Alchemy Docs").
       const isReadmeFile = page.url && page.url.endsWith("README.mdx");
+      const hasFallbackDescription = !page.model.comment?.summary?.length;
+      if (!isReadmeFile && npmPackage) {
+        title = `${title} | ${npmPackage}`;
+        if (hasFallbackDescription) {
+          description = `${description} from ${npmPackage}`;
+        }
+      }
+
+      // For README.mdx files, remove "/src" and "/src/exports" from title and description
       if (isReadmeFile) {
         title = title.replace(/\/src\/exports$/, "").replace(/\/src$/, "");
         description = description
@@ -233,6 +250,7 @@ export function load(app) {
       const slug = page.frontmatter?.slug;
       const isReadmeFile = page.url && page.url.endsWith("README.mdx");
       if (slug && isReadmeFile) {
+        const packageName = parsePackageFromUrl(page.url)?.packageName ?? null;
         page.contents = page.contents.replace(
           /\]\((?!https?:\/\/|\/|#)([^)]+)\)/g,
           (_, relPath) => {
@@ -247,7 +265,27 @@ export function load(app) {
                 normalized.push(seg);
               }
             }
-            return `](/${normalized.join("/")})`;
+            let resolvedPath = normalized.join("/");
+
+            // Apply the same hooks/components path rewrite used for individual
+            // page slugs so README links match the actual page slugs.
+            const fnMatch = resolvedPath.match(/\/functions\/([^/]+)$/);
+            if (fnMatch) {
+              const fnName = fnMatch[1];
+              if (isReactComponent(fnName, packageName)) {
+                resolvedPath = resolvedPath.replace(
+                  /\/functions\//,
+                  "/components/",
+                );
+              } else if (
+                fnName.startsWith("use") &&
+                (packageName === "react" || packageName === "react-native")
+              ) {
+                resolvedPath = resolvedPath.replace(/\/functions\//, "/hooks/");
+              }
+            }
+
+            return `](/${resolvedPath})`;
           },
         );
       }

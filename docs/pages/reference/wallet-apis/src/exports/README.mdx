@@ -45,6 +45,8 @@ layout: reference
 | [SignTypedDataResult](/wallets/reference/wallet-apis/type-aliases/SignTypedDataResult)                     | -           |
 | [SmartWalletActions](/wallets/reference/wallet-apis/type-aliases/SmartWalletActions)                       | -           |
 | [SmartWalletClient](/wallets/reference/wallet-apis/type-aliases/SmartWalletClient)                         | -           |
+| [UndelegateAccountParams](/wallets/reference/wallet-apis/type-aliases/UndelegateAccountParams)             | -           |
+| [UndelegateAccountResult](/wallets/reference/wallet-apis/type-aliases/UndelegateAccountResult)             | -           |
 
 ## Functions
 
@@ -66,3 +68,4 @@ layout: reference
 | [signSignatureRequest](/wallets/reference/wallet-apis/functions/signSignatureRequest)       | Signs a signature request using the provided signer. This method handles different types of signature requests including personal_sign, eth_signTypedData_v4, and authorization.                      |
 | [signTypedData](/wallets/reference/wallet-apis/functions/signTypedData)                     | Signs typed data (EIP-712) using the smart account. This method requests the account associated with the signer and uses it to sign the typed data.                                                   |
 | [smartWalletActions](/wallets/reference/wallet-apis/functions/smartWalletActions)           | Decorator that adds smart wallet actions to a wallet API client. Provides both Alchemy-specific methods and standard viem wallet actions.                                                             |
+| [undelegateAccount](/wallets/reference/wallet-apis/functions/undelegateAccount)             | Prepares, signs, and sends an EIP-7702 undelegation to remove delegation from an EOA. Gas is sponsored by Alchemy (requires Enterprise plan).                                                         |
