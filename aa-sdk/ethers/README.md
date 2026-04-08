@@ -1,6 +1,6 @@
 # `@aa-sdk/ethers`
 
-> **No longer actively maintained.** This package only receives critical fixes. We recommend using [viem](https://viem.sh) instead.
+> **No longer actively maintained.** This package only receives critical fixes. Use [viem](https://viem.sh) instead.
 
 This package contains `EthersProviderAdapter` and `AccountSigner`, respective extensions of the [`JsonRpcProvider`](https://docs.ethers.org/v5/api/providers/jsonrpc-provider/) and [`Signer`](https://docs.ethers.org/v5/api/signer/) classes defined in [`ethers.js`](https://docs.ethers.org/v5/) external library.
 
@@ -54,7 +54,7 @@ const signer: SmartAccountSigner = LocalAccountSigner.mnemonicToAccountSigner(
 );
 
 // 2. Connect the provider to the smart account signer
-export const signer = provider.connectToAccount(
+export const connectedAccount = provider.connectToAccount(
   (rpcClient) =>
     new LightSmartContractAccount({
       chain,

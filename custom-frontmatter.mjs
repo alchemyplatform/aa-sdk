@@ -239,6 +239,33 @@ export function load(app) {
     (page) => {
       if (!page.contents) return;
 
+      const slug = page.frontmatter?.slug;
+      const isReadmeFile = page.url && page.url.endsWith("README.mdx");
+
+      // For README pages, inject the package README.md content (if it exists)
+      // before link rewrites so that any relative links in the README are also
+      // normalized to absolute slug paths.
+      let readmeContent = "";
+      if (isReadmeFile && page.url) {
+        // page.url is e.g. "account-kit/wallet-client/src/exports/README.mdx"
+        // Package dir is the first two segments: "account-kit/wallet-client"
+        const segments = page.url.split("/");
+        if (segments.length >= 2) {
+          const pkgDir = join(segments[0], segments[1]);
+          try {
+            const raw = readFileSync(join(pkgDir, "README.md"), "utf-8");
+            // Strip the first markdown heading (# title) since the page already
+            // has a title via frontmatter, then trim.
+            const stripped = raw.replace(/^#\s+.+\n+/, "").trim();
+            if (stripped) {
+              readmeContent = stripped + "\n\n";
+            }
+          } catch {
+            // No README.md — that's fine, skip.
+          }
+        }
+      }
+
       // Strip .mdx extension from relative markdown links.
       // The docs site uses extensionless slug-based URLs.
       page.contents = page.contents.replace(
@@ -249,8 +276,6 @@ export function load(app) {
       // For README/index pages, convert relative links to absolute slug paths.
       // Without this, relative links resolve from the parent path because the
       // slug (e.g. wallets/reference/aa-sdk/core) has no trailing slash.
-      const slug = page.frontmatter?.slug;
-      const isReadmeFile = page.url && page.url.endsWith("README.mdx");
       if (slug && isReadmeFile) {
         const packageName = parsePackageFromUrl(page.url)?.packageName ?? null;
         page.contents = page.contents.replace(
@@ -290,29 +315,6 @@ export function load(app) {
             return `](/${resolvedPath})`;
           },
         );
-      }
-
-      // For README pages, inject the package README.md content (if it exists)
-      // between the auto-generated comment and the TypeDoc-generated API index.
-      let readmeContent = "";
-      if (isReadmeFile && page.url) {
-        // page.url is e.g. "account-kit/wallet-client/src/exports/README.mdx"
-        // Package dir is the first two segments: "account-kit/wallet-client"
-        const segments = page.url.split("/");
-        if (segments.length >= 2) {
-          const pkgDir = join(segments[0], segments[1]);
-          try {
-            const raw = readFileSync(join(pkgDir, "README.md"), "utf-8");
-            // Strip the first markdown heading (# title) since the page already
-            // has a title via frontmatter, then trim.
-            const stripped = raw.replace(/^#\s+.+\n+/, "").trim();
-            if (stripped) {
-              readmeContent = stripped + "\n\n";
-            }
-          } catch {
-            // No README.md — that's fine, skip.
-          }
-        }
       }
 
       const frontmatterMatch = page.contents.match(/^(---\n[\s\S]*?\n---\n)/);

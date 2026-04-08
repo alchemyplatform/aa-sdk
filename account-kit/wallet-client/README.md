@@ -1,8 +1,8 @@
 # `@account-kit/wallet-client`
 
-> **Note:** This package is being replaced by [`@alchemy/wallet-apis`](https://www.npmjs.com/package/@alchemy/wallet-apis), which is currently in beta but recommended for new integrations.
+> **Note:** This package is being replaced by [`@alchemy/wallet-apis`](https://www.npmjs.com/package/@alchemy/wallet-apis), which is currently in beta. Start new integrations with `@alchemy/wallet-apis` instead.
 
-Wallet Client for Alchemy Account Kit. Provides a smart wallet client for interacting with smart accounts via the Alchemy Wallet API.
+Smart wallet client for interacting with smart accounts via the Wallet API.
 
 ## Getting started
 

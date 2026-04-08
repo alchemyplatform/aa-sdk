@@ -1,6 +1,6 @@
 # `@aa-sdk/core`
 
-> **Note:** This package is being replaced by [viem](https://viem.sh). We recommend using viem for new projects.
+> **Note:** This package is being replaced by [viem](https://viem.sh). Use viem for new projects.
 
 This package contains the core interfaces and components for interacting with 4337 infrastructure. The primary interfaces that it exports are the `SmartAccountProvider` and `BaseSmartContractAccount`.
 

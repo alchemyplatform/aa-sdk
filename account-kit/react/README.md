@@ -1,8 +1,8 @@
 # `@account-kit/react`
 
-> **Note:** We recommend using [`@alchemy/wallet-apis`](https://www.npmjs.com/package/@alchemy/wallet-apis) instead, which is currently in beta but recommended for new integrations.
+> **Note:** Use [`@alchemy/wallet-apis`](https://www.npmjs.com/package/@alchemy/wallet-apis) for new integrations. It is currently in beta.
 
-React components and hooks for Alchemy Account Kit. Provides pre-built UI components and React hooks for integrating smart accounts into React applications.
+React components and hooks for integrating smart accounts into React applications.
 
 ## Getting started
 
