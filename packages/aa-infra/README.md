@@ -1,5 +1,7 @@
 # @alchemy/aa-infra
 
+**Beta** — This package, along with `@alchemy/common`, replaces `@account-kit/infra`. This is a low-level package. Most users should use [`@alchemy/wallet-apis`](https://www.alchemy.com/docs/wallets/reference/wallet-apis) unless you need to call bundler or paymaster RPCs directly via viem.
+
 Alchemy Account Abstraction infrastructure utilities. Provides Rundler-specific fee estimation and RPC types for use with viem's bundler client.
 
 ## Installation

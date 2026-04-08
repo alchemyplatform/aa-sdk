@@ -1,6 +1,6 @@
 # @alchemy/common
 
-Shared foundation for the Alchemy Smart Wallets SDK. Provides the core interfaces and utilities used by all other `@alchemy/*` packages.
+**Beta** — This is a low-level package that is consumed by other Alchemy packages.
 
 ## Installation
 

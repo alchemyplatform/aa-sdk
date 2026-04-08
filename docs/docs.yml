@@ -12,6 +12,389 @@ navigation:
     layout:
       - section: SDK Reference
         contents:
+          - section: AA Infra (beta)
+            path: wallets/pages/reference/aa-infra/src/README.mdx
+            contents:
+              - section: Functions
+                contents:
+                  - page: estimateFeesPerGas
+                    path: wallets/pages/reference/aa-infra/src/functions/estimateFeesPerGas.mdx
+              - section: Type Aliases
+                contents:
+                  - page: RundlerClient
+                    path: wallets/pages/reference/aa-infra/src/type-aliases/RundlerClient.mdx
+                  - page: RundlerRpcSchema
+                    path: wallets/pages/reference/aa-infra/src/type-aliases/RundlerRpcSchema.mdx
+          - section: Alchemy Common (beta)
+            path: wallets/pages/reference/common/src/README.mdx
+            contents:
+              - section: Classes
+                contents:
+                  - page: AccountNotFoundError
+                    path: wallets/pages/reference/common/src/classes/AccountNotFoundError.mdx
+                  - page: BaseError
+                    path: wallets/pages/reference/common/src/classes/BaseError.mdx
+                  - page: ChainNotFoundError
+                    path: wallets/pages/reference/common/src/classes/ChainNotFoundError.mdx
+                  - page: ConnectionConfigError
+                    path: wallets/pages/reference/common/src/classes/ConnectionConfigError.mdx
+                  - page: FetchError
+                    path: wallets/pages/reference/common/src/classes/FetchError.mdx
+                  - page: InvalidRequestError
+                    path: wallets/pages/reference/common/src/classes/InvalidRequestError.mdx
+                  - page: MethodUnsupportedError
+                    path: wallets/pages/reference/common/src/classes/MethodUnsupportedError.mdx
+                  - page: ServerError
+                    path: wallets/pages/reference/common/src/classes/ServerError.mdx
+              - section: Functions
+                contents:
+                  - page: alchemyTransport
+                    path: wallets/pages/reference/common/src/functions/alchemyTransport.mdx
+                  - page: assertNever
+                    path: wallets/pages/reference/common/src/functions/assertNever.mdx
+                  - page: bigIntMax
+                    path: wallets/pages/reference/common/src/functions/bigIntMax.mdx
+                  - page: bigIntMultiply
+                    path: wallets/pages/reference/common/src/functions/bigIntMultiply.mdx
+                  - page: getAlchemyRpcUrl
+                    path: wallets/pages/reference/common/src/functions/getAlchemyRpcUrl.mdx
+                  - page: getSupportedChainIds
+                    path: wallets/pages/reference/common/src/functions/getSupportedChainIds.mdx
+                  - page: isAlchemyConnectionConfig
+                    path: wallets/pages/reference/common/src/functions/isAlchemyConnectionConfig.mdx
+                  - page: isAlchemyTransport
+                    path: wallets/pages/reference/common/src/functions/isAlchemyTransport.mdx
+                  - page: isChainSupported
+                    path: wallets/pages/reference/common/src/functions/isChainSupported.mdx
+                  - page: lowerAddress
+                    path: wallets/pages/reference/common/src/functions/lowerAddress.mdx
+                  - page: raise
+                    path: wallets/pages/reference/common/src/functions/raise.mdx
+                  - page: validateAlchemyConnectionConfig
+                    path: wallets/pages/reference/common/src/functions/validateAlchemyConnectionConfig.mdx
+              - section: Interfaces
+                contents:
+                  - page: AlchemyTransportConfig
+                    path: wallets/pages/reference/common/src/interfaces/AlchemyTransportConfig.mdx
+              - section: Type Aliases
+                contents:
+                  - page: AlchemyConnectionConfig
+                    path: wallets/pages/reference/common/src/type-aliases/AlchemyConnectionConfig.mdx
+                  - page: AlchemyTransport
+                    path: wallets/pages/reference/common/src/type-aliases/AlchemyTransport.mdx
+                  - page: ExtractRpcMethod
+                    path: wallets/pages/reference/common/src/type-aliases/ExtractRpcMethod.mdx
+                  - page: Never
+                    path: wallets/pages/reference/common/src/type-aliases/Never.mdx
+              - section: Variables
+                contents:
+                  - page: AlchemyConnectionConfigSchema
+                    path: wallets/pages/reference/common/src/variables/AlchemyConnectionConfigSchema.mdx
+          - section: Smart Accounts (beta)
+            path: wallets/pages/reference/smart-accounts/src/README.mdx
+            contents:
+              - section: Classes
+                contents:
+                  - page: AccountAddressAsTargetError
+                    path: wallets/pages/reference/smart-accounts/src/classes/AccountAddressAsTargetError.mdx
+                  - page: DeadlineOverLimitError
+                    path: wallets/pages/reference/smart-accounts/src/classes/DeadlineOverLimitError.mdx
+                  - page: DuplicateTargetAddressError
+                    path: wallets/pages/reference/smart-accounts/src/classes/DuplicateTargetAddressError.mdx
+                  - page: EntityIdOverrideError
+                    path: wallets/pages/reference/smart-accounts/src/classes/EntityIdOverrideError.mdx
+                  - page: ExpiredDeadlineError
+                    path: wallets/pages/reference/smart-accounts/src/classes/ExpiredDeadlineError.mdx
+                  - page: InvalidDeferredActionNonceError
+                    path: wallets/pages/reference/smart-accounts/src/classes/InvalidDeferredActionNonceError.mdx
+                  - page: InvalidEntityIdError
+                    path: wallets/pages/reference/smart-accounts/src/classes/InvalidEntityIdError.mdx
+                  - page: InvalidNonceKeyError
+                    path: wallets/pages/reference/smart-accounts/src/classes/InvalidNonceKeyError.mdx
+                  - page: InvalidOwnerError
+                    path: wallets/pages/reference/smart-accounts/src/classes/InvalidOwnerError.mdx
+                  - page: MultipleGasLimitError
+                    path: wallets/pages/reference/smart-accounts/src/classes/MultipleGasLimitError.mdx
+                  - page: MultipleNativeTokenTransferError
+                    path: wallets/pages/reference/smart-accounts/src/classes/MultipleNativeTokenTransferError.mdx
+                  - page: NoFunctionsProvidedError
+                    path: wallets/pages/reference/smart-accounts/src/classes/NoFunctionsProvidedError.mdx
+                  - page: PermissionBuilder
+                    path: wallets/pages/reference/smart-accounts/src/classes/PermissionBuilder.mdx
+                  - page: PermissionBuilderError
+                    path: wallets/pages/reference/smart-accounts/src/classes/PermissionBuilderError.mdx
+                  - page: RootPermissionOnlyError
+                    path: wallets/pages/reference/smart-accounts/src/classes/RootPermissionOnlyError.mdx
+                  - page: SelectorNotAllowed
+                    path: wallets/pages/reference/smart-accounts/src/classes/SelectorNotAllowed.mdx
+                  - page: UnsupportedPermissionTypeError
+                    path: wallets/pages/reference/smart-accounts/src/classes/UnsupportedPermissionTypeError.mdx
+                  - page: ValidationConfigUnsetError
+                    path: wallets/pages/reference/smart-accounts/src/classes/ValidationConfigUnsetError.mdx
+                  - page: ZeroAddressError
+                    path: wallets/pages/reference/smart-accounts/src/classes/ZeroAddressError.mdx
+              - section: Functions
+                contents:
+                  - page: buildDeferredActionDigest
+                    path: wallets/pages/reference/smart-accounts/src/functions/buildDeferredActionDigest.mdx
+                  - page: buildFullNonceKey
+                    path: wallets/pages/reference/smart-accounts/src/functions/buildFullNonceKey.mdx
+                  - page: decodeCallsLA
+                    path: wallets/pages/reference/smart-accounts/src/functions/decodeCallsLA.mdx
+                  - page: decodeCallsMAv1
+                    path: wallets/pages/reference/smart-accounts/src/functions/decodeCallsMAv1.mdx
+                  - page: decodeCallsMAv2
+                    path: wallets/pages/reference/smart-accounts/src/functions/decodeCallsMAv2.mdx
+                  - page: defaultLightAccountVersion
+                    path: wallets/pages/reference/smart-accounts/src/functions/defaultLightAccountVersion.mdx
+                  - page: deferralActions
+                    path: wallets/pages/reference/smart-accounts/src/functions/deferralActions.mdx
+                  - page: encodeCallsLA
+                    path: wallets/pages/reference/smart-accounts/src/functions/encodeCallsLA.mdx
+                  - page: encodeCallsMAv1
+                    path: wallets/pages/reference/smart-accounts/src/functions/encodeCallsMAv1.mdx
+                  - page: encodeCallsMAv2
+                    path: wallets/pages/reference/smart-accounts/src/functions/encodeCallsMAv2.mdx
+                  - page: getLightAccountAddressFromFactoryData
+                    path: wallets/pages/reference/smart-accounts/src/functions/getLightAccountAddressFromFactoryData.mdx
+                  - page: getLightAccountImplAddress
+                    path: wallets/pages/reference/smart-accounts/src/functions/getLightAccountImplAddress.mdx
+                  - page: getMAV2UpgradeToData
+                    path: wallets/pages/reference/smart-accounts/src/functions/getMAV2UpgradeToData.mdx
+                  - page: getModularAccountV2AddressFromFactoryData
+                    path: wallets/pages/reference/smart-accounts/src/functions/getModularAccountV2AddressFromFactoryData.mdx
+                  - page: getMultiOwnerLightAccountAddressFromFactoryData
+                    path: wallets/pages/reference/smart-accounts/src/functions/getMultiOwnerLightAccountAddressFromFactoryData.mdx
+                  - page: getMultiOwnerModularAccountV1AddressFromFactoryData
+                    path: wallets/pages/reference/smart-accounts/src/functions/getMultiOwnerModularAccountV1AddressFromFactoryData.mdx
+                  - page: installValidationActions
+                    path: wallets/pages/reference/smart-accounts/src/functions/installValidationActions.mdx
+                  - page: isLightAccountVersion1
+                    path: wallets/pages/reference/smart-accounts/src/functions/isLightAccountVersion1.mdx
+                  - page: isLightAccountVersion2
+                    path: wallets/pages/reference/smart-accounts/src/functions/isLightAccountVersion2.mdx
+                  - page: isModularAccountV2
+                    path: wallets/pages/reference/smart-accounts/src/functions/isModularAccountV2.mdx
+                  - page: pack1271Signature
+                    path: wallets/pages/reference/smart-accounts/src/functions/pack1271Signature.mdx
+                  - page: packUOSignature
+                    path: wallets/pages/reference/smart-accounts/src/functions/packUOSignature.mdx
+                  - page: parseDeferredAction
+                    path: wallets/pages/reference/smart-accounts/src/functions/parseDeferredAction.mdx
+                  - page: predictLightAccountAddress
+                    path: wallets/pages/reference/smart-accounts/src/functions/predictLightAccountAddress.mdx
+                  - page: predictModularAccountV2Address
+                    path: wallets/pages/reference/smart-accounts/src/functions/predictModularAccountV2Address.mdx
+                  - page: predictMultiOwnerLightAccountAddress
+                    path: wallets/pages/reference/smart-accounts/src/functions/predictMultiOwnerLightAccountAddress.mdx
+                  - page: predictMultiOwnerModularAccountV1Address
+                    path: wallets/pages/reference/smart-accounts/src/functions/predictMultiOwnerModularAccountV1Address.mdx
+                  - page: serializeHookConfig
+                    path: wallets/pages/reference/smart-accounts/src/functions/serializeHookConfig.mdx
+                  - page: serializeModuleEntity
+                    path: wallets/pages/reference/smart-accounts/src/functions/serializeModuleEntity.mdx
+                  - page: serializeValidationConfig
+                    path: wallets/pages/reference/smart-accounts/src/functions/serializeValidationConfig.mdx
+                  - page: toLightAccount
+                    path: wallets/pages/reference/smart-accounts/src/functions/toLightAccount.mdx
+                  - page: toModularAccountV1Base
+                    path: wallets/pages/reference/smart-accounts/src/functions/toModularAccountV1Base.mdx
+                  - page: toModularAccountV2
+                    path: wallets/pages/reference/smart-accounts/src/functions/toModularAccountV2.mdx
+                  - page: toModularAccountV2Base
+                    path: wallets/pages/reference/smart-accounts/src/functions/toModularAccountV2Base.mdx
+                  - page: toMultiOwnerLightAccount
+                    path: wallets/pages/reference/smart-accounts/src/functions/toMultiOwnerLightAccount.mdx
+                  - page: toMultiOwnerModularAccountV1
+                    path: wallets/pages/reference/smart-accounts/src/functions/toMultiOwnerModularAccountV1.mdx
+                  - page: toReplaySafeTypedData
+                    path: wallets/pages/reference/smart-accounts/src/functions/toReplaySafeTypedData.mdx
+              - section: Type Aliases
+                contents:
+                  - page: BaseMaV1AccountImplementation
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/BaseMaV1AccountImplementation.mdx
+                  - page: BaseModularAccountV2Implementation
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/BaseModularAccountV2Implementation.mdx
+                  - page: BuildDeferredActionDigestParams
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/BuildDeferredActionDigestParams.mdx
+                  - page: BuildNonceParams
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/BuildNonceParams.mdx
+                  - page: BuildPreSignatureDeferredActionDigestParams
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/BuildPreSignatureDeferredActionDigestParams.mdx
+                  - page: CreateDeferredActionTypedDataParams
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/CreateDeferredActionTypedDataParams.mdx
+                  - page: DeferralActions
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/DeferralActions.mdx
+                  - page: DeferredActionReturnData
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/DeferredActionReturnData.mdx
+                  - page: DeferredActionTypedData
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/DeferredActionTypedData.mdx
+                  - page: EntityIdAndNonceParams
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/EntityIdAndNonceParams.mdx
+                  - page: EntryPointFromAccountRegistry
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/EntryPointFromAccountRegistry.mdx
+                  - page: ExecutionDataView
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/ExecutionDataView.mdx
+                  - page: GetAccountParameter
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/GetAccountParameter.mdx
+                  - page: GetLightAccountAddressFromFactoryDataParams
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/GetLightAccountAddressFromFactoryDataParams.mdx
+                  - page: GetLightAccountType
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/GetLightAccountType.mdx
+                  - page: GetMAV2UpgradeToData
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/GetMAV2UpgradeToData.mdx
+                  - page: GetModularAccountV2AddressFromFactoryDataParams
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/GetModularAccountV2AddressFromFactoryDataParams.mdx
+                  - page: GetMultiOwnerLightAccountAddressFromFactoryDataParams
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/GetMultiOwnerLightAccountAddressFromFactoryDataParams.mdx
+                  - page: GetMultiOwnerModularAccountV1AddressFromFactoryDataParams
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/GetMultiOwnerModularAccountV1AddressFromFactoryDataParams.mdx
+                  - page: HookConfig
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/HookConfig.mdx
+                  - page: HookIdentifier
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/HookIdentifier.mdx
+                  - page: HookType
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/HookType.mdx
+                  - page: InstallValidationActions
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/InstallValidationActions.mdx
+                  - page: InstallValidationParams
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/InstallValidationParams.mdx
+                  - page: LightAccount
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/LightAccount.mdx
+                  - page: LightAccountAbi
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/LightAccountAbi.mdx
+                  - page: LightAccountType
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/LightAccountType.mdx
+                  - page: LightAccountVersion
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/LightAccountVersion.mdx
+                  - page: ModularAccountV1Base
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/ModularAccountV1Base.mdx
+                  - page: ModularAccountV2
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/ModularAccountV2.mdx
+                  - page: ModularAccountV2Base
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/ModularAccountV2Base.mdx
+                  - page: ModuleEntity
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/ModuleEntity.mdx
+                  - page: MultiOwnerLightAccount
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/MultiOwnerLightAccount.mdx
+                  - page: MultiOwnerModularAccountV1
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/MultiOwnerModularAccountV1.mdx
+                  - page: Pack1271SignatureParams
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/Pack1271SignatureParams.mdx
+                  - page: PackUOSignatureParams
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/PackUOSignatureParams.mdx
+                  - page: Permission
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/Permission.mdx
+                  - page: PermissionType
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/PermissionType.mdx
+                  - page: PredictLightAccountAddressParams
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/PredictLightAccountAddressParams.mdx
+                  - page: PredictModularAccountV2AddressParams
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/PredictModularAccountV2AddressParams.mdx
+                  - page: PredictMultiOwnerLightAccountAddressParams
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/PredictMultiOwnerLightAccountAddressParams.mdx
+                  - page: PredictMultiOwnerModularAccountV1AddressParams
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/PredictMultiOwnerModularAccountV1AddressParams.mdx
+                  - page: SemiModularAccount7702StaticImpl
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/SemiModularAccount7702StaticImpl.mdx
+                  - page: SemiModularAccountV2FactoryArgs
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/SemiModularAccountV2FactoryArgs.mdx
+                  - page: SemiModularAccountV2StaticImpl
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/SemiModularAccountV2StaticImpl.mdx
+                  - page: SignaturePrefix
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/SignaturePrefix.mdx
+                  - page: SignatureRequest
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/SignatureRequest.mdx
+                  - page: SignerEntity
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/SignerEntity.mdx
+                  - page: SmartAccountWithDecodeCalls
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/SmartAccountWithDecodeCalls.mdx
+                  - page: StaticSmartAccountImplementation
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/StaticSmartAccountImplementation.mdx
+                  - page: ToLightAccountParams
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/ToLightAccountParams.mdx
+                  - page: ToModularAccountV1BaseParams
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/ToModularAccountV1BaseParams.mdx
+                  - page: ToModularAccountV2BaseParams
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/ToModularAccountV2BaseParams.mdx
+                  - page: ToModularAccountV2Params
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/ToModularAccountV2Params.mdx
+                  - page: ToMultiOwnerLightAccountParams
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/ToMultiOwnerLightAccountParams.mdx
+                  - page: ToMultiOwnerModularAccountV1Params
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/ToMultiOwnerModularAccountV1Params.mdx
+                  - page: UninstallValidationParams
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/UninstallValidationParams.mdx
+                  - page: UpgradeToData
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/UpgradeToData.mdx
+                  - page: ValidationConfig
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/ValidationConfig.mdx
+                  - page: ValidationData
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/ValidationData.mdx
+                  - page: ValidationDataParams
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/ValidationDataParams.mdx
+                  - page: ValidationDataView
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/ValidationDataView.mdx
+              - section: Variables
+                contents:
+                  - page: AccountVersionRegistry
+                    path: wallets/pages/reference/smart-accounts/src/variables/AccountVersionRegistry.mdx
+                  - page: AllowlistModule
+                    path: wallets/pages/reference/smart-accounts/src/variables/AllowlistModule.mdx
+                  - page: DEFAULT_OWNER_ENTITY_ID
+                    path: wallets/pages/reference/smart-accounts/src/variables/DEFAULT_OWNER_ENTITY_ID.mdx
+                  - page: DefaultAddress
+                    path: wallets/pages/reference/smart-accounts/src/variables/DefaultAddress.mdx
+                  - page: DefaultMaV1Address
+                    path: wallets/pages/reference/smart-accounts/src/variables/DefaultMaV1Address.mdx
+                  - page: DefaultMaV1PluginAddress
+                    path: wallets/pages/reference/smart-accounts/src/variables/DefaultMaV1PluginAddress.mdx
+                  - page: DefaultModuleAddress
+                    path: wallets/pages/reference/smart-accounts/src/variables/DefaultModuleAddress.mdx
+                  - page: ENTITY_ID_AND_NONCE_READER_BYTECODE
+                    path: wallets/pages/reference/smart-accounts/src/variables/ENTITY_ID_AND_NONCE_READER_BYTECODE.mdx
+                  - page: EXECUTE_USER_OP_SELECTOR
+                    path: wallets/pages/reference/smart-accounts/src/variables/EXECUTE_USER_OP_SELECTOR.mdx
+                  - page: HookIdentifier
+                    path: wallets/pages/reference/smart-accounts/src/variables/HookIdentifier.mdx
+                  - page: HookType
+                    path: wallets/pages/reference/smart-accounts/src/variables/HookType.mdx
+                  - page: LightAccountUnsupported1271Factories
+                    path: wallets/pages/reference/smart-accounts/src/variables/LightAccountUnsupported1271Factories.mdx
+                  - page: LightAccountUnsupported1271Impls
+                    path: wallets/pages/reference/smart-accounts/src/variables/LightAccountUnsupported1271Impls.mdx
+                  - page: LightAccountV1Versions
+                    path: wallets/pages/reference/smart-accounts/src/variables/LightAccountV1Versions.mdx
+                  - page: LightAccountV2Versions
+                    path: wallets/pages/reference/smart-accounts/src/variables/LightAccountV2Versions.mdx
+                  - page: NativeTokenLimitModule
+                    path: wallets/pages/reference/smart-accounts/src/variables/NativeTokenLimitModule.mdx
+                  - page: PaymasterGuardModule
+                    path: wallets/pages/reference/smart-accounts/src/variables/PaymasterGuardModule.mdx
+                  - page: PermissionType
+                    path: wallets/pages/reference/smart-accounts/src/variables/PermissionType.mdx
+                  - page: SignaturePrefix
+                    path: wallets/pages/reference/smart-accounts/src/variables/SignaturePrefix.mdx
+                  - page: SingleSignerValidationModule
+                    path: wallets/pages/reference/smart-accounts/src/variables/SingleSignerValidationModule.mdx
+                  - page: TimeRangeModule
+                    path: wallets/pages/reference/smart-accounts/src/variables/TimeRangeModule.mdx
+                  - page: lightAccountStaticImplV1_0_1
+                    path: wallets/pages/reference/smart-accounts/src/variables/lightAccountStaticImplV1_0_1.mdx
+                  - page: lightAccountStaticImplV1_0_2
+                    path: wallets/pages/reference/smart-accounts/src/variables/lightAccountStaticImplV1_0_2.mdx
+                  - page: lightAccountStaticImplV1_1_0
+                    path: wallets/pages/reference/smart-accounts/src/variables/lightAccountStaticImplV1_1_0.mdx
+                  - page: lightAccountStaticImplV2_0_0
+                    path: wallets/pages/reference/smart-accounts/src/variables/lightAccountStaticImplV2_0_0.mdx
+                  - page: multiOwnerLightAccountStaticImplV2_0_0
+                    path: wallets/pages/reference/smart-accounts/src/variables/multiOwnerLightAccountStaticImplV2_0_0.mdx
+                  - page: multiOwnerModularAccountStaticImpl
+                    path: wallets/pages/reference/smart-accounts/src/variables/multiOwnerModularAccountStaticImpl.mdx
+                  - page: semiModularAccount7702StaticImpl
+                    path: wallets/pages/reference/smart-accounts/src/variables/semiModularAccount7702StaticImpl.mdx
+                  - page: semiModularAccountV2StaticImpl
+                    path: wallets/pages/reference/smart-accounts/src/variables/semiModularAccountV2StaticImpl.mdx
           - section: Wallet APIs (beta)
             path: wallets/pages/reference/wallet-apis/src/exports/README.mdx
             contents:

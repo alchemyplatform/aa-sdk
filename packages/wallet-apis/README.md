@@ -1,5 +1,7 @@
 # @alchemy/wallet-apis
 
+**Beta** — This package replaces `@account-kit/wallet-client`. See the [migration guide](https://www.alchemy.com/docs/wallets/resources/migration-v5).
+
 High-level viem-style client for Alchemy's Smart Wallet APIs. Provides EIP-7702 smart wallet support with signing, transaction preparation, and call sending.
 
 ## Installation
