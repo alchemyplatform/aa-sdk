@@ -384,11 +384,11 @@ export class PermissionBuilder {
   /**
    * Compiles the deferred action typed data to sign.
    *
-   * @returns {Promise<{typedData: DeferredActionTypedData, fullPreSignatureDeferredActionDigest: Hex}>} The deferred action typed data and the full pre-signature deferred action digest.
+   * @returns {Promise<{typedData: DeferredActionTypedData, fullPreSignatureDeferredActionPayload: Hex}>} The deferred action typed data and the full pre-signature deferred action payload.
    */
   async compileDeferred(): Promise<{
     typedData: DeferredActionTypedData;
-    fullPreSignatureDeferredActionDigest: Hex;
+    fullPreSignatureDeferredActionPayload: Hex;
   }> {
     // Add time range module hook via expiry
     if (this.deadline !== 0) {
@@ -421,20 +421,20 @@ export class PermissionBuilder {
       nonce: this.nonce,
     });
 
-    const preSignatureDigest = deferralActions(
+    const preSignaturePayload = deferralActions(
       this.client,
-    ).buildPreSignatureDeferredActionDigest({ typedData });
+    ).buildPreSignatureDeferredActionPayload({ typedData });
 
-    // Encode additional information to build the full pre-signature digest
-    const fullPreSignatureDeferredActionDigest: `0x${string}` = `0x0${
+    // Encode additional information to build the full pre-signature payload
+    const fullPreSignatureDeferredActionPayload: `0x${string}` = `0x0${
       this.hasAssociatedExecHooks ? "1" : "0"
     }${toHex(this.nonce, {
       size: 32,
-    }).slice(2)}${preSignatureDigest.slice(2)}`;
+    }).slice(2)}${preSignaturePayload.slice(2)}`;
 
     return {
       typedData,
-      fullPreSignatureDeferredActionDigest,
+      fullPreSignatureDeferredActionPayload,
     };
   }
 
