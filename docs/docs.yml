@@ -135,8 +135,6 @@ navigation:
                     path: wallets/pages/reference/smart-accounts/src/classes/ZeroAddressError.mdx
               - section: Functions
                 contents:
-                  - page: buildDeferredActionDigest
-                    path: wallets/pages/reference/smart-accounts/src/functions/buildDeferredActionDigest.mdx
                   - page: buildFullNonceKey
                     path: wallets/pages/reference/smart-accounts/src/functions/buildFullNonceKey.mdx
                   - page: decodeCallsLA
@@ -155,6 +153,8 @@ navigation:
                     path: wallets/pages/reference/smart-accounts/src/functions/encodeCallsMAv1.mdx
                   - page: encodeCallsMAv2
                     path: wallets/pages/reference/smart-accounts/src/functions/encodeCallsMAv2.mdx
+                  - page: encodeDeferredActionWithSignature
+                    path: wallets/pages/reference/smart-accounts/src/functions/encodeDeferredActionWithSignature.mdx
                   - page: getLightAccountAddressFromFactoryData
                     path: wallets/pages/reference/smart-accounts/src/functions/getLightAccountAddressFromFactoryData.mdx
                   - page: getLightAccountImplAddress
@@ -215,12 +215,10 @@ navigation:
                     path: wallets/pages/reference/smart-accounts/src/type-aliases/BaseMaV1AccountImplementation.mdx
                   - page: BaseModularAccountV2Implementation
                     path: wallets/pages/reference/smart-accounts/src/type-aliases/BaseModularAccountV2Implementation.mdx
-                  - page: BuildDeferredActionDigestParams
-                    path: wallets/pages/reference/smart-accounts/src/type-aliases/BuildDeferredActionDigestParams.mdx
                   - page: BuildNonceParams
                     path: wallets/pages/reference/smart-accounts/src/type-aliases/BuildNonceParams.mdx
-                  - page: BuildPreSignatureDeferredActionDigestParams
-                    path: wallets/pages/reference/smart-accounts/src/type-aliases/BuildPreSignatureDeferredActionDigestParams.mdx
+                  - page: BuildPreSignatureDeferredActionPayloadParams
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/BuildPreSignatureDeferredActionPayloadParams.mdx
                   - page: CreateDeferredActionTypedDataParams
                     path: wallets/pages/reference/smart-accounts/src/type-aliases/CreateDeferredActionTypedDataParams.mdx
                   - page: DeferralActions
@@ -229,6 +227,8 @@ navigation:
                     path: wallets/pages/reference/smart-accounts/src/type-aliases/DeferredActionReturnData.mdx
                   - page: DeferredActionTypedData
                     path: wallets/pages/reference/smart-accounts/src/type-aliases/DeferredActionTypedData.mdx
+                  - page: EncodeDeferredActionWithSignatureParams
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/EncodeDeferredActionWithSignatureParams.mdx
                   - page: EntityIdAndNonceParams
                     path: wallets/pages/reference/smart-accounts/src/type-aliases/EntityIdAndNonceParams.mdx
                   - page: EntryPointFromAccountRegistry
