@@ -114,7 +114,7 @@ export {
 export type * from "./ma-v2/utils/deferredActions.js";
 export {
   parseDeferredAction,
-  buildDeferredActionDigest,
+  encodeDeferredActionWithSignature,
 } from "./ma-v2/utils/deferredActions.js";
 
 export type * from "./ma-v2/utils/hooks.js";

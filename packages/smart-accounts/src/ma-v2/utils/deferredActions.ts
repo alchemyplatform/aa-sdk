@@ -34,31 +34,31 @@ export const parseDeferredAction = (
   };
 };
 
-export type BuildDeferredActionDigestParams = {
-  fullPreSignatureDeferredActionDigest: Hex;
+export type EncodeDeferredActionWithSignatureParams = {
+  fullPreSignatureDeferredActionPayload: Hex;
   sig: Hex;
   signaturePrefix?: SignaturePrefix;
 };
 
 /**
- * Creates the digest which must be prepended to the userOp signature.
+ * Encodes the deferred action with its signature, producing the payload to prepend to the userOp signature.
  *
  * Assumption: The client this extends is used to sign the typed data.
  *
- * @param {BuildDeferredActionDigestParams} params - The parameters for building the deferred action digest.
- * @returns {Hex} The encoded digest to be prepended to the userOp signature.
+ * @param {EncodeDeferredActionWithSignatureParams} params - The parameters for encoding the deferred action with its signature.
+ * @returns {Hex} The encoded payload to be prepended to the userOp signature.
  */
-export const buildDeferredActionDigest = ({
-  fullPreSignatureDeferredActionDigest,
+export const encodeDeferredActionWithSignature = ({
+  fullPreSignatureDeferredActionPayload,
   sig,
-}: BuildDeferredActionDigestParams): Hex => {
+}: EncodeDeferredActionWithSignatureParams): Hex => {
   // 6492 sigs don't work here.
   const _sig = parseErc6492Signature(sig).signature;
 
   const sigLength = size(_sig);
 
   const encodedData = concatHex([
-    fullPreSignatureDeferredActionDigest,
+    fullPreSignatureDeferredActionPayload,
     toHex(sigLength, { size: 4 }),
     _sig,
   ]);
