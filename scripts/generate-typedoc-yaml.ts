@@ -54,10 +54,10 @@ type PackageDisplayNames = Record<string, string>;
 type TypeSections = Record<string, string>;
 
 const PACKAGE_DISPLAY_NAMES: Record<string, string> = {
-  "aa-infra": "AA Infra (beta)",
-  common: "Alchemy Common (beta)",
-  "smart-accounts": "Smart Accounts (beta)",
-  "wallet-apis": "Wallet APIs (beta)",
+  "aa-infra": "AA Infra",
+  common: "Alchemy Common",
+  "smart-accounts": "Smart Accounts",
+  "wallet-apis": "Wallet APIs",
 } as const;
 
 // Be sure to keep in sync w/ SDK_PATH_REGEX in the `docs-site` repo.

@@ -183,8 +183,23 @@ function main(): void {
     `Including v5 sections: ${filteredV5Contents.map((c: any) => c.section).join(", ")}`,
   );
 
-  // Merge: v5 sections first (beta), then main (v4) sections
-  const mergedContents = [...filteredV5Contents, ...filteredMainContents];
+  // Wrap v5 and v4 sections in version sub-sections
+  const mergedContents: unknown[] = [];
+
+  if (filteredV5Contents.length > 0) {
+    mergedContents.push({
+      section: "5.x.x (beta)",
+      contents: filteredV5Contents,
+    });
+  }
+
+  if (filteredMainContents.length > 0) {
+    mergedContents.push({
+      section: "4.x.x",
+      collapsed: true,
+      contents: filteredMainContents,
+    });
+  }
 
   // Build the merged SDK Reference structure
   const mergedSdkReference = {
@@ -226,7 +241,7 @@ function main(): void {
 
   console.log(`\n✅ Updated ${mainDocsYml} with merged SDK Reference`);
   console.log(
-    `   ${filteredMainContents.length} v4 sections + ${filteredV5Contents.length} v5 sections = ${mergedContents.length} total`,
+    `   ${filteredV5Contents.length} v5 sections (under "5.x.x (beta)") + ${filteredMainContents.length} v4 sections (under "4.x.x", collapsed)`,
   );
 }
 

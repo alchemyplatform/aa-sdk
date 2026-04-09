@@ -12,7 +12,7 @@ navigation:
     layout:
       - section: SDK Reference
         contents:
-          - section: AA Infra (beta)
+          - section: AA Infra
             path: wallets/pages/reference/aa-infra/src/README.mdx
             contents:
               - section: Functions
@@ -25,7 +25,7 @@ navigation:
                     path: wallets/pages/reference/aa-infra/src/type-aliases/RundlerClient.mdx
                   - page: RundlerRpcSchema
                     path: wallets/pages/reference/aa-infra/src/type-aliases/RundlerRpcSchema.mdx
-          - section: Alchemy Common (beta)
+          - section: Alchemy Common
             path: wallets/pages/reference/common/src/README.mdx
             contents:
               - section: Classes
@@ -90,7 +90,7 @@ navigation:
                 contents:
                   - page: AlchemyConnectionConfigSchema
                     path: wallets/pages/reference/common/src/variables/AlchemyConnectionConfigSchema.mdx
-          - section: Smart Accounts (beta)
+          - section: Smart Accounts
             path: wallets/pages/reference/smart-accounts/src/README.mdx
             contents:
               - section: Classes
@@ -395,7 +395,7 @@ navigation:
                     path: wallets/pages/reference/smart-accounts/src/variables/semiModularAccount7702StaticImpl.mdx
                   - page: semiModularAccountV2StaticImpl
                     path: wallets/pages/reference/smart-accounts/src/variables/semiModularAccountV2StaticImpl.mdx
-          - section: Wallet APIs (beta)
+          - section: Wallet APIs
             path: wallets/pages/reference/wallet-apis/src/exports/README.mdx
             contents:
               - section: Functions
