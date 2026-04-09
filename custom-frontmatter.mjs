@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import {
   ReflectionKind,
   DeclarationReflection,
@@ -828,6 +830,39 @@ export function load(app) {
     (page) => {
       if (!page.contents) return;
 
+      const slug = page.frontmatter?.slug;
+      const isReadmeFile = page.url && page.url.endsWith("README.mdx");
+
+      // For README pages, inject the package README.md content before link
+      // rewrites so that any relative links in the README get normalized too.
+      if (isReadmeFile && page.url) {
+        // page.url is e.g. "wallet-apis/src/exports/README.mdx"
+        // Package dir is the first segment: "wallet-apis"
+        const segments = page.url.split("/");
+        if (segments.length >= 1) {
+          const pkgDir = join("packages", segments[0]);
+          try {
+            const raw = readFileSync(join(pkgDir, "README.md"), "utf-8");
+            // Strip the first markdown heading (# title) since the page already
+            // has a title via frontmatter, then trim.
+            const stripped = raw.replace(/^#\s+.+\n+/, "").trim();
+            if (stripped) {
+              // Insert after frontmatter, before TypeDoc content
+              const fmMatch = page.contents.match(/^(---\n[\s\S]*?\n---\n)/);
+              if (fmMatch) {
+                const fm = fmMatch[1];
+                const rest = page.contents.substring(fm.length);
+                page.contents = fm + "\n" + stripped + "\n\n" + rest;
+              } else {
+                page.contents = stripped + "\n\n" + page.contents;
+              }
+            }
+          } catch {
+            // No README.md — that's fine, skip.
+          }
+        }
+      }
+
       // Strip .mdx extension from relative markdown links.
       // The docs site uses extensionless slug-based URLs.
       page.contents = page.contents.replace(
@@ -838,8 +873,6 @@ export function load(app) {
       // For README/index pages, convert relative links to absolute slug paths.
       // Without this, relative links resolve from the parent path because the
       // slug (e.g. wallets/reference/aa-sdk/core) has no trailing slash.
-      const slug = page.frontmatter?.slug;
-      const isReadmeFile = page.url && page.url.endsWith("README.mdx");
       if (slug && isReadmeFile) {
         page.contents = page.contents.replace(
           /\]\((?!https?:\/\/|\/|#)([^)]+)\)/g,
