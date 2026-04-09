@@ -1,10 +1,8 @@
-# @account-kit/react-native-signer (Alpha)
+# @account-kit/react-native-signer
+
+> **Deprecation Notice:** This package is being deprecated in SDK v5.x.x and is no longer supported for new integrations.
 
 React Native compatible signer implementation
-
-## ⚠️ Alpha ⚠️
-
-This is an alpha release of the library. Only the **Android** platform is supported at this time.
 
 ## Installation
 
