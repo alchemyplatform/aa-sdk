@@ -45,7 +45,7 @@ export type CreateDeferredActionTypedDataParams = {
   nonce: bigint;
 };
 
-export type BuildPreSignatureDeferredActionDigestParams = {
+export type BuildPreSignatureDeferredActionPayloadParams = {
   typedData: DeferredActionTypedData;
 };
 
@@ -60,8 +60,8 @@ export type DeferralActions = {
   createDeferredActionTypedDataObject: (
     args: CreateDeferredActionTypedDataParams,
   ) => Promise<DeferredActionReturnData>;
-  buildPreSignatureDeferredActionDigest: (
-    args: BuildPreSignatureDeferredActionDigestParams,
+  buildPreSignatureDeferredActionPayload: (
+    args: BuildPreSignatureDeferredActionPayloadParams,
   ) => Hex;
   getEntityIdAndNonce: (
     args: EntityIdAndNonceParams,
@@ -72,7 +72,7 @@ export type DeferralActions = {
  * Provides deferred action functionalities for a MA v2 client, ensuring compatibility with `SmartAccountClient`.
  *
  * @param {ModularAccountV2Client} client - The client instance which provides account and sendUserOperation functionality.
- * @returns {object} - An object containing three methods: `createDeferredActionTypedDataObject`, `buildDeferredActionDigest`, and `buildUserOperationWithDeferredAction`.
+ * @returns {object} - An object containing three methods: `createDeferredActionTypedDataObject`, `buildPreSignatureDeferredActionPayload`, and `buildUserOperationWithDeferredAction`.
  */
 export const deferralActions = <
   TTransport extends Transport = Transport,
@@ -114,9 +114,9 @@ export const deferralActions = <
     };
   };
 
-  const buildPreSignatureDeferredActionDigest = ({
+  const buildPreSignatureDeferredActionPayload = ({
     typedData,
-  }: BuildPreSignatureDeferredActionDigestParams): Hex => {
+  }: BuildPreSignatureDeferredActionPayloadParams): Hex => {
     const account = client.account;
     if (!account || !isModularAccountV2(account)) {
       throw new AccountNotFoundError();
@@ -187,7 +187,7 @@ export const deferralActions = <
 
   return {
     createDeferredActionTypedDataObject,
-    buildPreSignatureDeferredActionDigest,
+    buildPreSignatureDeferredActionPayload,
     getEntityIdAndNonce,
   };
 };

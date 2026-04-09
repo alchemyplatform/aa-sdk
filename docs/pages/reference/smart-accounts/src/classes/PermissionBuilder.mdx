@@ -343,7 +343,7 @@ The permission builder instance.
 
 ```ts
 compileDeferred(): Promise<{
-  fullPreSignatureDeferredActionDigest: `0x${string}`;
+  fullPreSignatureDeferredActionPayload: `0x${string}`;
   typedData: MessageDefinition;
 }>;
 ```
@@ -355,11 +355,11 @@ Compiles the deferred action typed data to sign.
 #### Returns
 
 `Promise`\<\{
-`fullPreSignatureDeferredActionDigest`: `` `0x${string}` ``;
+`fullPreSignatureDeferredActionPayload`: `` `0x${string}` ``;
 `typedData`: [`MessageDefinition`](https://viem.sh);
 }>
 
-The deferred action typed data and the full pre-signature deferred action digest.
+The deferred action typed data and the full pre-signature deferred action payload.
 
 ---
 
