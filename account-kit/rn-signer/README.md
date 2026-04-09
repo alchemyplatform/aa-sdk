@@ -1,10 +1,8 @@
-# @account-kit/react-native-signer (Alpha)
+# @account-kit/react-native-signer
 
-React Native compatible Alchemy signer impl
+> **Deprecation Notice:** This package is being deprecated in SDK v5.x.x and is no longer supported for new integrations.
 
-## ⚠️ Alpha ⚠️
-
-This is an alpha release of the library. Only the **Android** platform is supported at this time.
+React Native compatible signer implementation
 
 ## Installation
 
@@ -26,10 +24,10 @@ If using passkeys, there are iOS- and Android-specific steps to link your app to
 
 #### Deep Linking
 
-We recommend using emails containing OTP codes (the default setting) to avoid the need for this step.
+Use emails containing OTP codes (the default setting) to avoid the need for this step.
 
-If using emails with magic links, your app will need to be configured to handle deep linking. Check out the React Native [docs](https://reactnative.dev/docs/linking#enabling-deep-links) for more information.
-You will also need a way to trigger the deep link via a http or https url. This can be done in a viarety of ways ranging from universal links to setting up a custom redirect server.
+If using emails with magic links, your app needs to be configured to handle deep linking. Check out the React Native [docs](https://reactnative.dev/docs/linking#enabling-deep-links) for more information.
+You will also need a way to trigger the deep link via an HTTP or HTTPS URL. This can be done in a variety of ways ranging from universal links to setting up a custom redirect server.
 
 See the [example app](./example) for usage information.
 

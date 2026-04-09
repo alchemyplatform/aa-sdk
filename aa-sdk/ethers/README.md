@@ -1,5 +1,7 @@
 # `@aa-sdk/ethers`
 
+> **No longer actively maintained.** This package only receives critical fixes. Use [viem](https://viem.sh) instead.
+
 This package contains `EthersProviderAdapter` and `AccountSigner`, respective extensions of the [`JsonRpcProvider`](https://docs.ethers.org/v5/api/providers/jsonrpc-provider/) and [`Signer`](https://docs.ethers.org/v5/api/signer/) classes defined in [`ethers.js`](https://docs.ethers.org/v5/) external library.
 
 If you currently rely `ethers.js` for web3 development, you can use these `ethers.js`-compatible `JsonRpcProvider` and `Signer` to integrate Account Abstraction into your dApp. You may also find the [`util`](https://www.alchemy.com/docs/wallets/packages/aa-ethers/utils/introduction) methods helpful.
@@ -52,7 +54,7 @@ const signer: SmartAccountSigner = LocalAccountSigner.mnemonicToAccountSigner(
 );
 
 // 2. Connect the provider to the smart account signer
-export const signer = provider.connectToAccount(
+export const connectedAccount = provider.connectToAccount(
   (rpcClient) =>
     new LightSmartContractAccount({
       chain,
