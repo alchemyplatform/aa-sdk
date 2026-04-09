@@ -44,6 +44,7 @@ const ERC20_APPROVE_SELECTOR = "0x095ea7b3";
 const ERC20_TRANSFER_SELECTOR = "0xa9059cbb";
 const ACCOUNT_EXECUTE_SELECTOR = "0xb61d27f6";
 const ACCOUNT_EXECUTEBATCH_SELECTOR = "0x34fcd5be";
+const ACCOUNT_PERFORM_CREATE_SELECTOR = "0x5998db5c";
 
 /**
  * A pseudo-enum for permission types.
@@ -289,6 +290,9 @@ export class PermissionBuilder {
    * @returns {this} The permission builder instance.
    */
   addSelector({ selector }: { selector: Hex }): this {
+    if (selector === ACCOUNT_PERFORM_CREATE_SELECTOR) {
+      throw new SelectorNotAllowed("performCreate");
+    }
     this.selectors.push(selector);
     return this;
   }
@@ -351,13 +355,17 @@ export class PermissionBuilder {
       if (permission.data.functions.length === 0) {
         throw new NoFunctionsProvidedError(permission);
       }
-      // Explicitly disallow adding execute & executeBatch
+      // Explicitly disallow adding execute, executeBatch, and performCreate
       if (permission.data.functions.includes(ACCOUNT_EXECUTE_SELECTOR)) {
         throw new SelectorNotAllowed("execute");
       } else if (
         permission.data.functions.includes(ACCOUNT_EXECUTEBATCH_SELECTOR)
       ) {
         throw new SelectorNotAllowed("executeBatch");
+      } else if (
+        permission.data.functions.includes(ACCOUNT_PERFORM_CREATE_SELECTOR)
+      ) {
+        throw new SelectorNotAllowed("performCreate");
       }
       this.selectors = [...this.selectors, ...permission.data.functions];
     }
