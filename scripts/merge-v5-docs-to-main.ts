@@ -161,23 +161,20 @@ function main(): void {
   const v5Contents = extractSdkReferenceContents(v5Lines, v5Block);
   const mainContents = extractSdkReferenceContents(mainLines, mainBlock);
 
-  // If main already has the versioned structure (from a prior merge), extract
-  // the v4 packages from inside the "4.x.x" subsection rather than treating
-  // the top-level version sections as v4 content.
-  const existing4xSection = mainContents.find(
+  // Main's SDK Reference has versioned subsections: "5.x.x (beta)" and "4.x.x".
+  // Extract the v4 packages from inside the "4.x.x" subsection.
+  const v4Section = mainContents.find(
     (item: any) =>
       typeof item.section === "string" && item.section.startsWith("4.x.x"),
   ) as { section: string; contents?: unknown[] } | undefined;
 
-  const v4Contents = existing4xSection
-    ? (existing4xSection.contents ?? [])
-    : mainContents;
-
-  if (existing4xSection) {
-    console.log(
-      `Main already has versioned structure — extracting v4 packages from "${existing4xSection.section}"`,
+  if (!v4Section) {
+    throw new Error(
+      'Could not find "4.x.x" subsection in main\'s SDK Reference',
     );
   }
+
+  const v4Contents = v4Section.contents ?? [];
 
   console.log(
     `v5 sections: ${v5Contents.map((c: any) => c.section).join(", ")}`,
