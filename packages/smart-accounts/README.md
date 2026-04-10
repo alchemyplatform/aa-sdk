@@ -10,6 +10,49 @@ Viem-compatible smart account implementations for Alchemy's smart contract accou
 npm install @alchemy/smart-accounts @alchemy/common viem
 ```
 
+## Example Usage
+
+```ts
+import { createPublicClient } from "viem";
+import {
+  createBundlerClient,
+  createPaymasterClient,
+} from "viem/account-abstraction";
+import { sepolia } from "viem/chains";
+import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
+import { alchemyTransport } from "@alchemy/common";
+import { estimateFeesPerGas } from "@alchemy/aa-infra";
+import { toModularAccountV2 } from "@alchemy/smart-accounts";
+
+const transport = alchemyTransport({ apiKey: "YOUR_API_KEY" });
+
+// 1. Create a MAv2 smart account
+const account = await toModularAccountV2({
+  client: createPublicClient({ chain: sepolia, transport }),
+  owner: privateKeyToAccount(generatePrivateKey()),
+});
+
+// 2. Create a bundler client with the account
+const bundlerClient = createBundlerClient({
+  account,
+  chain: sepolia,
+  transport,
+  userOperation: {
+    estimateFeesPerGas,
+  },
+  // Optional: sponsor gas with a paymaster
+  paymaster: createPaymasterClient({ transport }),
+  paymasterContext: { policyId: "YOUR_POLICY_ID" },
+});
+
+// 3. Send a user operation
+const hash = await bundlerClient.sendUserOperation({
+  calls: [{ to: "0x...", value: 0n, data: "0x" }],
+});
+
+const receipt = await bundlerClient.waitForUserOperationReceipt({ hash });
+```
+
 ## Key Exports
 
 ### LightAccount
