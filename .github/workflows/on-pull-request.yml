@@ -185,7 +185,7 @@ jobs:
           # Restore v5 reference files that typedoc's cleanOutputDir deleted.
           # Only restore files under known v5 package directories to avoid masking
           # legitimate v4 deletions (e.g. removed APIs, config changes).
-          V5_PACKAGES="wallet-apis"
+          V5_PACKAGES="aa-infra common smart-accounts wallet-apis"
           for pkg in $V5_PACKAGES; do
             # Only check for deleted files if the package dir was tracked by git
             if git cat-file -e "HEAD:docs/pages/reference/$pkg" 2>/dev/null; then
