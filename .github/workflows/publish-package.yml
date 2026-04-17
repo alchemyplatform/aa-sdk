@@ -39,12 +39,30 @@ jobs:
       packages: write
 
     steps:
+      - name: Generate app token
+        id: app-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.PR_BYPASSER_APP_ID }}
+          private-key: ${{ secrets.PR_BYPASSER_PRIVATE_KEY }}
+
       - name: "Checkout files"
         uses: actions/checkout@v3
         with:
-          token: ${{ secrets.ALCHEMY_BOT_PAT }}
+          token: ${{ steps.app-token.outputs.token }}
           fetch-depth: "0"
           submodules: "recursive"
+      
+      - name: Free up disk space
+        run: |
+          echo "Disk space before cleanup:"
+          df -h
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /opt/ghc
+          sudo rm -rf /opt/hostedtoolcache/CodeQL
+          sudo docker image prune --all --force
+          echo "Disk space after cleanup:"
+          df -h
           
       - name: Setup
         uses: ./.github/actions/setup
@@ -62,7 +80,7 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
 
-      # Lerna publish will, compute the new version, update files, run precommit hooks, tag, publish, and push change log
+      # Lerna publish will compute the new version, update files, run precommit hooks, tag, publish, and push
       - name: Publish using Lerna
         if: inputs.publish
         env:

@@ -1,7 +1,8 @@
-import type { Chain, Transport } from "viem";
-import type {
-  GetEntryPointFromAccount,
-  SmartContractAccount,
+import { type Chain, type Transport, concatHex, toHex, zeroHash } from "viem";
+import {
+  isSmartAccountWithSigner,
+  type GetEntryPointFromAccount,
+  type SmartContractAccount,
 } from "../../../account/smartContractAccount.js";
 import type { BaseSmartAccountClient } from "../../../client/smartAccountClient.js";
 import { AccountNotFoundError } from "../../../errors/account.js";
@@ -89,6 +90,39 @@ export async function _initUserOperation<
           callData,
           signature,
         } as Deferrable<UserOperationStruct<TEntryPointVersion>>);
+
+  const is7702 =
+    account.source === "ModularAccountV2" &&
+    isSmartAccountWithSigner(account) &&
+    (await account.getSigner().getAddress()).toLowerCase() ===
+      account.address.toLowerCase();
+
+  if (is7702) {
+    if (entryPoint.version !== "0.7.0") {
+      throw new Error("7702 is only compatible with EntryPoint v0.7.0");
+    }
+
+    const [implementationAddress, code = "0x", nonce] = await Promise.all([
+      account.getImplementationAddress(),
+      client.getCode({ address: account.address }),
+      client.getTransactionCount({ address: account.address }),
+    ]);
+
+    const isAlreadyDelegated =
+      code.toLowerCase() ===
+      concatHex(["0xef0100", implementationAddress]).toLowerCase();
+
+    if (!isAlreadyDelegated) {
+      (struct as UserOperationStruct<"0.7.0">).eip7702Auth = {
+        chainId: toHex(client.chain.id),
+        nonce: toHex(nonce),
+        address: implementationAddress,
+        r: zeroHash, // aka `bytes32(0)`
+        s: zeroHash,
+        yParity: "0x0",
+      };
+    }
+  }
 
   return struct;
 }

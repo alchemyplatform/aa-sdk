@@ -65,7 +65,6 @@ export interface EntryPointRegistry<TChain extends Chain = Chain>
   "0.7.0": SupportedEntryPoint<"0.7.0", TChain, typeof EntryPointAbi_v7>;
 }
 
-// [!region EntryPointDef]
 export type EntryPointDef<
   TEntryPointVersion extends EntryPointVersion = EntryPointVersion,
   TChain extends Chain = Chain,
@@ -82,7 +81,6 @@ export type EntryPointDef<
     userOperation: UserOperationRequest<TEntryPointVersion>,
   ) => Hex;
 };
-// [!endregion EntryPointDef]
 
 export interface EntryPointDefRegistry<TChain extends Chain = Chain>
   extends EntryPointRegistryBase<

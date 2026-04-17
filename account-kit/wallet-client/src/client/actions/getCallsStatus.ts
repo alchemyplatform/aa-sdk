@@ -1,15 +1,19 @@
 import type { InnerWalletApiClient } from "../../types.ts";
-import type { Static } from "@sinclair/typebox";
-import { wallet_getCallsStatus } from "@alchemy/wallet-api-types/rpc";
+import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
 import { metrics } from "../../metrics.js";
 
-export type GetCallsStatusParams = Static<
-  typeof wallet_getCallsStatus
->["Request"]["params"][0];
+type RpcSchema = Extract<
+  WalletServerRpcSchemaType,
+  {
+    Request: {
+      method: "wallet_getCallsStatus";
+    };
+  }
+>;
 
-export type GetCallsStatusResult = Static<
-  typeof wallet_getCallsStatus
->["ReturnType"];
+export type GetCallsStatusParams = RpcSchema["Request"]["params"][0];
+
+export type GetCallsStatusResult = RpcSchema["ReturnType"];
 
 /**
  * Gets the status of a prepared call by its ID.
@@ -28,8 +32,8 @@ export type GetCallsStatusResult = Static<
  * // After sending prepared calls
  * const sendResult = await client.sendPreparedCalls({...});
  *
- * // Check the status of the first call ID
- * const status = await client.getCallsStatus(sendResult.preparedCallIds[0]);
+ * // Check the status of the call ID
+ * const status = await client.getCallsStatus(sendResult.id);
  * ```
  */
 export async function getCallsStatus(

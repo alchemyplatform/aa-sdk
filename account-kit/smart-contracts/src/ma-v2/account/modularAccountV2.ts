@@ -13,6 +13,7 @@ import {
 import {
   concatHex,
   encodeFunctionData,
+  isAddressEqual,
   type Address,
   type Chain,
   type Hex,
@@ -210,7 +211,7 @@ export async function createModularAccountV2<
         const accountAddress = _accountAddress ?? signerAddress;
         if (
           entityId === DEFAULT_OWNER_ENTITY_ID &&
-          signerAddress !== accountAddress
+          !isAddressEqual(signerAddress, accountAddress)
         ) {
           throw new EntityIdOverrideError();
         }

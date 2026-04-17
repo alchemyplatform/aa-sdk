@@ -121,7 +121,7 @@ export const AuthCardContent = ({
   }, [isConnected, authStep.type, closeAuthModal, config, setAuthStep]);
 
   useEffect(() => {
-    if (authStep.type === "complete") {
+    if (isConnected && authStep.type === "complete") {
       didGoBack.current = false;
       closeAuthModal();
       onAuthSuccess?.();

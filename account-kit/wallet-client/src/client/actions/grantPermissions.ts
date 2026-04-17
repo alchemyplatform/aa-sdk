@@ -1,27 +1,32 @@
-import { AccountNotFoundError, type SmartAccountSigner } from "@aa-sdk/core";
+import { AccountNotFoundError } from "@aa-sdk/core";
 import {
   toHex,
   type Address,
   type Hex,
   type IsUndefined,
   type Prettify,
+  concatHex,
+  serializeSignature,
 } from "viem";
 import type { InnerWalletApiClient } from "../../types.ts";
-import type { Static } from "@sinclair/typebox";
-import { wallet_createSession } from "@alchemy/wallet-api-types/rpc";
-import { encodePermissionsContext } from "@alchemy/wallet-api-types/capabilities";
+import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
 import { signSignatureRequest } from "./signSignatureRequest.js";
 import { metrics } from "../../metrics.js";
+import type { SmartWalletSigner } from "../index.js";
+
+type RpcSchema = Extract<
+  WalletServerRpcSchemaType,
+  {
+    Request: {
+      method: "wallet_createSession";
+    };
+  }
+>;
 
 export type GrantPermissionsParams<
   TAccount extends Address | undefined = Address | undefined,
 > = Prettify<
-  Omit<
-    Static<
-      (typeof wallet_createSession)["properties"]["Request"]["properties"]["params"]
-    >[0],
-    "account" | "chainId"
-  > &
+  Omit<RpcSchema["Request"]["params"][0], "account" | "chainId"> &
     (IsUndefined<TAccount> extends true
       ? { account: Address }
       : { account?: never })
@@ -90,7 +95,7 @@ export async function grantPermissions<
   TAccount extends Address | undefined = Address | undefined,
 >(
   client: InnerWalletApiClient,
-  signer: SmartAccountSigner,
+  signer: SmartWalletSigner,
   params: GrantPermissionsParams<TAccount>,
 ): Promise<GrantPermissionsResult> {
   metrics.trackEvent({
@@ -115,11 +120,31 @@ export async function grantPermissions<
 
   const signature = await signSignatureRequest(signer, signatureRequest);
 
+  let signatureHex: Hex;
+  if (typeof signature.data === "string") {
+    signatureHex = signature.data;
+  } else {
+    const sigData = signature.data;
+    if ("yParity" in sigData) {
+      signatureHex = serializeSignature({
+        r: sigData.r,
+        s: sigData.s,
+        yParity: Number(sigData.yParity),
+      });
+    } else {
+      signatureHex = serializeSignature({
+        r: sigData.r,
+        s: sigData.s,
+        v: BigInt(sigData.v),
+      });
+    }
+  }
+
   return {
-    context: encodePermissionsContext({
-      contextVersion: "REMOTE_MODE_DEFERRED_ACTION",
+    context: concatHex([
+      "0x00", // remote mode
       sessionId,
-      signature: signature.data,
-    }),
+      signatureHex,
+    ]),
   };
 }

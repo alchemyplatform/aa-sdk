@@ -71,6 +71,10 @@ describe("tailwind utils test", () => {
               "dark": "#FF66CC",
               "light": "#E82594",
             },
+            "fg-btn-primary": {
+              "dark": "#FFF",
+              "light": "#FFF",
+            },
             "fg-critical": {
               "dark": "#F87171",
               "light": "#B91C1C",

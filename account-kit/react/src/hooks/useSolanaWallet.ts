@@ -68,7 +68,7 @@ export const EMPTY_WALLET_CONTEXT_STATE: WalletContextState = Object.freeze({
  *   frozen, safe no-op context when Solana is not configured.
  *
  * @example
- * ```ts
+ * ```ts twoslash
  * import { useSolanaWallet } from "@account-kit/react";
  *
  * const wallet = useSolanaWallet();

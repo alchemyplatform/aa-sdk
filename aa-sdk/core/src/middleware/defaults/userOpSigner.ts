@@ -7,6 +7,12 @@ import {
   resolveProperties,
 } from "../../utils/index.js";
 import type { ClientMiddlewareFn } from "../types";
+import { type Authorization, type Hex, hexToNumber, toHex } from "viem";
+import {
+  isSmartAccountWithSigner,
+  type SmartContractAccount,
+} from "../../account/smartContractAccount.js";
+import { BaseError } from "../../errors/base.js";
 
 /**
  * Provides a default middleware function for signing user operations with a client account. This function validates the request and adds the signature to it.
@@ -41,5 +47,39 @@ export const defaultUserOpSigner: ClientMiddlewareFn = async (
     signature: await account.signUserOperationHash(
       account.getEntryPoint().getUserOperationHash(request),
     ),
+    ...(resolvedStruct.eip7702Auth && {
+      eip7702Auth: await signAuthorization(account, resolvedStruct.eip7702Auth),
+    }),
+  };
+};
+
+const signAuthorization = async (
+  account: SmartContractAccount,
+  unsignedAuthorization: Authorization<Hex, false>,
+) => {
+  if (!account || !isSmartAccountWithSigner(account)) {
+    throw new AccountNotFoundError();
+  }
+
+  const signer = account.getSigner();
+  if (!signer.signAuthorization) {
+    throw new BaseError(
+      "Signer must implement signAuthorization to sign EIP-7702 authorizations.",
+    );
+  }
+
+  const signedAuthorization = await signer.signAuthorization({
+    chainId: hexToNumber(unsignedAuthorization.chainId),
+    contractAddress: unsignedAuthorization.address,
+    nonce: hexToNumber(unsignedAuthorization.nonce),
+  });
+
+  return {
+    chainId: toHex(signedAuthorization.chainId),
+    nonce: toHex(signedAuthorization.nonce),
+    address: signedAuthorization.address,
+    r: signedAuthorization.r,
+    s: signedAuthorization.s,
+    yParity: toHex(signedAuthorization.yParity ?? signedAuthorization.v - 27n),
   };
 };

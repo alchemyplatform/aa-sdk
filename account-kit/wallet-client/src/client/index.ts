@@ -4,18 +4,25 @@ import {
   type Address,
   type Chain,
   type Prettify,
+  type Transport,
   createClient,
   custom,
+  type JsonRpcAccount,
 } from "viem";
-import type { InnerWalletApiClient } from "../types.ts";
+import type { InnerWalletApiClientBase } from "../types.ts";
 import {
   smartWalletClientActions,
   type SmartWalletActions,
 } from "./decorator.js";
-import { Provider } from "ox";
-import { WalletServerRpcSchema } from "@alchemy/wallet-api-types/rpc";
+import { Provider, RpcSchema } from "ox";
+import type {
+  WalletServerRpcSchemaType,
+  WalletServerViemRpcSchema,
+} from "@alchemy/wallet-api-types/rpc";
 import { internalStateDecorator } from "../internal/decorator.js";
 import { metrics } from "../metrics.js";
+
+export type SmartWalletSigner = SmartAccountSigner<any>;
 
 export type SmartWalletClientParams<
   TAccount extends Address | undefined = Address | undefined,
@@ -23,7 +30,7 @@ export type SmartWalletClientParams<
   {
     transport: AlchemyTransport;
     chain: Chain;
-    signer: SmartAccountSigner;
+    signer: SmartWalletSigner;
     account?: TAccount | Address | undefined;
   } & (
     | { policyId?: string; policyIds?: never }
@@ -33,7 +40,7 @@ export type SmartWalletClientParams<
 
 export type SmartWalletClient<
   TAccount extends Address | undefined = Address | undefined,
-> = InnerWalletApiClient & SmartWalletActions<TAccount>;
+> = InnerWalletApiClientBase<SmartWalletActions<TAccount>>;
 
 /**
  * Creates a smart wallet client that can be used to interact with a smart account.
@@ -79,11 +86,18 @@ export function createSmartWalletClient(
       ? params.policyIds
       : undefined;
 
-  const innerClient = createClient({
+  const innerClient = createClient<
+    Transport,
+    Chain,
+    JsonRpcAccount<Address> | undefined,
+    WalletServerViemRpcSchema
+  >({
     transport: (opts) =>
-      custom(Provider.from(transport(opts), { schema: WalletServerRpcSchema }))(
-        opts,
-      ),
+      custom(
+        Provider.from(transport(opts), {
+          schema: RpcSchema.from<WalletServerRpcSchemaType>(),
+        }),
+      )(opts),
     chain,
     account,
   }).extend(() => ({

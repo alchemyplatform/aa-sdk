@@ -65,16 +65,20 @@ export type UseSendPreparedCallsResult = {
  * - `error`: Error from the last failed prepared call execution, if any
  *
  * @example
- * ```tsx
+ * ```ts twoslash
+ * import { useSendPreparedCalls } from "@account-kit/react";
+ *
  * const { sendPreparedCalls, sendPreparedCallsAsync, isSendingPreparedCalls, error } = useSendPreparedCalls();
  *
  * // Send prepared calls
  * await sendPreparedCallsAsync({
- *   preparedCalls: [/* prepared call objects *\/]
+ *   preparedCalls: [
+ *     // prepared call objects
+ *   ]
  * });
  * ```
  *
- * @description
+ * @remarks
  * - This hook only works with smart accounts and does not support EOA wallets
  * - The hook handles the signing and sending of prepared calls
  * - The returned result contains the prepared call IDs

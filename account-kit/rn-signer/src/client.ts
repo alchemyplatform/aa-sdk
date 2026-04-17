@@ -32,6 +32,7 @@ import {
   type SubmitOtpCodeResponse,
   type CredentialCreationOptionOverrides,
   type SmsAuthParams,
+  type IdTokenOnly,
 } from "@account-kit/signer";
 import { InAppBrowser } from "react-native-inappbrowser-reborn";
 import { z } from "zod";
@@ -60,12 +61,13 @@ export type ExportWalletParams = {
 
 export type ExportWalletResult = string;
 
+const SESSION_STAMPER = NativeTEKStamper;
+
 // TODO: need to emit events
 export class RNSignerClient extends BaseSignerClient<
   ExportWalletParams,
   string
 > {
-  private stamper = NativeTEKStamper;
   oauthCallbackUrl: string;
   rpId: string | undefined;
   private validAuthenticatingTypes: AuthenticatingEventMetadata["type"][] = [
@@ -79,7 +81,7 @@ export class RNSignerClient extends BaseSignerClient<
       RNSignerClientParamsSchema.parse(params);
 
     super({
-      stamper: NativeTEKStamper,
+      stamper: SESSION_STAMPER,
       rootOrgId: rootOrgId ?? "24c1acf5-810f-41e0-a503-d5d13fa8e830",
       connection,
     });
@@ -92,7 +94,7 @@ export class RNSignerClient extends BaseSignerClient<
     args: Omit<OtpParams, "targetPublicKey">,
   ): Promise<SubmitOtpCodeResponse> {
     this.eventEmitter.emit("authenticating", { type: "otpVerify" });
-    const publicKey = await this.stamper.init();
+    const publicKey = await this.initSessionStamper();
 
     const response = await this.request("/v1/otp", {
       ...args,
@@ -129,7 +131,7 @@ export class RNSignerClient extends BaseSignerClient<
     params: Omit<EmailAuthParams, "targetPublicKey">,
   ): Promise<{ orgId: string; otpId?: string; multiFactors?: MfaFactor[] }> {
     this.eventEmitter.emit("authenticating", { type: "email" });
-    const targetPublicKey = await this.stamper.init();
+    const targetPublicKey = await this.initSessionStamper();
 
     try {
       return await this.request("/v1/auth", {
@@ -155,7 +157,7 @@ export class RNSignerClient extends BaseSignerClient<
   ): Promise<{ orgId: string; otpId?: string }> {
     this.eventEmitter.emit("authenticating", { type: "sms" });
     const { phone } = params;
-    const targetPublicKey = await this.stamper.init();
+    const targetPublicKey = await this.initSessionStamper();
 
     return this.request("/v1/auth", {
       phone,
@@ -168,7 +170,7 @@ export class RNSignerClient extends BaseSignerClient<
   ): Promise<JwtResponse> {
     this.eventEmitter.emit("authenticating", { type: "custom-jwt" });
 
-    const publicKey = await this.stamper.init();
+    const publicKey = await this.initSessionStamper();
     return this.request("/v1/auth-jwt", {
       jwt: args.jwt,
       targetPublicKey: publicKey,
@@ -193,9 +195,9 @@ export class RNSignerClient extends BaseSignerClient<
       type: params.authenticatingType,
     });
 
-    await this.stamper.init();
+    await this.initSessionStamper();
 
-    const result = await this.stamper.injectCredentialBundle(params.bundle);
+    const result = await SESSION_STAMPER.injectCredentialBundle(params.bundle);
 
     if (!result) {
       throw new Error("Failed to inject credential bundle");
@@ -210,9 +212,10 @@ export class RNSignerClient extends BaseSignerClient<
     this.eventEmitter.emit(params.connectedEventName, user, params.bundle);
     return user;
   }
+
   override oauthWithRedirect = async (
     args: Extract<OauthParams, { mode: "redirect" }>,
-  ): Promise<User> => {
+  ): Promise<User | IdTokenOnly> => {
     // Ensure the In-App Browser required for authentication is available
     if (!(await InAppBrowser.isAvailable())) {
       throw new InAppBrowserUnavailableError();
@@ -221,7 +224,7 @@ export class RNSignerClient extends BaseSignerClient<
     this.eventEmitter.emit("authenticating", { type: "oauth" });
 
     const oauthParams = args;
-    const turnkeyPublicKey = await this.stamper.init();
+    const turnkeyPublicKey = await this.initSessionStamper();
     const oauthCallbackUrl = this.oauthCallbackUrl;
     const oauthConfig = await this.getOauthConfig();
     const providerUrl = await this.getOauthProviderUrl({
@@ -233,7 +236,6 @@ export class RNSignerClient extends BaseSignerClient<
     });
     const redirectUrl = args.redirectUrl;
     const res = await InAppBrowser.openAuth(providerUrl, redirectUrl);
-
     if (res.type !== "success" || !res.url) {
       throw new OauthFailedError("An error occured completing your request");
     }
@@ -245,26 +247,40 @@ export class RNSignerClient extends BaseSignerClient<
     const accessToken = authResult["alchemy-access-token"];
     const isSignup = authResult["alchemy-is-signup"];
     const error = authResult["alchemy-error"];
+    const status = authResult["alchemy-status"];
+    const providerName = authResult["alchemy-auth-provider"];
 
     if (error) {
       throw new OauthFailedError(error);
     }
 
-    if (bundle && orgId && idToken) {
-      const user = await this.completeAuthWithBundle({
-        bundle,
-        orgId,
-        connectedEventName: "connectedOauth",
-        idToken,
-        accessToken,
-        authenticatingType: "oauth",
-      });
-
-      if (isSignup) {
-        this.eventEmitter.emit("newUserSignup");
+    if (status === "FETCHED_ID_TOKEN_ONLY") {
+      // This supports the add auth provider flow
+      if (idToken && providerName) {
+        return {
+          status: "FETCHED_ID_TOKEN_ONLY",
+          idToken,
+          accessToken,
+          providerName,
+        };
       }
+    } else {
+      // This supports the sign in with auth flow
+      if (bundle && orgId && idToken) {
+        const user = await this.completeAuthWithBundle({
+          bundle,
+          orgId,
+          connectedEventName: "connectedOauth",
+          idToken,
+          accessToken,
+          authenticatingType: "oauth",
+        });
 
-      return user;
+        if (isSignup) {
+          this.eventEmitter.emit("newUserSignup");
+        }
+        return user;
+      }
     }
 
     // Throw the Alchemy error if available, otherwise throw a generic error.
@@ -279,14 +295,14 @@ export class RNSignerClient extends BaseSignerClient<
 
   override async disconnect(): Promise<void> {
     this.user = undefined;
-    this.stamper.clear();
-    await this.stamper.init();
+    SESSION_STAMPER.clear();
+    await this.initSessionStamper();
   }
 
   /**
    * Exports the wallet and returns the decrypted private key or seed phrase.
    *
-   * @param {ExportWalletParams} params - Export parameters
+   * @param {ExportWalletParams} params - exportWallet parameters
    * @returns {Promise<string>} The decrypted private key or seed phrase
    * @throws {Error} If the user is not authenticated or export fails
    */
@@ -411,7 +427,7 @@ export class RNSignerClient extends BaseSignerClient<
   }
 
   override targetPublicKey(): Promise<string> {
-    return this.stamper.init();
+    return this.initSessionStamper();
   }
 
   protected override getWebAuthnAttestation = async (
@@ -446,14 +462,34 @@ export class RNSignerClient extends BaseSignerClient<
   };
 
   protected override getOauthConfig = async (): Promise<OauthConfig> => {
-    const publicKey = await this.stamper.init();
+    const currentStamper = this.turnkeyClient.stamper;
+    const publicKey = await this.initSessionStamper();
 
+    // swap the stamper back in case the user logged in with a different stamper (passkeys)
+    this.setStamper(currentStamper);
     const nonce = this.getOauthNonce(publicKey);
     return this.request("/v1/prepare-oauth", { nonce });
   };
 
+  private initSessionStamperPromise: Promise<string> | null = null;
+
   protected override async initSessionStamper(): Promise<string> {
-    return this.stamper.init();
+    if (this.initSessionStamperPromise) {
+      return this.initSessionStamperPromise;
+    }
+
+    this.initSessionStamperPromise = (async () => {
+      await SESSION_STAMPER.init();
+      this.setStamper(SESSION_STAMPER);
+      return SESSION_STAMPER.publicKey()!;
+    })();
+
+    try {
+      const result = await this.initSessionStamperPromise;
+      return result;
+    } finally {
+      this.initSessionStamperPromise = null;
+    }
   }
 
   protected override async initWebauthnStamper(

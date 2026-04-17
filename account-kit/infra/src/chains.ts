@@ -8,6 +8,8 @@ import {
   base as vbase,
   baseGoerli as vbaseg,
   baseSepolia as vbases,
+  bsc as vbsc,
+  bscTestnet as vbsct,
   fraxtal as vfrax,
   goerli as vgo,
   mainnet as vmain,
@@ -21,6 +23,12 @@ import {
   arbitrumNova as vabn,
   zora as vzora,
   zoraSepolia as vzoras,
+  worldchain as vwc,
+  worldchainSepolia as vwcs,
+  hyperliquid as vhyperliquid,
+  hyperliquidEvmTestnet as vhyperliquidEvmTestnet,
+  cronos as vCronos,
+  cronosTestnet as vCronosTesnet,
 } from "viem/chains";
 
 export type AlchemyChainConfig = {
@@ -176,6 +184,26 @@ export const baseSepolia: Chain = {
   },
 };
 
+export const bsc: Chain = {
+  ...vbsc,
+  rpcUrls: {
+    ...vbsc.rpcUrls,
+    alchemy: {
+      http: ["https://bnb-mainnet.g.alchemy.com/v2"],
+    },
+  },
+};
+
+export const bscTestnet: Chain = {
+  ...vbsct,
+  rpcUrls: {
+    ...vbsct.rpcUrls,
+    alchemy: {
+      http: ["https://bnb-testnet.g.alchemy.com/v2"],
+    },
+  },
+};
+
 export const polygonMumbai: Chain = {
   ...vpgm,
   rpcUrls: {
@@ -238,41 +266,25 @@ export const zoraSepolia: Chain = {
   },
 };
 
-export const worldChainSepolia: Chain = defineChain({
-  id: 4801,
-  name: "World Chain Sepolia",
-  network: "World Chain Sepolia",
-  nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+export const worldChainSepolia: Chain = {
+  ...vwcs,
   rpcUrls: {
-    default: {
-      http: ["https://worldchain-sepolia.g.alchemy.com/v2"],
-    },
-    public: {
-      http: ["https://worldchain-sepolia.g.alchemy.com/v2"],
-    },
+    ...vwcs.rpcUrls,
     alchemy: {
       http: ["https://worldchain-sepolia.g.alchemy.com/v2"],
     },
   },
-});
+};
 
-export const worldChain: Chain = defineChain({
-  id: 480,
-  name: "World Chain",
-  network: "World Chain",
-  nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+export const worldChain: Chain = {
+  ...vwc,
   rpcUrls: {
-    default: {
-      http: ["https://worldchain-mainnet.g.alchemy.com/v2"],
-    },
-    public: {
-      http: ["https://worldchain-mainnet.g.alchemy.com/v2"],
-    },
+    ...vwc.rpcUrls,
     alchemy: {
       http: ["https://worldchain-mainnet.g.alchemy.com/v2"],
     },
   },
-});
+};
 
 export const shapeSepolia: Chain = defineChain({
   id: 11011,
@@ -503,6 +515,30 @@ export const monadTestnet: Chain = defineChain({
   testnet: true,
 });
 
+export const monadMainnet: Chain = defineChain({
+  id: 143,
+  name: "Monad Mainnet",
+  nativeCurrency: { name: "Monad", symbol: "MON", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://monad-mainnet.g.alchemy.com/v2"],
+    },
+    public: {
+      http: ["https://monad-mainnet.g.alchemy.com/v2"],
+    },
+    alchemy: {
+      http: ["https://monad-mainnet.g.alchemy.com/v2"],
+    },
+  },
+  blockExplorers: {
+    default: {
+      name: "Block Explorer",
+      url: "https://mainnet-beta.monvision.io",
+    },
+  },
+  testnet: false,
+});
+
 export const mekong: Chain = defineChain({
   id: 7078815900,
   name: "Mekong Pectra Devnet",
@@ -641,30 +677,6 @@ export const storyAeneid: Chain = defineChain({
   testnet: true,
 });
 
-export const celoAlfajores: Chain = defineChain({
-  id: 44787,
-  name: "Celo Alfajores",
-  nativeCurrency: { name: "Celo native asset", symbol: "CELO", decimals: 18 },
-  rpcUrls: {
-    default: {
-      http: ["https://celo-alfajores.g.alchemy.com/v2"],
-    },
-    public: {
-      http: ["https://celo-alfajores.g.alchemy.com/v2"],
-    },
-    alchemy: {
-      http: ["https://celo-alfajores.g.alchemy.com/v2"],
-    },
-  },
-  blockExplorers: {
-    default: {
-      name: "Block Explorer",
-      url: "https://celo-alfajores.blockscout.com/",
-    },
-  },
-  testnet: true,
-});
-
 export const celoMainnet: Chain = defineChain({
   id: 42220,
   name: "Celo Mainnet",
@@ -687,6 +699,30 @@ export const celoMainnet: Chain = defineChain({
     },
   },
   testnet: false,
+});
+
+export const celoSepolia: Chain = defineChain({
+  id: 11142220,
+  name: "Celo Sepolia",
+  nativeCurrency: { name: "Celo native asset", symbol: "CELO", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://celo-sepolia.g.alchemy.com/v2"],
+    },
+    public: {
+      http: ["https://celo-sepolia.g.alchemy.com/v2"],
+    },
+    alchemy: {
+      http: ["https://celo-sepolia.g.alchemy.com/v2"],
+    },
+  },
+  blockExplorers: {
+    default: {
+      name: "Block Explorer",
+      url: "https://celo-sepolia.blockscout.com/",
+    },
+  },
+  testnet: true,
 });
 
 export const teaSepolia: Chain = defineChain({
@@ -760,3 +796,139 @@ export const bobaMainnet: Chain = defineChain({
   },
   testnet: false,
 });
+
+export const edgeMainnet: Chain = defineChain({
+  id: 3343,
+  name: "Edge Mainnet",
+  nativeCurrency: { name: "eth", symbol: "eth", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://edge-mainnet.g.alchemy.com/v2"],
+    },
+    public: {
+      http: ["https://edge-mainnet.g.alchemy.com/v2"],
+    },
+    alchemy: {
+      http: ["https://edge-mainnet.g.alchemy.com/v2"],
+    },
+  },
+  blockExplorers: {
+    default: {
+      name: "Block Explorer",
+      url: "https://edge-mainnet.blockscout.com/",
+    },
+  },
+  testnet: false,
+});
+
+export const worldl3devnet: Chain = defineChain({
+  id: 48011,
+  name: "WorldL3 Devnet",
+  nativeCurrency: { name: "eth", symbol: "eth", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://worldl3-devnet.g.alchemy.com/v2"],
+    },
+    public: {
+      http: ["https://worldl3-devnet.g.alchemy.com/v2"],
+    },
+    alchemy: {
+      http: ["https://worldl3-devnet.g.alchemy.com/v2"],
+    },
+  },
+  blockExplorers: {
+    default: {
+      name: "Block Explorer",
+      url: "https://worldl3-devnet.blockscout.com/",
+    },
+  },
+  testnet: true,
+});
+
+export const stableMainnet: Chain = defineChain({
+  id: 988,
+  name: "Stable Mainnet",
+  nativeCurrency: { name: "gUSDT", symbol: "gUSDT", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://stable-mainnet.g.alchemy.com/v2"],
+    },
+    public: {
+      http: ["https://stable-mainnet.g.alchemy.com/v2"],
+    },
+    alchemy: {
+      http: ["https://stable-mainnet.g.alchemy.com/v2"],
+    },
+  },
+  blockExplorers: {
+    default: {
+      name: "Block Explorer",
+      url: "https://stablescan.xyz/",
+    },
+  },
+  testnet: false,
+});
+
+export const mythosMainnet: Chain = defineChain({
+  id: 42018,
+  name: "Mythos Mainnet",
+  nativeCurrency: { name: "eth", symbol: "eth", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://mythos-mainnet.g.alchemy.com/v2"],
+    },
+    public: {
+      http: ["https://mythos-mainnet.g.alchemy.com/v2"],
+    },
+    alchemy: {
+      http: ["https://mythos-mainnet.g.alchemy.com/v2"],
+    },
+  },
+  blockExplorers: {
+    default: {
+      name: "Block Explorer",
+      url: "https://mythos-mainnet.explorer.alchemy.com/",
+    },
+  },
+  testnet: false,
+});
+
+export const hyperliquid: Chain = {
+  ...vhyperliquid,
+  rpcUrls: {
+    ...vhyperliquid.rpcUrls,
+    alchemy: {
+      http: ["https://hyperliquid-mainnet.g.alchemy.com/v2"],
+    },
+  },
+};
+
+export const hyperliquidEvmTestnet: Chain = {
+  ...vhyperliquidEvmTestnet,
+  rpcUrls: {
+    ...vhyperliquidEvmTestnet.rpcUrls,
+    alchemy: {
+      http: ["https://hyperliquid-testnet.g.alchemy.com/v2"],
+    },
+  },
+};
+
+export const cronos: Chain = {
+  ...vCronos,
+  rpcUrls: {
+    ...vCronos.rpcUrls,
+    alchemy: {
+      http: ["https://cronos-mainnet.g.alchemy.com/v2"],
+    },
+  },
+};
+
+export const cronosTestnet: Chain = {
+  ...vCronosTesnet,
+  rpcUrls: {
+    ...vCronosTesnet.rpcUrls,
+    alchemy: {
+      http: ["https://cronos-testnet.g.alchemy.com/v2"],
+    },
+  },
+};

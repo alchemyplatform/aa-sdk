@@ -8,7 +8,7 @@ export type UseAuthErrorResult = Error | undefined;
  * @returns {UseAuthErrorResult} the current Error object
  *
  * @example
- * ```tsx twoslash
+ * ```ts twoslash
  * import { useAuthError } from "@account-kit/react";
  *
  * const error = useAuthError();

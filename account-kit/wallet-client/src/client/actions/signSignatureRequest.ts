@@ -1,15 +1,16 @@
-import type { SmartAccountSigner } from "@aa-sdk/core";
-import { type Hex, hexToNumber, serializeSignature } from "viem";
+import { hexToNumber, serializeSignature } from "viem";
 import { assertNever } from "../../utils.js";
-import {
-  type PersonalSignSignatureRequest,
-  type TypedDataSignatureRequest,
-  type AuthorizationSignatureRequest,
-  type Eip7702UnsignedAuth,
+import type {
+  PersonalSignSignatureRequest,
+  TypedDataSignatureRequest,
+  AuthorizationSignatureRequest,
+  Eip7702UnsignedAuth,
+  EcdsaSig,
 } from "@alchemy/wallet-api-types";
 import { vToYParity } from "ox/Signature";
 import type { WithoutRawPayload } from "../../types.ts";
 import { metrics } from "../../metrics.js";
+import type { SmartWalletSigner } from "../index.js";
 
 export type SignSignatureRequestParams = WithoutRawPayload<
   | PersonalSignSignatureRequest
@@ -19,10 +20,7 @@ export type SignSignatureRequestParams = WithoutRawPayload<
     })
 >;
 
-export type SignSignatureRequestResult = {
-  type: "secp256k1";
-  data: Hex;
-};
+export type SignSignatureRequestResult = EcdsaSig["signature"];
 
 /**
  * Signs a signature request using the provided signer.
@@ -54,11 +52,10 @@ export type SignSignatureRequestResult = {
  * });
  * ```
  */
-
 export async function signSignatureRequest(
-  signer: SmartAccountSigner,
+  signer: SmartWalletSigner,
   params: SignSignatureRequestParams,
-): Promise<SignSignatureRequestResult> {
+): Promise<EcdsaSig["signature"]> {
   metrics.trackEvent({
     name: "sign_signature_request",
     data: {
@@ -83,18 +80,25 @@ export async function signSignatureRequest(
       if (!signer.signAuthorization) {
         throw new Error("Signer does not implement signAuthorization");
       }
-      const { r, s, v, yParity } = await signer.signAuthorization({
+      const {
+        r,
+        s,
+        v,
+        yParity: _yParity,
+      } = await signer.signAuthorization({
         ...params.data,
         chainId: hexToNumber(params.data.chainId),
         nonce: hexToNumber(params.data.nonce),
       });
+      const yParity =
+        _yParity != null ? Number(_yParity) : vToYParity(Number(v));
 
       return {
         type: "secp256k1",
         data: serializeSignature({
           r,
           s,
-          yParity: yParity ?? vToYParity(Number(v)),
+          yParity,
         }),
       };
     }

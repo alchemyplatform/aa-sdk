@@ -116,7 +116,6 @@ export const isSmartAccountWithSigner = (
   return "getSigner" in account;
 };
 
-// [!region SmartContractAccount]
 export type SmartContractAccount<
   Name extends string = string,
   TEntryPointVersion extends EntryPointVersion = EntryPointVersion,
@@ -142,7 +141,6 @@ export type SmartContractAccount<
   getEntryPoint: () => EntryPointDef<TEntryPointVersion>;
   getImplementationAddress: () => Promise<NullAddress | Address>;
 } & SigningMethods;
-// [!endregion SmartContractAccount]
 
 export interface AccountEntryPointRegistry<Name extends string = string>
   extends EntryPointRegistryBase<
@@ -152,7 +150,6 @@ export interface AccountEntryPointRegistry<Name extends string = string>
   "0.7.0": SmartContractAccount<Name, "0.7.0">;
 }
 
-// [!region ToSmartContractAccountParams]
 export type ToSmartContractAccountParams<
   Name extends string = string,
   TTransport extends Transport = Transport,
@@ -175,7 +172,6 @@ export type ToSmartContractAccountParams<
   getImplementationAddress?: () => Promise<NullAddress | Address>;
 } & Omit<CustomSource, "signTransaction" | "address"> &
   (SigningMethods | Never<SigningMethods>);
-// [!endregion ToSmartContractAccountParams]
 
 /**
  * Parses the factory address and factory calldata from the provided account initialization code (initCode).
@@ -267,7 +263,6 @@ export const getAccountAddress = async ({
   throw new GetCounterFactualAddressError();
 };
 
-// [!region toSmartContractAccount]
 export async function toSmartContractAccount<
   Name extends string = string,
   TTransport extends Transport = Transport,
@@ -294,7 +289,6 @@ export async function toSmartContractAccount<
   TChain,
   TEntryPointVersion
 >): Promise<SmartContractAccount<Name, TEntryPointVersion>>;
-// [!endregion toSmartContractAccount]
 
 /**
  * Converts an account to a smart contract account and sets up various account-related methods using the provided parameters like transport, chain, entry point, and other utilities.

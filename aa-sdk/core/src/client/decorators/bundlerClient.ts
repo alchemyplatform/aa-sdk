@@ -50,7 +50,6 @@ export type BundlerRpcSchema = [
   },
 ];
 
-// [!region BundlerActions]
 export type BundlerActions = {
   /**
    * calls `eth_estimateUserOperationGas` and  returns the result
@@ -109,7 +108,6 @@ export type BundlerActions = {
    */
   getSupportedEntryPoints(): Promise<Address[]>;
 };
-// [!endregion BundlerActions]
 
 /**
  * A viem client decorator that provides Bundler specific actions.

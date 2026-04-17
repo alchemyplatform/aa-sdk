@@ -1,0 +1,20 @@
+# Qualifiers rule
+# Detects unnecessary qualifiers that should be removed for confident tone
+
+extends: existence
+message: "Remove qualifier '%s' for more confident tone"
+level: suggestion
+ignorecase: true
+
+# Qualifiers to avoid per CONTRIBUTING.md
+tokens:
+  - '\bperhaps\b'
+  - '\bmight\s+want\s+to\b'
+  - '\byou\s+may\s+wish\s+to\b'
+  - '\bpossibly\b'
+  - '\bprobably\b'
+  - '\bseems\s+like\b'
+  - '\bappears\s+to\b'
+  - '\btends\s+to\b'
+  - '\bkind\s+of\b'
+  - '\bsort\s+of\b'

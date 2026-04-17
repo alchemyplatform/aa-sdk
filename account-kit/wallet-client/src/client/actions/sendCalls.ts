@@ -3,12 +3,13 @@ import type { InnerWalletApiClient } from "../../types.js";
 import { prepareCalls, type PrepareCallsParams } from "./prepareCalls.js";
 import { metrics } from "../../metrics.js";
 import { signPreparedCalls } from "./signPreparedCalls.js";
-import { type SmartAccountSigner } from "@aa-sdk/core";
 import {
   sendPreparedCalls,
   type SendPreparedCallsResult,
 } from "./sendPreparedCalls.js";
 import { signSignatureRequest } from "./signSignatureRequest.js";
+import type { SmartWalletSigner } from "../index.js";
+import { extractCapabilitiesForSending } from "../../internal/capabilities.js";
 
 export type SendCallsParams<
   TAccount extends Address | undefined = Address | undefined,
@@ -29,8 +30,8 @@ export type SendCallsResult = SendPreparedCallsResult;
  * @param {PrepareCallsParams<TAccount>} params - Parameters for sending calls
  * @param {Array<{to: Address, data?: Hex, value?: Hex}>} params.calls - Array of contract calls to execute
  * @param {Address} [params.from] - The address to execute the calls from (required if the client wasn't initialized with an account)
- * @param {object} [params.capabilities] - Optional capabilities to include with the request.
- * @returns {Promise<SendPreparedCallsResult>} A Promise that resolves to the result containing the prepared call IDs.
+ * @param {object} [params.capabilities] - Optional capabilities to include with the request. See [API documentation](/wallets/api-reference/smart-wallets/wallet-api-endpoints/wallet-api-endpoints/wallet-prepare-calls#request.body.prepareCallsRequest.capabilities) for details.
+ * @returns {Promise<SendPreparedCallsResult>} A Promise that resolves to the result containing the call ID.
  *
  *  @example
  * ```ts
@@ -45,15 +46,15 @@ export type SendCallsResult = SendPreparedCallsResult;
  *   }
  * });
  *
- * // The result contains the prepared call IDs
- * console.log(result.preparedCallIds);
+ * // The result contains the call ID
+ * console.log(result.id);
  * ```
  */
 export async function sendCalls<
   TAccount extends Address | undefined = Address | undefined,
 >(
   client: InnerWalletApiClient,
-  signer: SmartAccountSigner,
+  signer: SmartWalletSigner,
   params: SendCallsParams<TAccount>,
 ): Promise<SendCallsResult> {
   metrics.trackEvent({
@@ -80,11 +81,10 @@ export async function sendCalls<
 
   const signedCalls = await signPreparedCalls(signer, calls);
 
+  const capabilities = extractCapabilitiesForSending(params.capabilities);
+
   return await sendPreparedCalls(client, {
     ...signedCalls,
-    // The only capability that is supported in sendPreparedCalls is permissions.
-    ...(params.capabilities?.permissions != null
-      ? { capabilities: { permissions: params.capabilities.permissions } }
-      : {}),
+    ...(capabilities != null ? { capabilities } : {}),
   });
 }

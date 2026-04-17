@@ -6,7 +6,10 @@ import {
   type UserOperationRequest,
   AccountNotFoundError,
 } from "@aa-sdk/core";
-import type { SmartWalletClient } from "@account-kit/wallet-client";
+import type {
+  SignSignatureRequestResult,
+  SmartWalletClient,
+} from "@account-kit/wallet-client";
 import {
   useMutation,
   type UseMutateAsyncFunction,
@@ -85,7 +88,9 @@ export type UseSendCallsResult<
  * - `error`: Error from the last failed call execution, if any
  *
  * @example
- * ```tsx
+ * ```ts twoslash
+ * import { useSendCalls } from "@account-kit/react";
+ *
  * const { sendCalls, sendCallsAsync, isSendingCalls, error } = useSendCalls();
  *
  * // Send a single call
@@ -106,7 +111,7 @@ export type UseSendCallsResult<
  * });
  * ```
  *
- * @description
+ * @remarks
  * - When connected to an EOA wallet, only single calls are supported (batch execution is not allowed)
  * - For smart accounts, the returned `ids` are the prepared call IDs
  * - For EOA wallets, the returned `ids` are transaction hashes
@@ -177,9 +182,10 @@ export function useSendCalls<
         let preparedCalls = await _smartWalletClient.prepareCalls(params);
 
         if (preparedCalls.type === "paymaster-permit") {
-          const signature = await _smartWalletClient.signSignatureRequest(
+          const signature = (await _smartWalletClient.signSignatureRequest(
             preparedCalls.signatureRequest,
-          );
+            // It is not possible to attach a webauthn signer to account-kit/core, so this assertion is safe to make
+          )) as Exclude<SignSignatureRequestResult, { type: "webauthn-p256" }>;
 
           const params = {
             calls: preparedCalls.modifiedRequest.calls,
@@ -193,8 +199,7 @@ export function useSendCalls<
         const signedCalls =
           await _smartWalletClient.signPreparedCalls(preparedCalls);
 
-        const { preparedCallIds } =
-          await _smartWalletClient.sendPreparedCalls(signedCalls);
+        const { id } = await _smartWalletClient.sendPreparedCalls(signedCalls);
 
         const uoCall =
           signedCalls.type === "array"
@@ -206,7 +211,7 @@ export function useSendCalls<
             : signedCalls;
 
         return {
-          ids: preparedCallIds,
+          ids: [id],
           request: {
             ...uoCall.data,
             signature: uoCall.signature.data,

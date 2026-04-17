@@ -1,0 +1,24 @@
+# Passive voice detection rule
+# Enforces active voice as required in CONTRIBUTING.md
+
+extends: existence
+message: "Use active voice instead of passive voice"
+level: warning
+ignorecase: true
+
+# Common passive voice patterns
+tokens:
+  - '\bis\s+created\s+by\b'
+  - '\bare\s+created\s+by\b'
+  - '\bwas\s+created\s+by\b'
+  - '\bwere\s+created\s+by\b'
+  - '\bis\s+provided\s+by\b'
+  - '\bare\s+provided\s+by\b'
+  - '\bis\s+supported\s+by\b'
+  - '\bare\s+supported\s+by\b'
+  - '\bshould\s+be\s+created\b'
+  - '\bshould\s+be\s+configured\b'
+  - '\bshould\s+be\s+installed\b'
+  - '\bcan\s+be\s+used\b'
+  - '\bmust\s+be\s+set\b'
+  - '\bwill\s+be\s+created\b'

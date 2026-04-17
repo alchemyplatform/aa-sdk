@@ -10,32 +10,7 @@ import { defaultUserOpSigner } from "./userOpSigner.js";
  * If the signer doesn't support `signAuthorization`, then this just runs the provided `signUserOperation` middleware.
  * This function is only compatible with accounts using EntryPoint v0.7.0, and the account must have an implementation address defined in `getImplementationAddress()`.
  *
- * @example
- * ```ts twoslash
- * import {
- *   default7702GasEstimator,
- *   default7702UserOpSigner,
- *   createSmartAccountClient,
- *   type SmartAccountClient,
- * } from "@aa-sdk/core";
- * import {
- *   createModularAccountV2,
- *   type CreateModularAccountV2ClientParams,
- * } from "@account-kit/smart-contracts";
- *
- * async function createSMA7702AccountClient(
- *   config: CreateModularAccountV2ClientParams
- * ): Promise<SmartAccountClient> {
- *   const sma7702Account = await createModularAccountV2({ ...config, mode: "7702" });
- *
- *   return createSmartAccountClient({
- *     account: sma7702Account,
- *     gasEstimator: default7702GasEstimator(config.gasEstimator),
- *     signUserOperation: default7702UserOpSigner(config.signUserOperation),
- *     ...config,
- *   });
- * }
- * ```
+ * @deprecated The EIP-7702 auth signature is now handled by the defaultUserOpSigner middleware. This middleware is no longer necessary.
  *
  * @param {ClientMiddlewareFn} [userOpSigner] Optional user operation signer function
  * @returns {ClientMiddlewareFn} A middleware function that signs EIP-7702 authorization tuples if necessary, and also uses the provided or default user operation signer to generate the user op signature.

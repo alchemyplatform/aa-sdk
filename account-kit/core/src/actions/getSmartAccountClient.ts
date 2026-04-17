@@ -1,4 +1,3 @@
-import { default7702GasEstimator, default7702UserOpSigner } from "@aa-sdk/core";
 import {
   createAlchemySmartAccountClient,
   type AlchemySmartAccountClient,
@@ -29,7 +28,7 @@ import type {
   SupportedAccounts,
   SupportedAccountTypes,
 } from "../types";
-import { createAccount, isModularV2AccountParams } from "./createAccount.js";
+import { createAccount } from "./createAccount.js";
 import { getAccount, type GetAccountParams } from "./getAccount.js";
 import { getAlchemyTransport } from "./getAlchemyTransport.js";
 import { getConnection } from "./getConnection.js";
@@ -226,9 +225,6 @@ export function getSmartAccountClient(
           isLoadingClient: false,
         };
       case "ModularAccountV2":
-        const is7702 =
-          isModularV2AccountParams(params) &&
-          params.accountParams?.mode === "7702";
         return {
           client: createAlchemySmartAccountClient({
             transport,
@@ -236,16 +232,6 @@ export function getSmartAccountClient(
             account: account,
             policyId: connection.policyId,
             policyToken: connection.policyToken,
-            ...(is7702
-              ? {
-                  gasEstimator: default7702GasEstimator(
-                    clientParams.gasEstimator,
-                  ),
-                  signUserOperation: default7702UserOpSigner(
-                    clientParams.signUserOperation,
-                  ),
-                }
-              : {}),
             ...clientParams,
           }),
           address: account.address,
