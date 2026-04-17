@@ -17,9 +17,10 @@ import {
 } from "viem";
 import {
   packUOSignature,
-  pack1271Signature,
+  pack1271EOASignature,
   DEFAULT_OWNER_ENTITY_ID,
-  assertNeverSignatureRequestType,
+  assertNever,
+  isDeferredAction,
 } from "../utils.js";
 import { SignatureType } from "../modules/utils.js";
 
@@ -57,18 +58,15 @@ export const nativeSMASigner = (
       request: SignatureRequest,
     ): Promise<SignatureRequest> => {
       let hash;
+      const requestType = request.type;
 
-      switch (request.type) {
+      switch (requestType) {
         case "personal_sign":
           hash = hashMessage(request.data);
           break;
 
         case "eth_signTypedData_v4":
-          const isDeferredAction =
-            request.data?.primaryType === "DeferredAction" &&
-            request.data?.domain?.verifyingContract === accountAddress;
-
-          if (isDeferredAction) {
+          if (isDeferredAction(request.data, accountAddress)) {
             return request;
           } else {
             hash = await hashTypedData(request.data);
@@ -76,7 +74,7 @@ export const nativeSMASigner = (
           }
 
         default:
-          assertNeverSignatureRequestType();
+          return assertNever(requestType, "Invalid signature request type");
       }
 
       return {
@@ -97,7 +95,7 @@ export const nativeSMASigner = (
       };
     },
     formatSign: async (signature: Hex) => {
-      return pack1271Signature({
+      return pack1271EOASignature({
         validationSignature: signature,
         entityId: DEFAULT_OWNER_ENTITY_ID,
       });
@@ -169,14 +167,7 @@ export const nativeSMASigner = (
 
       const sig = await signer.signTypedData(data);
 
-      const isDeferredAction =
-        typedDataDefinition.primaryType === "DeferredAction" &&
-        typedDataDefinition.domain != null &&
-        // @ts-expect-error the domain type I think changed in viem, so this is not working correctly (TODO: fix this)
-        "verifyingContract" in typedDataDefinition.domain &&
-        typedDataDefinition.domain.verifyingContract === accountAddress;
-
-      return isDeferredAction
+      return isDeferredAction(typedDataDefinition, accountAddress)
         ? concat([SignatureType.EOA, sig])
         : signingMethods.formatSign(sig);
     },

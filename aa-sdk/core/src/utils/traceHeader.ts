@@ -57,7 +57,8 @@ export class TraceHeader {
   /**
    * Creating a default trace id that is a random setup for both trace id and parent id
    *
-   * @example ```ts
+   * @example
+   * ```ts
    * const traceHeader = TraceHeader.fromTraceHeader(headers) || TraceHeader.default();
    * ```
    *
@@ -74,7 +75,8 @@ export class TraceHeader {
   /**
    * Should be able to consume a trace header from the headers of an http request
    *
-   * @example ```ts
+   * @example
+   * ```ts
    * const traceHeader = TraceHeader.fromTraceHeader(headers);
    * ```
    *
@@ -113,7 +115,8 @@ export class TraceHeader {
   /**
    * Should be able to convert the trace header to the format that is used in the headers of an http request
    *
-   * @example ```ts
+   * @example
+   * ```ts
    * const traceHeader = TraceHeader.fromTraceHeader(headers) || TraceHeader.default();
    * const headers = traceHeader.toTraceHeader();
    * ```
@@ -134,7 +137,8 @@ export class TraceHeader {
    *  as the key of the eventName as breadcrumbs appending onto previous breadcrumbs with the - infix if exists. And the
    * trace parent gets updated as according to the docs
    *
-   * @example ```ts
+   * @example
+   * ```ts
    * const traceHeader = TraceHeader.fromTraceHeader(headers) || TraceHeader.default();
    * const newTraceHeader = traceHeader.withEvent("newEvent");
    * ```

@@ -5,7 +5,7 @@ Contracts Used for AA SDK
 Built using foundry + Alchemy
 
 - Foundry Getting started: https://book.getfoundry.sh/getting-started/installation
-- Alchemy Getting started: https://docs.alchemy.com/reference/api-overview
+- Alchemy Getting started: https://alchemy.com/docs/reference/api-overview
 
 ## Index
 

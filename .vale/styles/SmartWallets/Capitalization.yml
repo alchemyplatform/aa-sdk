@@ -1,0 +1,11 @@
+# Capitalization rules for headings only
+# Enforces proper capitalization per CONTRIBUTING.md guidelines
+
+extends: capitalization
+message: "Use title case for headings: '%s'"
+level: suggestion
+scope: heading
+
+# Match patterns and their required capitalization
+match: $title
+style: title

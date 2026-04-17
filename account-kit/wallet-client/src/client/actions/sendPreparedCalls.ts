@@ -1,18 +1,23 @@
-import type { Static } from "@sinclair/typebox";
 import { toHex } from "viem";
-import type { wallet_sendPreparedCalls } from "@alchemy/wallet-api-types/rpc";
+import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
 import type { InnerWalletApiClient, WithoutChainId } from "../../types.ts";
 import { metrics } from "../../metrics.js";
+import { mergeClientCapabilities } from "../../internal/capabilities.js";
 
-export type SendPreparedCallsParams = WithoutChainId<
-  Static<
-    (typeof wallet_sendPreparedCalls)["properties"]["Request"]["properties"]["params"]
-  >[0]
+type RpcSchema = Extract<
+  WalletServerRpcSchemaType,
+  {
+    Request: {
+      method: "wallet_sendPreparedCalls";
+    };
+  }
 >;
 
-export type SendPreparedCallsResult = Static<
-  typeof wallet_sendPreparedCalls
->["ReturnType"];
+export type SendPreparedCallsParams = WithoutChainId<
+  RpcSchema["Request"]["params"][0]
+>;
+
+export type SendPreparedCallsResult = RpcSchema["ReturnType"];
 
 /**
  * Sends prepared calls by submitting a signed user operation.
@@ -20,7 +25,7 @@ export type SendPreparedCallsResult = Static<
  *
  * @param {InnerWalletApiClient} client - The wallet API client to use for the request
  * @param {SendPreparedCallsParams} params - Parameters for sending prepared calls
- * @returns {Promise<SendPreparedCallsResult>} A Promise that resolves to the result containing the prepared call IDs
+ * @returns {Promise<SendPreparedCallsResult>} A Promise that resolves to the result containing the call ID
  *
  * @example
  * ```ts
@@ -55,6 +60,8 @@ export async function sendPreparedCalls(
       type: params.type,
     },
   });
+
+  params.capabilities = mergeClientCapabilities(client, params.capabilities);
 
   return client.request({
     method: "wallet_sendPreparedCalls",

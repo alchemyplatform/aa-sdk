@@ -33,7 +33,7 @@ export function defaultFeeEstimator<C extends MiddlewareClient>(
     // Note that if maxFeePerGas is not at least the sum of maxPriorityFeePerGas and required baseFee
     // after applying the fee options, then the transaction will fail
     //
-    // Refer to https://docs.alchemy.com/docs/maxpriorityfeepergas-vs-maxfeepergas
+    // Refer to https://alchemy.com/docs/maxpriorityfeepergas-vs-maxfeepergas
     // for more information about maxFeePerGas and maxPriorityFeePerGas
 
     const feeData = await client.estimateFeesPerGas();

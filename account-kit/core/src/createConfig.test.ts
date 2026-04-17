@@ -24,7 +24,7 @@ describe("createConfig", () => {
       sessionConfig: {
         expirationTimeMs: 5000,
       },
-      createSigner: createWebSigner,
+      _internal: { createSigner: createWebSigner },
     });
   };
 });

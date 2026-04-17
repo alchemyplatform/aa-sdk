@@ -3,6 +3,7 @@ import Cookies from "js-cookie";
 import type { StoredState } from "../store/types.js";
 import type { AlchemyAccountsConfig } from "../types.js";
 import { deserialize } from "./deserialize.js";
+import { DEFAULT_SESSION_MS } from "@account-kit/signer";
 
 // The maximum duration of a cookie according to the spec is 400 days.
 // https://httpwg.org/http-extensions/draft-ietf-httpbis-rfc6265bis.html#name-cookie-lifetime-limits
@@ -86,15 +87,12 @@ export function cookieToInitialState(
     state: StoredState["alchemy"];
   }>(state).state;
 
-  // If the expirationTimeMs is changed in the config, we should use the new config
-  // value instead of restoring the value from the cookie, otherwise it can lead
-  // to confusion and unexpected behavior when it seems like the expirationTimeMs
-  // is being ignored.
   alchemyClientState.config.sessionConfig = {
     ...alchemyClientState.config.sessionConfig,
+    // Always use the session expiration time set in the config.
     expirationTimeMs:
       config.store.getInitialState().config.sessionConfig?.expirationTimeMs ??
-      alchemyClientState.config.sessionConfig?.expirationTimeMs,
+      DEFAULT_SESSION_MS,
   };
 
   const wagmiClientState = wagmiCookieToInitialState(

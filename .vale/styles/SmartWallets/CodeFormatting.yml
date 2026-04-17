@@ -1,0 +1,16 @@
+# Code formatting rule
+# Ensures technical terms and function names are properly formatted with backticks
+
+extends: existence
+message: "Wrap '%s' in backticks for proper code formatting"
+level: suggestion
+ignorecase: false
+
+# Technical terms that should be in backticks when not already formatted
+tokens:
+  - "(?<!`)aa-sdk(?!`)"
+  - "(?<!`)getSigner(?!`)"
+  - "(?<!`)sendUserOperation(?!`)"
+  - "(?<!`)createAccount(?!`)"
+  - "(?<!`)bundlerClient(?!`)"
+  - "(?<!`)paymasterClient(?!`)"

@@ -18,7 +18,6 @@ export const createPublicErc4337ClientSchema = <
     );
   });
 
-// [!region ConnectionConfigSchema]
 // TODO: in v5 either remove this or simplify it (either way this should be moved out of aa-sdk/core)
 export const ConnectionConfigSchema = z.intersection(
   z.union([
@@ -47,7 +46,6 @@ export const ConnectionConfigSchema = z.intersection(
     chainAgnosticUrl: z.string().optional(),
   }),
 );
-// [!endregion ConnectionConfigSchema]
 
 export const UserOperationFeeOptionsFieldSchema =
   BigNumberishRangeSchema.merge(MultiplierSchema).partial();

@@ -1,0 +1,28 @@
+name: Publish V5 Beta Packages
+
+# ⚠️  This workflow must be run from the v5.x.x branch.
+# The authoritative version of this workflow lives on v5.x.x.
+# This stub exists so the workflow appears in the Actions tab,
+# but it will fail immediately if triggered from the wrong branch.
+on:
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: "Publish packages (leave unchecked for dry-run)"
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+jobs:
+  wrong_branch:
+    name: Must run from v5.x.x
+    runs-on: ubuntu-latest
+    steps:
+      - name: Error - wrong branch
+        run: |
+          echo "::error::This workflow must be triggered from the v5.x.x branch, not ${{ github.ref_name }}."
+          echo "Go to Actions > Publish V5 Beta Packages > Run workflow > select 'v5.x.x' from the branch dropdown."
+          exit 1

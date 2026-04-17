@@ -1,4 +1,5 @@
 import {
+  BaseError,
   createBundlerClient,
   getEntryPoint,
   InvalidDeferredActionNonce,
@@ -18,6 +19,7 @@ import {
   maxUint152,
   maxUint32,
   zeroAddress,
+  isAddressEqual,
   type Address,
   type Chain,
   type Hex,
@@ -211,11 +213,13 @@ export async function createMAv2Base<
     value,
   }) =>
     await encodeCallData(
-      encodeFunctionData({
-        abi: modularAccountAbi,
-        functionName: "execute",
-        args: [target, value ?? 0n, data],
-      }),
+      !isAddressEqual(target, accountAddress)
+        ? encodeFunctionData({
+            abi: modularAccountAbi,
+            functionName: "execute",
+            args: [target, value ?? 0n, data],
+          })
+        : data, // If the target is the same as the account address, we don't need to wrap in a call to `execute`.
     );
 
   const encodeBatchExecute: (txs: AccountOp[]) => Promise<Hex> = async (txs) =>
@@ -233,8 +237,31 @@ export async function createMAv2Base<
       }),
     );
 
-  const isAccountDeployed: () => Promise<boolean> = async () =>
-    !!(await client.getCode({ address: accountAddress }));
+  const isAccountDeployed: () => Promise<boolean> = async () => {
+    const code = (
+      await client.getCode({ address: accountAddress })
+    )?.toLowerCase();
+    const is7702Delegated = code?.startsWith("0xef0100");
+
+    if (!is7702Delegated) {
+      return !!code;
+    }
+
+    if (!config.getImplementationAddress) {
+      // Edge case where account is already delegated to a 3rd party
+      // implementation, but the MAv2 client is initialized using its
+      // address without specifying 7702 mode.
+      throw new BaseError(
+        "Account is an already-delegated 7702 account, but client is missing implementation address. Be sure to initialize the client in 7702 mode.",
+      );
+    }
+
+    const expectedCode = concatHex([
+      "0xef0100",
+      await config.getImplementationAddress(),
+    ]).toLowerCase();
+    return code === expectedCode;
+  };
 
   const getNonce = async (nonceKey: bigint = 0n): Promise<bigint> => {
     if (nonce) {
@@ -265,7 +292,21 @@ export async function createMAv2Base<
   });
 
   const getExecutionData = async (selector: Hex) => {
-    if (!(await isAccountDeployed())) {
+    // Start both promises in parallel
+    const deployStatusPromise = isAccountDeployed();
+    const executionDataPromise = accountContract.read
+      .getExecutionData([selector])
+      .catch((error) => {
+        // Store the original error for potential re-throwing
+        // If the account is not deployed, we will get an error here that we want to swallow.
+        // Otherwise, we will re-throw the error.
+        return { error };
+      });
+
+    // Check if account is deployed first
+    const deployStatus = await deployStatusPromise;
+
+    if (deployStatus === false) {
       return {
         module: zeroAddress,
         skipRuntimeValidation: false,
@@ -274,11 +315,37 @@ export async function createMAv2Base<
       };
     }
 
-    return await accountContract.read.getExecutionData([selector]);
+    // Only await execution data if account is deployed
+    const executionData = await executionDataPromise;
+    if ("error" in executionData) {
+      throw executionData.error;
+    }
+    return executionData;
   };
 
   const getValidationData = async (args: ValidationDataParams) => {
-    if (!(await isAccountDeployed())) {
+    const { validationModuleAddress, entityId } = args;
+
+    // Start both promises in parallel
+    const deployStatusPromise = isAccountDeployed();
+    const validationDataPromise = accountContract.read
+      .getValidationData([
+        serializeModuleEntity({
+          moduleAddress: validationModuleAddress ?? zeroAddress,
+          entityId: entityId ?? Number(maxUint32),
+        }),
+      ])
+      .catch((error) => {
+        // Store the original error for potential re-throwing
+        // If the account is not deployed, we will get an error here that we want to swallow.
+        // Otherwise, we will re-throw the error.
+        return { error };
+      });
+
+    // Check if account is deployed first
+    const deployStatus = await deployStatusPromise;
+
+    if (deployStatus === false) {
       return {
         validationHooks: [],
         executionHooks: [],
@@ -287,13 +354,12 @@ export async function createMAv2Base<
       };
     }
 
-    const { validationModuleAddress, entityId } = args;
-    return await accountContract.read.getValidationData([
-      serializeModuleEntity({
-        moduleAddress: validationModuleAddress ?? zeroAddress,
-        entityId: entityId ?? Number(maxUint32),
-      }),
-    ]);
+    // Only await validation data if account is deployed
+    const validationData = await validationDataPromise;
+    if ("error" in validationData) {
+      throw validationData.error;
+    }
+    return validationData;
   };
 
   const encodeCallData = async (callData: Hex): Promise<Hex> => {

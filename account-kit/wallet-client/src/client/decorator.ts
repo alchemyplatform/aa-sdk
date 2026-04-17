@@ -1,8 +1,7 @@
-import type { SmartAccountSigner } from "@aa-sdk/core";
 import type { Address, Hex } from "viem";
-import {
-  type WaitForCallsStatusParameters,
-  type WaitForCallsStatusReturnType,
+import type {
+  WaitForCallsStatusParameters,
+  WaitForCallsStatusReturnType,
 } from "viem/actions";
 import type { InnerWalletApiClient } from "../types.ts";
 import {
@@ -56,6 +55,7 @@ import {
   type SendCallsParams,
   type SendCallsResult,
 } from "./actions/sendCalls.js";
+import type { SmartWalletSigner } from "./index.js";
 
 export type SmartWalletActions<
   TAccount extends Address | undefined = Address | undefined,
@@ -94,7 +94,7 @@ export function smartWalletClientActions<
   TAccount extends Address | undefined = Address | undefined,
 >(
   client: InnerWalletApiClient,
-  signer: SmartAccountSigner,
+  signer: SmartWalletSigner,
 ): SmartWalletActions<TAccount> {
   return {
     requestAccount: (params) => requestAccount(client, signer, params),

@@ -19,11 +19,6 @@
       "env": ["VITEST_SEPOLIA_FORK_URL"],
       "dependsOn": ["^build"],
       "cache": false
-    },
-    "fern:gen": {
-      "dependsOn": ["ak-docgen#build"],
-      "outputs": ["../../docs/pages/reference/**"],
-      "cache": false
     }
   }
 }

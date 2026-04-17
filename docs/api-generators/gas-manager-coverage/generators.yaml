@@ -1,3 +1,0 @@
-api:
-  specs:
-    - openrpc: ../../api-specs/alchemy/json-rpc/gas-manager-coverage.json

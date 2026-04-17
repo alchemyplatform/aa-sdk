@@ -1,21 +1,24 @@
 import type { InnerWalletApiClient } from "../../types.ts";
 import { toHex, type Address, type IsUndefined } from "viem";
 import { AccountNotFoundError } from "@aa-sdk/core";
-import type { Static } from "@sinclair/typebox";
-import { wallet_prepareSign } from "@alchemy/wallet-api-types/rpc";
+import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
 import { metrics } from "../../metrics.js";
+
+type RpcSchema = Extract<
+  WalletServerRpcSchemaType,
+  {
+    Request: {
+      method: "wallet_prepareSign";
+    };
+  }
+>;
 
 export type PrepareSignParams<
   TAccount extends Address | undefined = Address | undefined,
-> = Omit<
-  Static<
-    (typeof wallet_prepareSign)["properties"]["Request"]["properties"]["params"]
-  >[0],
-  "from" | "chainId"
-> &
+> = Omit<RpcSchema["Request"]["params"][0], "from" | "chainId"> &
   (IsUndefined<TAccount> extends true ? { from: Address } : { from?: never });
 
-export type PrepareSignResult = Static<typeof wallet_prepareSign>["ReturnType"];
+export type PrepareSignResult = RpcSchema["ReturnType"];
 
 /**
  * Prepares a signature request for signing messages or transactions.

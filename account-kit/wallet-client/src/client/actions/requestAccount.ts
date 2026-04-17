@@ -1,20 +1,23 @@
-import {
-  type SmartAccountSigner,
-  type SmartContractAccount,
-} from "@aa-sdk/core";
-import type { Static } from "@sinclair/typebox";
+import type { SmartContractAccount } from "@aa-sdk/core";
 import type { Address } from "abitype";
 import deepEqual from "deep-equal";
 import { custom } from "viem";
-import type { wallet_requestAccount } from "@alchemy/wallet-api-types/rpc";
+import type { WalletServerRpcSchemaType } from "@alchemy/wallet-api-types/rpc";
 import type { InnerWalletApiClient } from "../../types.js";
 import { createAccount } from "../../internal/account.js";
+import type { SmartWalletSigner } from "../index.js";
+
+type RpcSchema = Extract<
+  WalletServerRpcSchemaType,
+  {
+    Request: {
+      method: "wallet_requestAccount";
+    };
+  }
+>;
 
 export type RequestAccountParams = Omit<
-  Extract<
-    Static<typeof wallet_requestAccount>["Request"]["params"][0],
-    { signerAddress: Address }
-  >,
+  Extract<RpcSchema["Request"]["params"][0], { signerAddress: Address }>,
   "signerAddress" | "includeCounterfactualInfo"
 > & { accountAddress?: Address };
 
@@ -41,20 +44,27 @@ export type RequestAccountResult = SmartContractAccount;
  */
 export async function requestAccount(
   client: InnerWalletApiClient,
-  signer: SmartAccountSigner,
+  signer: SmartWalletSigner,
   params?: RequestAccountParams,
 ): Promise<RequestAccountResult> {
-  const args =
+  const { creationHint = {} } = params ?? {};
+
+  const args = (
     (client.account && !params) || params?.accountAddress
       ? {
           accountAddress: params?.accountAddress ?? client.account!.address,
           includeCounterfactualInfo: true,
         }
       : {
-          ...params,
           signerAddress: await signer.getAddress(),
+          ...(creationHint
+            ? {
+                creationHint,
+              }
+            : {}),
           includeCounterfactualInfo: true,
-        };
+        }
+  ) satisfies RpcSchema["Request"]["params"][0];
 
   const cachedAccount = client.internal.getAccount();
 
