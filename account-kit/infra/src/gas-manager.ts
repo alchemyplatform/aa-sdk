@@ -19,7 +19,6 @@ import {
   shapeSepolia,
   optimismGoerli,
   arbitrumGoerli,
-  arbitrumNova,
   baseGoerli,
   beraChainBartio,
   celoMainnet,
@@ -110,7 +109,6 @@ export const getAlchemyPaymasterAddress = (
         case opbnbMainnet.id:
         case beraChainBartio.id:
         case inkMainnet.id:
-        case arbitrumNova.id:
         case storyMainnet.id:
         case celoMainnet.id:
           return AlchemyPaymasterAddressV4;
@@ -136,7 +134,6 @@ export const getAlchemyPaymasterAddress = (
       }
     case "0.7.0":
       switch (chain.id) {
-        case arbitrumNova.id:
         case celoMainnet.id:
         case gensynTestnet.id:
         case inkMainnet.id:

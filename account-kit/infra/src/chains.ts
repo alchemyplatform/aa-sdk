@@ -20,7 +20,6 @@ import {
   polygonAmoy as vpga,
   polygonMumbai as vpgm,
   sepolia as vsep,
-  arbitrumNova as vabn,
   zora as vzora,
   zoraSepolia as vzoras,
   worldchain as vwc,
@@ -483,13 +482,6 @@ export const inkSepolia: Chain = defineChain({
     },
   },
 });
-
-export const arbitrumNova: Chain = {
-  ...vabn,
-  rpcUrls: {
-    ...vabn.rpcUrls,
-  },
-};
 
 export const monadTestnet: Chain = defineChain({
   id: 10143,

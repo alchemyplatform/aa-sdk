@@ -1220,8 +1220,6 @@ navigation:
                         path: wallets/pages/reference/account-kit/infra/src/exports/variables/arbitrum.mdx
                       - page: arbitrumGoerli
                         path: wallets/pages/reference/account-kit/infra/src/exports/variables/arbitrumGoerli.mdx
-                      - page: arbitrumNova
-                        path: wallets/pages/reference/account-kit/infra/src/exports/variables/arbitrumNova.mdx
                       - page: arbitrumSepolia
                         path: wallets/pages/reference/account-kit/infra/src/exports/variables/arbitrumSepolia.mdx
                       - page: base
