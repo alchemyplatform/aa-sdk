@@ -1,7 +1,6 @@
 import {
   arbitrum,
   arbitrumGoerli,
-  arbitrumNova,
   arbitrumSepolia,
   base,
   baseGoerli,
@@ -57,8 +56,6 @@ export function getChain(chainId: number) {
       return arbitrum;
     case arbitrumGoerli.id:
       return arbitrumGoerli;
-    case arbitrumNova.id:
-      return arbitrumNova;
     case arbitrumSepolia.id:
       return arbitrumSepolia;
     case base.id:
