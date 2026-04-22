@@ -442,6 +442,17 @@ export type SignerEndpoints = [
       };
     };
   },
+  {
+    Route: "/v1/track-key-export";
+    Body: {
+      orgId: string;
+      accountAddress: string;
+      type: "ETH" | "SOL";
+    };
+    Response: {
+      success: boolean;
+    };
+  },
 ];
 
 export type AuthenticatingEventMetadata = {
