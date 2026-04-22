@@ -449,9 +449,7 @@ export type SignerEndpoints = [
       accountAddress: string;
       type: "ETH" | "SOL";
     };
-    Response: {
-      success: boolean;
-    };
+    Response: {};
   },
 ];
 
