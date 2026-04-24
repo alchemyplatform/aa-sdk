@@ -14,6 +14,12 @@ export function isSmartWalletClient(
   return client.name === "alchemySmartWalletClient" && "owner" in client;
 }
 
+export function isSolanaClient(
+  client: Client,
+): client is InnerWalletApiClient<"solana"> {
+  return client.name === "alchemySolanaSmartWalletClient" && "owner" in client;
+}
+
 /**
  * Assertion function that throws an error if the client is not an Alchemy Smart Wallet Client.
  * After this function returns successfully, TypeScript will narrow the client type.

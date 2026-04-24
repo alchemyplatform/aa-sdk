@@ -1,5 +1,18 @@
 import type { Address, Prettify } from "viem";
-import type { DistributiveOmit, InnerWalletApiClient } from "../types.ts";
+import type {
+  DistributiveOmit,
+  InnerWalletApiClient,
+  Mode,
+  SolanaChainDef,
+  SolanaSigner,
+} from "../types.ts";
+import type { SolanaChainId } from "@alchemy/wallet-api-types";
+import {
+  PrepareCallsParams as EvmPrepareCallsSchema,
+  SolanaPrepareCallsParams as SolanaPrepareCallsSchema,
+  PreparedCall_SolanaV0 as PreparedCall_SolanaV0Schema,
+} from "@alchemy/wallet-api-types";
+import type { StaticDecode } from "typebox";
 import { LOGGER } from "../logger.js";
 import {
   fromRpcCapabilities,
@@ -14,97 +27,136 @@ import {
   methodSchema,
   encode,
   decode,
-  type MethodParams,
   type MethodResponse,
 } from "../utils/schema.js";
 
 const schema = methodSchema(MethodSchema);
-type BasePrepareCallsParams = MethodParams<typeof MethodSchema>;
 type PrepareCallsResponse = MethodResponse<typeof MethodSchema>;
+
+// ── EVM types ────────────────────────────────────────────────────────────────
+
+type EvmBasePrepareCallsParams = StaticDecode<typeof EvmPrepareCallsSchema>;
 
 export type PrepareCallsParams = Prettify<
   WithCapabilities<
-    DistributiveOmit<BasePrepareCallsParams, "from" | "chainId"> & {
+    DistributiveOmit<EvmBasePrepareCallsParams, "from" | "chainId"> & {
       account?: AccountParam;
       chainId?: number;
     }
   >
 >;
 
-/** The modifiedRequest in client format: `account` instead of `from`, SDK capabilities. */
 type ClientModifiedRequest = Prettify<
-  Omit<BasePrepareCallsParams, "from" | "capabilities"> & {
+  Omit<EvmBasePrepareCallsParams, "from" | "capabilities"> & {
     account: Address;
     capabilities?: PrepareCallsCapabilities;
   }
 >;
 
+type EvmPrepareCallsResponse = Exclude<
+  PrepareCallsResponse,
+  { type: "solana-transaction-v0" }
+>;
+
 export type PrepareCallsResult =
-  | Exclude<PrepareCallsResponse, { type: "paymaster-permit" }>
+  | Exclude<EvmPrepareCallsResponse, { type: "paymaster-permit" }>
   | (Omit<
-      Extract<PrepareCallsResponse, { type: "paymaster-permit" }>,
+      Extract<EvmPrepareCallsResponse, { type: "paymaster-permit" }>,
       "modifiedRequest"
     > & {
       modifiedRequest: ClientModifiedRequest;
     });
 
-/**
- * Prepares a set of contract calls for execution by building a user operation.
- * Returns the built user operation and a signature request that needs to be signed
- * before submitting to sendPreparedCalls.
- *
- * The client defaults to using EIP-7702 with the signer's address, so you can call
- * this directly without first calling `requestAccount`.
- *
- * @param {InnerWalletApiClient} client - The wallet API client to use for the request
- * @param {PrepareCallsParams} params - Parameters for preparing calls
- * @param {Array<{to: Address, data?: Hex, value?: bigint}>} params.calls - Array of contract calls to execute
- * @param {AccountParam} [params.account] - The account to execute the calls from. Can be an address string or an object with an `address` property. Defaults to the client's account (signer address via EIP-7702).
- * @param {object} [params.capabilities] - Optional capabilities to include with the request
- * @returns {Promise<PrepareCallsResult>} A Promise that resolves to the prepared calls result containing
- * the user operation data and signature request
- *
- * @example
- * ```ts
- * // Prepare a sponsored user operation call (uses signer address via EIP-7702 by default)
- * const result = await client.prepareCalls({
- *   calls: [{
- *     to: "0x1234...",
- *     data: "0xabcdef...",
- *     value: 0n
- *   }],
- *   capabilities: {
- *     paymaster: { policyId: "your-policy-id" }
- *   }
- * });
- * ```
- */
+// ── Solana types ─────────────────────────────────────────────────────────────
+
+type SolanaBasePrepareCallsParams = StaticDecode<
+  typeof SolanaPrepareCallsSchema
+>;
+
+export type SolanaPrepareCallsParams = Prettify<
+  WithCapabilities<
+    DistributiveOmit<SolanaBasePrepareCallsParams, "from" | "chainId"> & {
+      account?: string;
+      chainId?: SolanaChainId;
+    }
+  >
+>;
+
+export type SolanaPrepareCallsResult = StaticDecode<
+  typeof PreparedCall_SolanaV0Schema
+>;
+
+// ── Overloads ────────────────────────────────────────────────────────────────
+
 export async function prepareCalls(
-  client: InnerWalletApiClient,
+  client: InnerWalletApiClient<"evm">,
   params: PrepareCallsParams,
-): Promise<PrepareCallsResult> {
-  const from = params.account
-    ? resolveAddress(params.account)
-    : client.account.address;
+): Promise<PrepareCallsResult>;
+export async function prepareCalls(
+  client: InnerWalletApiClient<"solana">,
+  params: SolanaPrepareCallsParams,
+): Promise<SolanaPrepareCallsResult>;
+export async function prepareCalls(
+  client: InnerWalletApiClient<Mode>,
+  params: PrepareCallsParams | SolanaPrepareCallsParams,
+): Promise<PrepareCallsResult | SolanaPrepareCallsResult> {
+  const isSolana = "solanaChainId" in client.chain;
 
-  const chainId = params.chainId ?? client.chain.id;
+  const from: string = isSolana
+    ? ((params.account as string | undefined) ??
+      (client.owner as SolanaSigner).address)
+    : params.account
+      ? resolveAddress(params.account as Exclude<AccountParam, null>)
+      : client.account.address;
 
-  const capabilities = mergeClientCapabilities(client, params.capabilities);
+  const chainId: number | SolanaChainId = isSolana
+    ? ((params.chainId as SolanaChainId | undefined) ??
+      (client.chain as SolanaChainDef).solanaChainId)
+    : ((params.chainId as number | undefined) ?? client.chain.id);
+
+  const capabilities = mergeClientCapabilities(
+    client as InnerWalletApiClient,
+    params.capabilities,
+  );
 
   LOGGER.debug("prepareCalls:start", {
     callsCount: params.calls?.length,
     hasCapabilities: !!params.capabilities,
   });
 
-  const { account: _, chainId: __, ...rest } = params;
-  const rpcParams = encode(schema.request, {
-    ...rest,
-    chainId,
-    from,
-    capabilities: toRpcCapabilities(capabilities),
-  });
+  const rpcParams = isSolana
+    ? (() => {
+        const {
+          account: _,
+          chainId: __,
+          capabilities: solCaps,
+          ...solRest
+        } = params as SolanaPrepareCallsParams;
+        const solCapabilities = solCaps?.paymaster
+          ? { paymasterService: solCaps.paymaster }
+          : undefined;
+        return encode(schema.request, {
+          ...solRest,
+          chainId: chainId as SolanaChainId,
+          from,
+          capabilities: solCapabilities,
+        });
+      })()
+    : (() => {
+        const {
+          account: _,
+          chainId: __,
+          ...evmRest
+        } = params as PrepareCallsParams;
+        return encode(schema.request, {
+          ...evmRest,
+          chainId: chainId as number,
+          from: from as Address,
+          capabilities: toRpcCapabilities(capabilities),
+        });
+      })();
 
-  const rpcResp = await client.request({
+  const rpcResp = await (client as InnerWalletApiClient).request({
     method: "wallet_prepareCalls",
     params: [rpcParams],
   });
@@ -112,9 +164,6 @@ export async function prepareCalls(
   LOGGER.debug("prepareCalls:done");
   const decoded = decode(schema.response, rpcResp);
 
-  // Transform paymaster-permit modifiedRequest from RPC format to client format:
-  // - `from` (RPC) → `account` (client)
-  // - `capabilities.paymasterService` (RPC) → `capabilities.paymaster` (client)
   if (decoded.type === "paymaster-permit") {
     const { from, capabilities, ...restModifiedRequest } =
       decoded.modifiedRequest;
@@ -125,8 +174,8 @@ export async function prepareCalls(
         account: from,
         capabilities: fromRpcCapabilities(capabilities),
       },
-    };
+    } as PrepareCallsResult;
   }
 
-  return decoded;
+  return decoded as PrepareCallsResult | SolanaPrepareCallsResult;
 }
