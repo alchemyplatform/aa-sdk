@@ -1,4 +1,4 @@
-import type { InnerWalletApiClient, BaseWalletClient } from "../types.js";
+import type { InnerWalletApiClient } from "../types.js";
 import {
   prepareCalls,
   type SolanaPrepareCallsParams,
@@ -50,12 +50,13 @@ export type SolanaSmartWalletActions = {
 export const solanaSmartWalletActions = (
   client: InnerWalletApiClient<"solana">,
 ): SolanaSmartWalletActions => ({
+  // Alchemy actions.
   prepareCalls: (params) => prepareCalls(client, params),
   signPreparedCalls: (params) => signPreparedCalls(client, params),
   sendPreparedCalls: (params) => sendPreparedCalls(client, params),
   sendCalls: (params) => sendCalls(client, params),
-  getCallsStatus: (params) =>
-    getCallsStatus(client as unknown as BaseWalletClient, params),
-  waitForCallsStatus: (params) =>
-    waitForCallsStatus(client as unknown as BaseWalletClient, params),
+  // TODO(jh): be sure these actually work & viem isn't unhappy about something.
+  // Viem actions.
+  getCallsStatus: (params) => getCallsStatus(client, params),
+  waitForCallsStatus: (params) => waitForCallsStatus(client, params),
 });

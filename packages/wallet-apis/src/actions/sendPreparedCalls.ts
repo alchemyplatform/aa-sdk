@@ -21,8 +21,6 @@ const schema = methodSchema(MethodSchema);
 type BaseSendPreparedCallsParams = MethodParams<typeof MethodSchema>;
 type SendPreparedCallsResponse = MethodResponse<typeof MethodSchema>;
 
-// ── EVM types ────────────────────────────────────────────────────────────────
-
 type EvmBaseSendPreparedCallsParams = Exclude<
   BaseSendPreparedCallsParams,
   { type: "solana-transaction-v0" }
@@ -43,8 +41,6 @@ type EvmSendPreparedCallsResponse = Extract<
 
 export type SendPreparedCallsResult = EvmSendPreparedCallsResponse;
 
-// ── Solana types ─────────────────────────────────────────────────────────────
-
 export type SolanaSendPreparedCallsParams = Prettify<
   StaticDecode<typeof PreparedCall_SolanaV0_SignedSchema>
 >;
@@ -56,12 +52,49 @@ type SolanaSendPreparedCallsResponse = Extract<
 
 export type SolanaSendPreparedCallsResult = SolanaSendPreparedCallsResponse;
 
-// ── Overloads ────────────────────────────────────────────────────────────────
-
+/**
+ * Sends prepared calls by submitting a signed user operation.
+ * This method is used after signing the signature request returned from prepareCalls.
+ *
+ * @param {InnerWalletApiClient} client - The wallet API client to use for the request
+ * @param {SendPreparedCallsParams} params - Parameters for sending prepared calls
+ * @returns {Promise<SendPreparedCallsResult>} A Promise that resolves to the result containing the call ID
+ *
+ * @example
+ * ```ts
+ * // First prepare the calls
+ * const preparedCalls = await client.prepareCalls({
+ *   calls: [{
+ *     to: "0x1234...",
+ *     data: "0xabcdef...",
+ *     value: 0n
+ *   }],
+ *   capabilities: {
+ *     paymaster: { policyId: "your-policy-id" }
+ *   }
+ * });
+ *
+ * // Then sign the calls
+ * const signedCalls = await client.signPreparedCalls(preparedCalls);
+ *
+ * // Then send the prepared calls with the signature
+ * const result = await client.sendPreparedCalls({
+ *   signedCalls,
+ * });
+ * ```
+ */
 export async function sendPreparedCalls(
   client: InnerWalletApiClient<"evm">,
   params: SendPreparedCallsParams,
 ): Promise<SendPreparedCallsResult>;
+/**
+ * Sends a signed Solana transaction.
+ * This method is used after signing the signature request returned from prepareCalls.
+ *
+ * @param {InnerWalletApiClient<"solana">} client - The Solana wallet API client
+ * @param {SolanaSendPreparedCallsParams} params - The signed Solana transaction
+ * @returns {Promise<SolanaSendPreparedCallsResult>} The result containing the call ID
+ */
 export async function sendPreparedCalls(
   client: InnerWalletApiClient<"solana">,
   params: SolanaSendPreparedCallsParams,
@@ -70,34 +103,45 @@ export async function sendPreparedCalls(
   client: InnerWalletApiClient<Mode>,
   params: SendPreparedCallsParams | SolanaSendPreparedCallsParams,
 ): Promise<SendPreparedCallsResult | SolanaSendPreparedCallsResult> {
-  const isSolana = "solanaChainId" in client.chain;
-
-  LOGGER.debug("sendPreparedCalls:start", {
-    type: (params as SendPreparedCallsParams).type,
-  });
-
-  if (isSolana) {
-    const rpcParams = encode(
-      schema.request,
+  if ("solanaChainId" in client.chain) {
+    return sendSolanaPreparedCalls(
+      client as InnerWalletApiClient<"solana">,
       params as SolanaSendPreparedCallsParams,
     );
-    const rpcResp = await (client as InnerWalletApiClient).request({
-      method: "wallet_sendPreparedCalls",
-      params: [rpcParams],
-    });
-    LOGGER.debug("sendPreparedCalls:done");
-    return decode(schema.response, rpcResp) as SolanaSendPreparedCallsResult;
   }
 
-  const evmClient = client as InnerWalletApiClient;
-  const evmParams = params as SendPreparedCallsParams;
-  const capabilities = mergeClientCapabilities(
-    evmClient,
-    evmParams.capabilities,
+  return sendEvmPreparedCalls(
+    client as InnerWalletApiClient,
+    params as SendPreparedCallsParams,
   );
+}
 
-  const { chainId: rawChainId, ...restParams } = evmParams;
-  const chainId = rawChainId ?? evmClient.chain.id;
+async function sendSolanaPreparedCalls(
+  client: InnerWalletApiClient<"solana">,
+  params: SolanaSendPreparedCallsParams,
+): Promise<SolanaSendPreparedCallsResult> {
+  LOGGER.debug("sendPreparedCalls:start", { type: params.type });
+
+  const rpcParams = encode(schema.request, params);
+  const rpcResp = await (client as unknown as InnerWalletApiClient).request({
+    method: "wallet_sendPreparedCalls",
+    params: [rpcParams],
+  });
+
+  LOGGER.debug("sendPreparedCalls:done");
+  return decode(schema.response, rpcResp) as SolanaSendPreparedCallsResult;
+}
+
+async function sendEvmPreparedCalls(
+  client: InnerWalletApiClient,
+  params: SendPreparedCallsParams,
+): Promise<SendPreparedCallsResult> {
+  const capabilities = mergeClientCapabilities(client, params.capabilities);
+
+  LOGGER.debug("sendPreparedCalls:start", { type: params.type });
+
+  const { chainId: rawChainId, ...restParams } = params;
+  const chainId = rawChainId ?? client.chain.id;
 
   const fullParams =
     restParams.type === "array"
@@ -110,7 +154,7 @@ export async function sendPreparedCalls(
 
   const rpcParams = encode(schema.request, fullParams);
 
-  const rpcResp = await evmClient.request({
+  const rpcResp = await client.request({
     method: "wallet_sendPreparedCalls",
     params: [rpcParams],
   });

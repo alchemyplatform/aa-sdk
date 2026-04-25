@@ -17,13 +17,15 @@ import type { SolanaSmartWalletActions } from "./decorators/solanaSmartWalletAct
 
 export type Mode = "evm" | "solana";
 
-export type SolanaChainDef = Chain & { solanaChainId: SolanaChainId };
+export interface SolanaChainDef extends Chain {
+  solanaChainId: SolanaChainId;
+}
 
 export interface SolanaSigner {
   address: string;
   signTransactions(
     transactions: readonly unknown[],
-    config?: object,
+    config?: { abortSignal?: AbortSignal; minContextSlot?: bigint },
   ): Promise<readonly Record<string, Uint8Array>[]>;
 }
 

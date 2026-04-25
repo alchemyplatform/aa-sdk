@@ -2,7 +2,6 @@ import { BaseError } from "@alchemy/common";
 import { createClient, defineChain, type Address } from "viem";
 import { solanaSmartWalletActions } from "./decorators/solanaSmartWalletActions.js";
 import type {
-  InnerWalletApiClient,
   SolanaSmartWalletClient,
   SolanaSigner,
   SolanaChainDef,
@@ -11,11 +10,9 @@ import { createInternalState } from "./internal.js";
 import type { AlchemyWalletTransport } from "./transport.js";
 import type { SolanaChainId } from "@alchemy/wallet-api-types";
 
-// ── Internal Solana chain definitions ────────────────────────────────────────
-
 const solanaMainnet: SolanaChainDef = {
   ...defineChain({
-    id: 900_901,
+    id: 101,
     name: "Solana Mainnet",
     nativeCurrency: { name: "SOL", symbol: "SOL", decimals: 9 },
     rpcUrls: { default: { http: [] } },
@@ -25,7 +22,7 @@ const solanaMainnet: SolanaChainDef = {
 
 const solanaDevnet: SolanaChainDef = {
   ...defineChain({
-    id: 900_903,
+    id: 103,
     name: "Solana Devnet",
     nativeCurrency: { name: "SOL", symbol: "SOL", decimals: 9 },
     rpcUrls: { default: { http: [] } },
@@ -33,14 +30,12 @@ const solanaDevnet: SolanaChainDef = {
   solanaChainId: "solana-devnet",
 };
 
-const SOLANA_CHAINS: Record<string, SolanaChainDef> = {
+const SOLANA_CHAINS: Record<SolanaChainId, SolanaChainDef> = {
   "solana-mainnet": solanaMainnet,
   "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp": solanaMainnet,
   "solana-devnet": solanaDevnet,
   "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1": solanaDevnet,
 };
-
-// ── Factory ──────────────────────────────────────────────────────────────────
 
 export type CreateSolanaSmartWalletClientParams = {
   signer: SolanaSigner;
@@ -48,8 +43,7 @@ export type CreateSolanaSmartWalletClientParams = {
   chainId: SolanaChainId;
   account?: string;
   paymaster?: {
-    policyId?: string;
-    policyIds?: string[];
+    policyId: string;
   };
 };
 
@@ -60,10 +54,7 @@ export const createSolanaSmartWalletClient = ({
   account,
   paymaster,
 }: CreateSolanaSmartWalletClientParams): SolanaSmartWalletClient => {
-  const _policyIds = [
-    ...(paymaster?.policyId ? [paymaster.policyId] : []),
-    ...(paymaster?.policyIds ?? []),
-  ];
+  const _policyIds = paymaster?.policyId ? [paymaster.policyId] : [];
 
   const _account = account ?? signer.address;
 
@@ -73,7 +64,7 @@ export const createSolanaSmartWalletClient = ({
   }
 
   return createClient({
-    account: _account as Address,
+    account: _account as Address, // TODO(jh): be sure viem doesn't freak out that this isn't hex
     transport,
     chain,
     name: "alchemySolanaSmartWalletClient",
@@ -83,9 +74,5 @@ export const createSolanaSmartWalletClient = ({
       internal: createInternalState(),
       owner: signer,
     }))
-    .extend(
-      solanaSmartWalletActions as (
-        client: InnerWalletApiClient<"solana">,
-      ) => ReturnType<typeof solanaSmartWalletActions>,
-    ) as unknown as SolanaSmartWalletClient;
+    .extend(solanaSmartWalletActions);
 };

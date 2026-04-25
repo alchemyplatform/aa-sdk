@@ -7,16 +7,15 @@ import {
   signSignatureRequest,
   type SignSignatureRequestResult,
 } from "./signSignatureRequest.js";
-import { signSolanaTransaction } from "./signSolanaTransaction.js";
+import { signSolanaPreparedCalls } from "./signSolanaPreparedCalls.js";
 import type { Prettify } from "viem";
 import type { InnerWalletApiClient, Mode } from "../types.js";
 import type { SolanaSendPreparedCallsParams } from "./sendPreparedCalls.js";
 import { LOGGER } from "../logger.js";
 
-// ── EVM types ────────────────────────────────────────────────────────────────
-
 export type SignPreparedCallsParams = Prettify<PrepareCallsResult>;
 
+/** Replace signatureRequest/feePayment with the actual signature produced by signPreparedCalls. */
 type Signed<T> = T extends { signatureRequest?: unknown }
   ? Prettify<
       Omit<T, "signatureRequest" | "feePayment"> & {
@@ -36,13 +35,9 @@ export type SignPreparedCallsResult =
   | Signed<Extract<PrepareCallsResult, { type: "user-operation-v070" }>>
   | Signed<Extract<PrepareCallsResult, { type: "authorization" }>>;
 
-// ── Solana types ─────────────────────────────────────────────────────────────
-
 export type SolanaSignPreparedCallsParams = Prettify<SolanaPrepareCallsResult>;
 
 export type SolanaSignPreparedCallsResult = SolanaSendPreparedCallsParams;
-
-// ── Derived helpers ──────────────────────────────────────────────────────────
 
 type ArrayCallData = Extract<
   PrepareCallsResult,
@@ -51,12 +46,42 @@ type ArrayCallData = Extract<
 type AuthorizationCall = Extract<ArrayCallData, { type: "authorization" }>;
 type UserOpCall = Exclude<ArrayCallData, { type: "authorization" }>;
 
-// ── Overloads ────────────────────────────────────────────────────────────────
-
+/**
+ * Signs prepared calls using the provided signer.
+ *
+ * @param {InnerWalletApiClient} client - The wallet client to use for signing
+ * @param {SignPreparedCallsParams} params - The prepared calls with signature requests
+ * @returns {Promise<SignPreparedCallsResult>} A Promise that resolves to the signed calls
+ *
+ * @example
+ * ```ts
+ * // Prepare a user operation call.
+ * const preparedCalls = await client.prepareCalls({
+ *   calls: [{
+ *     to: "0x1234...",
+ *     data: "0xabcdef...",
+ *     value: "0x0"
+ *   }],
+ * });
+ *
+ * // Sign the prepared calls.
+ * const signedCalls = await client.signPreparedCalls(preparedCalls);
+ *
+ * // Send the signed calls.
+ * const result = await client.sendPreparedCalls(signedCalls);
+ * ```
+ */
 export async function signPreparedCalls(
   client: InnerWalletApiClient<"evm">,
   params: SignPreparedCallsParams,
 ): Promise<SignPreparedCallsResult>;
+/**
+ * Signs a prepared Solana transaction using the client's Ed25519 signer.
+ *
+ * @param {InnerWalletApiClient<"solana">} client - The Solana wallet client
+ * @param {SolanaSignPreparedCallsParams} params - The prepared Solana transaction with signature request
+ * @returns {Promise<SolanaSignPreparedCallsResult>} The signed Solana transaction
+ */
 export async function signPreparedCalls(
   client: InnerWalletApiClient<"solana">,
   params: SolanaSignPreparedCallsParams,
@@ -67,17 +92,13 @@ export async function signPreparedCalls(
 ): Promise<SignPreparedCallsResult | SolanaSignPreparedCallsResult> {
   LOGGER.debug("signPreparedCalls:start", { type: params.type });
 
-  // ── Solana path ──────────────────────────────────────────────────────────
   if (params.type === "solana-transaction-v0") {
-    const result = await signSolanaTransaction(
+    return signSolanaPreparedCalls(
       client as InnerWalletApiClient<"solana">,
       params as SolanaPrepareCallsResult,
     );
-    LOGGER.debug("signPreparedCalls:solana:ok");
-    return result;
   }
 
-  // ── EVM path ─────────────────────────────────────────────────────────────
   const evmClient = client as InnerWalletApiClient<"evm">;
   const evmParams = params as SignPreparedCallsParams;
 
