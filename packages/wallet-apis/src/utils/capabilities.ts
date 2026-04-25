@@ -3,7 +3,10 @@ import {
   SendPreparedCallsCapabilities as SendPreparedCallsCapabilitiesSchema,
 } from "@alchemy/wallet-api-types/capabilities";
 import type { StaticDecode } from "typebox";
-import type { InnerWalletApiClient } from "../types.js";
+import type {
+  InnerWalletApiClient,
+  InnerSolanaWalletApiClient,
+} from "../types.js";
 
 /**
  * Decoded capabilities matching the schema shape (uses `paymasterService` key).
@@ -133,6 +136,37 @@ export const mergeClientCapabilities = <
         ? { policyId: client.policyIds[0] }
         : { policyIds: client.policyIds },
   } as T;
+};
+
+export type SolanaPaymasterCapability = {
+  policyId: string;
+  webhookData?: string;
+};
+
+export type SolanaPrepareCallsCapabilities = {
+  paymaster?: SolanaPaymasterCapability;
+};
+
+/**
+ * Merges Solana client-level capabilities (policyId from factory) with
+ * request-level capabilities. Request-level takes priority if provided.
+ *
+ * @param {InnerSolanaWalletApiClient} client - The Solana wallet API client
+ * @param {SolanaPrepareCallsCapabilities | undefined} capabilities - Request capabilities to merge with
+ * @returns {SolanaPrepareCallsCapabilities | undefined} The merged capabilities
+ */
+export const mergeSolanaClientCapabilities = (
+  client: InnerSolanaWalletApiClient,
+  capabilities: SolanaPrepareCallsCapabilities | undefined,
+): SolanaPrepareCallsCapabilities | undefined => {
+  if (!client.policyIds?.length || capabilities?.paymaster) {
+    return capabilities;
+  }
+
+  return {
+    ...capabilities,
+    paymaster: { policyId: client.policyIds[0] },
+  };
 };
 
 /**

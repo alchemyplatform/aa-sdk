@@ -37,9 +37,25 @@ export type {
   BaseWalletClient,
   SignerClient,
   SmartWalletClient,
+  SolanaSigner,
+  SolanaSmartWalletClient,
 } from "../types.js";
 export type * from "../client.js";
 export { createSmartWalletClient } from "../client.js";
+
+// Solana client.
+export type * from "../solanaClient.js";
+export { createSolanaSmartWalletClient } from "../solanaClient.js";
+
+// Solana decorator.
+export type { SolanaSmartWalletActions } from "../decorators/solanaSmartWalletActions.js";
+export { solanaSmartWalletActions } from "../decorators/solanaSmartWalletActions.js";
+
+// Solana actions.
+export type * from "../actions/solana/prepareCalls.js";
+export type * from "../actions/solana/signPreparedCalls.js";
+export type * from "../actions/solana/sendPreparedCalls.js";
+export type * from "../actions/solana/sendCalls.js";
 
 // Transport.
 export type * from "../transport.js";

@@ -1,4 +1,5 @@
 import type { WalletServerViemRpcSchema } from "@alchemy/wallet-api-types/rpc";
+import type { SolanaChainId } from "@alchemy/wallet-api-types";
 import type {
   Account,
   Address,
@@ -12,6 +13,7 @@ import type {
 } from "viem";
 import type { InternalState } from "./internal";
 import type { SmartWalletActions } from "./decorators/smartWalletActions";
+import type { SolanaSmartWalletActions } from "./decorators/solanaSmartWalletActions";
 
 export type BaseWalletClient<
   TExtend extends { [key: string]: unknown } | undefined =
@@ -26,7 +28,7 @@ export type BaseWalletClient<
 >;
 
 export type InnerWalletApiClient = BaseWalletClient<{
-  internal: InternalState | undefined; // undefined if you want to skip using an internal cache
+  internal: InternalState | undefined;
   owner: SmartWalletSigner;
   policyIds?: string[];
 }>;
@@ -36,6 +38,27 @@ export type SignerClient = WalletClient<Transport, Chain | undefined, Account>;
 export type SmartWalletSigner = LocalAccount | SignerClient;
 
 export type SmartWalletClient = BaseWalletClient<SmartWalletActions>;
+
+export interface SolanaChainDef extends Chain {
+  solanaChainId: SolanaChainId;
+}
+
+export interface SolanaSigner {
+  address: string;
+  signTransactions(
+    transactions: readonly unknown[],
+    config?: { abortSignal?: AbortSignal; minContextSlot?: bigint },
+  ): Promise<readonly Record<string, Uint8Array>[]>;
+}
+
+export type InnerSolanaWalletApiClient = BaseWalletClient<{
+  internal: InternalState | undefined;
+  owner: SolanaSigner;
+  policyIds?: string[];
+}>;
+
+export type SolanaSmartWalletClient =
+  BaseWalletClient<SolanaSmartWalletActions>;
 
 export type OptionalChainId<T> = T extends { chainId: number }
   ? Omit<T, "chainId"> & { chainId?: number | undefined }

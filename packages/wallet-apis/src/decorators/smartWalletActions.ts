@@ -109,7 +109,7 @@ export type SmartWalletActions = {
 export const smartWalletActions = (
   client: InnerWalletApiClient,
 ): SmartWalletActions => ({
-  // Alchemy methods.
+  // Alchemy actions.
   requestAccount: (params) => requestAccount(client, params),
   prepareCalls: (params) => prepareCalls(client, params),
   listAccounts: (params) => listAccounts(client, params),
@@ -122,7 +122,7 @@ export const smartWalletActions = (
   grantPermissions: (params) => grantPermissions(client, params),
   getCapabilities: (params) => getCapabilities(client, params),
   undelegateAccount: (params) => undelegateAccount(client, params),
-  // Viem methods.
+  // Viem actions.
   getCallsStatus: (params) => getCallsStatus(client, params),
   waitForCallsStatus: (params) => waitForCallsStatus(client, params),
 });
