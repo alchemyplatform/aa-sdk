@@ -1,6 +1,6 @@
-import type { SolanaSigner } from "../types.js";
+import type { SolanaSigner } from "../../types.js";
 import { BaseError } from "@alchemy/common";
-import { LOGGER } from "../logger.js";
+import { LOGGER } from "../../logger.js";
 
 export type SolanaSignatureRequestParams = {
   type: "solana_signTransaction";

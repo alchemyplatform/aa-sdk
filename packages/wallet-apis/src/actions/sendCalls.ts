@@ -1,16 +1,10 @@
 import type { Chain, Prettify } from "viem";
-import type { DistributiveOmit, InnerWalletApiClient, Mode } from "../types.js";
-import type { SolanaChainId } from "@alchemy/wallet-api-types";
-import {
-  prepareCalls,
-  type PrepareCallsParams,
-  type SolanaPrepareCallsParams,
-} from "./prepareCalls.js";
+import type { DistributiveOmit, InnerWalletApiClient } from "../types.js";
+import { prepareCalls, type PrepareCallsParams } from "./prepareCalls.js";
 import { signPreparedCalls } from "./signPreparedCalls.js";
 import {
   sendPreparedCalls,
   type SendPreparedCallsResult,
-  type SolanaSendPreparedCallsResult,
 } from "./sendPreparedCalls.js";
 import { LOGGER } from "../logger.js";
 import { signSignatureRequest } from "./signSignatureRequest.js";
@@ -23,14 +17,6 @@ export type SendCallsParams = Prettify<
 >;
 
 export type SendCallsResult = Prettify<SendPreparedCallsResult>;
-
-export type SolanaSendCallsParams = Prettify<
-  DistributiveOmit<SolanaPrepareCallsParams, "chainId"> & {
-    chainId?: SolanaChainId;
-  }
->;
-
-export type SolanaSendCallsResult = Prettify<SolanaSendPreparedCallsResult>;
 
 /**
  * Prepares, signs, and submits calls. This function internally calls `prepareCalls`, `signPreparedCalls`, and `sendPreparedCalls`.
@@ -45,7 +31,7 @@ export type SolanaSendCallsResult = Prettify<SolanaSendPreparedCallsResult>;
  * @param {object} [params.capabilities] - Optional capabilities to include with the request.
  * @returns {Promise<SendPreparedCallsResult>} A Promise that resolves to the result containing the call ID.
  *
- * @example
+ *  @example
  * ```ts
  * // Send calls (uses signer address via EIP-7702 by default)
  * const result = await client.sendCalls({
@@ -62,88 +48,20 @@ export type SolanaSendCallsResult = Prettify<SolanaSendPreparedCallsResult>;
  * // The result contains the call ID
  * console.log(result.id);
  * ```
+ * <Note>
+ * If using this action with an ERC-20 paymaster in pre-operation mode with `autoPermit`, the contents of the permit will be hidden
+ * from the user. It is recommended to use the `prepareCalls` action instead to manually handle the permit signature.
+ * </Note>
  */
 export async function sendCalls(
-  client: InnerWalletApiClient<"evm">,
-  params: SendCallsParams,
-): Promise<SendCallsResult>;
-/**
- * Prepares, signs, and submits Solana instructions in a single call.
- * Internally calls `prepareCalls`, `signPreparedCalls`, and `sendPreparedCalls`.
- *
- * @param {InnerWalletApiClient<"solana">} client - The Solana wallet API client
- * @param {SolanaSendCallsParams} params - Parameters for sending Solana calls
- * @param {Array<{programId: string, accounts?: Array, data: Hex}>} params.calls - Array of Solana instructions
- * @param {string} [params.account] - The Solana address to execute from. Defaults to the signer's address.
- * @param {object} [params.capabilities] - Optional capabilities (e.g. paymaster sponsorship)
- * @returns {Promise<SolanaSendCallsResult>} The result containing the call ID
- *
- * @example
- * ```ts
- * const result = await client.sendCalls({
- *   calls: [{
- *     programId: "11111111111111111111111111111111",
- *     data: "0x...",
- *   }],
- *   capabilities: {
- *     paymaster: { policyId: "your-policy-id" }
- *   }
- * });
- * ```
- */
-export async function sendCalls(
-  client: InnerWalletApiClient<"solana">,
-  params: SolanaSendCallsParams,
-): Promise<SolanaSendCallsResult>;
-export async function sendCalls(
-  client: InnerWalletApiClient<Mode>,
-  params: SendCallsParams | SolanaSendCallsParams,
-): Promise<SendCallsResult | SolanaSendCallsResult> {
-  if ("solanaChainId" in client.chain) {
-    return sendSolanaCalls(
-      client as InnerWalletApiClient<"solana">,
-      params as SolanaSendCallsParams,
-    );
-  }
-
-  return sendEvmCalls(
-    client as InnerWalletApiClient<"evm">,
-    params as SendCallsParams,
-  );
-}
-
-async function sendSolanaCalls(
-  client: InnerWalletApiClient<"solana">,
-  params: SolanaSendCallsParams,
-): Promise<SolanaSendCallsResult> {
-  LOGGER.info("sendCalls:start", {
-    calls: params.calls?.length,
-    hasCapabilities: !!params.capabilities,
-  });
-
-  const { chainId, ...rest } = params;
-  const prepared = await prepareCalls(client, {
-    ...rest,
-    ...(chainId != null ? { chainId } : {}),
-  });
-
-  const signed = await signPreparedCalls(client, prepared);
-  const res = await sendPreparedCalls(client, signed);
-  LOGGER.info("sendCalls:done");
-  return res;
-}
-
-async function sendEvmCalls(
-  client: InnerWalletApiClient<"evm">,
+  client: InnerWalletApiClient,
   params: SendCallsParams,
 ): Promise<SendCallsResult> {
   LOGGER.info("sendCalls:start", {
     calls: params.calls?.length,
     hasCapabilities: !!params.capabilities,
   });
-
   const { chain, ...prepareCallsParams } = params;
-
   let calls = await prepareCalls(client, {
     ...prepareCallsParams,
     ...(chain != null ? { chainId: chain.id } : {}),
@@ -157,6 +75,7 @@ async function sendEvmCalls(
 
     const secondCallParams = {
       ...calls.modifiedRequest,
+      // WebAuthn signatures are not supported for paymaster permits (throws above).
       paymasterPermitSignature: signature as Exclude<
         typeof signature,
         { type: "webauthn-p256" }

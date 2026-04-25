@@ -1,5 +1,10 @@
-import type { Client, LocalAccount } from "viem";
-import type { InnerWalletApiClient, SignerClient } from "../types.js";
+import type { Chain, Client, LocalAccount } from "viem";
+import type {
+  InnerWalletApiClient,
+  InnerSolanaWalletApiClient,
+  SignerClient,
+  SolanaChainDef,
+} from "../types.js";
 import { BaseError } from "@alchemy/common";
 
 /**
@@ -16,7 +21,7 @@ export function isSmartWalletClient(
 
 export function isSolanaClient(
   client: Client,
-): client is InnerWalletApiClient<"solana"> {
+): client is InnerSolanaWalletApiClient {
   return client.name === "alchemySolanaSmartWalletClient" && "owner" in client;
 }
 
@@ -35,6 +40,10 @@ export function assertSmartWalletClient(
   if (!isSmartWalletClient(client)) {
     throw new BaseError(message);
   }
+}
+
+export function isSolanaChain(chain: Chain): chain is SolanaChainDef {
+  return "solanaChainId" in chain;
 }
 
 export function isLocalAccount(

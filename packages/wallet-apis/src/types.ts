@@ -15,7 +15,29 @@ import type { InternalState } from "./internal";
 import type { SmartWalletActions } from "./decorators/smartWalletActions";
 import type { SolanaSmartWalletActions } from "./decorators/solanaSmartWalletActions";
 
-export type Mode = "evm" | "solana";
+export type BaseWalletClient<
+  TExtend extends { [key: string]: unknown } | undefined =
+    | { [key: string]: unknown }
+    | undefined,
+> = Client<
+  Transport<"alchemyHttp">,
+  Chain,
+  JsonRpcAccount<Address>,
+  WalletServerViemRpcSchema,
+  TExtend
+>;
+
+export type InnerWalletApiClient = BaseWalletClient<{
+  internal: InternalState | undefined;
+  owner: SmartWalletSigner;
+  policyIds?: string[];
+}>;
+
+export type SignerClient = WalletClient<Transport, Chain | undefined, Account>;
+
+export type SmartWalletSigner = LocalAccount | SignerClient;
+
+export type SmartWalletClient = BaseWalletClient<SmartWalletActions>;
 
 export interface SolanaChainDef extends Chain {
   solanaChainId: SolanaChainId;
@@ -29,29 +51,11 @@ export interface SolanaSigner {
   ): Promise<readonly Record<string, Uint8Array>[]>;
 }
 
-export type BaseWalletClient<
-  TExtend extends { [key: string]: unknown } | undefined =
-    | { [key: string]: unknown }
-    | undefined,
-> = Client<
-  Transport<"alchemyHttp">,
-  Chain,
-  JsonRpcAccount<Address>,
-  WalletServerViemRpcSchema,
-  TExtend
->;
-
-export type InnerWalletApiClient<M extends Mode = "evm"> = BaseWalletClient<{
+export type InnerSolanaWalletApiClient = BaseWalletClient<{
   internal: InternalState | undefined;
-  owner: M extends "evm" ? SmartWalletSigner : SolanaSigner;
+  owner: SolanaSigner;
   policyIds?: string[];
 }>;
-
-export type SignerClient = WalletClient<Transport, Chain | undefined, Account>;
-
-export type SmartWalletSigner = LocalAccount | SignerClient;
-
-export type SmartWalletClient = BaseWalletClient<SmartWalletActions>;
 
 export type SolanaSmartWalletClient =
   BaseWalletClient<SolanaSmartWalletActions>;

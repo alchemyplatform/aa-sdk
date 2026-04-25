@@ -1,7 +1,5 @@
 import type { Prettify } from "viem";
-import type { DistributiveOmit, InnerWalletApiClient, Mode } from "../types.ts";
-import { PreparedCall_SolanaV0_Signed as PreparedCall_SolanaV0_SignedSchema } from "@alchemy/wallet-api-types";
-import type { StaticDecode } from "typebox";
+import type { DistributiveOmit, InnerWalletApiClient } from "../types.ts";
 import { LOGGER } from "../logger.js";
 import {
   mergeClientCapabilities,
@@ -18,39 +16,22 @@ import {
 } from "../utils/schema.js";
 
 const schema = methodSchema(MethodSchema);
-type BaseSendPreparedCallsParams = MethodParams<typeof MethodSchema>;
-type SendPreparedCallsResponse = MethodResponse<typeof MethodSchema>;
-
-type EvmBaseSendPreparedCallsParams = Exclude<
-  BaseSendPreparedCallsParams,
+type AllSendPreparedCallsParams = MethodParams<typeof MethodSchema>;
+type BaseSendPreparedCallsParams = Exclude<
+  AllSendPreparedCallsParams,
   { type: "solana-transaction-v0" }
 >;
+type SendPreparedCallsResponse = MethodResponse<typeof MethodSchema>;
 
 export type SendPreparedCallsParams = Prettify<
   WithCapabilities<
-    DistributiveOmit<EvmBaseSendPreparedCallsParams, "chainId"> & {
+    DistributiveOmit<BaseSendPreparedCallsParams, "chainId"> & {
       chainId?: number;
     }
   >
 >;
 
-type EvmSendPreparedCallsResponse = Extract<
-  SendPreparedCallsResponse,
-  { details: { type: "user-operation" | "delegation" } }
->;
-
-export type SendPreparedCallsResult = EvmSendPreparedCallsResponse;
-
-export type SolanaSendPreparedCallsParams = Prettify<
-  StaticDecode<typeof PreparedCall_SolanaV0_SignedSchema>
->;
-
-type SolanaSendPreparedCallsResponse = Extract<
-  SendPreparedCallsResponse,
-  { details: { type: "solana-transaction-v0" } }
->;
-
-export type SolanaSendPreparedCallsResult = SolanaSendPreparedCallsResponse;
+export type SendPreparedCallsResult = SendPreparedCallsResponse;
 
 /**
  * Sends prepared calls by submitting a signed user operation.
@@ -84,55 +65,6 @@ export type SolanaSendPreparedCallsResult = SolanaSendPreparedCallsResponse;
  * ```
  */
 export async function sendPreparedCalls(
-  client: InnerWalletApiClient<"evm">,
-  params: SendPreparedCallsParams,
-): Promise<SendPreparedCallsResult>;
-/**
- * Sends a signed Solana transaction.
- * This method is used after signing the signature request returned from prepareCalls.
- *
- * @param {InnerWalletApiClient<"solana">} client - The Solana wallet API client
- * @param {SolanaSendPreparedCallsParams} params - The signed Solana transaction
- * @returns {Promise<SolanaSendPreparedCallsResult>} The result containing the call ID
- */
-export async function sendPreparedCalls(
-  client: InnerWalletApiClient<"solana">,
-  params: SolanaSendPreparedCallsParams,
-): Promise<SolanaSendPreparedCallsResult>;
-export async function sendPreparedCalls(
-  client: InnerWalletApiClient<Mode>,
-  params: SendPreparedCallsParams | SolanaSendPreparedCallsParams,
-): Promise<SendPreparedCallsResult | SolanaSendPreparedCallsResult> {
-  if ("solanaChainId" in client.chain) {
-    return sendSolanaPreparedCalls(
-      client as InnerWalletApiClient<"solana">,
-      params as SolanaSendPreparedCallsParams,
-    );
-  }
-
-  return sendEvmPreparedCalls(
-    client as InnerWalletApiClient,
-    params as SendPreparedCallsParams,
-  );
-}
-
-async function sendSolanaPreparedCalls(
-  client: InnerWalletApiClient<"solana">,
-  params: SolanaSendPreparedCallsParams,
-): Promise<SolanaSendPreparedCallsResult> {
-  LOGGER.debug("sendPreparedCalls:start", { type: params.type });
-
-  const rpcParams = encode(schema.request, params);
-  const rpcResp = await (client as unknown as InnerWalletApiClient).request({
-    method: "wallet_sendPreparedCalls",
-    params: [rpcParams],
-  });
-
-  LOGGER.debug("sendPreparedCalls:done");
-  return decode(schema.response, rpcResp) as SolanaSendPreparedCallsResult;
-}
-
-async function sendEvmPreparedCalls(
   client: InnerWalletApiClient,
   params: SendPreparedCallsParams,
 ): Promise<SendPreparedCallsResult> {
@@ -160,5 +92,5 @@ async function sendEvmPreparedCalls(
   });
 
   LOGGER.debug("sendPreparedCalls:done");
-  return decode(schema.response, rpcResp) as SendPreparedCallsResult;
+  return decode(schema.response, rpcResp);
 }

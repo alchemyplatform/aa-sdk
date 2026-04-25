@@ -1,16 +1,11 @@
 import { assertNever, BaseError } from "@alchemy/common";
-import type {
-  PrepareCallsResult,
-  SolanaPrepareCallsResult,
-} from "./prepareCalls.ts";
+import type { PrepareCallsResult } from "./prepareCalls.ts";
 import {
   signSignatureRequest,
   type SignSignatureRequestResult,
 } from "./signSignatureRequest.js";
-import { signSolanaPreparedCalls } from "./signSolanaPreparedCalls.js";
 import type { Prettify } from "viem";
-import type { InnerWalletApiClient, Mode } from "../types.js";
-import type { SolanaSendPreparedCallsParams } from "./sendPreparedCalls.js";
+import type { InnerWalletApiClient } from "../types.js";
 import { LOGGER } from "../logger.js";
 
 export type SignPreparedCallsParams = Prettify<PrepareCallsResult>;
@@ -35,10 +30,7 @@ export type SignPreparedCallsResult =
   | Signed<Extract<PrepareCallsResult, { type: "user-operation-v070" }>>
   | Signed<Extract<PrepareCallsResult, { type: "authorization" }>>;
 
-export type SolanaSignPreparedCallsParams = Prettify<SolanaPrepareCallsResult>;
-
-export type SolanaSignPreparedCallsResult = SolanaSendPreparedCallsParams;
-
+// Decoded types derived from PrepareCallsResult (numbers/bigints, not hex strings)
 type ArrayCallData = Extract<
   PrepareCallsResult,
   { type: "array" }
@@ -72,40 +64,15 @@ type UserOpCall = Exclude<ArrayCallData, { type: "authorization" }>;
  * ```
  */
 export async function signPreparedCalls(
-  client: InnerWalletApiClient<"evm">,
+  client: InnerWalletApiClient,
   params: SignPreparedCallsParams,
-): Promise<SignPreparedCallsResult>;
-/**
- * Signs a prepared Solana transaction using the client's Ed25519 signer.
- *
- * @param {InnerWalletApiClient<"solana">} client - The Solana wallet client
- * @param {SolanaSignPreparedCallsParams} params - The prepared Solana transaction with signature request
- * @returns {Promise<SolanaSignPreparedCallsResult>} The signed Solana transaction
- */
-export async function signPreparedCalls(
-  client: InnerWalletApiClient<"solana">,
-  params: SolanaSignPreparedCallsParams,
-): Promise<SolanaSignPreparedCallsResult>;
-export async function signPreparedCalls(
-  client: InnerWalletApiClient<Mode>,
-  params: SignPreparedCallsParams | SolanaSignPreparedCallsParams,
-): Promise<SignPreparedCallsResult | SolanaSignPreparedCallsResult> {
+): Promise<SignPreparedCallsResult> {
   LOGGER.debug("signPreparedCalls:start", { type: params.type });
-
-  if (params.type === "solana-transaction-v0") {
-    return signSolanaPreparedCalls(
-      client as InnerWalletApiClient<"solana">,
-      params as SolanaPrepareCallsResult,
-    );
-  }
-
-  const evmClient = client as InnerWalletApiClient<"evm">;
-  const evmParams = params as SignPreparedCallsParams;
 
   const signAuthorizationCall = async (call: AuthorizationCall) => {
     const { signatureRequest: _signatureRequest, ...rest } = call;
 
-    const signature = await signSignatureRequest(evmClient, {
+    const signature = await signSignatureRequest(client, {
       type: "eip7702Auth",
       data: {
         ...rest.data,
@@ -130,7 +97,7 @@ export async function signPreparedCalls(
       );
     }
 
-    const signature = await signSignatureRequest(evmClient, signatureRequest);
+    const signature = await signSignatureRequest(client, signatureRequest);
     const res = {
       ...rest,
       signature,
@@ -139,11 +106,11 @@ export async function signPreparedCalls(
     return res;
   };
 
-  if (evmParams.type === "array") {
+  if (params.type === "array") {
     const res = {
       type: "array" as const,
       data: await Promise.all(
-        evmParams.data.map((call) =>
+        params.data.map((call) =>
           call.type === "authorization"
             ? signAuthorizationCall(call)
             : signUserOperationCall(call),
@@ -153,38 +120,36 @@ export async function signPreparedCalls(
     LOGGER.debug("signPreparedCalls:array:ok", { count: res.data.length });
     return res;
   } else if (
-    evmParams.type === "user-operation-v060" ||
-    evmParams.type === "user-operation-v070"
+    params.type === "user-operation-v060" ||
+    params.type === "user-operation-v070"
   ) {
-    const res = await signUserOperationCall(evmParams);
+    const res = await signUserOperationCall(params);
     LOGGER.debug("signPreparedCalls:single-userOp:ok");
     return res;
-  } else if (evmParams.type === "authorization") {
-    const { signatureRequest: _signatureRequest, ...rest } = evmParams;
-    const signature = await signSignatureRequest(evmClient, {
+  } else if (params.type === "authorization") {
+    const { signatureRequest: _signatureRequest, ...rest } = params;
+    const signature = await signSignatureRequest(client, {
       type: "eip7702Auth",
       data: {
         ...rest.data,
-        chainId: evmParams.chainId,
+        chainId: params.chainId,
       },
     });
     const res = { ...rest, signature };
     LOGGER.debug("signPreparedCalls:single-authorization:ok");
     return res;
-  } else if (evmParams.type === "paymaster-permit") {
-    LOGGER.warn("signPreparedCalls:invalid-call-type", {
-      type: evmParams.type,
-    });
+  } else if (params.type === "paymaster-permit") {
+    LOGGER.warn("signPreparedCalls:invalid-call-type", { type: params.type });
     throw new BaseError(
-      `Invalid call type ${evmParams.type} for signing prepared calls`,
+      `Invalid call type ${params.type} for signing prepared calls`,
     );
   } else {
     LOGGER.warn("signPreparedCalls:unexpected-call-type", {
-      type: (evmParams as { type?: unknown }).type,
+      type: (params as { type?: unknown }).type,
     });
     return assertNever(
-      evmParams,
-      `Unexpected call type in ${evmParams} for signing prepared calls`,
+      params,
+      `Unexpected call type in ${params} for signing prepared calls`,
     );
   }
 }
