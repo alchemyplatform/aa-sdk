@@ -36,7 +36,7 @@ export async function signPreparedCalls(
   client: InnerSolanaWalletApiClient,
   params: SolanaSignPreparedCallsParams,
 ): Promise<SolanaSignPreparedCallsResult> {
-  LOGGER.debug("signPreparedCalls:start");
+  LOGGER.debug("solana:signPreparedCalls:start");
 
   const signature = await signSolanaSignatureRequest(
     client.owner,
@@ -45,6 +45,6 @@ export async function signPreparedCalls(
 
   const { signatureRequest: _, feePayment: __, details: ___, ...rest } = params;
 
-  LOGGER.debug("signPreparedCalls:done");
+  LOGGER.debug("solana:signPreparedCalls:done");
   return { ...rest, signature };
 }

@@ -48,7 +48,7 @@ export async function sendCalls(
   client: InnerSolanaWalletApiClient,
   params: SolanaSendCallsParams,
 ): Promise<SolanaSendCallsResult> {
-  LOGGER.info("sendCalls:start", {
+  LOGGER.info("solana:sendCalls:start", {
     calls: params.calls?.length,
     hasCapabilities: !!params.capabilities,
   });
@@ -61,6 +61,6 @@ export async function sendCalls(
 
   const signed = await signPreparedCalls(client, prepared);
   const res = await sendPreparedCalls(client, signed);
-  LOGGER.info("sendCalls:done");
+  LOGGER.info("solana:sendCalls:done");
   return res;
 }

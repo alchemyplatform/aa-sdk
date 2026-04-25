@@ -44,7 +44,7 @@ export async function sendPreparedCalls(
   client: InnerSolanaWalletApiClient,
   params: SolanaSendPreparedCallsParams,
 ): Promise<SolanaSendPreparedCallsResult> {
-  LOGGER.debug("sendPreparedCalls:start", { type: params.type });
+  LOGGER.debug("solana:sendPreparedCalls:start", { type: params.type });
 
   const rpcParams = encode(schema.request, params);
   const rpcResp = await client.request({
@@ -52,7 +52,7 @@ export async function sendPreparedCalls(
     params: [rpcParams],
   });
 
-  LOGGER.debug("sendPreparedCalls:done");
+  LOGGER.debug("solana:sendPreparedCalls:done");
   const decoded = decode(schema.response, rpcResp);
 
   if (!isSolanaResponse(decoded)) {

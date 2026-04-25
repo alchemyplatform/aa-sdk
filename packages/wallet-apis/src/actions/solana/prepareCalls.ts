@@ -92,7 +92,7 @@ export async function prepareCalls(
     ? { paymasterService: merged.paymaster }
     : undefined;
 
-  LOGGER.debug("prepareCalls:start", {
+  LOGGER.debug("solana:prepareCalls:start", {
     callsCount: params.calls?.length,
     hasCapabilities: !!caps,
   });
@@ -109,7 +109,7 @@ export async function prepareCalls(
     params: [rpcParams],
   });
 
-  LOGGER.debug("prepareCalls:done");
+  LOGGER.debug("solana:prepareCalls:done");
   const decoded = decode(schema.response, rpcResp);
 
   if (!isSolanaResponse(decoded)) {
