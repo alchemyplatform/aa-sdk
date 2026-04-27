@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.88.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.88.0...v4.88.1) (2026-04-24)
+
+**Note:** Version bump only for package @aa-sdk/core
+
+# [4.88.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.87.2...v4.88.0) (2026-04-23)
+
+**Note:** Version bump only for package @aa-sdk/core
+
 ## [4.87.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.87.1...v4.87.2) (2026-04-17)
 
 **Note:** Version bump only for package @aa-sdk/core
