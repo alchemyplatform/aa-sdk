@@ -1,4 +1,9 @@
-import { type Hex, type Prettify, type TypedDataDefinition } from "viem";
+import {
+  type Hex,
+  type Prettify,
+  type TypedData,
+  type TypedDataDefinition,
+} from "viem";
 import type { InnerWalletApiClient } from "../types.ts";
 import { prepareSign } from "./prepareSign.js";
 import { signSignatureRequest } from "./signSignatureRequest.js";
@@ -8,7 +13,7 @@ import { LOGGER } from "../logger.js";
 import { resolveAddress, type AccountParam } from "../utils/resolve.js";
 
 export type SignTypedDataParams = Prettify<
-  TypedDataDefinition & {
+  TypedDataDefinition<TypedData | Record<string, unknown>> & {
     account?: AccountParam;
   }
 >;
