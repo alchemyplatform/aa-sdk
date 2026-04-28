@@ -4,8 +4,10 @@ import {
   type Hex,
   type SignableMessage,
   bytesToHex,
+  type TypedData,
   type TypedDataDefinition,
   getTypesForEIP712Domain,
+  validateTypedData,
 } from "viem";
 import type { TypedDataDefinition as WalletServerTypedDataDefinition } from "@alchemy/wallet-api-types";
 
@@ -35,7 +37,10 @@ export const typedDataToJsonSafe = ({
   primaryType,
   message,
   types,
-}: TypedDataDefinition): WalletServerTypedDataDefinition => {
+}: TypedDataDefinition<
+  TypedData | Record<string, unknown>
+>): WalletServerTypedDataDefinition => {
+  validateTypedData({ domain, primaryType, message, types });
   return {
     domain: {
       ...domain,
@@ -48,7 +53,7 @@ export const typedDataToJsonSafe = ({
       ...Object.fromEntries(
         Object.entries(types).map(([key, value]) => [
           key,
-          value ? [...value] : [],
+          Array.isArray(value) ? [...value] : [],
         ]),
       ),
       EIP712Domain: [...getTypesForEIP712Domain({ domain })],
