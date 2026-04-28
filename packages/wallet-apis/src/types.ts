@@ -28,21 +28,16 @@ export type BaseWalletClient<
   TExtend
 >;
 
-export type InnerWalletApiClient = BaseWalletClient<{
-  internal: InternalState | undefined;
-  owner: SmartWalletSigner;
-  policyIds?: string[];
-}>;
-
 export type SignerClient = WalletClient<Transport, Chain | undefined, Account>;
 
 export type SmartWalletSigner = LocalAccount | SignerClient;
 
 export type SmartWalletClient = BaseWalletClient<SmartWalletActions>;
 
-export interface SolanaChainDef extends Chain {
-  solanaChainId: SolanaChainId;
-}
+export type SolanaSmartWalletClient = BaseWalletClient<
+  SolanaSmartWalletActions & { solanaAccount: string },
+  undefined
+>;
 
 /** Solana wallet standard signer (Privy, Phantom, etc). Takes serialized tx, returns signed serialized tx. */
 export interface SolanaWalletStandardSigner {
@@ -72,6 +67,16 @@ export type SolanaSigner =
   | SolanaTransactionPartialSigner
   | SolanaMessageSigner;
 
+export interface SolanaChainDef extends Chain {
+  solanaChainId: SolanaChainId;
+}
+
+export type InnerWalletApiClient = BaseWalletClient<{
+  internal: InternalState | undefined;
+  owner: SmartWalletSigner;
+  policyIds?: string[];
+}>;
+
 export type InnerSolanaWalletApiClient = BaseWalletClient<
   {
     internal: InternalState | undefined;
@@ -79,11 +84,6 @@ export type InnerSolanaWalletApiClient = BaseWalletClient<
     solanaAccount: string;
     policyIds?: string[];
   },
-  undefined
->;
-
-export type SolanaSmartWalletClient = BaseWalletClient<
-  SolanaSmartWalletActions & { solanaAccount: string },
   undefined
 >;
 
