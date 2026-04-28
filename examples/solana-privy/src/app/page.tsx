@@ -39,7 +39,7 @@ export default function Home() {
       const client = createSolanaSmartWalletClient({
         signer: solanaWallet,
         transport,
-        chainId: "solana-devnet",
+        chain: "solana:devnet",
         paymaster: { policyId: SOLANA_POLICY_ID },
       });
 

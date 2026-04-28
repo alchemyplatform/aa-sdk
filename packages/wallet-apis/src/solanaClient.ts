@@ -17,7 +17,7 @@ const solanaMainnet: SolanaChainDef = {
     nativeCurrency: { name: "SOL", symbol: "SOL", decimals: 9 },
     rpcUrls: { default: { http: [] } },
   }),
-  solanaChainId: "solana-mainnet",
+  solanaChainId: "solana:mainnet",
 };
 
 const solanaDevnet: SolanaChainDef = {
@@ -27,20 +27,20 @@ const solanaDevnet: SolanaChainDef = {
     nativeCurrency: { name: "SOL", symbol: "SOL", decimals: 9 },
     rpcUrls: { default: { http: [] } },
   }),
-  solanaChainId: "solana-devnet",
+  solanaChainId: "solana:devnet",
 };
 
 const SOLANA_CHAINS: Record<SolanaChainId, SolanaChainDef> = {
-  "solana-mainnet": solanaMainnet,
+  "solana:mainnet": solanaMainnet,
   "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp": solanaMainnet,
-  "solana-devnet": solanaDevnet,
+  "solana:devnet": solanaDevnet,
   "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1": solanaDevnet,
 };
 
 export type CreateSolanaSmartWalletClientParams = {
   signer: SolanaSigner;
   transport: AlchemyWalletTransport;
-  chainId: SolanaChainId;
+  chain: SolanaChainId;
   account?: string;
   paymaster?: {
     policyId: string;
@@ -50,7 +50,7 @@ export type CreateSolanaSmartWalletClientParams = {
 export const createSolanaSmartWalletClient = ({
   signer,
   transport,
-  chainId,
+  chain,
   account,
   paymaster,
 }: CreateSolanaSmartWalletClientParams): SolanaSmartWalletClient => {
@@ -58,15 +58,15 @@ export const createSolanaSmartWalletClient = ({
 
   const _account = account ?? signer.address;
 
-  const chain = SOLANA_CHAINS[chainId];
+  const _chain = SOLANA_CHAINS[chain];
   if (!chain) {
-    throw new BaseError(`Unsupported Solana chain ID: ${chainId}`);
+    throw new BaseError(`Unsupported Solana chain: ${chain}`);
   }
 
   return createClient({
-    account: _account as Address, // TODO(jh): be sure viem doesn't freak out that this isn't hex
+    account: _account as Address, // This cast is a lie to get Viem to accept it, but it's fine since the Solana client only uses our custom actions.
     transport,
-    chain,
+    chain: _chain,
     name: "alchemySolanaSmartWalletClient",
   })
     .extend(() => ({

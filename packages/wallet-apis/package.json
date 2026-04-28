@@ -49,6 +49,7 @@
     "test:run": "vitest run"
   },
   "devDependencies": {
+    "@solana/kit": "^6.8.0",
     "@types/deep-equal": "^1.0.4",
     "abitype": "^1.0.0",
     "typescript-template": "workspace:*",
@@ -56,13 +57,13 @@
   },
   "dependencies": {
     "@alchemy/common": "workspace:*",
-    "@alchemy/wallet-api-types": "0.1.0-local.1",
+    "@alchemy/wallet-api-types": "0.1.0-local.2",
     "deep-equal": "^2.2.3",
     "ox": "^0.11.1",
     "typebox": "^1.0.81"
   },
   "peerDependencies": {
-    "@solana/kit": "^2.0.0",
+    "@solana/kit": ">=2.0.0",
     "viem": "^2.45.0"
   },
   "peerDependenciesMeta": {

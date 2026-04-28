@@ -39,7 +39,7 @@ async function sendAndWait(
   const client = createSolanaSmartWalletClient({
     signer,
     transport: createTransport(),
-    chainId: "solana-devnet",
+    chain: "solana:devnet",
     paymaster: { policyId: SOLANA_POLICY_ID },
   });
 
@@ -68,7 +68,7 @@ async function sendAndWait(
 }
 
 async function main() {
-  console.log("Chain: solana-devnet");
+  console.log("Chain: solana:devnet");
   console.log(`Policy: ${SOLANA_POLICY_ID}`);
 
   // ── Test 1: SolanaTransactionPartialSigner (@solana/kit KeyPairSigner) ──
