@@ -33,19 +33,13 @@ export async function signSolanaSignatureRequest(
     const { signedTransaction } = await signer.signTransaction({
       transaction: txBytes,
     });
-    rawSignature = extractSignerSignature(txBytes, signedTransaction, signer.address);
+    rawSignature = extractSignerSignature(
+      txBytes,
+      signedTransaction,
+      signer.address,
+    );
   } else if (isTransactionPartialSigner(signer)) {
-    const [sigDict] = await signer.signTransactions([txBytes]);
-    if (!sigDict) {
-      throw new BaseError("TransactionPartialSigner returned no signatures");
-    }
-    const sig = sigDict[signer.address];
-    if (!sig) {
-      throw new BaseError(
-        `TransactionPartialSigner did not produce a signature for ${signer.address}`,
-      );
-    }
-    rawSignature = sig;
+    rawSignature = await signWithTransactionPartialSigner(signer, txBytes);
   } else if (isMessageSigner(signer)) {
     const numSigs = txBytes[0];
     const messageStart = 1 + numSigs * 64;
@@ -62,6 +56,42 @@ export async function signSolanaSignatureRequest(
     type: "ed25519",
     data: Base58.fromBytes(rawSignature),
   };
+}
+
+async function signWithTransactionPartialSigner(
+  signer: import("../../types.js").SolanaTransactionPartialSigner,
+  txBytes: Uint8Array,
+): Promise<Uint8Array> {
+  // Dynamically import @solana/kit to deserialize the raw tx bytes into a
+  // Transaction object that TransactionPartialSigner.signTransactions expects.
+  // This keeps @solana/kit as an optional peer dep — only needed for this path.
+  let getTransactionCodec: Awaited<typeof import("@solana/kit")>["getTransactionCodec"];
+  try {
+    const solKit = await import("@solana/kit");
+    getTransactionCodec = solKit.getTransactionCodec;
+  } catch {
+    throw new BaseError(
+      "@solana/kit is required when using a TransactionPartialSigner. " +
+        "Install it with: npm install @solana/kit",
+    );
+  }
+
+  const codec = getTransactionCodec();
+  const transaction = codec.decode(txBytes);
+
+  const [sigDict] = await signer.signTransactions([transaction]);
+  if (!sigDict) {
+    throw new BaseError("TransactionPartialSigner returned no signatures");
+  }
+
+  const sig = sigDict[signer.address];
+  if (!sig) {
+    throw new BaseError(
+      `TransactionPartialSigner did not produce a signature for ${signer.address}`,
+    );
+  }
+
+  return sig;
 }
 
 function extractSignerSignature(
