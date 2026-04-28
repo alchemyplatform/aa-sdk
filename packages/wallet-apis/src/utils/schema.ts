@@ -108,3 +108,22 @@ export function decode<const T extends TSchema>(
     throw error;
   }
 }
+
+/**
+ * Decodes an RPC response against a specific Solana schema.
+ * Used when the RPC returns a union (EVM | Solana) but we know the response
+ * is Solana and want to decode against the narrower schema.
+ */
+export function decodeSolanaResponse<const T extends TSchema>(
+  schema: T,
+  value: unknown,
+): StaticDecode<T> {
+  try {
+    return Value.Decode(schema, value);
+  } catch (error) {
+    if (error instanceof DecodeError) {
+      throw new BaseError(formatCodecError(schema, error), { cause: error });
+    }
+    throw error;
+  }
+}

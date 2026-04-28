@@ -22,21 +22,24 @@ export async function signSolanaSignatureRequest(
 
   LOGGER.debug("signSolanaSignatureRequest:signing");
 
-  const [sigDict] = await signer.signTransactions([txBytes]);
-  if (!sigDict) {
-    throw new BaseError("Solana signer returned no signatures");
-  }
+  let signature: Uint8Array;
 
-  const sigBytes = sigDict[signer.address];
-  if (!sigBytes) {
+  if (signer.signTransaction) {
+    signature = await signer.signTransaction(txBytes);
+  } else if (signer.signMessage) {
+    const numSigs = txBytes[0];
+    const messageStart = 1 + numSigs * 64;
+    const messageBytes = txBytes.slice(messageStart);
+    signature = await signer.signMessage(messageBytes);
+  } else {
     throw new BaseError(
-      `Solana signer did not produce a signature for address ${signer.address}`,
+      "SolanaSigner must implement either signTransaction or signMessage",
     );
   }
 
   LOGGER.debug("signSolanaSignatureRequest:ok");
   return {
     type: "ed25519",
-    data: Base58.fromBytes(sigBytes),
+    data: Base58.fromBytes(signature),
   };
 }

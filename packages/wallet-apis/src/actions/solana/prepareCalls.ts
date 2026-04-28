@@ -16,22 +16,7 @@ import {
   mergeSolanaClientCapabilities,
   type WithCapabilities,
 } from "../../utils/capabilities.js";
-import { wallet_prepareCalls as MethodSchema } from "@alchemy/wallet-api-types/rpc";
-import {
-  methodSchema,
-  encode,
-  decode,
-  type MethodResponse,
-} from "../../utils/schema.js";
-
-const schema = methodSchema(MethodSchema);
-type FullPrepareCallsResponse = MethodResponse<typeof MethodSchema>;
-
-function isSolanaResponse(
-  response: FullPrepareCallsResponse,
-): response is SolanaPrepareCallsResult {
-  return response.type === "solana-transaction-v0";
-}
+import { encode, decodeSolanaResponse } from "../../utils/schema.js";
 
 type BaseSolanaPrepareCallsParams = StaticDecode<
   typeof SolanaPrepareCallsSchema
@@ -97,7 +82,7 @@ export async function prepareCalls(
     hasCapabilities: !!caps,
   });
 
-  const rpcParams = encode(schema.request, {
+  const rpcParams = encode(SolanaPrepareCallsSchema, {
     ...rest,
     chainId: resolvedChainId,
     from,
@@ -110,13 +95,5 @@ export async function prepareCalls(
   });
 
   LOGGER.debug("solana:prepareCalls:done");
-  const decoded = decode(schema.response, rpcResp);
-
-  if (!isSolanaResponse(decoded)) {
-    throw new BaseError(
-      `Unexpected EVM response from Solana prepareCalls: ${decoded.type}`,
-    );
-  }
-
-  return decoded;
+  return decodeSolanaResponse(PreparedCall_SolanaV0Schema, rpcResp);
 }

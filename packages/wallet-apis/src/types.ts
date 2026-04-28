@@ -45,10 +45,8 @@ export interface SolanaChainDef extends Chain {
 
 export interface SolanaSigner {
   address: string;
-  signTransactions(
-    transactions: readonly unknown[],
-    config?: { abortSignal?: AbortSignal; minContextSlot?: bigint },
-  ): Promise<readonly Record<string, Uint8Array>[]>;
+  signTransaction?: (transaction: Uint8Array) => Promise<Uint8Array>;
+  signMessage?: (message: Uint8Array) => Promise<Uint8Array>;
 }
 
 export type InnerSolanaWalletApiClient = BaseWalletClient<{

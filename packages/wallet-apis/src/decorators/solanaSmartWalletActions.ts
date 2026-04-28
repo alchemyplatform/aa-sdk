@@ -21,12 +21,14 @@ import {
 } from "../actions/solana/sendCalls.js";
 import {
   getCallsStatus,
+  type SolanaGetCallsStatusParams,
+  type SolanaGetCallsStatusResult,
+} from "../actions/solana/getCallsStatus.js";
+import {
   waitForCallsStatus,
-  type GetCallsStatusParameters,
-  type GetCallsStatusReturnType,
-  type WaitForCallsStatusParameters,
-  type WaitForCallsStatusReturnType,
-} from "viem/actions";
+  type SolanaWaitForCallsStatusParams,
+  type SolanaWaitForCallsStatusResult,
+} from "../actions/solana/waitForCallsStatus.js";
 
 export type SolanaSmartWalletActions = {
   prepareCalls: (
@@ -40,11 +42,11 @@ export type SolanaSmartWalletActions = {
   ) => Promise<SolanaSendPreparedCallsResult>;
   sendCalls: (params: SolanaSendCallsParams) => Promise<SolanaSendCallsResult>;
   getCallsStatus: (
-    params: GetCallsStatusParameters,
-  ) => Promise<GetCallsStatusReturnType>;
+    params: SolanaGetCallsStatusParams,
+  ) => Promise<SolanaGetCallsStatusResult>;
   waitForCallsStatus: (
-    params: WaitForCallsStatusParameters,
-  ) => Promise<WaitForCallsStatusReturnType>;
+    params: SolanaWaitForCallsStatusParams,
+  ) => Promise<SolanaWaitForCallsStatusResult>;
 };
 
 export const solanaSmartWalletActions = (
@@ -55,8 +57,7 @@ export const solanaSmartWalletActions = (
   signPreparedCalls: (params) => signPreparedCalls(client, params),
   sendPreparedCalls: (params) => sendPreparedCalls(client, params),
   sendCalls: (params) => sendCalls(client, params),
-  // TODO(jh): be sure these work!
+  getCallsStatus: (params) => getCallsStatus(client, params), // Viem's getCallsStatus doesn't work for SOL since chainId isn't hex.
   // Viem actions.
-  getCallsStatus: (params) => getCallsStatus(client, params),
   waitForCallsStatus: (params) => waitForCallsStatus(client, params),
 });
