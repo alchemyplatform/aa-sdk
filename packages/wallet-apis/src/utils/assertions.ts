@@ -4,6 +4,10 @@ import type {
   InnerSolanaWalletApiClient,
   SignerClient,
   SolanaChainDef,
+  SolanaSigner,
+  SolanaWalletStandardSigner,
+  SolanaTransactionPartialSigner,
+  SolanaMessageSigner,
 } from "../types.js";
 import { BaseError } from "@alchemy/common";
 
@@ -56,4 +60,30 @@ export function isSignerClient(
   signer: LocalAccount | SignerClient,
 ): signer is SignerClient {
   return "request" in signer;
+}
+
+export function isWalletStandardSigner(
+  signer: SolanaSigner,
+): signer is SolanaWalletStandardSigner {
+  return (
+    "signTransaction" in signer &&
+    typeof signer.signTransaction === "function"
+  );
+}
+
+export function isTransactionPartialSigner(
+  signer: SolanaSigner,
+): signer is SolanaTransactionPartialSigner {
+  return (
+    "signTransactions" in signer &&
+    typeof signer.signTransactions === "function"
+  );
+}
+
+export function isMessageSigner(
+  signer: SolanaSigner,
+): signer is SolanaMessageSigner {
+  return (
+    "signMessage" in signer && typeof signer.signMessage === "function"
+  );
 }
