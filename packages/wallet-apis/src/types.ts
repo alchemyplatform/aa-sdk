@@ -19,10 +19,11 @@ export type BaseWalletClient<
   TExtend extends { [key: string]: unknown } | undefined =
     | { [key: string]: unknown }
     | undefined,
+  TAccount extends Account | undefined = JsonRpcAccount<Address>,
 > = Client<
   Transport<"alchemyHttp">,
   Chain,
-  JsonRpcAccount<Address>,
+  TAccount,
   WalletServerViemRpcSchema,
   TExtend
 >;
@@ -71,14 +72,20 @@ export type SolanaSigner =
   | SolanaTransactionPartialSigner
   | SolanaMessageSigner;
 
-export type InnerSolanaWalletApiClient = BaseWalletClient<{
-  internal: InternalState | undefined;
-  owner: SolanaSigner;
-  policyIds?: string[];
-}>;
+export type InnerSolanaWalletApiClient = BaseWalletClient<
+  {
+    internal: InternalState | undefined;
+    owner: SolanaSigner;
+    solanaAccount: string;
+    policyIds?: string[];
+  },
+  undefined
+>;
 
-export type SolanaSmartWalletClient =
-  BaseWalletClient<SolanaSmartWalletActions>;
+export type SolanaSmartWalletClient = BaseWalletClient<
+  SolanaSmartWalletActions & { solanaAccount: string },
+  undefined
+>;
 
 export type OptionalChainId<T> = T extends { chainId: number }
   ? Omit<T, "chainId"> & { chainId?: number | undefined }

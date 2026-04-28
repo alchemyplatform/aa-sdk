@@ -43,10 +43,6 @@ export type {
 export type * from "../client.js";
 export { createSmartWalletClient } from "../client.js";
 
-// Solana client.
-export type * from "../solanaClient.js";
-export { createSolanaSmartWalletClient } from "../solanaClient.js";
-
 // Solana decorator.
 export type { SolanaSmartWalletActions } from "../decorators/solanaSmartWalletActions.js";
 export { solanaSmartWalletActions } from "../decorators/solanaSmartWalletActions.js";

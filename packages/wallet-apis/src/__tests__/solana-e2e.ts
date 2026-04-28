@@ -5,7 +5,7 @@
  *   ALCHEMY_API_KEY=<key> SOLANA_POLICY_ID=<id> \
  *     bun packages/wallet-apis/src/__tests__/solana-e2e.ts
  */
-import { createSolanaSmartWalletClient } from "../solanaClient.js";
+import { createSmartWalletClient } from "../client.js";
 import { alchemyWalletTransport } from "../transport.js";
 import type {
   SolanaMessageSigner,
@@ -36,7 +36,7 @@ async function sendAndWait(
   console.log(`\n=== ${label} ===`);
   console.log(`Signer: ${signer.address}`);
 
-  const client = createSolanaSmartWalletClient({
+  const client = createSmartWalletClient({
     signer,
     transport: createTransport(),
     chain: "solana:devnet",

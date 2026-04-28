@@ -7,7 +7,7 @@ import {
   useCreateWallet,
 } from "@privy-io/react-auth/solana";
 import {
-  createSolanaSmartWalletClient,
+  createSmartWalletClient,
   alchemyWalletTransport,
 } from "@alchemy/wallet-apis";
 
@@ -36,7 +36,7 @@ export default function Home() {
         url: "https://api.g.alchemypreview.com/v2",
       });
 
-      const client = createSolanaSmartWalletClient({
+      const client = createSmartWalletClient({
         signer: solanaWallet,
         transport,
         chain: "solana:devnet",

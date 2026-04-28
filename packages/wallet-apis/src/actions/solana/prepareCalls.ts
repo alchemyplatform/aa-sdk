@@ -66,7 +66,7 @@ export async function prepareCalls(
   params: SolanaPrepareCallsParams,
 ): Promise<SolanaPrepareCallsResult> {
   const { account, chainId, capabilities: caps, ...rest } = params;
-  const from = account ?? client.owner.address;
+  const from = account ?? client.solanaAccount;
   if (!isSolanaChain(client.chain)) {
     throw new BaseError("Expected a Solana chain on the client");
   }
