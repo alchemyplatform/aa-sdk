@@ -6,7 +6,7 @@
     "build": "next build"
   },
   "dependencies": {
-    "@alchemy/wallet-apis": "workspace:*",
+    "@alchemy/wallet-apis": "0.1.0-alpha.28",
     "@privy-io/react-auth": "^2.11.0",
     "@solana/kit": "^2.3.0",
     "@solana/spl-token": "^0.4.14",

@@ -24,12 +24,20 @@ if (!SOLANA_POLICY_ID) throw new Error("Missing SOLANA_POLICY_ID");
 const SYSTEM_PROGRAM = "11111111111111111111111111111111";
 
 async function rpc(method: string, params: unknown[]) {
+  const request = { jsonrpc: "2.0", id: 1, method, params };
+  console.log(`\n>>> REQUEST: ${method}`);
+  console.log(JSON.stringify(request, null, 2));
+
   const res = await fetch(RPC_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ jsonrpc: "2.0", id: 1, method, params }),
+    body: JSON.stringify(request),
   });
   const json = await res.json();
+
+  console.log(`\n<<< RESPONSE: ${method}`);
+  console.log(JSON.stringify(json, null, 2));
+
   if (json.error) {
     throw new Error(`RPC error: ${JSON.stringify(json.error)}`);
   }
