@@ -52,12 +52,11 @@ export type SolanaSmartWalletActions = {
 export const solanaSmartWalletActions = (
   client: InnerSolanaWalletApiClient,
 ): SolanaSmartWalletActions => ({
-  // Alchemy actions.
   prepareCalls: (params) => prepareCalls(client, params),
   signPreparedCalls: (params) => signPreparedCalls(client, params),
   sendPreparedCalls: (params) => sendPreparedCalls(client, params),
   sendCalls: (params) => sendCalls(client, params),
-  getCallsStatus: (params) => getCallsStatus(client, params), // Viem's getCallsStatus doesn't work for SOL since chainId isn't hex.
-  // Viem actions.
+  // Note that status actions from Viem don't work since the chain ID is not hex.
+  getCallsStatus: (params) => getCallsStatus(client, params),
   waitForCallsStatus: (params) => waitForCallsStatus(client, params),
 });
