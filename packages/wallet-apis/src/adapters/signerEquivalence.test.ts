@@ -46,7 +46,8 @@ describe("Solana signer adapter equivalence", () => {
     // Adapter 2: fromKeypair (raw Ed25519 signMessage)
     const keypairAdapted = fromKeypair({
       address: kitSigner.address,
-      signMessage: (message) => ed25519Sign(kitSigner.keyPair.privateKey, message),
+      signMessage: (message) =>
+        ed25519Sign(kitSigner.keyPair.privateKey, message),
     });
     const keypairResult = await keypairAdapted.signTransaction({
       transaction: Uint8Array.from(txBytes),
@@ -59,7 +60,10 @@ describe("Solana signer adapter equivalence", () => {
         const numSigs = transaction[0];
         const messageStart = 1 + numSigs * 64;
         const messageBytes = transaction.slice(messageStart);
-        const sig = await ed25519Sign(kitSigner.keyPair.privateKey, messageBytes);
+        const sig = await ed25519Sign(
+          kitSigner.keyPair.privateKey,
+          messageBytes,
+        );
         const signedTx = Uint8Array.from(transaction);
         for (let i = 0; i < numSigs; i++) {
           const offset = 1 + i * 64;
@@ -78,9 +82,7 @@ describe("Solana signer adapter equivalence", () => {
     expect(kitResult.signedTransaction).toEqual(
       keypairResult.signedTransaction,
     );
-    expect(kitResult.signedTransaction).toEqual(
-      directResult.signedTransaction,
-    );
+    expect(kitResult.signedTransaction).toEqual(directResult.signedTransaction);
 
     // Verify the signature slot is actually filled
     const sig = kitResult.signedTransaction.slice(1, 65);

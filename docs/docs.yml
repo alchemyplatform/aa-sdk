@@ -444,6 +444,10 @@ navigation:
                     path: wallets/pages/reference/wallet-apis/src/exports/functions/solanaSmartWalletActions.mdx
                   - page: undelegateAccount
                     path: wallets/pages/reference/wallet-apis/src/exports/functions/undelegateAccount.mdx
+              - section: Interfaces
+                contents:
+                  - page: SolanaStandardSigner
+                    path: wallets/pages/reference/wallet-apis/src/exports/interfaces/SolanaStandardSigner.mdx
               - section: Type Aliases
                 contents:
                   - page: AlchemyWalletTransport

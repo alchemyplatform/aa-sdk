@@ -48,7 +48,6 @@ export interface SolanaStandardSigner {
   }): Promise<{ signedTransaction: Uint8Array }>;
 }
 
-
 export interface SolanaChainDef extends Chain {
   solanaChainId: SolanaChainId;
 }

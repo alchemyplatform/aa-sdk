@@ -9,7 +9,7 @@ layout: reference
 
 ```ts
 type CreateSolanaSmartWalletClientParams = {
-  signer: SolanaSigner;
+  signer: SolanaStandardSigner;
   transport: AlchemyWalletTransport;
   chain: SolanaChainId;
   account?: string;
@@ -78,7 +78,7 @@ Defined in: [packages/wallet-apis/src/client.ts:81](https://github.com/alchemypl
       </td>
 
       <td>
-        `SolanaSigner`
+        [`SolanaStandardSigner`](../interfaces/SolanaStandardSigner)
       </td>
     </tr>
 
