@@ -1,6 +1,6 @@
 # Solana Smart Wallet — Dogfooding Guide
 
-Three ways to test Solana smart wallets: a CLI e2e script using the SDK client, a CLI e2e script using raw JSON-RPC, and a Next.js app with Privy login.
+Five ways to test Solana smart wallets: a CLI e2e script using the SDK client, a CLI e2e script using raw JSON-RPC, a Next.js app with Privy login, and two browser-wallet demos (wallet adapter + raw Phantom).
 
 All three use the **Alchemy Wallet APIs preview endpoint** and run on **Solana devnet**.
 
@@ -309,17 +309,186 @@ const result = await client.waitForCallsStatus({ id });
 
 ---
 
+## 4. Wallet Standard Example (`/wallet-standard`)
+
+Uses `@wallet-standard/app` to discover any installed Solana wallet (Phantom, Solflare, Backpack, etc.) directly — no Privy, no wallet adapter library. This demonstrates that `SolanaStandardSigner` is a real standard, not a Privy-specific thing.
+
+### Run it
+
+Same as the Privy example — `pnpm dev` from `examples/solana-privy/`, then open [http://localhost:3000/wallet-standard](http://localhost:3000/wallet-standard).
+
+### Walkthrough
+
+1. The page lists all detected browser wallets. Click **Connect \<wallet-name\>**
+2. Approve the connection in the wallet popup
+3. Click **Send Sponsored SOL Transfer**
+4. Approve the transaction signing in the wallet popup
+5. Watch the status area for confirmation
+
+### How the code works
+
+`getWallets()` from `@wallet-standard/app` discovers wallets that register via the wallet-standard protocol. The wallet's `solana:signTransaction` feature already speaks `Uint8Array` in and out — matching `SolanaStandardSigner` with no serialization adapter:
+
+```ts
+import { getWallets } from "@wallet-standard/app";
+
+const { get, on } = getWallets();
+const solanaWallets = get().filter((w) =>
+  "standard:connect" in w.features && "solana:signTransaction" in w.features
+);
+
+// connect
+const { accounts } = await wallet.features["standard:connect"].connect();
+const account = accounts[0];
+
+// build signer — Uint8Array in, Uint8Array out, no VersionedTransaction dance
+const signer = {
+  address: account.address,
+  signTransaction: async ({ transaction }: { transaction: Uint8Array }) => {
+    const [output] = await wallet.features["solana:signTransaction"]
+      .signTransaction({ account, transaction });
+    return output; // { signedTransaction: Uint8Array }
+  },
+};
+
+const client = createSmartWalletClient({
+  signer,
+  transport: alchemyWalletTransport({ apiKey, url }),
+  chain: "solana:devnet",
+  paymaster: { policyId: SOLANA_POLICY_ID },
+});
+```
+
+No `VersionedTransaction`, no `@solana/web3.js` — just wallet-standard primitives.
+
+---
+
+## 5. Raw Phantom Example (`/phantom-raw`)
+
+Connects directly to `window.phantom.solana` without any wallet adapter library. This is the most minimal integration — useful for understanding what the adapter layer does under the hood.
+
+### Prerequisites
+
+[Phantom](https://phantom.app/) must be installed as a browser extension.
+
+### Run it
+
+Same as the Privy example — `pnpm dev` from `examples/solana-privy/`, then open [http://localhost:3000/phantom-raw](http://localhost:3000/phantom-raw).
+
+### Walkthrough
+
+1. Click **Connect Phantom** — approve the connection in the Phantom popup
+2. Click **Send Sponsored SOL Transfer**
+3. Approve the transaction signing in the Phantom popup
+4. Watch the status area for confirmation
+
+### How the code works
+
+Phantom's injected provider (`window.phantom.solana`) exposes `connect()` and `signTransaction()`. The adapter is identical to the wallet adapter version — deserialize, sign, re-serialize:
+
+```ts
+import { VersionedTransaction } from "@solana/web3.js";
+
+const phantom = window.phantom?.solana;
+const { publicKey } = await phantom.connect();
+
+const signer = {
+  address: publicKey.toBase58(),
+  signTransaction: async ({ transaction }: { transaction: Uint8Array }) => {
+    const tx = VersionedTransaction.deserialize(transaction);
+    const signed = await phantom.signTransaction(tx);
+    return { signedTransaction: new Uint8Array(signed.serialize()) };
+  },
+};
+
+const client = createSmartWalletClient({ signer, transport, chain, paymaster });
+```
+
+No additional dependencies are needed beyond what the Privy example already has.
+
+---
+
 ## Signer compatibility
 
 The SDK accepts three kinds of Solana signers:
 
-| Signer type | What it is | How it signs |
-|-------------|-----------|-------------|
-| **`SolanaTransactionPartialSigner`** | `@solana/kit` `KeyPairSigner` or anything with `signTransactions` | Deserializes the full transaction, signs, returns signature dict |
-| **`SolanaMessageSigner`** | Any object with `{ address, signMessage }` | Signs raw message bytes extracted from the transaction |
-| **Wallet-standard** | Privy, Phantom, etc. via `@wallet-standard/base` | Uses `signTransaction` feature from the standard |
+| Signer type | What it is | How it signs | Example |
+|-------------|-----------|-------------|---------|
+| **`SolanaTransactionPartialSigner`** | `@solana/kit` `KeyPairSigner` or anything with `signTransactions` | Deserializes the full transaction, signs, returns signature dict | SDK e2e, raw RPC e2e |
+| **`SolanaMessageSigner`** | Any object with `{ address, signMessage }` | Signs raw message bytes extracted from the transaction | SDK e2e |
+| **Wallet-standard (direct)** | Privy, Phantom, etc. via `@wallet-standard/base` | Uses `signTransaction` feature from the standard (`Uint8Array` in/out) | Privy example, wallet standard example |
+| **Legacy provider (adapted)** | `window.phantom.solana` or other injected providers | Deserialize `Uint8Array` → `VersionedTransaction`, sign, re-serialize | Raw Phantom example |
 
-All three produce an Ed25519 signature that gets submitted via `wallet_sendPreparedCalls`.
+All of these produce an Ed25519 signature that gets submitted via `wallet_sendPreparedCalls`.
+
+---
+
+## Signer interface discussion (needs alignment)
+
+### The problem
+
+`SolanaStandardSigner` is a simple interface:
+
+```ts
+interface SolanaStandardSigner {
+  address: string;
+  signTransaction(input: { transaction: Uint8Array }): Promise<{ signedTransaction: Uint8Array }>;
+}
+```
+
+**Privy works directly** — `useConnectedStandardWallets()` returns objects that match this shape out of the box. No adapter needed. But Privy is doing the adaptation internally — their hook wraps the raw wallet-standard wallet (which requires an `account` param and returns arrays) into this simpler shape.
+
+**Everything else needs an adapter today:**
+
+| Integration | What it exposes | Mismatch |
+|---|---|---|
+| `@solana/wallet-adapter-react` (`useWallet()`) | `signTransaction(VersionedTransaction)` | Uses web3.js v1 objects, not `Uint8Array` — need to deserialize/re-serialize |
+| `@wallet-standard/app` (raw wallet-standard) | `signTransaction({ account, transaction: Uint8Array })` → `[{ signedTransaction }]` | Requires `account` param, returns array — need to inject account and unwrap |
+| `window.phantom.solana` (legacy provider) | `signTransaction(VersionedTransaction)` | Same as wallet-adapter — web3.js v1 objects |
+
+### Why this matters
+
+`@solana/wallet-adapter-react` is what ~90% of React Solana devs use for wallet connection. There is no updated version that exposes `Uint8Array` natively — the React hooks still use the legacy `VersionedTransaction` API even though the library uses wallet-standard internally for discovery. This is a gap in the Solana ecosystem, not something we can fix.
+
+Without SDK-provided adapters, every developer using `wallet-adapter-react` has to write this inline:
+
+```ts
+const signer = {
+  address: publicKey.toBase58(),
+  signTransaction: async ({ transaction }: { transaction: Uint8Array }) => {
+    const tx = VersionedTransaction.deserialize(transaction);
+    const signed = await signTransaction(tx);
+    return { signedTransaction: new Uint8Array(signed.serialize()) };
+  },
+};
+```
+
+It's only ~5 lines, but it's confusing — devs will ask "why do I need this if the interface is supposed to be standard?"
+
+### Proposed solution: SDK adapter helpers
+
+Add `fromWalletAdapter` (and optionally `fromWalletStandard`) alongside the existing `fromKitSigner` and `fromKeypair` adapters:
+
+```ts
+// @alchemy/wallet-apis/solana-adapters
+
+// Priority — covers the most common React integration path
+import { fromWalletAdapter } from "@alchemy/wallet-apis/solana-adapters";
+const { publicKey, signTransaction } = useWallet();
+const signer = fromWalletAdapter({ publicKey, signTransaction });
+
+// Optional — for devs using @wallet-standard/app directly
+import { fromWalletStandard } from "@alchemy/wallet-apis/solana-adapters";
+const signer = fromWalletStandard({ wallet, account });
+```
+
+This keeps `SolanaStandardSigner` simple, doesn't force Privy users to change anything, and makes every other integration path a one-liner.
+
+### Open questions
+
+1. **Do Dynamic / Capsule / other wallet providers expose the same interface as Privy?** If their hooks return `{ address, signTransaction({ transaction: Uint8Array }) }` directly, they'd work without adapters too. Needs verification.
+2. **Should `createSmartWalletClient` accept a wallet-standard wallet + account directly?** Instead of only accepting `SolanaStandardSigner`, it could also accept `{ wallet: Wallet, account: WalletAccount }` and handle the unwrapping internally. More flexible but more complex types.
+3. **Is `fromWalletAdapter` enough, or do we also need `fromWalletStandard`?** `fromWalletAdapter` covers the vast majority of use cases. `fromWalletStandard` is trivial to implement but the audience is mostly library authors.
 
 ---
 

@@ -11,6 +11,8 @@
     "@solana/kit": "^2.3.0",
     "@solana/spl-token": "^0.4.14",
     "@solana/web3.js": "^1.98.4",
+    "@wallet-standard/app": "^1.1.0",
+    "@wallet-standard/base": "^1.1.0",
     "next": "^15.3.0",
     "ox": "^0.11.1",
     "react": "^19.1.0",
