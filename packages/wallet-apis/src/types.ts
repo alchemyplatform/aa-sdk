@@ -48,7 +48,7 @@ export interface SolanaWalletStandardSigner {
   }): Promise<{ signedTransaction: Uint8Array }>;
 }
 
-/** @solana/kit TransactionPartialSigner. Takes Transaction objects, returns SignatureDictionaries. */
+/** {@link https://github.com/anza-xyz/kit @solana/kit} TransactionPartialSigner. Takes Transaction objects, returns SignatureDictionaries. */
 export interface SolanaTransactionPartialSigner {
   address: string;
   signTransactions(
