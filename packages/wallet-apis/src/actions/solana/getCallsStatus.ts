@@ -2,20 +2,33 @@ import type { Hex } from "viem";
 import { BaseError } from "@alchemy/common";
 import type { InnerSolanaWalletApiClient } from "../../types.js";
 import { LOGGER } from "../../logger.js";
-import { SolanaGetCallsStatusResponse as SolanaGetCallsStatusResponseSchema } from "@alchemy/wallet-api-types";
-import type { StaticDecode } from "typebox";
-import { decodeSolanaResponse } from "../../utils/schema.js";
+import { wallet_getCallsStatus as MethodSchema } from "@alchemy/wallet-api-types/rpc";
+import {
+  methodSchema,
+  decode,
+  type MethodResponse,
+} from "../../utils/schema.js";
 
-type DecodedSolanaGetCallsStatusResponse = StaticDecode<
-  typeof SolanaGetCallsStatusResponseSchema
+const schema = methodSchema(MethodSchema);
+type GetCallsStatusResponse = MethodResponse<typeof MethodSchema>;
+
+type SolanaGetCallsStatusResponse = Exclude<
+  GetCallsStatusResponse,
+  { details: unknown }
 >;
+
+function isSolanaResponse(
+  response: GetCallsStatusResponse,
+): response is SolanaGetCallsStatusResponse {
+  return !("details" in response);
+}
 
 export type SolanaGetCallsStatusParams = {
   id: Hex;
 };
 
 export type SolanaGetCallsStatusResult = Omit<
-  DecodedSolanaGetCallsStatusResponse,
+  SolanaGetCallsStatusResponse,
   "status"
 > & {
   status: "pending" | "success" | "failure";
@@ -40,11 +53,13 @@ export async function getCallsStatus(
     params: [params.id],
   });
 
-  const decoded = decodeSolanaResponse(
-    SolanaGetCallsStatusResponseSchema,
-    rpcResp,
-  );
+  const fullDecoded = decode(schema.response, rpcResp);
 
+  if (!isSolanaResponse(fullDecoded)) {
+    throw new BaseError(`Unexpected EVM response from Solana getCallsStatus`);
+  }
+
+  const decoded = fullDecoded;
   const statusCode = decoded.status;
   const status = (() => {
     if (statusCode >= 100 && statusCode < 200) return "pending" as const;

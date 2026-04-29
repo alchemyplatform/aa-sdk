@@ -29,18 +29,20 @@ export type * from "../actions/undelegateAccount.js";
 export { undelegateAccount } from "../actions/undelegateAccount.js";
 
 // Decorators.
-export type * from "../decorators/smartWalletActions.js";
+export type { SmartWalletActions } from "../decorators/smartWalletActions.js";
 export { smartWalletActions } from "../decorators/smartWalletActions.js";
 
 // Client.
 export type {
-  BaseWalletClient,
-  SignerClient,
   SmartWalletClient,
-  SolanaSigner,
   SolanaSmartWalletClient,
+  SolanaStandardSigner,
 } from "../types.js";
-export type * from "../client.js";
+export type {
+  CreateEvmSmartWalletClientParams,
+  CreateSolanaSmartWalletClientParams,
+  CreateSmartWalletClientParams,
+} from "../client.js";
 export { createSmartWalletClient } from "../client.js";
 
 // Solana decorator.
@@ -49,9 +51,13 @@ export { solanaSmartWalletActions } from "../decorators/solanaSmartWalletActions
 
 // Solana actions.
 export type * from "../actions/solana/prepareCalls.js";
+export { prepareCalls as solanaPrepareCalls } from "../actions/solana/prepareCalls.js";
 export type * from "../actions/solana/signPreparedCalls.js";
+export { signPreparedCalls as solanaSignPreparedCalls } from "../actions/solana/signPreparedCalls.js";
 export type * from "../actions/solana/sendPreparedCalls.js";
+export { sendPreparedCalls as solanaSendPreparedCalls } from "../actions/solana/sendPreparedCalls.js";
 export type * from "../actions/solana/sendCalls.js";
+export { sendCalls as solanaSendCalls } from "../actions/solana/sendCalls.js";
 
 // Transport.
 export type * from "../transport.js";

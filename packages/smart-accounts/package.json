@@ -1,6 +1,6 @@
 {
   "name": "@alchemy/smart-accounts",
-  "version": "5.0.0-beta.24",
+  "version": "5.0.0-beta.25",
   "description": "This package contains all of the viem interfaces for Alchemy's Smart Contract Accounts",
   "author": "Alchemy",
   "license": "MIT",

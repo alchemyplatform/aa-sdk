@@ -1,5 +1,5 @@
 /**
- * Solana e2e test script. Tests both SolanaMessageSigner and SolanaTransactionPartialSigner paths.
+ * Solana e2e test script. Tests both fromKeypair and fromKitSigner adapter paths.
  *
  * Usage:
  *   ALCHEMY_API_KEY=<key> SOLANA_POLICY_ID=<id> \
@@ -7,10 +7,9 @@
  */
 import { createSmartWalletClient } from "../client.js";
 import { alchemyWalletTransport } from "../transport.js";
-import type {
-  SolanaMessageSigner,
-  SolanaTransactionPartialSigner,
-} from "../types.js";
+import { fromKeypair } from "../adapters/fromKeypair.js";
+import { fromKitSigner } from "../adapters/fromKitSigner.js";
+import type { SolanaStandardSigner } from "../types.js";
 import { generateKeyPairSigner } from "@solana/kit";
 
 const ALCHEMY_API_KEY = process.env.ALCHEMY_API_KEY!;
@@ -29,10 +28,7 @@ function createTransport() {
   });
 }
 
-async function sendAndWait(
-  label: string,
-  signer: SolanaMessageSigner | SolanaTransactionPartialSigner,
-) {
+async function sendAndWait(label: string, signer: SolanaStandardSigner) {
   console.log(`\n=== ${label} ===`);
   console.log(`Signer: ${signer.address}`);
 
@@ -71,36 +67,39 @@ async function main() {
   console.log("Chain: solana:devnet");
   console.log(`Policy: ${SOLANA_POLICY_ID}`);
 
-  // ── Test 1: SolanaTransactionPartialSigner (@solana/kit KeyPairSigner) ──
+  // ── Test 1: fromKitSigner (@solana/kit KeyPairSigner) ──────────────────
   const keypairSigner = await generateKeyPairSigner();
-  await sendAndWait("TransactionPartialSigner (@solana/kit)", keypairSigner);
+  await sendAndWait(
+    "fromKitSigner (@solana/kit)",
+    fromKitSigner(keypairSigner),
+  );
 
-  // ── Test 2: SolanaMessageSigner (raw Ed25519) ──────────────────────────
+  // ── Test 2: fromKeypair (raw Ed25519) ──────────────────────────────────
   const rawSigner = await createRawEd25519Signer();
-  await sendAndWait("MessageSigner (raw Ed25519)", rawSigner);
+  await sendAndWait("fromKeypair (raw Ed25519)", rawSigner);
 
   console.log("All tests passed!");
 }
 
-async function createRawEd25519Signer(): Promise<SolanaMessageSigner> {
+async function createRawEd25519Signer(): Promise<SolanaStandardSigner> {
   const { Base58 } = await import("ox");
   const keyPair = await crypto.subtle.generateKey("Ed25519", true, ["sign"]);
   const rawPublicKey = new Uint8Array(
     await crypto.subtle.exportKey("raw", keyPair.publicKey),
   );
 
-  return {
+  return fromKeypair({
     address: Base58.fromBytes(rawPublicKey),
     async signMessage(message: Uint8Array) {
       return new Uint8Array(
         await crypto.subtle.sign(
           "Ed25519",
           keyPair.privateKey,
-          message.buffer as ArrayBuffer,
+          new Uint8Array(message),
         ),
       );
     },
-  };
+  });
 }
 
 main().catch((err) => {

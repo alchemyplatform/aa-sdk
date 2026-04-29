@@ -432,16 +432,32 @@ navigation:
                     path: wallets/pages/reference/wallet-apis/src/exports/functions/signTypedData.mdx
                   - page: smartWalletActions
                     path: wallets/pages/reference/wallet-apis/src/exports/functions/smartWalletActions.mdx
+                  - page: solanaPrepareCalls
+                    path: wallets/pages/reference/wallet-apis/src/exports/functions/solanaPrepareCalls.mdx
+                  - page: solanaSendCalls
+                    path: wallets/pages/reference/wallet-apis/src/exports/functions/solanaSendCalls.mdx
+                  - page: solanaSendPreparedCalls
+                    path: wallets/pages/reference/wallet-apis/src/exports/functions/solanaSendPreparedCalls.mdx
+                  - page: solanaSignPreparedCalls
+                    path: wallets/pages/reference/wallet-apis/src/exports/functions/solanaSignPreparedCalls.mdx
+                  - page: solanaSmartWalletActions
+                    path: wallets/pages/reference/wallet-apis/src/exports/functions/solanaSmartWalletActions.mdx
                   - page: undelegateAccount
                     path: wallets/pages/reference/wallet-apis/src/exports/functions/undelegateAccount.mdx
+              - section: Interfaces
+                contents:
+                  - page: SolanaStandardSigner
+                    path: wallets/pages/reference/wallet-apis/src/exports/interfaces/SolanaStandardSigner.mdx
               - section: Type Aliases
                 contents:
                   - page: AlchemyWalletTransport
                     path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/AlchemyWalletTransport.mdx
-                  - page: BaseWalletClient
-                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/BaseWalletClient.mdx
+                  - page: CreateEvmSmartWalletClientParams
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/CreateEvmSmartWalletClientParams.mdx
                   - page: CreateSmartWalletClientParams
                     path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/CreateSmartWalletClientParams.mdx
+                  - page: CreateSolanaSmartWalletClientParams
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/CreateSolanaSmartWalletClientParams.mdx
                   - page: FormatSignParams
                     path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/FormatSignParams.mdx
                   - page: FormatSignResult
@@ -494,12 +510,30 @@ navigation:
                     path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SignTypedDataParams.mdx
                   - page: SignTypedDataResult
                     path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SignTypedDataResult.mdx
-                  - page: SignerClient
-                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SignerClient.mdx
                   - page: SmartWalletActions
                     path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SmartWalletActions.mdx
                   - page: SmartWalletClient
                     path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SmartWalletClient.mdx
+                  - page: SolanaPrepareCallsParams
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SolanaPrepareCallsParams.mdx
+                  - page: SolanaPrepareCallsResult
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SolanaPrepareCallsResult.mdx
+                  - page: SolanaSendCallsParams
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SolanaSendCallsParams.mdx
+                  - page: SolanaSendCallsResult
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SolanaSendCallsResult.mdx
+                  - page: SolanaSendPreparedCallsParams
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SolanaSendPreparedCallsParams.mdx
+                  - page: SolanaSendPreparedCallsResult
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SolanaSendPreparedCallsResult.mdx
+                  - page: SolanaSignPreparedCallsParams
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SolanaSignPreparedCallsParams.mdx
+                  - page: SolanaSignPreparedCallsResult
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SolanaSignPreparedCallsResult.mdx
+                  - page: SolanaSmartWalletActions
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SolanaSmartWalletActions.mdx
+                  - page: SolanaSmartWalletClient
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SolanaSmartWalletClient.mdx
                   - page: UndelegateAccountParams
                     path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/UndelegateAccountParams.mdx
                   - page: UndelegateAccountResult
