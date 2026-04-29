@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeAll } from "vitest";
-import { createKeyPairSignerFromPrivateKeyBytes } from "@solana/kit";
+import { generateKeyPairSigner } from "@solana/kit";
 import { createSmartWalletClient } from "./client.js";
-import { fromKeypair } from "./adapters/fromKeypair.js";
+import { fromKitSigner } from "./adapters/fromKitSigner.js";
 import { apiTransport } from "./__tests__/setup.js";
 import type { SolanaSmartWalletClient } from "./types.js";
 import type { SolanaSendCallsParams } from "./actions/solana/sendCalls.js";
@@ -43,32 +43,12 @@ const sendVariants: SendVariant[] = [
 ];
 
 describe("Solana Client E2E Tests", () => {
-  // Fixed 32-byte Ed25519 private key for deterministic signer address.
-  const TEST_PRIVATE_KEY = new Uint8Array([
-    0xd7, 0xb0, 0x61, 0xef, 0x04, 0xd2, 0x9c, 0xf6, 0x8b, 0x3c, 0x89, 0x35,
-    0x66, 0x78, 0xec, 0xce, 0xc9, 0x98, 0x8d, 0xe8, 0xd5, 0xed, 0x89, 0x2c,
-    0x19, 0x46, 0x1c, 0x4a, 0x9d, 0x65, 0x92, 0x5d,
-  ]);
-
   let client: SolanaSmartWalletClient;
 
   beforeAll(async () => {
-    const kitSigner = await createKeyPairSignerFromPrivateKeyBytes(
-      TEST_PRIVATE_KEY,
-      true,
-    );
+    const kitSigner = await generateKeyPairSigner();
 
-    const signer = fromKeypair({
-      address: kitSigner.address,
-      signMessage: async (message) => {
-        const buf = await crypto.subtle.sign(
-          "Ed25519",
-          kitSigner.keyPair.privateKey,
-          new Uint8Array(message),
-        );
-        return new Uint8Array(buf);
-      },
-    });
+    const signer = fromKitSigner(kitSigner);
 
     client = createSmartWalletClient({
       transport: apiTransport,
