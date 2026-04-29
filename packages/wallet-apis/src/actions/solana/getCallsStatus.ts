@@ -3,7 +3,11 @@ import { BaseError } from "@alchemy/common";
 import type { InnerSolanaWalletApiClient } from "../../types.js";
 import { LOGGER } from "../../logger.js";
 import { wallet_getCallsStatus as MethodSchema } from "@alchemy/wallet-api-types/rpc";
-import { methodSchema, decode, type MethodResponse } from "../../utils/schema.js";
+import {
+  methodSchema,
+  decode,
+  type MethodResponse,
+} from "../../utils/schema.js";
 
 const schema = methodSchema(MethodSchema);
 type GetCallsStatusResponse = MethodResponse<typeof MethodSchema>;
@@ -52,9 +56,7 @@ export async function getCallsStatus(
   const fullDecoded = decode(schema.response, rpcResp);
 
   if (!isSolanaResponse(fullDecoded)) {
-    throw new BaseError(
-      `Unexpected EVM response from Solana getCallsStatus`,
-    );
+    throw new BaseError(`Unexpected EVM response from Solana getCallsStatus`);
   }
 
   const decoded = fullDecoded;

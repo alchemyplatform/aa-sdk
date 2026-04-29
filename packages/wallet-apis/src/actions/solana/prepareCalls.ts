@@ -5,9 +5,7 @@ import type {
 } from "../../types.js";
 import { isSolanaChain } from "../../utils/assertions.js";
 import type { SolanaChainId } from "@alchemy/wallet-api-types";
-import {
-  SolanaPrepareCallsParams as SolanaPrepareCallsSchema,
-} from "@alchemy/wallet-api-types";
+import { SolanaPrepareCallsParams as SolanaPrepareCallsSchema } from "@alchemy/wallet-api-types";
 import { wallet_prepareCalls as MethodSchema } from "@alchemy/wallet-api-types/rpc";
 import type { StaticDecode } from "typebox";
 import { BaseError } from "@alchemy/common";

@@ -40,7 +40,7 @@ export type SolanaSmartWalletClient = BaseWalletClient<
 >;
 
 /** Solana wallet standard signer (Privy, Phantom, etc). Takes serialized tx, returns signed serialized tx. */
-export interface SolanaWalletStandardSigner {
+export interface SolanaStandardSigner {
   address: string;
   signTransaction(input: {
     transaction: Uint8Array;
@@ -48,24 +48,6 @@ export interface SolanaWalletStandardSigner {
   }): Promise<{ signedTransaction: Uint8Array }>;
 }
 
-/** {@link https://github.com/anza-xyz/kit @solana/kit} TransactionPartialSigner. Takes Transaction objects, returns SignatureDictionaries. */
-export interface SolanaTransactionPartialSigner {
-  address: string;
-  signTransactions(
-    transactions: readonly unknown[],
-  ): Promise<readonly Record<string, Uint8Array>[]>;
-}
-
-/** Raw Ed25519 keypair signer. Takes message bytes, returns 64-byte signature. */
-export interface SolanaMessageSigner {
-  address: string;
-  signMessage(message: Uint8Array): Promise<Uint8Array>;
-}
-
-export type SolanaSigner =
-  | SolanaWalletStandardSigner
-  | SolanaTransactionPartialSigner
-  | SolanaMessageSigner;
 
 export interface SolanaChainDef extends Chain {
   solanaChainId: SolanaChainId;
@@ -80,7 +62,7 @@ export type InnerWalletApiClient = BaseWalletClient<{
 export type InnerSolanaWalletApiClient = BaseWalletClient<
   {
     internal: InternalState | undefined;
-    owner: SolanaSigner;
+    owner: SolanaStandardSigner;
     solanaAccount: string;
     policyIds?: string[];
   },

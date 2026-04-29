@@ -37,6 +37,11 @@
       "import": "./dist/esm/exports/internal.js",
       "default": "./dist/esm/exports/internal.js"
     },
+    "./solana-adapters": {
+      "types": "./dist/types/exports/solana-adapters.d.ts",
+      "import": "./dist/esm/exports/solana-adapters.js",
+      "default": "./dist/esm/exports/solana-adapters.js"
+    },
     "./package.json": "./package.json"
   },
   "scripts": {

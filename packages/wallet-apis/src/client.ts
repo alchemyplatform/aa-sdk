@@ -12,7 +12,7 @@ import type {
   SmartWalletClient,
   SmartWalletSigner,
   SolanaSmartWalletClient,
-  SolanaSigner,
+  SolanaStandardSigner,
   SolanaChainDef,
 } from "./types.js";
 import { createInternalState } from "./internal.js";
@@ -79,7 +79,7 @@ export type CreateEvmSmartWalletClientParams = {
 };
 
 export type CreateSolanaSmartWalletClientParams = {
-  signer: SolanaSigner;
+  signer: SolanaStandardSigner;
   transport: AlchemyWalletTransport;
   chain: SolanaChainId;
   account?: string;
