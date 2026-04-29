@@ -1,4 +1,4 @@
-# Solana Smart Wallet — Dogfooding Guide
+# [Wallet APIs] Solana API Spec, SDK Implementation, & Dogfooding Guide
 
 API shape, real request/response examples, and five runnable demos for Solana smart wallets.
 
@@ -13,8 +13,8 @@ All examples use the **Alchemy Wallet APIs preview endpoint** on **Solana devnet
 | **Alchemy API key**                   | Dashboard — must have Wallet APIs enabled                                      |
 | **Solana policy ID**                  | Gas Manager → create a Solana devnet sponsorship policy                        |
 | **Privy app ID** (Privy example only) | [Privy dashboard](https://dashboard.privy.io) — enable Solana embedded wallets |
-| **bun** (CLI scripts)                 | `brew install oven-sh/bun/bun`                                                 |
-| **Node 18+** (Privy example)          | Already on your machine                                                        |
+| **bun** (CLI examples)                |                                                                                |
+| **Node 22+** (React examples)         |                                                                                |
 
 ---
 
@@ -22,41 +22,41 @@ All examples use the **Alchemy Wallet APIs preview endpoint** on **Solana devnet
 
 ### Common Types
 
-#### SolanaChainId
+#### `SolanaChainId`
 
 ```
 "solana:mainnet" | "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"   // Mainnet
 "solana:devnet"  | "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1"   // Devnet
 ```
 
-#### SolanaAddress
+#### `SolanaAddress`
 
 Base58-encoded string, 32-44 characters.
 
-#### SolanaInstruction
+#### `SolanaInstruction`
 
 ```jsonc
 {
-  "programId": SolanaAddress,             // required
-  "accounts": [                           // optional
+  "programId": SolanaAddress,
+  "accounts?": [
     {
       "pubkey": SolanaAddress,
       "isSigner": boolean,
       "isWritable": boolean
     }
   ],
-  "data": Hex                             // hex-encoded instruction data
+  "data": Hex
 }
 ```
 
-#### StatusCode
+#### `StatusCode`
 
-| Code | Title | Description |
-|------|-------|-------------|
-| 100 | Pending | Submitted but not yet confirmed |
-| 200 | Confirmed | Included on-chain successfully |
-| 400 | Offchain Failure | Not included on-chain, will not retry (e.g. expired blockhash) |
-| 500 | Onchain Failure | Reverted completely on-chain |
+| Code | Title            | Description                                                    |
+| ---- | ---------------- | -------------------------------------------------------------- |
+| 100  | Pending          | Submitted but not yet confirmed                                |
+| 200  | Confirmed        | Included on-chain successfully                                 |
+| 400  | Offchain Failure | Not included on-chain, will not retry (e.g. expired blockhash) |
+| 500  | Onchain Failure  | Reverted completely on-chain                                   |
 
 > Codes 110, 115, 116, 120, 410, 600 exist in the union but are EVM/cross-chain specific.
 
@@ -71,16 +71,14 @@ Base58-encoded string, 32-44 characters.
   "method": "wallet_prepareCalls",
   "params": [
     {
-      "calls": SolanaInstruction[],                     // required
-      "from": SolanaAddress,                            // required - user's signing address
-      "chainId": SolanaChainId,                         // required
-
-      // optional
-      "addressLookupTableAddresses": SolanaAddress[],
-      "capabilities": {
-        "paymasterService": {                           // optional - omit for unsponsored
-          "policyId": string,                           // UUID, required if present
-          "webhookData": string                         // optional
+      "calls": SolanaInstruction[],
+      "from": SolanaAddress,
+      "chainId": SolanaChainId,
+      "addressLookupTableAddresses?": SolanaAddress[],
+      "capabilities?": {
+        "paymasterService?": {        // enables fee sponsorship
+          "policyId": string,
+          "webhookData?": string
         }
       }
     }
@@ -94,32 +92,28 @@ Base58-encoded string, 32-44 characters.
 {
   "type": "solana-transaction-v0",
   "chainId": SolanaChainId,
-
   "signatureRequest": {
     "type": "solana_signTransaction",
-    "data": Hex                                         // full serialized tx to sign
+    "data": Hex
   },
-
   "data": {
-    "compiledTransaction": Hex,                         // pre-compiled wire-format bytes
-    "signer": SolanaAddress,                            // user's signing address
+    "compiledTransaction": Hex,
+    "signer": SolanaAddress,
     "version": "0",
     "lifetimeConstraint": {
-      "blockHash": string,                              // base58-encoded
-      "lastValidBlockHeight": Hex                       // optional, hex-encoded bigint
+      "blockHash": string,
+      "lastValidBlockHeight?": Hex
     }
   },
-
   "feePayment": {
     "sponsored": boolean,
     "feePayer": SolanaAddress
   },
-
   "details": {
     "type": "solana-transaction-v0",
     "data": {
-      "calls": SolanaInstruction[],                     // echo of original instructions
-      "addressLookupTableAddresses": SolanaAddress[]    // optional
+      "calls": SolanaInstruction[],
+      "addressLookupTableAddresses?": SolanaAddress[]
     }
   }
 }
@@ -138,20 +132,18 @@ Base58-encoded string, 32-44 characters.
     {
       "type": "solana-transaction-v0",
       "chainId": SolanaChainId,
-
       "data": {
-        "compiledTransaction": Hex,                     // from prepareCalls response
+        "compiledTransaction": Hex,
         "signer": SolanaAddress,
         "version": "0",
         "lifetimeConstraint": {
-          "blockHash": string,                          // base58-encoded
-          "lastValidBlockHeight": Hex                   // optional
+          "blockHash": string,
+          "lastValidBlockHeight?": Hex
         }
       },
-
       "signature": {
         "type": "ed25519",
-        "data": string                                  // 64-byte Ed25519 signature, base58-encoded
+        "data": string
       }
     }
   ]
@@ -162,8 +154,7 @@ Base58-encoded string, 32-44 characters.
 
 ```jsonc
 {
-  "id": Hex,                                            // call ID for polling status
-  "preparedCallIds": Hex[],                             // deprecated, use id
+  "id": Hex,
   "details": {
     "type": "solana-transaction-v0"
   }
@@ -179,9 +170,7 @@ Base58-encoded string, 32-44 characters.
 ```jsonc
 {
   "method": "wallet_getCallsStatus",
-  "params": [
-    Hex                                                 // call ID from sendPreparedCalls
-  ]
+  "params": [Hex]
 }
 ```
 
@@ -191,16 +180,14 @@ Base58-encoded string, 32-44 characters.
 {
   "id": Hex,
   "chainId": SolanaChainId,
-  "atomic": boolean,                                    // always true for Solana
-  "status": StatusCode,                                 // 100 | 200 | 400 | 500
-
-  // optional - present once status resolves
-  "commitment": "processed" | "confirmed" | "finalized",
-  "receipts": [
+  "atomic": boolean,
+  "status": StatusCode,
+  "commitment?": "processed" | "confirmed" | "finalized",
+  "receipts?": [
     {
-      "signature": string,                              // base58-encoded tx signature
-      "blockTime": Hex,                                 // optional, unix timestamp
-      "slot": Hex                                       // slot number
+      "signature": string,
+      "blockTime?": Hex,
+      "slot": Hex
     }
   ]
 }
@@ -220,6 +207,100 @@ Base58-encoded string, 32-44 characters.
 ---
 
 ### Full Examples (Real Devnet Responses)
+
+#### wallet_prepareCalls — request
+
+Sponsored 0-lamport self-transfer via the System Program — simplest possible instruction to exercise the full flow.
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "wallet_prepareCalls",
+  "params": [
+    {
+      "calls": [
+        {
+          "programId": "11111111111111111111111111111111",
+          "accounts": [
+            {
+              "pubkey": "J8tXRgztWDQWapi7teAxmpx4cH3caJRfckyCBTdUpU3f",
+              "isSigner": true,
+              "isWritable": true
+            },
+            {
+              "pubkey": "J8tXRgztWDQWapi7teAxmpx4cH3caJRfckyCBTdUpU3f",
+              "isSigner": false,
+              "isWritable": true
+            }
+          ],
+          "data": "0x0200000000000000000000000000"
+        }
+      ],
+      "chainId": "solana:devnet",
+      "from": "J8tXRgztWDQWapi7teAxmpx4cH3caJRfckyCBTdUpU3f",
+      "capabilities": {
+        "paymasterService": {
+          "policyId": "850a7066-30d4-49d8-8672-521319d86f5a"
+        }
+      }
+    }
+  ]
+}
+```
+
+#### wallet_prepareCalls — response
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "type": "solana-transaction-v0",
+    "chainId": "solana:devnet",
+    "signatureRequest": {
+      "type": "solana_signTransaction",
+      "data": "0x020784602a94bd4715680f44f4169abf36b4ee37407c6806a737859bc6a5b803221b2826ad5d8d08a30c1ed112fe743976383ddd99a8d3884e94be6b7e2893200d00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000800200010314f223f56f8a396dc5ca02028ede46d3c78161db1856f9dc5f63791527f89ed0fe9c009ff4130a712570159f1b2f31dd1cb3a1481c3f6469f856baf8f7cb666e0000000000000000000000000000000000000000000000000000000000000000cde22751157e9ad919cbe6676978684fdd2348e686ea363b4e4e608d586cbbc301020201010e020000000000000000000000000000"
+    },
+    "data": {
+      "compiledTransaction": "0x020784602a94bd4715680f44f4169abf36b4ee37407c6806a737859bc6a5b803221b2826ad5d8d08a30c1ed112fe743976383ddd99a8d3884e94be6b7e2893200d00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000800200010314f223f56f8a396dc5ca02028ede46d3c78161db1856f9dc5f63791527f89ed0fe9c009ff4130a712570159f1b2f31dd1cb3a1481c3f6469f856baf8f7cb666e0000000000000000000000000000000000000000000000000000000000000000cde22751157e9ad919cbe6676978684fdd2348e686ea363b4e4e608d586cbbc301020201010e020000000000000000000000000000",
+      "signer": "J8tXRgztWDQWapi7teAxmpx4cH3caJRfckyCBTdUpU3f",
+      "version": "0",
+      "lifetimeConstraint": {
+        "blockHash": "ErgbBnrLVthAKiGoPZ7PFDxPxd9MBqZt2Z6pJbJQeRxN",
+        "lastValidBlockHeight": "0x1aa23b09"
+      }
+    },
+    "feePayment": {
+      "sponsored": true,
+      "feePayer": "2QmJeMox1MU8X9hqvQj3JqWvYfJcGUYyAgZtTuvKhT3u"
+    },
+    "details": {
+      "type": "solana-transaction-v0",
+      "data": {
+        "calls": [
+          {
+            "programId": "11111111111111111111111111111111",
+            "accounts": [
+              {
+                "pubkey": "J8tXRgztWDQWapi7teAxmpx4cH3caJRfckyCBTdUpU3f",
+                "isSigner": true,
+                "isWritable": true
+              },
+              {
+                "pubkey": "J8tXRgztWDQWapi7teAxmpx4cH3caJRfckyCBTdUpU3f",
+                "isSigner": true,
+                "isWritable": true
+              }
+            ],
+            "data": "0x0200000000000000000000000000"
+          }
+        ]
+      }
+    }
+  }
+}
+```
 
 #### wallet_sendPreparedCalls — request
 
@@ -258,9 +339,6 @@ Base58-encoded string, 32-44 characters.
   "id": 1,
   "result": {
     "id": "0x010300000000000000000000000000000000000000000000000000000000000000679f72cdb1dccd1e56e73241b2a2f87fe994dc7bbe67e992b66b55d0e9a673eb2ee5842f6182c6dc4cce9b0892a903bd4416b09d6f71425831986d287d7deaaf05f7536d1d18a5cc6a94ae7efffcde49598d4e91c0a261d7ee9b516c018b332971",
-    "preparedCallIds": [
-      "0x010300000000000000000000000000000000000000000000000000000000000000679f72cdb1dccd1e56e73241b2a2f87fe994dc7bbe67e992b66b55d0e9a673eb2ee5842f6182c6dc4cce9b0892a903bd4416b09d6f71425831986d287d7deaaf05f7536d1d18a5cc6a94ae7efffcde49598d4e91c0a261d7ee9b516c018b332971"
-    ],
     "details": {
       "type": "solana-transaction-v0"
     }
@@ -308,9 +386,9 @@ Base58-encoded string, 32-44 characters.
 
 ---
 
-## Signer Interface: `SolanaSigner`
+## SDK Signer Interface: `SolanaSigner`
 
-The SDK's signer contract — the simplest possible interface:
+The simplest possible interface:
 
 ```ts
 interface SolanaSigner {
@@ -323,23 +401,97 @@ interface SolanaSigner {
 
 Adapters in `@alchemy/wallet-apis/solana` convert various signer sources into this interface:
 
-| What you have | Adapter | Source |
-|---|---|---|
-| Privy `useConnectedStandardWallets()` | **None needed** — already a `SolanaSigner` | [Privy example](https://github.com/alchemyplatform/aa-sdk/blob/jake/v5/sol-examples/examples/solana-privy/src/app/page.tsx) |
-| `@solana/wallet-adapter-react` `useWallet()` | `fromWalletAdapter({ publicKey, signTransaction })` | `@alchemy/wallet-apis/solana` |
-| `window.phantom.solana` (injected provider) | `fromWalletAdapter(provider)` — same adapter, same shape | [Phantom example](https://github.com/alchemyplatform/aa-sdk/blob/jake/v5/sol-examples/examples/solana-privy/src/app/phantom-raw/page.tsx) |
-| `@solana/kit` `KeyPairSigner` | `fromKitSigner(signer)` | `@alchemy/wallet-apis/solana` |
-| Raw Ed25519 keypair / `@solana/web3.js` v1 `Keypair` | `fromKeypair({ address, signMessage })` | `@alchemy/wallet-apis/solana` |
-| `@wallet-standard/app` (raw wallet-standard) | Thin inline wrapper (inject `account`, unwrap array) | [Wallet standard example](https://github.com/alchemyplatform/aa-sdk/blob/jake/v5/sol-examples/examples/solana-privy/src/app/wallet-standard/page.tsx) |
+| What you have                                        | Adapter                                                                                                                                                                   |
+| ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Privy `useConnectedStandardWallets()`                | **None needed** — already a `SolanaSigner` ([example](https://github.com/alchemyplatform/aa-sdk/blob/jake/v5/sol-examples/examples/solana-privy/src/app/page.tsx))        |
+| `@solana/wallet-adapter-react` `useWallet()`         | `fromWalletAdapter({ publicKey, signTransaction })`                                                                                                                       |
+| `window.phantom.solana` (injected provider)          | `fromWalletAdapter(provider)` ([example](https://github.com/alchemyplatform/aa-sdk/blob/jake/v5/sol-examples/examples/solana-privy/src/app/phantom-raw/page.tsx))         |
+| `@solana/kit` `KeyPairSigner`                        | `fromKitSigner(signer)` ([example](https://github.com/alchemyplatform/aa-sdk/blob/jake/v5/sol-examples/packages/wallet-apis/src/__tests__/solana-e2e.ts))                 |
+| Raw Ed25519 keypair / `@solana/web3.js` v1 `Keypair` | `fromKeypair({ address, signMessage })` ([example](https://github.com/alchemyplatform/aa-sdk/blob/jake/v5/sol-examples/packages/wallet-apis/src/__tests__/solana-e2e.ts)) |
+| `@wallet-standard/app` (low-level, for library authors) | Thin inline wrapper ([example](https://github.com/alchemyplatform/aa-sdk/blob/jake/v5/sol-examples/examples/solana-privy/src/app/wallet-standard/page.tsx))               |
 
 All adapters are verified to produce identical signed transactions in the [signer equivalence test](https://github.com/alchemyplatform/aa-sdk/blob/jake/v5/sol-examples/packages/wallet-apis/src/adapters/signerEquivalence.test.ts).
+
+#### Privy (no adapter needed)
+
+```ts
+import { useConnectedStandardWallets } from "@privy-io/react-auth/solana";
+
+const { wallets } = useConnectedStandardWallets();
+const signer = wallets[0]; // already a SolanaSigner
+```
+
+#### `@solana/wallet-adapter-react`
+
+```ts
+import { useWallet } from "@solana/wallet-adapter-react";
+import { fromWalletAdapter } from "@alchemy/wallet-apis/solana";
+
+const wallet = useWallet();
+const signer = fromWalletAdapter(wallet); // needs @solana/web3.js
+```
+
+#### `window.phantom.solana`
+
+```ts
+import { fromWalletAdapter } from "@alchemy/wallet-apis/solana";
+
+const phantom = window.phantom?.solana;
+await phantom.connect();
+const signer = fromWalletAdapter(phantom); // same adapter, same shape
+```
+
+#### `@solana/kit` KeyPairSigner
+
+```ts
+import { generateKeyPairSigner } from "@solana/kit";
+import { fromKitSigner } from "@alchemy/wallet-apis/solana";
+
+const kitSigner = await generateKeyPairSigner();
+const signer = fromKitSigner(kitSigner); // needs @solana/kit
+```
+
+#### Raw Ed25519 keypair
+
+```ts
+import { fromKeypair } from "@alchemy/wallet-apis/solana";
+
+const signer = fromKeypair({
+  address: base58PublicKey,
+  signMessage: async (message) => {
+    return new Uint8Array(
+      await crypto.subtle.sign("Ed25519", privateKey, message),
+    );
+  },
+}); // no Solana libs needed
+```
+
+#### `@wallet-standard/app` (low-level, for library authors)
+
+```ts
+import { getWallets } from "@wallet-standard/app";
+
+const wallet = getWallets().get().find(/* has solana:signTransaction */);
+const { accounts } = await wallet.features["standard:connect"].connect();
+const account = accounts[0];
+
+const signer = {
+  address: account.address,
+  signTransaction: async ({ transaction }: { transaction: Uint8Array }) => {
+    const [output] = await wallet.features[
+      "solana:signTransaction"
+    ].signTransaction({ account, transaction });
+    return output;
+  },
+};
+```
 
 ### Why adapters are needed
 
 `SolanaSigner` takes `Uint8Array` in and out. But the Solana React ecosystem hasn't caught up to wallet-standard:
 
 - **`@solana/wallet-adapter-react`** (what ~90% of React devs use) exposes `signTransaction(VersionedTransaction)` — the legacy `@solana/web3.js` v1 API. `fromWalletAdapter` handles the `Uint8Array` ↔ `VersionedTransaction` conversion.
-- **Raw wallet-standard** (`@wallet-standard/app`) requires an `account` param and returns arrays. This is a shape mismatch, not a serialization mismatch.
+- **Raw wallet-standard** (`@wallet-standard/app`) is a low-level API for library authors, not typical app devs. It requires an `account` param and returns arrays — a shape mismatch, not a serialization mismatch.
 - **Privy** wraps the wallet-standard wallet internally, so their hook already returns a `SolanaSigner`-compatible object.
 
 ### Import paths
@@ -369,10 +521,30 @@ import { prepareCalls, sendCalls } from "@alchemy/wallet-apis/solana";
 
 Uses `createSmartWalletClient` from `@alchemy/wallet-apis`. This is the highest-level API — it handles prepare, sign, and send internally.
 
+#### Simplest example
+
+```ts
+import { generateKeyPairSigner } from "@solana/kit";
+import { fromKitSigner } from "@alchemy/wallet-apis/solana";
+import { createSmartWalletClient, alchemyWalletTransport } from "@alchemy/wallet-apis";
+
+const signer = fromKitSigner(await generateKeyPairSigner());
+
+const client = createSmartWalletClient({
+  signer,
+  transport: alchemyWalletTransport({ apiKey: ALCHEMY_API_KEY }),
+  chain: "solana:devnet",
+  paymaster: { policyId: SOLANA_POLICY_ID },
+});
+
+const { id } = await client.sendCalls({ calls: [/* ... */] });
+const result = await client.waitForCallsStatus({ id });
+```
+
 #### What it tests
 
-- **`fromKitSigner`** path — uses an `@solana/kit` `KeyPairSigner` via `generateKeyPairSigner()` + `fromKitSigner()`
-- **`fromKeypair`** path — uses a raw Web Crypto Ed25519 key pair (signs only the transaction message bytes)
+- **`fromKitSigner`** path — `generateKeyPairSigner()` + `fromKitSigner()`
+- **`fromKeypair`** path — raw Web Crypto Ed25519 key pair (signs only the transaction message bytes)
 
 #### Run it
 
@@ -430,6 +602,34 @@ ALCHEMY_API_KEY=<your-key> SOLANA_POLICY_ID=<your-policy> \
 
 This script logs **full JSON-RPC request and response bodies** for every call. Use it to see exact payloads.
 
+#### Zero-dependency signing (any language)
+
+The raw Ed25519 test shows the minimal signing path — no Solana libraries needed. This is the pattern to follow if you're calling the API from Python, Go, Rust, etc.:
+
+```ts
+// 1. Generate an Ed25519 keypair (Web Crypto, or your language's equivalent)
+const keyPair = await crypto.subtle.generateKey("Ed25519", true, ["sign"]);
+const rawPublicKey = new Uint8Array(
+  await crypto.subtle.exportKey("raw", keyPair.publicKey),
+);
+const address = Base58.fromBytes(rawPublicKey);
+
+// 2. Call wallet_prepareCalls, get back signatureRequest.data (hex)
+const txBytes = hexToBytes(prepareResult.signatureRequest.data);
+
+// 3. Extract the message bytes from the serialized transaction
+const numSigs = txBytes[0];
+const messageBytes = txBytes.slice(1 + numSigs * 64);
+
+// 4. Sign the message bytes with Ed25519
+const sigBytes = new Uint8Array(
+  await crypto.subtle.sign("Ed25519", keyPair.privateKey, messageBytes),
+);
+
+// 5. Base58-encode the signature, pass to wallet_sendPreparedCalls
+const signatureBase58 = Base58.fromBytes(sigBytes);
+```
+
 ---
 
 ### 3. Privy + Next.js Example ([`examples/solana-privy/`](https://github.com/alchemyplatform/aa-sdk/tree/jake/v5/sol-examples/examples/solana-privy))
@@ -482,13 +682,17 @@ Open [http://localhost:3000](http://localhost:3000).
 The Privy wallet (`useConnectedStandardWallets`) returns a wallet-standard `StandardConnect` signer. The SDK's `createSmartWalletClient` accepts this directly:
 
 ```ts
+import { useConnectedStandardWallets } from "@privy-io/react-auth/solana";
 import {
   createSmartWalletClient,
   alchemyWalletTransport,
 } from "@alchemy/wallet-apis";
 
+const { wallets } = useConnectedStandardWallets();
+const privyWallet = wallets[0]; // already a SolanaSigner
+
 const client = createSmartWalletClient({
-  signer: privyWallet, // wallet-standard signer from Privy
+  signer: privyWallet,
   transport: alchemyWalletTransport({
     apiKey: ALCHEMY_API_KEY,
     url: "https://api.g.alchemypreview.com/v2",
@@ -548,7 +752,7 @@ const solanaWallets = get().filter(
 const { accounts } = await wallet.features["standard:connect"].connect();
 const account = accounts[0];
 
-// build signer — Uint8Array in, Uint8Array out, no VersionedTransaction dance
+// build signer — Uint8Array in, Uint8Array out, no VersionedTransaction
 const signer = {
   address: account.address,
   signTransaction: async ({ transaction }: { transaction: Uint8Array }) => {
