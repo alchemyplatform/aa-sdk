@@ -8,9 +8,11 @@ import {
   getTransactionEncoder,
   type Blockhash,
 } from "@solana/kit";
+import { VersionedTransaction } from "@solana/web3.js";
 import { fromKeypair } from "./fromKeypair.js";
 import { fromKitSigner } from "./fromKitSigner.js";
-import type { SolanaStandardSigner } from "../types.js";
+import { fromWalletAdapter } from "./fromWalletAdapter.js";
+import type { SolanaSigner } from "../types.js";
 
 async function ed25519Sign(
   key: CryptoKey,
@@ -21,7 +23,7 @@ async function ed25519Sign(
 }
 
 describe("Solana signer adapter equivalence", () => {
-  it("fromKeypair, fromKitSigner, and raw SolanaStandardSigner all produce the same signed transaction", async () => {
+  it("fromKeypair, fromKitSigner, fromWalletAdapter, and raw SolanaSigner all produce the same signed transaction", async () => {
     const kitSigner = await generateKeyPairSigner(true);
 
     const msg = setTransactionMessageLifetimeUsingBlockhash(
@@ -53,8 +55,35 @@ describe("Solana signer adapter equivalence", () => {
       transaction: Uint8Array.from(txBytes),
     });
 
-    // Adapter 3: Direct SolanaStandardSigner (wallet-standard style)
-    const directSigner: SolanaStandardSigner = {
+    // Adapter 3: fromWalletAdapter (VersionedTransaction-based, like useWallet())
+    const walletAdapterAdapted = fromWalletAdapter({
+      publicKey: { toBase58: () => kitSigner.address },
+      signTransaction: async (tx) => {
+        const serialized = tx.serialize();
+        const numSigs = serialized[0];
+        const messageStart = 1 + numSigs * 64;
+        const messageBytes = serialized.slice(messageStart);
+        const sig = await ed25519Sign(
+          kitSigner.keyPair.privateKey,
+          messageBytes,
+        );
+        const signed = new Uint8Array(serialized);
+        for (let i = 0; i < numSigs; i++) {
+          const offset = 1 + i * 64;
+          if (serialized.slice(offset, offset + 64).every((b) => b === 0)) {
+            signed.set(sig, offset);
+            break;
+          }
+        }
+        return VersionedTransaction.deserialize(signed) as typeof tx;
+      },
+    });
+    const walletAdapterResult = await walletAdapterAdapted.signTransaction({
+      transaction: Uint8Array.from(txBytes),
+    });
+
+    // Adapter 4: Direct SolanaSigner (wallet-standard style)
+    const directSigner: SolanaSigner = {
       address: kitSigner.address,
       signTransaction: async ({ transaction }) => {
         const numSigs = transaction[0];
@@ -81,6 +110,9 @@ describe("Solana signer adapter equivalence", () => {
 
     expect(kitResult.signedTransaction).toEqual(
       keypairResult.signedTransaction,
+    );
+    expect(kitResult.signedTransaction).toEqual(
+      walletAdapterResult.signedTransaction,
     );
     expect(kitResult.signedTransaction).toEqual(directResult.signedTransaction);
 

@@ -1,4 +1,4 @@
-import type { SolanaStandardSigner } from "../types.js";
+import type { SolanaSigner } from "../types.js";
 import { BaseError } from "@alchemy/common";
 
 /** Raw Ed25519 keypair signer (e.g. `Keypair` from `@solana/web3.js` v1 or a bare Ed25519 key). */
@@ -8,17 +8,17 @@ export interface SolanaKeypairSigner {
 }
 
 /**
- * Adapts a raw Ed25519 keypair signer into a {@link SolanaStandardSigner}.
+ * Adapts a raw Ed25519 keypair signer into a {@link SolanaSigner}.
  *
  * Use this for legacy `@solana/web3.js` v1 `Keypair` signers or any signer
  * that exposes a `signMessage(bytes) => signature` interface. For
- * `@solana/kit` signers (e.g. `KeyPairSigner`, `TransactionPartialSigner`),
- * use {@link fromKitSigner} instead.
+ * `@solana/kit` signers, use {@link fromKitSigner}. For browser wallets
+ * (wallet adapter, Phantom, etc.), use {@link fromWalletAdapter}.
  *
  * @param {SolanaKeypairSigner} signer - The raw Ed25519 keypair signer to adapt
- * @returns {SolanaStandardSigner} A wallet-standard compatible signer
+ * @returns {SolanaSigner} A SolanaSigner compatible with `createSmartWalletClient`
  */
-export function fromKeypair(signer: SolanaKeypairSigner): SolanaStandardSigner {
+export function fromKeypair(signer: SolanaKeypairSigner): SolanaSigner {
   return {
     address: signer.address,
     async signTransaction({ transaction }) {

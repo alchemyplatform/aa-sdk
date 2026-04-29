@@ -36,7 +36,7 @@ export { smartWalletActions } from "../decorators/smartWalletActions.js";
 export type {
   SmartWalletClient,
   SolanaSmartWalletClient,
-  SolanaStandardSigner,
+  SolanaSigner,
 } from "../types.js";
 export type {
   CreateEvmSmartWalletClientParams,

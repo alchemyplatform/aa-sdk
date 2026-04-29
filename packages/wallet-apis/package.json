@@ -55,6 +55,7 @@
   },
   "devDependencies": {
     "@solana/kit": "^6.8.0",
+    "@solana/web3.js": "^1.98.4",
     "@types/deep-equal": "^1.0.4",
     "abitype": "^1.0.0",
     "typescript-template": "workspace:*",
@@ -69,10 +70,14 @@
   },
   "peerDependencies": {
     "@solana/kit": ">=2.0.0",
+    "@solana/web3.js": "^1.95.0",
     "viem": "^2.45.0"
   },
   "peerDependenciesMeta": {
     "@solana/kit": {
+      "optional": true
+    },
+    "@solana/web3.js": {
       "optional": true
     }
   },
