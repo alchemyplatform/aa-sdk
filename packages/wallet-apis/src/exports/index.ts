@@ -45,20 +45,6 @@ export type {
 } from "../client.js";
 export { createSmartWalletClient } from "../client.js";
 
-// Solana decorator.
-export type { SolanaSmartWalletActions } from "../decorators/solanaSmartWalletActions.js";
-export { solanaSmartWalletActions } from "../decorators/solanaSmartWalletActions.js";
-
-// Solana actions.
-export type * from "../actions/solana/prepareCalls.js";
-export { prepareCalls as solanaPrepareCalls } from "../actions/solana/prepareCalls.js";
-export type * from "../actions/solana/signPreparedCalls.js";
-export { signPreparedCalls as solanaSignPreparedCalls } from "../actions/solana/signPreparedCalls.js";
-export type * from "../actions/solana/sendPreparedCalls.js";
-export { sendPreparedCalls as solanaSendPreparedCalls } from "../actions/solana/sendPreparedCalls.js";
-export type * from "../actions/solana/sendCalls.js";
-export { sendCalls as solanaSendCalls } from "../actions/solana/sendCalls.js";
-
 // Transport.
 export type * from "../transport.js";
 export { alchemyWalletTransport } from "../transport.js";

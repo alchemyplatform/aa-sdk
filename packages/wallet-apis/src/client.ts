@@ -100,6 +100,19 @@ function isSolanaParams(
   return typeof params.chain === "string" && params.chain.startsWith("solana:");
 }
 
+/**
+ * Creates a smart wallet client for EVM or Solana chains.
+ *
+ * Pass an EVM `Chain` to get a {@link SmartWalletClient} with EVM actions.
+ * Pass a Solana chain ID string (e.g. `"solana:devnet"`) with a
+ * {@link SolanaSigner} to get a {@link SolanaSmartWalletClient}.
+ *
+ * Imported from `@alchemy/wallet-apis` — works for both chains.
+ * Solana-specific actions and adapters are in `@alchemy/wallet-apis/solana`.
+ *
+ * @param {CreateSmartWalletClientParams} params - EVM or Solana client configuration
+ * @returns {SmartWalletClient | SolanaSmartWalletClient} A smart wallet client for the specified chain
+ */
 export function createSmartWalletClient(
   params: CreateEvmSmartWalletClientParams,
 ): SmartWalletClient;
