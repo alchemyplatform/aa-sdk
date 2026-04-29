@@ -152,8 +152,8 @@ export default function WalletStandardPage() {
         Uses <code>@wallet-standard/app</code> to discover installed wallets
         directly. No Privy, no wallet adapter library — the wallet&apos;s{" "}
         <code>solana:signTransaction</code> feature already returns{" "}
-        <code>Uint8Array</code>, matching <code>SolanaStandardSigner</code> with
-        no serialization adapter needed.
+        <code>Uint8Array</code>, matching <code>SolanaSigner</code> with no
+        serialization adapter needed.
       </p>
 
       {!account ? (

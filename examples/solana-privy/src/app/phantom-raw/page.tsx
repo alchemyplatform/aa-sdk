@@ -6,6 +6,7 @@ import {
   createSmartWalletClient,
   alchemyWalletTransport,
 } from "@alchemy/wallet-apis";
+import { fromWalletAdapter } from "@alchemy/wallet-apis/solana";
 
 const ALCHEMY_API_KEY = process.env.NEXT_PUBLIC_ALCHEMY_API_KEY!;
 const SOLANA_POLICY_ID = process.env.NEXT_PUBLIC_SOLANA_POLICY_ID!;
@@ -64,14 +65,7 @@ export default function PhantomRawPage() {
     setStatus("Creating client...");
 
     try {
-      const signer = {
-        address,
-        signTransaction: async (input: { transaction: Uint8Array }) => {
-          const tx = VersionedTransaction.deserialize(input.transaction);
-          const signed = await provider.signTransaction(tx);
-          return { signedTransaction: new Uint8Array(signed.serialize()) };
-        },
-      };
+      const signer = fromWalletAdapter(provider);
 
       const transport = alchemyWalletTransport({
         apiKey: ALCHEMY_API_KEY,
@@ -129,7 +123,7 @@ export default function PhantomRawPage() {
       <p style={{ color: "#666", marginBottom: 20 }}>
         Connects directly to <code>window.phantom.solana</code> without any
         wallet adapter library. The Phantom provider is wrapped into a{" "}
-        <code>SolanaStandardSigner</code> for the Alchemy client.
+        <code>SolanaSigner</code> via <code>fromWalletAdapter</code>.
       </p>
 
       {!address ? (
