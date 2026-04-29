@@ -1,5 +1,5 @@
 import { getTransactionCodec } from "@solana/kit";
-import type { SolanaStandardSigner } from "../types.js";
+import type { SolanaSigner } from "../types.js";
 import { BaseError } from "@alchemy/common";
 
 /** Any {@link https://solanakit.com @solana/kit} signer that implements `signTransactions` (e.g. `TransactionPartialSigner`, `KeyPairSigner`). */
@@ -11,21 +11,21 @@ export interface SolanaTransactionPartialSigner {
 }
 
 /**
- * Adapts an {@link https://solanakit.com @solana/kit} signer into a {@link SolanaStandardSigner}.
+ * Adapts an {@link https://solanakit.com @solana/kit} signer into a {@link SolanaSigner}.
  *
  * Accepts any signer that implements `signTransactions`, including
  * `KeyPairSigner`, `TransactionPartialSigner`, and `NoopSigner`. For raw
- * Ed25519 keypairs that aren't from `@solana/kit`, use {@link fromKeypair}
- * instead.
+ * Ed25519 keypairs, use {@link fromKeypair}. For browser wallets (wallet
+ * adapter, Phantom, etc.), use {@link fromWalletAdapter}.
  *
  * Requires `@solana/kit` as a peer dependency.
  *
  * @param {SolanaTransactionPartialSigner} signer - The @solana/kit signer to adapt
- * @returns {SolanaStandardSigner} A wallet-standard compatible signer
+ * @returns {SolanaSigner} A SolanaSigner compatible with `createSmartWalletClient`
  */
 export function fromKitSigner(
   signer: SolanaTransactionPartialSigner,
-): SolanaStandardSigner {
+): SolanaSigner {
   return {
     address: signer.address,
     async signTransaction({ transaction }) {

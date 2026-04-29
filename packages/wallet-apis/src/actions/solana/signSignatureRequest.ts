@@ -1,4 +1,4 @@
-import type { SolanaStandardSigner } from "../../types.js";
+import type { SolanaSigner } from "../../types.js";
 import { BaseError } from "@alchemy/common";
 import { LOGGER } from "../../logger.js";
 import { hexToBytes } from "viem";
@@ -15,7 +15,7 @@ export type SolanaSignatureResult = {
 };
 
 export async function signSolanaSignatureRequest(
-  signer: SolanaStandardSigner,
+  signer: SolanaSigner,
   signatureRequest: SolanaSignatureRequestParams,
 ): Promise<SolanaSignatureResult> {
   const txBytes = hexToBytes(signatureRequest.data);

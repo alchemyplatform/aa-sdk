@@ -39,8 +39,8 @@ export type SolanaSmartWalletClient = BaseWalletClient<
   undefined
 >;
 
-/** Solana wallet standard signer (Privy, Phantom, etc). Takes serialized tx, returns signed serialized tx. */
-export interface SolanaStandardSigner {
+/** Solana signer interface. Takes serialized tx bytes, returns signed serialized tx bytes. */
+export interface SolanaSigner {
   address: string;
   signTransaction(input: {
     transaction: Uint8Array;
@@ -61,7 +61,7 @@ export type InnerWalletApiClient = BaseWalletClient<{
 export type InnerSolanaWalletApiClient = BaseWalletClient<
   {
     internal: InternalState | undefined;
-    owner: SolanaStandardSigner;
+    owner: SolanaSigner;
     solanaAccount: string;
     policyIds?: string[];
   },
