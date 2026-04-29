@@ -8,7 +8,7 @@ import { wallet_sendPreparedCalls as MethodSchema } from "@alchemy/wallet-api-ty
 import {
   methodSchema,
   encode,
-  decodeSolanaResponse,
+  decode,
   type MethodResponse,
 } from "../../utils/schema.js";
 
@@ -53,7 +53,7 @@ export async function sendPreparedCalls(
   });
 
   LOGGER.debug("solana:sendPreparedCalls:done");
-  const decoded = decodeSolanaResponse(schema.response, rpcResp);
+  const decoded = decode(schema.response, rpcResp);
 
   if (!isSolanaResponse(decoded)) {
     throw new BaseError(

@@ -7,8 +7,8 @@ import { isSolanaChain } from "../../utils/assertions.js";
 import type { SolanaChainId } from "@alchemy/wallet-api-types";
 import {
   SolanaPrepareCallsParams as SolanaPrepareCallsSchema,
-  PreparedCall_SolanaV0 as PreparedCall_SolanaV0Schema,
 } from "@alchemy/wallet-api-types";
+import { wallet_prepareCalls as MethodSchema } from "@alchemy/wallet-api-types/rpc";
 import type { StaticDecode } from "typebox";
 import { BaseError } from "@alchemy/common";
 import { LOGGER } from "../../logger.js";
@@ -16,7 +16,15 @@ import {
   mergeSolanaClientCapabilities,
   type WithCapabilities,
 } from "../../utils/capabilities.js";
-import { encode, decodeSolanaResponse } from "../../utils/schema.js";
+import {
+  methodSchema,
+  encode,
+  decode,
+  type MethodResponse,
+} from "../../utils/schema.js";
+
+const schema = methodSchema(MethodSchema);
+type PrepareCallsResponse = MethodResponse<typeof MethodSchema>;
 
 type BaseSolanaPrepareCallsParams = StaticDecode<
   typeof SolanaPrepareCallsSchema
@@ -31,9 +39,18 @@ export type SolanaPrepareCallsParams = Prettify<
   >
 >;
 
-export type SolanaPrepareCallsResult = StaticDecode<
-  typeof PreparedCall_SolanaV0Schema
+type SolanaPrepareCallsResponse = Extract<
+  PrepareCallsResponse,
+  { type: "solana-transaction-v0" }
 >;
+
+function isSolanaResponse(
+  response: PrepareCallsResponse,
+): response is SolanaPrepareCallsResponse {
+  return response.type === "solana-transaction-v0";
+}
+
+export type SolanaPrepareCallsResult = SolanaPrepareCallsResponse;
 
 /**
  * Prepares Solana instructions for execution by building a versioned transaction.
@@ -95,5 +112,13 @@ export async function prepareCalls(
   });
 
   LOGGER.debug("solana:prepareCalls:done");
-  return decodeSolanaResponse(PreparedCall_SolanaV0Schema, rpcResp);
+  const decoded = decode(schema.response, rpcResp);
+
+  if (!isSolanaResponse(decoded)) {
+    throw new BaseError(
+      `Unexpected EVM response from Solana prepareCalls: ${decoded.type}`,
+    );
+  }
+
+  return decoded;
 }

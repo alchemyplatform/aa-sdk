@@ -23,11 +23,12 @@ import { arbitrumSepolia, baseSepolia } from "viem/chains";
 import { createSmartWalletClient } from "./client.js";
 import { apiTransport, publicTransport } from "./__tests__/setup.js";
 import { getAction } from "viem/utils";
+import type { SmartWalletClient } from "./types.js";
 
 // We want to test both the "unroll each step" method and the full e2e "sendCalls" method.
 const sendVariants: Array<
   (
-    client: ReturnType<typeof createSmartWalletClient>,
+    client: SmartWalletClient,
     input: SendCallsParams,
   ) => Promise<WaitForCallsStatusReturnType>
 > = [
