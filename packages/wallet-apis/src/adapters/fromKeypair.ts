@@ -14,6 +14,9 @@ export interface SolanaKeypairSigner {
  * that exposes a `signMessage(bytes) => signature` interface. For
  * `@solana/kit` signers (e.g. `KeyPairSigner`, `TransactionPartialSigner`),
  * use {@link fromKitSigner} instead.
+ *
+ * @param {SolanaKeypairSigner} signer - The raw Ed25519 keypair signer to adapt
+ * @returns {SolanaStandardSigner} A wallet-standard compatible signer
  */
 export function fromKeypair(signer: SolanaKeypairSigner): SolanaStandardSigner {
   return {

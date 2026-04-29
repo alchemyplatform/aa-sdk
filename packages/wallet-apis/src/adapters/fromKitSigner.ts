@@ -19,6 +19,9 @@ export interface SolanaTransactionPartialSigner {
  * instead.
  *
  * Requires `@solana/kit` as a peer dependency.
+ *
+ * @param {SolanaTransactionPartialSigner} signer - The @solana/kit signer to adapt
+ * @returns {SolanaStandardSigner} A wallet-standard compatible signer
  */
 export function fromKitSigner(
   signer: SolanaTransactionPartialSigner,
