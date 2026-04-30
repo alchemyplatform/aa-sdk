@@ -59,16 +59,15 @@ export type RequestQuoteV0Result =
  *
  * @param {InnerWalletApiClient} client - The wallet API client to use for the request
  * @param {RequestQuoteV0Params} params - Parameters for requesting a swap quote
- * @param {Address} params.fromToken - The address of the token to swap from
- * @param {Address} params.toToken - The address of the token to swap to
- * @param {Hex} [params.fromAmount] - The amount to swap from (mutually exclusive with minimumToAmount)
- * @param {Hex} [params.minimumToAmount] - The minimum amount to receive (mutually exclusive with fromAmount)
- * @param {AccountParam} [params.account] - The account to execute the swap from. Can be an address string or an object with an `address` property. Defaults to the client's account (signer address via EIP-7702).
- * @param {Hex} [params.slippage] - The maximum acceptable slippage percentage
- * @param {boolean} [params.returnRawCalls] - Whether to return raw calls for EOA wallets (defaults to false for smart wallets)
- * @param {object} [params.capabilities] - Optional capabilities to include with the request (only available when returnRawCalls is false)
- * @param {Array<{to: Address, data?: Hex, value?: Hex}>} [params.postCalls] - Optional calls to execute after the swap
  * @returns {Promise<RequestQuoteV0Result>} A Promise that resolves to either prepared calls or raw calls depending on returnRawCalls
+ *
+ * @remarks
+ * This SDK action accepts decoded JavaScript values and encodes them to the raw
+ * `wallet_requestQuote_v0` RPC shape before sending. Pass chain IDs as numbers
+ * (for example, `42161`), and pass amounts such as `fromAmount`,
+ * `minimumToAmount`, `slippage`, and `postCalls[].value` as `bigint` values.
+ * Raw RPC callers use hex strings, but SDK callers should not pre-encode these
+ * values with `toHex`.
  *
  * @example
  * ```ts twoslash
@@ -77,6 +76,7 @@ export type RequestQuoteV0Result =
  *   fromToken: "0xA0b86a33E6441e1d6a8E8C7a8E8E8E8E8E8E8E8E",
  *   toToken: "0xB0b86a33E6441e1d6a8E8C7a8E8E8E8E8E8E8E8E",
  *   fromAmount: 1000000000000000000n, // 1 ETH
+ *   chainId: 42161, // Arbitrum
  *   capabilities: {
  *     paymaster: { policyId: "your-policy-id" }
  *   }
@@ -87,6 +87,7 @@ export type RequestQuoteV0Result =
  *   fromToken: "0xA0b86a33E6441e1d6a8E8C7a8E8E8E8E8E8E8E8E",
  *   toToken: "0xB0b86a33E6441e1d6a8E8C7a8E8E8E8E8E8E8E8E",
  *   fromAmount: 1000000000000000000n,
+ *   chainId: 42161,
  *   returnRawCalls: true
  * });
  * ```

@@ -174,6 +174,40 @@ function isReactComponent(fileName: string, packageName: string): boolean {
 }
 
 /**
+ * Generate a navigation subsection for a TypeDoc type directory.
+ *
+ * @param {DirectoryItem} typeDir - TypeDoc directory for functions, type aliases, variables, etc.
+ * @returns {YamlSection | undefined} The generated section, or undefined when the directory is not navigable.
+ */
+function generateFlatTypeSection(
+  typeDir: DirectoryItem,
+): YamlSection | undefined {
+  const typeDisplayName = TYPE_SECTIONS[typeDir.name];
+  if (!typeDisplayName) {
+    return undefined;
+  }
+
+  const contents: YamlPage[] = [];
+  for (const item of typeDir.children) {
+    if (item.type === "file") {
+      contents.push({
+        page: toDisplayName(item.name),
+        path: item.mdxPath,
+      });
+    }
+  }
+
+  if (contents.length === 0) {
+    return undefined;
+  }
+
+  return {
+    section: typeDisplayName,
+    contents,
+  };
+}
+
+/**
  * Generate YAML structure for a package section
  *
  * @param {string} packageName - The package name (aa-infra, common, etc.)
@@ -201,7 +235,23 @@ function generatePackageSection(
     const typeName = typeDir.name;
     const typeDisplayName = TYPE_SECTIONS[typeName];
 
-    if (!typeDisplayName) continue;
+    if (!typeDisplayName) {
+      if (packageName === "wallet-apis" && typeName === "experimental") {
+        const experimentalContents = typeDir.children
+          .filter((child): child is DirectoryItem => child.type === "directory")
+          .map((child) => generateFlatTypeSection(child))
+          .filter((section): section is YamlSection => section !== undefined);
+
+        if (experimentalContents.length > 0) {
+          section.contents.push({
+            section: "Experimental",
+            contents: experimentalContents,
+          });
+        }
+      }
+
+      continue;
+    }
 
     const typeSection: YamlSection = {
       section: typeDisplayName,
