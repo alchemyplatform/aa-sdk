@@ -1,4 +1,5 @@
 import type { Address, Prettify } from "viem";
+import { BaseError } from "@alchemy/common";
 import type { DistributiveOmit, InnerWalletApiClient } from "../../types.ts";
 import {
   fromRpcCapabilities,
@@ -20,6 +21,26 @@ import {
 const schema = methodSchema(MethodSchema);
 type BaseRequestQuoteV0Params = MethodParams<typeof MethodSchema>;
 type RequestQuoteV0Response = MethodResponse<typeof MethodSchema>;
+
+/**
+ * Validates chain IDs in the SDK-facing request shape before TypeBox encodes
+ * them to the raw RPC hex-string shape.
+ *
+ * @param {"chainId" | "toChainId"} name - The parameter name shown in the error message.
+ * @param {unknown} value - The SDK-facing chain ID value to validate.
+ */
+function assertOptionalChainId(
+  name: "chainId" | "toChainId",
+  value: unknown,
+): asserts value is number | undefined {
+  if (value === undefined || typeof value === "number") {
+    return;
+  }
+
+  throw new BaseError(
+    `Invalid params: ${name} must be a number when using requestQuoteV0, e.g. 42161. Hex strings like "0xa4b1" are only valid for raw wallet_requestQuote_v0 RPC calls.`,
+  );
+}
 
 export type RequestQuoteV0Params = Prettify<
   WithCapabilities<
@@ -106,6 +127,12 @@ export async function requestQuoteV0(
           client,
           "capabilities" in params ? params.capabilities : undefined,
         );
+
+  assertOptionalChainId("chainId", params.chainId);
+  assertOptionalChainId(
+    "toChainId",
+    "toChainId" in params ? params.toChainId : undefined,
+  );
 
   const { account: _, chainId: __, ...rest } = params;
   const rpcParams = encode(schema.request, {
