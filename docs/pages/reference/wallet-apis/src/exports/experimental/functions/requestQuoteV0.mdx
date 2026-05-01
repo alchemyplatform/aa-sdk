@@ -11,7 +11,7 @@ layout: reference
 function requestQuoteV0(client, params): Promise<RequestQuoteV0Result>;
 ```
 
-Defined in: [packages/wallet-apis/src/experimental/actions/requestQuoteV0.ts:112](https://github.com/alchemyplatform/aa-sdk/blob/v5.x.x/packages/wallet-apis/src/experimental/actions/requestQuoteV0.ts#L112)
+Defined in: [packages/wallet-apis/src/experimental/actions/requestQuoteV0.ts:116](https://github.com/alchemyplatform/aa-sdk/blob/v5.x.x/packages/wallet-apis/src/experimental/actions/requestQuoteV0.ts#L116)
 
 Requests a quote for a token swap, returning either prepared calls for smart wallets
 or raw calls for EOA wallets depending on the returnRawCalls parameter.
@@ -20,13 +20,6 @@ or raw calls for EOA wallets depending on the returnRawCalls parameter.
 
 > **Experimental**: This swap quote API is experimental and may change in a
 > future release.
-
-This SDK action accepts decoded JavaScript values and encodes them to the raw
-`wallet_requestQuote_v0` RPC shape before sending. Pass chain IDs as numbers
-(for example, `42161`), and pass amounts such as `fromAmount`,
-`minimumToAmount`, `slippage`, and `postCalls[].value` as `bigint` values.
-Raw RPC callers use hex strings, but SDK callers should not pre-encode these
-values with `toHex`.
 
 ## Example
 
