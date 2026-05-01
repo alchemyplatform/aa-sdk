@@ -869,6 +869,21 @@ export function load(app) {
         }
       }
 
+      if (page.url?.includes("/experimental/")) {
+        const experimentalNotice =
+          "<Warning>Experimental: This API is experimental and may change in a future release.</Warning>\n\n";
+        const fmMatch = page.contents.match(/^(---\n[\s\S]*?\n---\n)/);
+        if (fmMatch) {
+          const fm = fmMatch[1];
+          const rest = page.contents.substring(fm.length).trimStart();
+          if (!rest.startsWith("<Warning>Experimental:")) {
+            page.contents = `${fm}\n${experimentalNotice}${rest}`;
+          }
+        } else if (!page.contents.startsWith("<Warning>Experimental:")) {
+          page.contents = experimentalNotice + page.contents;
+        }
+      }
+
       // Strip .mdx extension from relative markdown links.
       // The docs site uses extensionless slug-based URLs.
       page.contents = page.contents.replace(

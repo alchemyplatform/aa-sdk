@@ -23,10 +23,6 @@ type RequestQuoteV0Response = MethodResponse<typeof MethodSchema>;
 
 /**
  * Parameters accepted by the experimental `requestQuoteV0` action.
- *
- * @remarks
- * > **Experimental**: This swap quote API is experimental and may change in a
- * > future release.
  */
 export type RequestQuoteV0Params = Prettify<
   WithCapabilities<
@@ -53,10 +49,6 @@ type ClientModifiedRequest = Prettify<
 
 /**
  * Result returned by the experimental `requestQuoteV0` action.
- *
- * @remarks
- * > **Experimental**: This swap quote API is experimental and may change in a
- * > future release.
  */
 export type RequestQuoteV0Result =
   | Exclude<RequestQuoteV0Response, { type: "paymaster-permit" }>
@@ -85,10 +77,6 @@ export type RequestQuoteV0Result =
  * @param {object} [params.capabilities] - Optional capabilities to include with the request (only available when returnRawCalls is false)
  * @param {Array<{ to: Address; data?: Hex; value?: bigint }>} [params.postCalls] - Optional calls to execute after the swap
  * @returns {Promise<RequestQuoteV0Result>} A Promise that resolves to either prepared calls or raw calls depending on returnRawCalls
- *
- * @remarks
- * > **Experimental**: This swap quote API is experimental and may change in a
- * > future release.
  *
  * @example
  * ```ts twoslash
