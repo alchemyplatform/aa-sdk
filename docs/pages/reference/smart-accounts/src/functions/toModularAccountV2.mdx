@@ -19,7 +19,10 @@ Creates a MAv2 account.
 
 ```ts
 import { createPublicClient } from "viem";
-import { createBundlerClient, createPaymasterClient } from "viem/account-abstraction";
+import {
+  createBundlerClient,
+  createPaymasterClient,
+} from "viem/account-abstraction";
 import { sepolia } from "viem/chains";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import { alchemyTransport } from "@alchemy/common";
@@ -75,6 +78,7 @@ const receipt = await bundlerClient.waitForUserOperationReceipt({ hash });
         `Mode`
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -103,6 +107,7 @@ const receipt = await bundlerClient.waitForUserOperationReceipt({ hash });
         The parameters for creating a MAv2 account.
       </td>
     </tr>
+
   </tbody>
 </table>
 
