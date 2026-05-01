@@ -21,6 +21,13 @@ const schema = methodSchema(MethodSchema);
 type BaseRequestQuoteV0Params = MethodParams<typeof MethodSchema>;
 type RequestQuoteV0Response = MethodResponse<typeof MethodSchema>;
 
+/**
+ * Parameters accepted by the experimental `requestQuoteV0` action.
+ *
+ * @remarks
+ * > **Experimental**: This swap quote API is experimental and may change in a
+ * > future release.
+ */
 export type RequestQuoteV0Params = Prettify<
   WithCapabilities<
     DistributiveOmit<BaseRequestQuoteV0Params, "from" | "chainId"> & {
@@ -44,6 +51,13 @@ type ClientModifiedRequest = Prettify<
   }
 >;
 
+/**
+ * Result returned by the experimental `requestQuoteV0` action.
+ *
+ * @remarks
+ * > **Experimental**: This swap quote API is experimental and may change in a
+ * > future release.
+ */
 export type RequestQuoteV0Result =
   | Exclude<RequestQuoteV0Response, { type: "paymaster-permit" }>
   | (Omit<
@@ -62,6 +76,9 @@ export type RequestQuoteV0Result =
  * @returns {Promise<RequestQuoteV0Result>} A Promise that resolves to either prepared calls or raw calls depending on returnRawCalls
  *
  * @remarks
+ * > **Experimental**: This swap quote API is experimental and may change in a
+ * > future release.
+ *
  * This SDK action accepts decoded JavaScript values and encodes them to the raw
  * `wallet_requestQuote_v0` RPC shape before sending. Pass chain IDs as numbers
  * (for example, `42161`), and pass amounts such as `fromAmount`,

@@ -65,8 +65,8 @@ function extractPackageFromUrl(url) {
  * (compiled dist/ files or node_modules/), indicating it is either a
  * re-export or an inherited member from an external package.
  *
- * @param {import('typedoc').Reflection} reflection
- * @returns {boolean}
+ * @param {import('typedoc').Reflection} reflection - Reflection to inspect for source file metadata.
+ * @returns {boolean} True when all reflection sources are generated or external.
  */
 function isExternalSource(reflection) {
   const sources = reflection.sources;
@@ -83,12 +83,12 @@ function isExternalSource(reflection) {
  * Convert a TypeScript type from the checker into a TypeDoc Type.
  * Handles common patterns and falls back to a string representation.
  *
- * @param {import('typescript').TypeChecker} checker
- * @param {import('typescript').Type} tsType
+ * @param {import('typescript').TypeChecker} checker - TypeScript checker used to inspect type structure.
+ * @param {import('typescript').Type} tsType - TypeScript type to convert into a TypeDoc type.
  * @param {import('typedoc').DeclarationReflection} parent - Parent reflection for nested objects
- * @param {import('typedoc').ProjectReflection} project
+ * @param {import('typedoc').ProjectReflection} project - TypeDoc project that owns generated reflections.
  * @param {number} depth - Recursion depth guard
- * @returns {import('typedoc').Type}
+ * @returns {import('typedoc').Type} TypeDoc type representation for the TypeScript type.
  */
 function tsTypeToTypeDoc(checker, tsType, parent, project, depth = 0) {
   if (depth > 4) {
@@ -212,8 +212,8 @@ function tsTypeToTypeDoc(checker, tsType, parent, project, depth = 0) {
 /**
  * Check if a TypeDoc type represents an empty/broken object ({} or Object)
  *
- * @param {import('typedoc').Type | undefined} type
- * @returns {boolean}
+ * @param {import('typedoc').Type | undefined} type - TypeDoc type to inspect.
+ * @returns {boolean} True when the type is an empty reflected object.
  */
 function isEmptyObjectType(type) {
   if (!type) return false;
@@ -232,10 +232,10 @@ function isEmptyObjectType(type) {
  * Resolve TypeBox-derived types that TypeDoc couldn't resolve.
  * Fixes type aliases (detail pages) and function signatures.
  *
- * @param {import('typedoc').Context} context
- * @param {import('typedoc').ProjectReflection} project
- * @param {import('typescript').TypeChecker} checker
- * @returns {{ count: number, codeBlockFixes: Map<string, string> }}
+ * @param {import('typedoc').Context} context - TypeDoc conversion context used for symbol lookup.
+ * @param {import('typedoc').ProjectReflection} project - Project reflection whose TypeBox-derived types should be repaired.
+ * @param {import('typescript').TypeChecker} checker - TypeScript checker used to resolve structural types.
+ * @returns {{ count: number, codeBlockFixes: Map<string, string> }} Number of fixes and code block replacements.
  */
 function resolveTypeBoxTypes(context, project, checker) {
   let fixedCount = 0;
@@ -712,6 +712,9 @@ export function load(app) {
 
       // Extract package name from URL for categorization
       const packageName = extractPackageFromUrl(page.url);
+      const isReadmeFile = page.url && page.url.endsWith("README.mdx");
+      const isExperimentalPage =
+        page.url && page.url.includes("/experimental/") && !isReadmeFile;
 
       if (page.model.kind === ReflectionKind.Class) {
         title = page.model.name;
@@ -774,13 +777,16 @@ export function load(app) {
       }
 
       // For README.mdx files, remove "/src" and "/src/exports" from title and description
-      const isReadmeFile = page.url && page.url.endsWith("README.mdx");
       if (isReadmeFile) {
         title = title.replace(/\/src\/exports$/, "").replace(/\/src$/, "");
         title = `@alchemy/${title}`;
         description = description
           .replace(/\/src\/exports/g, "")
           .replace(/\/src/g, "");
+      }
+
+      if (isExperimentalPage) {
+        title = `${title} (experimental)`;
       }
 
       // Generate slug from the URL path
@@ -920,7 +926,7 @@ export function load(app) {
               .replace(/\{\s+/g, "{\n  ")
               .replace(/;\s{2,}/g, ";\n  ")
               .replace(/;\s*\}/g, ";\n}")
-              .replace(/\n  \}/g, "\n}");
+              .replace(/\n {2}\}/g, "\n}");
           }
           // Replace the entire code block body after `type Name =`
           page.contents = page.contents.replace(

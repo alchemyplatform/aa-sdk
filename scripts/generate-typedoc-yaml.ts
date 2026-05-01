@@ -149,6 +149,16 @@ function toDisplayName(fileName: string): string {
 }
 
 /**
+ * Convert an experimental export file name to its navigation display name.
+ *
+ * @param {string} fileName - The file name to convert
+ * @returns {string} The experimental display name
+ */
+function toExperimentalDisplayName(fileName: string): string {
+  return `${toDisplayName(fileName)} (experimental)`;
+}
+
+/**
  * Determine if a function should be categorized as a component (React components)
  *
  * @param {string} fileName - The function name
@@ -176,35 +186,38 @@ function isReactComponent(fileName: string, packageName: string): boolean {
 /**
  * Generate a navigation subsection for a TypeDoc type directory.
  *
+ * @param {YamlPackageSection} packageSection - The package section to append experimental pages to.
  * @param {DirectoryItem} typeDir - TypeDoc directory for functions, type aliases, variables, etc.
- * @returns {YamlSection | undefined} The generated section, or undefined when the directory is not navigable.
+ * @returns {void}
  */
-function generateFlatTypeSection(
+function appendExperimentalTypeSection(
+  packageSection: YamlPackageSection,
   typeDir: DirectoryItem,
-): YamlSection | undefined {
+): void {
   const typeDisplayName = TYPE_SECTIONS[typeDir.name];
   if (!typeDisplayName) {
-    return undefined;
+    return;
   }
 
-  const contents: YamlPage[] = [];
+  let targetSection = packageSection.contents.find(
+    (child) => child.section === typeDisplayName,
+  );
+  if (!targetSection) {
+    targetSection = {
+      section: typeDisplayName,
+      contents: [],
+    };
+    packageSection.contents.push(targetSection);
+  }
+
   for (const item of typeDir.children) {
     if (item.type === "file") {
-      contents.push({
-        page: toDisplayName(item.name),
+      targetSection.contents.push({
+        page: toExperimentalDisplayName(item.name),
         path: item.mdxPath,
       });
     }
   }
-
-  if (contents.length === 0) {
-    return undefined;
-  }
-
-  return {
-    section: typeDisplayName,
-    contents,
-  };
 }
 
 /**
@@ -228,6 +241,8 @@ function generatePackageSection(
     contents: [],
   };
 
+  let experimentalDir: DirectoryItem | undefined;
+
   // Process each type directory (functions, classes, etc.)
   for (const typeDir of packageData.children) {
     if (typeDir.type !== "directory") continue;
@@ -237,17 +252,7 @@ function generatePackageSection(
 
     if (!typeDisplayName) {
       if (packageName === "wallet-apis" && typeName === "experimental") {
-        const experimentalContents = typeDir.children
-          .filter((child): child is DirectoryItem => child.type === "directory")
-          .map((child) => generateFlatTypeSection(child))
-          .filter((section): section is YamlSection => section !== undefined);
-
-        if (experimentalContents.length > 0) {
-          section.contents.push({
-            section: "Experimental",
-            contents: experimentalContents,
-          });
-        }
+        experimentalDir = typeDir;
       }
 
       continue;
@@ -348,6 +353,14 @@ function generatePackageSection(
 
     if (typeSection.contents.length > 0) {
       section.contents.push(typeSection);
+    }
+  }
+
+  if (experimentalDir) {
+    for (const typeDir of experimentalDir.children) {
+      if (typeDir.type === "directory") {
+        appendExperimentalTypeSection(section, typeDir);
+      }
     }
   }
 

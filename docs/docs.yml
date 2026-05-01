@@ -398,24 +398,6 @@ navigation:
           - section: Wallet APIs
             path: wallets/pages/reference/wallet-apis/src/exports/README.mdx
             contents:
-              - section: Experimental
-                contents:
-                  - section: Functions
-                    contents:
-                      - page: requestQuoteV0
-                        path: wallets/pages/reference/wallet-apis/src/exports/experimental/functions/requestQuoteV0.mdx
-                  - section: Type Aliases
-                    contents:
-                      - page: RequestQuoteV0Params
-                        path: wallets/pages/reference/wallet-apis/src/exports/experimental/type-aliases/RequestQuoteV0Params.mdx
-                      - page: RequestQuoteV0Result
-                        path: wallets/pages/reference/wallet-apis/src/exports/experimental/type-aliases/RequestQuoteV0Result.mdx
-                      - page: SwapActions
-                        path: wallets/pages/reference/wallet-apis/src/exports/experimental/type-aliases/SwapActions.mdx
-                  - section: Variables
-                    contents:
-                      - page: swapActions
-                        path: wallets/pages/reference/wallet-apis/src/exports/experimental/variables/swapActions.mdx
               - section: Functions
                 contents:
                   - page: alchemyWalletTransport
@@ -452,6 +434,8 @@ navigation:
                     path: wallets/pages/reference/wallet-apis/src/exports/functions/smartWalletActions.mdx
                   - page: undelegateAccount
                     path: wallets/pages/reference/wallet-apis/src/exports/functions/undelegateAccount.mdx
+                  - page: requestQuoteV0 (experimental)
+                    path: wallets/pages/reference/wallet-apis/src/exports/experimental/functions/requestQuoteV0.mdx
               - section: Type Aliases
                 contents:
                   - page: AlchemyWalletTransport
@@ -522,3 +506,13 @@ navigation:
                     path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/UndelegateAccountParams.mdx
                   - page: UndelegateAccountResult
                     path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/UndelegateAccountResult.mdx
+                  - page: RequestQuoteV0Params (experimental)
+                    path: wallets/pages/reference/wallet-apis/src/exports/experimental/type-aliases/RequestQuoteV0Params.mdx
+                  - page: RequestQuoteV0Result (experimental)
+                    path: wallets/pages/reference/wallet-apis/src/exports/experimental/type-aliases/RequestQuoteV0Result.mdx
+                  - page: SwapActions (experimental)
+                    path: wallets/pages/reference/wallet-apis/src/exports/experimental/type-aliases/SwapActions.mdx
+              - section: Variables
+                contents:
+                  - page: swapActions (experimental)
+                    path: wallets/pages/reference/wallet-apis/src/exports/experimental/variables/swapActions.mdx
