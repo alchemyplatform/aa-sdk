@@ -11,7 +11,7 @@ layout: reference
 function prepareCalls(client, params): Promise<PrepareCallsResult>;
 ```
 
-Defined in: [packages/wallet-apis/src/actions/prepareCalls.ts:82](https://github.com/alchemyplatform/aa-sdk/blob/v5.x.x/packages/wallet-apis/src/actions/prepareCalls.ts#L82)
+Defined in: [packages/wallet-apis/src/actions/prepareCalls.ts:94](https://github.com/alchemyplatform/aa-sdk/blob/v5.x.x/packages/wallet-apis/src/actions/prepareCalls.ts#L94)
 
 Prepares a set of contract calls for execution by building a user operation.
 Returns the built user operation and a signature request that needs to be signed
@@ -25,16 +25,14 @@ this directly without first calling `requestAccount`.
 ```ts
 // Prepare a sponsored user operation call (uses signer address via EIP-7702 by default)
 const result = await client.prepareCalls({
-  calls: [
-    {
-      to: "0x1234...",
-      data: "0xabcdef...",
-      value: 0n,
-    },
-  ],
+  calls: [{
+    to: "0x1234...",
+    data: "0xabcdef...",
+    value: 0n
+  }],
   capabilities: {
-    paymaster: { policyId: "your-policy-id" },
-  },
+    paymaster: { policyId: "your-policy-id" }
+  }
 });
 ```
 
@@ -77,7 +75,6 @@ const result = await client.prepareCalls({
         Parameters for preparing calls
       </td>
     </tr>
-
   </tbody>
 </table>
 

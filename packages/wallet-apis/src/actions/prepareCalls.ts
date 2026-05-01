@@ -1,5 +1,6 @@
 import type { Address, Prettify } from "viem";
 import type { DistributiveOmit, InnerWalletApiClient } from "../types.ts";
+import { BaseError } from "@alchemy/common";
 import { LOGGER } from "../logger.js";
 import {
   fromRpcCapabilities,
@@ -9,18 +10,29 @@ import {
   type WithCapabilities,
 } from "../utils/capabilities.js";
 import { resolveAddress, type AccountParam } from "../utils/resolve.js";
+import { PrepareCallsParams as EvmPrepareCallsSchema } from "@alchemy/wallet-api-types";
+import type { StaticDecode } from "typebox";
 import { wallet_prepareCalls as MethodSchema } from "@alchemy/wallet-api-types/rpc";
 import {
   methodSchema,
   encode,
   decode,
-  type MethodParams,
   type MethodResponse,
 } from "../utils/schema.js";
 
 const schema = methodSchema(MethodSchema);
-type BasePrepareCallsParams = MethodParams<typeof MethodSchema>;
-type PrepareCallsResponse = MethodResponse<typeof MethodSchema>;
+type BasePrepareCallsParams = StaticDecode<typeof EvmPrepareCallsSchema>;
+type FullPrepareCallsResponse = MethodResponse<typeof MethodSchema>;
+type PrepareCallsResponse = Exclude<
+  FullPrepareCallsResponse,
+  { type: "solana-transaction-v0" }
+>;
+
+function isEvmResponse(
+  response: FullPrepareCallsResponse,
+): response is PrepareCallsResponse {
+  return response.type !== "solana-transaction-v0";
+}
 
 export type PrepareCallsParams = Prettify<
   WithCapabilities<
@@ -110,7 +122,15 @@ export async function prepareCalls(
   });
 
   LOGGER.debug("prepareCalls:done");
-  const decoded = decode(schema.response, rpcResp);
+  const fullDecoded = decode(schema.response, rpcResp);
+
+  if (!isEvmResponse(fullDecoded)) {
+    throw new BaseError(
+      `Unexpected Solana response from EVM prepareCalls: ${fullDecoded.type}`,
+    );
+  }
+
+  const decoded = fullDecoded;
 
   // Transform paymaster-permit modifiedRequest from RPC format to client format:
   // - `from` (RPC) → `account` (client)

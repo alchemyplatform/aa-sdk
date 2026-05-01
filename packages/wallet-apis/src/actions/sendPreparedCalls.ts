@@ -16,7 +16,11 @@ import {
 } from "../utils/schema.js";
 
 const schema = methodSchema(MethodSchema);
-type BaseSendPreparedCallsParams = MethodParams<typeof MethodSchema>;
+type AllSendPreparedCallsParams = MethodParams<typeof MethodSchema>;
+type BaseSendPreparedCallsParams = Exclude<
+  AllSendPreparedCallsParams,
+  { type: "solana-transaction-v0" }
+>;
 type SendPreparedCallsResponse = MethodResponse<typeof MethodSchema>;
 
 export type SendPreparedCallsParams = Prettify<
