@@ -13,7 +13,8 @@ export interface SolanaKeypairSigner {
  * Use this for legacy `@solana/web3.js` v1 `Keypair` signers or any signer
  * that exposes a `signMessage(bytes) => signature` interface. For
  * `@solana/kit` signers, use {@link fromKitSigner}. For browser wallets
- * (wallet adapter, Phantom, etc.), use {@link fromWalletAdapter}.
+ * (wallet adapter, Phantom, etc.), use {@link fromWalletAdapter}. For
+ * wallet-standard wallets, use {@link fromWalletStandard}.
  *
  * @param {SolanaKeypairSigner} signer - The raw Ed25519 keypair signer to adapt
  * @returns {SolanaSigner} A SolanaSigner compatible with `createSmartWalletClient`
@@ -26,7 +27,17 @@ export function fromKeypair(signer: SolanaKeypairSigner): SolanaSigner {
       const messageStart = 1 + numSigs * 64;
       const messageBytes = transaction.slice(messageStart);
       const sig = await signer.signMessage(messageBytes);
+      if (sig.length !== 64) {
+        throw new BaseError(
+          `Expected a 64-byte Ed25519 signature but received ${sig.length} bytes`,
+        );
+      }
 
+      // Assumes the Wallet API sends a transaction with exactly one empty
+      // signature slot for this signer and the server resolves placement via
+      // data.signer. If the API changes to accept a fully-signed transaction
+      // body, this "first empty slot" heuristic breaks for multi-signer or
+      // non-zero signer-slot transactions — resolve from signer.address instead.
       const signedTx = new Uint8Array(transaction);
       for (let i = 0; i < numSigs; i++) {
         const offset = 1 + i * 64;

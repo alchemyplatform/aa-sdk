@@ -1,5 +1,5 @@
 import type { SolanaSigner } from "../types.js";
-import { VersionedTransaction } from "@solana/web3.js";
+import type { VersionedTransaction } from "@solana/web3.js";
 
 /** Any signer with a `publicKey` and `signTransaction(VersionedTransaction)` method — matches `useWallet()` from `@solana/wallet-adapter-react` and injected wallet providers like `window.phantom.solana`. */
 export interface WalletAdapterSigner {
@@ -17,8 +17,8 @@ export interface WalletAdapterSigner {
  * `Uint8Array` ↔ `VersionedTransaction` conversion internally.
  *
  * For `@solana/kit` signers, use {@link fromKitSigner}. For raw Ed25519
- * keypairs, use {@link fromKeypair}. Privy wallets from
- * `useConnectedStandardWallets()` already satisfy `SolanaSigner` directly.
+ * keypairs, use {@link fromKeypair}. For wallet-standard wallets, use
+ * {@link fromWalletStandard}.
  *
  * Requires `@solana/web3.js` as a peer dependency.
  *
@@ -29,7 +29,8 @@ export function fromWalletAdapter(signer: WalletAdapterSigner): SolanaSigner {
   return {
     address: signer.publicKey.toBase58(),
     async signTransaction({ transaction }) {
-      const tx = VersionedTransaction.deserialize(transaction);
+      const web3 = await import("@solana/web3.js");
+      const tx = web3.VersionedTransaction.deserialize(transaction);
       const signed = await signer.signTransaction(tx);
       return { signedTransaction: new Uint8Array(signed.serialize()) };
     },

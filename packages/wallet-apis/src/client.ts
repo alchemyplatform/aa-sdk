@@ -6,6 +6,7 @@ import {
   type Address,
   type Chain,
 } from "viem";
+import { isAddress as isSolanaAddress } from "@solana/kit";
 import { smartWalletActions } from "./decorators/smartWalletActions.js";
 import { solanaSmartWalletActions } from "./decorators/solanaSmartWalletActions.js";
 import type {
@@ -24,7 +25,7 @@ import type { SolanaChainId } from "@alchemy/wallet-api-types";
 
 const solanaMainnet: SolanaChainDef = {
   ...defineChain({
-    id: 101,
+    id: 0,
     name: "Solana Mainnet",
     nativeCurrency: { name: "SOL", symbol: "SOL", decimals: 9 },
     rpcUrls: { default: { http: [] } },
@@ -34,7 +35,7 @@ const solanaMainnet: SolanaChainDef = {
 
 const solanaDevnet: SolanaChainDef = {
   ...defineChain({
-    id: 103,
+    id: 0,
     name: "Solana Devnet",
     nativeCurrency: { name: "SOL", symbol: "SOL", decimals: 9 },
     rpcUrls: { default: { http: [] } },
@@ -51,8 +52,6 @@ export const SOLANA_CHAINS: Record<SolanaChainId, SolanaChainDef> = {
 
 // ── Validation ──────────────────────────────────────────────────────────
 
-const BASE58_RE = /^[1-9A-HJ-NP-Za-km-z]{32,44}$/;
-
 function validateEvmAddress(address: string): asserts address is Address {
   if (!isAddress(address)) {
     throw new BaseError(`Invalid EVM address: ${address}`);
@@ -60,7 +59,7 @@ function validateEvmAddress(address: string): asserts address is Address {
 }
 
 function validateSolanaAddress(address: string): void {
-  if (!BASE58_RE.test(address)) {
+  if (!isSolanaAddress(address)) {
     throw new BaseError(`Invalid Solana address: ${address}`);
   }
 }
