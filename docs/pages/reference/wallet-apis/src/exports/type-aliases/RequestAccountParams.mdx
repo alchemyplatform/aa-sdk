@@ -10,7 +10,7 @@ layout: reference
 ```ts
 type RequestAccountParams = Prettify<DistributiveOmit<Extract<BaseRequestAccountParams, {
   signerAddress: Address;
-}>, "signerAddress" | "includeCounterfactualInfo"> & 
+}>, "signerAddress" | "includeCounterfactualInfo"> &
   | {
   accountAddress?: never;
   signerAddress?: Address;

@@ -11,9 +11,9 @@ layout: reference
 type UndelegateAccountParams = Prettify<{
   account?: AccountParam;
   capabilities?: {
-     paymaster?: {
-        policyId: string;
-     };
+    paymaster?: {
+      policyId: string;
+    };
   };
   chain?: Pick<Chain, "id">;
 }>;
