@@ -23,6 +23,11 @@ export { fromKitSigner } from "../adapters/fromKitSigner.js";
 export type { SolanaTransactionPartialSigner } from "../adapters/fromKitSigner.js";
 export { fromWalletAdapter } from "../adapters/fromWalletAdapter.js";
 export type { WalletAdapterSigner } from "../adapters/fromWalletAdapter.js";
+export { fromWalletStandard } from "../adapters/fromWalletStandard.js";
+export type {
+  WalletStandardWallet,
+  WalletStandardAccount,
+} from "../adapters/fromWalletStandard.js";
 
 // Types.
 export type { SolanaSigner, SolanaSmartWalletClient } from "../types.js";

@@ -20,8 +20,10 @@ type SolanaGetCallsStatusResponse = Extract<
 function isSolanaResponse(
   response: GetCallsStatusResponse,
 ): response is SolanaGetCallsStatusResponse {
-  return typeof response.chainId === "string" &&
-    response.chainId.startsWith("solana:");
+  return (
+    typeof response.chainId === "string" &&
+    response.chainId.startsWith("solana:")
+  );
 }
 
 export type SolanaGetCallsStatusParams = {
