@@ -149,6 +149,23 @@ function toDisplayName(fileName: string): string {
 }
 
 /**
+ * Convert a nested export file name to its navigation display name.
+ *
+ * @param {string} fileName - The file name to convert
+ * @param {string} subpathName - The nested export subpath name
+ * @returns {string} The nested export display name
+ */
+function toNestedExportDisplayName(
+  fileName: string,
+  subpathName: string,
+): string {
+  const displayName = toDisplayName(fileName);
+  return subpathName === "experimental"
+    ? `${displayName} (experimental)`
+    : displayName;
+}
+
+/**
  * Determine if a function should be categorized as a component (React components)
  *
  * @param {string} fileName - The function name
@@ -174,6 +191,45 @@ function isReactComponent(fileName: string, packageName: string): boolean {
 }
 
 /**
+ * Generate a navigation subsection for a TypeDoc type directory.
+ *
+ * @param {YamlPackageSection} packageSection - The package section to append nested export pages to.
+ * @param {string} subpathName - The nested export subpath name.
+ * @param {DirectoryItem} typeDir - TypeDoc directory for functions, type aliases, variables, etc.
+ * @returns {void}
+ */
+function appendNestedExportTypeSection(
+  packageSection: YamlPackageSection,
+  subpathName: string,
+  typeDir: DirectoryItem,
+): void {
+  const typeDisplayName = TYPE_SECTIONS[typeDir.name];
+  if (!typeDisplayName) {
+    return;
+  }
+
+  let targetSection = packageSection.contents.find(
+    (child) => child.section === typeDisplayName,
+  );
+  if (!targetSection) {
+    targetSection = {
+      section: typeDisplayName,
+      contents: [],
+    };
+    packageSection.contents.push(targetSection);
+  }
+
+  for (const item of typeDir.children) {
+    if (item.type === "file") {
+      targetSection.contents.push({
+        page: toNestedExportDisplayName(item.name, subpathName),
+        path: item.mdxPath,
+      });
+    }
+  }
+}
+
+/**
  * Generate YAML structure for a package section
  *
  * @param {string} packageName - The package name (aa-infra, common, etc.)
@@ -194,6 +250,8 @@ function generatePackageSection(
     contents: [],
   };
 
+  const nestedExportDirs: DirectoryItem[] = [];
+
   // Process each type directory (functions, classes, etc.)
   for (const typeDir of packageData.children) {
     if (typeDir.type !== "directory") continue;
@@ -201,7 +259,10 @@ function generatePackageSection(
     const typeName = typeDir.name;
     const typeDisplayName = TYPE_SECTIONS[typeName];
 
-    if (!typeDisplayName) continue;
+    if (!typeDisplayName) {
+      nestedExportDirs.push(typeDir);
+      continue;
+    }
 
     const typeSection: YamlSection = {
       section: typeDisplayName,
@@ -298,6 +359,14 @@ function generatePackageSection(
 
     if (typeSection.contents.length > 0) {
       section.contents.push(typeSection);
+    }
+  }
+
+  for (const nestedExportDir of nestedExportDirs) {
+    for (const typeDir of nestedExportDir.children) {
+      if (typeDir.type === "directory") {
+        appendNestedExportTypeSection(section, nestedExportDir.name, typeDir);
+      }
     }
   }
 

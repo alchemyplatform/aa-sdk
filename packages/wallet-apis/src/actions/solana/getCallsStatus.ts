@@ -12,15 +12,16 @@ import {
 const schema = methodSchema(MethodSchema);
 type GetCallsStatusResponse = MethodResponse<typeof MethodSchema>;
 
-type SolanaGetCallsStatusResponse = Exclude<
+type SolanaGetCallsStatusResponse = Extract<
   GetCallsStatusResponse,
-  { details: unknown }
+  { chainId: `solana:${string}` }
 >;
 
 function isSolanaResponse(
   response: GetCallsStatusResponse,
 ): response is SolanaGetCallsStatusResponse {
-  return !("details" in response);
+  return typeof response.chainId === "string" &&
+    response.chainId.startsWith("solana:");
 }
 
 export type SolanaGetCallsStatusParams = {

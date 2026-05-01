@@ -20,7 +20,7 @@ export type SolanaWaitForCallsStatusResult = SolanaGetCallsStatusResult;
 
 /**
  * Polls getCallsStatus until the call reaches a terminal state.
- * Mirrors viem's waitForCallsStatus behavior: retry with exponential backoff,
+ * Similar API to viem's waitForCallsStatus with retry, exponential backoff,
  * configurable status predicate, throwOnFailure, and timeout.
  *
  * @param {InnerSolanaWalletApiClient} client - The Solana wallet API client

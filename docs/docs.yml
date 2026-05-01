@@ -434,6 +434,8 @@ navigation:
                     path: wallets/pages/reference/wallet-apis/src/exports/functions/smartWalletActions.mdx
                   - page: undelegateAccount
                     path: wallets/pages/reference/wallet-apis/src/exports/functions/undelegateAccount.mdx
+                  - page: requestQuoteV0 (experimental)
+                    path: wallets/pages/reference/wallet-apis/src/exports/experimental/functions/requestQuoteV0.mdx
               - section: Interfaces
                 contents:
                   - page: SolanaSigner
@@ -510,3 +512,13 @@ navigation:
                     path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/UndelegateAccountParams.mdx
                   - page: UndelegateAccountResult
                     path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/UndelegateAccountResult.mdx
+                  - page: RequestQuoteV0Params (experimental)
+                    path: wallets/pages/reference/wallet-apis/src/exports/experimental/type-aliases/RequestQuoteV0Params.mdx
+                  - page: RequestQuoteV0Result (experimental)
+                    path: wallets/pages/reference/wallet-apis/src/exports/experimental/type-aliases/RequestQuoteV0Result.mdx
+                  - page: SwapActions (experimental)
+                    path: wallets/pages/reference/wallet-apis/src/exports/experimental/type-aliases/SwapActions.mdx
+              - section: Variables
+                contents:
+                  - page: swapActions (experimental)
+                    path: wallets/pages/reference/wallet-apis/src/exports/experimental/variables/swapActions.mdx

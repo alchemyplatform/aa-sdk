@@ -1,6 +1,6 @@
 {
   "name": "@alchemy/wallet-apis",
-  "version": "5.0.0-beta.25",
+  "version": "5.0.0-beta.26",
   "description": "Alchemy Wallet APIs",
   "author": "Alchemy",
   "license": "MIT",
@@ -63,7 +63,7 @@
   },
   "dependencies": {
     "@alchemy/common": "workspace:*",
-    "@alchemy/wallet-api-types": "0.1.0-alpha.28",
+    "@alchemy/wallet-api-types": "0.1.0-alpha.30",
     "deep-equal": "^2.2.3",
     "ox": "^0.11.1",
     "typebox": "^1.0.81"

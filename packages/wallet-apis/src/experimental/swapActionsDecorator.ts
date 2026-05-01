@@ -5,6 +5,9 @@ import {
 } from "./actions/requestQuoteV0.js";
 import type { BaseWalletClient, InnerWalletApiClient } from "../types.js";
 
+/**
+ * Experimental swap actions for wallet API clients.
+ */
 export type SwapActions = {
   requestQuoteV0: (
     params: RequestQuoteV0Params,
