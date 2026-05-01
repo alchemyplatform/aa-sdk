@@ -7,6 +7,7 @@ import {
   createSmartWalletClient,
   alchemyWalletTransport,
 } from "@alchemy/wallet-apis";
+import { fromWalletStandard } from "@alchemy/wallet-apis/solana";
 
 const ALCHEMY_API_KEY = process.env.NEXT_PUBLIC_ALCHEMY_API_KEY!;
 const SOLANA_POLICY_ID = process.env.NEXT_PUBLIC_SOLANA_POLICY_ID!;
@@ -75,25 +76,7 @@ export default function WalletStandardPage() {
     setStatus("Creating client...");
 
     try {
-      const { signTransaction } = activeWallet.features[SIGN_TX] as {
-        signTransaction: (
-          ...inputs: { account: WalletAccount; transaction: Uint8Array }[]
-        ) => Promise<{ signedTransaction: Uint8Array }[]>;
-      };
-
-      // wallet-standard signTransaction already speaks Uint8Array in/out —
-      // just pass the account through and unwrap the single-element array
-      const signer = {
-        address: account.address,
-        signTransaction: async ({
-          transaction,
-        }: {
-          transaction: Uint8Array;
-        }) => {
-          const [output] = await signTransaction({ account, transaction });
-          return output;
-        },
-      };
+      const signer = fromWalletStandard(activeWallet, account);
 
       const transport = alchemyWalletTransport({
         apiKey: ALCHEMY_API_KEY,
@@ -150,10 +133,10 @@ export default function WalletStandardPage() {
       <h1>Wallet Standard + Alchemy Smart Wallet</h1>
       <p style={{ color: "#666", marginBottom: 20 }}>
         Uses <code>@wallet-standard/app</code> to discover installed wallets
-        directly. No Privy, no wallet adapter library — the wallet&apos;s{" "}
-        <code>solana:signTransaction</code> feature already returns{" "}
-        <code>Uint8Array</code>, matching <code>SolanaSigner</code> with no
-        serialization adapter needed.
+        directly. The <code>fromWalletStandard</code> adapter from{" "}
+        <code>@alchemy/wallet-apis/solana</code> wraps the wallet&apos;s{" "}
+        <code>solana:signTransaction</code> feature into a{" "}
+        <code>SolanaSigner</code>. No Privy, no wallet adapter library needed.
       </p>
 
       {!account ? (

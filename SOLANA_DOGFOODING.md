@@ -408,7 +408,7 @@ Adapters in `@alchemy/wallet-apis/solana` convert various signer sources into th
 | `window.phantom.solana` (injected provider)          | `fromWalletAdapter(provider)` ([example](https://github.com/alchemyplatform/aa-sdk/blob/jake/v5/sol-examples/examples/solana-privy/src/app/phantom-raw/page.tsx))         |
 | `@solana/kit` `KeyPairSigner`                        | `fromKitSigner(signer)` ([example](https://github.com/alchemyplatform/aa-sdk/blob/jake/v5/sol-examples/packages/wallet-apis/src/__tests__/solana-e2e.ts))                 |
 | Raw Ed25519 keypair / `@solana/web3.js` v1 `Keypair` | `fromKeypair({ address, signMessage })` ([example](https://github.com/alchemyplatform/aa-sdk/blob/jake/v5/sol-examples/packages/wallet-apis/src/__tests__/solana-e2e.ts)) |
-| `@wallet-standard/app` (low-level, for library authors) | Thin inline wrapper ([example](https://github.com/alchemyplatform/aa-sdk/blob/jake/v5/sol-examples/examples/solana-privy/src/app/wallet-standard/page.tsx))               |
+| `@wallet-standard/app` (low-level, for library authors) | `fromWalletStandard(wallet, account)` ([example](https://github.com/alchemyplatform/aa-sdk/blob/jake/v5/sol-examples/examples/solana-privy/src/app/wallet-standard/page.tsx)) |
 
 All adapters are verified to produce identical signed transactions in the [signer equivalence test](https://github.com/alchemyplatform/aa-sdk/blob/jake/v5/sol-examples/packages/wallet-apis/src/adapters/signerEquivalence.test.ts).
 
@@ -470,20 +470,13 @@ const signer = fromKeypair({
 
 ```ts
 import { getWallets } from "@wallet-standard/app";
+import { fromWalletStandard } from "@alchemy/wallet-apis/solana";
 
 const wallet = getWallets().get().find(/* has solana:signTransaction */);
 const { accounts } = await wallet.features["standard:connect"].connect();
 const account = accounts[0];
 
-const signer = {
-  address: account.address,
-  signTransaction: async ({ transaction }: { transaction: Uint8Array }) => {
-    const [output] = await wallet.features[
-      "solana:signTransaction"
-    ].signTransaction({ account, transaction });
-    return output;
-  },
-};
+const signer = fromWalletStandard(wallet, account);
 ```
 
 ### Why adapters are needed
@@ -491,7 +484,7 @@ const signer = {
 `SolanaSigner` takes `Uint8Array` in and out. But the Solana React ecosystem hasn't caught up to wallet-standard:
 
 - **`@solana/wallet-adapter-react`** (what ~90% of React devs use) exposes `signTransaction(VersionedTransaction)` — the legacy `@solana/web3.js` v1 API. `fromWalletAdapter` handles the `Uint8Array` ↔ `VersionedTransaction` conversion.
-- **Raw wallet-standard** (`@wallet-standard/app`) is a low-level API for library authors, not typical app devs. It requires an `account` param and returns arrays — a shape mismatch, not a serialization mismatch.
+- **Raw wallet-standard** (`@wallet-standard/app`) is a low-level API for library authors, not typical app devs. It requires an `account` param and returns arrays — a shape mismatch, not a serialization mismatch. `fromWalletStandard` handles this.
 - **Privy** wraps the wallet-standard wallet internally, so their hook already returns a `SolanaSigner`-compatible object.
 
 ### Import paths
@@ -507,6 +500,7 @@ import type { SolanaSigner } from "@alchemy/wallet-apis";
 // Solana-specific actions, adapters, and decorator
 import {
   fromWalletAdapter,
+  fromWalletStandard,
   fromKitSigner,
   fromKeypair,
 } from "@alchemy/wallet-apis/solana";
@@ -721,7 +715,7 @@ const result = await client.waitForCallsStatus({ id });
 
 ### 4. Wallet Standard Example ([`/wallet-standard`](https://github.com/alchemyplatform/aa-sdk/blob/jake/v5/sol-examples/examples/solana-privy/src/app/wallet-standard/page.tsx))
 
-Uses `@wallet-standard/app` to discover any installed Solana wallet (Phantom, Solflare, Backpack, etc.) directly — no Privy, no wallet adapter library. This demonstrates that `SolanaSigner` works with any wallet, not just Privy.
+Uses `@wallet-standard/app` to discover any installed Solana wallet (Phantom, Solflare, Backpack, etc.) directly — no Privy, no wallet adapter library. The `fromWalletStandard` adapter wraps the wallet's `solana:signTransaction` feature into a `SolanaSigner`.
 
 #### Run it
 
@@ -737,10 +731,11 @@ Same as the Privy example — `pnpm dev` from `examples/solana-privy/`, then ope
 
 #### How the code works
 
-`getWallets()` from `@wallet-standard/app` discovers wallets that register via the wallet-standard protocol. The wallet's `solana:signTransaction` feature already speaks `Uint8Array` in and out — matching `SolanaSigner` with no serialization adapter:
+`getWallets()` from `@wallet-standard/app` discovers wallets that register via the wallet-standard protocol. The `fromWalletStandard` adapter wraps the wallet's `solana:signTransaction` feature — no `VersionedTransaction`, no `@solana/web3.js`:
 
 ```ts
 import { getWallets } from "@wallet-standard/app";
+import { fromWalletStandard } from "@alchemy/wallet-apis/solana";
 
 const { get, on } = getWallets();
 const solanaWallets = get().filter(
@@ -752,16 +747,8 @@ const solanaWallets = get().filter(
 const { accounts } = await wallet.features["standard:connect"].connect();
 const account = accounts[0];
 
-// build signer — Uint8Array in, Uint8Array out, no VersionedTransaction
-const signer = {
-  address: account.address,
-  signTransaction: async ({ transaction }: { transaction: Uint8Array }) => {
-    const [output] = await wallet.features[
-      "solana:signTransaction"
-    ].signTransaction({ account, transaction });
-    return output; // { signedTransaction: Uint8Array }
-  },
-};
+// build signer via adapter
+const signer = fromWalletStandard(wallet, account);
 
 const client = createSmartWalletClient({
   signer,
@@ -770,8 +757,6 @@ const client = createSmartWalletClient({
   paymaster: { policyId: SOLANA_POLICY_ID },
 });
 ```
-
-No `VersionedTransaction`, no `@solana/web3.js` — just wallet-standard primitives.
 
 ---
 
