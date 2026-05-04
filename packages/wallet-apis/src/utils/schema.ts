@@ -122,11 +122,12 @@ function encodeUnion(
     }
   }
 
-  // All branches failed — report the error with the deepest path (most specific match).
+  // All branches failed — report from the branch with the fewest errors
+  // (i.e. the closest structural match). Ties go to the earlier branch.
   const best = errors.reduce((a, b) => {
-    const aPath = a.error.cause.errors[0]?.instancePath ?? "";
-    const bPath = b.error.cause.errors[0]?.instancePath ?? "";
-    return bPath.length > aPath.length ? b : a;
+    const aCount = a.error.cause.errors.length;
+    const bCount = b.error.cause.errors.length;
+    return bCount < aCount ? b : a;
   });
 
   throw new BaseError(formatCodecError(best.member, best.error), {
