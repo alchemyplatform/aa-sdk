@@ -84,6 +84,16 @@ export function encode<const T extends TSchema>(
   schema: T,
   value: StaticDecode<T>,
 ): StaticEncode<T> {
+  // TypeBox union-matching checks values against the *encoded* schema type,
+  // so decoded values (e.g. chainId: 1) never match a branch that expects
+  // hex strings. Work around this by trying each branch individually.
+  if ("anyOf" in schema && Array.isArray(schema.anyOf)) {
+    return encodeUnion(
+      schema as TSchema & { anyOf: TSchema[] },
+      value,
+    ) as StaticEncode<T>;
+  }
+
   try {
     return Value.Encode(schema, value);
   } catch (error) {
@@ -92,6 +102,36 @@ export function encode<const T extends TSchema>(
     }
     throw error;
   }
+}
+
+function encodeUnion(
+  schema: TSchema & { anyOf: TSchema[] },
+  value: unknown,
+): unknown {
+  const errors: Array<{ member: TSchema; error: EncodeError }> = [];
+
+  for (const member of schema.anyOf) {
+    try {
+      return Value.Encode(member, value);
+    } catch (error) {
+      if (error instanceof EncodeError) {
+        errors.push({ member, error });
+      } else {
+        throw error;
+      }
+    }
+  }
+
+  // All branches failed — report the error with the deepest path (most specific match).
+  const best = errors.reduce((a, b) => {
+    const aPath = a.error.cause.errors[0]?.instancePath ?? "";
+    const bPath = b.error.cause.errors[0]?.instancePath ?? "";
+    return bPath.length > aPath.length ? b : a;
+  });
+
+  throw new BaseError(formatCodecError(best.member, best.error), {
+    cause: best.error,
+  });
 }
 
 // Type-safe wrapper around `Value.Decode` with human-readable errors.
