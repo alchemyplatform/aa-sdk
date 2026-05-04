@@ -45,8 +45,11 @@ export type SendCallsResult = Prettify<SendPreparedCallsResult>;
  *   }
  * });
  *
- * // The result contains the call ID
- * console.log(result.id);
+ * // Wait for the calls to be mined and confirmed.
+ * // Polls getCallsStatus until the bundle succeeds, fails, or times out (default 60s).
+ * // See: https://viem.sh/docs/actions/wallet/waitForCallsStatus
+ * const status = await client.waitForCallsStatus({ id: result.id });
+ * console.log(status.status); // "success" | "failure"
  * ```
  * <Note>
  * If using this action with an ERC-20 paymaster in pre-operation mode with `autoPermit`, the contents of the permit will be hidden
