@@ -11,7 +11,7 @@ layout: reference
 function sendCalls(client, params): Promise<SendCallsResult>;
 ```
 
-Defined in: [packages/wallet-apis/src/actions/sendCalls.ts:56](https://github.com/alchemyplatform/aa-sdk/blob/v5.x.x/packages/wallet-apis/src/actions/sendCalls.ts#L56)
+Defined in: [packages/wallet-apis/src/actions/sendCalls.ts:59](https://github.com/alchemyplatform/aa-sdk/blob/v5.x.x/packages/wallet-apis/src/actions/sendCalls.ts#L59)
 
 Prepares, signs, and submits calls. This function internally calls `prepareCalls`, `signPreparedCalls`, and `sendPreparedCalls`.
 
@@ -35,8 +35,11 @@ const result = await client.sendCalls({
   },
 });
 
-// The result contains the call ID
-console.log(result.id);
+// Wait for the calls to be mined and confirmed.
+// Polls getCallsStatus until the bundle succeeds, fails, or times out (default 60s).
+// See: https://viem.sh/docs/actions/wallet/waitForCallsStatus
+const status = await client.waitForCallsStatus({ id: result.id });
+console.log(status.status); // "success" | "failure"
 ```
 
 \<Note>
