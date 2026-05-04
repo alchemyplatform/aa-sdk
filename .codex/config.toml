@@ -1,0 +1,5 @@
+[mcp_servers.notion]
+url = "https://mcp.notion.com/mcp"
+
+[mcp_servers.slack]
+url = "https://mcp.slack.com/sse"

@@ -401,13 +401,13 @@ interface SolanaSigner {
 
 Adapters in `@alchemy/wallet-apis/solana` convert various signer sources into this interface:
 
-| What you have                                        | Adapter                                                                                                                                                                   |
-| ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Privy `useConnectedStandardWallets()`                | **None needed** — already a `SolanaSigner` ([example](https://github.com/alchemyplatform/aa-sdk/blob/jake/v5/sol-examples/examples/solana-privy/src/app/page.tsx))        |
-| `@solana/wallet-adapter-react` `useWallet()`         | `fromWalletAdapter({ publicKey, signTransaction })`                                                                                                                       |
-| `window.phantom.solana` (injected provider)          | `fromWalletAdapter(provider)` ([example](https://github.com/alchemyplatform/aa-sdk/blob/jake/v5/sol-examples/examples/solana-privy/src/app/phantom-raw/page.tsx))         |
-| `@solana/kit` `KeyPairSigner`                        | `fromKitSigner(signer)` ([example](https://github.com/alchemyplatform/aa-sdk/blob/jake/v5/sol-examples/packages/wallet-apis/src/__tests__/solana-e2e.ts))                 |
-| Raw Ed25519 keypair / `@solana/web3.js` v1 `Keypair` | `fromKeypair({ address, signMessage })` ([example](https://github.com/alchemyplatform/aa-sdk/blob/jake/v5/sol-examples/packages/wallet-apis/src/__tests__/solana-e2e.ts)) |
+| What you have                                           | Adapter                                                                                                                                                                       |
+| ------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Privy `useConnectedStandardWallets()`                   | **None needed** — already a `SolanaSigner` ([example](https://github.com/alchemyplatform/aa-sdk/blob/jake/v5/sol-examples/examples/solana-privy/src/app/page.tsx))            |
+| `@solana/wallet-adapter-react` `useWallet()`            | `fromWalletAdapter({ publicKey, signTransaction })`                                                                                                                           |
+| `window.phantom.solana` (injected provider)             | `fromWalletAdapter(provider)` ([example](https://github.com/alchemyplatform/aa-sdk/blob/jake/v5/sol-examples/examples/solana-privy/src/app/phantom-raw/page.tsx))             |
+| `@solana/kit` `KeyPairSigner`                           | `fromKitSigner(signer)` ([example](https://github.com/alchemyplatform/aa-sdk/blob/jake/v5/sol-examples/packages/wallet-apis/src/__tests__/solana-e2e.ts))                     |
+| Raw Ed25519 keypair / `@solana/web3.js` v1 `Keypair`    | `fromKeypair({ address, signMessage })` ([example](https://github.com/alchemyplatform/aa-sdk/blob/jake/v5/sol-examples/packages/wallet-apis/src/__tests__/solana-e2e.ts))     |
 | `@wallet-standard/app` (low-level, for library authors) | `fromWalletStandard(wallet, account)` ([example](https://github.com/alchemyplatform/aa-sdk/blob/jake/v5/sol-examples/examples/solana-privy/src/app/wallet-standard/page.tsx)) |
 
 All adapters are verified to produce identical signed transactions in the [signer equivalence test](https://github.com/alchemyplatform/aa-sdk/blob/jake/v5/sol-examples/packages/wallet-apis/src/adapters/signerEquivalence.test.ts).
@@ -520,7 +520,10 @@ Uses `createSmartWalletClient` from `@alchemy/wallet-apis`. This is the highest-
 ```ts
 import { generateKeyPairSigner } from "@solana/kit";
 import { fromKitSigner } from "@alchemy/wallet-apis/solana";
-import { createSmartWalletClient, alchemyWalletTransport } from "@alchemy/wallet-apis";
+import {
+  createSmartWalletClient,
+  alchemyWalletTransport,
+} from "@alchemy/wallet-apis";
 
 const signer = fromKitSigner(await generateKeyPairSigner());
 
@@ -531,7 +534,11 @@ const client = createSmartWalletClient({
   paymaster: { policyId: SOLANA_POLICY_ID },
 });
 
-const { id } = await client.sendCalls({ calls: [/* ... */] });
+const { id } = await client.sendCalls({
+  calls: [
+    /* ... */
+  ],
+});
 const result = await client.waitForCallsStatus({ id });
 ```
 

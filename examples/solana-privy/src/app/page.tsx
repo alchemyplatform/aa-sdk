@@ -53,8 +53,16 @@ export default function Home() {
           {
             programId: SYSTEM_PROGRAM,
             accounts: [
-              { pubkey: solanaWallet.address, isSigner: true, isWritable: true },
-              { pubkey: solanaWallet.address, isSigner: false, isWritable: true },
+              {
+                pubkey: solanaWallet.address,
+                isSigner: true,
+                isWritable: true,
+              },
+              {
+                pubkey: solanaWallet.address,
+                isSigner: false,
+                isWritable: true,
+              },
             ],
             data: transferData,
           },
@@ -103,7 +111,10 @@ export default function Home() {
           )}
 
           <div style={{ marginTop: 20, display: "flex", gap: 10 }}>
-            <button onClick={handleSendCalls} disabled={!solanaWallet || loading}>
+            <button
+              onClick={handleSendCalls}
+              disabled={!solanaWallet || loading}
+            >
               {loading ? "Sending..." : "Send Sponsored SOL Transfer"}
             </button>
             <button onClick={logout}>Logout</button>
