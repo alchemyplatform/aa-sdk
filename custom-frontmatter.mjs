@@ -229,21 +229,21 @@ function isEmptyObjectType(type) {
 }
 
 /**
- * Resolve TypeBox-derived types that TypeDoc couldn't resolve.
+ * Resolve schema-derived types that TypeDoc couldn't resolve.
  * Fixes type aliases (detail pages) and function signatures.
  *
  * @param {import('typedoc').Context} context - TypeDoc conversion context used for symbol lookup.
- * @param {import('typedoc').ProjectReflection} project - Project reflection whose TypeBox-derived types should be repaired.
+ * @param {import('typedoc').ProjectReflection} project - Project reflection whose schema-derived types should be repaired.
  * @param {import('typescript').TypeChecker} checker - TypeScript checker used to resolve structural types.
  * @returns {{ count: number, codeBlockFixes: Map<string, string> }} Number of fixes and code block replacements.
  */
-function resolveTypeBoxTypes(context, project, checker) {
+function resolveschemaTypes(context, project, checker) {
   let fixedCount = 0;
   // Map of type alias name → checker type string for code block fixups
   const codeBlockFixes = new Map();
   const reflections = Object.values(project.reflections);
 
-  // Only fix types in the wallet-apis package (TypeBox-derived types)
+  // Only fix types in the wallet-apis package (schema-derived types)
   const isWalletApis = (r) =>
     r.sources?.some((s) => s.fileName.includes("wallet-apis/"));
 
@@ -271,7 +271,7 @@ function resolveTypeBoxTypes(context, project, checker) {
 
     // Check if the current type needs fixing:
     // 1. No type at all (null/undefined)
-    // 2. Empty object type ({}) — TypeDoc couldn't resolve TypeBox types
+    // 2. Empty object type ({}) — TypeDoc couldn't resolve schema types
     // 3. Wrapped in Prettify/utility types that collapse inner types to `object`
     // 4. Unresolved internal reference — unexported alias TypeDoc can't follow
     const currentType = reflection.type;
@@ -521,8 +521,49 @@ function resolveTypeBoxTypes(context, project, checker) {
     }
   }
 
+  // Step 2b: Generate code block fixes for ALL wallet-apis type aliases
+  // that weren't already fixed. Even when TypeDoc resolves the type alias
+  // definition, the code block often shows opaque utility-type chains
+  // (Prettify<WithCapabilities<...>>) instead of the resolved shape.
+  for (const reflection of reflections) {
+    if (
+      !(reflection instanceof DeclarationReflection) ||
+      reflection.kind !== ReflectionKind.TypeAlias ||
+      !isWalletApis(reflection)
+    ) {
+      continue;
+    }
+
+    const sym = context.getSymbolFromReflection(reflection);
+    if (!sym) continue;
+
+    // Use getTypeAtLocation on the declaration's type node to force full
+    // resolution through Prettify<>, WithCapabilities<>, z.output<>, etc.
+    const decl = sym.getDeclarations()?.[0];
+    let resolvedType;
+    if (decl && ts.isTypeAliasDeclaration(decl) && decl.type) {
+      resolvedType = checker.getTypeAtLocation(decl.type);
+    } else {
+      resolvedType = checker.getDeclaredTypeOfSymbol(sym);
+    }
+
+    const typeStr = checker.typeToString(
+      resolvedType,
+      undefined,
+      ts.TypeFormatFlags.MultilineObjectLiterals |
+        ts.TypeFormatFlags.NoTruncation |
+        ts.TypeFormatFlags.InTypeAlias,
+    );
+
+    // Skip if the checker just returns the alias name itself
+    if (typeStr === reflection.name) continue;
+
+    codeBlockFixes.set(reflection.name, typeStr);
+    fixedCount++;
+  }
+
   // Step 3: Fix method signatures inside type alias reflections
-  // (e.g. SmartWalletActions) — TypeDoc expands TypeBox-derived param/return
+  // (e.g. SmartWalletActions) — TypeDoc expands schema-derived param/return
   // types inline instead of keeping the named type references.
   for (const reflection of reflections) {
     if (
@@ -639,7 +680,7 @@ function resolveTypeBoxTypes(context, project, checker) {
     }
 
     // Generate a clean code block from the source AST instead of letting
-    // TypeDoc expand all the TypeBox-derived types inline
+    // TypeDoc expand all the schema-derived types inline
     const sourceText = typeLiteral.getText();
     if (sourceText) {
       codeBlockFixes.set(reflection.name, sourceText);
@@ -677,8 +718,8 @@ export function load(app) {
       );
     }
 
-    // --- Resolve TypeBox-derived types using the TS checker ---
-    // TypeDoc can't resolve StaticDecode<T> from TypeBox, so types derived
+    // --- Resolve schema-derived types using the TS checker ---
+    // TypeDoc can't resolve StaticDecode<T> from schema, so types derived
     // via MethodResponse/MethodParams appear as {} or Object. We use the TS
     // checker to get the actual resolved properties and build proper TypeDoc
     // reflections.
@@ -690,10 +731,10 @@ export function load(app) {
     }
 
     if (checker) {
-      const result = resolveTypeBoxTypes(context, project, checker);
+      const result = resolveschemaTypes(context, project, checker);
       if (result.count > 0) {
         console.log(
-          `Resolved ${result.count} TypeBox-derived types using TS checker`,
+          `Resolved ${result.count} schema-derived types using TS checker`,
         );
       }
       // Store code block fixes for use during markdown rendering
