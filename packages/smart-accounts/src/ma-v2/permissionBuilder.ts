@@ -53,9 +53,8 @@ const ACCOUNT_UNINSTALL_EXECUTION_SELECTOR = "0x0b7cad71";
 const ACCOUNT_UPGRADE_TO_AND_CALL_SELECTOR = "0x4f1ef286";
 const ACCOUNT_EXECUTE_USER_OP_SELECTOR = "0x8dd7712f";
 
-const FORBIDDEN_SELECTORS: Record<string, string> = {
-  [ACCOUNT_EXECUTE_SELECTOR]: "execute",
-  [ACCOUNT_EXECUTEBATCH_SELECTOR]: "executeBatch",
+// Wrapped native functions that must not be added to a session key's selector allowlist.
+const PRIVILEGED_SELECTORS: Record<string, string> = {
   [ACCOUNT_PERFORM_CREATE_SELECTOR]: "performCreate",
   [ACCOUNT_EXECUTE_WITH_RUNTIME_VALIDATION_SELECTOR]:
     "executeWithRuntimeValidation",
@@ -67,8 +66,17 @@ const FORBIDDEN_SELECTORS: Record<string, string> = {
   [ACCOUNT_EXECUTE_USER_OP_SELECTOR]: "executeUserOp",
 };
 
+// Auto-added by translatePermissions when a PREVAL_ALLOWLIST hook exists.
+// Blocked from manual addition to ensure they're only added with proper hook context.
+const SYSTEM_MANAGED_SELECTORS: Record<string, string> = {
+  [ACCOUNT_EXECUTE_SELECTOR]: "execute",
+  [ACCOUNT_EXECUTEBATCH_SELECTOR]: "executeBatch",
+};
+
 function assertNotForbiddenSelector(selector: Hex): void {
-  const match = FORBIDDEN_SELECTORS[selector.toLowerCase()];
+  const normalized = selector.toLowerCase();
+  const match =
+    PRIVILEGED_SELECTORS[normalized] ?? SYSTEM_MANAGED_SELECTORS[normalized];
   if (match != null) {
     throw new SelectorNotAllowed(match);
   }
