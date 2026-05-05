@@ -53,26 +53,24 @@ const ACCOUNT_UNINSTALL_EXECUTION_SELECTOR = "0x0b7cad71";
 const ACCOUNT_UPGRADE_TO_AND_CALL_SELECTOR = "0x4f1ef286";
 const ACCOUNT_EXECUTE_USER_OP_SELECTOR = "0x8dd7712f";
 
-const FORBIDDEN_SELECTORS: ReadonlyMap<string, string> = new Map([
-  [ACCOUNT_EXECUTE_SELECTOR, "execute"],
-  [ACCOUNT_EXECUTEBATCH_SELECTOR, "executeBatch"],
-  [ACCOUNT_PERFORM_CREATE_SELECTOR, "performCreate"],
-  [
-    ACCOUNT_EXECUTE_WITH_RUNTIME_VALIDATION_SELECTOR,
+const FORBIDDEN_SELECTORS: Record<string, string> = {
+  [ACCOUNT_EXECUTE_SELECTOR]: "execute",
+  [ACCOUNT_EXECUTEBATCH_SELECTOR]: "executeBatch",
+  [ACCOUNT_PERFORM_CREATE_SELECTOR]: "performCreate",
+  [ACCOUNT_EXECUTE_WITH_RUNTIME_VALIDATION_SELECTOR]:
     "executeWithRuntimeValidation",
-  ],
-  [ACCOUNT_INSTALL_VALIDATION_SELECTOR, "installValidation"],
-  [ACCOUNT_UNINSTALL_VALIDATION_SELECTOR, "uninstallValidation"],
-  [ACCOUNT_INSTALL_EXECUTION_SELECTOR, "installExecution"],
-  [ACCOUNT_UNINSTALL_EXECUTION_SELECTOR, "uninstallExecution"],
-  [ACCOUNT_UPGRADE_TO_AND_CALL_SELECTOR, "upgradeToAndCall"],
-  [ACCOUNT_EXECUTE_USER_OP_SELECTOR, "executeUserOp"],
-]);
+  [ACCOUNT_INSTALL_VALIDATION_SELECTOR]: "installValidation",
+  [ACCOUNT_UNINSTALL_VALIDATION_SELECTOR]: "uninstallValidation",
+  [ACCOUNT_INSTALL_EXECUTION_SELECTOR]: "installExecution",
+  [ACCOUNT_UNINSTALL_EXECUTION_SELECTOR]: "uninstallExecution",
+  [ACCOUNT_UPGRADE_TO_AND_CALL_SELECTOR]: "upgradeToAndCall",
+  [ACCOUNT_EXECUTE_USER_OP_SELECTOR]: "executeUserOp",
+};
 
 function assertNotForbiddenSelector(selector: Hex): void {
-  const name = FORBIDDEN_SELECTORS.get(selector.toLowerCase());
-  if (name !== undefined) {
-    throw new SelectorNotAllowed(name);
+  const match = FORBIDDEN_SELECTORS[selector.toLowerCase()];
+  if (match != null) {
+    throw new SelectorNotAllowed(match);
   }
 }
 
