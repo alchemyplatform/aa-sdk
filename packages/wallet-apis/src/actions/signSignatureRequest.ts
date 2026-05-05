@@ -1,8 +1,8 @@
 import { type Hex, type Prettify, serializeSignature } from "viem";
 import {
-  type PersonalSignSignatureRequest,
-  type TypedDataSignatureRequest,
-  type AuthorizationSignatureRequest,
+  PersonalSignSignatureRequest,
+  TypedDataSignatureRequest,
+  AuthorizationSignatureRequest,
   Eip7702UnsignedAuth,
 } from "@alchemy/wallet-api-types";
 import { vToYParity } from "ox/Signature";
@@ -17,14 +17,14 @@ import { isLocalAccount } from "../utils/assertions.js";
 import { getAction } from "viem/utils";
 import { signAuthorization, signMessage, signTypedData } from "viem/actions";
 import type { LocalAccount } from "viem";
-import type { StaticDecode } from "typebox";
+import type { z } from "zod";
 
 export type SignSignatureRequestParams = Prettify<
   WithoutRawPayload<
-    | PersonalSignSignatureRequest
-    | TypedDataSignatureRequest
-    | (AuthorizationSignatureRequest & {
-        data: StaticDecode<typeof Eip7702UnsignedAuth>;
+    | z.output<typeof PersonalSignSignatureRequest>
+    | z.output<typeof TypedDataSignatureRequest>
+    | (z.output<typeof AuthorizationSignatureRequest> & {
+        data: z.output<typeof Eip7702UnsignedAuth>;
       })
   >
 >;

@@ -2,17 +2,17 @@ import {
   PrepareCallsCapabilities as PrepareCallsCapabilitiesSchema,
   SendPreparedCallsCapabilities as SendPreparedCallsCapabilitiesSchema,
 } from "@alchemy/wallet-api-types/capabilities";
-import type { StaticDecode } from "typebox";
+import type { z } from "zod";
 import type { InnerWalletApiClient } from "../types.js";
 
 /**
  * Decoded capabilities matching the schema shape (uses `paymasterService` key).
  * `ResolveCapabilities` renames this to `paymaster` for client-facing types.
  */
-type DecodedPrepareCallsCaps = StaticDecode<
+type DecodedPrepareCallsCaps = z.output<
   typeof PrepareCallsCapabilitiesSchema
 >;
-type DecodedSendPreparedCallsCaps = StaticDecode<
+type DecodedSendPreparedCallsCaps = z.output<
   typeof SendPreparedCallsCapabilitiesSchema
 >;
 

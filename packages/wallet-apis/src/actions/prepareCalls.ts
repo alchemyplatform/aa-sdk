@@ -9,6 +9,7 @@ import {
   type WithCapabilities,
 } from "../utils/capabilities.js";
 import { resolveAddress, type AccountParam } from "../utils/resolve.js";
+import { assertNotSolana } from "../utils/assertions.js";
 import { wallet_prepareCalls as MethodSchema } from "@alchemy/wallet-api-types/rpc";
 import {
   methodSchema,
@@ -19,8 +20,14 @@ import {
 } from "../utils/schema.js";
 
 const schema = methodSchema(MethodSchema);
-type BasePrepareCallsParams = MethodParams<typeof MethodSchema>;
-type PrepareCallsResponse = MethodResponse<typeof MethodSchema>;
+type BasePrepareCallsParams = Exclude<
+  MethodParams<typeof MethodSchema>,
+  { chainId: string }
+>;
+type PrepareCallsResponse = Exclude<
+  MethodResponse<typeof MethodSchema>,
+  { type: "solana-transaction-v0" }
+>;
 
 export type PrepareCallsParams = Prettify<
   WithCapabilities<
@@ -111,6 +118,7 @@ export async function prepareCalls(
 
   LOGGER.debug("prepareCalls:done");
   const decoded = decode(schema.response, rpcResp);
+  assertNotSolana(decoded);
 
   // Transform paymaster-permit modifiedRequest from RPC format to client format:
   // - `from` (RPC) → `account` (client)

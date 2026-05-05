@@ -1,109 +1,85 @@
-import type {
-  TObject,
-  TSchema,
-  TTuple,
-  StaticDecode,
-  StaticEncode,
-} from "typebox";
-import { Value, EncodeError, DecodeError, Pointer } from "typebox/value";
+import { z } from "zod";
 import { BaseError } from "@alchemy/common";
 
 /** Constraint for RPC method schemas from `@alchemy/wallet-api-types/rpc`. */
-type RpcMethodSchema = TObject<{
-  Request: TObject<{
-    method: TSchema;
-    params: TTuple<[TSchema, ...TSchema[]]>;
+type RpcMethodSchema = z.ZodObject<{
+  Request: z.ZodObject<{
+    method: z.ZodType;
+    params: z.ZodTuple<[z.ZodType, ...z.ZodType[]]>;
   }>;
-  ReturnType: TSchema;
+  ReturnType: z.ZodType;
 }>;
 
-export function methodSchema<TReq extends TSchema, TRes extends TSchema>(
-  schema: TObject<{
-    Request: TObject<{ method: TSchema; params: TTuple<[TReq, ...TSchema[]]> }>;
+export function methodSchema<TReq extends z.ZodType, TRes extends z.ZodType>(
+  schema: z.ZodObject<{
+    Request: z.ZodObject<{
+      method: z.ZodType;
+      params: z.ZodTuple<[TReq, ...z.ZodType[]]>;
+    }>;
     ReturnType: TRes;
   }>,
 ): { request: TReq; response: TRes } {
   return {
-    request: schema.properties.Request.properties.params.items[0],
-    response: schema.properties.ReturnType,
+    request: schema.shape.Request.shape.params.def.items[0],
+    response: schema.shape.ReturnType,
   };
 }
 
 /** Extracts the decoded params type from a method schema. */
-export type MethodParams<T extends RpcMethodSchema> = StaticDecode<
-  T["properties"]["Request"]["properties"]["params"]["items"][0]
+export type MethodParams<T extends RpcMethodSchema> = z.output<
+  T["shape"]["Request"]["shape"]["params"]["def"]["items"][0]
 >;
 
 /** Extracts the decoded response type from a method schema. */
-export type MethodResponse<T extends RpcMethodSchema> = StaticDecode<
-  T["properties"]["ReturnType"]
+export type MethodResponse<T extends RpcMethodSchema> = z.output<
+  T["shape"]["ReturnType"]
 >;
 
-/**
- * Formats an {@link EncodeError} or {@link DecodeError} into a human-readable
- * string describing what went wrong, including the JSON path and the schema's
- * custom error message (if any).
- *
- * @param {TSchema} schema - The TypeBox schema that validation was run against.
- * @param {EncodeError | DecodeError} error - The error thrown by {@link Value.Encode} or {@link Value.Decode}.
- * @returns {string} A formatted error string prefixed with `"Invalid params"`.
- */
-function formatCodecError(
-  schema: TSchema,
-  error: EncodeError | DecodeError,
-): string {
-  // Use only the first error — it's the most specific. Subsequent errors are
-  // typically cascade noise from union/anyOf branches.
-  const causeError = error.cause.errors[0];
-  // errors is typed as an open array — guard against the (practically
-  // impossible) empty case.
-  if (!causeError) return "Invalid params";
+function formatCodecError(error: z.ZodError): string {
+  let issue: z.core.$ZodIssue | undefined = error.issues[0];
+  if (!issue) return "Invalid params";
 
-  const path = causeError.instancePath || "(root)";
-
-  // Prefer the schema's custom errorMessage annotation over the generic locale message.
-  let message = causeError.message;
-  const schemaPointer = causeError.schemaPath.replace(/^#/, "");
-  if (schemaPointer) {
-    const schemaNode = Pointer.Get(schema, schemaPointer);
-    if (
-      schemaNode &&
-      typeof schemaNode === "object" &&
-      "errorMessage" in schemaNode &&
-      typeof (schemaNode as Record<string, unknown>).errorMessage === "string"
-    ) {
-      message = (schemaNode as Record<string, unknown>).errorMessage as string;
-    }
+  // For union errors, drill into the first branch for the most specific error.
+  while (
+    issue.code === "invalid_union" &&
+    (issue as z.core.$ZodIssueInvalidUnion).errors?.[0]?.[0]
+  ) {
+    issue = (issue as z.core.$ZodIssueInvalidUnion).errors[0][0];
   }
 
-  return `Invalid params: ${path}: ${message}`;
+  const path =
+    issue.path.length > 0 ? "/" + issue.path.join("/") : "(root)";
+
+  return `Invalid params: ${path}: ${issue.message}`;
 }
 
-// Type-safe wrapper around `Value.Encode` with human-readable errors.
-export function encode<const T extends TSchema>(
+export function encode<const T extends z.ZodType>(
   schema: T,
-  value: StaticDecode<T>,
-): StaticEncode<T> {
+  value: z.output<T>,
+): z.input<T> {
   try {
-    return Value.Encode(schema, value);
+    return schema.encode(value);
   } catch (error) {
-    if (error instanceof EncodeError) {
-      throw new BaseError(formatCodecError(schema, error), { cause: error });
+    if (error instanceof z.ZodError) {
+      throw new BaseError(formatCodecError(error), {
+        cause: error as Error,
+      });
     }
     throw error;
   }
 }
 
-// Type-safe wrapper around `Value.Decode` with human-readable errors.
-export function decode<const T extends TSchema>(
+export function decode<const T extends z.ZodType>(
   schema: T,
-  value: StaticEncode<T>,
-): StaticDecode<T> {
+  value: z.input<T>,
+): z.output<T> {
   try {
-    return Value.Decode(schema, value);
+    return schema.decode(value);
   } catch (error) {
-    if (error instanceof DecodeError) {
-      throw new BaseError(formatCodecError(schema, error), { cause: error });
+    if (error instanceof z.ZodError) {
+      throw new BaseError(formatCodecError(error), {
+        cause: error as Error,
+      });
     }
     throw error;
   }
