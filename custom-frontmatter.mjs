@@ -384,7 +384,14 @@ function resolveschemaTypes(context, project, checker) {
         sig.type.typeArguments?.length === 1
       ) {
         const innerArg = sig.type.typeArguments[0];
-        if (innerArg.type === "reflection") {
+        const isUnresolved =
+          innerArg.type === "reflection" ||
+          (innerArg.type === "union" &&
+            innerArg.types?.some(
+              (t) => isEmptyObjectType(t) || t.type === "reflection",
+            )) ||
+          (innerArg.type === "intrinsic" && innerArg.name === "object");
+        if (isUnresolved) {
           // Use the TS checker to find the actual return type name
           const funcSym = context.getSymbolFromReflection(reflection);
           if (funcSym) {
@@ -537,9 +544,19 @@ function resolveschemaTypes(context, project, checker) {
     const sym = context.getSymbolFromReflection(reflection);
     if (!sym) continue;
 
+    // Skip generic types (have type parameters) — expanding them inlines
+    // the full resolved type of external packages like viem's Client<...>.
+    const decl = sym.getDeclarations()?.[0];
+    if (
+      decl &&
+      ts.isTypeAliasDeclaration(decl) &&
+      decl.typeParameters?.length
+    ) {
+      continue;
+    }
+
     // Use getTypeAtLocation on the declaration's type node to force full
     // resolution through Prettify<>, WithCapabilities<>, z.output<>, etc.
-    const decl = sym.getDeclarations()?.[0];
     let resolvedType;
     if (decl && ts.isTypeAliasDeclaration(decl) && decl.type) {
       resolvedType = checker.getTypeAtLocation(decl.type);
@@ -555,8 +572,31 @@ function resolveschemaTypes(context, project, checker) {
         ts.TypeFormatFlags.InTypeAlias,
     );
 
-    // Skip if the checker just returns the alias name itself
-    if (typeStr === reflection.name) continue;
+    // Skip if the checker returns a trivial or broken result
+    if (
+      typeStr === reflection.name ||
+      typeStr === "any" ||
+      typeStr === "unknown" ||
+      typeStr === "object" ||
+      typeStr === "never"
+    ) {
+      continue;
+    }
+
+    // Skip types that reference viem internals — the checker over-expands
+    // external package types (Client, WalletClient, TypedDataDefinition, etc.)
+    // producing walls of irrelevant internal fields.
+    if (
+      typeStr.includes("Client_Base<") ||
+      typeStr.includes("ExactPartial<") ||
+      typeStr.includes("WalletActions<") ||
+      typeStr.includes("SignTransactionParameters") ||
+      typeStr.includes("cacheTime?") ||
+      typeStr.includes("ccipRead?") ||
+      typeStr.includes("TypedDataParameter")
+    ) {
+      continue;
+    }
 
     codeBlockFixes.set(reflection.name, typeStr);
     fixedCount++;
