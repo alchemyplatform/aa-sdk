@@ -25,7 +25,10 @@ import {
   PermissionType,
   type Permission,
 } from "../permissionBuilder.js";
-import { RootPermissionOnlyError } from "../../errors/permissionBuilderErrors.js";
+import {
+  RootPermissionOnlyError,
+  SelectorNotAllowed,
+} from "../../errors/permissionBuilderErrors.js";
 import { encodeDeferredActionWithSignature } from "../utils/deferredActions.js";
 import { SignaturePrefix } from "../types.js";
 import { packAccountGasLimits, packPaymasterData } from "../../utils.js";
@@ -454,6 +457,106 @@ describe("MA v2 deferral actions tests", async () => {
         }),
       );
     });
+  });
+
+  const FORBIDDEN_SELECTOR_CASES: [Hex, string][] = [
+    ["0xb61d27f6", "execute"],
+    ["0x34fcd5be", "executeBatch"],
+    ["0x5998db5c", "performCreate"],
+    ["0xf2680c0f", "executeWithRuntimeValidation"],
+    ["0x1bbf564c", "installValidation"],
+    ["0xb6b1ccfe", "uninstallValidation"],
+    ["0x1d37e7d6", "installExecution"],
+    ["0x0b7cad71", "uninstallExecution"],
+    ["0x4f1ef286", "upgradeToAndCall"],
+    ["0x8dd7712f", "executeUserOp"],
+  ];
+
+  it.each(FORBIDDEN_SELECTOR_CASES)(
+    "PermissionBuilder: constructor rejects forbidden selector %s (%s)",
+    async (selector, _name) => {
+      const provider = await givenConnectedProvider({ signer: owner });
+      expect(
+        () =>
+          new PermissionBuilder({
+            client: provider.extend(deferralActions),
+            key: { publicKey: sessionKey.address, type: "secp256k1" },
+            entityId: 1,
+            nonce: 0n,
+            selectors: [selector],
+            deadline: 0,
+          }),
+      ).toThrow(SelectorNotAllowed);
+    },
+  );
+
+  it.each(FORBIDDEN_SELECTOR_CASES)(
+    "PermissionBuilder: addSelector rejects forbidden selector %s (%s)",
+    async (selector, _name) => {
+      const provider = await givenConnectedProvider({ signer: owner });
+      const builder = new PermissionBuilder({
+        client: provider.extend(deferralActions),
+        key: { publicKey: sessionKey.address, type: "secp256k1" },
+        entityId: 1,
+        nonce: 0n,
+        deadline: 0,
+      });
+      expect(() => builder.addSelector({ selector })).toThrow(
+        SelectorNotAllowed,
+      );
+    },
+  );
+
+  it.each(FORBIDDEN_SELECTOR_CASES)(
+    "PermissionBuilder: addPermission(ACCOUNT_FUNCTIONS) rejects forbidden selector %s (%s)",
+    async (selector, _name) => {
+      const provider = await givenConnectedProvider({ signer: owner });
+      const builder = new PermissionBuilder({
+        client: provider.extend(deferralActions),
+        key: { publicKey: sessionKey.address, type: "secp256k1" },
+        entityId: 1,
+        nonce: 0n,
+        deadline: 0,
+      });
+      expect(() =>
+        builder.addPermission({
+          permission: {
+            type: PermissionType.ACCOUNT_FUNCTIONS,
+            data: { functions: [selector] },
+          },
+        }),
+      ).toThrow(SelectorNotAllowed);
+    },
+  );
+
+  it("PermissionBuilder: rejects forbidden selector with mixed-case hex", async () => {
+    const provider = await givenConnectedProvider({ signer: owner });
+    const builder = new PermissionBuilder({
+      client: provider.extend(deferralActions),
+      key: { publicKey: sessionKey.address, type: "secp256k1" },
+      entityId: 1,
+      nonce: 0n,
+      deadline: 0,
+    });
+    expect(() => builder.addSelector({ selector: "0x8DD7712F" })).toThrow(
+      SelectorNotAllowed,
+    );
+  });
+
+  it("PermissionBuilder: accepts non-forbidden selectors", async () => {
+    const provider = await givenConnectedProvider({ signer: owner });
+    const safeSelector: Hex = "0xdeadbeef";
+    expect(
+      () =>
+        new PermissionBuilder({
+          client: provider.extend(deferralActions),
+          key: { publicKey: sessionKey.address, type: "secp256k1" },
+          entityId: 1,
+          nonce: 0n,
+          selectors: [safeSelector],
+          deadline: 0,
+        }),
+    ).not.toThrow();
   });
 
   /* -------------------------------------------------------------------------- */
