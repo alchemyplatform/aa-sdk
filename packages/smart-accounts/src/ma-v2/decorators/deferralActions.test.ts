@@ -469,7 +469,6 @@ describe("MA v2 deferral actions tests", async () => {
     ["0x1d37e7d6", "installExecution"],
     ["0x0b7cad71", "uninstallExecution"],
     ["0x4f1ef286", "upgradeToAndCall"],
-    ["0x8dd7712f", "executeUserOp"],
   ];
 
   it.each(FORBIDDEN_SELECTOR_CASES)(
@@ -538,7 +537,7 @@ describe("MA v2 deferral actions tests", async () => {
       nonce: 0n,
       deadline: 0,
     });
-    expect(() => builder.addSelector({ selector: "0x8DD7712F" })).toThrow(
+    expect(() => builder.addSelector({ selector: "0x4F1EF286" })).toThrow(
       SelectorNotAllowed,
     );
   });

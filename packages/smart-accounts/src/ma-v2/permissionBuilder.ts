@@ -51,8 +51,6 @@ const ACCOUNT_UNINSTALL_VALIDATION_SELECTOR = "0xb6b1ccfe";
 const ACCOUNT_INSTALL_EXECUTION_SELECTOR = "0x1d37e7d6";
 const ACCOUNT_UNINSTALL_EXECUTION_SELECTOR = "0x0b7cad71";
 const ACCOUNT_UPGRADE_TO_AND_CALL_SELECTOR = "0x4f1ef286";
-const ACCOUNT_EXECUTE_USER_OP_SELECTOR = "0x8dd7712f";
-
 // Wrapped native functions that must not be added to a session key's selector allowlist.
 const PRIVILEGED_SELECTORS: Record<string, string> = {
   [ACCOUNT_PERFORM_CREATE_SELECTOR]: "performCreate",
@@ -63,7 +61,6 @@ const PRIVILEGED_SELECTORS: Record<string, string> = {
   [ACCOUNT_INSTALL_EXECUTION_SELECTOR]: "installExecution",
   [ACCOUNT_UNINSTALL_EXECUTION_SELECTOR]: "uninstallExecution",
   [ACCOUNT_UPGRADE_TO_AND_CALL_SELECTOR]: "upgradeToAndCall",
-  [ACCOUNT_EXECUTE_USER_OP_SELECTOR]: "executeUserOp",
 };
 
 // Auto-added by translatePermissions when a PREVAL_ALLOWLIST hook exists.
