@@ -9,9 +9,7 @@ import type { InnerWalletApiClient } from "../types.js";
  * Decoded capabilities matching the schema shape (uses `paymasterService` key).
  * `ResolveCapabilities` renames this to `paymaster` for client-facing types.
  */
-type DecodedPrepareCallsCaps = z.output<
-  typeof PrepareCallsCapabilitiesSchema
->;
+type DecodedPrepareCallsCaps = z.output<typeof PrepareCallsCapabilitiesSchema>;
 type DecodedSendPreparedCallsCaps = z.output<
   typeof SendPreparedCallsCapabilitiesSchema
 >;

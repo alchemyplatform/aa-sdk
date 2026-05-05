@@ -12,11 +12,13 @@ type CreateSmartWalletClientParams = {
   signer: SmartWalletSigner;
   transport: AlchemyWalletTransport;
   chain: Chain;
-  account?: Address;
-  paymaster?: {
-    policyId?: string;
-    policyIds?: string[];
-  };
+  account?: `0x${string}` | undefined;
+  paymaster?:
+    | {
+        policyId?: string | undefined;
+        policyIds?: string[] | undefined;
+      }
+    | undefined;
 };
 ```
 

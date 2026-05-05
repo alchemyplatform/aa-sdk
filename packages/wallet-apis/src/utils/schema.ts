@@ -47,8 +47,7 @@ function formatCodecError(error: z.ZodError): string {
     issue = (issue as z.core.$ZodIssueInvalidUnion).errors[0][0];
   }
 
-  const path =
-    issue.path.length > 0 ? "/" + issue.path.join("/") : "(root)";
+  const path = issue.path.length > 0 ? "/" + issue.path.join("/") : "(root)";
 
   return `Invalid params: ${path}: ${issue.message}`;
 }
