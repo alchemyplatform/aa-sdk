@@ -13,12 +13,10 @@ type CreateSmartWalletClientParams = {
   transport: AlchemyWalletTransport;
   chain: Chain;
   account?: `0x${string}` | undefined;
-  paymaster?:
-    | {
-        policyId?: string | undefined;
-        policyIds?: string[] | undefined;
-      }
-    | undefined;
+  paymaster?: {
+  policyId?: string | undefined;
+  policyIds?: string[] | undefined;
+} | undefined;
 };
 ```
 
@@ -104,6 +102,5 @@ Defined in: [packages/wallet-apis/src/client.ts:8](https://github.com/alchemypla
         [`AlchemyWalletTransport`](AlchemyWalletTransport)
       </td>
     </tr>
-
   </tbody>
 </table>
