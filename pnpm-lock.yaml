@@ -248,7 +248,7 @@ importers:
         specifier: workspace:*
         version: link:../common
       "@alchemy/wallet-api-types":
-        specifier: ^0.1.0-alpha.27
+        specifier: 0.1.0-alpha.27
         version: 0.1.0-alpha.27(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76)
       deep-equal:
         specifier: ^2.2.3
