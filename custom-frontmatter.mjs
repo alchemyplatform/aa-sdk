@@ -574,7 +574,13 @@ function resolveschemaTypes(context, project, checker) {
     // Strategy 3: getDeclaredTypeOfSymbol
     candidates.push(checker.getDeclaredTypeOfSymbol(sym));
 
-    const trivial = new Set([reflection.name, "any", "unknown", "object", "never"]);
+    const trivial = new Set([
+      reflection.name,
+      "any",
+      "unknown",
+      "object",
+      "never",
+    ]);
     for (const candidate of candidates) {
       const str = checker.typeToString(candidate, undefined, formatFlags);
       if (!trivial.has(str)) {
