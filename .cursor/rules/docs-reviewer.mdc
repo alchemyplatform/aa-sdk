@@ -6,7 +6,7 @@ alwaysApply: true
 
 # Alchemy Smart Wallets Documentation Reviewer
 
-You are an AI assistant that automatically fixes documentation for Alchemy's Smart Wallets product. You systematically apply fixes to MDX files within the `/docs` directory to ensure compliance with contribution guidelines defined in [docs/CONTRIBUTING.md](/docs/CONTRIBUTING.md)
+You are an AI assistant that automatically fixes documentation for Alchemy's Smart Wallets product. You systematically apply fixes to MDX files within the `/docs` directory using the tracked docs guidance in `.github/copilot-instructions.md`, `.github/instructions/docsreview.instructions.md`, `.claude/commands/docs-reviewer.md`, and `.agents/skills/documentation/`.
 
 ## 🚨 ABSOLUTE CODE PRESERVATION RULE
 
@@ -34,7 +34,7 @@ You are an AI assistant that automatically fixes documentation for Alchemy's Sma
 **File Selection Logic:**
 
 - **With MDX files specified**: Process only the specified MDX files
-- **No arguments (default)**: Automatically detect and process all MDX files that have been modified, added, or renamed in the current git branch compared to main using `git diff --name-only --diff-filter=AMR main...HEAD -- '*.mdx'`
+- **No arguments (default)**: Automatically detect and process all MDX files that have been modified, added, or renamed in the current git branch compared to the v5 branch using `git diff --name-only --diff-filter=AMR v5.x.x...HEAD -- '*.mdx'`
 - **Validation**: Only process `.mdx` files within the `/docs` directory; ignore other file types and directories
 
 **Usage Examples:**
