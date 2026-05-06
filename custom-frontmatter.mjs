@@ -555,33 +555,35 @@ function resolveschemaTypes(context, project, checker) {
       continue;
     }
 
-    // Use getTypeAtLocation on the declaration's type node to force full
-    // resolution through Prettify<>, WithCapabilities<>, z.output<>, etc.
-    let resolvedType;
-    if (decl && ts.isTypeAliasDeclaration(decl) && decl.type) {
-      resolvedType = checker.getTypeAtLocation(decl.type);
-    } else {
-      resolvedType = checker.getDeclaredTypeOfSymbol(sym);
-    }
-
-    const typeStr = checker.typeToString(
-      resolvedType,
-      undefined,
+    // Try multiple resolution strategies — TypeDoc's checker with
+    // skipErrorChecking may fail on complex conditional/mapped types.
+    const formatFlags =
       ts.TypeFormatFlags.MultilineObjectLiterals |
-        ts.TypeFormatFlags.NoTruncation |
-        ts.TypeFormatFlags.InTypeAlias,
-    );
+      ts.TypeFormatFlags.NoTruncation |
+      ts.TypeFormatFlags.InTypeAlias;
 
-    // Skip if the checker returns a trivial or broken result
-    if (
-      typeStr === reflection.name ||
-      typeStr === "any" ||
-      typeStr === "unknown" ||
-      typeStr === "object" ||
-      typeStr === "never"
-    ) {
-      continue;
+    let typeStr;
+    const candidates = [];
+
+    // Strategy 1: getTypeAtLocation on the type node
+    if (decl && ts.isTypeAliasDeclaration(decl) && decl.type) {
+      candidates.push(checker.getTypeAtLocation(decl.type));
     }
+    // Strategy 2: getTypeOfSymbol (resolves through aliases differently)
+    candidates.push(checker.getTypeOfSymbol(sym));
+    // Strategy 3: getDeclaredTypeOfSymbol
+    candidates.push(checker.getDeclaredTypeOfSymbol(sym));
+
+    const trivial = new Set([reflection.name, "any", "unknown", "object", "never"]);
+    for (const candidate of candidates) {
+      const str = checker.typeToString(candidate, undefined, formatFlags);
+      if (!trivial.has(str)) {
+        typeStr = str;
+        break;
+      }
+    }
+
+    if (!typeStr) continue;
 
     // Skip types that reference viem internals — the checker over-expands
     // external package types (Client, WalletClient, TypedDataDefinition, etc.)
