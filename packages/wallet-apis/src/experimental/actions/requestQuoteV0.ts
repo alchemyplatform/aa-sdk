@@ -1,11 +1,10 @@
-import type { Address, Prettify } from "viem";
-import type { DistributiveOmit, InnerWalletApiClient } from "../../types.ts";
+import type { Address, Hex, Prettify } from "viem";
+import type { InnerWalletApiClient } from "../../types.ts";
 import {
   fromRpcCapabilities,
   mergeClientCapabilities,
   toRpcCapabilities,
   type PrepareCallsCapabilities,
-  type WithCapabilities,
 } from "../../utils/capabilities.js";
 import { resolveAddress, type AccountParam } from "../../utils/resolve.js";
 import { wallet_requestQuote_v0 as MethodSchema } from "@alchemy/wallet-api-types/rpc";
@@ -13,24 +12,40 @@ import {
   methodSchema,
   encode,
   decode,
-  type MethodParams,
   type MethodResponse,
 } from "../../utils/schema.js";
 
 const schema = methodSchema(MethodSchema);
-type BaseRequestQuoteV0Params = MethodParams<typeof MethodSchema>;
 type RequestQuoteV0Response = MethodResponse<typeof MethodSchema>;
+
+type SwapAmountParams =
+  | { fromAmount: bigint; minimumToAmount?: never }
+  | { fromAmount?: never; minimumToAmount: bigint };
+
+type SwapChainParams =
+  | {
+      toChainId?: never;
+      postCalls?: Array<{ to: Address; data?: Hex; value?: bigint }>;
+    }
+  | { toChainId: number; postCalls?: never };
+
+type SwapExecutionParams =
+  | { returnRawCalls?: false; capabilities?: PrepareCallsCapabilities }
+  | { returnRawCalls: true; capabilities?: never };
 
 /**
  * Parameters accepted by the experimental `requestQuoteV0` action.
  */
 export type RequestQuoteV0Params = Prettify<
-  WithCapabilities<
-    DistributiveOmit<BaseRequestQuoteV0Params, "from" | "chainId"> & {
-      account?: AccountParam;
-      chainId?: number;
-    }
-  >
+  {
+    fromToken: Address;
+    toToken: Address;
+    slippage?: bigint;
+    account?: AccountParam;
+    chainId?: number;
+  } & SwapAmountParams &
+    SwapChainParams &
+    SwapExecutionParams
 >;
 
 /** The modifiedRequest in client format: `account` instead of `from`, SDK capabilities. */

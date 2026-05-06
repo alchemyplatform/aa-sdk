@@ -611,14 +611,18 @@ function resolveschemaTypes(context, project, checker) {
     if (
       !(reflection instanceof DeclarationReflection) ||
       reflection.kind !== ReflectionKind.TypeAlias ||
-      !isWalletApis(reflection) ||
-      reflection.type?.type !== "reflection"
+      !isWalletApis(reflection)
     ) {
       continue;
     }
 
-    const decl = reflection.type.declaration;
-    if (!decl?.children?.length) continue;
+    // Step 3 fixes method signatures AND generates source-text code blocks.
+    // For types with children in a reflection, fix signatures.
+    // For ANY type alias backed by a type literal in source, use source text.
+    const decl3 =
+      reflection.type?.type === "reflection"
+        ? reflection.type.declaration
+        : null;
 
     // Get the TS AST declaration for this type alias
     const sym = context.getSymbolFromReflection(reflection);
@@ -638,91 +642,92 @@ function resolveschemaTypes(context, project, checker) {
       }
     }
 
-    for (const child of decl.children) {
-      const astMember = memberAstMap.get(child.name);
-      if (!astMember?.type || !ts.isFunctionTypeNode(astMember.type)) continue;
-      const funcTypeNode = astMember.type;
+    // Fix method signatures if TypeDoc has reflection children
+    if (decl3?.children?.length) {
+      for (const child of decl3.children) {
+        const astMember = memberAstMap.get(child.name);
+        if (!astMember?.type || !ts.isFunctionTypeNode(astMember.type))
+          continue;
+        const funcTypeNode = astMember.type;
 
-      for (const sig of child.signatures ?? []) {
-        // Fix return type: replace expanded type with named reference
-        if (
-          sig.type?.type === "reference" &&
-          sig.type.name === "Promise" &&
-          sig.type.typeArguments?.length === 1
-        ) {
-          const innerArg = sig.type.typeArguments[0];
+        for (const sig of child.signatures ?? []) {
+          // Fix return type: replace expanded type with named reference
           if (
-            innerArg.type === "reflection" ||
-            (innerArg.type === "intrinsic" && innerArg.name === "object")
+            sig.type?.type === "reference" &&
+            sig.type.name === "Promise" &&
+            sig.type.typeArguments?.length === 1
           ) {
-            const retNode = funcTypeNode.type;
+            const innerArg = sig.type.typeArguments[0];
             if (
-              ts.isTypeReferenceNode(retNode) &&
-              retNode.typeArguments?.length === 1
+              innerArg.type === "reflection" ||
+              (innerArg.type === "intrinsic" && innerArg.name === "object")
             ) {
-              const innerNode = retNode.typeArguments[0];
-              if (ts.isTypeReferenceNode(innerNode)) {
-                const aliasName = innerNode.typeName.getText();
-                const target = typeAliasMap.get(aliasName);
-                if (target) {
-                  sig.type.typeArguments[0] =
-                    ReferenceType.createResolvedReference(
-                      aliasName,
-                      target,
-                      project,
-                    );
-                  fixedCount++;
+              const retNode = funcTypeNode.type;
+              if (
+                ts.isTypeReferenceNode(retNode) &&
+                retNode.typeArguments?.length === 1
+              ) {
+                const innerNode = retNode.typeArguments[0];
+                if (ts.isTypeReferenceNode(innerNode)) {
+                  const aliasName = innerNode.typeName.getText();
+                  const target = typeAliasMap.get(aliasName);
+                  if (target) {
+                    sig.type.typeArguments[0] =
+                      ReferenceType.createResolvedReference(
+                        aliasName,
+                        target,
+                        project,
+                      );
+                    fixedCount++;
+                  }
                 }
               }
             }
           }
-        }
 
-        // Fix parameter types: replace expanded types with named references
-        if (sig.parameters?.length) {
-          for (let i = 0; i < sig.parameters.length; i++) {
-            const param = sig.parameters[i];
-            // Skip params already resolved to a reference
-            if (param.type?.type === "reference" && param.type.reflection) {
-              continue;
-            }
+          // Fix parameter types: replace expanded types with named references
+          if (sig.parameters?.length) {
+            for (let i = 0; i < sig.parameters.length; i++) {
+              const param = sig.parameters[i];
+              if (param.type?.type === "reference" && param.type.reflection) {
+                continue;
+              }
 
-            const astParam = funcTypeNode.parameters[i];
-            if (!astParam?.type) continue;
+              const astParam = funcTypeNode.parameters[i];
+              if (!astParam?.type) continue;
 
-            // Handle optional param: T | undefined — unwrap to check the ref
-            let typeNode = astParam.type;
-            if (ts.isUnionTypeNode(typeNode)) {
-              // Find the non-undefined type in the union
-              const nonUndef = typeNode.types.find(
-                (t) =>
-                  !(
-                    t.kind === ts.SyntaxKind.UndefinedKeyword ||
-                    (ts.isLiteralTypeNode(t) &&
-                      t.literal.kind === ts.SyntaxKind.UndefinedKeyword)
-                  ),
-              );
-              if (nonUndef) typeNode = nonUndef;
-            }
+              let typeNode = astParam.type;
+              if (ts.isUnionTypeNode(typeNode)) {
+                const nonUndef = typeNode.types.find(
+                  (t) =>
+                    !(
+                      t.kind === ts.SyntaxKind.UndefinedKeyword ||
+                      (ts.isLiteralTypeNode(t) &&
+                        t.literal.kind === ts.SyntaxKind.UndefinedKeyword)
+                    ),
+                );
+                if (nonUndef) typeNode = nonUndef;
+              }
 
-            if (!ts.isTypeReferenceNode(typeNode)) continue;
-            const aliasName = typeNode.typeName.getText();
-            const target = typeAliasMap.get(aliasName);
-            if (target) {
-              param.type = ReferenceType.createResolvedReference(
-                aliasName,
-                target,
-                project,
-              );
-              fixedCount++;
+              if (!ts.isTypeReferenceNode(typeNode)) continue;
+              const aliasName = typeNode.typeName.getText();
+              const target = typeAliasMap.get(aliasName);
+              if (target) {
+                param.type = ReferenceType.createResolvedReference(
+                  aliasName,
+                  target,
+                  project,
+                );
+                fixedCount++;
+              }
             }
           }
         }
       }
     }
 
-    // Generate a clean code block from the source AST instead of letting
-    // TypeDoc expand all the schema-derived types inline
+    // Always use source AST text for type literal code blocks — keeps
+    // named type references instead of checker-expanded inline types.
     const sourceText = typeLiteral.getText();
     if (sourceText) {
       codeBlockFixes.set(reflection.name, sourceText);
@@ -1031,6 +1036,32 @@ export function load(app) {
             /^(```ts\ntype \w+(?:<[^>]*>)? =) [\s\S]*?^```/m,
             `$1 ${typeStr};\n\`\`\``,
           );
+        }
+      }
+
+      // Inject param type links into SmartWalletActions properties table.
+      // Must run AFTER the code block fix so we can parse named types.
+      if (
+        page.model?.name === "SmartWalletActions" &&
+        page.url?.includes("wallet-apis/")
+      ) {
+        const codeBlock = page.contents.match(/```ts\n([\s\S]*?)```/);
+        if (codeBlock) {
+          const sigRegex = /(\w+):\s*\(\s*\n?\s*params(\?)?:\s*(\w+)/g;
+          let match;
+          while ((match = sigRegex.exec(codeBlock[1])) !== null) {
+            const [, methodName, optional, paramType] = match;
+            const paramLabel = optional ? "params?" : "params";
+            // Use a regex that anchors to the method name's anchor ID in the table
+            const methodId = methodName.toLowerCase();
+            const pattern = new RegExp(
+              `(<a id="${methodId}"[^>]*>[\\s\\S]*?)\\(\\\`${paramLabel.replace("?", "\\?")}\\\`\\)( => \\\`Promise\\\`)`,
+            );
+            page.contents = page.contents.replace(
+              pattern,
+              `$1(\`${paramLabel}\`: [\`${paramType}\`](${paramType}))$2`,
+            );
+          }
         }
       }
 
