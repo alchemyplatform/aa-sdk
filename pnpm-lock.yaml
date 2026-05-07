@@ -248,8 +248,8 @@ importers:
         specifier: workspace:*
         version: link:../common
       "@alchemy/wallet-api-types":
-        specifier: 0.1.0-alpha.31
-        version: 0.1.0-alpha.31(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@3.25.76)
+        specifier: 0.1.0-alpha.32
+        version: 0.1.0-alpha.32(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@3.25.76)
       deep-equal:
         specifier: ^2.2.3
         version: 2.2.3
@@ -330,10 +330,10 @@ packages:
     peerDependencies:
       viem: ^2.45.0
 
-  "@alchemy/wallet-api-types@0.1.0-alpha.31":
+  "@alchemy/wallet-api-types@0.1.0-alpha.32":
     resolution:
       {
-        integrity: sha512-lcYqwXsrskr7aNz8XOQgaKhJLbM6dwtc21PBqDTS2rbVzrfOmvIhiU2KVPZGiQr+b3D2gl+pgi7wPIDJhhnI6g==,
+        integrity: sha512-ozNfKitz/LnGiMTM2V5bXVSIfxccKc3u1wYnIjVokjL+4OBHstGIwrtIPp0AK0kEysKOnQGfnNXSfAPee0k6uA==,
       }
     peerDependencies:
       typescript: ^5.8.2
@@ -13666,7 +13666,7 @@ snapshots:
       viem: 2.46.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@3.25.76)
       zod: 3.25.76
 
-  "@alchemy/wallet-api-types@0.1.0-alpha.31(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@3.25.76)":
+  "@alchemy/wallet-api-types@0.1.0-alpha.32(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@3.25.76)":
     dependencies:
       "@alchemy/common": 5.0.0-beta.24(viem@2.46.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@3.25.76))
       deep-equal: 2.2.3
@@ -20628,7 +20628,7 @@ snapshots:
 
   log-symbols@4.1.0:
     dependencies:
-      chalk: 4.1.0
+      chalk: 4.1.2
       is-unicode-supported: 0.1.0
 
   log-update@5.0.1:
@@ -21903,7 +21903,7 @@ snapshots:
   ora@5.3.0:
     dependencies:
       bl: 4.1.0
-      chalk: 4.1.0
+      chalk: 4.1.2
       cli-cursor: 3.1.0
       cli-spinners: 2.6.1
       is-interactive: 1.0.0
