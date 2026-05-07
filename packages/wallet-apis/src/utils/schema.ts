@@ -117,6 +117,10 @@ function encodeUnion(
       if (error instanceof EncodeError) {
         errors.push({ member, error });
       } else {
+        // TODO(jh): Codec callbacks (e.g. HexNumber.Encode) throw non-EncodeError
+        // errors (InvalidParamsError from ox) which kills union probing before all
+        // branches are tried. Solana encode through this path is broken. Zod migration
+        // (#2486) removes this entirely.
         throw error;
       }
     }
@@ -134,6 +138,12 @@ function encodeUnion(
     cause: best.error,
   });
 }
+
+// TODO(jh): Value.Decode for unions picks the first branch passing Value.Check,
+// which allows extra properties. If a branch with fewer fields matches first,
+// Value.Decode silently strips unrecognized properties (e.g. EVM `details` field
+// dropped when Solana branch matches). Zod migration (#2486) fixes this via
+// z.discriminatedUnion.
 
 // Type-safe wrapper around `Value.Decode` with human-readable errors.
 export function decode<const T extends TSchema>(
