@@ -6,10 +6,10 @@
   "license": "MIT",
   "private": false,
   "type": "module",
-  "main": "./dist/esm/index.js",
-  "module": "./dist/esm/index.js",
-  "types": "./dist/types/index.d.ts",
-  "typings": "./dist/types/index.d.ts",
+  "main": "./dist/esm/exports/index.js",
+  "module": "./dist/esm/exports/index.js",
+  "types": "./dist/types/exports/index.d.ts",
+  "typings": "./dist/types/exports/index.d.ts",
   "sideEffects": false,
   "files": [
     "dist",
@@ -69,7 +69,7 @@
     "zod": "^4.4.1"
   },
   "peerDependencies": {
-    "@solana/kit": ">=2.0.0",
+    "@solana/kit": ">=6.0.0",
     "@solana/web3.js": "^1.95.0",
     "viem": "^2.45.0"
   },
