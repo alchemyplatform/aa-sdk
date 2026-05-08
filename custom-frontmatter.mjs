@@ -459,6 +459,39 @@ function resolveSchemaTypes(context, project, checker) {
         }
       }
 
+      // Fix non-Promise return types that resolved to `any` — happens when
+      // TypeDoc can't resolve complex generic return types (e.g. viem Client<...>)
+      // on overloaded functions. Walk the TS AST to find the declared return
+      // type annotation and replace with a ReferenceType if it's a known alias.
+      if (
+        sig.type?.type === "intrinsic" &&
+        (sig.type.name === "any" || sig.type.name === "object")
+      ) {
+        const funcSym = context.getSymbolFromReflection(reflection);
+        if (funcSym) {
+          const decls = funcSym.getDeclarations() ?? [];
+          const sigIndex = (reflection.signatures ?? []).indexOf(sig);
+          // For overloaded functions, match by index against non-implementation declarations
+          const overloadDecls = decls.filter(
+            (d) => ts.isFunctionDeclaration(d) && !d.body,
+          );
+          const tsDecl = overloadDecls[sigIndex] ?? decls[sigIndex];
+
+          if (tsDecl && tsDecl.type && ts.isTypeReferenceNode(tsDecl.type)) {
+            const aliasName = tsDecl.type.typeName.getText();
+            const target = typeAliasMap.get(aliasName);
+            if (target) {
+              sig.type = ReferenceType.createResolvedReference(
+                aliasName,
+                target,
+                project,
+              );
+              fixedCount++;
+            }
+          }
+        }
+      }
+
       // Fix parameter types: use TS checker to restore named types
       // TypeDoc may render params as "Object" when it can't resolve Prettify<T>
       // or other mapped types. Check all non-reference params against the checker.

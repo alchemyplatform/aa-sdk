@@ -1,5 +1,10 @@
-import type { Client, LocalAccount } from "viem";
-import type { InnerWalletApiClient, SignerClient } from "../types.js";
+import type { Chain, Client, LocalAccount } from "viem";
+import type {
+  InnerWalletApiClient,
+  InnerSolanaWalletApiClient,
+  SignerClient,
+  SolanaChainDef,
+} from "../types.js";
 import { BaseError } from "@alchemy/common";
 
 /**
@@ -12,6 +17,12 @@ export function isSmartWalletClient(
   client: Client,
 ): client is InnerWalletApiClient {
   return client.name === "alchemySmartWalletClient" && "owner" in client;
+}
+
+export function isSolanaClient(
+  client: Client,
+): client is InnerSolanaWalletApiClient {
+  return client.name === "alchemySolanaSmartWalletClient" && "owner" in client;
 }
 
 /**
@@ -31,6 +42,10 @@ export function assertSmartWalletClient(
   }
 }
 
+export function isSolanaChain(chain: Chain): chain is SolanaChainDef {
+  return "solanaChainId" in chain;
+}
+
 export function isLocalAccount(
   signer: LocalAccount | SignerClient,
 ): signer is LocalAccount {
@@ -41,12 +56,4 @@ export function isSignerClient(
   signer: LocalAccount | SignerClient,
 ): signer is SignerClient {
   return "request" in signer;
-}
-
-export function assertNotSolana<T extends { type: string }>(
-  value: T,
-): asserts value is Exclude<T, { type: "solana-transaction-v0" }> {
-  if (value.type === "solana-transaction-v0") {
-    throw new BaseError("Solana transactions are not yet supported");
-  }
 }
