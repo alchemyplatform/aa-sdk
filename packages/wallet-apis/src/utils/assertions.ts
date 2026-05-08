@@ -46,7 +46,7 @@ export function isSignerClient(
 export function assertNotSolana<T extends { type: string }>(
   value: T,
 ): asserts value is Exclude<T, { type: "solana-transaction-v0" }> {
-  if ((value as { type: string }).type === "solana-transaction-v0") {
+  if (value.type === "solana-transaction-v0") {
     throw new BaseError("Solana transactions are not yet supported");
   }
 }

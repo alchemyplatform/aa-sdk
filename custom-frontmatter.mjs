@@ -237,7 +237,7 @@ function isEmptyObjectType(type) {
  * @param {import('typescript').TypeChecker} checker - TypeScript checker used to resolve structural types.
  * @returns {{ count: number, codeBlockFixes: Map<string, string> }} Number of fixes and code block replacements.
  */
-function resolveschemaTypes(context, project, checker) {
+function resolveSchemaTypes(context, project, checker) {
   let fixedCount = 0;
   // Map of type alias name → checker type string for code block fixups
   const codeBlockFixes = new Map();
@@ -784,7 +784,7 @@ export function load(app) {
     }
 
     if (checker) {
-      const result = resolveschemaTypes(context, project, checker);
+      const result = resolveSchemaTypes(context, project, checker);
       if (result.count > 0) {
         console.log(
           `Resolved ${result.count} schema-derived types using TS checker`,
