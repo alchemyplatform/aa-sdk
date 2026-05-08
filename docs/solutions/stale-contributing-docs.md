@@ -25,4 +25,4 @@ scaffold uses `v5.x.x` as its PR base.
 When writing agent guidance, verify commands and paths against tracked source,
 scripts, and workflow YAML instead of copying stale contributor prose. Keep
 existing docs-reviewer instructions accurate by pointing at tracked guidance and
-using `v5.x.x...HEAD` when checking changed MDX on this branch.
+using `origin/v5.x.x...HEAD` when checking changed MDX on this branch.

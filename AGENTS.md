@@ -2,11 +2,14 @@
 
 AI assistants should load skills from `.agents/skills/` based on the task
 context. This branch is the v5 SDK branch; use `v5.x.x` as the audit source,
-comparison base, and PR base unless the user explicitly asks for another branch.
+comparison base, and PR base for v5 SDK source and scaffold work unless the
+user explicitly asks for another branch. Generated docs sync PRs created by
+`update-v5-docs.yml` target `main`.
 
 Do not treat untracked top-level directories as source truth. On this branch,
-the tracked workspace is the root config plus `.claude/`, `.cursor/`, `.github/`,
-`.vitest/`, `docs/`, `halp/`, `packages/`, `scripts/`, and `templates/`.
+the tracked workspace is the root config plus `.agents/`, `.claude/`,
+`.cursor/`, `.github/`, `.vitest/`, `docs/`, `halp/`, `packages/`, `scripts/`,
+and `templates/`.
 
 ## Quick Reference
 
@@ -72,6 +75,7 @@ use remote caching.
 
 ```text
 aa-sdk/
+├── .agents/            # Agent skills, commands, and repo guidance
 ├── packages/
 │   ├── common/          # Shared transport, chain, logging, config, and errors
 │   ├── aa-infra/        # Rundler fee estimation and RPC types
