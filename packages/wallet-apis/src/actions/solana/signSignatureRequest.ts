@@ -43,7 +43,13 @@ function extractSignerSignature(
   signedTx: Uint8Array,
   signerAddress: string,
 ): Uint8Array {
-  const numSigs = signedTx[0];
+  const numSigs = unsignedTx[0];
+
+  if (signedTx[0] !== numSigs) {
+    throw new BaseError(
+      `Signer returned a transaction with a different signature count (expected ${numSigs}, got ${signedTx[0]})`,
+    );
+  }
 
   for (let i = 0; i < numSigs; i++) {
     const offset = 1 + i * 64;

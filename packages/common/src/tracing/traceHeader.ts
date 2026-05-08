@@ -1,6 +1,6 @@
 function generateRandomHexString(numBytes: number) {
   const hexPairs = new Array(numBytes).fill(0).map(() =>
-    Math.floor(Math.random() * 16)
+    Math.floor(Math.random() * 256)
       .toString(16)
       .padStart(2, "0"),
   );
