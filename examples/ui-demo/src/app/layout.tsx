@@ -20,17 +20,18 @@ export const metadata: Metadata = {
   description: "Protected by Alchemy",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const headerStore = await headers();
   const initialState = cookieToInitialState(
     alchemyConfig(),
-    headers().get("cookie") ?? undefined,
+    headerStore.get("cookie") ?? undefined,
   );
 
-  const initialConfig = cookieToInitialConfig(headers().get("cookie"));
+  const initialConfig = cookieToInitialConfig(headerStore.get("cookie"));
 
   const classes = initialConfig
     ? generateClassesForRoot(initialConfig)

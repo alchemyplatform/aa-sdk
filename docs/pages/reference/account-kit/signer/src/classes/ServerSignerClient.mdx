@@ -910,7 +910,7 @@ This will remove members from an existing multi-sig account
 experimental_multiOwnerExportPrivateKeyEncrypted(opts): Promise<ExportPrivateKeyEncryptedResult>;
 ```
 
-Defined in: [account-kit/signer/src/client/base.ts:1610](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/signer/src/client/base.ts#L1610)
+Defined in: [account-kit/signer/src/client/base.ts:1616](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/signer/src/client/base.ts#L1616)
 
 Exports a private key for a given account in a multi-owner org
 
@@ -1045,7 +1045,7 @@ the signature over the raw hex
 exportPrivateKey(opts): Promise<string>;
 ```
 
-Defined in: [account-kit/signer/src/client/base.ts:1574](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/signer/src/client/base.ts#L1574)
+Defined in: [account-kit/signer/src/client/base.ts:1580](https://github.com/alchemyplatform/aa-sdk/blob/main/account-kit/signer/src/client/base.ts#L1580)
 
 Exports a private key for a given account
 
@@ -2224,6 +2224,7 @@ Not intended to be used directly, use the specific methods instead on the client
         | `"/v1/multi-owner-sign-raw-payload"`
         | `"/v1/multi-owner-prepare-delete"`
         | `"/v1/multi-owner-delete"`
+        | `"/v1/track-key-export"`
       </td>
     </tr>
   </tbody>

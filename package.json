@@ -75,7 +75,7 @@
     "is-ci": "^3.0.1",
     "js-yaml": "^4.1.0",
     "jsdom": "^25.0.1",
-    "lerna": "^8.0.2",
+    "lerna": "^9.0.7",
     "lint-staged": "^13.2.2",
     "markdownlint": "^0.38.0",
     "mdx2vast": "^0.3.0",
