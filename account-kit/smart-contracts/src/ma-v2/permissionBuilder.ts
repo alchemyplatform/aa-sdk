@@ -46,6 +46,44 @@ const ACCOUNT_EXECUTE_SELECTOR = "0xb61d27f6";
 const ACCOUNT_EXECUTEBATCH_SELECTOR = "0x34fcd5be";
 const ACCOUNT_PERFORM_CREATE_SELECTOR = "0x5998db5c";
 const ACCOUNT_EXECUTE_WITH_RUNTIME_VALIDATION_SELECTOR = "0xf2680c0f";
+const ACCOUNT_INSTALL_VALIDATION_SELECTOR = "0x1bbf564c";
+const ACCOUNT_UNINSTALL_VALIDATION_SELECTOR = "0xb6b1ccfe";
+const ACCOUNT_INSTALL_EXECUTION_SELECTOR = "0x1d37e7d6";
+const ACCOUNT_UNINSTALL_EXECUTION_SELECTOR = "0x0b7cad71";
+const ACCOUNT_UPGRADE_TO_AND_CALL_SELECTOR = "0x4f1ef286";
+// Wrapped native functions that must not be added to a session key's selector allowlist.
+const PRIVILEGED_SELECTORS: Record<string, string> = {
+  [ACCOUNT_PERFORM_CREATE_SELECTOR]: "performCreate",
+  [ACCOUNT_EXECUTE_WITH_RUNTIME_VALIDATION_SELECTOR]:
+    "executeWithRuntimeValidation",
+  [ACCOUNT_INSTALL_VALIDATION_SELECTOR]: "installValidation",
+  [ACCOUNT_UNINSTALL_VALIDATION_SELECTOR]: "uninstallValidation",
+  [ACCOUNT_INSTALL_EXECUTION_SELECTOR]: "installExecution",
+  [ACCOUNT_UNINSTALL_EXECUTION_SELECTOR]: "uninstallExecution",
+  [ACCOUNT_UPGRADE_TO_AND_CALL_SELECTOR]: "upgradeToAndCall",
+};
+
+// Auto-added by translatePermissions when a PREVAL_ALLOWLIST hook exists.
+// Blocked from manual addition to ensure they're only added with proper hook context.
+const SYSTEM_MANAGED_SELECTORS: Record<string, string> = {
+  [ACCOUNT_EXECUTE_SELECTOR]: "execute",
+  [ACCOUNT_EXECUTEBATCH_SELECTOR]: "executeBatch",
+};
+
+function assertNotForbiddenSelector(selector: Hex): void {
+  const normalized = selector.toLowerCase();
+  const match =
+    PRIVILEGED_SELECTORS[normalized] ?? SYSTEM_MANAGED_SELECTORS[normalized];
+  if (match != null) {
+    throw new SelectorNotAllowed(match);
+  }
+}
+
+function assertNoForbiddenSelectors(selectors: Hex[]): void {
+  for (const selector of selectors) {
+    assertNotForbiddenSelector(selector);
+  }
+}
 
 export enum PermissionType {
   NATIVE_TOKEN_TRANSFER = "native-token-transfer",
@@ -254,18 +292,16 @@ export class PermissionBuilder {
       signer: key.publicKey,
     });
     this.nonce = nonce;
-    if (selectors) this.selectors = selectors;
+    if (selectors) {
+      assertNoForbiddenSelectors(selectors);
+      this.selectors = selectors;
+    }
     if (hooks) this.hooks = hooks;
     if (deadline) this.deadline = deadline;
   }
 
   addSelector({ selector }: { selector: Hex }): this {
-    if (selector === ACCOUNT_PERFORM_CREATE_SELECTOR) {
-      throw new SelectorNotAllowed("performCreate");
-    }
-    if (selector === ACCOUNT_EXECUTE_WITH_RUNTIME_VALIDATION_SELECTOR) {
-      throw new SelectorNotAllowed("executeWithRuntimeValidation");
-    }
+    assertNotForbiddenSelector(selector);
     this.selectors.push(selector);
     return this;
   }
@@ -322,24 +358,7 @@ export class PermissionBuilder {
       if (permission.data.functions.length === 0) {
         throw new NoFunctionsProvidedError(permission);
       }
-      // Explicitly disallow adding execute, executeBatch, performCreate, and executeWithRuntimeValidation
-      if (permission.data.functions.includes(ACCOUNT_EXECUTE_SELECTOR)) {
-        throw new SelectorNotAllowed("execute");
-      } else if (
-        permission.data.functions.includes(ACCOUNT_EXECUTEBATCH_SELECTOR)
-      ) {
-        throw new SelectorNotAllowed("executeBatch");
-      } else if (
-        permission.data.functions.includes(ACCOUNT_PERFORM_CREATE_SELECTOR)
-      ) {
-        throw new SelectorNotAllowed("performCreate");
-      } else if (
-        permission.data.functions.includes(
-          ACCOUNT_EXECUTE_WITH_RUNTIME_VALIDATION_SELECTOR,
-        )
-      ) {
-        throw new SelectorNotAllowed("executeWithRuntimeValidation");
-      }
+      assertNoForbiddenSelectors(permission.data.functions);
       this.selectors = [...this.selectors, ...permission.data.functions];
     }
 

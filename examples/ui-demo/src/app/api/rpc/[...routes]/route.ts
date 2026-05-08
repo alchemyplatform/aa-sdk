@@ -4,8 +4,9 @@ import { env } from "../../../../../env.mjs";
 
 export async function POST(
   req: Request,
-  { params }: { params: { routes: string[] } },
+  { params }: { params: Promise<{ routes: string[] }> },
 ) {
+  const { routes } = await params;
   const body = await req.text();
 
   const headers: Record<string, string> = {
@@ -18,7 +19,7 @@ export async function POST(
     headers[key] = value;
   });
 
-  const res = await fetch(env.ALCHEMY_API_URL + `/${params.routes.join("/")}`, {
+  const res = await fetch(env.ALCHEMY_API_URL + `/${routes.join("/")}`, {
     method: "POST",
     headers: {
       ...headers,

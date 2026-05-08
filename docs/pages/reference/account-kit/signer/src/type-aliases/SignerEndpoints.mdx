@@ -265,6 +265,15 @@ type SignerEndpoints = [
     };
     Route: "/v1/multi-owner-delete";
   },
+  {
+    Body: {
+      accountAddress: string;
+      orgId: string;
+      type: "ETH" | "SOL";
+    };
+    Response: {};
+    Route: "/v1/track-key-export";
+  },
 ];
 ```
 
