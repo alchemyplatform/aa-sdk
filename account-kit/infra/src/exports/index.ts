@@ -7,7 +7,6 @@ export type * from "../chains.js";
 export {
   arbitrum,
   arbitrumGoerli,
-  arbitrumNova,
   arbitrumSepolia,
   base,
   baseGoerli,
