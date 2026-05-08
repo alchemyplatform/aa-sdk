@@ -11,7 +11,7 @@ import {
 } from "../utils/capabilities.js";
 import { resolveAddress, type AccountParam } from "../utils/resolve.js";
 import { PrepareCallsParams as EvmPrepareCallsSchema } from "@alchemy/wallet-api-types";
-import type { StaticDecode } from "typebox";
+import type { z } from "zod";
 import { wallet_prepareCalls as MethodSchema } from "@alchemy/wallet-api-types/rpc";
 import {
   methodSchema,
@@ -21,7 +21,7 @@ import {
 } from "../utils/schema.js";
 
 const schema = methodSchema(MethodSchema);
-type BasePrepareCallsParams = StaticDecode<typeof EvmPrepareCallsSchema>;
+type BasePrepareCallsParams = z.output<typeof EvmPrepareCallsSchema>;
 type FullPrepareCallsResponse = MethodResponse<typeof MethodSchema>;
 type PrepareCallsResponse = Exclude<
   FullPrepareCallsResponse,

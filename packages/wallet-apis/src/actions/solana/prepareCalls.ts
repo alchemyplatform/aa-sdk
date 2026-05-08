@@ -7,7 +7,7 @@ import { isSolanaChain } from "../../utils/assertions.js";
 import type { SolanaChainId } from "@alchemy/wallet-api-types";
 import { SolanaPrepareCallsParams as SolanaPrepareCallsSchema } from "@alchemy/wallet-api-types";
 import { wallet_prepareCalls as MethodSchema } from "@alchemy/wallet-api-types/rpc";
-import type { StaticDecode } from "typebox";
+import type { z } from "zod";
 import { BaseError } from "@alchemy/common";
 import { LOGGER } from "../../logger.js";
 import {
@@ -24,9 +24,7 @@ import {
 const schema = methodSchema(MethodSchema);
 type PrepareCallsResponse = MethodResponse<typeof MethodSchema>;
 
-type BaseSolanaPrepareCallsParams = StaticDecode<
-  typeof SolanaPrepareCallsSchema
->;
+type BaseSolanaPrepareCallsParams = z.output<typeof SolanaPrepareCallsSchema>;
 
 export type SolanaPrepareCallsParams = Prettify<
   WithCapabilities<

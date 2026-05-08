@@ -1,7 +1,7 @@
 import type { Prettify } from "viem";
 import type { InnerSolanaWalletApiClient } from "../../types.js";
 import { PreparedCall_SolanaV0_Signed as PreparedCall_SolanaV0_SignedSchema } from "@alchemy/wallet-api-types";
-import type { StaticDecode } from "typebox";
+import type { z } from "zod";
 import { BaseError } from "@alchemy/common";
 import { LOGGER } from "../../logger.js";
 import { wallet_sendPreparedCalls as MethodSchema } from "@alchemy/wallet-api-types/rpc";
@@ -16,7 +16,7 @@ const schema = methodSchema(MethodSchema);
 type SendPreparedCallsResponse = MethodResponse<typeof MethodSchema>;
 
 export type SolanaSendPreparedCallsParams = Prettify<
-  StaticDecode<typeof PreparedCall_SolanaV0_SignedSchema>
+  z.output<typeof PreparedCall_SolanaV0_SignedSchema>
 >;
 
 type SolanaSendPreparedCallsResponse = Extract<

@@ -1,9 +1,4 @@
-import {
-  type Hex,
-  type Prettify,
-  type TypedData,
-  type TypedDataDefinition,
-} from "viem";
+import { type Address as ViemAddress, type Hex, type TypedData } from "viem";
 import type { InnerWalletApiClient } from "../types.ts";
 import { prepareSign } from "./prepareSign.js";
 import { signSignatureRequest } from "./signSignatureRequest.js";
@@ -12,13 +7,21 @@ import { typedDataToJsonSafe } from "../utils/format.js";
 import { LOGGER } from "../logger.js";
 import { resolveAddress, type AccountParam } from "../utils/resolve.js";
 
-export type SignTypedDataParams = Prettify<
-  TypedDataDefinition<TypedData | Record<string, unknown>> & {
-    account?: AccountParam;
-  }
->;
+export type SignTypedDataParams = {
+  domain?: {
+    name?: string;
+    version?: string;
+    chainId?: number | bigint;
+    verifyingContract?: ViemAddress;
+    salt?: Hex;
+  };
+  types: TypedData | Record<string, unknown>;
+  primaryType: string;
+  message: Record<string, unknown>;
+  account?: AccountParam;
+};
 
-export type SignTypedDataResult = Prettify<Hex>;
+export type SignTypedDataResult = Hex;
 
 /**
  * Signs typed data (EIP-712) using the smart account.
