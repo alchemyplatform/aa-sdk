@@ -10,6 +10,7 @@ vi.mock("@solana/kit", () => {
   throw new Error("@solana/kit is not installed");
 });
 
+// @ts-expect-error -- top-level await works in vitest but tsconfig module setting disallows it
 const { findSignerSlot } = await import("./resolveSignerSlot.js");
 
 const BLOCKHASH = "11111111111111111111111111111111";
@@ -59,9 +60,7 @@ describe("findSignerSlot (@solana/web3.js fallback)", () => {
     expect(await findSignerSlot(txBytes, feePayer.publicKey.toBase58())).toBe(
       0,
     );
-    expect(await findSignerSlot(txBytes, signer2.publicKey.toBase58())).toBe(
-      1,
-    );
+    expect(await findSignerSlot(txBytes, signer2.publicKey.toBase58())).toBe(1);
   });
 
   it("returns -1 for a non-signer account present in the transaction", async () => {
@@ -80,8 +79,8 @@ describe("findSignerSlot (@solana/web3.js fallback)", () => {
     });
     const txBytes = new VersionedTransaction(msg).serialize();
 
-    expect(
-      await findSignerSlot(txBytes, recipient.publicKey.toBase58()),
-    ).toBe(-1);
+    expect(await findSignerSlot(txBytes, recipient.publicKey.toBase58())).toBe(
+      -1,
+    );
   });
 });

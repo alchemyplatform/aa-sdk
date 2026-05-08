@@ -89,7 +89,9 @@ export function fromWalletStandard(
       }
 
       if (!(output.signedTransaction instanceof Uint8Array)) {
-        throw new SolanaSignerError("Wallet returned an invalid signed transaction.");
+        throw new SolanaSignerError(
+          "Wallet returned an invalid signed transaction.",
+        );
       }
 
       return output;

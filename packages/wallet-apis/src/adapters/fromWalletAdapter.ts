@@ -44,9 +44,12 @@ export function fromWalletAdapter(signer: WalletAdapterSigner): SolanaSigner {
       try {
         signed = await signer.signTransaction(tx);
       } catch (e) {
-        throw new SolanaSignerError("Wallet adapter failed to sign transaction", {
-          cause: e as Error,
-        });
+        throw new SolanaSignerError(
+          "Wallet adapter failed to sign transaction",
+          {
+            cause: e as Error,
+          },
+        );
       }
 
       return { signedTransaction: new Uint8Array(signed.serialize()) };

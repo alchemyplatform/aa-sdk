@@ -22,8 +22,7 @@ export async function findSignerSlot(
     );
     const numSigs = transaction[0];
     const messageBytes = transaction.slice(1 + numSigs * 64);
-    const decoded =
-      getCompiledTransactionMessageDecoder().decode(messageBytes);
+    const decoded = getCompiledTransactionMessageDecoder().decode(messageBytes);
     accounts = decoded.staticAccounts as readonly string[];
     numRequiredSigners = decoded.header.numSignerAccounts;
   } catch {

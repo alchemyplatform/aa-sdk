@@ -50,7 +50,9 @@ export function fromKitSigner(
         });
       }
       if (!sigDict) {
-        throw new SolanaSignerError("TransactionPartialSigner returned no signatures");
+        throw new SolanaSignerError(
+          "TransactionPartialSigner returned no signatures",
+        );
       }
 
       const sig = sigDict[signer.address];

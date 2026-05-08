@@ -9,37 +9,49 @@ layout: reference
 
 ```ts
 type FormatSignParams = {
-  signature: {
-  type: "secp256k1";
-  data: `0x${string}` | {
-  r: `0x${string}`;
-  s: `0x${string}`;
-  yParity: `0x${string}`;
-} | {
-  r: `0x${string}`;
-  s: `0x${string}`;
-  v: `0x${string}`;
-};
-} | {
-  type: "ecdsa";
-  data: `0x${string}` | {
-  r: `0x${string}`;
-  s: `0x${string}`;
-  yParity: `0x${string}`;
-} | {
-  r: `0x${string}`;
-  s: `0x${string}`;
-  v: `0x${string}`;
-};
-};
-  capabilities?: {
-  permissions: {
-  context: `0x${string}`;
-} | {
-  sessionId: `0x${string}`;
-  signature: `0x${string}`;
-};
-} | undefined;
+  signature:
+    | {
+        type: "secp256k1";
+        data:
+          | `0x${string}`
+          | {
+              r: `0x${string}`;
+              s: `0x${string}`;
+              yParity: `0x${string}`;
+            }
+          | {
+              r: `0x${string}`;
+              s: `0x${string}`;
+              v: `0x${string}`;
+            };
+      }
+    | {
+        type: "ecdsa";
+        data:
+          | `0x${string}`
+          | {
+              r: `0x${string}`;
+              s: `0x${string}`;
+              yParity: `0x${string}`;
+            }
+          | {
+              r: `0x${string}`;
+              s: `0x${string}`;
+              v: `0x${string}`;
+            };
+      };
+  capabilities?:
+    | {
+        permissions:
+          | {
+              context: `0x${string}`;
+            }
+          | {
+              sessionId: `0x${string}`;
+              signature: `0x${string}`;
+            };
+      }
+    | undefined;
   account?: AccountParam | undefined;
   chainId?: number | undefined;
 };

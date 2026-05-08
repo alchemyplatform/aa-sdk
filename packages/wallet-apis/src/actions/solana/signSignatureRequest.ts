@@ -3,6 +3,7 @@ import { BaseError } from "@alchemy/common";
 import { LOGGER } from "../../logger.js";
 import { hexToBytes } from "viem";
 import { Base58 } from "ox";
+import { findSignerSlot } from "../../adapters/resolveSignerSlot.js";
 
 export type SolanaSignatureRequestParams = {
   type: "solana_signTransaction";
@@ -25,46 +26,26 @@ export async function signSolanaSignatureRequest(
   const { signedTransaction } = await signer.signTransaction({
     transaction: txBytes,
   });
-  const rawSignature = extractSignerSignature(
-    txBytes,
-    signedTransaction,
-    signer.address,
-  );
+
+  const slotIndex = await findSignerSlot(txBytes, signer.address);
+  if (slotIndex < 0) {
+    throw new BaseError(
+      `Signer ${signer.address} is not a required signer in this transaction`,
+    );
+  }
+
+  const offset = 1 + slotIndex * 64;
+  const rawSignature = signedTransaction.slice(offset, offset + 64);
+
+  if (rawSignature.every((b) => b === 0)) {
+    throw new BaseError(
+      `Signer ${signer.address} did not produce a signature at slot ${slotIndex}`,
+    );
+  }
 
   LOGGER.debug("signSolanaSignatureRequest:ok");
   return {
     type: "ed25519",
     data: Base58.fromBytes(rawSignature),
   };
-}
-
-function extractSignerSignature(
-  unsignedTx: Uint8Array,
-  signedTx: Uint8Array,
-  signerAddress: string,
-): Uint8Array {
-  const numSigs = unsignedTx[0];
-
-  if (signedTx[0] !== numSigs) {
-    throw new BaseError(
-      `Signer returned a transaction with a different signature count (expected ${numSigs}, got ${signedTx[0]})`,
-    );
-  }
-
-  for (let i = 0; i < numSigs; i++) {
-    const offset = 1 + i * 64;
-    const unsignedSig = unsignedTx.slice(offset, offset + 64);
-    const signedSig = signedTx.slice(offset, offset + 64);
-
-    const wasEmpty = unsignedSig.every((b) => b === 0);
-    const isNowFilled = !signedSig.every((b) => b === 0);
-
-    if (wasEmpty && isNowFilled) {
-      return signedSig;
-    }
-  }
-
-  throw new BaseError(
-    `Could not find signature for signer ${signerAddress} in signed transaction`,
-  );
 }

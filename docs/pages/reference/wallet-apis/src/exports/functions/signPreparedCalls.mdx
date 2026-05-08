@@ -20,11 +20,13 @@ Signs prepared calls using the provided signer.
 ```ts
 // Prepare a user operation call.
 const preparedCalls = await client.prepareCalls({
-  calls: [{
-    to: "0x1234...",
-    data: "0xabcdef...",
-    value: "0x0"
-  }],
+  calls: [
+    {
+      to: "0x1234...",
+      data: "0xabcdef...",
+      value: "0x0",
+    },
+  ],
 });
 
 // Sign the prepared calls.
@@ -73,6 +75,7 @@ const result = await client.sendPreparedCalls(signedCalls);
         The prepared calls with signature requests
       </td>
     </tr>
+
   </tbody>
 </table>
 

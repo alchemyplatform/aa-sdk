@@ -1,10 +1,5 @@
 import { BaseError } from "@alchemy/common";
-import {
-  createClient,
-  defineChain,
-  type Address,
-  type Chain,
-} from "viem";
+import { createClient, defineChain, type Address, type Chain } from "viem";
 import { smartWalletActions } from "./decorators/smartWalletActions.js";
 import { solanaSmartWalletActions } from "./decorators/solanaSmartWalletActions.js";
 import type {
