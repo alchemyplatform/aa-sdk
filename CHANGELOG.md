@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.88.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.88.1...v4.88.2) (2026-05-06)
+
+### Bug Fixes
+
+- disallow more permission builder selectors ([#2485](https://github.com/alchemyplatform/aa-sdk/issues/2485)) ([5903ae9](https://github.com/alchemyplatform/aa-sdk/commit/5903ae9ed082c26e4693d2235f4b48f6456d951a))
+
+## [4.88.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.88.0...v4.88.1) (2026-04-24)
+
+**Note:** Version bump only for package root
+
+# [4.88.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.87.2...v4.88.0) (2026-04-23)
+
+### Features
+
+- **v4:** track key exports for migration visibility ([#2466](https://github.com/alchemyplatform/aa-sdk/issues/2466)) ([934cd82](https://github.com/alchemyplatform/aa-sdk/commit/934cd8254b92845f37b3b28993137a3bc78c8091))
+
+## [4.87.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.87.1...v4.87.2) (2026-04-17)
+
+**Note:** Version bump only for package root
+
 ## [4.87.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.87.0...v4.87.1) (2026-04-09)
 
 **Note:** Version bump only for package root

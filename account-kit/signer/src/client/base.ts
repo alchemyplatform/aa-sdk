@@ -1553,6 +1553,12 @@ export abstract class BaseSignerClient<
       exported?.activity.result.exportWalletAccountResult?.exportBundle;
     if (!exportBundle) throw new Error("No export bundle found");
 
+    this.request("/v1/track-key-export", {
+      orgId: organizationId,
+      accountAddress: account.address,
+      type: opts.type === "ETHEREUM" ? "ETH" : "SOL",
+    }).catch(() => {});
+
     const parsedExportBundle = JSON.parse(exportBundle);
     const signedData = JSON.parse(
       fromHex(`0x${parsedExportBundle.data}`, { to: "string" }),
