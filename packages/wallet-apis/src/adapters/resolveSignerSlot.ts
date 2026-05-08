@@ -4,7 +4,10 @@ import { SolanaSignerError } from "./SolanaSignerError.js";
  * Finds the signature slot index for `signerAddress` by decoding the
  * transaction message and looking up the address in the account keys.
  * Tries `@solana/kit` first, falls back to `@solana/web3.js`.
- * Returns -1 if the address is not a required signer.
+ *
+ * @param {Uint8Array} transaction - The serialized Solana transaction bytes
+ * @param {string} signerAddress - The base58-encoded address of the signer
+ * @returns {Promise<number>} The slot index, or -1 if the address is not a required signer
  */
 export async function findSignerSlot(
   transaction: Uint8Array,
