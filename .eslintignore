@@ -13,3 +13,4 @@ site/.vitepress/cache/**/*
 **/vendor/*
 **/test-results/*
 **/playwright-report/*
+pnpm-lock.yaml
