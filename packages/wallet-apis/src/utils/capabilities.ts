@@ -58,7 +58,7 @@ function hasNoPaymasterServiceField(
 
 /**
  * Converts capabilities (with `paymaster`) to RPC capabilities (with `paymasterService`)
- * for use with Value.Encode before sending to the RPC.
+ * for use with `encode` before sending to the RPC.
  *
  * @param {PrepareCallsCapabilities | SendPreparedCallsCapabilities | undefined} capabilities - Capabilities object containing a `paymaster` field
  * @returns {DecodedPrepareCallsCaps | DecodedSendPreparedCallsCaps | undefined} RPC capabilities with `paymasterService`, or undefined if input is undefined
@@ -80,7 +80,7 @@ export function toRpcCapabilities(
 }
 
 /**
- * Converts RPC capabilities (with `paymasterService`) from Value.Decode
+ * Converts RPC capabilities (with `paymasterService`) from `decode`
  * to capabilities (with `paymaster`).
  *
  * @param {DecodedPrepareCallsCaps | DecodedSendPreparedCallsCaps | undefined} capabilities - RPC capabilities object containing a `paymasterService` field
