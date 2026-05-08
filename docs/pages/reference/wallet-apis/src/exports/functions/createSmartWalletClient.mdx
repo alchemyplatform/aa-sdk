@@ -10,19 +10,13 @@ layout: reference
 ## Call Signature
 
 ```ts
-function createSmartWalletClient(params): any;
+function createSmartWalletClient(params): SmartWalletClient;
 ```
 
-Defined in: [packages/wallet-apis/src/client.ts:115](https://github.com/alchemyplatform/aa-sdk/blob/v5.x.x/packages/wallet-apis/src/client.ts#L115)
+Defined in: [packages/wallet-apis/src/client.ts:94](https://github.com/alchemyplatform/aa-sdk/blob/v5.x.x/packages/wallet-apis/src/client.ts#L94)
 
-Creates a smart wallet client for EVM or Solana chains.
-
-Pass an EVM `Chain` to get a [SmartWalletClient](../type-aliases/SmartWalletClient) with EVM actions.
-Pass a Solana chain ID string (e.g. `"solana:devnet"`) with a
-[SolanaSigner](../interfaces/SolanaSigner) to get a [SolanaSmartWalletClient](../type-aliases/SolanaSmartWalletClient).
-
-Imported from `@alchemy/wallet-apis` — works for both chains.
-Solana-specific actions and adapters are in `@alchemy/wallet-apis/solana`.
+Creates a smart wallet client for EVM chains with actions for preparing,
+signing, and sending user operations.
 
 ### Parameters
 
@@ -46,35 +40,30 @@ Solana-specific actions and adapters are in `@alchemy/wallet-apis/solana`.
       </td>
 
       <td>
-        EVM or Solana client configuration
+        EVM client configuration
       </td>
     </tr>
-
   </tbody>
 </table>
 
 ### Returns
 
-`any`
+[`SmartWalletClient`](../type-aliases/SmartWalletClient)
 
-A smart wallet client for the specified chain
+An EVM smart wallet client with smart wallet actions
 
 ## Call Signature
 
 ```ts
-function createSmartWalletClient(params): any;
+function createSmartWalletClient(params): SolanaSmartWalletClient;
 ```
 
-Defined in: [packages/wallet-apis/src/client.ts:118](https://github.com/alchemyplatform/aa-sdk/blob/v5.x.x/packages/wallet-apis/src/client.ts#L118)
+Defined in: [packages/wallet-apis/src/client.ts:106](https://github.com/alchemyplatform/aa-sdk/blob/v5.x.x/packages/wallet-apis/src/client.ts#L106)
 
-Creates a smart wallet client for EVM or Solana chains.
+Creates a smart wallet client for Solana chains with actions for preparing,
+signing, and sending transactions.
 
-Pass an EVM `Chain` to get a [SmartWalletClient](../type-aliases/SmartWalletClient) with EVM actions.
-Pass a Solana chain ID string (e.g. `"solana:devnet"`) with a
-[SolanaSigner](../interfaces/SolanaSigner) to get a [SolanaSmartWalletClient](../type-aliases/SolanaSmartWalletClient).
-
-Imported from `@alchemy/wallet-apis` — works for both chains.
-Solana-specific actions and adapters are in `@alchemy/wallet-apis/solana`.
+Solana-specific adapters are in `@alchemy/wallet-apis/solana`.
 
 ### Parameters
 
@@ -98,15 +87,14 @@ Solana-specific actions and adapters are in `@alchemy/wallet-apis/solana`.
       </td>
 
       <td>
-        EVM or Solana client configuration
+        Solana client configuration
       </td>
     </tr>
-
   </tbody>
 </table>
 
 ### Returns
 
-`any`
+[`SolanaSmartWalletClient`](../type-aliases/SolanaSmartWalletClient)
 
-A smart wallet client for the specified chain
+A Solana smart wallet client with Solana smart wallet actions

@@ -1,6 +1,6 @@
 import type { SolanaSigner } from "../types.js";
 import type { VersionedTransaction } from "@solana/web3.js";
-import { BaseError } from "@alchemy/common";
+import { SolanaSignerError } from "./SolanaSignerError.js";
 
 /** Any signer with a `publicKey` and `signTransaction(VersionedTransaction)` method — matches `useWallet()` from `@solana/wallet-adapter-react` and injected wallet providers like `window.phantom.solana`. */
 export interface WalletAdapterSigner {
@@ -35,7 +35,7 @@ export function fromWalletAdapter(signer: WalletAdapterSigner): SolanaSigner {
         const web3 = await import("@solana/web3.js");
         tx = web3.VersionedTransaction.deserialize(transaction);
       } catch (e) {
-        throw new BaseError("Failed to deserialize transaction", {
+        throw new SolanaSignerError("Failed to deserialize transaction", {
           cause: e as Error,
         });
       }
@@ -44,7 +44,7 @@ export function fromWalletAdapter(signer: WalletAdapterSigner): SolanaSigner {
       try {
         signed = await signer.signTransaction(tx);
       } catch (e) {
-        throw new BaseError("Wallet adapter failed to sign transaction", {
+        throw new SolanaSignerError("Wallet adapter failed to sign transaction", {
           cause: e as Error,
         });
       }

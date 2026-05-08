@@ -56,13 +56,11 @@ export async function getCallsStatus(
     params: [params.id],
   });
 
-  const fullDecoded = decode(schema.response, rpcResp);
+  const decoded = decode(schema.response, rpcResp);
 
-  if (!isSolanaResponse(fullDecoded)) {
+  if (!isSolanaResponse(decoded)) {
     throw new BaseError(`Unexpected EVM response from Solana getCallsStatus`);
   }
-
-  const decoded = fullDecoded;
   const statusCode = decoded.status;
   const status = (() => {
     if (statusCode >= 100 && statusCode < 200) return "pending" as const;

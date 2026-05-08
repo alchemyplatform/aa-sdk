@@ -1,4 +1,4 @@
-import { BaseError } from "@alchemy/common";
+import { SolanaSignerError } from "./SolanaSignerError.js";
 import type { SolanaSigner } from "../types.js";
 
 const SIGN_TRANSACTION = "solana:signTransaction";
@@ -60,13 +60,13 @@ export function fromWalletStandard(
   const feature = wallet.features[SIGN_TRANSACTION];
 
   if (!isSolanaSignTransactionFeature(feature)) {
-    throw new BaseError(
+    throw new SolanaSignerError(
       `Wallet does not support the "${SIGN_TRANSACTION}" feature.`,
     );
   }
 
   if (account.features && !account.features.includes(SIGN_TRANSACTION)) {
-    throw new BaseError(
+    throw new SolanaSignerError(
       `Account ${account.address} does not support the "${SIGN_TRANSACTION}" feature.`,
     );
   }
@@ -77,11 +77,11 @@ export function fromWalletStandard(
       const [output] = await feature.signTransaction({ account, transaction });
 
       if (!output) {
-        throw new BaseError("Wallet returned no signed transaction.");
+        throw new SolanaSignerError("Wallet returned no signed transaction.");
       }
 
       if (!(output.signedTransaction instanceof Uint8Array)) {
-        throw new BaseError("Wallet returned an invalid signed transaction.");
+        throw new SolanaSignerError("Wallet returned an invalid signed transaction.");
       }
 
       return output;

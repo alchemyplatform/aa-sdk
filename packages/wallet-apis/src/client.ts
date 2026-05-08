@@ -2,11 +2,9 @@ import { BaseError } from "@alchemy/common";
 import {
   createClient,
   defineChain,
-  isAddress,
   type Address,
   type Chain,
 } from "viem";
-import { isAddress as isSolanaAddress } from "@solana/kit";
 import { smartWalletActions } from "./decorators/smartWalletActions.js";
 import { solanaSmartWalletActions } from "./decorators/solanaSmartWalletActions.js";
 import type {
@@ -50,20 +48,6 @@ export const SOLANA_CHAINS: Record<SolanaChainId, SolanaChainDef> = {
   "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1": solanaDevnet,
 };
 
-// ── Validation ──────────────────────────────────────────────────────────
-
-function validateEvmAddress(address: string): asserts address is Address {
-  if (!isAddress(address)) {
-    throw new BaseError(`Invalid EVM address: ${address}`);
-  }
-}
-
-function validateSolanaAddress(address: string): void {
-  if (!isSolanaAddress(address)) {
-    throw new BaseError(`Invalid Solana address: ${address}`);
-  }
-}
-
 // ── Param types ─────────────────────────────────────────────────────────
 
 export type CreateEvmSmartWalletClientParams = {
@@ -87,6 +71,7 @@ export type CreateSolanaSmartWalletClientParams = {
   };
 };
 
+/** Either {@link CreateEvmSmartWalletClientParams} or {@link CreateSolanaSmartWalletClientParams}. */
 export type CreateSmartWalletClientParams =
   | CreateEvmSmartWalletClientParams
   | CreateSolanaSmartWalletClientParams;
@@ -100,21 +85,24 @@ function isSolanaParams(
 }
 
 /**
- * Creates a smart wallet client for EVM or Solana chains.
+ * Creates a smart wallet client for EVM chains with actions for preparing,
+ * signing, and sending user operations.
  *
- * Pass an EVM `Chain` to get a {@link SmartWalletClient} with EVM actions.
- * Pass a Solana chain ID string (e.g. `"solana:devnet"`) with a
- * {@link SolanaSigner} to get a {@link SolanaSmartWalletClient}.
- *
- * Imported from `@alchemy/wallet-apis` — works for both chains.
- * Solana-specific actions and adapters are in `@alchemy/wallet-apis/solana`.
- *
- * @param {CreateSmartWalletClientParams} params - EVM or Solana client configuration
- * @returns {SmartWalletClient | SolanaSmartWalletClient} A smart wallet client for the specified chain
+ * @param {CreateEvmSmartWalletClientParams} params - EVM client configuration
+ * @returns {SmartWalletClient} An EVM smart wallet client with smart wallet actions
  */
 export function createSmartWalletClient(
   params: CreateEvmSmartWalletClientParams,
 ): SmartWalletClient;
+/**
+ * Creates a smart wallet client for Solana chains with actions for preparing,
+ * signing, and sending transactions.
+ *
+ * Solana-specific adapters are in `@alchemy/wallet-apis/solana`.
+ *
+ * @param {CreateSolanaSmartWalletClientParams} params - Solana client configuration
+ * @returns {SolanaSmartWalletClient} A Solana smart wallet client with Solana smart wallet actions
+ */
 export function createSmartWalletClient(
   params: CreateSolanaSmartWalletClientParams,
 ): SolanaSmartWalletClient;
@@ -141,13 +129,10 @@ function createEvmClient({
     ...(paymaster?.policyIds ?? []),
   ];
 
+  // If no account address is provided, the client defaults to using the signer's address via EIP-7702.
   const _account =
     account ??
     (isLocalAccount(signer) ? signer.address : signer.account.address);
-
-  if (account) {
-    validateEvmAddress(account);
-  }
 
   return createClient({
     account: _account,
@@ -175,10 +160,6 @@ function createSolanaClient({
   const _policyIds = paymaster?.policyId ? [paymaster.policyId] : [];
 
   const _account = account ?? signer.address;
-
-  if (account) {
-    validateSolanaAddress(account);
-  }
 
   const _chain = SOLANA_CHAINS[chain];
   if (!_chain) {

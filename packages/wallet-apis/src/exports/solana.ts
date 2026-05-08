@@ -16,6 +16,9 @@ export { waitForCallsStatus } from "../actions/solana/waitForCallsStatus.js";
 export type { SolanaSmartWalletActions } from "../decorators/solanaSmartWalletActions.js";
 export { solanaSmartWalletActions } from "../decorators/solanaSmartWalletActions.js";
 
+// Errors.
+export { SolanaSignerError } from "../adapters/SolanaSignerError.js";
+
 // Adapters.
 export { fromKeypair } from "../adapters/fromKeypair.js";
 export type { SolanaKeypairSigner } from "../adapters/fromKeypair.js";

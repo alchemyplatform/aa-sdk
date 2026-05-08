@@ -122,15 +122,13 @@ export async function prepareCalls(
   });
 
   LOGGER.debug("prepareCalls:done");
-  const fullDecoded = decode(schema.response, rpcResp);
+  const decoded = decode(schema.response, rpcResp);
 
-  if (!isEvmResponse(fullDecoded)) {
+  if (!isEvmResponse(decoded)) {
     throw new BaseError(
-      `Unexpected Solana response from EVM prepareCalls: ${fullDecoded.type}`,
+      `Unexpected Solana response from EVM prepareCalls: ${decoded.type}`,
     );
   }
-
-  const decoded = fullDecoded;
 
   // Transform paymaster-permit modifiedRequest from RPC format to client format:
   // - `from` (RPC) → `account` (client)
