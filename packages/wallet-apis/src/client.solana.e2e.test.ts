@@ -12,7 +12,7 @@ const SYSTEM_PROGRAM = "11111111111111111111111111111111";
 function noopTransferCall(from: string) {
   return {
     programId: SYSTEM_PROGRAM,
-    data: "0x020000000000000000000000" as `0x${string}`,
+    data: "0x020000000000000000000000" as const,
     accounts: [
       { pubkey: from, isSigner: true, isWritable: true },
       { pubkey: from, isSigner: false, isWritable: true },
