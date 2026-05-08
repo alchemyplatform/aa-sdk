@@ -1,4 +1,4 @@
-import { Type } from "typebox";
+import { z } from "zod";
 import { encode, decode, methodSchema } from "./schema.js";
 import {
   wallet_prepareCalls,
@@ -89,15 +89,14 @@ describe("encode", () => {
 
 describe("decode", () => {
   it("decodes valid data", () => {
-    const schema = Type.Object({ value: Type.String() });
+    const schema = z.object({ value: z.string() });
     expect(decode(schema, { value: "hello" })).toEqual({ value: "hello" });
   });
 
   it("throws a readable error on invalid data", () => {
-    const schema = Type.Object({
-      // eslint-disable-next-line no-template-curly-in-string
-      id: Type.TemplateLiteral("0x${string}", {
-        errorMessage: "Must be a hex string",
+    const schema = z.object({
+      id: z.string({ error: "Must be a hex string" }).regex(/^0x/, {
+        error: "Must be a hex string",
       }),
     });
 
