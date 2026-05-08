@@ -29,7 +29,14 @@ export function fromKeypair(signer: SolanaKeypairSigner): SolanaSigner {
       const numSigs = transaction[0];
       const messageStart = 1 + numSigs * 64;
       const messageBytes = transaction.slice(messageStart);
-      const sig = await signer.signMessage(messageBytes);
+      let sig: Uint8Array;
+      try {
+        sig = await signer.signMessage(messageBytes);
+      } catch (e) {
+        throw new SolanaSignerError("Keypair signer failed to sign message", {
+          cause: e as Error,
+        });
+      }
       if (sig.length !== 64) {
         throw new SolanaSignerError(
           `Expected a 64-byte Ed25519 signature but received ${sig.length} bytes`,

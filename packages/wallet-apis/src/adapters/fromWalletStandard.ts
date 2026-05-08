@@ -74,7 +74,15 @@ export function fromWalletStandard(
   return {
     address: account.address,
     async signTransaction({ transaction }) {
-      const [output] = await feature.signTransaction({ account, transaction });
+      let output: { signedTransaction: Uint8Array } | undefined;
+      try {
+        [output] = await feature.signTransaction({ account, transaction });
+      } catch (e) {
+        throw new SolanaSignerError(
+          "Wallet standard wallet failed to sign transaction",
+          { cause: e as Error },
+        );
+      }
 
       if (!output) {
         throw new SolanaSignerError("Wallet returned no signed transaction.");

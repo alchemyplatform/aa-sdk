@@ -30,11 +30,25 @@ export function fromKitSigner(
   return {
     address: signer.address,
     async signTransaction({ transaction }) {
-      const { getTransactionCodec } = await import("@solana/kit");
-      const codec = getTransactionCodec();
-      const tx = codec.decode(transaction);
+      let tx: unknown;
+      try {
+        const { getTransactionCodec } = await import("@solana/kit");
+        const codec = getTransactionCodec();
+        tx = codec.decode(transaction);
+      } catch (e) {
+        throw new SolanaSignerError("Failed to decode transaction", {
+          cause: e as Error,
+        });
+      }
 
-      const [sigDict] = await signer.signTransactions([tx]);
+      let sigDict: Record<string, Uint8Array> | undefined;
+      try {
+        [sigDict] = await signer.signTransactions([tx]);
+      } catch (e) {
+        throw new SolanaSignerError("Kit signer failed to sign transaction", {
+          cause: e as Error,
+        });
+      }
       if (!sigDict) {
         throw new SolanaSignerError("TransactionPartialSigner returned no signatures");
       }
