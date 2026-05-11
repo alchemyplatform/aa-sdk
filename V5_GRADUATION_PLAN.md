@@ -59,22 +59,11 @@ git log --oneline origin/4.x.x -3     # Should show v4 commits (v4.88.2, etc.)
 
 ## Phase 4: v4 Maintenance Setup (on 4.x.x branch)
 
-### 4.1 - Update v4 publish dist-tag
-
-On `4.x.x` branch, edit `.github/workflows/publish-package.yml`:
-
-```diff
-- run: pnpm lerna publish --conventional-commits --no-private --yes --no-verify-access
-+ run: pnpm lerna publish --conventional-commits --no-private --yes --no-verify-access --dist-tag v4
-```
-
-This ensures v4 patches publish to the `v4` npm dist-tag instead of `latest`.
-
-### 4.2 - Add branch protection to 4.x.x
+### 4.1 - Add branch protection to 4.x.x
 
 Apply similar protection rules as main (required reviews, status checks).
 
-### 4.3 - Update Vercel SKIP_BUILD_FOR_BRANCH env var
+### 4.2 - Update Vercel SKIP_BUILD_FOR_BRANCH env var
 
 Change from `v5.x.x` to `4.x.x` (so Vercel skips builds for the legacy branch).
 
