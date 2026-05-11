@@ -35,21 +35,35 @@ export type MethodResponse<T extends RpcMethodSchema> = z.output<
   T["shape"]["ReturnType"]
 >;
 
+function isUnionIssue(
+  issue: z.core.$ZodIssue,
+): issue is z.core.$ZodIssueInvalidUnion {
+  return issue.code === "invalid_union";
+}
+
 function formatCodecError(error: z.ZodError): string {
   let issue: z.core.$ZodIssue | undefined = error.issues[0];
   if (!issue) return "Invalid params";
 
-  // For union errors, drill into the first branch for the most specific error.
-  while (
-    issue.code === "invalid_union" &&
-    (issue as z.core.$ZodIssueInvalidUnion).errors?.[0]?.[0]
-  ) {
-    issue = (issue as z.core.$ZodIssueInvalidUnion).errors[0][0];
+  // For union errors, drill into the branch with the fewest issues (closest match).
+  // Accumulate paths as we drill — each union level carries a partial path.
+  const pathPrefix: PropertyKey[] = [];
+  while (isUnionIssue(issue)) {
+    pathPrefix.push(...issue.path);
+    let best: z.core.$ZodIssue[] | undefined;
+    for (const branch of issue.errors) {
+      if (!best || branch.length < best.length) best = branch;
+    }
+    const next = best?.[0];
+    if (!next) break;
+    issue = next;
   }
 
-  const path = issue.path.length > 0 ? "/" + issue.path.join("/") : "(root)";
+  const fullPath = [...pathPrefix, ...issue.path];
+  const path =
+    fullPath.length > 0 ? "/" + fullPath.map(String).join("/") + ": " : "";
 
-  return `Invalid params: ${path}: ${issue.message}`;
+  return `Invalid params: ${path}${issue.message}`;
 }
 
 export function encode<const T extends z.ZodType>(
