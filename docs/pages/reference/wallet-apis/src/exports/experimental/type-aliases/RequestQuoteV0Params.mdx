@@ -12,13 +12,1141 @@ layout: reference
 </Warning>
 
 ```ts
-type RequestQuoteV0Params = Prettify<
-  WithCapabilities<
-    DistributiveOmit<BaseRequestQuoteV0Params, "from" | "chainId">
-  >
->;
+type RequestQuoteV0Params =
+  | {
+      fromToken: `0x${string}`;
+      toToken: `0x${string}`;
+      slippage?: bigint | undefined;
+      account?: AccountParam | undefined;
+      chainId?: number | undefined;
+      fromAmount: bigint;
+      minimumToAmount?: undefined;
+      toChainId?: undefined;
+      postCalls?:
+        | {
+            to: `0x${string}`;
+            data?: `0x${string}` | undefined;
+            value?: bigint | undefined;
+          }[]
+        | undefined;
+      returnRawCalls?: false | undefined;
+      capabilities?:
+        | (Omit<
+            {
+              permissions?:
+                | {
+                    context: `0x${string}`;
+                  }
+                | {
+                    sessionId: `0x${string}`;
+                    signature: `0x${string}`;
+                  }
+                | undefined;
+              paymasterService?:
+                | ((
+                    | {
+                        policyId: string;
+                      }
+                    | {
+                        policyIds: string[];
+                      }
+                  ) & {
+                    onlyEstimation?: boolean | undefined;
+                    erc20?:
+                      | {
+                          preOpSettings: {
+                            autoPermit: {
+                              below: bigint;
+                              amount: bigint;
+                              durationSeconds?: number | undefined;
+                            };
+                          };
+                          tokenAddress: `0x${string}`;
+                          maxTokenAmount?: bigint | undefined;
+                        }
+                      | {
+                          preOpSettings: {
+                            permitDetails: {
+                              deadline: number;
+                              value: bigint;
+                            };
+                          };
+                          tokenAddress: `0x${string}`;
+                          maxTokenAmount?: bigint | undefined;
+                        }
+                      | {
+                          postOpSettings: {
+                            autoApprove?:
+                              | true
+                              | {
+                                  below: bigint;
+                                  amount: bigint;
+                                }
+                              | undefined;
+                          };
+                          tokenAddress: `0x${string}`;
+                          maxTokenAmount?: bigint | undefined;
+                        }
+                      | {
+                          tokenAddress: `0x${string}`;
+                          maxTokenAmount?: bigint | undefined;
+                        }
+                      | undefined;
+                    webhookData?: string | undefined;
+                  })
+                | undefined;
+              gasParamsOverride?:
+                | {
+                    preVerificationGas?:
+                      | bigint
+                      | {
+                          multiplier: number;
+                        }
+                      | undefined;
+                    verificationGasLimit?:
+                      | bigint
+                      | {
+                          multiplier: number;
+                        }
+                      | undefined;
+                    callGasLimit?:
+                      | bigint
+                      | {
+                          multiplier: number;
+                        }
+                      | undefined;
+                    paymasterVerificationGasLimit?:
+                      | bigint
+                      | {
+                          multiplier: number;
+                        }
+                      | undefined;
+                    paymasterPostOpGasLimit?:
+                      | bigint
+                      | {
+                          multiplier: number;
+                        }
+                      | undefined;
+                    maxFeePerGas?:
+                      | bigint
+                      | {
+                          multiplier: number;
+                        }
+                      | undefined;
+                    maxPriorityFeePerGas?:
+                      | bigint
+                      | {
+                          multiplier: number;
+                        }
+                      | undefined;
+                  }
+                | undefined;
+              eip7702Auth?:
+                | true
+                | {
+                    delegation:
+                      | "ModularAccountV2"
+                      | "0x69007702764179f14F51cdce752f4f775d74E139"
+                      | "0x0000000000000000000000000000000000000000";
+                    account?: `0x${string}` | undefined;
+                  }
+                | undefined;
+              nonceOverride?:
+                | {
+                    nonceKey: bigint | `0x${string}`;
+                  }
+                | undefined;
+              stateOverride?:
+                | Record<
+                    `0x${string}`,
+                    | {
+                        state: Record<`0x${string}`, `0x${string}`>;
+                        balance?: bigint | undefined;
+                        nonce?: number | undefined;
+                        code?: `0x${string}` | undefined;
+                      }
+                    | {
+                        stateDiff: Record<`0x${string}`, `0x${string}`>;
+                        balance?: bigint | undefined;
+                        nonce?: number | undefined;
+                        code?: `0x${string}` | undefined;
+                      }
+                    | {
+                        balance?: bigint | undefined;
+                        nonce?: number | undefined;
+                        code?: `0x${string}` | undefined;
+                      }
+                  >
+                | undefined;
+              experimental_dataSuffix?:
+                | {
+                    value: `0x${string}`;
+                  }
+                | undefined;
+            },
+            "paymasterService"
+          > & {
+            paymaster?:
+              | ({
+                  policyId: string;
+                } & {
+                  onlyEstimation?: boolean | undefined;
+                  erc20?:
+                    | {
+                        preOpSettings: {
+                          autoPermit: {
+                            below: bigint;
+                            amount: bigint;
+                            durationSeconds?: number | undefined;
+                          };
+                        };
+                        tokenAddress: `0x${string}`;
+                        maxTokenAmount?: bigint | undefined;
+                      }
+                    | {
+                        preOpSettings: {
+                          permitDetails: {
+                            deadline: number;
+                            value: bigint;
+                          };
+                        };
+                        tokenAddress: `0x${string}`;
+                        maxTokenAmount?: bigint | undefined;
+                      }
+                    | {
+                        postOpSettings: {
+                          autoApprove?:
+                            | true
+                            | {
+                                below: bigint;
+                                amount: bigint;
+                              }
+                            | undefined;
+                        };
+                        tokenAddress: `0x${string}`;
+                        maxTokenAmount?: bigint | undefined;
+                      }
+                    | {
+                        tokenAddress: `0x${string}`;
+                        maxTokenAmount?: bigint | undefined;
+                      }
+                    | undefined;
+                  webhookData?: string | undefined;
+                })
+              | ({
+                  policyIds: string[];
+                } & {
+                  onlyEstimation?: boolean | undefined;
+                  erc20?:
+                    | {
+                        preOpSettings: {
+                          autoPermit: {
+                            below: bigint;
+                            amount: bigint;
+                            durationSeconds?: number | undefined;
+                          };
+                        };
+                        tokenAddress: `0x${string}`;
+                        maxTokenAmount?: bigint | undefined;
+                      }
+                    | {
+                        preOpSettings: {
+                          permitDetails: {
+                            deadline: number;
+                            value: bigint;
+                          };
+                        };
+                        tokenAddress: `0x${string}`;
+                        maxTokenAmount?: bigint | undefined;
+                      }
+                    | {
+                        postOpSettings: {
+                          autoApprove?:
+                            | true
+                            | {
+                                below: bigint;
+                                amount: bigint;
+                              }
+                            | undefined;
+                        };
+                        tokenAddress: `0x${string}`;
+                        maxTokenAmount?: bigint | undefined;
+                      }
+                    | {
+                        tokenAddress: `0x${string}`;
+                        maxTokenAmount?: bigint | undefined;
+                      }
+                    | undefined;
+                  webhookData?: string | undefined;
+                })
+              | undefined;
+          })
+        | undefined;
+    }
+  | {
+      fromToken: `0x${string}`;
+      toToken: `0x${string}`;
+      slippage?: bigint | undefined;
+      account?: AccountParam | undefined;
+      chainId?: number | undefined;
+      fromAmount: bigint;
+      minimumToAmount?: undefined;
+      toChainId?: undefined;
+      postCalls?:
+        | {
+            to: `0x${string}`;
+            data?: `0x${string}` | undefined;
+            value?: bigint | undefined;
+          }[]
+        | undefined;
+      returnRawCalls: true;
+      capabilities?: undefined;
+    }
+  | {
+      fromToken: `0x${string}`;
+      toToken: `0x${string}`;
+      slippage?: bigint | undefined;
+      account?: AccountParam | undefined;
+      chainId?: number | undefined;
+      fromAmount: bigint;
+      minimumToAmount?: undefined;
+      toChainId: number;
+      postCalls?: undefined;
+      returnRawCalls?: false | undefined;
+      capabilities?:
+        | (Omit<
+            {
+              permissions?:
+                | {
+                    context: `0x${string}`;
+                  }
+                | {
+                    sessionId: `0x${string}`;
+                    signature: `0x${string}`;
+                  }
+                | undefined;
+              paymasterService?:
+                | ((
+                    | {
+                        policyId: string;
+                      }
+                    | {
+                        policyIds: string[];
+                      }
+                  ) & {
+                    onlyEstimation?: boolean | undefined;
+                    erc20?:
+                      | {
+                          preOpSettings: {
+                            autoPermit: {
+                              below: bigint;
+                              amount: bigint;
+                              durationSeconds?: number | undefined;
+                            };
+                          };
+                          tokenAddress: `0x${string}`;
+                          maxTokenAmount?: bigint | undefined;
+                        }
+                      | {
+                          preOpSettings: {
+                            permitDetails: {
+                              deadline: number;
+                              value: bigint;
+                            };
+                          };
+                          tokenAddress: `0x${string}`;
+                          maxTokenAmount?: bigint | undefined;
+                        }
+                      | {
+                          postOpSettings: {
+                            autoApprove?:
+                              | true
+                              | {
+                                  below: bigint;
+                                  amount: bigint;
+                                }
+                              | undefined;
+                          };
+                          tokenAddress: `0x${string}`;
+                          maxTokenAmount?: bigint | undefined;
+                        }
+                      | {
+                          tokenAddress: `0x${string}`;
+                          maxTokenAmount?: bigint | undefined;
+                        }
+                      | undefined;
+                    webhookData?: string | undefined;
+                  })
+                | undefined;
+              gasParamsOverride?:
+                | {
+                    preVerificationGas?:
+                      | bigint
+                      | {
+                          multiplier: number;
+                        }
+                      | undefined;
+                    verificationGasLimit?:
+                      | bigint
+                      | {
+                          multiplier: number;
+                        }
+                      | undefined;
+                    callGasLimit?:
+                      | bigint
+                      | {
+                          multiplier: number;
+                        }
+                      | undefined;
+                    paymasterVerificationGasLimit?:
+                      | bigint
+                      | {
+                          multiplier: number;
+                        }
+                      | undefined;
+                    paymasterPostOpGasLimit?:
+                      | bigint
+                      | {
+                          multiplier: number;
+                        }
+                      | undefined;
+                    maxFeePerGas?:
+                      | bigint
+                      | {
+                          multiplier: number;
+                        }
+                      | undefined;
+                    maxPriorityFeePerGas?:
+                      | bigint
+                      | {
+                          multiplier: number;
+                        }
+                      | undefined;
+                  }
+                | undefined;
+              eip7702Auth?:
+                | true
+                | {
+                    delegation:
+                      | "ModularAccountV2"
+                      | "0x69007702764179f14F51cdce752f4f775d74E139"
+                      | "0x0000000000000000000000000000000000000000";
+                    account?: `0x${string}` | undefined;
+                  }
+                | undefined;
+              nonceOverride?:
+                | {
+                    nonceKey: bigint | `0x${string}`;
+                  }
+                | undefined;
+              stateOverride?:
+                | Record<
+                    `0x${string}`,
+                    | {
+                        state: Record<`0x${string}`, `0x${string}`>;
+                        balance?: bigint | undefined;
+                        nonce?: number | undefined;
+                        code?: `0x${string}` | undefined;
+                      }
+                    | {
+                        stateDiff: Record<`0x${string}`, `0x${string}`>;
+                        balance?: bigint | undefined;
+                        nonce?: number | undefined;
+                        code?: `0x${string}` | undefined;
+                      }
+                    | {
+                        balance?: bigint | undefined;
+                        nonce?: number | undefined;
+                        code?: `0x${string}` | undefined;
+                      }
+                  >
+                | undefined;
+              experimental_dataSuffix?:
+                | {
+                    value: `0x${string}`;
+                  }
+                | undefined;
+            },
+            "paymasterService"
+          > & {
+            paymaster?:
+              | ({
+                  policyId: string;
+                } & {
+                  onlyEstimation?: boolean | undefined;
+                  erc20?:
+                    | {
+                        preOpSettings: {
+                          autoPermit: {
+                            below: bigint;
+                            amount: bigint;
+                            durationSeconds?: number | undefined;
+                          };
+                        };
+                        tokenAddress: `0x${string}`;
+                        maxTokenAmount?: bigint | undefined;
+                      }
+                    | {
+                        preOpSettings: {
+                          permitDetails: {
+                            deadline: number;
+                            value: bigint;
+                          };
+                        };
+                        tokenAddress: `0x${string}`;
+                        maxTokenAmount?: bigint | undefined;
+                      }
+                    | {
+                        postOpSettings: {
+                          autoApprove?:
+                            | true
+                            | {
+                                below: bigint;
+                                amount: bigint;
+                              }
+                            | undefined;
+                        };
+                        tokenAddress: `0x${string}`;
+                        maxTokenAmount?: bigint | undefined;
+                      }
+                    | {
+                        tokenAddress: `0x${string}`;
+                        maxTokenAmount?: bigint | undefined;
+                      }
+                    | undefined;
+                  webhookData?: string | undefined;
+                })
+              | ({
+                  policyIds: string[];
+                } & {
+                  onlyEstimation?: boolean | undefined;
+                  erc20?:
+                    | {
+                        preOpSettings: {
+                          autoPermit: {
+                            below: bigint;
+                            amount: bigint;
+                            durationSeconds?: number | undefined;
+                          };
+                        };
+                        tokenAddress: `0x${string}`;
+                        maxTokenAmount?: bigint | undefined;
+                      }
+                    | {
+                        preOpSettings: {
+                          permitDetails: {
+                            deadline: number;
+                            value: bigint;
+                          };
+                        };
+                        tokenAddress: `0x${string}`;
+                        maxTokenAmount?: bigint | undefined;
+                      }
+                    | {
+                        postOpSettings: {
+                          autoApprove?:
+                            | true
+                            | {
+                                below: bigint;
+                                amount: bigint;
+                              }
+                            | undefined;
+                        };
+                        tokenAddress: `0x${string}`;
+                        maxTokenAmount?: bigint | undefined;
+                      }
+                    | {
+                        tokenAddress: `0x${string}`;
+                        maxTokenAmount?: bigint | undefined;
+                      }
+                    | undefined;
+                  webhookData?: string | undefined;
+                })
+              | undefined;
+          })
+        | undefined;
+    }
+  | {
+      fromToken: `0x${string}`;
+      toToken: `0x${string}`;
+      slippage?: bigint | undefined;
+      account?: AccountParam | undefined;
+      chainId?: number | undefined;
+      fromAmount: bigint;
+      minimumToAmount?: undefined;
+      toChainId: number;
+      postCalls?: undefined;
+      returnRawCalls: true;
+      capabilities?: undefined;
+    }
+  | {
+      fromToken: `0x${string}`;
+      toToken: `0x${string}`;
+      slippage?: bigint | undefined;
+      account?: AccountParam | undefined;
+      chainId?: number | undefined;
+      fromAmount?: undefined;
+      minimumToAmount: bigint;
+      toChainId?: undefined;
+      postCalls?:
+        | {
+            to: `0x${string}`;
+            data?: `0x${string}` | undefined;
+            value?: bigint | undefined;
+          }[]
+        | undefined;
+      returnRawCalls?: false | undefined;
+      capabilities?:
+        | (Omit<
+            {
+              permissions?:
+                | {
+                    context: `0x${string}`;
+                  }
+                | {
+                    sessionId: `0x${string}`;
+                    signature: `0x${string}`;
+                  }
+                | undefined;
+              paymasterService?:
+                | ((
+                    | {
+                        policyId: string;
+                      }
+                    | {
+                        policyIds: string[];
+                      }
+                  ) & {
+                    onlyEstimation?: boolean | undefined;
+                    erc20?:
+                      | {
+                          preOpSettings: {
+                            autoPermit: {
+                              below: bigint;
+                              amount: bigint;
+                              durationSeconds?: number | undefined;
+                            };
+                          };
+                          tokenAddress: `0x${string}`;
+                          maxTokenAmount?: bigint | undefined;
+                        }
+                      | {
+                          preOpSettings: {
+                            permitDetails: {
+                              deadline: number;
+                              value: bigint;
+                            };
+                          };
+                          tokenAddress: `0x${string}`;
+                          maxTokenAmount?: bigint | undefined;
+                        }
+                      | {
+                          postOpSettings: {
+                            autoApprove?:
+                              | true
+                              | {
+                                  below: bigint;
+                                  amount: bigint;
+                                }
+                              | undefined;
+                          };
+                          tokenAddress: `0x${string}`;
+                          maxTokenAmount?: bigint | undefined;
+                        }
+                      | {
+                          tokenAddress: `0x${string}`;
+                          maxTokenAmount?: bigint | undefined;
+                        }
+                      | undefined;
+                    webhookData?: string | undefined;
+                  })
+                | undefined;
+              gasParamsOverride?:
+                | {
+                    preVerificationGas?:
+                      | bigint
+                      | {
+                          multiplier: number;
+                        }
+                      | undefined;
+                    verificationGasLimit?:
+                      | bigint
+                      | {
+                          multiplier: number;
+                        }
+                      | undefined;
+                    callGasLimit?:
+                      | bigint
+                      | {
+                          multiplier: number;
+                        }
+                      | undefined;
+                    paymasterVerificationGasLimit?:
+                      | bigint
+                      | {
+                          multiplier: number;
+                        }
+                      | undefined;
+                    paymasterPostOpGasLimit?:
+                      | bigint
+                      | {
+                          multiplier: number;
+                        }
+                      | undefined;
+                    maxFeePerGas?:
+                      | bigint
+                      | {
+                          multiplier: number;
+                        }
+                      | undefined;
+                    maxPriorityFeePerGas?:
+                      | bigint
+                      | {
+                          multiplier: number;
+                        }
+                      | undefined;
+                  }
+                | undefined;
+              eip7702Auth?:
+                | true
+                | {
+                    delegation:
+                      | "ModularAccountV2"
+                      | "0x69007702764179f14F51cdce752f4f775d74E139"
+                      | "0x0000000000000000000000000000000000000000";
+                    account?: `0x${string}` | undefined;
+                  }
+                | undefined;
+              nonceOverride?:
+                | {
+                    nonceKey: bigint | `0x${string}`;
+                  }
+                | undefined;
+              stateOverride?:
+                | Record<
+                    `0x${string}`,
+                    | {
+                        state: Record<`0x${string}`, `0x${string}`>;
+                        balance?: bigint | undefined;
+                        nonce?: number | undefined;
+                        code?: `0x${string}` | undefined;
+                      }
+                    | {
+                        stateDiff: Record<`0x${string}`, `0x${string}`>;
+                        balance?: bigint | undefined;
+                        nonce?: number | undefined;
+                        code?: `0x${string}` | undefined;
+                      }
+                    | {
+                        balance?: bigint | undefined;
+                        nonce?: number | undefined;
+                        code?: `0x${string}` | undefined;
+                      }
+                  >
+                | undefined;
+              experimental_dataSuffix?:
+                | {
+                    value: `0x${string}`;
+                  }
+                | undefined;
+            },
+            "paymasterService"
+          > & {
+            paymaster?:
+              | ({
+                  policyId: string;
+                } & {
+                  onlyEstimation?: boolean | undefined;
+                  erc20?:
+                    | {
+                        preOpSettings: {
+                          autoPermit: {
+                            below: bigint;
+                            amount: bigint;
+                            durationSeconds?: number | undefined;
+                          };
+                        };
+                        tokenAddress: `0x${string}`;
+                        maxTokenAmount?: bigint | undefined;
+                      }
+                    | {
+                        preOpSettings: {
+                          permitDetails: {
+                            deadline: number;
+                            value: bigint;
+                          };
+                        };
+                        tokenAddress: `0x${string}`;
+                        maxTokenAmount?: bigint | undefined;
+                      }
+                    | {
+                        postOpSettings: {
+                          autoApprove?:
+                            | true
+                            | {
+                                below: bigint;
+                                amount: bigint;
+                              }
+                            | undefined;
+                        };
+                        tokenAddress: `0x${string}`;
+                        maxTokenAmount?: bigint | undefined;
+                      }
+                    | {
+                        tokenAddress: `0x${string}`;
+                        maxTokenAmount?: bigint | undefined;
+                      }
+                    | undefined;
+                  webhookData?: string | undefined;
+                })
+              | ({
+                  policyIds: string[];
+                } & {
+                  onlyEstimation?: boolean | undefined;
+                  erc20?:
+                    | {
+                        preOpSettings: {
+                          autoPermit: {
+                            below: bigint;
+                            amount: bigint;
+                            durationSeconds?: number | undefined;
+                          };
+                        };
+                        tokenAddress: `0x${string}`;
+                        maxTokenAmount?: bigint | undefined;
+                      }
+                    | {
+                        preOpSettings: {
+                          permitDetails: {
+                            deadline: number;
+                            value: bigint;
+                          };
+                        };
+                        tokenAddress: `0x${string}`;
+                        maxTokenAmount?: bigint | undefined;
+                      }
+                    | {
+                        postOpSettings: {
+                          autoApprove?:
+                            | true
+                            | {
+                                below: bigint;
+                                amount: bigint;
+                              }
+                            | undefined;
+                        };
+                        tokenAddress: `0x${string}`;
+                        maxTokenAmount?: bigint | undefined;
+                      }
+                    | {
+                        tokenAddress: `0x${string}`;
+                        maxTokenAmount?: bigint | undefined;
+                      }
+                    | undefined;
+                  webhookData?: string | undefined;
+                })
+              | undefined;
+          })
+        | undefined;
+    }
+  | {
+      fromToken: `0x${string}`;
+      toToken: `0x${string}`;
+      slippage?: bigint | undefined;
+      account?: AccountParam | undefined;
+      chainId?: number | undefined;
+      fromAmount?: undefined;
+      minimumToAmount: bigint;
+      toChainId?: undefined;
+      postCalls?:
+        | {
+            to: `0x${string}`;
+            data?: `0x${string}` | undefined;
+            value?: bigint | undefined;
+          }[]
+        | undefined;
+      returnRawCalls: true;
+      capabilities?: undefined;
+    }
+  | {
+      fromToken: `0x${string}`;
+      toToken: `0x${string}`;
+      slippage?: bigint | undefined;
+      account?: AccountParam | undefined;
+      chainId?: number | undefined;
+      fromAmount?: undefined;
+      minimumToAmount: bigint;
+      toChainId: number;
+      postCalls?: undefined;
+      returnRawCalls?: false | undefined;
+      capabilities?:
+        | (Omit<
+            {
+              permissions?:
+                | {
+                    context: `0x${string}`;
+                  }
+                | {
+                    sessionId: `0x${string}`;
+                    signature: `0x${string}`;
+                  }
+                | undefined;
+              paymasterService?:
+                | ((
+                    | {
+                        policyId: string;
+                      }
+                    | {
+                        policyIds: string[];
+                      }
+                  ) & {
+                    onlyEstimation?: boolean | undefined;
+                    erc20?:
+                      | {
+                          preOpSettings: {
+                            autoPermit: {
+                              below: bigint;
+                              amount: bigint;
+                              durationSeconds?: number | undefined;
+                            };
+                          };
+                          tokenAddress: `0x${string}`;
+                          maxTokenAmount?: bigint | undefined;
+                        }
+                      | {
+                          preOpSettings: {
+                            permitDetails: {
+                              deadline: number;
+                              value: bigint;
+                            };
+                          };
+                          tokenAddress: `0x${string}`;
+                          maxTokenAmount?: bigint | undefined;
+                        }
+                      | {
+                          postOpSettings: {
+                            autoApprove?:
+                              | true
+                              | {
+                                  below: bigint;
+                                  amount: bigint;
+                                }
+                              | undefined;
+                          };
+                          tokenAddress: `0x${string}`;
+                          maxTokenAmount?: bigint | undefined;
+                        }
+                      | {
+                          tokenAddress: `0x${string}`;
+                          maxTokenAmount?: bigint | undefined;
+                        }
+                      | undefined;
+                    webhookData?: string | undefined;
+                  })
+                | undefined;
+              gasParamsOverride?:
+                | {
+                    preVerificationGas?:
+                      | bigint
+                      | {
+                          multiplier: number;
+                        }
+                      | undefined;
+                    verificationGasLimit?:
+                      | bigint
+                      | {
+                          multiplier: number;
+                        }
+                      | undefined;
+                    callGasLimit?:
+                      | bigint
+                      | {
+                          multiplier: number;
+                        }
+                      | undefined;
+                    paymasterVerificationGasLimit?:
+                      | bigint
+                      | {
+                          multiplier: number;
+                        }
+                      | undefined;
+                    paymasterPostOpGasLimit?:
+                      | bigint
+                      | {
+                          multiplier: number;
+                        }
+                      | undefined;
+                    maxFeePerGas?:
+                      | bigint
+                      | {
+                          multiplier: number;
+                        }
+                      | undefined;
+                    maxPriorityFeePerGas?:
+                      | bigint
+                      | {
+                          multiplier: number;
+                        }
+                      | undefined;
+                  }
+                | undefined;
+              eip7702Auth?:
+                | true
+                | {
+                    delegation:
+                      | "ModularAccountV2"
+                      | "0x69007702764179f14F51cdce752f4f775d74E139"
+                      | "0x0000000000000000000000000000000000000000";
+                    account?: `0x${string}` | undefined;
+                  }
+                | undefined;
+              nonceOverride?:
+                | {
+                    nonceKey: bigint | `0x${string}`;
+                  }
+                | undefined;
+              stateOverride?:
+                | Record<
+                    `0x${string}`,
+                    | {
+                        state: Record<`0x${string}`, `0x${string}`>;
+                        balance?: bigint | undefined;
+                        nonce?: number | undefined;
+                        code?: `0x${string}` | undefined;
+                      }
+                    | {
+                        stateDiff: Record<`0x${string}`, `0x${string}`>;
+                        balance?: bigint | undefined;
+                        nonce?: number | undefined;
+                        code?: `0x${string}` | undefined;
+                      }
+                    | {
+                        balance?: bigint | undefined;
+                        nonce?: number | undefined;
+                        code?: `0x${string}` | undefined;
+                      }
+                  >
+                | undefined;
+              experimental_dataSuffix?:
+                | {
+                    value: `0x${string}`;
+                  }
+                | undefined;
+            },
+            "paymasterService"
+          > & {
+            paymaster?:
+              | ({
+                  policyId: string;
+                } & {
+                  onlyEstimation?: boolean | undefined;
+                  erc20?:
+                    | {
+                        preOpSettings: {
+                          autoPermit: {
+                            below: bigint;
+                            amount: bigint;
+                            durationSeconds?: number | undefined;
+                          };
+                        };
+                        tokenAddress: `0x${string}`;
+                        maxTokenAmount?: bigint | undefined;
+                      }
+                    | {
+                        preOpSettings: {
+                          permitDetails: {
+                            deadline: number;
+                            value: bigint;
+                          };
+                        };
+                        tokenAddress: `0x${string}`;
+                        maxTokenAmount?: bigint | undefined;
+                      }
+                    | {
+                        postOpSettings: {
+                          autoApprove?:
+                            | true
+                            | {
+                                below: bigint;
+                                amount: bigint;
+                              }
+                            | undefined;
+                        };
+                        tokenAddress: `0x${string}`;
+                        maxTokenAmount?: bigint | undefined;
+                      }
+                    | {
+                        tokenAddress: `0x${string}`;
+                        maxTokenAmount?: bigint | undefined;
+                      }
+                    | undefined;
+                  webhookData?: string | undefined;
+                })
+              | ({
+                  policyIds: string[];
+                } & {
+                  onlyEstimation?: boolean | undefined;
+                  erc20?:
+                    | {
+                        preOpSettings: {
+                          autoPermit: {
+                            below: bigint;
+                            amount: bigint;
+                            durationSeconds?: number | undefined;
+                          };
+                        };
+                        tokenAddress: `0x${string}`;
+                        maxTokenAmount?: bigint | undefined;
+                      }
+                    | {
+                        preOpSettings: {
+                          permitDetails: {
+                            deadline: number;
+                            value: bigint;
+                          };
+                        };
+                        tokenAddress: `0x${string}`;
+                        maxTokenAmount?: bigint | undefined;
+                      }
+                    | {
+                        postOpSettings: {
+                          autoApprove?:
+                            | true
+                            | {
+                                below: bigint;
+                                amount: bigint;
+                              }
+                            | undefined;
+                        };
+                        tokenAddress: `0x${string}`;
+                        maxTokenAmount?: bigint | undefined;
+                      }
+                    | {
+                        tokenAddress: `0x${string}`;
+                        maxTokenAmount?: bigint | undefined;
+                      }
+                    | undefined;
+                  webhookData?: string | undefined;
+                })
+              | undefined;
+          })
+        | undefined;
+    }
+  | {
+      fromToken: `0x${string}`;
+      toToken: `0x${string}`;
+      slippage?: bigint | undefined;
+      account?: AccountParam | undefined;
+      chainId?: number | undefined;
+      fromAmount?: undefined;
+      minimumToAmount: bigint;
+      toChainId: number;
+      postCalls?: undefined;
+      returnRawCalls: true;
+      capabilities?: undefined;
+    };
 ```
 
-Defined in: [packages/wallet-apis/src/experimental/actions/requestQuoteV0.ts:27](https://github.com/alchemyplatform/aa-sdk/blob/v5.x.x/packages/wallet-apis/src/experimental/actions/requestQuoteV0.ts#L27)
+Defined in: [packages/wallet-apis/src/experimental/actions/requestQuoteV0.ts:39](https://github.com/alchemyplatform/aa-sdk/blob/v5.x.x/packages/wallet-apis/src/experimental/actions/requestQuoteV0.ts#L39)
 
 Parameters accepted by the experimental `requestQuoteV0` action.

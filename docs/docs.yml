@@ -439,14 +439,20 @@ navigation:
                         path: wallets/pages/reference/wallet-apis/src/exports/functions/undelegateAccount.mdx
                       - page: requestQuoteV0 (experimental)
                         path: wallets/pages/reference/wallet-apis/src/exports/experimental/functions/requestQuoteV0.mdx
+                  - section: Interfaces
+                    contents:
+                      - page: SolanaSigner
+                        path: wallets/pages/reference/wallet-apis/src/exports/interfaces/SolanaSigner.mdx
                   - section: Type Aliases
                     contents:
                       - page: AlchemyWalletTransport
                         path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/AlchemyWalletTransport.mdx
-                      - page: BaseWalletClient
-                        path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/BaseWalletClient.mdx
+                      - page: CreateEvmSmartWalletClientParams
+                        path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/CreateEvmSmartWalletClientParams.mdx
                       - page: CreateSmartWalletClientParams
                         path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/CreateSmartWalletClientParams.mdx
+                      - page: CreateSolanaSmartWalletClientParams
+                        path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/CreateSolanaSmartWalletClientParams.mdx
                       - page: FormatSignParams
                         path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/FormatSignParams.mdx
                       - page: FormatSignResult
@@ -499,12 +505,12 @@ navigation:
                         path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SignTypedDataParams.mdx
                       - page: SignTypedDataResult
                         path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SignTypedDataResult.mdx
-                      - page: SignerClient
-                        path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SignerClient.mdx
                       - page: SmartWalletActions
                         path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SmartWalletActions.mdx
                       - page: SmartWalletClient
                         path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SmartWalletClient.mdx
+                      - page: SolanaSmartWalletClient
+                        path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SolanaSmartWalletClient.mdx
                       - page: UndelegateAccountParams
                         path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/UndelegateAccountParams.mdx
                       - page: UndelegateAccountResult

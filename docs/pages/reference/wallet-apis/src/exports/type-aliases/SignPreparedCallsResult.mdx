@@ -10,40 +10,143 @@ layout: reference
 ```ts
 type SignPreparedCallsResult =
   | {
-      data: Signed<
-        Extract<
-          PrepareCallsResult,
-          {
-            type: "array";
-          }
-        >["data"][number]
-      >[];
       type: "array";
+      data: (
+        | {
+            type: "user-operation-v060";
+            data: {
+              sender: `0x${string}`;
+              nonce: bigint;
+              initCode: `0x${string}`;
+              callData: `0x${string}`;
+              callGasLimit: bigint;
+              verificationGasLimit: bigint;
+              preVerificationGas: bigint;
+              maxFeePerGas: bigint;
+              maxPriorityFeePerGas: bigint;
+              paymasterAndData: `0x${string}`;
+            };
+            chainId: number;
+            signature: SignSignatureRequestResult;
+          }
+        | {
+            type: "user-operation-v070";
+            data: {
+              sender: `0x${string}`;
+              nonce: bigint;
+              callData: `0x${string}`;
+              callGasLimit: bigint;
+              verificationGasLimit: bigint;
+              preVerificationGas: bigint;
+              maxFeePerGas: bigint;
+              maxPriorityFeePerGas: bigint;
+              factory?: `0x${string}` | undefined;
+              factoryData?: `0x${string}` | undefined;
+              paymaster?: `0x${string}` | undefined;
+              paymasterData?: `0x${string}` | undefined;
+              paymasterVerificationGasLimit?: bigint | undefined;
+              paymasterPostOpGasLimit?: bigint | undefined;
+            };
+            chainId: number;
+            signature: SignSignatureRequestResult;
+          }
+        | {
+            type: "authorization";
+            data: {
+              address: `0x${string}`;
+              nonce: number;
+            };
+            chainId: number;
+            signature: SignSignatureRequestResult;
+          }
+      )[];
     }
-  | Signed<
-      Extract<
-        PrepareCallsResult,
-        {
-          type: "user-operation-v060";
-        }
-      >
-    >
-  | Signed<
-      Extract<
-        PrepareCallsResult,
-        {
-          type: "user-operation-v070";
-        }
-      >
-    >
-  | Signed<
-      Extract<
-        PrepareCallsResult,
-        {
-          type: "authorization";
-        }
-      >
-    >;
+  | {
+      type: "user-operation-v060";
+      data: {
+        sender: `0x${string}`;
+        nonce: bigint;
+        initCode: `0x${string}`;
+        callData: `0x${string}`;
+        callGasLimit: bigint;
+        verificationGasLimit: bigint;
+        preVerificationGas: bigint;
+        maxFeePerGas: bigint;
+        maxPriorityFeePerGas: bigint;
+        paymasterAndData: `0x${string}`;
+      };
+      chainId: number;
+      details?:
+        | {
+            type: "user-operation";
+            data: {
+              hash: `0x${string}`;
+              calls: {
+                to: `0x${string}`;
+                data?: `0x${string}` | undefined;
+                value?: bigint | undefined;
+              }[];
+            };
+          }
+        | undefined;
+      signature: SignSignatureRequestResult;
+    }
+  | {
+      type: "user-operation-v070";
+      data: {
+        sender: `0x${string}`;
+        nonce: bigint;
+        callData: `0x${string}`;
+        callGasLimit: bigint;
+        verificationGasLimit: bigint;
+        preVerificationGas: bigint;
+        maxFeePerGas: bigint;
+        maxPriorityFeePerGas: bigint;
+        factory?: `0x${string}` | undefined;
+        factoryData?: `0x${string}` | undefined;
+        paymaster?: `0x${string}` | undefined;
+        paymasterData?: `0x${string}` | undefined;
+        paymasterVerificationGasLimit?: bigint | undefined;
+        paymasterPostOpGasLimit?: bigint | undefined;
+      };
+      chainId: number;
+      details?:
+        | {
+            type: "user-operation";
+            data: {
+              hash: `0x${string}`;
+              calls: {
+                to: `0x${string}`;
+                data?: `0x${string}` | undefined;
+                value?: bigint | undefined;
+              }[];
+            };
+          }
+        | undefined;
+      signature: SignSignatureRequestResult;
+    }
+  | {
+      type: "authorization";
+      data: {
+        address: `0x${string}`;
+        nonce: number;
+      };
+      chainId: number;
+      details?:
+        | {
+            type: "user-operation";
+            data: {
+              hash: `0x${string}`;
+              calls: {
+                to: `0x${string}`;
+                data?: `0x${string}` | undefined;
+                value?: bigint | undefined;
+              }[];
+            };
+          }
+        | undefined;
+      signature: SignSignatureRequestResult;
+    };
 ```
 
 Defined in: [packages/wallet-apis/src/actions/signPreparedCalls.ts:22](https://github.com/alchemyplatform/aa-sdk/blob/v5.x.x/packages/wallet-apis/src/actions/signPreparedCalls.ts#L22)
