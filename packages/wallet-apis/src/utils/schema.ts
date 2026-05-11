@@ -61,9 +61,7 @@ function formatCodecError(error: z.ZodError): string {
 
   const fullPath = [...pathPrefix, ...issue.path];
   const path =
-    fullPath.length > 0
-      ? "/" + fullPath.map(String).join("/") + ": "
-      : "";
+    fullPath.length > 0 ? "/" + fullPath.map(String).join("/") + ": " : "";
 
   return `Invalid params: ${path}${issue.message}`;
 }
