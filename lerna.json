@@ -12,7 +12,7 @@
     "version": {
       "message": "chore(release): publish %s [skip ci]",
       "forcePublish": true,
-      "conventionalCommits": false
+      "conventionalCommits": true
     },
     "publish": {
       "distTag": "latest",

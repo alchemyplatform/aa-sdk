@@ -87,21 +87,21 @@ jobs:
           echo ""
           CURRENT_VERSION=$(node -p "require('./lerna.json').version")
           echo "Current version: $CURRENT_VERSION"
-          NEXT_VERSION=$(npx semver $CURRENT_VERSION -i patch)
-          echo "Next version:    $NEXT_VERSION"
+          echo "(actual bump determined by conventional commits: feat -> minor, fix -> patch, BREAKING -> major)"
           echo ""
           echo "Packages that would be published:"
           npx lerna ls --long
           echo ""
           echo "=== To actually publish, re-run with 'publish' checkbox checked ==="
 
-      # Auto-increment patch version
+      # Bump version using conventional commits
       - name: Increment Version
         if: ${{ inputs.publish }}
         shell: bash
         run: |
-          echo "Auto-incrementing patch version..."
-          npx lerna version patch \
+          echo "Incrementing version via conventional commits..."
+          npx lerna version \
+            --conventional-commits \
             --no-push \
             --no-git-tag-version \
             --yes \
