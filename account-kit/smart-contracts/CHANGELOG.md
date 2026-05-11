@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.88.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.88.1...v4.88.2) (2026-05-06)
+
+### Bug Fixes
+
+- disallow more permission builder selectors ([#2485](https://github.com/alchemyplatform/aa-sdk/issues/2485)) ([5903ae9](https://github.com/alchemyplatform/aa-sdk/commit/5903ae9ed082c26e4693d2235f4b48f6456d951a))
+
 ## [4.88.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.88.0...v4.88.1) (2026-04-24)
 
 **Note:** Version bump only for package @account-kit/smart-contracts
