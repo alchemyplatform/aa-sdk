@@ -69,10 +69,10 @@ Apply similar protection rules as main (required reviews, status checks).
 
 ### 5.1 - OMGWINNING/wallet-server
 
-| File | Change |
-|------|--------|
-| `.github/workflows/test-e2e.yml` | `git clone ... -b v5.x.x` -> `-b main` |
-| `.agents/commands/run-e2e.md` | Update "Clones aa-sdk at v5.x.x" -> "at main" |
+| File                             | Change                                        |
+| -------------------------------- | --------------------------------------------- |
+| `.github/workflows/test-e2e.yml` | `git clone ... -b v5.x.x` -> `-b main`        |
+| `.agents/commands/run-e2e.md`    | Update "Clones aa-sdk at v5.x.x" -> "at main" |
 
 ### 5.2 - alchemyplatform/docs (~23 files)
 
@@ -81,6 +81,7 @@ Apply similar protection rules as main (required reviews, status checks).
 - Update `content/wallets/shared/v4-accordion.mdx` version references
 
 Files to update:
+
 - `content/wallets/pages/smart-wallets/quickstart/sdk.mdx`
 - `content/wallets/pages/concepts/smart-account-client.mdx`
 - `content/wallets/pages/resources/migration-v5.mdx`
