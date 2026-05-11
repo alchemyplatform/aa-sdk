@@ -63,10 +63,6 @@ git log --oneline origin/4.x.x -3     # Should show v4 commits (v4.88.2, etc.)
 
 Apply similar protection rules as main (required reviews, status checks).
 
-### 4.2 - Update Vercel SKIP_BUILD_FOR_BRANCH env var
-
-Change from `v5.x.x` to `4.x.x` (so Vercel skips builds for the legacy branch).
-
 ---
 
 ## Phase 5: External Repository Updates
