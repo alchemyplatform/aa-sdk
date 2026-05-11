@@ -39,15 +39,19 @@ function formatCodecError(error: z.ZodError): string {
   let issue: z.core.$ZodIssue | undefined = error.issues[0];
   if (!issue) return "Invalid params";
 
-  // For union errors, drill into the first branch for the most specific error.
-  while (
-    issue.code === "invalid_union" &&
-    (issue as z.core.$ZodIssueInvalidUnion).errors?.[0]?.[0]
-  ) {
-    issue = (issue as z.core.$ZodIssueInvalidUnion).errors[0][0];
+  // For union errors, drill into the branch with the fewest issues (closest match).
+  // Accumulate paths as we drill — each union level carries a partial path.
+  const pathPrefix: (string | number)[] = [];
+  while (issue.code === "invalid_union") {
+    pathPrefix.push(...(issue.path as (string | number)[]));
+    const { errors: branches } = issue as z.core.$ZodIssueInvalidUnion;
+    const best = branches.reduce((a, b) => (b.length < a.length ? b : a));
+    if (!best[0]) break;
+    issue = best[0];
   }
 
-  const path = issue.path.length > 0 ? "/" + issue.path.join("/") : "(root)";
+  const fullPath = [...pathPrefix, ...issue.path];
+  const path = fullPath.length > 0 ? "/" + fullPath.join("/") : "(root)";
 
   return `Invalid params: ${path}: ${issue.message}`;
 }
