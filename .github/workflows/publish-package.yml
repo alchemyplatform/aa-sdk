@@ -15,7 +15,6 @@ permissions:
   contents: write
   pages: write
   id-token: write
-  pull-requests: write
 
 # Allow only one concurrent publish
 concurrency:
@@ -61,10 +60,6 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
 
-      # Clear pnpm store to avoid stale workspace resolution from other branches
-      - name: Clear pnpm store
-        run: pnpm store prune
-
       - name: Set Github User Details
         run: |
           git config --global user.name "Alchemy Bot"
@@ -75,108 +70,8 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
 
-      - name: Build Packages
-        run: pnpm run build:libs
-
-      # Dry run to see what would be published
-      - name: Dry Run - Show what would be published
-        if: ${{ inputs.publish == false }}
+      # lerna publish handles: version bump, build (via `version` lifecycle), commit, tag, npm publish, and git push
+      - name: Publish using Lerna
+        if: inputs.publish
         shell: bash
-        run: |
-          echo "=== DRY RUN MODE - No packages will be published ==="
-          echo ""
-          CURRENT_VERSION=$(node -p "require('./lerna.json').version")
-          echo "Current version: $CURRENT_VERSION"
-          echo "(actual bump determined by conventional commits: feat -> minor, fix -> patch, BREAKING -> major)"
-          echo ""
-          echo "Packages that would be published:"
-          npx lerna ls --long
-          echo ""
-          echo "=== To actually publish, re-run with 'publish' checkbox checked ==="
-
-      # Bump version using conventional commits
-      - name: Increment Version
-        if: ${{ inputs.publish }}
-        shell: bash
-        run: |
-          echo "Incrementing version via conventional commits..."
-          npx lerna version \
-            --conventional-commits \
-            --no-push \
-            --no-git-tag-version \
-            --yes \
-            --force-publish \
-            --no-private \
-            --ignore-scripts
-
-      # Run inject-version scripts to update version.ts files with new versions
-      - name: Inject Versions
-        if: ${{ inputs.publish }}
-        run: |
-          for pkg in packages/*/; do
-            if [ -f "$pkg/inject-version.ts" ]; then
-              echo "Injecting version for $pkg"
-              (cd "$pkg" && npx tsx inject-version.ts)
-            fi
-          done
-
-      # Format version changes so committed files pass lint checks
-      - name: Format Version Changes
-        if: ${{ inputs.publish }}
-        run: pnpm prettier --write --ignore-unknown .
-
-      # Commit version changes so lerna publish doesn't complain about uncommitted changes
-      - name: Commit Version Changes
-        if: ${{ inputs.publish }}
-        run: |
-          NEW_VERSION=$(node -p "require('./lerna.json').version")
-          git add -A
-          git commit --no-verify -m "chore(release): publish $NEW_VERSION [skip ci]"
-
-      # Publish packages from the updated package.json versions
-      - name: Publish to NPM
-        if: ${{ inputs.publish }}
-        shell: bash
-        run: |
-          set +e
-          npx lerna publish from-package \
-            --no-private \
-            --no-verify-access \
-            --yes \
-            --ignore-scripts
-          LERNA_EXIT=$?
-          set -e
-
-          if [ $LERNA_EXIT -ne 0 ]; then
-            echo "Lerna publish exited with code $LERNA_EXIT"
-            echo "This may mean some packages failed to publish"
-            echo "lerna_published=false" >> $GITHUB_ENV
-            exit $LERNA_EXIT
-          else
-            echo "Lerna publish completed successfully"
-            echo "lerna_published=true" >> $GITHUB_ENV
-          fi
-
-      # Tag the version commit
-      - name: Tag Changes
-        id: tag
-        if: ${{ inputs.publish && env.lerna_published == 'true' }}
-        shell: bash
-        run: |
-          NEW_VERSION=$(node -p "require('./lerna.json').version")
-          echo "Published version: $NEW_VERSION"
-
-          TAG_NAME="v$NEW_VERSION"
-          echo "Creating tag: $TAG_NAME"
-          git tag -a "$TAG_NAME" -m "v$NEW_VERSION"
-
-          echo "has_changes=true" >> $GITHUB_ENV
-          echo "new_version=$NEW_VERSION" >> $GITHUB_ENV
-          echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
-
-      # Push commit and tags
-      - name: Push Changes
-        if: ${{ inputs.publish && env.lerna_published == 'true' && env.has_changes == 'true' }}
-        run: |
-          git push origin HEAD:main --follow-tags
-          echo "Successfully pushed version ${{ env.new_version }} to main"
+        run: pnpm lerna publish --conventional-commits --no-private --yes --no-verify-access
