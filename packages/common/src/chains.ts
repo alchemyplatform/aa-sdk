@@ -116,3 +116,27 @@ export const teaSepolia = defineChain({
   },
   testnet: true,
 });
+
+export const robinhoodTestnet = defineChain({
+  id: 46630,
+  name: "Robinhood Testnet",
+  nativeCurrency: { name: "ETH", symbol: "ETH", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://robinhood-testnet.g.alchemy.com/v2"],
+    },
+  },
+  testnet: true,
+});
+
+export const robinhoodMainnet = defineChain({
+  id: 4663,
+  name: "Robinhood Mainnet",
+  nativeCurrency: { name: "ETH", symbol: "ETH", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://robinhood-mainnet.g.alchemy.com/v2"],
+    },
+  },
+  testnet: false,
+});
