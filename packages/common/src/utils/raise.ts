@@ -1,4 +1,4 @@
-import { BaseError } from "viem";
+import { BaseError } from "../errors/BaseError.js";
 
 /**
  * Raises an error.

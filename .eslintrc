@@ -84,6 +84,18 @@
       "files": ["packages/**/*"],
       "rules": {
         "no-warning-comments": "off",
+        "no-restricted-imports": [
+          "error",
+          {
+            "paths": [
+              {
+                "name": "viem",
+                "importNames": ["BaseError"],
+                "message": "Use BaseError from '@account-kit/common' (or '../errors/BaseError.js') instead of viem's BaseError.",
+              },
+            ],
+          },
+        ],
         "no-restricted-syntax": [
           "error",
           {
@@ -102,6 +114,15 @@
       ],
       "rules": {
         "no-restricted-syntax": "off",
+      },
+    },
+    {
+      "files": [
+        "packages/common/src/errors/BaseError.ts",
+        "packages/smart-accounts/src/utils.ts",
+      ],
+      "rules": {
+        "no-restricted-imports": "off",
       },
     },
   ],
