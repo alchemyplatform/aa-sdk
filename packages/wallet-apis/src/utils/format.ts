@@ -31,7 +31,7 @@ export const signableMessageToJsonSafe = (
 };
 
 // Purposefully not using `formatTypedData` from the wallet server types pkg
-// here, since that would require typebox at runtime (which breaks RN).
+// here, since that would require zod at runtime (which breaks RN).
 export const typedDataToJsonSafe = ({
   domain,
   primaryType,

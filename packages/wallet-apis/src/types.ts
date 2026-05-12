@@ -1,4 +1,5 @@
 import type { WalletServerViemRpcSchema } from "@alchemy/wallet-api-types/rpc";
+import type { SolanaChainId } from "@alchemy/wallet-api-types";
 import type {
   Account,
   Address,
@@ -12,30 +13,60 @@ import type {
 } from "viem";
 import type { InternalState } from "./internal";
 import type { SmartWalletActions } from "./decorators/smartWalletActions";
+import type { SolanaSmartWalletActions } from "./decorators/solanaSmartWalletActions";
 
 export type BaseWalletClient<
   TExtend extends { [key: string]: unknown } | undefined =
     | { [key: string]: unknown }
     | undefined,
+  TAccount extends Account | undefined = JsonRpcAccount<Address>,
 > = Client<
   Transport<"alchemyHttp">,
   Chain,
-  JsonRpcAccount<Address>,
+  TAccount,
   WalletServerViemRpcSchema,
   TExtend
 >;
-
-export type InnerWalletApiClient = BaseWalletClient<{
-  internal: InternalState | undefined; // undefined if you want to skip using an internal cache
-  owner: SmartWalletSigner;
-  policyIds?: string[];
-}>;
 
 export type SignerClient = WalletClient<Transport, Chain | undefined, Account>;
 
 export type SmartWalletSigner = LocalAccount | SignerClient;
 
 export type SmartWalletClient = BaseWalletClient<SmartWalletActions>;
+
+export type SolanaSmartWalletClient = BaseWalletClient<
+  SolanaSmartWalletActions & { solanaAccount: string },
+  undefined
+>;
+
+/** Solana signer interface. Takes serialized tx bytes, returns signed serialized tx bytes. */
+export interface SolanaSigner {
+  address: string;
+  signTransaction(input: {
+    transaction: Uint8Array;
+    [key: string]: unknown;
+  }): Promise<{ signedTransaction: Uint8Array }>;
+}
+
+export interface SolanaChainDef extends Chain {
+  solanaChainId: SolanaChainId;
+}
+
+export type InnerWalletApiClient = BaseWalletClient<{
+  internal: InternalState | undefined;
+  owner: SmartWalletSigner;
+  policyIds?: string[];
+}>;
+
+export type InnerSolanaWalletApiClient = BaseWalletClient<
+  {
+    internal: InternalState | undefined;
+    owner: SolanaSigner;
+    solanaAccount: string;
+    policyIds?: string[];
+  },
+  undefined
+>;
 
 export type OptionalChainId<T> = T extends { chainId: number }
   ? Omit<T, "chainId"> & { chainId?: number | undefined }

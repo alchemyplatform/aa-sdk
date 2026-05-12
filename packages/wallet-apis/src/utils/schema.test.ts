@@ -1,4 +1,4 @@
-import { Type } from "typebox";
+import { z } from "zod";
 import { encode, decode, methodSchema } from "./schema.js";
 import {
   wallet_prepareCalls,
@@ -50,6 +50,63 @@ describe("encode", () => {
     );
   });
 
+  // ─── Union branch selection (EVM vs Solana) ───
+  // formatCodecError should pick the union branch with the fewest issues
+  // (closest match) rather than always the first branch.
+
+  it("picks the Solana branch when input is Solana-shaped", () => {
+    expect(() =>
+      encode(prepareCallsSchema.request, {
+        from: "7EcDhSYGxXyscszYEp35KHN8vvw3svAuLKTzXwCFLtV",
+        chainId: "solana:mainnet",
+        calls: [{ programId: 12345 as any, data: "0xabcdef" }],
+      } as any),
+    ).toThrow(
+      expect.objectContaining({
+        message: expect.stringContaining("/calls/0/programId"),
+      }),
+    );
+  });
+
+  it("picks the EVM branch when input is EVM-shaped", () => {
+    expect(() =>
+      encode(prepareCallsSchema.request, {
+        ...validPrepareCallsParams,
+        calls: [
+          {
+            to: "0xd46e8dd67c5d32be8058bb8eb970870f07244567" as const,
+            value: "0x1" as any,
+          },
+        ],
+      }),
+    ).toThrow(
+      expect.objectContaining({
+        message: expect.stringContaining("/calls/0/value: Expected bigint"),
+      }),
+    );
+  });
+
+  // ─── Path accumulation across nested unions ───
+  // Paths from intermediate union levels must be preserved when drilling
+  // into nested unions (e.g. capabilities → paymasterService variants).
+
+  it("includes the full path for errors inside nested unions", () => {
+    expect(() =>
+      encode(prepareCallsSchema.request, {
+        ...validPrepareCallsParams,
+        capabilities: {
+          paymasterService: { policyId: 12345 as any },
+        },
+      }),
+    ).toThrow(
+      expect.objectContaining({
+        message: expect.stringContaining(
+          "/capabilities/paymasterService/policyId",
+        ),
+      }),
+    );
+  });
+
   // ─── Runtime-only validations that TypeScript cannot catch ───
   // These all compile fine because TS sees `string` or `number`,
   // but the schema enforces stricter constraints at runtime.
@@ -89,15 +146,14 @@ describe("encode", () => {
 
 describe("decode", () => {
   it("decodes valid data", () => {
-    const schema = Type.Object({ value: Type.String() });
+    const schema = z.object({ value: z.string() });
     expect(decode(schema, { value: "hello" })).toEqual({ value: "hello" });
   });
 
   it("throws a readable error on invalid data", () => {
-    const schema = Type.Object({
-      // eslint-disable-next-line no-template-curly-in-string
-      id: Type.TemplateLiteral("0x${string}", {
-        errorMessage: "Must be a hex string",
+    const schema = z.object({
+      id: z.string({ error: "Must be a hex string" }).regex(/^0x/, {
+        error: "Must be a hex string",
       }),
     });
 

@@ -29,16 +29,20 @@ export type * from "../actions/undelegateAccount.js";
 export { undelegateAccount } from "../actions/undelegateAccount.js";
 
 // Decorators.
-export type * from "../decorators/smartWalletActions.js";
+export type { SmartWalletActions } from "../decorators/smartWalletActions.js";
 export { smartWalletActions } from "../decorators/smartWalletActions.js";
 
 // Client.
 export type {
-  BaseWalletClient,
-  SignerClient,
   SmartWalletClient,
+  SolanaSmartWalletClient,
+  SolanaSigner,
 } from "../types.js";
-export type * from "../client.js";
+export type {
+  CreateEvmSmartWalletClientParams,
+  CreateSolanaSmartWalletClientParams,
+  CreateSmartWalletClientParams,
+} from "../client.js";
 export { createSmartWalletClient } from "../client.js";
 
 // Transport.

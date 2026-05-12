@@ -86,7 +86,7 @@ export async function signPreparedCalls(
   };
 
   const signUserOperationCall = async (call: UserOpCall) => {
-    const { signatureRequest, ...rest } = call;
+    const { signatureRequest, feePayment: _feePayment, ...rest } = call;
 
     if (!signatureRequest) {
       LOGGER.warn("signPreparedCalls:missing-signatureRequest", {

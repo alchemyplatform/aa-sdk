@@ -2,7 +2,7 @@ import type { Address } from "abitype";
 import { isAddressEqual, type JsonRpcAccount, type Prettify } from "viem";
 import { wallet_requestAccount as MethodSchema } from "@alchemy/wallet-api-types/rpc";
 import deepEqual from "deep-equal";
-import type { DistributiveOmit, InnerWalletApiClient } from "../types";
+import type { InnerWalletApiClient } from "../types";
 import { LOGGER } from "../logger.js";
 import { isLocalAccount } from "../utils/assertions.js";
 import {
@@ -15,11 +15,13 @@ import {
 const schema = methodSchema(MethodSchema);
 type BaseRequestAccountParams = MethodParams<typeof MethodSchema>;
 
+type SignerAddressParams = Extract<
+  BaseRequestAccountParams,
+  { signerAddress: Address }
+>;
+
 export type RequestAccountParams = Prettify<
-  DistributiveOmit<
-    Extract<BaseRequestAccountParams, { signerAddress: Address }>,
-    "signerAddress" | "includeCounterfactualInfo"
-  > &
+  Pick<SignerAddressParams, "id" | "creationHint"> &
     (
       | { signerAddress?: Address; accountAddress?: never }
       | { signerAddress?: never; accountAddress: Address }
