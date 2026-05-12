@@ -23,5 +23,7 @@ Runtime package errors should use the SDK error hierarchy rooted at
 
 - `packages/common/src/errors/BaseError.ts` extends viem's `BaseError`.
 - `.eslintrc` forbids `throw new Error(...)` in `packages/**/*` except tests.
-- `packages/wallet-apis/src/utils/schema.ts` wraps TypeBox codec failures in
+- `.eslintrc` forbids `import { BaseError } from "viem"` to prevent accidentally
+  using viem's `BaseError` instead of `@alchemy/common`'s.
+- `packages/wallet-apis/src/utils/schema.ts` wraps Zod validation failures in
   `@alchemy/common` `BaseError`.

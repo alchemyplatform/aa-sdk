@@ -1,25 +1,25 @@
 ---
-title: Wallet API TypeBox Codecs
-date: 2026-05-06
+title: Wallet API Zod Codecs
+date: 2026-05-12
 tags:
   - wallet-apis
-  - typebox
+  - zod
   - errors
 area: wallet-apis
 ---
 
-# Wallet API TypeBox Codecs
+# Wallet API Zod Codecs
 
 ## Problem
 
-Changing Wallet API RPC validation can accidentally leak raw TypeBox errors or
-lose useful schema path messages.
+Changing Wallet API RPC validation can accidentally leak raw Zod errors or
+lose useful error messages.
 
 ## Root Cause
 
-`packages/wallet-apis/src/utils/schema.ts` wraps `Value.Encode` and
-`Value.Decode`, catches `EncodeError` and `DecodeError`, formats the first
-schema error, and rethrows `@alchemy/common` `BaseError`.
+`packages/wallet-apis/src/utils/schema.ts` provides `methodSchema`, `encode`,
+and `decode` helpers that extract Zod schemas from RPC method definitions and
+wrap validation failures in `@alchemy/common` `BaseError`.
 
 ## Solution
 

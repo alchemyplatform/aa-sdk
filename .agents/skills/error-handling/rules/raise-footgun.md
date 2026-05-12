@@ -1,30 +1,31 @@
 # Raise Footgun
 
-Be careful with `raise` from `packages/common/src/utils/raise.ts`.
+`raise` from `packages/common/src/utils/raise.ts` now uses `@alchemy/common`
+`BaseError`. An ESLint `no-restricted-imports` rule also prevents importing
+`BaseError` from `viem` directly.
 
 ## Why
 
-`raise` throws viem's `BaseError` for string arguments, not the SDK
-`@alchemy/common` `BaseError` class. That may be intentional for low-level viem
-compatibility, but it is different from the package runtime error convention.
+`raise` previously threw viem's `BaseError` instead of the SDK's, which lost
+docs links and version metadata. This was fixed and an ESLint rule was added to
+prevent regressions.
 
 ## Good
-
-Use `raise` only when the existing call site expects its exact behavior.
 
 ```ts
 return value ?? raise("Missing value");
 ```
 
-For new SDK-facing failures, prefer a specific SDK error class or
-`@alchemy/common` `BaseError`.
+`raise` is fine for concise null/undefined guards. For new SDK-facing failures
+with richer error context, prefer a specific SDK error subclass.
 
 ## Bad
 
-Replacing established SDK error subclasses with `raise("...")` because it is
-shorter.
+Importing `BaseError` from `viem` in package code. The ESLint rule will catch
+this, but the one legitimate use in `packages/common/src/errors/BaseError.ts`
+(which extends viem's class) is exempted via an override.
 
 ## Exceptions
 
-If you are deliberately working on the `raise` helper itself, preserve its
-public behavior or update all consumers and tests that depend on it.
+`packages/common/src/errors/BaseError.ts` is the only file allowed to import
+`BaseError` from `viem`.

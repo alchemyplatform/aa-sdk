@@ -22,6 +22,7 @@ defined by each package's `package.json` `exports` map and source entry points.
 ## Evidence
 
 - `packages/common/package.json` exports `.`, `./chains`, and `./internal`.
-- `packages/wallet-apis/package.json` exports `.`, `./experimental`, and `./internal`.
+- `packages/wallet-apis/package.json` exports `.`, `./experimental`, `./solana`,
+  and `./internal`.
 - `packages/aa-infra/package.json` and `packages/smart-accounts/package.json`
   export their root entry point.

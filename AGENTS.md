@@ -36,7 +36,7 @@ use remote caching.
 | `tooling`           | pnpm, Turborepo, Lerna, local validation, and generated-output boundaries.              |
 | `package-exports`   | Package export maps, ESM import paths, public/internal/experimental surfaces.           |
 | `error-handling`    | SDK error hierarchy, `BaseError`, and package error conventions.                        |
-| `wallet-apis`       | Wallet API client, TypeBox codecs, signer/client model, and runtime constraints.        |
+| `wallet-apis`       | Wallet API client, Zod codecs, signer/client model, and Solana support.                 |
 | `smart-accounts`    | Light Account, Modular Account v1/v2, modules, permissions, and deferred actions.       |
 | `testing`           | Vitest workspace, Anvil/Foundry/Rundler setup, and affected test execution.             |
 | `documentation`     | MDX docs, TypeDoc reference generation, `docs/docs.yml`, and code snippet preservation. |
@@ -91,13 +91,10 @@ aa-sdk/
 
 ## Slash Commands
 
-| Command                     | Description                                                                     |
-| --------------------------- | ------------------------------------------------------------------------------- |
-| `/docs-reviewer`            | Existing Claude command for MDX documentation review.                           |
-| `/regenerate-sdk-reference` | Regenerate TypeDoc reference MDX and `docs/docs.yml`.                           |
-| `/run-affected-tests`       | Run package tests affected by changes from a base branch.                       |
-| `/publish-v5-beta`          | Checklist for dry-running or publishing the v5 beta workflow.                   |
-| `/sync-v5-docs`             | Checklist for generating v5 reference docs and opening the main-branch docs PR. |
+| Command            | Description                                                   |
+| ------------------ | ------------------------------------------------------------- |
+| `/docs-reviewer`   | Existing Claude command for MDX documentation review.         |
+| `/publish-v5-beta` | Checklist for dry-running or publishing the v5 beta workflow. |
 
 ## Documentation Discovery
 

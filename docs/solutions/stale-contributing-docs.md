@@ -15,10 +15,11 @@ Some contributor guidance on `v5.x.x` does not match the tracked repo.
 
 ## Root Cause
 
-`CONTRIBUTING.md` references `docs/CONTRIBUTING.md`, `pnpm run docs:dev`,
-`site/packages/*`, and PRs against `development`. On `v5.x.x`, `docs/CONTRIBUTING.md`
-is not tracked, the root `package.json` does not define `docs:dev`, and the v5
-scaffold uses `v5.x.x` as its PR base.
+`CONTRIBUTING.md` references `docs/CONTRIBUTING.md`, `pnpm run docs:dev`, and
+`site/packages/*`. On `v5.x.x`, `docs/CONTRIBUTING.md` is not tracked, the root
+`package.json` does not define `docs:dev`, and the v5 scaffold uses `v5.x.x` as
+its PR base. A `development` branch exists on the remote but has been inactive
+since January 2024 and is not used for v5 work.
 
 ## Solution
 
