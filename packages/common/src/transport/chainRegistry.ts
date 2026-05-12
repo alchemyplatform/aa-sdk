@@ -71,6 +71,10 @@ export const ALCHEMY_RPC_MAPPING: Record<number, string> = {
   4326: "https://megaeth-mainnet.g.alchemy.com/v2", // megaethMainnet
   6343: "https://megaeth-testnet.g.alchemy.com/v2", // megaethTestnet
 
+  // MONAD networks
+  10143: "https://monad-testnet.g.alchemy.com/v2", // monadTestnet
+  143: "https://monad-mainnet.g.alchemy.com/v2", // monadMainnet
+
   // MYTHOS networks
   42018: "https://mythos-mainnet.g.alchemy.com/v2", // mythosMainnet
 
