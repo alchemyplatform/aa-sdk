@@ -1,0 +1,13 @@
+---
+description: Documentation and generated SDK reference guidance
+globs: "docs/**/*.mdx,docs/docs.yml,typedoc.json,tsconfig.typedoc.json,scripts/generate-typedoc-yaml.ts"
+alwaysApply: false
+---
+
+# Documentation Reference
+
+- Preserve code snippet behavior in docs; do not rename SDK APIs or change imports as style edits.
+- Treat `docs/pages/reference/**` as TypeDoc-generated output.
+- Change source TSDoc, exports, `typedoc.json`, or generation scripts before regenerating reference docs.
+- Run `pnpm run docs:sdk` and `pnpm run lint:write` when public API docs should change.
+- Read `.agents/skills/documentation/` for full docs and generated-output rules.
