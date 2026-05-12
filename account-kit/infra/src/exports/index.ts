@@ -61,6 +61,8 @@ export {
   hyperliquidEvmTestnet,
   cronos,
   cronosTestnet,
+  robinhoodMainnet,
+  robinhoodTestnet,
 } from "../chains.js";
 export type * from "../client/decorators/smartAccount.js";
 export { alchemyActions } from "../client/decorators/smartAccount.js";

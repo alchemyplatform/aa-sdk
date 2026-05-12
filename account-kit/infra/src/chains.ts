@@ -924,3 +924,39 @@ export const cronosTestnet: Chain = {
     },
   },
 };
+
+export const robinhoodMainnet: Chain = defineChain({
+  id: 4663,
+  name: "Robinhood Mainnet",
+  nativeCurrency: { name: "eth", symbol: "eth", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://robinhood-mainnet.g.alchemy.com/v2"],
+    },
+    public: {
+      http: ["https://robinhood-mainnet.g.alchemy.com/v2"],
+    },
+    alchemy: {
+      http: ["https://robinhood-mainnet.g.alchemy.com/v2"],
+    },
+  },
+  testnet: false,
+});
+
+export const robinhoodTestnet: Chain = defineChain({
+  id: 46630,
+  name: "Robinhood Testnet",
+  nativeCurrency: { name: "eth", symbol: "eth", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://robinhood-testnet.g.alchemy.com/v2"],
+    },
+    public: {
+      http: ["https://robinhood-testnet.g.alchemy.com/v2"],
+    },
+    alchemy: {
+      http: ["https://robinhood-testnet.g.alchemy.com/v2"],
+    },
+  },
+  testnet: true,
+});
