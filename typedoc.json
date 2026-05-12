@@ -40,7 +40,7 @@
   // SOURCE LINK CONFIGURATION
   // Controls how source links are generated in documentation
   // ============================================================================
-  "gitRevision": "v5.x.x",
+  "gitRevision": "main",
 
   // ============================================================================
   // PLUGIN CONFIGURATION

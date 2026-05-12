@@ -1,6 +1,6 @@
 # @alchemy/smart-accounts
 
-**Beta** — This package replaces `@account-kit/smart-contracts`. This is a low-level package. Most users should use [`@alchemy/wallet-apis`](https://www.alchemy.com/docs/wallets/reference/wallet-apis) unless you need to use interface with Smart Accounts directly via viem.
+This package replaces `@account-kit/smart-contracts`. This is a low-level package. Most users should use [`@alchemy/wallet-apis`](https://www.alchemy.com/docs/wallets/reference/wallet-apis) unless you need to use interface with Smart Accounts directly via viem.
 
 Viem-compatible smart account implementations for Alchemy's smart contract accounts. Supports LightAccount, Modular Account v1, and Modular Account v2 with EIP-7702.
 

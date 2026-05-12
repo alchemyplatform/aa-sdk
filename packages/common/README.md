@@ -1,6 +1,6 @@
 # @alchemy/common
 
-**Beta** — This is a low-level package that is consumed by other Alchemy packages.
+This is a low-level package that is consumed by other Alchemy packages.
 
 ## Installation
 

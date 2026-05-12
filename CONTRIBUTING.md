@@ -43,7 +43,7 @@ We are excited to have you contribute to the `aa-sdk`. Here's a step-by-step gui
 10. **Creating a Pull Request**:
 
 - Push your changes to your GitHub fork.
-- Create a pull request against the original `aa-sdk` repository's `development` branch.
+- Create a pull request against the original `aa-sdk` repository's `main` branch.
 - Ensure the pull request title follows the Enforce PR Title Format: `[subject-type]: [description starting with lowercase letters]`. You can check this using `echo "[YOUR_PR_TITLE_HERE] | pnpm commitlint`.
 
 11. **Celebrate** your contribution!
