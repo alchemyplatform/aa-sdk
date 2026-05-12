@@ -17,9 +17,6 @@ export const ALCHEMY_RPC_MAPPING: Record<number, string> = {
   421614: "https://arb-sepolia.g.alchemy.com/v2", // arbSepolia
   42161: "https://arb-mainnet.g.alchemy.com/v2", // arbMainnet
 
-  // ARBNOVA networks
-  42170: "https://arbnova-mainnet.g.alchemy.com/v2", // arbnovaMainnet
-
   // ARC networks
   5042002: "https://arc-testnet.g.alchemy.com/v2", // arcTestnet
 
@@ -45,19 +42,26 @@ export const ALCHEMY_RPC_MAPPING: Record<number, string> = {
   // ETH networks
   1: "https://eth-mainnet.g.alchemy.com/v2", // ethMainnet
   11155111: "https://eth-sepolia.g.alchemy.com/v2", // ethSepolia
+  560048: "https://eth-hoodi.g.alchemy.com/v2", // ethHoodi
 
   // FRAX networks
   252: "https://frax-mainnet.g.alchemy.com/v2", // fraxMainnet
 
   // GENSYN networks
+  685689: "https://gensyn-mainnet.g.alchemy.com/v2", // gensynMainnet
   685685: "https://gensyn-testnet.g.alchemy.com/v2", // gensynTestnet
 
   // HYPERLIQUID networks
+  998: "https://hyperliquid-testnet.g.alchemy.com/v2", // hyperliquidTestnet
   999: "https://hyperliquid-mainnet.g.alchemy.com/v2", // hyperliquidMainnet
 
   // INK networks
   57073: "https://ink-mainnet.g.alchemy.com/v2", // inkMainnet
   763373: "https://ink-sepolia.g.alchemy.com/v2", // inkSepolia
+
+  // KATANA networks
+  737373: "https://katana-bokuto.g.alchemy.com/v2", // katanaBokuto
+  747474: "https://katana-mainnet.g.alchemy.com/v2", // katanaMainnet
 
   // MATIC networks
   80002: "https://polygon-amoy.g.alchemy.com/v2", // maticAmoy
@@ -78,9 +82,6 @@ export const ALCHEMY_RPC_MAPPING: Record<number, string> = {
   5611: "https://opbnb-testnet.g.alchemy.com/v2", // opbnbTestnet
   204: "https://opbnb-mainnet.g.alchemy.com/v2", // opbnbMainnet
 
-  // OPENLOOT networks
-  905905: "https://openloot-sepolia.g.alchemy.com/v2", // openlootSepolia
-
   // OPT networks
   10: "https://opt-mainnet.g.alchemy.com/v2", // optMainnet
   11155420: "https://opt-sepolia.g.alchemy.com/v2", // optSepolia
@@ -89,15 +90,13 @@ export const ALCHEMY_RPC_MAPPING: Record<number, string> = {
   9746: "https://plasma-testnet.g.alchemy.com/v2", // plasmaTestnet
   9745: "https://plasma-mainnet.g.alchemy.com/v2", // plasmaMainnet
 
-  // POLYNOMIAL networks
-  8008: "https://polynomial-mainnet.g.alchemy.com/v2", // polynomialMainnet
-  80008: "https://polynomial-sepolia.g.alchemy.com/v2", // polynomialSepolia
-
   // RISE networks
+  4153: "https://rise-mainnet.g.alchemy.com/v2", // riseMainnet
   11155931: "https://rise-testnet.g.alchemy.com/v2", // riseTestnet
 
   // ROBINHOOD networks
   46630: "https://robinhood-testnet.g.alchemy.com/v2", // robinhoodTestnet
+  4663: "https://robinhood-mainnet.g.alchemy.com/v2", // robinhoodMainnet
 
   // SHAPE networks
   11011: "https://shape-sepolia.g.alchemy.com/v2", // shapeSepolia
@@ -125,6 +124,10 @@ export const ALCHEMY_RPC_MAPPING: Record<number, string> = {
 
   // WORLDMOBILECHAIN networks
   869: "https://worldmobilechain-mainnet.g.alchemy.com/v2", // worldmobilechainMainnet
+
+  // XLAYER networks
+  1952: "https://xlayer-testnet.g.alchemy.com/v2", // xlayerTestnet
+  196: "https://xlayer-mainnet.g.alchemy.com/v2", // xlayerMainnet
 
   // ZORA networks
   7777777: "https://zora-mainnet.g.alchemy.com/v2", // zoraMainnet
