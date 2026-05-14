@@ -51,7 +51,7 @@ export const WalletButton = ({
 
   return (
     <Button
-      className={`justify-start ${className ?? ""}`}
+      className={`justify-center ${className ?? ""}`}
       variant="social"
       icon={renderIcon()}
       onClick={handleClick}
