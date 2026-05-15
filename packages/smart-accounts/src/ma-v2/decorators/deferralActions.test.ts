@@ -3,6 +3,7 @@ import {
   concatHex,
   createPublicClient,
   custom,
+  decodeAbiParameters,
   isAddress,
   parseEther,
   parseGwei,
@@ -29,6 +30,9 @@ import {
   RootPermissionOnlyError,
   SelectorNotAllowed,
 } from "../../errors/permissionBuilderErrors.js";
+import { InvalidEntityIdError } from "../../errors/InvalidEntityIdError.js";
+import { DefaultModuleAddress } from "../utils/account.js";
+import { HookType } from "../types.js";
 import { encodeDeferredActionWithSignature } from "../utils/deferredActions.js";
 import { SignaturePrefix } from "../types.js";
 import { packAccountGasLimits, packPaymasterData } from "../../utils.js";
@@ -556,6 +560,89 @@ describe("MA v2 deferral actions tests", async () => {
           deadline: 0,
         }),
     ).not.toThrow();
+  });
+
+  const HALF_UINT32 = 2147483647;
+
+  it.each([HALF_UINT32, HALF_UINT32 + 1, 4294967295])(
+    "PermissionBuilder: constructor rejects entityId %s (reserved offset range)",
+    async (entityId) => {
+      const provider = await givenConnectedProvider({ signer: owner });
+      expect(
+        () =>
+          new PermissionBuilder({
+            client: provider.extend(deferralActions),
+            key: { publicKey: sessionKey.address, type: "secp256k1" },
+            entityId,
+            nonce: 0n,
+            deadline: 0,
+          }),
+      ).toThrow(InvalidEntityIdError);
+    },
+  );
+
+  it("PermissionBuilder: GAS_LIMIT and NATIVE_TOKEN_TRANSFER install to distinct slots", async () => {
+    const provider = await givenConnectedProvider({ signer: owner });
+    const entityId = 7;
+
+    const builder = new PermissionBuilder({
+      client: provider.extend(deferralActions),
+      key: { publicKey: sessionKey.address, type: "secp256k1" },
+      entityId,
+      nonce: 0n,
+      deadline: 0,
+    })
+      .addPermission({
+        permission: {
+          type: PermissionType.NATIVE_TOKEN_TRANSFER,
+          data: { allowance: toHex(parseEther("1")) },
+        },
+      })
+      .addPermission({
+        permission: {
+          type: PermissionType.GAS_LIMIT,
+          data: { limit: toHex(parseEther("0.01")) },
+        },
+      })
+      .addSelector({ selector: "0xdeadbeef" });
+
+    // compileRaw is what performs permission→hook translation; compileInstallArgs
+    // alone just returns the current builder state without translating.
+    await builder.compileRaw();
+    const { hooks } = await builder.compileInstallArgs();
+
+    const nativeHook = hooks.find(
+      (h) =>
+        h.hookConfig.address === DefaultModuleAddress.NATIVE_TOKEN_LIMIT &&
+        h.hookConfig.hookType === HookType.EXECUTION,
+    );
+    const gasHook = hooks.find(
+      (h) =>
+        h.hookConfig.address === DefaultModuleAddress.NATIVE_TOKEN_LIMIT &&
+        h.hookConfig.hookType === HookType.VALIDATION,
+    );
+
+    expect(nativeHook).toBeDefined();
+    expect(gasHook).toBeDefined();
+
+    // hookConfig.entityId drives runtime hook dispatch; initData drives onInstall storage slot.
+    // Both must differ between NTT and GL or the gas install will overwrite the native cap.
+    expect(nativeHook!.hookConfig.entityId).toBe(entityId);
+    expect(gasHook!.hookConfig.entityId).toBe(entityId + HALF_UINT32);
+
+    const [nativeInitEntityId, nativeSpendLimit] = decodeAbiParameters(
+      [{ type: "uint32" }, { type: "uint256" }],
+      nativeHook!.initData,
+    );
+    const [gasInitEntityId, gasSpendLimit] = decodeAbiParameters(
+      [{ type: "uint32" }, { type: "uint256" }],
+      gasHook!.initData,
+    );
+
+    expect(nativeInitEntityId).toBe(entityId);
+    expect(gasInitEntityId).toBe(entityId + HALF_UINT32);
+    expect(nativeSpendLimit).toBe(parseEther("1"));
+    expect(gasSpendLimit).toBe(parseEther("0.01"));
   });
 
   /* -------------------------------------------------------------------------- */
