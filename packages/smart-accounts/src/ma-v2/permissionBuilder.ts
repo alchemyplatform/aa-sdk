@@ -35,10 +35,14 @@ import {
   ValidationConfigUnsetError,
   ZeroAddressError,
 } from "../errors/permissionBuilderErrors.js";
+import { InvalidEntityIdError } from "../errors/InvalidEntityIdError.js";
 import type { SmartAccount } from "viem/account-abstraction";
 import { DefaultModuleAddress, isModularAccountV2 } from "./utils/account.js";
 
-// We use this to offset the ERC20 spend limit entityId
+// Reserved offset for hooks that would otherwise collide on shared module storage
+// (ERC20 spend limit vs PREVAL_ALLOWLIST on AllowlistModule; GAS_LIMIT vs
+// NATIVE_TOKEN_TRANSFER on NativeTokenLimitModule). Any user-supplied entityId
+// must be strictly less than this so the offset namespace stays disjoint.
 const HALF_UINT32 = 2147483647;
 const ERC20_APPROVE_SELECTOR = "0x095ea7b3";
 const ERC20_TRANSFER_SELECTOR = "0xa9059cbb";
@@ -302,6 +306,13 @@ export class PermissionBuilder {
     const account = client.account;
     if (!account || !isModularAccountV2(account)) {
       throw new AccountNotFoundError();
+    }
+
+    // EntityIds in [HALF_UINT32, uint32.max] overlap the offset namespace used by
+    // ERC20 spend-limit and GAS_LIMIT hooks, which would silently corrupt the
+    // shared module storage. Reject early.
+    if (entityId >= HALF_UINT32) {
+      throw new InvalidEntityIdError(entityId, HALF_UINT32 - 1);
     }
 
     this.client = client;
@@ -628,16 +639,18 @@ export class PermissionBuilder {
           if (rawHooks[HookIdentifier.GAS_LIMIT] !== undefined) {
             throw new MultipleGasLimitError(permission);
           }
+          // Offset the entityId so GAS_LIMIT writes to a different slot than
+          // NATIVE_TOKEN_TRANSFER on the shared NativeTokenLimitModule.
           rawHooks[HookIdentifier.GAS_LIMIT] = {
             hookConfig: {
               address: DefaultModuleAddress.NATIVE_TOKEN_LIMIT,
-              entityId,
+              entityId: entityId + HALF_UINT32,
               hookType: HookType.VALIDATION,
               hasPreHooks: true,
               hasPostHooks: false,
             },
             initData: {
-              entityId,
+              entityId: entityId + HALF_UINT32,
               spendLimit: BigInt(permission.data.limit),
             },
           };
