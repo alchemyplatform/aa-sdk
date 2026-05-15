@@ -645,6 +645,163 @@ describe("MA v2 deferral actions tests", async () => {
     expect(gasSpendLimit).toBe(parseEther("0.01"));
   });
 
+  it("PermissionBuilder: GAS_LIMIT alone is still installed at the offset entityId", async () => {
+    // Regression guard: the offset must be unconditional. If anyone made it
+    // conditional on NTT being present, the all-four integration test would
+    // still pass but a GL-only caller would land at the un-offset slot.
+    const provider = await givenConnectedProvider({ signer: owner });
+    const entityId = 11;
+
+    const builder = new PermissionBuilder({
+      client: provider.extend(deferralActions),
+      key: { publicKey: sessionKey.address, type: "secp256k1" },
+      entityId,
+      nonce: 0n,
+      deadline: 0,
+    })
+      .addPermission({
+        permission: {
+          type: PermissionType.GAS_LIMIT,
+          data: { limit: toHex(parseEther("0.01")) },
+        },
+      })
+      .addSelector({ selector: "0xdeadbeef" });
+
+    await builder.compileRaw();
+    const { hooks } = await builder.compileInstallArgs();
+
+    expect(hooks).toHaveLength(1);
+    const gasHook = hooks[0];
+    expect(gasHook.hookConfig.address).toBe(
+      DefaultModuleAddress.NATIVE_TOKEN_LIMIT,
+    );
+    expect(gasHook.hookConfig.hookType).toBe(HookType.VALIDATION);
+    expect(gasHook.hookConfig.entityId).toBe(entityId + HALF_UINT32);
+
+    const [gasInitEntityId, gasSpendLimit] = decodeAbiParameters(
+      [{ type: "uint32" }, { type: "uint256" }],
+      gasHook.initData,
+    );
+    expect(gasInitEntityId).toBe(entityId + HALF_UINT32);
+    expect(gasSpendLimit).toBe(parseEther("0.01"));
+  });
+
+  it("PermissionBuilder: ERC20_TOKEN_TRANSFER alone produces two distinct AllowlistModule slots", async () => {
+    // Locks in the existing AllowlistModule offset pattern that GAS_LIMIT's
+    // fix was modeled on. ERC20 produces both the spend-limit hook (offset)
+    // and the approve/transfer selector allowlist (base entityId).
+    const provider = await givenConnectedProvider({ signer: owner });
+    const entityId = 13;
+    const erc20Token: Address = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48";
+
+    const builder = new PermissionBuilder({
+      client: provider.extend(deferralActions),
+      key: { publicKey: sessionKey.address, type: "secp256k1" },
+      entityId,
+      nonce: 0n,
+      deadline: 0,
+    }).addPermission({
+      permission: {
+        type: PermissionType.ERC20_TOKEN_TRANSFER,
+        data: { address: erc20Token, allowance: toHex(1_000_000_000n) },
+      },
+    });
+
+    await builder.compileRaw();
+    const { hooks } = await builder.compileInstallArgs();
+
+    expect(hooks).toHaveLength(2);
+
+    const erc20Hook = hooks.find(
+      (h) =>
+        h.hookConfig.address === DefaultModuleAddress.ALLOWLIST &&
+        h.hookConfig.hookType === HookType.EXECUTION,
+    );
+    const allowlistHook = hooks.find(
+      (h) =>
+        h.hookConfig.address === DefaultModuleAddress.ALLOWLIST &&
+        h.hookConfig.hookType === HookType.VALIDATION,
+    );
+
+    expect(erc20Hook).toBeDefined();
+    expect(allowlistHook).toBeDefined();
+    expect(erc20Hook!.hookConfig.entityId).toBe(entityId + HALF_UINT32);
+    expect(allowlistHook!.hookConfig.entityId).toBe(entityId);
+  });
+
+  it("PermissionBuilder: NTT + ERC20 + GAS_LIMIT produce four distinct hooks across both shared modules", async () => {
+    const provider = await givenConnectedProvider({ signer: owner });
+    const entityId = 9;
+    const erc20Token: Address = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48";
+
+    const builder = new PermissionBuilder({
+      client: provider.extend(deferralActions),
+      key: { publicKey: sessionKey.address, type: "secp256k1" },
+      entityId,
+      nonce: 0n,
+      deadline: 0,
+    })
+      .addPermission({
+        permission: {
+          type: PermissionType.NATIVE_TOKEN_TRANSFER,
+          data: { allowance: toHex(parseEther("1")) },
+        },
+      })
+      .addPermission({
+        permission: {
+          type: PermissionType.ERC20_TOKEN_TRANSFER,
+          data: { address: erc20Token, allowance: toHex(1_000_000_000n) },
+        },
+      })
+      .addPermission({
+        permission: {
+          type: PermissionType.GAS_LIMIT,
+          data: { limit: toHex(parseEther("0.01")) },
+        },
+      });
+
+    await builder.compileRaw();
+    const { hooks } = await builder.compileInstallArgs();
+
+    // Expect exactly 4 hooks: NTT (exec, NTL@EID), ERC20 (exec, Allowlist@EID+X),
+    // GAS_LIMIT (validation, NTL@EID+X), PREVAL_ALLOWLIST (validation, Allowlist@EID)
+    expect(hooks).toHaveLength(4);
+
+    const find = (address: Address, hookType: HookType) =>
+      hooks.find(
+        (h) =>
+          h.hookConfig.address === address &&
+          h.hookConfig.hookType === hookType,
+      );
+
+    const nttHook = find(
+      DefaultModuleAddress.NATIVE_TOKEN_LIMIT,
+      HookType.EXECUTION,
+    );
+    const gasHook = find(
+      DefaultModuleAddress.NATIVE_TOKEN_LIMIT,
+      HookType.VALIDATION,
+    );
+    const erc20Hook = find(DefaultModuleAddress.ALLOWLIST, HookType.EXECUTION);
+    const allowlistHook = find(
+      DefaultModuleAddress.ALLOWLIST,
+      HookType.VALIDATION,
+    );
+
+    expect(nttHook).toBeDefined();
+    expect(gasHook).toBeDefined();
+    expect(erc20Hook).toBeDefined();
+    expect(allowlistHook).toBeDefined();
+
+    // Native token module: NTT at EID, GAS_LIMIT at EID + HALF_UINT32 → no collision.
+    expect(nttHook!.hookConfig.entityId).toBe(entityId);
+    expect(gasHook!.hookConfig.entityId).toBe(entityId + HALF_UINT32);
+
+    // Allowlist module: PREVAL_ALLOWLIST at EID, ERC20 spend-limit at EID + HALF_UINT32 → no collision.
+    expect(allowlistHook!.hookConfig.entityId).toBe(entityId);
+    expect(erc20Hook!.hookConfig.entityId).toBe(entityId + HALF_UINT32);
+  });
+
   /* -------------------------------------------------------------------------- */
   /*                                  Utilities                                 */
   /* -------------------------------------------------------------------------- */
