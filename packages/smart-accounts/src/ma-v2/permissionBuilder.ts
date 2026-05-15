@@ -427,6 +427,8 @@ export class PermissionBuilder {
     typedData: DeferredActionTypedData;
     fullPreSignatureDeferredActionPayload: Hex;
   }> {
+    const extraHooks: Hook[] = [];
+
     // Add time range module hook via expiry
     if (this.deadline !== 0) {
       if (this.deadline < Date.now() / 1000) {
@@ -436,7 +438,7 @@ export class PermissionBuilder {
         throw new DeadlineOverLimitError(this.deadline);
       }
 
-      this.hooks.push(
+      extraHooks.push(
         TimeRangeModule.buildHook(
           {
             entityId: this.validationConfig.entityId,
@@ -448,7 +450,8 @@ export class PermissionBuilder {
       );
     }
 
-    const installValidationCall = await this.compileRaw();
+    const installValidationCall =
+      await this.encodeInstallValidationCall(extraHooks);
 
     const { typedData } = await deferralActions(
       this.client,
@@ -481,32 +484,14 @@ export class PermissionBuilder {
    * @returns {Promise<Hex>} The raw install arguments.
    */
   async compileRaw(): Promise<Hex> {
-    const account = this.client.account;
-    if (!account || !isModularAccountV2(account)) {
-      throw new AccountNotFoundError();
-    }
-
-    // Translate all permissions into raw hooks if >0
-    if (this.permissions.length > 0) {
-      const rawHooks = this.translatePermissions(
-        this.validationConfig.entityId,
-      );
-      // Add the translated permissions as hooks
-      this.addHooks(rawHooks);
-    }
-    this.validateConfiguration();
-
-    return await installValidationActions(this.client).encodeInstallValidation({
-      validationConfig: this.validationConfig,
-      selectors: this.selectors,
-      installData: this.installData,
-      hooks: this.hooks,
-      account,
-    });
+    return await this.encodeInstallValidationCall();
   }
 
   /**
-   * Compiles the install arguments for the installValidation function.
+   * Compiles the install arguments for the installValidation function. Translates
+   * any permissions added via {@link addPermission}/{@link addPermissions} into
+   * hooks before returning, so the returned `hooks` array reflects the full
+   * configured permission set.
    *
    * @returns {Promise<InstallValidationParams>} The install arguments.
    */
@@ -516,15 +501,53 @@ export class PermissionBuilder {
       throw new AccountNotFoundError();
     }
 
+    const hooks = this.buildHooks();
     this.validateConfiguration();
 
     return {
       validationConfig: this.validationConfig,
       selectors: this.selectors,
       installData: this.installData,
-      hooks: this.hooks,
+      hooks,
       account,
     };
+  }
+
+  // Shared encoder for compileRaw / compileDeferred. extraHooks lets the deferred
+  // path inject its TimeRange hook without mutating this.hooks.
+  private async encodeInstallValidationCall(
+    extraHooks: Hook[] = [],
+  ): Promise<Hex> {
+    const account = this.client.account;
+    if (!account || !isModularAccountV2(account)) {
+      throw new AccountNotFoundError();
+    }
+
+    const hooks = this.buildHooks(extraHooks);
+    this.validateConfiguration();
+
+    return await installValidationActions(this.client).encodeInstallValidation({
+      validationConfig: this.validationConfig,
+      selectors: this.selectors,
+      installData: this.installData,
+      hooks,
+      account,
+    });
+  }
+
+  // Assembles the final hook array fresh on every call: constructor-provided
+  // hooks, plus any extras the caller wants injected, plus encoded hooks from
+  // pending permissions. Does not mutate this.hooks — callers may invoke any
+  // compile method any number of times without duplication.
+  private buildHooks(extraHooks: Hook[] = []): Hook[] {
+    const result: Hook[] = [...this.hooks, ...extraHooks];
+    if (this.permissions.length > 0) {
+      const rawHooks = this.translatePermissions(
+        this.validationConfig.entityId,
+      );
+      result.push(...this.encodeRawHooks(rawHooks));
+    }
+    return result;
   }
 
   private validateConfiguration(): void {
@@ -762,10 +785,14 @@ export class PermissionBuilder {
     return rawHooks;
   }
 
-  private addHooks(rawHooks: RawHooks) {
+  // Encodes translated RawHooks into the on-the-wire Hook[] form. Returns a
+  // fresh array; does not mutate this.hooks.
+  private encodeRawHooks(rawHooks: RawHooks): Hook[] {
+    const result: Hook[] = [];
+
     const ntt = rawHooks[HookIdentifier.NATIVE_TOKEN_TRANSFER];
     if (ntt) {
-      this.hooks.push({
+      result.push({
         hookConfig: ntt.hookConfig,
         initData: NativeTokenLimitModule.encodeOnInstallData(ntt.initData),
       });
@@ -773,7 +800,7 @@ export class PermissionBuilder {
 
     const erc20 = rawHooks[HookIdentifier.ERC20_TOKEN_TRANSFER];
     if (erc20) {
-      this.hooks.push({
+      result.push({
         hookConfig: erc20.hookConfig,
         initData: AllowlistModule.encodeOnInstallData(erc20.initData),
       });
@@ -781,7 +808,7 @@ export class PermissionBuilder {
 
     const gl = rawHooks[HookIdentifier.GAS_LIMIT];
     if (gl) {
-      this.hooks.push({
+      result.push({
         hookConfig: gl.hookConfig,
         initData: NativeTokenLimitModule.encodeOnInstallData(gl.initData),
       });
@@ -789,10 +816,12 @@ export class PermissionBuilder {
 
     const allowlist = rawHooks[HookIdentifier.PREVAL_ALLOWLIST];
     if (allowlist) {
-      this.hooks.push({
+      result.push({
         hookConfig: allowlist.hookConfig,
         initData: AllowlistModule.encodeOnInstallData(allowlist.initData),
       });
     }
+
+    return result;
   }
 }
