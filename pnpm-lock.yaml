@@ -249,8 +249,8 @@ importers:
         specifier: workspace:*
         version: link:../common
       '@alchemy/wallet-api-types':
-        specifier: 0.2.0-alpha.1
-        version: 0.2.0-alpha.1(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)
+        specifier: 0.2.0-alpha.2
+        version: 0.2.0-alpha.2(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)
       deep-equal:
         specifier: ^2.2.3
         version: 2.2.3
@@ -326,8 +326,8 @@ packages:
     peerDependencies:
       viem: ^2.45.0
 
-  '@alchemy/wallet-api-types@0.2.0-alpha.1':
-    resolution: {integrity: sha512-Yd40U7SFXb5oAprRmt7PwHzNm+vrdE2YCr6+SuvcIMfLLg5g/3/NWTDWDV+JAenH8daSe2onkML/PXieHVSAvA==}
+  '@alchemy/wallet-api-types@0.2.0-alpha.2':
+    resolution: {integrity: sha512-ug9zINrUyzPMiqG3ifx1p4yoKGx1pfaWOghdz7rXfeIdGCW0bx69xA88Xh1B2Mf7Blz4nY0tmnzgsJ2tbdR6Nw==}
     peerDependencies:
       typescript: ^5.8.2
 
@@ -8182,7 +8182,7 @@ snapshots:
       viem: 2.46.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3)
       zod: 3.25.76
 
-  '@alchemy/wallet-api-types@0.2.0-alpha.1(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)':
+  '@alchemy/wallet-api-types@0.2.0-alpha.2(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)':
     dependencies:
       '@alchemy/common': 5.0.0-beta.24(viem@2.46.3(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@6.0.6)(zod@4.4.3))
       deep-equal: 2.2.3
