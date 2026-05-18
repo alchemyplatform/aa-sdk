@@ -63,7 +63,7 @@
   },
   "dependencies": {
     "@alchemy/common": "workspace:*",
-    "@alchemy/wallet-api-types": "0.2.0-alpha.1",
+    "@alchemy/wallet-api-types": "0.2.0-alpha.2",
     "deep-equal": "^2.2.3",
     "ox": "^0.11.1",
     "zod": "^4.4.1"
