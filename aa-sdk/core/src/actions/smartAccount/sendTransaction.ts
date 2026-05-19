@@ -18,7 +18,7 @@ import type { UserOperationOverrides } from "../../types.js";
 import { buildUserOperationFromTx } from "./buildUserOperationFromTx.js";
 import { _sendUserOperation } from "./internal/sendUserOperation.js";
 import type { UserOperationContext } from "./types.js";
-import { waitForUserOperationTransaction } from "./waitForUserOperationTransacation.js";
+import { waitForUserOperationTransaction } from "./waitForUserOperationTransaction.js";
 import { clientHeaderTrack } from "../../index.js";
 
 /**
