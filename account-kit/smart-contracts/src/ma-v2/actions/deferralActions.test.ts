@@ -15,15 +15,20 @@ import {
 import {
   buildDeferredActionDigest,
   deferralActions,
+  getDefaultAllowlistModuleAddress,
+  getDefaultNativeTokenLimitModuleAddress,
+  HookType,
   PermissionBuilder,
   PermissionType,
   RootPermissionOnlyError,
   SelectorNotAllowed,
   type Permission,
 } from "@account-kit/smart-contracts/experimental";
+import { InvalidEntityIdError } from "@aa-sdk/core";
 import {
   concat,
   custom,
+  decodeAbiParameters,
   fromHex,
   isAddress,
   parseEther,
@@ -623,6 +628,247 @@ describe("MA v2 deferral actions tests", async () => {
           deadline: 0,
         }),
     ).not.toThrow();
+  });
+
+  const HALF_UINT32 = 2147483647;
+
+  it.each([HALF_UINT32, HALF_UINT32 + 1, 4294967295])(
+    "PermissionBuilder: constructor rejects entityId %s (reserved offset range)",
+    async (entityId) => {
+      const provider = await givenConnectedProvider({ signer });
+      const sessionKeyAddress = await sessionKey.getAddress();
+      expect(
+        () =>
+          new PermissionBuilder({
+            client: provider.extend(deferralActions),
+            key: {
+              publicKey: sessionKeyAddress,
+              type: "secp256k1",
+            },
+            entityId,
+            nonce: 0n,
+            deadline: 0,
+          }),
+      ).toThrow(InvalidEntityIdError);
+    },
+  );
+
+  it("PermissionBuilder: GAS_LIMIT and NATIVE_TOKEN_TRANSFER install to distinct slots", async () => {
+    const provider = await givenConnectedProvider({ signer });
+    const entityId = 7;
+
+    const builder = new PermissionBuilder({
+      client: provider.extend(deferralActions),
+      key: {
+        publicKey: await sessionKey.getAddress(),
+        type: "secp256k1",
+      },
+      entityId,
+      nonce: 0n,
+      deadline: 0,
+    })
+      .addPermission({
+        permission: {
+          type: PermissionType.NATIVE_TOKEN_TRANSFER,
+          data: { allowance: toHex(parseEther("1")) },
+        },
+      })
+      .addPermission({
+        permission: {
+          type: PermissionType.GAS_LIMIT,
+          data: { limit: toHex(parseEther("0.01")) },
+        },
+      })
+      .addSelector({ selector: "0xdeadbeef" });
+
+    await builder.compileRaw();
+    const { hooks } = await builder.compileInstallArgs();
+
+    const chain = instance.chain;
+    const nttAddress = getDefaultNativeTokenLimitModuleAddress(chain);
+
+    const nativeHook = hooks.find(
+      (h) =>
+        h.hookConfig.address === nttAddress &&
+        h.hookConfig.hookType === HookType.EXECUTION,
+    );
+    const gasHook = hooks.find(
+      (h) =>
+        h.hookConfig.address === nttAddress &&
+        h.hookConfig.hookType === HookType.VALIDATION,
+    );
+
+    expect(nativeHook).toBeDefined();
+    expect(gasHook).toBeDefined();
+
+    expect(nativeHook!.hookConfig.entityId).toBe(entityId);
+    expect(gasHook!.hookConfig.entityId).toBe(entityId + HALF_UINT32);
+
+    const [nativeInitEntityId, nativeSpendLimit] = decodeAbiParameters(
+      [{ type: "uint32" }, { type: "uint256" }],
+      nativeHook!.initData,
+    );
+    const [gasInitEntityId, gasSpendLimit] = decodeAbiParameters(
+      [{ type: "uint32" }, { type: "uint256" }],
+      gasHook!.initData,
+    );
+
+    expect(nativeInitEntityId).toBe(entityId);
+    expect(gasInitEntityId).toBe(entityId + HALF_UINT32);
+    expect(nativeSpendLimit).toBe(parseEther("1"));
+    expect(gasSpendLimit).toBe(parseEther("0.01"));
+  });
+
+  it("PermissionBuilder: GAS_LIMIT alone is still installed at the offset entityId", async () => {
+    const provider = await givenConnectedProvider({ signer });
+    const entityId = 11;
+
+    const builder = new PermissionBuilder({
+      client: provider.extend(deferralActions),
+      key: {
+        publicKey: await sessionKey.getAddress(),
+        type: "secp256k1",
+      },
+      entityId,
+      nonce: 0n,
+      deadline: 0,
+    })
+      .addPermission({
+        permission: {
+          type: PermissionType.GAS_LIMIT,
+          data: { limit: toHex(parseEther("0.01")) },
+        },
+      })
+      .addSelector({ selector: "0xdeadbeef" });
+
+    await builder.compileRaw();
+    const { hooks } = await builder.compileInstallArgs();
+
+    expect(hooks).toHaveLength(1);
+    const gasHook = hooks[0];
+    expect(gasHook.hookConfig.address).toBe(
+      getDefaultNativeTokenLimitModuleAddress(instance.chain),
+    );
+    expect(gasHook.hookConfig.hookType).toBe(HookType.VALIDATION);
+    expect(gasHook.hookConfig.entityId).toBe(entityId + HALF_UINT32);
+
+    const [gasInitEntityId, gasSpendLimit] = decodeAbiParameters(
+      [{ type: "uint32" }, { type: "uint256" }],
+      gasHook.initData,
+    );
+    expect(gasInitEntityId).toBe(entityId + HALF_UINT32);
+    expect(gasSpendLimit).toBe(parseEther("0.01"));
+  });
+
+  it("PermissionBuilder: ERC20_TOKEN_TRANSFER alone produces two distinct AllowlistModule slots", async () => {
+    const provider = await givenConnectedProvider({ signer });
+    const entityId = 13;
+    const erc20Token: Address = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48";
+
+    const builder = new PermissionBuilder({
+      client: provider.extend(deferralActions),
+      key: {
+        publicKey: await sessionKey.getAddress(),
+        type: "secp256k1",
+      },
+      entityId,
+      nonce: 0n,
+      deadline: 0,
+    }).addPermission({
+      permission: {
+        type: PermissionType.ERC20_TOKEN_TRANSFER,
+        data: { address: erc20Token, allowance: toHex(1_000_000_000n) },
+      },
+    });
+
+    await builder.compileRaw();
+    const { hooks } = await builder.compileInstallArgs();
+
+    expect(hooks).toHaveLength(2);
+
+    const allowlistAddress = getDefaultAllowlistModuleAddress(instance.chain);
+
+    const erc20Hook = hooks.find(
+      (h) =>
+        h.hookConfig.address === allowlistAddress &&
+        h.hookConfig.hookType === HookType.EXECUTION,
+    );
+    const allowlistHook = hooks.find(
+      (h) =>
+        h.hookConfig.address === allowlistAddress &&
+        h.hookConfig.hookType === HookType.VALIDATION,
+    );
+
+    expect(erc20Hook).toBeDefined();
+    expect(allowlistHook).toBeDefined();
+    expect(erc20Hook!.hookConfig.entityId).toBe(entityId + HALF_UINT32);
+    expect(allowlistHook!.hookConfig.entityId).toBe(entityId);
+  });
+
+  it("PermissionBuilder: NTT + ERC20 + GAS_LIMIT produce four distinct hooks across both shared modules", async () => {
+    const provider = await givenConnectedProvider({ signer });
+    const entityId = 9;
+    const erc20Token: Address = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48";
+
+    const builder = new PermissionBuilder({
+      client: provider.extend(deferralActions),
+      key: {
+        publicKey: await sessionKey.getAddress(),
+        type: "secp256k1",
+      },
+      entityId,
+      nonce: 0n,
+      deadline: 0,
+    })
+      .addPermission({
+        permission: {
+          type: PermissionType.NATIVE_TOKEN_TRANSFER,
+          data: { allowance: toHex(parseEther("1")) },
+        },
+      })
+      .addPermission({
+        permission: {
+          type: PermissionType.ERC20_TOKEN_TRANSFER,
+          data: { address: erc20Token, allowance: toHex(1_000_000_000n) },
+        },
+      })
+      .addPermission({
+        permission: {
+          type: PermissionType.GAS_LIMIT,
+          data: { limit: toHex(parseEther("0.01")) },
+        },
+      });
+
+    await builder.compileRaw();
+    const { hooks } = await builder.compileInstallArgs();
+
+    expect(hooks).toHaveLength(4);
+
+    const nttAddress = getDefaultNativeTokenLimitModuleAddress(instance.chain);
+    const allowlistAddress = getDefaultAllowlistModuleAddress(instance.chain);
+
+    const find = (address: Address, hookType: HookType) =>
+      hooks.find(
+        (h) =>
+          h.hookConfig.address === address &&
+          h.hookConfig.hookType === hookType,
+      );
+
+    const nttHook = find(nttAddress, HookType.EXECUTION);
+    const gasHook = find(nttAddress, HookType.VALIDATION);
+    const erc20Hook = find(allowlistAddress, HookType.EXECUTION);
+    const allowlistHook = find(allowlistAddress, HookType.VALIDATION);
+
+    expect(nttHook).toBeDefined();
+    expect(gasHook).toBeDefined();
+    expect(erc20Hook).toBeDefined();
+    expect(allowlistHook).toBeDefined();
+
+    expect(nttHook!.hookConfig.entityId).toBe(entityId);
+    expect(gasHook!.hookConfig.entityId).toBe(entityId + HALF_UINT32);
+
+    expect(allowlistHook!.hookConfig.entityId).toBe(entityId);
+    expect(erc20Hook!.hookConfig.entityId).toBe(entityId + HALF_UINT32);
   });
 
   /* -------------------------------------------------------------------------- */
