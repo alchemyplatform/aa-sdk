@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.88.3](https://github.com/alchemyplatform/aa-sdk/compare/v4.88.2...v4.88.3) (2026-05-19)
+
+### Bug Fixes
+
+- **smart-contracts:** backport GAS_LIMIT entityId offset to v4 ([#2517](https://github.com/alchemyplatform/aa-sdk/issues/2517)) ([aa23def](https://github.com/alchemyplatform/aa-sdk/commit/aa23defc5b5c4bec43187667f52ad9a77ce5cbc3)), closes [#2511](https://github.com/alchemyplatform/aa-sdk/issues/2511)
+
 ## [4.88.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.88.1...v4.88.2) (2026-05-06)
 
 ### Bug Fixes
