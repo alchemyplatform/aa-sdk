@@ -1,5 +1,6 @@
 import {
   erc7677Middleware,
+  InvalidEntityIdError,
   LocalAccountSigner,
   type SmartAccountSigner,
   type UserOperationRequest_v7,
@@ -24,7 +25,6 @@ import {
   SelectorNotAllowed,
   type Permission,
 } from "@account-kit/smart-contracts/experimental";
-import { InvalidEntityIdError } from "@aa-sdk/core";
 import {
   concat,
   custom,
