@@ -157,9 +157,15 @@ export class SessionManager {
 
   public setTemporarySession = (session: TemporarySession) => {
     // temporary session must be placed in localStorage so that it can be accessed across tabs
+    // Persist only the minimum fields needed for cross-tab continuation.
+    // Do not store the full temporary session payload in cleartext.
+    const persistedSession = {
+      orgId: session.orgId,
+      isNewUser: session.isNewUser,
+    };
     localStorage.setItem(
       `${this.sessionKey}:temporary`,
-      JSON.stringify(session),
+      JSON.stringify(persistedSession),
     );
   };
 
@@ -171,7 +177,15 @@ export class SessionManager {
       return null;
     }
 
-    return JSON.parse(sessionStr);
+    const parsed = JSON.parse(sessionStr) as {
+      orgId?: string;
+      isNewUser?: boolean;
+    };
+
+    return {
+      orgId: parsed.orgId ?? "",
+      isNewUser: parsed.isNewUser,
+    };
   };
 
   on = <E extends keyof SessionManagerEvents>(
