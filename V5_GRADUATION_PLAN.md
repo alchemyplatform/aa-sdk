@@ -57,6 +57,21 @@ git log --oneline origin/4.x.x -3     # Should show v4 commits (v4.88.2, etc.)
 
 ---
 
+## Phase 3.5: In-Repo Agent Skills & Docs Cleanup
+
+After the v5 → main swap lands, update agent-facing docs in this repo that were authored against the `v5.x.x` branch / beta-release model:
+
+- `AGENTS.md` — replace `v5.x.x` source-of-truth references and `run-affected-tests.sh v5.x.x` examples with `main`; drop "v5 beta publish" from the skills table; remove the `/publish-v5-beta` command entry.
+- `.agents/commands/publish-v5-beta.md` — delete (workflow renamed to `publish-package.yml` and beta preid removed).
+- `.agents/skills/release-workflows/SKILL.md` — remove the v5-beta-publish bullet and the `update-v5-docs.yml` description.
+- `.agents/skills/release-workflows/rules/v5-beta-publish.md` — delete (workflow no longer exists).
+- `.agents/skills/release-workflows/rules/v5-docs-sync.md` — delete (script + workflow removed in graduation commit).
+- `.agents/skills/tooling/SKILL.md` — change `v5.x.x` workspace reference to `main`; drop "v5 beta version" mention from the `lerna.json` bullet.
+- `.agents/skills/tooling/rules/tracked-tree-only.md` — replace `v5.x.x` source-truth references with `main`.
+- `.agents/skills/testing/rules/affected-tests.md` — update `run-affected-tests.sh v5.x.x` example to `main`.
+
+---
+
 ## Phase 4: v4 Maintenance Setup (on 4.x.x branch)
 
 ### 4.1 - Add branch protection to 4.x.x

@@ -70,6 +70,21 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
 
+      - name: Dry run - show what would be published
+        if: ${{ !inputs.publish }}
+        shell: bash
+        run: |
+          echo "=== DRY RUN — no packages will be published ==="
+          echo "Current version: $(node -p 'require("./lerna.json").version')"
+          echo ""
+          echo "Changed packages:"
+          pnpm lerna changed --long || echo "(no changes detected)"
+          echo ""
+          echo "Computed next version:"
+          pnpm lerna version --conventional-commits --no-private --yes --no-push --no-git-tag-version --dry-run || true
+          echo ""
+          echo "=== To publish, re-run with 'publish' checked ==="
+
       # lerna publish handles: version bump, build (via `version` lifecycle), commit, tag, npm publish, and git push
       - name: Publish using Lerna
         if: inputs.publish
