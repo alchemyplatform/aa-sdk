@@ -50,25 +50,23 @@ interface SDKReference {
   contents: YamlPackageSection[];
 }
 
-type PackageDisplayNames = Record<string, Record<string, string>>;
+type PackageDisplayNames = Record<string, string>;
 type TypeSections = Record<string, string>;
 
-const PACKAGE_DISPLAY_NAMES: PackageDisplayNames = {
-  "aa-sdk": {
-    core: "AA-SDK core",
-    ethers: "AA-SDK ethers",
-  },
-  "account-kit": {
-    core: "Other Javascript Frameworks",
-    infra: "Infra",
-    react: "React",
-    "react-native": "React Native",
-    "rn-signer": "React Native Signer",
-    signer: "Signer",
-    "smart-contracts": "Smart contracts",
-    "wallet-client": "Wallet client",
-  },
+const PACKAGE_DISPLAY_NAMES: Record<string, string> = {
+  "aa-infra": "AA Infra",
+  common: "Alchemy Common",
+  "smart-accounts": "Smart Accounts",
+  "wallet-apis": "Wallet APIs",
 } as const;
+
+// Be sure to keep in sync w/ SDK_PATH_REGEX in the `docs-site` repo.
+const PACKAGES_INCLUDED_IN_NAV: string[] = [
+  "aa-infra",
+  "common",
+  "smart-accounts",
+  "wallet-apis",
+];
 
 const TYPE_SECTIONS: TypeSections = {
   functions: "Functions",
@@ -151,6 +149,23 @@ function toDisplayName(fileName: string): string {
 }
 
 /**
+ * Convert a nested export file name to its navigation display name.
+ *
+ * @param {string} fileName - The file name to convert
+ * @param {string} subpathName - The nested export subpath name
+ * @returns {string} The nested export display name
+ */
+function toNestedExportDisplayName(
+  fileName: string,
+  subpathName: string,
+): string {
+  const displayName = toDisplayName(fileName);
+  return subpathName === "experimental"
+    ? `${displayName} (experimental)`
+    : displayName;
+}
+
+/**
  * Determine if a function should be categorized as a component (React components)
  *
  * @param {string} fileName - The function name
@@ -176,29 +191,66 @@ function isReactComponent(fileName: string, packageName: string): boolean {
 }
 
 /**
+ * Generate a navigation subsection for a TypeDoc type directory.
+ *
+ * @param {YamlPackageSection} packageSection - The package section to append nested export pages to.
+ * @param {string} subpathName - The nested export subpath name.
+ * @param {DirectoryItem} typeDir - TypeDoc directory for functions, type aliases, variables, etc.
+ * @returns {void}
+ */
+function appendNestedExportTypeSection(
+  packageSection: YamlPackageSection,
+  subpathName: string,
+  typeDir: DirectoryItem,
+): void {
+  const typeDisplayName = TYPE_SECTIONS[typeDir.name];
+  if (!typeDisplayName) {
+    return;
+  }
+
+  let targetSection = packageSection.contents.find(
+    (child) => child.section === typeDisplayName,
+  );
+  if (!targetSection) {
+    targetSection = {
+      section: typeDisplayName,
+      contents: [],
+    };
+    packageSection.contents.push(targetSection);
+  }
+
+  for (const item of typeDir.children) {
+    if (item.type === "file") {
+      targetSection.contents.push({
+        page: toNestedExportDisplayName(item.name, subpathName),
+        path: item.mdxPath,
+      });
+    }
+  }
+}
+
+/**
  * Generate YAML structure for a package section
  *
- * @param {string} packageName - The main package name (aa-sdk, account-kit)
- * @param {string} subPackageName - The sub-package name (core, react, etc.)
+ * @param {string} packageName - The package name (aa-infra, common, etc.)
  * @param {DirectoryItem} packageData - The package data structure
  * @param {string} packagePath - The full package path
  * @returns {YamlPackageSection} The generated package section structure
  */
 function generatePackageSection(
   packageName: string,
-  subPackageName: string,
   packageData: DirectoryItem,
   packagePath: string,
 ): YamlPackageSection {
-  const displayName =
-    PACKAGE_DISPLAY_NAMES[packageName]?.[subPackageName] ||
-    `${packageName}/${subPackageName}`;
+  const displayName = PACKAGE_DISPLAY_NAMES[packageName] || packageName;
 
   const section: YamlPackageSection = {
     section: displayName,
     path: `wallets/pages/reference/${packagePath}/README.mdx`,
     contents: [],
   };
+
+  const nestedExportDirs: DirectoryItem[] = [];
 
   // Process each type directory (functions, classes, etc.)
   for (const typeDir of packageData.children) {
@@ -207,7 +259,10 @@ function generatePackageSection(
     const typeName = typeDir.name;
     const typeDisplayName = TYPE_SECTIONS[typeName];
 
-    if (!typeDisplayName) continue;
+    if (!typeDisplayName) {
+      nestedExportDirs.push(typeDir);
+      continue;
+    }
 
     const typeSection: YamlSection = {
       section: typeDisplayName,
@@ -252,14 +307,14 @@ function generatePackageSection(
 
       for (const item of typeDir.children) {
         if (item.type === "file") {
-          if (isReactComponent(item.name, subPackageName)) {
+          if (isReactComponent(item.name, packageName)) {
             components.push({
               page: toDisplayName(item.name),
               path: item.mdxPath,
             });
           } else if (
             item.name.startsWith("use") &&
-            (subPackageName === "react" || subPackageName === "react-native")
+            (packageName === "react" || packageName === "react-native")
           ) {
             hooks.push({
               page: toDisplayName(item.name),
@@ -307,6 +362,14 @@ function generatePackageSection(
     }
   }
 
+  for (const nestedExportDir of nestedExportDirs) {
+    for (const typeDir of nestedExportDir.children) {
+      if (typeDir.type === "directory") {
+        appendNestedExportTypeSection(section, nestedExportDir.name, typeDir);
+      }
+    }
+  }
+
   return section;
 }
 
@@ -333,42 +396,41 @@ function generateSDKReference(): SDKReference {
       continue;
     }
 
-    // Process each package within the top-level directory
-    for (const packageDir of topLevel.children) {
-      if (packageDir.type !== "directory") continue;
+    // Only include packages that are ready for the nav
+    if (!PACKAGES_INCLUDED_IN_NAV.includes(packageName)) {
+      continue;
+    }
 
-      const fullPackagePath = `${packageName}/${packageDir.name}/src`;
+    // Each top-level directory is a package (e.g., aa-infra, common)
+    // Look for src/ directly inside
+    let srcDir = topLevel.children.find(
+      (child): child is DirectoryItem =>
+        child.type === "directory" && child.name === "src",
+    );
 
-      let srcDir = packageDir.children.find(
+    if (!srcDir) continue;
+
+    // Handle special cases for packages which have exports subdirectory
+    let packagePath = `${packageName}/src`;
+    if (packageName === "wallet-apis" || packageName === "infra") {
+      const exportsDir = srcDir.children.find(
         (child): child is DirectoryItem =>
-          child.type === "directory" && child.name === "src",
+          child.type === "directory" && child.name === "exports",
       );
-
-      if (!srcDir) continue;
-
-      // Handle special cases for packages which have exports subdirectory
-      let actualPackagePath = fullPackagePath;
-      if (packageDir.name === "wallet-client" || packageDir.name === "infra") {
-        const exportsDir = srcDir.children.find(
-          (child): child is DirectoryItem =>
-            child.type === "directory" && child.name === "exports",
-        );
-        if (exportsDir) {
-          srcDir = exportsDir;
-          actualPackagePath = `${packageName}/${packageDir.name}/src/exports`;
-        }
+      if (exportsDir) {
+        srcDir = exportsDir;
+        packagePath = `${packageName}/src/exports`;
       }
+    }
 
-      const packageSection = generatePackageSection(
-        packageName,
-        packageDir.name,
-        srcDir,
-        actualPackagePath,
-      );
+    const packageSection = generatePackageSection(
+      packageName,
+      srcDir,
+      packagePath,
+    );
 
-      if (packageSection.contents.length > 0) {
-        sdkReference.contents.push(packageSection);
-      }
+    if (packageSection.contents.length > 0) {
+      sdkReference.contents.push(packageSection);
     }
   }
 
@@ -425,49 +487,7 @@ function updateDocsYml(sdkReference: SDKReference): void {
     `Found SDK Reference section from line ${startIndex + 1} to ${endIndex}`,
   );
 
-  // Preserve the v5/v4 versioned structure in docs.yml.
-  // The SDK Reference section is split into "5.x.x (beta)" (externally managed)
-  // and "4.x.x" (regenerated by this script). Parse the existing structure so we
-  // can preserve the v5 section and wrap regenerated v4 content inside "4.x.x".
-  const existingBlock = lines
-    .slice(startIndex, endIndex)
-    .map((line) => {
-      const baseIndent = "  ".repeat(currentIndent);
-      return line.startsWith(baseIndent) ? line.slice(baseIndent.length) : line;
-    })
-    .join("\n");
-  const existingSdkRef = yaml.load(existingBlock) as
-    | {
-        section: string;
-        contents?: { section: string; [key: string]: unknown }[];
-      }[]
-    | null;
-
-  const v5Section = existingSdkRef?.[0]?.contents?.find((s) =>
-    s.section.startsWith("5.x.x"),
-  );
-
-  // Build the final SDK Reference with versioned subsections.
-  const versionedSdkReference: {
-    section: string;
-    contents: unknown[];
-  } = {
-    section: "SDK Reference",
-    contents: [],
-  };
-
-  if (v5Section) {
-    console.log(`Preserving v5 section: "${v5Section.section}"`);
-    versionedSdkReference.contents.push(v5Section);
-  }
-
-  versionedSdkReference.contents.push({
-    section: "4.x.x",
-    collapsed: true,
-    contents: sdkReference.contents,
-  });
-
-  const sdkReferenceYaml = yaml.dump([versionedSdkReference], {
+  const sdkReferenceYaml = yaml.dump([sdkReference], {
     indent: 2,
     lineWidth: -1, // Disable line wrapping
     noRefs: true,
@@ -489,7 +509,7 @@ function updateDocsYml(sdkReference: SDKReference): void {
     ...lines.slice(endIndex),
   ];
 
-  fs.writeFileSync(DOCS_YML_FILE, newLines.join("\n"));
+  fs.writeFileSync(DOCS_YML_FILE, newLines.join("\n") + "\n");
 
   console.log(`✅ Updated ${DOCS_YML_FILE} with new SDK Reference structure`);
 }

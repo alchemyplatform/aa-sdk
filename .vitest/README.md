@@ -1,6 +1,6 @@
 # Vitest Testing Infrastructure
 
-This directory contains the testing infrastructure for the aa-sdk project using Vitest.
+This directory contains the testing infrastructure for this repo using Vitest.
 
 ## Prerequisites
 
@@ -41,7 +41,7 @@ For complete installation instructions and troubleshooting, visit the official F
 Once Anvil is installed, you can run the tests using:
 
 ```bash
-yarn test
+pnpm test
 ```
 
 The test infrastructure will automatically start and manage Anvil instances as needed.

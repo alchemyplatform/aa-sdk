@@ -1,0 +1,13 @@
+---
+description: v5 publish, docs sync, and external docs workflow guidance
+globs: ".github/workflows/*.yml,.github/actions/**/*.yml,lerna.json,packages/*/inject-version.ts"
+alwaysApply: false
+---
+
+# Release Workflows
+
+- `publish-v5-beta.yml` must publish from `v5.x.x`, not an arbitrary event branch.
+- `update-v5-docs.yml` uses `v5.x.x` as source and opens/updates a docs PR against `main`.
+- Main-branch docs hooks call external docs systems; do not trigger or broaden them without approval.
+- Keep secrets in GitHub Actions secrets and preserve least-privilege workflow permissions.
+- Read `.agents/skills/release-workflows/` before changing release automation.

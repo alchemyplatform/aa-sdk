@@ -1,0 +1,167 @@
+import type { Address, Hex, Prettify } from "viem";
+import type { InnerWalletApiClient } from "../../types.ts";
+import {
+  fromRpcCapabilities,
+  mergeClientCapabilities,
+  toRpcCapabilities,
+  type PrepareCallsCapabilities,
+} from "../../utils/capabilities.js";
+import { resolveAddress, type AccountParam } from "../../utils/resolve.js";
+import { wallet_requestQuote_v0 as MethodSchema } from "@alchemy/wallet-api-types/rpc";
+import {
+  methodSchema,
+  encode,
+  decode,
+  type MethodResponse,
+} from "../../utils/schema.js";
+
+const schema = methodSchema(MethodSchema);
+type RequestQuoteV0Response = MethodResponse<typeof MethodSchema>;
+
+type SwapAmountParams =
+  | { fromAmount: bigint; minimumToAmount?: never }
+  | { fromAmount?: never; minimumToAmount: bigint };
+
+type SwapChainParams =
+  | {
+      toChainId?: never;
+      postCalls?: Array<{ to: Address; data?: Hex; value?: bigint }>;
+    }
+  | { toChainId: number; postCalls?: never };
+
+type SwapExecutionParams =
+  | { returnRawCalls?: false; capabilities?: PrepareCallsCapabilities }
+  | { returnRawCalls: true; capabilities?: never };
+
+/**
+ * Parameters accepted by the experimental `requestQuoteV0` action.
+ */
+export type RequestQuoteV0Params = Prettify<
+  {
+    fromToken: Address;
+    toToken: Address;
+    slippage?: bigint;
+    account?: AccountParam;
+    chainId?: number;
+  } & SwapAmountParams &
+    SwapChainParams &
+    SwapExecutionParams
+>;
+
+/** The modifiedRequest in client format: `account` instead of `from`, SDK capabilities. */
+type ClientModifiedRequest = Prettify<
+  Omit<
+    Extract<
+      RequestQuoteV0Response,
+      { type: "paymaster-permit" }
+    >["modifiedRequest"],
+    "from" | "capabilities"
+  > & {
+    account: Address;
+    capabilities?: PrepareCallsCapabilities;
+  }
+>;
+
+/**
+ * Result returned by the experimental `requestQuoteV0` action.
+ */
+export type RequestQuoteV0Result =
+  | Exclude<RequestQuoteV0Response, { type: "paymaster-permit" }>
+  | (Omit<
+      Extract<RequestQuoteV0Response, { type: "paymaster-permit" }>,
+      "modifiedRequest"
+    > & {
+      modifiedRequest: ClientModifiedRequest;
+    });
+
+/**
+ * Requests a quote for a token swap, returning either prepared calls for smart wallets
+ * or raw calls for EOA wallets depending on the returnRawCalls parameter.
+ *
+ * @param {InnerWalletApiClient} client - The wallet API client to use for the request
+ * @param {RequestQuoteV0Params} params - Parameters for requesting a swap quote
+ * @param {Address} params.fromToken - The address of the token to swap from
+ * @param {Address} params.toToken - The address of the token to swap to
+ * @param {bigint} [params.fromAmount] - The amount to swap from (mutually exclusive with minimumToAmount)
+ * @param {bigint} [params.minimumToAmount] - The minimum amount to receive (mutually exclusive with fromAmount)
+ * @param {AccountParam} [params.account] - The account to execute the swap from. Can be an address string or an object with an `address` property. Defaults to the client's account (signer address via EIP-7702).
+ * @param {number} [params.chainId] - The source chain ID. Defaults to the wallet client's chain.
+ * @param {number} [params.toChainId] - The destination chain ID for cross-chain swaps. Omit for same-chain swaps.
+ * @param {bigint} [params.slippage] - The maximum acceptable slippage in basis points.
+ * @param {boolean} [params.returnRawCalls] - Whether to return raw calls for EOA wallets (defaults to false for smart wallets)
+ * @param {object} [params.capabilities] - Optional capabilities to include with the request (only available when returnRawCalls is false)
+ * @param {Array<{ to: Address; data?: Hex; value?: bigint }>} [params.postCalls] - Optional calls to execute after the swap
+ * @returns {Promise<RequestQuoteV0Result>} A Promise that resolves to either prepared calls or raw calls depending on returnRawCalls
+ *
+ * @example
+ * ```ts twoslash
+ * // Request a quote for smart wallet (prepared calls)
+ * const quote = await client.requestQuoteV0({
+ *   fromToken: "0xA0b86a33E6441e1d6a8E8C7a8E8E8E8E8E8E8E8E",
+ *   toToken: "0xB0b86a33E6441e1d6a8E8C7a8E8E8E8E8E8E8E8E",
+ *   fromAmount: 1000000000000000000n, // 1 ETH
+ *   chainId: 42161, // Arbitrum
+ *   capabilities: {
+ *     paymaster: { policyId: "your-policy-id" }
+ *   }
+ * });
+ *
+ * // Request a quote for EOA wallet (raw calls)
+ * const rawQuote = await client.requestQuoteV0({
+ *   fromToken: "0xA0b86a33E6441e1d6a8E8C7a8E8E8E8E8E8E8E8E",
+ *   toToken: "0xB0b86a33E6441e1d6a8E8C7a8E8E8E8E8E8E8E8E",
+ *   fromAmount: 1000000000000000000n,
+ *   chainId: 42161,
+ *   returnRawCalls: true
+ * });
+ * ```
+ */
+export async function requestQuoteV0(
+  client: InnerWalletApiClient,
+  params: RequestQuoteV0Params,
+): Promise<RequestQuoteV0Result> {
+  const from = params.account
+    ? resolveAddress(params.account)
+    : client.account.address;
+
+  const capabilities =
+    "returnRawCalls" in params && params.returnRawCalls
+      ? undefined
+      : mergeClientCapabilities(
+          client,
+          "capabilities" in params ? params.capabilities : undefined,
+        );
+
+  const { account: _, chainId: __, ...rest } = params;
+  const rpcParams = encode(schema.request, {
+    ...rest,
+    chainId: params.chainId ?? client.chain.id,
+    from,
+    ...(capabilities && { capabilities: toRpcCapabilities(capabilities) }),
+  });
+
+  const rpcResp = await client.request({
+    method: "wallet_requestQuote_v0",
+    params: [rpcParams],
+  });
+
+  const decoded = decode(schema.response, rpcResp);
+
+  // Transform paymaster-permit modifiedRequest from RPC format to client format:
+  // - `from` (RPC) → `account` (client)
+  // - `capabilities.paymasterService` (RPC) → `capabilities.paymaster` (client)
+  if ("type" in decoded && decoded.type === "paymaster-permit") {
+    const { from, capabilities, ...restModifiedRequest } =
+      decoded.modifiedRequest;
+    return {
+      ...decoded,
+      modifiedRequest: {
+        ...restModifiedRequest,
+        account: from,
+        capabilities: fromRpcCapabilities(capabilities),
+      },
+    };
+  }
+
+  return decoded;
+}
