@@ -37,8 +37,12 @@ import {
   ValidationConfigUnsetError,
   ZeroAddressError,
 } from "./permissionBuilderErrors.js";
+import { InvalidEntityIdError } from "@aa-sdk/core";
 
-// We use this to offset the ERC20 spend limit entityId
+// Reserved offset for hooks that would otherwise collide on shared module storage
+// (ERC20 spend limit vs PREVAL_ALLOWLIST on AllowlistModule; GAS_LIMIT vs
+// NATIVE_TOKEN_TRANSFER on NativeTokenLimitModule). Any user-supplied entityId
+// must be strictly less than this so the offset namespace stays disjoint.
 const HALF_UINT32 = 2147483647;
 const ERC20_APPROVE_SELECTOR = "0x095ea7b3";
 const ERC20_TRANSFER_SELECTOR = "0xa9059cbb";
@@ -277,6 +281,10 @@ export class PermissionBuilder {
     hooks?: Hook[];
     deadline?: number;
   }) {
+    if (entityId >= HALF_UINT32) {
+      throw new InvalidEntityIdError(entityId, HALF_UINT32 - 1);
+    }
+
     this.client = client;
     this.validationConfig = {
       moduleAddress: getDefaultSingleSignerValidationModuleAddress(
@@ -570,13 +578,13 @@ export class PermissionBuilder {
               address: getDefaultNativeTokenLimitModuleAddress(
                 this.client.chain,
               ),
-              entityId,
+              entityId: entityId + HALF_UINT32,
               hookType: HookType.VALIDATION,
               hasPreHooks: true,
               hasPostHooks: false,
             },
             initData: {
-              entityId,
+              entityId: entityId + HALF_UINT32,
               spendLimit: BigInt(permission.data.limit),
             },
           };
