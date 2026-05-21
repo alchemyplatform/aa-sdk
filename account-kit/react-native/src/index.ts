@@ -30,6 +30,7 @@ export {
   useSolanaConnection,
   useSolanaSigner,
   useSolanaTransaction,
+  useSolanaWallet,
   useUser,
   useWaitForUserOperationTransaction,
 } from "@account-kit/react/hooks";
