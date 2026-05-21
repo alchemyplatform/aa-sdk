@@ -63,6 +63,7 @@ type SendCallsParams = {
                               amount: bigint;
                             }
                           | undefined;
+                        balanceCheck?: false | undefined;
                       };
                       tokenAddress: `0x${string}`;
                       maxTokenAmount?: bigint | undefined;
@@ -202,6 +203,7 @@ type SendCallsParams = {
                             amount: bigint;
                           }
                         | undefined;
+                      balanceCheck?: false | undefined;
                     };
                     tokenAddress: `0x${string}`;
                     maxTokenAmount?: bigint | undefined;
@@ -248,6 +250,7 @@ type SendCallsParams = {
                             amount: bigint;
                           }
                         | undefined;
+                      balanceCheck?: false | undefined;
                     };
                     tokenAddress: `0x${string}`;
                     maxTokenAmount?: bigint | undefined;

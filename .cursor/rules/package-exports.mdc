@@ -1,0 +1,13 @@
+---
+description: Package export maps and ESM import reminders
+globs: "packages/*/package.json,packages/*/src/**/*.ts"
+alwaysApply: false
+---
+
+# Package Exports
+
+- Treat `packages/*/package.json` `exports` as the public consumer contract.
+- Keep source entry points, emitted `dist/esm` paths, and `dist/types` paths aligned.
+- Preserve explicit `.js` extensions for relative runtime imports in package source.
+- Use `internal` and `experimental` subpaths deliberately; do not expose them in stable docs by accident.
+- Read `.agents/skills/package-exports/` for full rules before changing public API shape.
