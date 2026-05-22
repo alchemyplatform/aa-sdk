@@ -61,11 +61,12 @@ const PACKAGE_DISPLAY_NAMES: Record<string, string> = {
 } as const;
 
 // Be sure to keep in sync w/ SDK_PATH_REGEX in the `docs-site` repo.
+// Order here determines top-level package order in the generated SDK Reference nav.
 const PACKAGES_INCLUDED_IN_NAV: string[] = [
+  "wallet-apis",
+  "smart-accounts",
   "aa-infra",
   "common",
-  "smart-accounts",
-  "wallet-apis",
 ];
 
 const TYPE_SECTIONS: TypeSections = {
@@ -382,6 +383,16 @@ function generateSDKReference(): SDKReference {
   console.log("Scanning TypeDoc directory:", TYPEDOC_DIR);
 
   const structure = scanDirectory(TYPEDOC_DIR);
+  // Filesystem order is non-deterministic; sort top-level entries by their
+  // position in PACKAGES_INCLUDED_IN_NAV so the generated nav follows that order.
+  structure.sort((a, b) => {
+    const ai = PACKAGES_INCLUDED_IN_NAV.indexOf(a.name);
+    const bi = PACKAGES_INCLUDED_IN_NAV.indexOf(b.name);
+    return (
+      (ai === -1 ? Number.MAX_SAFE_INTEGER : ai) -
+      (bi === -1 ? Number.MAX_SAFE_INTEGER : bi)
+    );
+  });
   const sdkReference: SDKReference = {
     section: "SDK Reference",
     contents: [],
