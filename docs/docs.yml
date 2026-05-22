@@ -12,84 +12,133 @@ navigation:
     layout:
       - section: SDK Reference
         contents:
-          - section: AA Infra
-            path: wallets/pages/reference/aa-infra/src/README.mdx
+          - section: Wallet APIs
+            path: wallets/pages/reference/wallet-apis/src/exports/README.mdx
             contents:
               - section: Functions
                 contents:
-                  - page: estimateFeesPerGas
-                    path: wallets/pages/reference/aa-infra/src/functions/estimateFeesPerGas.mdx
-              - section: Type Aliases
-                contents:
-                  - page: RundlerClient
-                    path: wallets/pages/reference/aa-infra/src/type-aliases/RundlerClient.mdx
-                  - page: RundlerRpcSchema
-                    path: wallets/pages/reference/aa-infra/src/type-aliases/RundlerRpcSchema.mdx
-          - section: Alchemy Common
-            path: wallets/pages/reference/common/src/README.mdx
-            contents:
-              - section: Classes
-                contents:
-                  - page: AccountNotFoundError
-                    path: wallets/pages/reference/common/src/classes/AccountNotFoundError.mdx
-                  - page: BaseError
-                    path: wallets/pages/reference/common/src/classes/BaseError.mdx
-                  - page: ChainNotFoundError
-                    path: wallets/pages/reference/common/src/classes/ChainNotFoundError.mdx
-                  - page: ConnectionConfigError
-                    path: wallets/pages/reference/common/src/classes/ConnectionConfigError.mdx
-                  - page: FetchError
-                    path: wallets/pages/reference/common/src/classes/FetchError.mdx
-                  - page: InvalidRequestError
-                    path: wallets/pages/reference/common/src/classes/InvalidRequestError.mdx
-                  - page: MethodUnsupportedError
-                    path: wallets/pages/reference/common/src/classes/MethodUnsupportedError.mdx
-                  - page: ServerError
-                    path: wallets/pages/reference/common/src/classes/ServerError.mdx
-              - section: Functions
-                contents:
-                  - page: alchemyTransport
-                    path: wallets/pages/reference/common/src/functions/alchemyTransport.mdx
-                  - page: assertNever
-                    path: wallets/pages/reference/common/src/functions/assertNever.mdx
-                  - page: bigIntMax
-                    path: wallets/pages/reference/common/src/functions/bigIntMax.mdx
-                  - page: bigIntMultiply
-                    path: wallets/pages/reference/common/src/functions/bigIntMultiply.mdx
-                  - page: getAlchemyRpcUrl
-                    path: wallets/pages/reference/common/src/functions/getAlchemyRpcUrl.mdx
-                  - page: getSupportedChainIds
-                    path: wallets/pages/reference/common/src/functions/getSupportedChainIds.mdx
-                  - page: isAlchemyConnectionConfig
-                    path: wallets/pages/reference/common/src/functions/isAlchemyConnectionConfig.mdx
-                  - page: isAlchemyTransport
-                    path: wallets/pages/reference/common/src/functions/isAlchemyTransport.mdx
-                  - page: isChainSupported
-                    path: wallets/pages/reference/common/src/functions/isChainSupported.mdx
-                  - page: lowerAddress
-                    path: wallets/pages/reference/common/src/functions/lowerAddress.mdx
-                  - page: raise
-                    path: wallets/pages/reference/common/src/functions/raise.mdx
-                  - page: validateAlchemyConnectionConfig
-                    path: wallets/pages/reference/common/src/functions/validateAlchemyConnectionConfig.mdx
+                  - page: alchemyWalletTransport
+                    path: wallets/pages/reference/wallet-apis/src/exports/functions/alchemyWalletTransport.mdx
+                  - page: createSmartWalletClient
+                    path: wallets/pages/reference/wallet-apis/src/exports/functions/createSmartWalletClient.mdx
+                  - page: formatSign
+                    path: wallets/pages/reference/wallet-apis/src/exports/functions/formatSign.mdx
+                  - page: getCapabilities
+                    path: wallets/pages/reference/wallet-apis/src/exports/functions/getCapabilities.mdx
+                  - page: grantPermissions
+                    path: wallets/pages/reference/wallet-apis/src/exports/functions/grantPermissions.mdx
+                  - page: listAccounts
+                    path: wallets/pages/reference/wallet-apis/src/exports/functions/listAccounts.mdx
+                  - page: prepareCalls
+                    path: wallets/pages/reference/wallet-apis/src/exports/functions/prepareCalls.mdx
+                  - page: prepareSign
+                    path: wallets/pages/reference/wallet-apis/src/exports/functions/prepareSign.mdx
+                  - page: requestAccount
+                    path: wallets/pages/reference/wallet-apis/src/exports/functions/requestAccount.mdx
+                  - page: sendCalls
+                    path: wallets/pages/reference/wallet-apis/src/exports/functions/sendCalls.mdx
+                  - page: sendPreparedCalls
+                    path: wallets/pages/reference/wallet-apis/src/exports/functions/sendPreparedCalls.mdx
+                  - page: signMessage
+                    path: wallets/pages/reference/wallet-apis/src/exports/functions/signMessage.mdx
+                  - page: signPreparedCalls
+                    path: wallets/pages/reference/wallet-apis/src/exports/functions/signPreparedCalls.mdx
+                  - page: signSignatureRequest
+                    path: wallets/pages/reference/wallet-apis/src/exports/functions/signSignatureRequest.mdx
+                  - page: signTypedData
+                    path: wallets/pages/reference/wallet-apis/src/exports/functions/signTypedData.mdx
+                  - page: smartWalletActions
+                    path: wallets/pages/reference/wallet-apis/src/exports/functions/smartWalletActions.mdx
+                  - page: undelegateAccount
+                    path: wallets/pages/reference/wallet-apis/src/exports/functions/undelegateAccount.mdx
+                  - page: requestQuoteV0 (experimental)
+                    path: wallets/pages/reference/wallet-apis/src/exports/experimental/functions/requestQuoteV0.mdx
               - section: Interfaces
                 contents:
-                  - page: AlchemyTransportConfig
-                    path: wallets/pages/reference/common/src/interfaces/AlchemyTransportConfig.mdx
+                  - page: SolanaSigner
+                    path: wallets/pages/reference/wallet-apis/src/exports/interfaces/SolanaSigner.mdx
               - section: Type Aliases
                 contents:
-                  - page: AlchemyConnectionConfig
-                    path: wallets/pages/reference/common/src/type-aliases/AlchemyConnectionConfig.mdx
-                  - page: AlchemyTransport
-                    path: wallets/pages/reference/common/src/type-aliases/AlchemyTransport.mdx
-                  - page: ExtractRpcMethod
-                    path: wallets/pages/reference/common/src/type-aliases/ExtractRpcMethod.mdx
-                  - page: Never
-                    path: wallets/pages/reference/common/src/type-aliases/Never.mdx
+                  - page: AlchemyWalletTransport
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/AlchemyWalletTransport.mdx
+                  - page: CreateEvmSmartWalletClientParams
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/CreateEvmSmartWalletClientParams.mdx
+                  - page: CreateSmartWalletClientParams
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/CreateSmartWalletClientParams.mdx
+                  - page: CreateSolanaSmartWalletClientParams
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/CreateSolanaSmartWalletClientParams.mdx
+                  - page: FormatSignParams
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/FormatSignParams.mdx
+                  - page: FormatSignResult
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/FormatSignResult.mdx
+                  - page: GetCapabilitiesParams
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/GetCapabilitiesParams.mdx
+                  - page: GetCapabilitiesResult
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/GetCapabilitiesResult.mdx
+                  - page: GrantPermissionsParams
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/GrantPermissionsParams.mdx
+                  - page: GrantPermissionsResult
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/GrantPermissionsResult.mdx
+                  - page: ListAccountsParams
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/ListAccountsParams.mdx
+                  - page: ListAccountsResult
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/ListAccountsResult.mdx
+                  - page: PrepareCallsParams
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/PrepareCallsParams.mdx
+                  - page: PrepareCallsResult
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/PrepareCallsResult.mdx
+                  - page: PrepareSignParams
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/PrepareSignParams.mdx
+                  - page: PrepareSignResult
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/PrepareSignResult.mdx
+                  - page: RequestAccountParams
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/RequestAccountParams.mdx
+                  - page: RequestAccountResult
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/RequestAccountResult.mdx
+                  - page: SendCallsParams
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SendCallsParams.mdx
+                  - page: SendCallsResult
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SendCallsResult.mdx
+                  - page: SendPreparedCallsParams
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SendPreparedCallsParams.mdx
+                  - page: SendPreparedCallsResult
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SendPreparedCallsResult.mdx
+                  - page: SignMessageParams
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SignMessageParams.mdx
+                  - page: SignMessageResult
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SignMessageResult.mdx
+                  - page: SignPreparedCallsParams
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SignPreparedCallsParams.mdx
+                  - page: SignPreparedCallsResult
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SignPreparedCallsResult.mdx
+                  - page: SignSignatureRequestParams
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SignSignatureRequestParams.mdx
+                  - page: SignSignatureRequestResult
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SignSignatureRequestResult.mdx
+                  - page: SignTypedDataParams
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SignTypedDataParams.mdx
+                  - page: SignTypedDataResult
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SignTypedDataResult.mdx
+                  - page: SmartWalletActions
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SmartWalletActions.mdx
+                  - page: SmartWalletClient
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SmartWalletClient.mdx
+                  - page: SolanaSmartWalletClient
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SolanaSmartWalletClient.mdx
+                  - page: UndelegateAccountParams
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/UndelegateAccountParams.mdx
+                  - page: UndelegateAccountResult
+                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/UndelegateAccountResult.mdx
+                  - page: RequestQuoteV0Params (experimental)
+                    path: wallets/pages/reference/wallet-apis/src/exports/experimental/type-aliases/RequestQuoteV0Params.mdx
+                  - page: RequestQuoteV0Result (experimental)
+                    path: wallets/pages/reference/wallet-apis/src/exports/experimental/type-aliases/RequestQuoteV0Result.mdx
+                  - page: SwapActions (experimental)
+                    path: wallets/pages/reference/wallet-apis/src/exports/experimental/type-aliases/SwapActions.mdx
               - section: Variables
                 contents:
-                  - page: AlchemyConnectionConfigSchema
-                    path: wallets/pages/reference/common/src/variables/AlchemyConnectionConfigSchema.mdx
+                  - page: swapActions (experimental)
+                    path: wallets/pages/reference/wallet-apis/src/exports/experimental/variables/swapActions.mdx
           - section: Smart Accounts
             path: wallets/pages/reference/smart-accounts/src/README.mdx
             contents:
@@ -395,130 +444,81 @@ navigation:
                     path: wallets/pages/reference/smart-accounts/src/variables/semiModularAccount7702StaticImpl.mdx
                   - page: semiModularAccountV2StaticImpl
                     path: wallets/pages/reference/smart-accounts/src/variables/semiModularAccountV2StaticImpl.mdx
-          - section: Wallet APIs
-            path: wallets/pages/reference/wallet-apis/src/exports/README.mdx
+          - section: AA Infra
+            path: wallets/pages/reference/aa-infra/src/README.mdx
             contents:
               - section: Functions
                 contents:
-                  - page: alchemyWalletTransport
-                    path: wallets/pages/reference/wallet-apis/src/exports/functions/alchemyWalletTransport.mdx
-                  - page: createSmartWalletClient
-                    path: wallets/pages/reference/wallet-apis/src/exports/functions/createSmartWalletClient.mdx
-                  - page: formatSign
-                    path: wallets/pages/reference/wallet-apis/src/exports/functions/formatSign.mdx
-                  - page: getCapabilities
-                    path: wallets/pages/reference/wallet-apis/src/exports/functions/getCapabilities.mdx
-                  - page: grantPermissions
-                    path: wallets/pages/reference/wallet-apis/src/exports/functions/grantPermissions.mdx
-                  - page: listAccounts
-                    path: wallets/pages/reference/wallet-apis/src/exports/functions/listAccounts.mdx
-                  - page: prepareCalls
-                    path: wallets/pages/reference/wallet-apis/src/exports/functions/prepareCalls.mdx
-                  - page: prepareSign
-                    path: wallets/pages/reference/wallet-apis/src/exports/functions/prepareSign.mdx
-                  - page: requestAccount
-                    path: wallets/pages/reference/wallet-apis/src/exports/functions/requestAccount.mdx
-                  - page: sendCalls
-                    path: wallets/pages/reference/wallet-apis/src/exports/functions/sendCalls.mdx
-                  - page: sendPreparedCalls
-                    path: wallets/pages/reference/wallet-apis/src/exports/functions/sendPreparedCalls.mdx
-                  - page: signMessage
-                    path: wallets/pages/reference/wallet-apis/src/exports/functions/signMessage.mdx
-                  - page: signPreparedCalls
-                    path: wallets/pages/reference/wallet-apis/src/exports/functions/signPreparedCalls.mdx
-                  - page: signSignatureRequest
-                    path: wallets/pages/reference/wallet-apis/src/exports/functions/signSignatureRequest.mdx
-                  - page: signTypedData
-                    path: wallets/pages/reference/wallet-apis/src/exports/functions/signTypedData.mdx
-                  - page: smartWalletActions
-                    path: wallets/pages/reference/wallet-apis/src/exports/functions/smartWalletActions.mdx
-                  - page: undelegateAccount
-                    path: wallets/pages/reference/wallet-apis/src/exports/functions/undelegateAccount.mdx
-                  - page: requestQuoteV0 (experimental)
-                    path: wallets/pages/reference/wallet-apis/src/exports/experimental/functions/requestQuoteV0.mdx
-              - section: Interfaces
-                contents:
-                  - page: SolanaSigner
-                    path: wallets/pages/reference/wallet-apis/src/exports/interfaces/SolanaSigner.mdx
+                  - page: estimateFeesPerGas
+                    path: wallets/pages/reference/aa-infra/src/functions/estimateFeesPerGas.mdx
               - section: Type Aliases
                 contents:
-                  - page: AlchemyWalletTransport
-                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/AlchemyWalletTransport.mdx
-                  - page: CreateEvmSmartWalletClientParams
-                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/CreateEvmSmartWalletClientParams.mdx
-                  - page: CreateSmartWalletClientParams
-                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/CreateSmartWalletClientParams.mdx
-                  - page: CreateSolanaSmartWalletClientParams
-                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/CreateSolanaSmartWalletClientParams.mdx
-                  - page: FormatSignParams
-                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/FormatSignParams.mdx
-                  - page: FormatSignResult
-                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/FormatSignResult.mdx
-                  - page: GetCapabilitiesParams
-                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/GetCapabilitiesParams.mdx
-                  - page: GetCapabilitiesResult
-                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/GetCapabilitiesResult.mdx
-                  - page: GrantPermissionsParams
-                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/GrantPermissionsParams.mdx
-                  - page: GrantPermissionsResult
-                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/GrantPermissionsResult.mdx
-                  - page: ListAccountsParams
-                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/ListAccountsParams.mdx
-                  - page: ListAccountsResult
-                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/ListAccountsResult.mdx
-                  - page: PrepareCallsParams
-                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/PrepareCallsParams.mdx
-                  - page: PrepareCallsResult
-                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/PrepareCallsResult.mdx
-                  - page: PrepareSignParams
-                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/PrepareSignParams.mdx
-                  - page: PrepareSignResult
-                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/PrepareSignResult.mdx
-                  - page: RequestAccountParams
-                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/RequestAccountParams.mdx
-                  - page: RequestAccountResult
-                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/RequestAccountResult.mdx
-                  - page: SendCallsParams
-                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SendCallsParams.mdx
-                  - page: SendCallsResult
-                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SendCallsResult.mdx
-                  - page: SendPreparedCallsParams
-                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SendPreparedCallsParams.mdx
-                  - page: SendPreparedCallsResult
-                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SendPreparedCallsResult.mdx
-                  - page: SignMessageParams
-                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SignMessageParams.mdx
-                  - page: SignMessageResult
-                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SignMessageResult.mdx
-                  - page: SignPreparedCallsParams
-                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SignPreparedCallsParams.mdx
-                  - page: SignPreparedCallsResult
-                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SignPreparedCallsResult.mdx
-                  - page: SignSignatureRequestParams
-                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SignSignatureRequestParams.mdx
-                  - page: SignSignatureRequestResult
-                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SignSignatureRequestResult.mdx
-                  - page: SignTypedDataParams
-                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SignTypedDataParams.mdx
-                  - page: SignTypedDataResult
-                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SignTypedDataResult.mdx
-                  - page: SmartWalletActions
-                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SmartWalletActions.mdx
-                  - page: SmartWalletClient
-                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SmartWalletClient.mdx
-                  - page: SolanaSmartWalletClient
-                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/SolanaSmartWalletClient.mdx
-                  - page: UndelegateAccountParams
-                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/UndelegateAccountParams.mdx
-                  - page: UndelegateAccountResult
-                    path: wallets/pages/reference/wallet-apis/src/exports/type-aliases/UndelegateAccountResult.mdx
-                  - page: RequestQuoteV0Params (experimental)
-                    path: wallets/pages/reference/wallet-apis/src/exports/experimental/type-aliases/RequestQuoteV0Params.mdx
-                  - page: RequestQuoteV0Result (experimental)
-                    path: wallets/pages/reference/wallet-apis/src/exports/experimental/type-aliases/RequestQuoteV0Result.mdx
-                  - page: SwapActions (experimental)
-                    path: wallets/pages/reference/wallet-apis/src/exports/experimental/type-aliases/SwapActions.mdx
+                  - page: RundlerClient
+                    path: wallets/pages/reference/aa-infra/src/type-aliases/RundlerClient.mdx
+                  - page: RundlerRpcSchema
+                    path: wallets/pages/reference/aa-infra/src/type-aliases/RundlerRpcSchema.mdx
+          - section: Alchemy Common
+            path: wallets/pages/reference/common/src/README.mdx
+            contents:
+              - section: Classes
+                contents:
+                  - page: AccountNotFoundError
+                    path: wallets/pages/reference/common/src/classes/AccountNotFoundError.mdx
+                  - page: BaseError
+                    path: wallets/pages/reference/common/src/classes/BaseError.mdx
+                  - page: ChainNotFoundError
+                    path: wallets/pages/reference/common/src/classes/ChainNotFoundError.mdx
+                  - page: ConnectionConfigError
+                    path: wallets/pages/reference/common/src/classes/ConnectionConfigError.mdx
+                  - page: FetchError
+                    path: wallets/pages/reference/common/src/classes/FetchError.mdx
+                  - page: InvalidRequestError
+                    path: wallets/pages/reference/common/src/classes/InvalidRequestError.mdx
+                  - page: MethodUnsupportedError
+                    path: wallets/pages/reference/common/src/classes/MethodUnsupportedError.mdx
+                  - page: ServerError
+                    path: wallets/pages/reference/common/src/classes/ServerError.mdx
+              - section: Functions
+                contents:
+                  - page: alchemyTransport
+                    path: wallets/pages/reference/common/src/functions/alchemyTransport.mdx
+                  - page: assertNever
+                    path: wallets/pages/reference/common/src/functions/assertNever.mdx
+                  - page: bigIntMax
+                    path: wallets/pages/reference/common/src/functions/bigIntMax.mdx
+                  - page: bigIntMultiply
+                    path: wallets/pages/reference/common/src/functions/bigIntMultiply.mdx
+                  - page: getAlchemyRpcUrl
+                    path: wallets/pages/reference/common/src/functions/getAlchemyRpcUrl.mdx
+                  - page: getSupportedChainIds
+                    path: wallets/pages/reference/common/src/functions/getSupportedChainIds.mdx
+                  - page: isAlchemyConnectionConfig
+                    path: wallets/pages/reference/common/src/functions/isAlchemyConnectionConfig.mdx
+                  - page: isAlchemyTransport
+                    path: wallets/pages/reference/common/src/functions/isAlchemyTransport.mdx
+                  - page: isChainSupported
+                    path: wallets/pages/reference/common/src/functions/isChainSupported.mdx
+                  - page: lowerAddress
+                    path: wallets/pages/reference/common/src/functions/lowerAddress.mdx
+                  - page: raise
+                    path: wallets/pages/reference/common/src/functions/raise.mdx
+                  - page: validateAlchemyConnectionConfig
+                    path: wallets/pages/reference/common/src/functions/validateAlchemyConnectionConfig.mdx
+              - section: Interfaces
+                contents:
+                  - page: AlchemyTransportConfig
+                    path: wallets/pages/reference/common/src/interfaces/AlchemyTransportConfig.mdx
+              - section: Type Aliases
+                contents:
+                  - page: AlchemyConnectionConfig
+                    path: wallets/pages/reference/common/src/type-aliases/AlchemyConnectionConfig.mdx
+                  - page: AlchemyTransport
+                    path: wallets/pages/reference/common/src/type-aliases/AlchemyTransport.mdx
+                  - page: ExtractRpcMethod
+                    path: wallets/pages/reference/common/src/type-aliases/ExtractRpcMethod.mdx
+                  - page: Never
+                    path: wallets/pages/reference/common/src/type-aliases/Never.mdx
               - section: Variables
                 contents:
-                  - page: swapActions (experimental)
-                    path: wallets/pages/reference/wallet-apis/src/exports/experimental/variables/swapActions.mdx
+                  - page: AlchemyConnectionConfigSchema
+                    path: wallets/pages/reference/common/src/variables/AlchemyConnectionConfigSchema.mdx
