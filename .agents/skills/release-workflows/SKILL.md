@@ -14,16 +14,16 @@ docs sync workflows were retired when v5 graduated to `main`.
 
 ## Rules
 
-| Rule                                          | When to read                                                                |
-| --------------------------------------------- | --------------------------------------------------------------------------- |
-| [Package publish](rules/package-publish.md)   | Before changing `.github/workflows/publish-package.yml` or Lerna config.    |
-| [Main docs hooks](rules/main-docs-hooks.md)   | Before changing docs revalidation or SDK indexer workflows.                 |
+| Rule                                        | When to read                                                             |
+| ------------------------------------------- | ------------------------------------------------------------------------ |
+| [Package publish](rules/package-publish.md) | Before changing `.github/workflows/publish-package.yml` or Lerna config. |
+| [Main docs hooks](rules/main-docs-hooks.md) | Before changing docs revalidation or SDK indexer workflows.              |
 
 ## Evidence
 
 - `publish-package.yml` is dispatched manually with a `publish` boolean. It
   runs `pnpm lerna publish --conventional-commits --no-private --yes
-  --no-verify-access` and pushes the version commit + tags back to `main`.
+--no-verify-access` and pushes the version commit + tags back to `main`.
 - `revalidate-sdk-content.yml` posts changed `docs/pages/**/*.md` and
   `docs/pages/**/*.mdx` paths to the docs site revalidation API on `main`.
 - `trigger-sdk-indexer.yml` dispatches `index-sdk-references` to
