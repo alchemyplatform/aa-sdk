@@ -31,7 +31,7 @@ export type SendCallsResult = Prettify<SendPreparedCallsResult>;
  * @param {object} [params.capabilities] - Optional capabilities to include with the request.
  * @returns {Promise<SendPreparedCallsResult>} A Promise that resolves to the result containing the call ID.
  *
- *  @example
+ * @example
  * ```ts
  * // Send calls (uses signer address via EIP-7702 by default)
  * const result = await client.sendCalls({
