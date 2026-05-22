@@ -27,7 +27,7 @@ Rundler, and uses `VITEST_SEPOLIA_FORK_URL` when available.
 Use the workspace project names and affected-test script:
 
 ```bash
-./scripts/run-affected-tests.sh v5.x.x
+./scripts/run-affected-tests.sh main
 pnpm vitest run --project=alchemy/wallet-apis
 ```
 

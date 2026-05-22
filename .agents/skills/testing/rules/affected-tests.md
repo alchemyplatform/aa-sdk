@@ -12,8 +12,12 @@ with the matching `--project=alchemy/<package>` flags.
 ## Good
 
 ```bash
-./scripts/run-affected-tests.sh v5.x.x
+./scripts/run-affected-tests.sh main
 ```
+
+The script defaults to `main` when no base branch is provided, so plain
+`./scripts/run-affected-tests.sh` is equivalent. Pass `v4.x.x` only when
+validating a backport to the legacy v4 branch.
 
 For targeted checks:
 

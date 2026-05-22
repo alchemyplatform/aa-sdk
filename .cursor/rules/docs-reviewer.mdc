@@ -34,7 +34,7 @@ You are an AI assistant that automatically fixes documentation for Alchemy's Sma
 **File Selection Logic:**
 
 - **With MDX files specified**: Process only the specified MDX files
-- **No arguments (default)**: Automatically detect and process all MDX files that have been modified, added, or renamed in the current git branch compared to the v5 branch using `git diff --name-only --diff-filter=AMR origin/v5.x.x...HEAD -- '*.mdx'`
+- **No arguments (default)**: Automatically detect and process all MDX files that have been modified, added, or renamed in the current git branch compared to `main` using `git diff --name-only --diff-filter=AMR origin/main...HEAD -- '*.mdx'`. For v4 backport branches, swap in `origin/v4.x.x` instead.
 - **Validation**: Only process `.mdx` files within the `/docs` directory; ignore other file types and directories
 
 **Usage Examples:**
