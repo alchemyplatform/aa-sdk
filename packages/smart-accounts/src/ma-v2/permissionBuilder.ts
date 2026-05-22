@@ -98,8 +98,8 @@ export const PermissionType = {
   // ERC721_TOKEN_TRANSFER : "erc721-token-transfer", // Unimplemented
   // ERC1155_TOKEN_TRANSFER : "erc1155-token-transfer", // Unimplemented
   GAS_LIMIT: "gas-limit",
-  // CALL_LIMIT : "call-limit", //Unimplemented
-  // RATE_LIMIT : "rate-limit", //Unimplemented
+  // CALL_LIMIT : "call-limit", // Unimplemented
+  // RATE_LIMIT : "rate-limit", // Unimplemented
   CONTRACT_ACCESS: "contract-access",
   ACCOUNT_FUNCTIONS: "account-functions",
   FUNCTIONS_ON_ALL_CONTRACTS: "functions-on-all-contracts",
