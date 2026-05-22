@@ -1,15 +1,15 @@
 # Agent Router
 
 AI assistants should load skills from `.agents/skills/` based on the task
-context. This branch is the v5 SDK branch; use `v5.x.x` as the audit source,
-comparison base, and PR base for v5 SDK source and scaffold work unless the
-user explicitly asks for another branch. Generated docs sync PRs created by
-`update-v5-docs.yml` target `main`.
+context. The v5 SDK now lives on `main` (graduated from `v5.x.x` on
+2026-05-20). Use `main` as the audit source, comparison base, and PR base
+unless the user explicitly asks for another branch. The legacy v4 SDK lives
+on the `v4.x.x` branch and only receives backports/security fixes.
 
-Do not treat untracked top-level directories as source truth. On this branch,
-the tracked workspace is the root config plus `.agents/`, `.claude/`,
-`.cursor/`, `.github/`, `.vitest/`, `docs/`, `halp/`, `packages/`, `scripts/`,
-and `templates/`.
+Do not treat untracked top-level directories as source truth. On `main`, the
+tracked workspace is the root config plus `.agents/`, `.claude/`, `.cursor/`,
+`.github/`, `.vitest/`, `docs/`, `halp/`, `packages/`, `scripts/`, and
+`templates/`.
 
 ## Quick Reference
 
@@ -20,7 +20,7 @@ pnpm run lint:check
 pnpm run lint:write
 pnpm run test:ci
 pnpm run test:typecheck
-./scripts/run-affected-tests.sh v5.x.x
+./scripts/run-affected-tests.sh main
 pnpm run docs:sdk
 pnpm run lint:docs
 pnpm run docs:broken-links
@@ -40,7 +40,7 @@ use remote caching.
 | `smart-accounts`    | Light Account, Modular Account v1/v2, modules, permissions, and deferred actions.       |
 | `testing`           | Vitest workspace, Anvil/Foundry/Rundler setup, and affected test execution.             |
 | `documentation`     | MDX docs, TypeDoc reference generation, `docs/docs.yml`, and code snippet preservation. |
-| `release-workflows` | npm publish, v5 beta publish, v5 docs sync, and post-merge docs hooks.                  |
+| `release-workflows` | npm publish (`publish-package.yml`) and post-merge docs hooks (revalidate, indexer).    |
 
 ## Skill Loading
 
@@ -91,10 +91,10 @@ aa-sdk/
 
 ## Slash Commands
 
-| Command            | Description                                                   |
-| ------------------ | ------------------------------------------------------------- |
-| `/docs-reviewer`   | Existing Claude command for MDX documentation review.         |
-| `/publish-v5-beta` | Checklist for dry-running or publishing the v5 beta workflow. |
+| Command            | Description                                                                 |
+| ------------------ | --------------------------------------------------------------------------- |
+| `/docs-reviewer`   | Existing Claude command for MDX documentation review.                       |
+| `/publish-package` | Checklist for dry-running or publishing via the `publish-package.yml` flow. |
 
 ## Documentation Discovery
 

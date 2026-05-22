@@ -12,7 +12,7 @@ This repository contains Alchemy's Smart Wallets SDK (aa-sdk) documentation. The
 
 - `/docs/`: Main documentation directory containing all `.mdx` files
 - `docs/pages/reference/`: TypeDoc-generated SDK reference MDX. Change source/TSDoc or generator files, then run `pnpm run docs:sdk`.
-- Documentation follows a developer-first approach with outcome-focused content. On `v5.x.x`, use the tracked agent docs and rules instead of referencing the missing docs contributor guide.
+- Documentation follows a developer-first approach with outcome-focused content. On `main` (v5 SDK), use the tracked agent docs and rules instead of referencing the missing docs contributor guide.
 
 ## Core Documentation Principles
 
