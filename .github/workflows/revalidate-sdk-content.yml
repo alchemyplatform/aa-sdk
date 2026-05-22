@@ -94,8 +94,9 @@ jobs:
 
       - name: Call revalidation API
         if: steps.changed-files.outputs.filePaths != '[]'
+        env:
+          ALL_PATHS: ${{ steps.changed-files.outputs.filePaths }}
         run: |
-          ALL_PATHS='${{ steps.changed-files.outputs.filePaths }}'
           TOTAL=$(echo "$ALL_PATHS" | jq 'length')
           BATCH_SIZE=50
           SUCCEEDED=0
