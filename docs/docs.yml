@@ -53,10 +53,42 @@ navigation:
                     path: wallets/pages/reference/wallet-apis/src/exports/functions/undelegateAccount.mdx
                   - page: requestQuoteV0 (experimental)
                     path: wallets/pages/reference/wallet-apis/src/exports/experimental/functions/requestQuoteV0.mdx
+                  - page: fromKeypair (Solana)
+                    path: wallets/pages/reference/wallet-apis/src/exports/solana/functions/fromKeypair.mdx
+                  - page: fromKitSigner (Solana)
+                    path: wallets/pages/reference/wallet-apis/src/exports/solana/functions/fromKitSigner.mdx
+                  - page: fromWalletAdapter (Solana)
+                    path: wallets/pages/reference/wallet-apis/src/exports/solana/functions/fromWalletAdapter.mdx
+                  - page: fromWalletStandard (Solana)
+                    path: wallets/pages/reference/wallet-apis/src/exports/solana/functions/fromWalletStandard.mdx
+                  - page: getCallsStatus (Solana)
+                    path: wallets/pages/reference/wallet-apis/src/exports/solana/functions/getCallsStatus.mdx
+                  - page: prepareCalls (Solana)
+                    path: wallets/pages/reference/wallet-apis/src/exports/solana/functions/prepareCalls.mdx
+                  - page: sendCalls (Solana)
+                    path: wallets/pages/reference/wallet-apis/src/exports/solana/functions/sendCalls.mdx
+                  - page: sendPreparedCalls (Solana)
+                    path: wallets/pages/reference/wallet-apis/src/exports/solana/functions/sendPreparedCalls.mdx
+                  - page: signPreparedCalls (Solana)
+                    path: wallets/pages/reference/wallet-apis/src/exports/solana/functions/signPreparedCalls.mdx
+                  - page: solanaSmartWalletActions (Solana)
+                    path: wallets/pages/reference/wallet-apis/src/exports/solana/functions/solanaSmartWalletActions.mdx
+                  - page: waitForCallsStatus (Solana)
+                    path: wallets/pages/reference/wallet-apis/src/exports/solana/functions/waitForCallsStatus.mdx
               - section: Interfaces
                 contents:
                   - page: SolanaSigner
                     path: wallets/pages/reference/wallet-apis/src/exports/interfaces/SolanaSigner.mdx
+                  - page: SolanaKeypairSigner (Solana)
+                    path: wallets/pages/reference/wallet-apis/src/exports/solana/interfaces/SolanaKeypairSigner.mdx
+                  - page: SolanaTransactionPartialSigner (Solana)
+                    path: wallets/pages/reference/wallet-apis/src/exports/solana/interfaces/SolanaTransactionPartialSigner.mdx
+                  - page: WalletAdapterSigner (Solana)
+                    path: wallets/pages/reference/wallet-apis/src/exports/solana/interfaces/WalletAdapterSigner.mdx
+                  - page: WalletStandardAccount (Solana)
+                    path: wallets/pages/reference/wallet-apis/src/exports/solana/interfaces/WalletStandardAccount.mdx
+                  - page: WalletStandardWallet (Solana)
+                    path: wallets/pages/reference/wallet-apis/src/exports/solana/interfaces/WalletStandardWallet.mdx
               - section: Type Aliases
                 contents:
                   - page: AlchemyWalletTransport
@@ -135,10 +167,40 @@ navigation:
                     path: wallets/pages/reference/wallet-apis/src/exports/experimental/type-aliases/RequestQuoteV0Result.mdx
                   - page: SwapActions (experimental)
                     path: wallets/pages/reference/wallet-apis/src/exports/experimental/type-aliases/SwapActions.mdx
+                  - page: SolanaGetCallsStatusParams (Solana)
+                    path: wallets/pages/reference/wallet-apis/src/exports/solana/type-aliases/SolanaGetCallsStatusParams.mdx
+                  - page: SolanaGetCallsStatusResult (Solana)
+                    path: wallets/pages/reference/wallet-apis/src/exports/solana/type-aliases/SolanaGetCallsStatusResult.mdx
+                  - page: SolanaPrepareCallsParams (Solana)
+                    path: wallets/pages/reference/wallet-apis/src/exports/solana/type-aliases/SolanaPrepareCallsParams.mdx
+                  - page: SolanaPrepareCallsResult (Solana)
+                    path: wallets/pages/reference/wallet-apis/src/exports/solana/type-aliases/SolanaPrepareCallsResult.mdx
+                  - page: SolanaSendCallsParams (Solana)
+                    path: wallets/pages/reference/wallet-apis/src/exports/solana/type-aliases/SolanaSendCallsParams.mdx
+                  - page: SolanaSendCallsResult (Solana)
+                    path: wallets/pages/reference/wallet-apis/src/exports/solana/type-aliases/SolanaSendCallsResult.mdx
+                  - page: SolanaSendPreparedCallsParams (Solana)
+                    path: wallets/pages/reference/wallet-apis/src/exports/solana/type-aliases/SolanaSendPreparedCallsParams.mdx
+                  - page: SolanaSendPreparedCallsResult (Solana)
+                    path: wallets/pages/reference/wallet-apis/src/exports/solana/type-aliases/SolanaSendPreparedCallsResult.mdx
+                  - page: SolanaSignPreparedCallsParams (Solana)
+                    path: wallets/pages/reference/wallet-apis/src/exports/solana/type-aliases/SolanaSignPreparedCallsParams.mdx
+                  - page: SolanaSignPreparedCallsResult (Solana)
+                    path: wallets/pages/reference/wallet-apis/src/exports/solana/type-aliases/SolanaSignPreparedCallsResult.mdx
+                  - page: SolanaSmartWalletActions (Solana)
+                    path: wallets/pages/reference/wallet-apis/src/exports/solana/type-aliases/SolanaSmartWalletActions.mdx
+                  - page: SolanaWaitForCallsStatusParams (Solana)
+                    path: wallets/pages/reference/wallet-apis/src/exports/solana/type-aliases/SolanaWaitForCallsStatusParams.mdx
+                  - page: SolanaWaitForCallsStatusResult (Solana)
+                    path: wallets/pages/reference/wallet-apis/src/exports/solana/type-aliases/SolanaWaitForCallsStatusResult.mdx
               - section: Variables
                 contents:
                   - page: swapActions (experimental)
                     path: wallets/pages/reference/wallet-apis/src/exports/experimental/variables/swapActions.mdx
+              - section: Classes
+                contents:
+                  - page: SolanaSignerError (Solana)
+                    path: wallets/pages/reference/wallet-apis/src/exports/solana/classes/SolanaSignerError.mdx
           - section: Smart Accounts
             path: wallets/pages/reference/smart-accounts/src/README.mdx
             contents:
