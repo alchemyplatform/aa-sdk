@@ -6,15 +6,6 @@
     "node": ">=18.16"
   },
   "packageManager": "pnpm@9.15.4",
-  "pnpm": {
-    "overrides": {
-      "wagmi": "2.16.9",
-      "viem": "^2.45.0",
-      "@noble/hashes": "^1.4.0",
-      "@noble/curves": "^1.4.0",
-      "eslint-plugin-react-hooks": "4.6.0"
-    }
-  },
   "scripts": {
     "generate": "turbo run generate",
     "postgenerate": "pnpm run lint:write",
@@ -98,5 +89,18 @@
     "**/*.{yaml,yml}": [
       "prettier --write"
     ]
-  }
+  },
+  "overrides": {
+    "wagmi": "2.16.9",
+    "viem": "^2.45.0",
+    "@noble/hashes": "^1.4.0",
+    "@noble/curves": "^1.4.0",
+    "eslint-plugin-react-hooks": "4.6.0"
+  },
+  "workspaces": [
+    "templates/*",
+    ".vitest",
+    "halp",
+    "packages/*"
+  ]
 }
