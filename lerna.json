@@ -8,6 +8,7 @@
     "packages/smart-accounts",
     "packages/wallet-apis"
   ],
+  "granularPathspec": false,
   "command": {
     "version": {
       "message": "chore(release): publish %s [skip ci]",
