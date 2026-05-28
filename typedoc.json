@@ -10,7 +10,8 @@
     "packages/common/src/index.ts",
     "packages/smart-accounts/src/index.ts",
     "packages/wallet-apis/src/exports/index.ts",
-    "packages/wallet-apis/src/exports/experimental.ts"
+    "packages/wallet-apis/src/exports/experimental.ts",
+    "packages/wallet-apis/src/exports/solana.ts"
   ],
   "entryPointStrategy": "expand",
   "tsconfig": "./tsconfig.typedoc.json",

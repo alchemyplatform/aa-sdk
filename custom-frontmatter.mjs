@@ -842,6 +842,8 @@ export function load(app) {
       const isReadmeFile = page.url && page.url.endsWith("README.mdx");
       const isExperimentalPage =
         page.url && page.url.includes("/experimental/") && !isReadmeFile;
+      const isSolanaPage =
+        page.url && page.url.includes("/solana/") && !isReadmeFile;
 
       if (page.model.kind === ReflectionKind.Class) {
         title = page.model.name;
@@ -903,9 +905,9 @@ export function load(app) {
         }
       }
 
-      // For README.mdx files, remove "/src" and "/src/exports" from title and description
+      // For README.mdx files, remove TypeDoc source path segments from title and description.
       if (isReadmeFile) {
-        title = title.replace(/\/src\/exports$/, "").replace(/\/src$/, "");
+        title = title.replace(/\/src\/exports/g, "").replace(/\/src/g, "");
         title = `@alchemy/${title}`;
         description = description
           .replace(/\/src\/exports/g, "")
@@ -914,6 +916,8 @@ export function load(app) {
 
       if (isExperimentalPage) {
         title = `${title} (experimental)`;
+      } else if (isSolanaPage) {
+        title = `${title} (Solana)`;
       }
 
       // Generate slug from the URL path
@@ -965,10 +969,16 @@ export function load(app) {
 
       const slug = page.frontmatter?.slug;
       const isReadmeFile = page.url && page.url.endsWith("README.mdx");
+      const isPackageRootReadmeFile =
+        isReadmeFile &&
+        page.url &&
+        /^[^/]+\/src\/(?:exports\/)?README\.mdx$/.test(page.url);
 
-      // For README pages, inject the package README.md content before link
-      // rewrites so that any relative links in the README get normalized too.
-      if (isReadmeFile && page.url) {
+      // For package-root README pages, inject the package README.md content
+      // before link rewrites so that any relative links in the README get
+      // normalized too. Nested export indexes stay as TypeDoc module indexes
+      // unless they get their own source README support.
+      if (isPackageRootReadmeFile && page.url) {
         // page.url is e.g. "wallet-apis/src/exports/README.mdx"
         // Package dir is the first segment: "wallet-apis"
         const segments = page.url.split("/");

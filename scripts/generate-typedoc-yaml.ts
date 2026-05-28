@@ -161,9 +161,12 @@ function toNestedExportDisplayName(
   subpathName: string,
 ): string {
   const displayName = toDisplayName(fileName);
-  return subpathName === "experimental"
-    ? `${displayName} (experimental)`
-    : displayName;
+  const subpathSuffixes: Record<string, string> = {
+    experimental: "experimental",
+    solana: "Solana",
+  };
+  const suffix = subpathSuffixes[subpathName];
+  return suffix ? `${displayName} (${suffix})` : displayName;
 }
 
 /**
