@@ -969,11 +969,16 @@ export function load(app) {
 
       const slug = page.frontmatter?.slug;
       const isReadmeFile = page.url && page.url.endsWith("README.mdx");
-      const isSolanaReadmeFile = isReadmeFile && page.url?.includes("/solana/");
+      const isPackageRootReadmeFile =
+        isReadmeFile &&
+        page.url &&
+        /^[^/]+\/src\/(?:exports\/)?README\.mdx$/.test(page.url);
 
-      // For README pages, inject the package README.md content before link
-      // rewrites so that any relative links in the README get normalized too.
-      if (isReadmeFile && page.url && !isSolanaReadmeFile) {
+      // For package-root README pages, inject the package README.md content
+      // before link rewrites so that any relative links in the README get
+      // normalized too. Nested export indexes stay as TypeDoc module indexes
+      // unless they get their own source README support.
+      if (isPackageRootReadmeFile && page.url) {
         // page.url is e.g. "wallet-apis/src/exports/README.mdx"
         // Package dir is the first segment: "wallet-apis"
         const segments = page.url.split("/");
