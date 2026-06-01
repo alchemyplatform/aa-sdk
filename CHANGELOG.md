@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.3](https://github.com/alchemyplatform/aa-sdk/compare/v5.0.2...v5.0.3) (2026-06-01)
+
+### Bug Fixes
+
+- **eslint:** lazily construct OpenAI client in jsdoc worker ([#2535](https://github.com/alchemyplatform/aa-sdk/issues/2535)) ([02d6f23](https://github.com/alchemyplatform/aa-sdk/commit/02d6f237af0ecf5af79a82f3f121435e1f9b0175))
+- **release:** include generated versions in publish commits ([#2531](https://github.com/alchemyplatform/aa-sdk/issues/2531)) ([edd7f5a](https://github.com/alchemyplatform/aa-sdk/commit/edd7f5a3b65123e95eea0d68e66da83771c03a29))
+
 ## [5.0.2](https://github.com/alchemyplatform/aa-sdk/compare/v5.0.1...v5.0.2) (2026-05-26)
 
 **Note:** Version bump only for package root
