@@ -179,8 +179,8 @@ const sampleResponseThree = `
 `;
 
 runAsWorker(async (codeToComment: string): Promise<string | null> => {
-  const completion = await getClient().chat.completions
-    .create({
+  const completion = await getClient()
+    .chat.completions.create({
       // 2 shot approach to "train" the model. We should consider training the model on a larger dataset so we can refine it further.
       messages: [
         { role: "system", content: systemPrompt },
