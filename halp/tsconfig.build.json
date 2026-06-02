@@ -16,8 +16,6 @@
     "module": "nodenext",
     "moduleResolution": "nodenext",
     "target": "es2022",
-    // Vitest 4's `vitest/globals` no longer transitively provides Node's
-    // ambient types (it did in v2), so list `node` explicitly for the build.
     "types": ["vitest/globals", "node"]
   }
 }
