@@ -38,7 +38,7 @@ use remote caching.
 | `error-handling`    | SDK error hierarchy, `BaseError`, and package error conventions.                        |
 | `wallet-apis`       | Wallet API client, Zod codecs, signer/client model, and Solana support.                 |
 | `smart-accounts`    | Light Account, Modular Account v1/v2, modules, permissions, and deferred actions.       |
-| `testing`           | Vitest workspace, Anvil/Foundry/Rundler setup, and affected test execution.             |
+| `testing`           | Vitest projects, Anvil/Foundry/Rundler setup, and affected test execution.              |
 | `documentation`     | MDX docs, TypeDoc reference generation, `docs/docs.yml`, and code snippet preservation. |
 | `release-workflows` | npm publish (`publish-package.yml`) and post-merge docs hooks (revalidate, indexer).    |
 
@@ -51,7 +51,7 @@ use remote caching.
 | Working on Wallet API client, transport, actions, schemas, or codecs                 | `wallet-apis`, `error-handling`, `testing`                        |
 | Working on account implementations, modules, permissions, or deferred actions        | `smart-accounts`, `error-handling`, `testing`                     |
 | Writing or modifying tests                                                           | `testing`, `tooling`                                              |
-| Editing `.vitest/`, `vitest.workspace.ts`, or test setup                             | `testing`, `tooling`                                              |
+| Editing `.vitest/`, `vitest.config.ts`, or test setup                                | `testing`, `tooling`                                              |
 | Editing docs or TypeDoc comments                                                     | `documentation`                                                   |
 | Editing `docs/pages/reference/`, `typedoc.json`, or `docs/docs.yml`                  | `documentation`, `tooling`                                        |
 | Editing `.github/workflows/`, `lerna.json`, version injection, or publish automation | `release-workflows`, `tooling`                                    |
@@ -65,7 +65,7 @@ use remote caching.
 | `packages/aa-infra/`                                                                   | `package-exports`, `error-handling`, `testing`                   |
 | `packages/smart-accounts/`                                                             | `smart-accounts`, `package-exports`, `error-handling`, `testing` |
 | `packages/wallet-apis/`                                                                | `wallet-apis`, `package-exports`, `error-handling`, `testing`    |
-| `.vitest/`, `vitest.workspace.ts`, `packages/*/vitest.config.ts`                       | `testing`, `tooling`                                             |
+| `.vitest/`, `vitest.config.ts`, `packages/*/vitest.config.ts`                          | `testing`, `tooling`                                             |
 | `templates/`, `halp/`, `turbo.json`, `pnpm-workspace.yaml`, `package.json`             | `tooling`                                                        |
 | `docs/**/*.mdx`, `docs/docs.yml`, `typedoc.json`, `tsconfig.typedoc.json`              | `documentation`                                                  |
 | `docs/pages/reference/`                                                                | `documentation`                                                  |

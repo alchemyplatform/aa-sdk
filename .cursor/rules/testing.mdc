@@ -1,12 +1,12 @@
 ---
-description: Vitest workspace, Anvil, Rundler, and affected-test guidance
-globs: ".vitest/**/*.ts,vitest.workspace.ts,packages/**/*.test.ts,packages/*/vitest.config.ts"
+description: Vitest projects, Anvil, Rundler, and affected-test guidance
+globs: ".vitest/**/*.ts,vitest.config.ts,packages/**/*.test.ts,packages/*/vitest.config.ts"
 alwaysApply: false
 ---
 
 # Testing
 
-- Use the Vitest workspace projects from `vitest.workspace.ts`; project names are `alchemy/<package>`.
+- Use the Vitest projects from `vitest.config.ts`; project names are `alchemy/<package>`.
 - Reuse shared `.vitest` setup for `~test`, global setup, timeouts, and local chain fixtures.
 - Chain/bundler tests may need Foundry/Anvil, Rundler, and `VITEST_SEPOLIA_FORK_URL`.
 - Prefer `./scripts/run-affected-tests.sh main` (or `v4.x.x` for v4 backports) for branch-level package validation. The script defaults to `main` if no base is provided.

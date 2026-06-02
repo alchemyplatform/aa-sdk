@@ -3,7 +3,7 @@
   "type": "module",
   "private": true,
   "engines": {
-    "node": ">=18.16"
+    "node": ">=22.12.0"
   },
   "packageManager": "pnpm@9.15.4",
   "scripts": {
@@ -33,6 +33,7 @@
     "@tanstack/react-query": "^5.28.9",
     "@types/fs-extra": "^11.0.4",
     "@types/js-yaml": "^4.0.9",
+    "@types/node": "^22.12.0",
     "add": "^2.0.6",
     "dotenv": "^16.4.5",
     "dotenv-cli": "^7.4.2",
@@ -66,7 +67,8 @@
     "typedoc-plugin-remark": "^2.0.1",
     "typescript": "^5.8.3",
     "viem": "^2.45.0",
-    "vitest": "^2.1.9",
+    "vite": "^7.3.5",
+    "vitest": "^4.1.8",
     "wagmi": "2.16.9",
     "webauthn-p256": "^0.0.10"
   },
@@ -83,7 +85,7 @@
   },
   "lint-staged": {
     "**/*.{mdx,js,jsx,ts,tsx}": [
-      "eslint --fix --max-warnings 0",
+      "eslint --fix --max-warnings 0 --ignore-pattern '!.vitest'",
       "prettier --write"
     ],
     "**/*.{yaml,yml}": [

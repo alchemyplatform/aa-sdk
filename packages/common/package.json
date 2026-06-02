@@ -49,6 +49,7 @@
     "test:run": "vitest run"
   },
   "devDependencies": {
+    "@types/node": "^22.0.0",
     "typescript-template": "workspace:*",
     "viem": "^2.45.0"
   },

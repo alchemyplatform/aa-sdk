@@ -15,6 +15,7 @@
     "jsx": "react-jsx",
     "module": "nodenext",
     "moduleResolution": "nodenext",
-    "target": "es2022"
+    "target": "es2022",
+    "types": ["vitest/globals", "node"]
   }
 }
