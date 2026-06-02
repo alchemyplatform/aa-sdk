@@ -22,9 +22,8 @@ export const sharedConfig = defineConfig({
     exclude: [
       ...configDefaults.exclude,
       "**/dist/**",
-      "**/cypress/**",
       "**/.{idea,cache,output,temp}/**",
-      "**/{karma,rollup,webpack,vite,vitest,jest,ava,babel,nyc,cypress,tsup,build,eslint,prettier}.config.*",
+      "**/{karma,rollup,webpack,vite,vitest,jest,ava,babel,nyc,tsup,build,eslint,prettier}.config.*",
       "**/e2e-tests/**/*.test.ts",
       "**/*.test.e2e.ts",
       "**/*.e2e.test.ts",
