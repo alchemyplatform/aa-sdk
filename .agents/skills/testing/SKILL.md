@@ -15,13 +15,14 @@ affected package tests and a separate typecheck-only Vitest pass.
 
 | Rule                                            | When to read                                               |
 | ----------------------------------------------- | ---------------------------------------------------------- |
-| [Vitest workspace](rules/vitest-workspace.md)   | Before changing tests or per-package Vitest config.        |
+| [Vitest projects](rules/vitest-workspace.md)    | Before changing tests or per-package Vitest config.        |
 | [Anvil and Rundler](rules/anvil-and-rundler.md) | Before changing tests that depend on local chain fixtures. |
 | [Affected tests](rules/affected-tests.md)       | Before choosing local verification for package changes.    |
 
 ## Evidence
 
-- `vitest.workspace.ts` loads `.vitest` and `packages/*`.
+- `vitest.config.ts` loads `.vitest` and `packages/*` through
+  `test.projects`.
 - `.vitest/vitest.shared.ts` sets `~test`, global setup, timeouts, and thread pool.
 - `scripts/run-affected-tests.sh` uses Turborepo dry-run output to select
   Vitest projects.

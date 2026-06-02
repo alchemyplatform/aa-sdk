@@ -18,14 +18,13 @@ export const sharedConfig = defineConfig({
     setupFiles: [join(__dirname, "setupTests.ts")],
     globalSetup: join(__dirname, "globalSetup.ts"),
     pool: "threads",
-    poolOptions: {
-      threads: {
-        minThreads: 4,
-        maxThreads: 4,
-      },
-    },
+    maxWorkers: 4,
     exclude: [
       ...configDefaults.exclude,
+      "**/dist/**",
+      "**/cypress/**",
+      "**/.{idea,cache,output,temp}/**",
+      "**/{karma,rollup,webpack,vite,vitest,jest,ava,babel,nyc,cypress,tsup,build,eslint,prettier}.config.*",
       "**/e2e-tests/**/*.test.ts",
       "**/*.test.e2e.ts",
       "**/*.e2e.test.ts",

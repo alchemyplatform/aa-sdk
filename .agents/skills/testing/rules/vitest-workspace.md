@@ -1,12 +1,12 @@
-# Vitest Workspace
+# Vitest Projects
 
 Use Vitest project names and shared setup consistently.
 
 ## Why
 
-The workspace is defined by `vitest.workspace.ts`, and package configs merge the
-shared `.vitest` setup. Shared config provides `~test`, global setup, common
-timeouts, globals, and excluded e2e patterns.
+The project list is defined by `vitest.config.ts` under `test.projects`, and
+package configs merge the shared `.vitest` setup. Shared config provides
+`~test`, global setup, common timeouts, globals, and excluded e2e patterns.
 
 ## Good
 

@@ -12,6 +12,9 @@
   "include": ["src"],
   "compilerOptions": {
     "sourceMap": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    // Vitest 4's `vitest/globals` no longer transitively provides Node's
+    // ambient types (it did in v2); the logging helpers reference `process`.
+    "types": ["vitest/globals", "node"]
   }
 }
