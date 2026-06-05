@@ -1,0 +1,22 @@
+---
+description: package publish and post-merge docs workflow guidance
+globs: ".github/workflows/*.yml,.github/actions/**/*.yml,lerna.json,packages/*/inject-version.ts"
+alwaysApply: false
+---
+
+# Release Workflows
+
+- `publish-package.yml` is a manual dispatch with a `publish` boolean. It must
+  publish from the dispatched branch (`main` for v5, `v4.x.x` for legacy
+  backports) — do not hardcode a `ref:` that overrides the dispatch.
+- `revalidate-sdk-content.yml` and `trigger-sdk-indexer.yml` are post-merge
+  hooks on `main` that call external docs systems. Do not trigger or broaden
+  them without approval.
+- Keep `--no-private`, `--no-verify-access`, and the `PR_BYPASSER` app token
+  on the publish job — Lerna pushes the version commit + tag past branch
+  protection using that token.
+- Keep secrets in GitHub Actions secrets and preserve least-privilege workflow
+  permissions.
+- Read `.agents/skills/release-workflows/` before changing release automation.
+- The legacy `publish-v5-beta.yml` and `update-v5-docs.yml` workflows were
+  retired when v5 graduated to `main` on 2026-05-20. Do not resurrect them.

@@ -1,0 +1,5 @@
+packages:
+  - "templates/*"
+  - ".vitest"
+  - "halp"
+  - "packages/*"

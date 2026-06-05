@@ -1,4 +1,3 @@
-import { type UserOperationRequest } from "@aa-sdk/core";
 import {
   concat,
   encodeAbiParameters,
@@ -10,9 +9,11 @@ import {
   type Address,
   type Client,
   type Hex,
+  type RpcUserOperation,
+  type TestClient,
 } from "viem";
 import {
-  getBytecode,
+  getCode,
   sendTransaction,
   setBalance,
   waitForTransactionReceipt,
@@ -21,10 +22,10 @@ import { accounts, create2deployer } from "../constants";
 import { ERC1967ProxyAbi } from "../Proxy";
 import type { Paymaster } from "./types";
 import type { VerifyingPaymaster060Abi } from "./VerifyingPaymaster060";
-import type { VerifyingPaymaster070Abi } from "./VerifyingPaymaster070";
+import { VerifyingPaymaster070Abi } from "./VerifyingPaymaster070";
 
 type ToPaymasterArgs = {
-  entryPointVersion: "0.6.0" | "0.7.0";
+  entryPointVersion: "0.6.0" | "0.7.0" | "0.8.0";
   entryPointAddress: Address;
   abi: typeof VerifyingPaymaster060Abi | typeof VerifyingPaymaster070Abi;
   dummyData: Hex;
@@ -33,7 +34,7 @@ type ToPaymasterArgs = {
   ) => { paymasterAndData: Hex } | { paymaster: Address; paymasterData: Hex };
   getPaymasterData: (
     self: Paymaster,
-    uo: UserOperationRequest,
+    uo: RpcUserOperation,
     client: Client & { mode: "anvil" },
   ) => Promise<
     { paymasterAndData: Hex } | { paymaster: Address; paymasterData: Hex }
@@ -51,6 +52,7 @@ export const toPaymaster = (args: ToPaymasterArgs): Paymaster => {
 
   const paymaster: Paymaster = {
     ...rest,
+    isV07Abi: abi === VerifyingPaymaster070Abi,
     getPaymasterData(uo, client) {
       return getPaymasterData_(paymaster, uo, client);
     },
@@ -59,7 +61,7 @@ export const toPaymaster = (args: ToPaymasterArgs): Paymaster => {
     },
     async deployPaymasterContract(client) {
       // give the owner some ether
-      await setBalance(client, {
+      await setBalance(client as TestClient, {
         address: accounts.paymasterOwner.address,
         value: parseEther("10"),
       });
@@ -68,7 +70,7 @@ export const toPaymaster = (args: ToPaymasterArgs): Paymaster => {
       const { address: implAddress, calldata: implCalldata } =
         this.getPaymasterImplDetails();
 
-      const paymasterImplBytecode = await getBytecode(client, {
+      const paymasterImplBytecode = await getCode(client, {
         address: implAddress,
       });
 
@@ -87,7 +89,7 @@ export const toPaymaster = (args: ToPaymasterArgs): Paymaster => {
       const { address: proxyAddress, calldata: proxyCalldata } =
         this.getPaymasterDetails();
 
-      const proxyBytecode = await getBytecode(client, {
+      const proxyBytecode = await getCode(client, {
         address: proxyAddress,
       });
 
@@ -111,7 +113,7 @@ export const toPaymaster = (args: ToPaymasterArgs): Paymaster => {
         address: proxyAddress,
       });
 
-      await setBalance(client, {
+      await setBalance(client as TestClient, {
         address: proxyAddress,
         value: parseEther("5"),
       });
@@ -138,7 +140,6 @@ export const toPaymaster = (args: ToPaymasterArgs): Paymaster => {
         abi: abi.abi,
         functionName: "initialize",
         args: [
-          // for now this just deploy 0.6.0
           entrypoint,
           // signer, owner, pauser
           accounts.paymasterOwner.address,

@@ -34,7 +34,7 @@ jobs:
       - name: Use commitlint to check PR title
         env:
           TITLE: ${{ github.event.pull_request.title }}
-        run: echo "$TITLE" | yarn commitlint
+        run: echo "$TITLE" | pnpm commitlint
 
   lint_docs:
     name: Lint Documentation
@@ -48,14 +48,17 @@ jobs:
           fetch-depth: "0"
           submodules: "recursive"
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '22'
-          cache: yarn
+          cache: pnpm
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: pnpm install --frozen-lockfile
 
       - name: Install Vale
         run: |
@@ -65,7 +68,7 @@ jobs:
           vale --version
 
       - name: Run documentation linting
-        run: yarn lint:docs
+        run: pnpm run lint:docs
 
   check_broken_links:
     name: Check Broken Links
@@ -79,14 +82,17 @@ jobs:
           fetch-depth: "0"
           submodules: "recursive"
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '22'
-          cache: yarn
+          cache: pnpm
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: pnpm install --frozen-lockfile
 
       - name: Install Lychee
         run: |
@@ -96,7 +102,7 @@ jobs:
           lychee --version
 
       - name: Check for broken links
-        run: yarn docs:broken-links
+        run: pnpm run docs:broken-links
 
   lint:
     name: Lint
@@ -117,10 +123,10 @@ jobs:
 
       - name: Build eslint plugin
         run: |
-          cd templates/eslint && yarn build
+          cd templates/eslint && pnpm run build
 
       - name: Run eslint for errors
-        run: yarn lint:check
+        run: pnpm run lint:check
 
   build_and_lint_and_test:
     name: Build and Test
@@ -130,6 +136,8 @@ jobs:
       API_KEY: ${{ secrets.API_KEY }}
       TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
       TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+      TEST_ALCHEMY_API_KEY: ${{ secrets.TEST_ALCHEMY_API_KEY }}
+      TEST_PAYMASTER_POLICY_ID: ${{ secrets.TEST_PAYMASTER_POLICY_ID }}
     steps:
       - name: "Checkout files"
         uses: actions/checkout@v3
@@ -163,68 +171,24 @@ jobs:
         with:
           repo: alchemyplatform/rundler
           platform: linux
-          tag: v0.8.2
+          tag: v0.11.0
           cache: enable
 
       - name: Build Libraries
         env:
           API_KEY: ${{ secrets.API_KEY }}
           JAVA_OPTS: "-XX:MaxHeapSize=6g"
-        run: yarn build:libs
+        run: pnpm run build:libs
 
       - name: Unit Test
-        run: yarn test:ci
+        run: ./scripts/run-affected-tests.sh "${{ github.event.pull_request.base.ref }}"
 
       - name: Typecheck Test
-        run: yarn test:typecheck
+        run: pnpm run test:typecheck
 
       - name: Check SDK reference docs are up to date
         run: |
-          yarn docs:sdk
-          yarn lint:write
-          # Restore v5 reference files that typedoc's cleanOutputDir deleted.
-          # Only restore files under known v5 package directories to avoid masking
-          # legitimate v4 deletions (e.g. removed APIs, config changes).
-          V5_PACKAGES="aa-infra common smart-accounts wallet-apis"
-          for pkg in $V5_PACKAGES; do
-            # Only check for deleted files if the package dir was tracked by git
-            if git cat-file -e "HEAD:docs/pages/reference/$pkg" 2>/dev/null; then
-              DELETED=$(git diff --name-only --diff-filter=D -- "docs/pages/reference/$pkg/")
-              if [ -n "$DELETED" ]; then
-                echo "Restoring v5 reference files for $pkg:"
-                echo "$DELETED"
-                echo "$DELETED" | xargs git checkout HEAD --
-              fi
-            fi
-          done
+          pnpm run docs:sdk
+          pnpm run lint:write
           git diff --exit-code docs/pages/reference/ || \
-            (echo "::error::SDK reference docs are out of date. Run 'yarn docs:sdk' and commit the changes." && exit 1)
-
-  build_ios:
-    name: Build iOS
-    runs-on: macos-14
-    env:
-      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-      API_KEY: ${{ secrets.API_KEY }}
-      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
-    steps:
-      - name: "Checkout files"
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: "0"
-          submodules: "recursive"
-
-      - name: Setup
-        uses: ./.github/actions/setup
-
-      - name: Install cocoapods
-        working-directory: account-kit/rn-signer/example/ios
-        run: |
-          pod install
-        env:
-          NO_FLIPPER: 1
-
-      - name: Build example for iOS
-        run: |
-          yarn turbo run build:ios
+            (echo "::error::SDK reference docs are out of date. Run 'pnpm run docs:sdk' and commit the changes." && exit 1)

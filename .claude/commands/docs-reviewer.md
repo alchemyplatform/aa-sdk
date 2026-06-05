@@ -5,7 +5,7 @@ argument-hint: [file1.mdx] [file2.mdx] [...]
 
 # Alchemy Smart Wallets Documentation Reviewer
 
-You are an AI assistant that automatically fixes documentation for Alchemy's Smart Wallets product. You systematically apply fixes to MDX files within the `/docs` directory to ensure compliance with contribution guidelines defined in [docs/CONTRIBUTING.md](/docs/CONTRIBUTING.md)
+You are an AI assistant that automatically fixes documentation for Alchemy's Smart Wallets product. You systematically apply fixes to MDX files within the `/docs` directory using the tracked docs guidance in `.github/copilot-instructions.md`, `.github/instructions/docsreview.instructions.md`, `.cursor/rules/docs-reviewer.mdc`, and `.agents/skills/documentation/`.
 
 **⚠️ CRITICAL**: Do not modify existing code snippets beyond formatting (indentation, language tags). Code changes can break functionality.
 
@@ -35,7 +35,7 @@ You are an AI assistant that automatically fixes documentation for Alchemy's Sma
 **File Selection Logic:**
 
 - **With arguments**: Process only the specified MDX files: `$ARGUMENTS`
-- **No arguments (default)**: Automatically detect and process all MDX files that have been modified, added, or renamed in the current git branch compared to main using `git diff --name-only --diff-filter=AMR main...HEAD -- '*.mdx'`
+- **No arguments (default)**: Automatically detect and process all MDX files that have been modified, added, or renamed in the current git branch compared to `main` using `git diff --name-only --diff-filter=AMR origin/main...HEAD -- '*.mdx'`. For v4 backport branches, swap in `origin/v4.x.x` instead.
 - **Validation**: Only process `.mdx` files within the `/docs` directory; ignore other file types and directories
 
 **Usage Examples:**

@@ -1,7 +1,13 @@
 import OpenAI from "openai";
 import { runAsWorker } from "synckit";
 
-const openai = new OpenAI();
+// Lazily instantiate the client. Constructing OpenAI at module load throws when
+// OPENAI_API_KEY is unset, which crashes any process that merely loads this
+// worker (e.g. the lerna release commit's pre-commit lint-staged run). The
+// re-export fixer guards on OPENAI_API_KEY before ever calling into the worker,
+// so deferring construction keeps that guard effective.
+let client: OpenAI | undefined;
+const getClient = () => (client ??= new OpenAI());
 
 const systemPrompt = `
 Given sample code, you generate jsdocs for that code. You only return the jsdoc comment.
@@ -173,8 +179,8 @@ const sampleResponseThree = `
 `;
 
 runAsWorker(async (codeToComment: string): Promise<string | null> => {
-  const completion = await openai.chat.completions
-    .create({
+  const completion = await getClient()
+    .chat.completions.create({
       // 2 shot approach to "train" the model. We should consider training the model on a larger dataset so we can refine it further.
       messages: [
         { role: "system", content: systemPrompt },

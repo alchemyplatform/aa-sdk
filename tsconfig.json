@@ -10,15 +10,9 @@
   },
   "files": [],
   "references": [
-    { "path": "./aa-sdk/core" },
-    { "path": "./aa-sdk/ethers" },
-    { "path": "./account-kit/core" },
-    { "path": "./account-kit/infra" },
-    { "path": "./account-kit/react" },
-    { "path": "./account-kit/react-native" },
-    { "path": "./account-kit/rn-signer" },
-    { "path": "./account-kit/signer" },
-    { "path": "./account-kit/smart-contracts" },
-    { "path": "./account-kit/wallet-client" }
+    { "path": "./packages/aa-infra" },
+    { "path": "./packages/common" },
+    { "path": "./packages/smart-accounts" },
+    { "path": "./packages/wallet-apis" }
   ]
 }
