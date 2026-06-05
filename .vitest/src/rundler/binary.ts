@@ -22,7 +22,7 @@ export async function cleanupRundler(rundlerPath: string) {
 
 export async function downloadLatestRundlerRelease(
   filePath: string,
-  version = "v0.8.2",
+  version = "v0.11.0",
 ) {
   const repoUrl =
     "https://api.github.com/repos/alchemyplatform/rundler/releases";
@@ -30,7 +30,11 @@ export async function downloadLatestRundlerRelease(
 
   try {
     // Get the list of releases from GitHub API
-    const releasesResponse = await fetch(repoUrl);
+    const releasesResponse = await fetch(repoUrl, {
+      headers: process.env.GH_AUTH_TOKEN
+        ? { Authorization: `Bearer ${process.env.GH_AUTH_TOKEN}` }
+        : undefined,
+    });
     if (!releasesResponse.ok) {
       throw new Error(
         `Failed to fetch releases: ${releasesResponse.statusText}`,
@@ -95,6 +99,7 @@ export async function downloadLatestRundlerRelease(
     const tarStream = tar.extract({
       cwd: extractPath,
     });
+    // @ts-ignore - This has a type error, but has always worked fine?
     await streamPipeline(assetResponse.body, gunzipStream, tarStream);
   } catch (error) {
     throw new Error(`Failed to download the latest release. ${error}`);

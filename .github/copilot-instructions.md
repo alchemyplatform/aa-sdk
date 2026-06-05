@@ -11,8 +11,8 @@ This repository contains Alchemy's Smart Wallets SDK (aa-sdk) documentation. The
 ## Documentation Structure
 
 - `/docs/`: Main documentation directory containing all `.mdx` files
-- `/docs/CONTRIBUTING.md`: Comprehensive style guide and standards
-- Documentation follows a developer-first approach with outcome-focused content
+- `docs/pages/reference/`: TypeDoc-generated SDK reference MDX. Change source/TSDoc or generator files, then run `pnpm run docs:sdk`.
+- Documentation follows a developer-first approach with outcome-focused content. On `main` (v5 SDK), use the tracked agent docs and rules instead of referencing the missing docs contributor guide.
 
 ## Core Documentation Principles
 
@@ -95,10 +95,10 @@ This repository contains Alchemy's Smart Wallets SDK (aa-sdk) documentation. The
 
 ## Build and Validation
 
-Always run these commands after making documentation changes:
-- Validate documentation builds successfully
-- Check for broken links and references
-- Ensure code examples compile and execute correctly
+Run the relevant tracked checks after documentation changes:
+- `pnpm run lint:docs` for MDX prose linting
+- `pnpm run docs:broken-links` for docs link checks
+- `pnpm run docs:sdk` plus `pnpm run lint:write` when TypeDoc reference output or `docs/docs.yml` should change
 
 ## Framework Support
 
