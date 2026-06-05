@@ -3,61 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-## [4.88.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.88.1...v4.88.2) (2026-05-06)
+## [5.0.3](https://github.com/alchemyplatform/aa-sdk/compare/v5.0.2...v5.0.3) (2026-06-01)
 
 ### Bug Fixes
 
-- disallow more permission builder selectors ([#2485](https://github.com/alchemyplatform/aa-sdk/issues/2485)) ([5903ae9](https://github.com/alchemyplatform/aa-sdk/commit/5903ae9ed082c26e4693d2235f4b48f6456d951a))
+- **eslint:** lazily construct OpenAI client in jsdoc worker ([#2535](https://github.com/alchemyplatform/aa-sdk/issues/2535)) ([02d6f23](https://github.com/alchemyplatform/aa-sdk/commit/02d6f237af0ecf5af79a82f3f121435e1f9b0175))
+- **release:** include generated versions in publish commits ([#2531](https://github.com/alchemyplatform/aa-sdk/issues/2531)) ([edd7f5a](https://github.com/alchemyplatform/aa-sdk/commit/edd7f5a3b65123e95eea0d68e66da83771c03a29))
 
-## [4.88.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.88.0...v4.88.1) (2026-04-24)
+## [5.0.2](https://github.com/alchemyplatform/aa-sdk/compare/v5.0.1...v5.0.2) (2026-05-26)
 
 **Note:** Version bump only for package root
 
-# [4.88.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.87.2...v4.88.0) (2026-04-23)
-
-### Features
-
-- **v4:** track key exports for migration visibility ([#2466](https://github.com/alchemyplatform/aa-sdk/issues/2466)) ([934cd82](https://github.com/alchemyplatform/aa-sdk/commit/934cd8254b92845f37b3b28993137a3bc78c8091))
-
-## [4.87.2](https://github.com/alchemyplatform/aa-sdk/compare/v4.87.1...v4.87.2) (2026-04-17)
+## [5.0.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.88.3...v5.0.1) (2026-05-22)
 
 **Note:** Version bump only for package root
-
-## [4.87.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.87.0...v4.87.1) (2026-04-09)
-
-**Note:** Version bump only for package root
-
-# [4.87.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.86.1...v4.87.0) (2026-03-30)
-
-### Features
-
-- add key export helper ([#2434](https://github.com/alchemyplatform/aa-sdk/issues/2434)) ([b5e49e8](https://github.com/alchemyplatform/aa-sdk/commit/b5e49e8ccd0c062dc766e3add72f33d9167c98bc))
-
-## [4.86.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.86.0...v4.86.1) (2026-03-24)
-
-### Bug Fixes
-
-- **ci:** add stub gha for v5 publishing, stricter v5 pkg reference ([#2401](https://github.com/alchemyplatform/aa-sdk/issues/2401)) ([0301c92](https://github.com/alchemyplatform/aa-sdk/commit/0301c92bd8ee07dab88a5717facd30f1dfd94bd3))
-
-# [4.86.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.84.1...v4.86.0) (2026-03-11)
-
-### Bug Fixes
-
-- **ci:** run prettier on lerna config ([#2389](https://github.com/alchemyplatform/aa-sdk/issues/2389)) ([67358d3](https://github.com/alchemyplatform/aa-sdk/commit/67358d312a0401805c4d1d06a7dad3a87c8019b8))
-
-### Features
-
-- **cronos:** add cronos to infra chains ([#2377](https://github.com/alchemyplatform/aa-sdk/issues/2377)) ([ff53f85](https://github.com/alchemyplatform/aa-sdk/commit/ff53f855fd487827a1fc674bcd38fd66d48b8c05))
-
-# [4.85.0](https://github.com/alchemyplatform/aa-sdk/compare/v4.84.1...v4.85.0) (2026-03-11)
-
-### Bug Fixes
-
-- **ci:** run prettier on lerna config ([#2389](https://github.com/alchemyplatform/aa-sdk/issues/2389)) ([67358d3](https://github.com/alchemyplatform/aa-sdk/commit/67358d312a0401805c4d1d06a7dad3a87c8019b8))
-
-### Features
-
-- **cronos:** add cronos to infra chains ([#2377](https://github.com/alchemyplatform/aa-sdk/issues/2377)) ([ff53f85](https://github.com/alchemyplatform/aa-sdk/commit/ff53f855fd487827a1fc674bcd38fd66d48b8c05))
 
 ## [4.84.1](https://github.com/alchemyplatform/aa-sdk/compare/v4.84.0...v4.84.1) (2026-02-19)
 

@@ -31,8 +31,8 @@ vale docs/pages/some-page.mdx
 # Run on all MDX files in docs directory
 vale docs/**/*.mdx
 
-# Use yarn script
-yarn lint:docs
+# Use pnpm script
+pnpm run lint:docs
 ```
 
 ### Configuration Files

@@ -7,6 +7,20 @@ on:
     paths:
       - "docs/pages/**/*.md"
       - "docs/pages/**/*.mdx"
+  # Manual recovery trigger. Use when a push to main silently skipped this workflow
+  # (GitHub stops evaluating `paths:` when the diff is too large — e.g. the v5
+  # graduation merge touched 2,599 files and never fired this workflow).
+  workflow_dispatch:
+    inputs:
+      base_ref:
+        description: >-
+          Optional SHA/ref to diff SINCE. Revalidates files changed in
+          `base_ref..HEAD` — paste the last commit that WAS successfully
+          revalidated (its changes are excluded; only commits after it count).
+          Leave empty to revalidate every md/mdx under docs/pages.
+        type: string
+        required: false
+        default: ""
 
 jobs:
   revalidate-content:
@@ -20,75 +34,69 @@ jobs:
         with:
           fetch-depth: 0 # Fetch full history to compare all commits in push
 
-      - name: Get changed MDX files
+      - name: Collect MDX files
         id: changed-files
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          PUSH_BEFORE: ${{ github.event.before }}
+          PUSH_AFTER: ${{ github.event.after }}
+          BASE_REF: ${{ inputs.base_ref }}
         run: |
-          # Get all MDX files changed in this push (handles multiple commits)
-          set +e
-          CHANGED_FILES=$(git diff --name-only \
-            "${{ github.event.before }}" "${{ github.event.after }}" \
-            -- 'docs/pages/**/*.md' 'docs/pages/**/*.mdx')
-          EXIT_CODE=$?
-          set -e
+          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            if [ -n "$BASE_REF" ]; then
+              echo "Manual run — diffing $BASE_REF..HEAD"
+              if ! git rev-parse --verify "$BASE_REF" >/dev/null 2>&1; then
+                echo "::error::base_ref '$BASE_REF' is not reachable from this checkout"
+                exit 1
+              fi
+              set +e
+              CHANGED_FILES=$(git diff --name-only "$BASE_REF" HEAD \
+                -- 'docs/pages/**/*.md' 'docs/pages/**/*.mdx')
+              EXIT_CODE=$?
+              set -e
+              if [ $EXIT_CODE -ne 0 ]; then
+                echo "::error::git diff failed with exit code $EXIT_CODE"
+                exit 1
+              fi
+            else
+              echo "Manual run — finding all md/mdx under docs/pages"
+              CHANGED_FILES=$(find docs/pages -type f \( -name '*.md' -o -name '*.mdx' \) | sort)
+            fi
+          else
+            # Get all MDX files changed in this push (handles multiple commits)
+            set +e
+            CHANGED_FILES=$(git diff --name-only \
+              "$PUSH_BEFORE" "$PUSH_AFTER" \
+              -- 'docs/pages/**/*.md' 'docs/pages/**/*.mdx')
+            EXIT_CODE=$?
+            set -e
 
-          # Check for git errors
-          if [ $EXIT_CODE -ne 0 ]; then
-            echo "::error::git diff failed with exit code $EXIT_CODE"
-            exit 1
+            if [ $EXIT_CODE -ne 0 ]; then
+              echo "::error::git diff failed with exit code $EXIT_CODE"
+              exit 1
+            fi
           fi
 
           # Handle empty result (no files changed)
           if [ -z "$CHANGED_FILES" ]; then
-            echo "No MDX files changed in /docs/pages/ directory"
+            echo "No MDX files found in /docs/pages/ directory"
             echo "filePaths=[]" >> $GITHUB_OUTPUT
-            echo "frontmatterChanged=false" >> $GITHUB_OUTPUT
             exit 0
           fi
-
-          # Detect whether any changed file has frontmatter changes
-          FRONTMATTER_CHANGED=false
-          extract_frontmatter() {
-            local ref="$1"
-            local path="$2"
-
-            if ! git cat-file -e "${ref}:${path}" 2>/dev/null; then
-              return 0
-            fi
-
-            git show "${ref}:${path}" | awk '
-              NR == 1 && $0 != "---" { exit }
-              NR == 1 && $0 == "---" { in_frontmatter = 1; next }
-              in_frontmatter && $0 == "---" { exit }
-              in_frontmatter { print }
-            '
-          }
-
-          while IFS= read -r FILE; do
-            [ -z "$FILE" ] && continue
-            OLD_FRONTMATTER=$(extract_frontmatter "${{ github.event.before }}" "$FILE")
-            NEW_FRONTMATTER=$(extract_frontmatter "${{ github.event.after }}" "$FILE")
-
-            if [ "$OLD_FRONTMATTER" != "$NEW_FRONTMATTER" ]; then
-              FRONTMATTER_CHANGED=true
-              echo "Frontmatter changed in: $FILE"
-              break
-            fi
-          done <<< "$CHANGED_FILES"
 
           # Strip docs/ prefix to get file paths matching Redis cache keys
           # e.g., docs/pages/reference/... -> pages/reference/...
           FILE_PATHS_JSON=$(echo "$CHANGED_FILES" | sed 's|^docs/||' | jq -R -s -c 'split("\n") | map(select(length > 0))')
 
           FILE_COUNT=$(echo "$FILE_PATHS_JSON" | jq 'length')
-          echo "Found $FILE_COUNT changed files"
-          echo "frontmatterChanged: $FRONTMATTER_CHANGED"
+          echo "Found $FILE_COUNT files to revalidate"
           echo "filePaths=$FILE_PATHS_JSON" >> $GITHUB_OUTPUT
-          echo "frontmatterChanged=$FRONTMATTER_CHANGED" >> $GITHUB_OUTPUT
 
       - name: Call revalidation API
         if: steps.changed-files.outputs.filePaths != '[]'
+        env:
+          ALL_PATHS: ${{ steps.changed-files.outputs.filePaths }}
         run: |
-          ALL_PATHS='${{ steps.changed-files.outputs.filePaths }}'
           TOTAL=$(echo "$ALL_PATHS" | jq 'length')
           BATCH_SIZE=50
           SUCCEEDED=0
@@ -150,14 +158,3 @@ jobs:
           fi
 
           echo "::notice::Successfully revalidated $SUCCEEDED files"
-
-      - name: Trigger reindex if frontmatter changed
-        if: steps.changed-files.outputs.frontmatterChanged == 'true'
-        run: |
-          echo "Frontmatter changes detected, triggering SDK content indexer..."
-          curl -f -X POST \
-            -H "Authorization: Bearer ${{ secrets.DOCS_GH_TOKEN }}" \
-            -H "Accept: application/vnd.github.v3+json" \
-            https://api.github.com/repos/alchemyplatform/docs/dispatches \
-            -d '{"event_type":"index-sdk-references","client_payload":{"source":"alchemyplatform/aa-sdk","ref":"${{ github.ref }}","sha":"${{ github.sha }}"}}'
-          echo "::notice::✅ Triggered index-sdk-references in docs repo"

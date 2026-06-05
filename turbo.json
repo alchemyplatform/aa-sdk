@@ -19,6 +19,11 @@
       "env": ["VITEST_SEPOLIA_FORK_URL"],
       "dependsOn": ["^build"],
       "cache": false
+    },
+    "test:run": {
+      "env": ["VITEST_SEPOLIA_FORK_URL"],
+      "dependsOn": ["^build"],
+      "cache": false
     }
   }
 }

@@ -1,0 +1,13 @@
+---
+description: SDK package error handling conventions
+globs: "packages/**/*.ts"
+alwaysApply: false
+---
+
+# Error Handling
+
+- Runtime package errors should use `@alchemy/common` `BaseError` or a specific subclass.
+- Do not throw plain `Error` in package runtime code; `.eslintrc` enforces this outside tests.
+- Preserve `BaseError` docs URL and SDK version behavior when changing error classes.
+- Do not import `BaseError` from `viem`; use `@alchemy/common`'s `BaseError`. An ESLint `no-restricted-imports` rule enforces this.
+- Read `.agents/skills/error-handling/` before adding or refactoring errors.
