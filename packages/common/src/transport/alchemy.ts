@@ -66,6 +66,30 @@ export function isAlchemyTransport(
   return transport({ chain }).config.type === "alchemyHttp";
 }
 
+function isAlchemyRpcUrl(url: string): boolean {
+  try {
+    const { hostname } = new URL(url);
+    return hostname === "alchemy.com" || hostname.endsWith(".alchemy.com");
+  } catch {
+    return false;
+  }
+}
+
+function getAlchemyRpcUrlFromChainDefinition(chain: Chain): string | undefined {
+  if (chain.rpcUrls?.alchemy?.http?.[0]) {
+    return chain.rpcUrls.alchemy.http[0];
+  }
+
+  for (const rpcUrls of Object.values(chain.rpcUrls ?? {})) {
+    const alchemyUrl = rpcUrls.http.find(isAlchemyRpcUrl);
+    if (alchemyUrl) {
+      return alchemyUrl;
+    }
+  }
+
+  return undefined;
+}
+
 /**
  * Creates an Alchemy HTTP transport for connecting to Alchemy's services.
  *
@@ -184,9 +208,10 @@ export function alchemyTransport<
         return alchemyUrl;
       }
 
-      // Fallback: check for legacy alchemy RPC URLs in chain definition
-      if (chain.rpcUrls?.alchemy?.http?.[0]) {
-        return chain.rpcUrls.alchemy.http[0];
+      const chainDefinitionAlchemyUrl =
+        getAlchemyRpcUrlFromChainDefinition(chain);
+      if (chainDefinitionAlchemyUrl) {
+        return chainDefinitionAlchemyUrl;
       }
 
       throw new BaseError(

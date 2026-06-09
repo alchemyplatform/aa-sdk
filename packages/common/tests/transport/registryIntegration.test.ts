@@ -77,6 +77,28 @@ describe("Registry Integration Tests", () => {
       );
     });
 
+    it("should fallback to Alchemy URLs in default chain RPC URLs", () => {
+      const transport = alchemyTransport({ apiKey: "test-key" });
+
+      const defaultAlchemyChain = defineChain({
+        id: 999998, // Not in registry
+        name: "Default Alchemy Chain",
+        nativeCurrency: { name: "ETH", symbol: "ETH", decimals: 18 },
+        rpcUrls: {
+          default: {
+            http: ["https://default-alchemy-chain.g.alchemy.com/v2"],
+          },
+        },
+      });
+
+      const defaultAlchemyTransport = transport({
+        chain: defaultAlchemyChain,
+      });
+      expect(defaultAlchemyTransport.value?.alchemyRpcUrl).toBe(
+        "https://default-alchemy-chain.g.alchemy.com/v2",
+      );
+    });
+
     it("should prioritize explicit URL over registry", () => {
       const explicitUrl = "https://explicit.alchemy.com/v2/custom-key";
       const transport = alchemyTransport({
