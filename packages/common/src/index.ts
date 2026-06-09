@@ -2,10 +2,10 @@
 export type * from "./transport/alchemy.js";
 export { alchemyTransport, isAlchemyTransport } from "./transport/alchemy.js";
 
-// http -- Revisit exporting this once it has a use case.
-// export type * from "./rest/restClient.js";
-// export type * from "./rest/types.js";
-// export { AlchemyRestClient } from "./rest/restClient.js";
+// http -- exported for @alchemy/data (REST channel); hardening tracked in the data SDK plan
+export type * from "./rest/restClient.js";
+export type * from "./rest/types.js";
+export { AlchemyRestClient } from "./rest/restClient.js";
 
 // chain registry utilities
 export {
@@ -13,6 +13,15 @@ export {
   isChainSupported,
   getSupportedChainIds,
 } from "./transport/chainRegistry.js";
+
+// network registry (slug / CAIP-2 / viem Chain resolution)
+export type {
+  KnownAlchemyNetwork,
+  AlchemyNetwork,
+  NetworkInput,
+  ResolvedNetwork,
+} from "./networks/networkRegistry.js";
+export { resolveNetwork } from "./networks/networkRegistry.js";
 
 // utils
 export type * from "./utils/types.js";
