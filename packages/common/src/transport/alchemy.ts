@@ -68,16 +68,20 @@ export function isAlchemyTransport(
 
 function isAlchemyRpcUrl(url: string): boolean {
   try {
-    const { hostname } = new URL(url);
-    return hostname === "alchemy.com" || hostname.endsWith(".alchemy.com");
+    const { hostname, pathname } = new URL(url);
+    return (
+      hostname.endsWith(".alchemy.com") &&
+      (pathname === "/v2" || pathname.startsWith("/v2/"))
+    );
   } catch {
     return false;
   }
 }
 
 function getAlchemyRpcUrlFromChainDefinition(chain: Chain): string | undefined {
-  if (chain.rpcUrls?.alchemy?.http?.[0]) {
-    return chain.rpcUrls.alchemy.http[0];
+  const legacyAlchemyUrl = chain.rpcUrls?.alchemy?.http?.[0];
+  if (legacyAlchemyUrl && isAlchemyRpcUrl(legacyAlchemyUrl)) {
+    return legacyAlchemyUrl;
   }
 
   for (const rpcUrls of Object.values(chain.rpcUrls ?? {})) {

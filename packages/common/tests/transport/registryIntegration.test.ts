@@ -99,6 +99,68 @@ describe("Registry Integration Tests", () => {
       );
     });
 
+    it("should reject Alchemy domain URLs that are not RPC endpoints", () => {
+      const transport = alchemyTransport({ apiKey: "test-key" });
+
+      const explorerChain = defineChain({
+        id: 999997, // Not in registry
+        name: "Explorer Chain",
+        nativeCurrency: { name: "ETH", symbol: "ETH", decimals: 18 },
+        rpcUrls: {
+          default: {
+            http: ["https://explorer.alchemy.com"],
+          },
+        },
+      });
+
+      expect(() => transport({ chain: explorerChain })).toThrowError(
+        `Chain ${explorerChain.id} (${explorerChain.name}) is not supported by Alchemy`,
+      );
+    });
+
+    it("should reject root alchemy.com URLs in chain RPC URLs", () => {
+      const transport = alchemyTransport({ apiKey: "test-key" });
+
+      const rootAlchemyChain = defineChain({
+        id: 999996, // Not in registry
+        name: "Root Alchemy Chain",
+        nativeCurrency: { name: "ETH", symbol: "ETH", decimals: 18 },
+        rpcUrls: {
+          default: {
+            http: ["https://alchemy.com/v2"],
+          },
+        },
+      });
+
+      expect(() => transport({ chain: rootAlchemyChain })).toThrowError(
+        `Chain ${rootAlchemyChain.id} (${rootAlchemyChain.name}) is not supported by Alchemy`,
+      );
+    });
+
+    it("should reject legacy alchemy RPC URLs without the v2 path", () => {
+      const transport = alchemyTransport({ apiKey: "test-key" });
+
+      const invalidLegacyAlchemyChain = defineChain({
+        id: 999995, // Not in registry
+        name: "Invalid Legacy Alchemy Chain",
+        nativeCurrency: { name: "ETH", symbol: "ETH", decimals: 18 },
+        rpcUrls: {
+          default: {
+            http: ["https://default.rpc.com"],
+          },
+          alchemy: {
+            http: ["https://invalid-legacy.g.alchemy.com"],
+          },
+        },
+      });
+
+      expect(() =>
+        transport({ chain: invalidLegacyAlchemyChain }),
+      ).toThrowError(
+        `Chain ${invalidLegacyAlchemyChain.id} (${invalidLegacyAlchemyChain.name}) is not supported by Alchemy`,
+      );
+    });
+
     it("should prioritize explicit URL over registry", () => {
       const explicitUrl = "https://explicit.alchemy.com/v2/custom-key";
       const transport = alchemyTransport({
