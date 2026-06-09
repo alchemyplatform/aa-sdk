@@ -39,7 +39,7 @@ export type DataActions = {
  * import { createClient } from "viem";
  * import { mainnet } from "viem/chains";
  * import { alchemyTransport } from "@alchemy/common";
- * import { dataActions } from "@alchemy/data";
+ * import { dataActions } from "@alchemy/data-apis";
  *
  * const client = createClient({
  *   chain: mainnet,

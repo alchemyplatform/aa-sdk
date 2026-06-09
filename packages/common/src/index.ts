@@ -2,7 +2,7 @@
 export type * from "./transport/alchemy.js";
 export { alchemyTransport, isAlchemyTransport } from "./transport/alchemy.js";
 
-// http -- exported for @alchemy/data (REST channel); hardening tracked in the data SDK plan
+// http -- exported for @alchemy/data-apis (REST channel); hardening tracked in the data SDK plan
 export type * from "./rest/restClient.js";
 export type * from "./rest/types.js";
 export { AlchemyRestClient } from "./rest/restClient.js";

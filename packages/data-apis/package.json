@@ -1,5 +1,5 @@
 {
-  "name": "@alchemy/data",
+  "name": "@alchemy/data-apis",
   "version": "0.0.0",
   "description": "Alchemy Data APIs SDK (Portfolio, Prices, NFT, Token, Transfers) — MVP",
   "author": "Alchemy",

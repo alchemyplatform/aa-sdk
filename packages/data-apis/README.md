@@ -1,4 +1,4 @@
-# @alchemy/data (MVP)
+# @alchemy/data-apis (MVP)
 
 A vertical-slice prototype of the Data APIs SDK, built to prove the architecture
 before scaling to the full v1 surface (Portfolio, Prices, NFT, Token, Transfers).

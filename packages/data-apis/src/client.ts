@@ -33,7 +33,7 @@ export type AlchemyDataClient = Client<AlchemyTransport, Chain | undefined> &
  *
  * @example
  * ```ts
- * import { createAlchemyDataClient } from "@alchemy/data";
+ * import { createAlchemyDataClient } from "@alchemy/data-apis";
  *
  * const data = createAlchemyDataClient({
  *   apiKey: process.env.ALCHEMY_API_KEY,
