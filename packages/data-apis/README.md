@@ -17,7 +17,7 @@ Plus the two entry points:
 
 ```ts
 // Data-only developers (no viem knowledge required)
-const data = createAlchemyDataClient({ apiKey, network: "eth-mainnet" });
+const data = createDataClient({ apiKey, network: "eth-mainnet" });
 
 // Developers already on a viem client with an Alchemy transport
 const client = createClient({ chain: mainnet, transport: alchemyTransport({ apiKey }) })

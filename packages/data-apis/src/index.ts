@@ -1,6 +1,6 @@
 // client
 export type { AlchemyDataClient, AlchemyDataClientOptions } from "./client.js";
-export { createAlchemyDataClient } from "./client.js";
+export { createDataClient } from "./client.js";
 
 // decorator
 export type { DataActions } from "./decorator.js";

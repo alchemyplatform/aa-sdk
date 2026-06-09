@@ -2,7 +2,7 @@ import { alchemyTransport } from "@alchemy/common";
 import { createClient } from "viem";
 import { mainnet, base } from "viem/chains";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { createAlchemyDataClient } from "./client.js";
+import { createDataClient } from "./client.js";
 import { dataActions } from "./decorator.js";
 
 const fetchMock = vi.fn();
@@ -22,11 +22,11 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 
-describe("createAlchemyDataClient", () => {
+describe("createDataClient", () => {
   it("routes multi-network portfolio calls to the global Data API with resolved slugs", async () => {
     fetchMock.mockResolvedValueOnce(jsonResponse({ data: { tokens: [] } }));
 
-    const data = createAlchemyDataClient({
+    const data = createDataClient({
       apiKey: "test-key",
       network: "eth-mainnet",
     });
@@ -60,7 +60,7 @@ describe("createAlchemyDataClient", () => {
       jsonResponse({ ownedNfts: [], totalCount: 0 }),
     );
 
-    const data = createAlchemyDataClient({
+    const data = createDataClient({
       apiKey: "test-key",
       network: "eth-mainnet",
     });
@@ -81,7 +81,7 @@ describe("createAlchemyDataClient", () => {
       jsonResponse({ jsonrpc: "2.0", id: 1, result: { transfers: [] } }),
     );
 
-    const data = createAlchemyDataClient({
+    const data = createDataClient({
       apiKey: "test-key",
       network: "eth-mainnet",
     });

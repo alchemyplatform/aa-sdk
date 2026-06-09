@@ -5,7 +5,7 @@
  *   ALCHEMY_API_KEY=<your-key> pnpm --filter @alchemy/data-apis smoke-test
  *
  * What it covers:
- *   - createAlchemyDataClient with slug, viem Chain, and CAIP-2 network inputs
+ *   - createDataClient with slug, viem Chain, and CAIP-2 network inputs
  *   - portfolio.getTokensByAddress (REST, multi-network, all three input formats)
  *   - nft.getNftsForOwner (REST, per-network, per-request override)
  *   - transfers.getAssetTransfers (JSON-RPC, per-request network override)
@@ -13,7 +13,7 @@
 
 import { mainnet } from "viem/chains";
 import { BaseError } from "@alchemy/common";
-import { createAlchemyDataClient } from "../src/client.js";
+import { createDataClient } from "../src/client.js";
 import { dataActions } from "../src/decorator.js";
 import { alchemyTransport } from "@alchemy/common";
 import { createClient } from "viem";
@@ -50,15 +50,15 @@ function assert(condition: boolean, message: string) {
 // ─── Clients ──────────────────────────────────────────────────────────────────
 
 // Three ways to specify the default network
-const clientBySlug = createAlchemyDataClient({
+const clientBySlug = createDataClient({
   apiKey: API_KEY,
   network: "eth-mainnet",
 });
-const clientByChain = createAlchemyDataClient({
+const clientByChain = createDataClient({
   apiKey: API_KEY,
   network: mainnet,
 });
-const clientByCaip2 = createAlchemyDataClient({
+const clientByCaip2 = createDataClient({
   apiKey: API_KEY,
   network: "eip155:1",
 });

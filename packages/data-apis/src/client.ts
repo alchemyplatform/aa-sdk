@@ -33,9 +33,9 @@ export type AlchemyDataClient = Client<AlchemyTransport, Chain | undefined> &
  *
  * @example
  * ```ts
- * import { createAlchemyDataClient } from "@alchemy/data-apis";
+ * import { createDataClient } from "@alchemy/data-apis";
  *
- * const data = createAlchemyDataClient({
+ * const data = createDataClient({
  *   apiKey: process.env.ALCHEMY_API_KEY,
  *   network: "eth-mainnet", // or `mainnet` from viem/chains, or "eip155:1"
  * });
@@ -46,7 +46,7 @@ export type AlchemyDataClient = Client<AlchemyTransport, Chain | undefined> &
  * @param {AlchemyDataClientOptions} options Auth (apiKey/jwt/proxy url) and default network
  * @returns {AlchemyDataClient} A viem client extended with the Data API actions
  */
-export function createAlchemyDataClient(
+export function createDataClient(
   options: AlchemyDataClientOptions,
 ): AlchemyDataClient {
   const { network, ...transportConfig } = options;
