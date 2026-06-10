@@ -1,0 +1,25 @@
+{
+  "name": "@alchemy/api-codegen",
+  "version": "0.0.0",
+  "description": "Internal codegen tool: generates SDK type internals from the docs repo's bundled OpenAPI/OpenRPC specs",
+  "author": "Alchemy",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "snapshot": "tsx src/cli.ts snapshot",
+    "test": "vitest",
+    "test:run": "vitest run"
+  },
+  "devDependencies": {
+    "json-schema-to-typescript": "15.0.4",
+    "openapi-typescript": "7.13.0",
+    "prettier": "3.3.3",
+    "typescript-template": "workspace:*"
+  }
+}

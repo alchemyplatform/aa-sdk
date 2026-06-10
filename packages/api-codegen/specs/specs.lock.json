@@ -1,0 +1,12 @@
+{
+  "docs": {
+    "repository": "alchemyplatform/docs",
+    "sha": "374030e02046972b4158612036af3aed9130b675",
+    "branch": "codex/improve-agent-wallet-docs"
+  },
+  "specs": {
+    "nft.json": "c90282cfc4959f48534aaccceccdd31202ca1410888d7d0daafdd20e0f8c4885",
+    "portfolio.json": "16bad2001183fada4147f445640555e22a0c58ad44844eefdf0a06e3f794774c",
+    "transfers.json": "17626a215d7453b41a868e434d5d86a9a1505d8e648ca91c7df1b44c97af9cf5"
+  }
+}

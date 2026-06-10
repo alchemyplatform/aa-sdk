@@ -1,0 +1,566 @@
+{
+  "$schema": "https://meta.open-rpc.org/",
+  "openrpc": "1.2.4",
+  "info": {
+    "title": "Alchemy Transfers API JSON-RPC Specification",
+    "description": "A specification of the standard JSON-RPC methods for Transfers API.",
+    "version": "0.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://eth-mainnet.g.alchemy.com/v2",
+      "name": "Ethereum Mainnet"
+    },
+    {
+      "url": "https://eth-mainnetbeacon.g.alchemy.com/v2",
+      "name": "Ethereum Mainnet Beacon"
+    },
+    {
+      "url": "https://eth-hoodi.g.alchemy.com/v2",
+      "name": "Ethereum Hoodi"
+    },
+    {
+      "url": "https://eth-hoodibeacon.g.alchemy.com/v2",
+      "name": "Ethereum Hoodi Beacon"
+    },
+    {
+      "url": "https://eth-sepolia.g.alchemy.com/v2",
+      "name": "Ethereum Sepolia"
+    },
+    {
+      "url": "https://eth-sepoliabeacon.g.alchemy.com/v2",
+      "name": "Ethereum Sepolia Beacon"
+    },
+    {
+      "url": "https://abstract-mainnet.g.alchemy.com/v2",
+      "name": "Abstract Mainnet"
+    },
+    {
+      "url": "https://abstract-testnet.g.alchemy.com/v2",
+      "name": "Abstract Testnet"
+    },
+    {
+      "url": "https://anime-mainnet.g.alchemy.com/v2",
+      "name": "Anime Mainnet"
+    },
+    {
+      "url": "https://anime-sepolia.g.alchemy.com/v2",
+      "name": "Anime Sepolia"
+    },
+    {
+      "url": "https://apechain-mainnet.g.alchemy.com/v2",
+      "name": "ApeChain Mainnet"
+    },
+    {
+      "url": "https://apechain-curtis.g.alchemy.com/v2",
+      "name": "ApeChain Curtis"
+    },
+    {
+      "url": "https://arb-mainnet.g.alchemy.com/v2",
+      "name": "Arbitrum Mainnet"
+    },
+    {
+      "url": "https://arb-sepolia.g.alchemy.com/v2",
+      "name": "Arbitrum Sepolia"
+    },
+    {
+      "url": "https://avax-mainnet.g.alchemy.com/v2",
+      "name": "Avalanche Mainnet"
+    },
+    {
+      "url": "https://avax-fuji.g.alchemy.com/v2",
+      "name": "Avalanche Fuji"
+    },
+    {
+      "url": "https://base-mainnet.g.alchemy.com/v2",
+      "name": "Base Mainnet"
+    },
+    {
+      "url": "https://base-sepolia.g.alchemy.com/v2",
+      "name": "Base Sepolia"
+    },
+    {
+      "url": "https://berachain-mainnet.g.alchemy.com/v2",
+      "name": "Berachain Mainnet"
+    },
+    {
+      "url": "https://berachain-bepolia.g.alchemy.com/v2",
+      "name": "Berachain Bepolia"
+    },
+    {
+      "url": "https://blast-mainnet.g.alchemy.com/v2",
+      "name": "Blast Mainnet"
+    },
+    {
+      "url": "https://blast-sepolia.g.alchemy.com/v2",
+      "name": "Blast Sepolia"
+    },
+    {
+      "url": "https://bnb-mainnet.g.alchemy.com/v2",
+      "name": "BNB Smart Chain Mainnet"
+    },
+    {
+      "url": "https://bnb-testnet.g.alchemy.com/v2",
+      "name": "BNB Smart Chain Testnet"
+    },
+    {
+      "url": "https://celo-mainnet.g.alchemy.com/v2",
+      "name": "Celo Mainnet"
+    },
+    {
+      "url": "https://celo-sepolia.g.alchemy.com/v2",
+      "name": "Celo Sepolia"
+    },
+    {
+      "url": "https://gensyn-mainnet.g.alchemy.com/v2",
+      "name": "Gensyn Mainnet"
+    },
+    {
+      "url": "https://gensyn-testnet.g.alchemy.com/v2",
+      "name": "Gensyn Testnet"
+    },
+    {
+      "url": "https://gnosis-mainnet.g.alchemy.com/v2",
+      "name": "Gnosis Mainnet"
+    },
+    {
+      "url": "https://gnosis-chiado.g.alchemy.com/v2",
+      "name": "Gnosis Chiado"
+    },
+    {
+      "url": "https://hyperliquid-mainnet.g.alchemy.com/v2",
+      "name": "Hyperliquid Mainnet"
+    },
+    {
+      "url": "https://hyperliquid-testnet.g.alchemy.com/v2",
+      "name": "Hyperliquid Testnet"
+    },
+    {
+      "url": "https://ink-mainnet.g.alchemy.com/v2",
+      "name": "Ink Mainnet"
+    },
+    {
+      "url": "https://ink-sepolia.g.alchemy.com/v2",
+      "name": "Ink Sepolia"
+    },
+    {
+      "url": "https://lens-mainnet.g.alchemy.com/v2",
+      "name": "Lens Mainnet"
+    },
+    {
+      "url": "https://lens-sepolia.g.alchemy.com/v2",
+      "name": "Lens Sepolia"
+    },
+    {
+      "url": "https://linea-mainnet.g.alchemy.com/v2",
+      "name": "Linea Mainnet"
+    },
+    {
+      "url": "https://linea-sepolia.g.alchemy.com/v2",
+      "name": "Linea Sepolia"
+    },
+    {
+      "url": "https://polygon-mainnet.g.alchemy.com/v2",
+      "name": "Polygon Mainnet"
+    },
+    {
+      "url": "https://polygon-amoy.g.alchemy.com/v2",
+      "name": "Polygon Amoy"
+    },
+    {
+      "url": "https://monad-mainnet.g.alchemy.com/v2",
+      "name": "Monad Mainnet"
+    },
+    {
+      "url": "https://monad-testnet.g.alchemy.com/v2",
+      "name": "Monad Testnet"
+    },
+    {
+      "url": "https://mythos-mainnet.g.alchemy.com/v2",
+      "name": "Mythos Mainnet"
+    },
+    {
+      "url": "https://opt-mainnet.g.alchemy.com/v2",
+      "name": "OP Mainnet Mainnet"
+    },
+    {
+      "url": "https://opt-sepolia.g.alchemy.com/v2",
+      "name": "OP Mainnet Sepolia"
+    },
+    {
+      "url": "https://robinhood-testnet.g.alchemy.com/v2",
+      "name": "Robinhood Chain Testnet"
+    },
+    {
+      "url": "https://ronin-mainnet.g.alchemy.com/v2",
+      "name": "Ronin Mainnet"
+    },
+    {
+      "url": "https://ronin-saigon.g.alchemy.com/v2",
+      "name": "Ronin Saigon"
+    },
+    {
+      "url": "https://rootstock-mainnet.g.alchemy.com/v2",
+      "name": "Rootstock Mainnet"
+    },
+    {
+      "url": "https://rootstock-testnet.g.alchemy.com/v2",
+      "name": "Rootstock Testnet"
+    },
+    {
+      "url": "https://scroll-mainnet.g.alchemy.com/v2",
+      "name": "Scroll Mainnet"
+    },
+    {
+      "url": "https://scroll-sepolia.g.alchemy.com/v2",
+      "name": "Scroll Sepolia"
+    },
+    {
+      "url": "https://settlus-mainnet.g.alchemy.com/v2",
+      "name": "Settlus Mainnet"
+    },
+    {
+      "url": "https://settlus-septestnet.g.alchemy.com/v2",
+      "name": "Settlus Sepolia"
+    },
+    {
+      "url": "https://shape-mainnet.g.alchemy.com/v2",
+      "name": "Shape Mainnet"
+    },
+    {
+      "url": "https://shape-sepolia.g.alchemy.com/v2",
+      "name": "Shape Sepolia"
+    },
+    {
+      "url": "https://soneium-mainnet.g.alchemy.com/v2",
+      "name": "Soneium Mainnet"
+    },
+    {
+      "url": "https://soneium-minato.g.alchemy.com/v2",
+      "name": "Soneium Minato"
+    },
+    {
+      "url": "https://story-mainnet.g.alchemy.com/v2",
+      "name": "Story Mainnet"
+    },
+    {
+      "url": "https://story-aeneid.g.alchemy.com/v2",
+      "name": "Story Aeneid"
+    },
+    {
+      "url": "https://unichain-mainnet.g.alchemy.com/v2",
+      "name": "Unichain Mainnet"
+    },
+    {
+      "url": "https://unichain-sepolia.g.alchemy.com/v2",
+      "name": "Unichain Sepolia"
+    },
+    {
+      "url": "https://worldchain-mainnet.g.alchemy.com/v2",
+      "name": "World Chain Mainnet"
+    },
+    {
+      "url": "https://worldchain-sepolia.g.alchemy.com/v2",
+      "name": "World Chain Sepolia"
+    },
+    {
+      "url": "https://zetachain-mainnet.g.alchemy.com/v2",
+      "name": "ZetaChain Mainnet"
+    },
+    {
+      "url": "https://zetachain-testnet.g.alchemy.com/v2",
+      "name": "ZetaChain Testnet"
+    },
+    {
+      "url": "https://zksync-mainnet.g.alchemy.com/v2",
+      "name": "ZKsync Mainnet"
+    },
+    {
+      "url": "https://zksync-sepolia.g.alchemy.com/v2",
+      "name": "ZKsync Sepolia"
+    },
+    {
+      "url": "https://zora-mainnet.g.alchemy.com/v2",
+      "name": "Zora Mainnet"
+    },
+    {
+      "url": "https://zora-sepolia.g.alchemy.com/v2",
+      "name": "Zora Sepolia"
+    }
+  ],
+  "methods": [
+    {
+      "name": "alchemy_getAssetTransfers",
+      "description": "The Transfers API allows you to easily fetch historical transactions for any address across Ethereum and supported L2s including Base, Polygon, Arbitrum, and Optimism (internal transfer data is only available on Ethereum Mainnet and Polygon Mainnet).",
+      "x-compute-units": 120,
+      "params": [
+        {
+          "name": "assetTransferParams",
+          "required": true,
+          "schema": {
+            "type": "object",
+            "properties": {
+              "fromBlock": {
+                "type": "string",
+                "default": "0x0"
+              },
+              "toBlock": {
+                "type": "string",
+                "default": "latest"
+              },
+              "fromAddress": {
+                "type": "string",
+                "default": "0x0000000000000000000000000000000000000000"
+              },
+              "toAddress": {
+                "type": "string",
+                "default": "0x0000000000000000000000000000000000000000"
+              },
+              "excludeZeroValue": {
+                "type": "boolean",
+                "default": true
+              },
+              "category": {
+                "type": "array",
+                "description": "Array of transfer categories to include. Note: 'internal' category is not supported on Base, it is only available on Ethereum Mainnet and Polygon Mainnet.",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "external",
+                    "internal",
+                    "erc20",
+                    "erc721",
+                    "erc1155",
+                    "specialnft"
+                  ]
+                }
+              },
+              "contractAddresses": {
+                "type": "array",
+                "description": "An array of contract addresses to filter for.",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "order": {
+                "type": "string",
+                "enum": [
+                  "asc",
+                  "desc"
+                ]
+              },
+              "withMetadata": {
+                "type": "boolean",
+                "description": "Available only on ETH, Base, Polygon, Arbitrum, Optimism",
+                "default": false
+              },
+              "maxCount": {
+                "type": "string",
+                "default": "0x3e8"
+              },
+              "pageKey": {
+                "type": "string",
+                "default": "0x0"
+              }
+            }
+          }
+        }
+      ],
+      "result": {
+        "name": "Asset transfers",
+        "description": "Returns the list of transfers, and a pageKey if additional results remain.",
+        "schema": {
+          "oneOf": [
+            {
+              "title": "Not Found (null)",
+              "type": "string"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "pageKey": {
+                  "type": "string",
+                  "description": "Uuid of next page of results (if exists, else blank)."
+                },
+                "transfers": {
+                  "type": "array",
+                  "description": "Array of transfer objects sorted in ascending or descending order by block number.",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "category": {
+                        "type": "string",
+                        "description": "'external', 'internal', 'token', 'erc20', 'erc721', 'erc1155', 'specialnft'"
+                      },
+                      "blockNum": {
+                        "type": "string",
+                        "description": "Block number of the transfer (hex string)."
+                      },
+                      "from": {
+                        "type": "string",
+                        "description": "From address (hex string)."
+                      },
+                      "to": {
+                        "type": "string",
+                        "description": "To address (hex string). null if contract creation."
+                      },
+                      "value": {
+                        "type": "number",
+                        "nullable": true,
+                        "description": "Asset transfer value. null if it's an ERC721 or unknown decimals."
+                      },
+                      "erc721TokenId": {
+                        "type": "string",
+                        "nullable": true,
+                        "description": "(Deprecated) Legacy token ID field for ERC721 tokens. Use `tokenId` instead."
+                      },
+                      "erc1155Metadata": {
+                        "type": "array",
+                        "nullable": true,
+                        "description": "Array of objects with (tokenId, value) for ERC1155 transfers, null otherwise.",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "tokenId": {
+                              "type": "string"
+                            },
+                            "value": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      },
+                      "tokenId": {
+                        "type": "string",
+                        "description": "Token ID for NFT tokens (ERC721, ERC1155, etc.)."
+                      },
+                      "asset": {
+                        "type": "string",
+                        "nullable": true,
+                        "description": "ETH or the token's symbol. null if unavailable."
+                      },
+                      "uniqueId": {
+                        "type": "string",
+                        "description": "Unique identifier for the transfer object."
+                      },
+                      "hash": {
+                        "type": "string",
+                        "description": "Transaction hash (hex string)."
+                      },
+                      "rawContract": {
+                        "type": "object",
+                        "properties": {
+                          "value": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "Raw hex transfer value. null for NFT transfers."
+                          },
+                          "address": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "Contract address (hex string). null for external or internal transfers."
+                          },
+                          "decimal": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "Contract decimal in hex. null if not known."
+                          }
+                        }
+                      },
+                      "metadata": {
+                        "type": "object",
+                        "properties": {
+                          "blockTimestamp": {
+                            "type": "string",
+                            "description": "ISO-formatted timestamp of the block containing this transfer. (Available only on ETH, Base, Polygon, Arbitrum, Optimism)"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      "examples": [
+        {
+          "name": "alchemy_getAssetTransfers example",
+          "params": [
+            {
+              "name": "assetTransferParams",
+              "value": {
+                "fromBlock": "0x0",
+                "fromAddress": "0x0000000000000000000000000000000000000000",
+                "toAddress": "0x5c43B1eD97e52d009611D89b74fA829FE4ac56b1",
+                "excludeZeroValue": true,
+                "withMetadata": true,
+                "category": [
+                  "erc721",
+                  "erc1155"
+                ]
+              }
+            }
+          ],
+          "result": {
+            "name": "Asset transfers",
+            "value": {
+              "transfers": [
+                {
+                  "blockNum": "0xb0eadc",
+                  "uniqueId": "0x3847245c01829b043431067fb2bfa95f7b5bdc7e4246c843e7a573ab6f26f5ff:external",
+                  "hash": "0x3847245c01829b043431067fb2bfa95f7b5bdc7e4246c843e7a573ab6f26f5ff",
+                  "from": "0xef4396d9ff8107086d215a1c9f8866c54795d7c7",
+                  "to": "0x5c43b1ed97e52d009611d89b74fa829fe4ac56b1",
+                  "value": 0.5,
+                  "erc721TokenId": null,
+                  "erc1155Metadata": null,
+                  "tokenId": null,
+                  "asset": "ETH",
+                  "category": "external",
+                  "rawContract": {
+                    "value": "0x6f05b59d3b20000",
+                    "address": null,
+                    "decimal": "0x12"
+                  }
+                },
+                {
+                  "blockNum": "0xb96042",
+                  "uniqueId": "0x5c88806ce2e4a42c5fbd5804f340ed887995914546cf92ec39eb5472cf22c88c:external",
+                  "hash": "0x5c88806ce2e4a42c5fbd5804f340ed887995914546cf92ec39eb5472cf22c88c",
+                  "from": "0xef4396d9ff8107086d215a1c9f8866c54795d7c7",
+                  "to": "0x5c43b1ed97e52d009611d89b74fa829fe4ac56b1",
+                  "value": 0.27,
+                  "erc721TokenId": null,
+                  "erc1155Metadata": null,
+                  "tokenId": null,
+                  "asset": "ETH",
+                  "category": "external",
+                  "rawContract": {
+                    "value": "0x3bf3b91c95b0000",
+                    "address": null,
+                    "decimal": "0x12"
+                  }
+                }
+              ],
+              "pageKey": ""
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "x-auth-params": [
+    {
+      "name": "apiKey",
+      "in": "path",
+      "schema": {
+        "type": "string",
+        "default": "docs-demo",
+        "description": "For higher throughput, [create your own API key](https://dashboard.alchemy.com/signup)"
+      },
+      "required": true
+    }
+  ]
+}

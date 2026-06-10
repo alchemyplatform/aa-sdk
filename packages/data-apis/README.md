@@ -7,11 +7,11 @@ before scaling to the full v1 surface (Portfolio, Prices, NFT, Token, Transfers)
 
 One method per seam, not full coverage:
 
-| Method | Channel | What it demonstrates |
-| --- | --- | --- |
+| Method                         | Channel                                   | What it demonstrates                                                                                           |
+| ------------------------------ | ----------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
 | `portfolio.getTokensByAddress` | REST → global `api.g.alchemy.com/data/v1` | Multi-network request bodies via `AlchemyRestClient`; networks are payload, the client's chain is not involved |
-| `nft.getNftsForOwner` | REST → `{network}.g.alchemy.com/nft/v3` | Network-scoped endpoint resolution with per-request `network` override falling back to the client default |
-| `transfers.getAssetTransfers` | JSON-RPC → `AlchemyTransport` | Plain viem action; network override derives a transport instance from `client.transport.config` |
+| `nft.getNftsForOwner`          | REST → `{network}.g.alchemy.com/nft/v3`   | Network-scoped endpoint resolution with per-request `network` override falling back to the client default      |
+| `transfers.getAssetTransfers`  | JSON-RPC → `AlchemyTransport`             | Plain viem action; network override derives a transport instance from `client.transport.config`                |
 
 Plus the two entry points:
 
@@ -20,8 +20,10 @@ Plus the two entry points:
 const data = createDataClient({ apiKey, network: "eth-mainnet" });
 
 // Developers already on a viem client with an Alchemy transport
-const client = createClient({ chain: mainnet, transport: alchemyTransport({ apiKey }) })
-  .extend(dataActions);
+const client = createClient({
+  chain: mainnet,
+  transport: alchemyTransport({ apiKey }),
+}).extend(dataActions);
 ```
 
 Network inputs accept all three formats everywhere, resolved by
@@ -29,6 +31,16 @@ Network inputs accept all three formats everywhere, resolved by
 (`"eth-mainnet"`), or CAIP-2 (`"eip155:1"`, `"solana:mainnet"`). The slug ↔
 chain-ID mapping is derived from the existing daikon-generated
 `ALCHEMY_RPC_MAPPING` — no second registry.
+
+## Generated internals
+
+Param/result types are generated from the docs repo's bundled OpenAPI/OpenRPC
+specs by `@alchemy/api-codegen` (see that package's README for the
+snapshot/generate pipeline). `src/generated/` is committed, machine-owned, and
+never re-exported directly: the public types in `src/types.ts` are
+hand-reviewed aliases, and `codegen.manifest.ts` maps spec operations to the
+generated surface — referencing a renamed/removed spec operation fails
+`pnpm generate` loudly.
 
 ## Companion changes in @alchemy/common
 
@@ -38,7 +50,6 @@ chain-ID mapping is derived from the existing daikon-generated
 
 ## Deliberately out of scope (tracked in the data SDK scope plan)
 
-- Codegen from docs OpenAPI/OpenRPC specs (types here are hand-written)
 - Rest client hardening: retries, timeouts, request-id, first-class query params
 - Pagination iterators, error normalization, the SDK manifest, remaining methods
 - ws-tools generator change to emit `{ slug, chainId, caip2 }` entries +

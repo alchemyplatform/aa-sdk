@@ -1,9 +1,22 @@
 import type { NetworkInput } from "@alchemy/common";
+import type {
+  GetNftsForOwnerQuery,
+  GetNftsForOwnerResponse,
+} from "./generated/rest/nft.schema.js";
+import type {
+  GetTokensByAddressBody,
+  GetTokensByAddressResponse,
+} from "./generated/rest/portfolio.schema.js";
+import type {
+  AlchemyGetAssetTransfersParams,
+  AlchemyGetAssetTransfersResult,
+} from "./generated/rpc/transfers.js";
 
-// NOTE(mvp): these param/result types are hand-written against the docs specs
-// to prove the architecture. The production plan generates them from the docs
-// repo's bundled OpenAPI/OpenRPC output (see data-sdk-scope-plan.md), with
-// reviewed, semver-bearing public names aliasing generated internals.
+// Public param/result types are hand-reviewed aliases over generated
+// internals (src/generated/, produced by @alchemy/api-codegen from the docs
+// repo's bundled OpenAPI/OpenRPC specs). Generated names are never
+// re-exported directly: every public-surface change is a deliberate edit
+// here, even when the underlying spec moves.
 
 /** An address paired with the networks to query it on. */
 export interface PortfolioAddressEntry {
@@ -12,92 +25,56 @@ export interface PortfolioAddressEntry {
   networks: NetworkInput[];
 }
 
-export interface GetTokensByAddressParams {
+/**
+ * Generated request body with the wire-format `addresses` (plain string
+ * networks) replaced by the SDK's three-format {@link PortfolioAddressEntry}.
+ */
+export type GetTokensByAddressParams = Omit<
+  GetTokensByAddressBody,
+  "addresses"
+> & {
   addresses: PortfolioAddressEntry[];
-  withMetadata?: boolean;
-  withPrices?: boolean;
-  includeNativeTokens?: boolean;
-  includeErc20Tokens?: boolean;
-}
+};
 
-export interface PortfolioToken {
-  address: string;
-  network: string;
-  tokenAddress: string | null;
-  tokenBalance: string;
-  tokenMetadata?: {
-    name?: string | null;
-    symbol?: string | null;
-    decimals?: number | null;
-    logo?: string | null;
-  };
-  tokenPrices?: Array<{
-    currency: string;
-    value: string;
-    lastUpdatedAt: string;
-  }>;
-}
+export type GetTokensByAddressResult = GetTokensByAddressResponse;
 
-export interface GetTokensByAddressResult {
-  data: {
-    tokens: PortfolioToken[];
-    pageKey?: string;
-  };
-}
+export type PortfolioToken = NonNullable<
+  GetTokensByAddressResponse["data"]["tokens"]
+>[number];
 
-export interface GetNftsForOwnerParams {
-  owner: string;
+/**
+ * Generated query params plus the SDK's network override; the wire's
+ * bracketed `contractAddresses[]` key is replaced with a plain array (the
+ * action serializes it back to the bracketed form).
+ */
+export type GetNftsForOwnerParams = Omit<
+  GetNftsForOwnerQuery,
+  "contractAddresses[]"
+> & {
   /** Overrides the client-level network for this request. */
   network?: NetworkInput;
+  /** Contract addresses to filter by (max 45). */
   contractAddresses?: string[];
-  withMetadata?: boolean;
-  pageKey?: string;
-  pageSize?: number;
-}
+};
 
-export interface GetNftsForOwnerResult {
-  ownedNfts: Array<Record<string, unknown>>;
-  totalCount: number;
-  pageKey?: string;
-  validAt?: Record<string, unknown>;
-}
+export type GetNftsForOwnerResult = GetNftsForOwnerResponse;
 
-export interface GetAssetTransfersParams {
+/** Generated RPC params plus the SDK's network override. */
+export type GetAssetTransfersParams = AlchemyGetAssetTransfersParams & {
   /** Overrides the client-level network for this request. */
   network?: NetworkInput;
-  fromBlock?: string;
-  toBlock?: string;
-  fromAddress?: string;
-  toAddress?: string;
-  excludeZeroValue?: boolean;
-  category: Array<
-    "external" | "internal" | "erc20" | "erc721" | "erc1155" | "specialnft"
-  >;
-  contractAddresses?: string[];
-  order?: "asc" | "desc";
-  withMetadata?: boolean;
-  pageKey?: string;
-  maxCount?: string;
-}
+};
 
-export interface AssetTransfer {
-  category: string;
-  blockNum: string;
-  from: string;
-  to: string | null;
-  value: number | null;
-  asset: string | null;
-  hash: string;
-  uniqueId: string;
-  rawContract: {
-    value: string | null;
-    address: string | null;
-    decimal: string | null;
-  };
-  metadata?: { blockTimestamp: string };
-}
+/**
+ * The spec result is `oneOf: ["Not Found (null)" string, object]`; the string
+ * branch is a docs-spec artifact the SDK deliberately does not surface, so it
+ * is collapsed away here (and in {@link DataRpcSchema}).
+ */
+export type GetAssetTransfersResult = Exclude<
+  AlchemyGetAssetTransfersResult,
+  string
+>;
 
-export interface GetAssetTransfersResult {
-  transfers: AssetTransfer[];
-  pageKey?: string;
-}
+export type AssetTransfer = NonNullable<
+  GetAssetTransfersResult["transfers"]
+>[number];

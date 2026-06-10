@@ -83,7 +83,7 @@ await test("single network (slug)", async () => {
     Array.isArray(result.data.tokens),
     "result.data.tokens should be an array",
   );
-  assert(result.data.tokens.length > 0, "expected at least one token");
+  assert((result.data.tokens ?? []).length > 0, "expected at least one token");
 });
 
 await test("multi-network: viem Chain + slug + CAIP-2 in one call", async () => {
@@ -108,7 +108,7 @@ await test("multi-network: viem Chain + slug + CAIP-2 in one call", async () => 
   );
   // expect at least some native ETH/MATIC results across 3 networks
   assert(
-    result.data.tokens.length > 0,
+    (result.data.tokens ?? []).length > 0,
     "expected tokens across multiple networks",
   );
 });
@@ -121,7 +121,10 @@ await test("uses client-level network (slug)", async () => {
     typeof result.totalCount === "number",
     "totalCount should be a number",
   );
-  assert(result.totalCount > 0, "Vitalik should own some NFTs on mainnet");
+  assert(
+    (result.totalCount ?? 0) > 0,
+    "Vitalik should own some NFTs on mainnet",
+  );
 });
 
 await test("uses client-level network (viem Chain)", async () => {
@@ -177,7 +180,7 @@ await test("pageSize param", async () => {
     pageSize: 2,
     withMetadata: false,
   });
-  assert(result.ownedNfts.length <= 2, "should respect pageSize=2");
+  assert((result.ownedNfts ?? []).length <= 2, "should respect pageSize=2");
 });
 
 console.log("\n\x1b[1mtransfers.getAssetTransfers\x1b[0m");
@@ -191,7 +194,7 @@ await test("uses client-level network (slug)", async () => {
     withMetadata: true,
   });
   assert(Array.isArray(result.transfers), "transfers should be an array");
-  assert(result.transfers.length > 0, "expected at least one transfer");
+  assert((result.transfers ?? []).length > 0, "expected at least one transfer");
 });
 
 await test("uses client-level network (viem Chain)", async () => {
