@@ -249,6 +249,182 @@ await test("nft via raw viem client", async () => {
   );
 });
 
+console.log("\n\x1b[1mportfolio — new methods\x1b[0m");
+
+await test("getTokenBalancesByAddress", async () => {
+  const result = await clientBySlug.portfolio.getTokenBalancesByAddress({
+    addresses: [{ address: VITALIK, networks: ["eth-mainnet"] }],
+  });
+  assert(Array.isArray(result.data.tokens), "data.tokens should be an array");
+});
+
+await test("getNftsByAddress (paginated body method)", async () => {
+  const result = await clientBySlug.portfolio.getNftsByAddress({
+    addresses: [{ address: VITALIK, networks: ["eth-mainnet"] }],
+    pageSize: 2,
+  });
+  assert(
+    Array.isArray(result.data.ownedNfts),
+    "data.ownedNfts should be an array",
+  );
+});
+
+await test("getNftContractsByAddress", async () => {
+  const result = await clientBySlug.portfolio.getNftContractsByAddress({
+    addresses: [{ address: VITALIK, networks: ["eth-mainnet"] }],
+    pageSize: 2,
+  });
+  assert(
+    Array.isArray(result.data.contracts),
+    "data.contracts should be an array",
+  );
+});
+
+console.log("\n\x1b[1mprices\x1b[0m");
+
+await test("getTokenPricesBySymbol (chain-agnostic)", async () => {
+  const result = await clientBySlug.prices.getTokenPricesBySymbol({
+    symbols: ["ETH"],
+  });
+  assert(Array.isArray(result.data), "data should be an array");
+  assert((result.data ?? []).length > 0, "expected a price for ETH");
+});
+
+await test("getTokenPricesByAddress (network in entry)", async () => {
+  // USDC on mainnet
+  const result = await clientBySlug.prices.getTokenPricesByAddress({
+    addresses: [
+      {
+        address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+        network: mainnet,
+      },
+    ],
+  });
+  assert(Array.isArray(result.data), "data should be an array");
+});
+
+await test("getHistoricalTokenPrices (symbol form)", async () => {
+  const end = new Date();
+  const start = new Date(end.getTime() - 24 * 60 * 60 * 1000);
+  const result = await clientBySlug.prices.getHistoricalTokenPrices({
+    symbol: "ETH",
+    startTime: start.toISOString(),
+    endTime: end.toISOString(),
+    interval: "1h",
+  });
+  assert(Array.isArray(result.data), "data should be an array");
+});
+
+console.log("\n\x1b[1mnft — new methods\x1b[0m");
+
+// BAYC — stable, well-known contract
+const BAYC = "0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D";
+
+await test("getContractMetadata", async () => {
+  const result = await clientBySlug.nft.getContractMetadata({
+    contractAddress: BAYC,
+  });
+  assert(
+    typeof result.address === "string",
+    "contract metadata should include the address",
+  );
+});
+
+await test("getNftMetadata", async () => {
+  const result = await clientBySlug.nft.getNftMetadata({
+    contractAddress: BAYC,
+    tokenId: "1",
+  });
+  assert(result.tokenId === "1", "should return the requested token");
+});
+
+await test("getFloorPrice", async () => {
+  const result = await clientBySlug.nft.getFloorPrice({
+    contractAddress: BAYC,
+  });
+  assert(
+    typeof result === "object" && result != null,
+    "should return floor prices",
+  );
+});
+
+await test("isSpamContract", async () => {
+  const result = await clientBySlug.nft.isSpamContract({
+    contractAddress: BAYC,
+  });
+  assert(typeof result.isSpamContract === "boolean", "should classify spam");
+});
+
+await test("getNftsForContract with pageSize-style limit", async () => {
+  const result = await clientBySlug.nft.getNftsForContract({
+    contractAddress: BAYC,
+    limit: 2,
+    withMetadata: false,
+  });
+  assert(Array.isArray(result.nfts), "nfts should be an array");
+  assert((result.nfts ?? []).length <= 2, "should respect limit");
+});
+
+console.log("\n\x1b[1mtoken (JSON-RPC)\x1b[0m");
+
+// USDC contract on mainnet
+const USDC = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48";
+
+await test("getTokenBalances", async () => {
+  const result = await clientBySlug.token.getTokenBalances({
+    address: VITALIK,
+    tokenSpec: [USDC],
+  });
+  assert(
+    Array.isArray(result.tokenBalances),
+    "tokenBalances should be an array",
+  );
+});
+
+await test("getTokenMetadata", async () => {
+  const result = await clientBySlug.token.getTokenMetadata({
+    contractAddress: USDC,
+  });
+  assert(result.symbol === "USDC", "should return USDC metadata");
+});
+
+await test("getTokenAllowance", async () => {
+  const result = await clientBySlug.token.getTokenAllowance({
+    contract: USDC,
+    owner: VITALIK,
+    spender: VITALIK,
+  });
+  assert(typeof result === "string", "allowance should be a decimal string");
+});
+
+console.log("\n\x1b[1mpagination companions\x1b[0m");
+
+await test("nft.getNftsForOwnerPages walks two pages", async () => {
+  let pages = 0;
+  let lastPageKey: string | undefined;
+  for await (const page of clientBySlug.nft.getNftsForOwnerPages(
+    { owner: VITALIK, pageSize: 5, withMetadata: false },
+    { maxPages: 2 },
+  )) {
+    pages += 1;
+    if (pages === 1) lastPageKey = page.pageKey;
+  }
+  assert(pages === 2, `expected 2 pages, got ${pages}`);
+  assert(!!lastPageKey, "first page should carry a cursor");
+});
+
+await test("transfers.getAssetTransfersPages walks two pages", async () => {
+  let pages = 0;
+  for await (const page of clientBySlug.transfers.getAssetTransfersPages(
+    { fromAddress: VITALIK, category: ["external"], maxCount: "0x2" },
+    { maxPages: 2 },
+  )) {
+    pages += 1;
+    assert(Array.isArray(page.transfers), "each page carries transfers");
+  }
+  assert(pages === 2, `expected 2 pages, got ${pages}`);
+});
+
 // ─── Summary ──────────────────────────────────────────────────────────────────
 
 console.log(`\n${"─".repeat(50)}`);
