@@ -25,6 +25,7 @@ export { resolveNetwork } from "./networks/networkRegistry.js";
 
 // utils
 export type * from "./utils/types.js";
+export { composeSignals, sleep } from "./utils/signals.js";
 export { assertNever } from "./utils/assertNever.js";
 export { raise } from "./utils/raise.js";
 export { bigIntMultiply, bigIntMax } from "./utils/bigint.js";
@@ -40,6 +41,8 @@ export {
 
 // errors
 export { BaseError } from "./errors/BaseError.js";
+export type { AlchemyApiErrorDetails } from "./errors/AlchemyApiError.js";
+export { AlchemyApiError } from "./errors/AlchemyApiError.js";
 export { ChainNotFoundError } from "./errors/ChainNotFoundError.js";
 export { AccountNotFoundError } from "./errors/AccountNotFoundError.js";
 export { ConnectionConfigError } from "./errors/ConnectionConfigError.js";
