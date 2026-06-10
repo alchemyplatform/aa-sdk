@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.4](https://github.com/alchemyplatform/aa-sdk/compare/v5.0.3...v5.0.4) (2026-06-09)
+
+**Note:** Version bump only for package @alchemy/aa-infra
+
 ## [5.0.3](https://github.com/alchemyplatform/aa-sdk/compare/v5.0.2...v5.0.3) (2026-06-01)
 
 **Note:** Version bump only for package @alchemy/aa-infra
