@@ -3,6 +3,7 @@ import { DATA_API_URL } from "../../internal/endpoints.js";
 import {
   getRestClient,
   type DataClient,
+  type RequestOptions,
 } from "../../internal/clientHelpers.js";
 import type { PortfolioRestSchema } from "../../schema/rest.js";
 import type {
@@ -27,23 +28,26 @@ import type {
  *
  * @param {DataClient} client A client configured with an Alchemy transport
  * @param {GetTokensByAddressParams} params Addresses paired with networks, plus options
+ * @param {RequestOptions} [options] Per-request options (abort signal)
  * @returns {Promise<GetTokensByAddressResult>} Token balances, metadata, and prices
  */
 export async function getTokensByAddress(
   client: DataClient,
   params: GetTokensByAddressParams,
+  options?: RequestOptions,
 ): Promise<GetTokensByAddressResult> {
-  const { addresses, ...options } = params;
+  const { addresses, ...rest } = params;
   const restClient = getRestClient<PortfolioRestSchema>(client, DATA_API_URL);
   return restClient.request({
     route: "assets/tokens/by-address",
     method: "POST",
     body: {
-      ...options,
+      ...rest,
       addresses: addresses.map(({ address, networks }) => ({
         address,
         networks: networks.map((n) => resolveNetwork(n).slug),
       })),
     },
+    signal: options?.signal,
   });
 }

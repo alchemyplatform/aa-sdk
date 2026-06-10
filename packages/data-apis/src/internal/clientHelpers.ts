@@ -1,5 +1,6 @@
 import {
   AlchemyRestClient,
+  alchemyTransport,
   resolveNetwork,
   type AlchemyTransport,
   type AlchemyTransportConfig,
@@ -8,7 +9,9 @@ import {
   type RestRequestSchema,
 } from "@alchemy/common";
 import { BaseError } from "@alchemy/common";
-import type { Chain, Client } from "viem";
+import type { Chain, Client, EIP1193RequestFn } from "viem";
+import { getRpcUrl } from "./endpoints.js";
+import type { DataRpcSchema } from "../schema/rpc.js";
 
 /** The minimal client shape data actions operate on. */
 export type DataClient = Client<AlchemyTransport, Chain | undefined>;
@@ -77,4 +80,29 @@ export function getRestClient<Schema extends RestRequestSchema>(
 ): AlchemyRestClient<Schema> {
   const { apiKey, jwt } = getTransportConfig(client);
   return new AlchemyRestClient<Schema>({ apiKey, jwt, url });
+}
+
+/**
+ * Resolves the JSON-RPC request function for an action: the client's own
+ * transport when no override is given, otherwise a transport instance derived
+ * from the client's transport config and pointed at the override network's
+ * RPC URL (the same mechanism the transport's tracing support uses).
+ *
+ * @param {DataClient} client The client whose transport (and config) is used
+ * @param {NetworkInput} [network] Optional per-request network override
+ * @returns {EIP1193RequestFn<DataRpcSchema>} A typed JSON-RPC request function
+ */
+export function getRpcRequest(
+  client: DataClient,
+  network?: NetworkInput,
+): EIP1193RequestFn<DataRpcSchema> {
+  if (!network) {
+    return client.request as EIP1193RequestFn<DataRpcSchema>;
+  }
+  const { slug } = resolveRequestNetwork(client, network);
+  const derived = alchemyTransport({
+    ...getTransportConfig(client),
+    url: getRpcUrl(slug),
+  })({ retryCount: 0 });
+  return derived.request as EIP1193RequestFn<DataRpcSchema>;
 }

@@ -1,16 +1,11 @@
-import { alchemyTransport } from "@alchemy/common";
-import { getRpcUrl } from "../../internal/endpoints.js";
 import {
-  getTransportConfig,
-  resolveRequestNetwork,
+  getRpcRequest,
   type DataClient,
 } from "../../internal/clientHelpers.js";
-import type { DataRpcSchema } from "../../schema/rpc.js";
 import type {
   GetAssetTransfersParams,
   GetAssetTransfersResult,
 } from "../../types.js";
-import type { EIP1193RequestFn } from "viem";
 
 /**
  * Fetches historical asset transfers (external, internal, token) for the
@@ -30,19 +25,7 @@ export async function getAssetTransfers(
   params: GetAssetTransfersParams,
 ): Promise<GetAssetTransfersResult> {
   const { network, ...rpcParams } = params;
-
-  const request = (() => {
-    if (!network) {
-      return client.request as EIP1193RequestFn<DataRpcSchema>;
-    }
-    const { slug } = resolveRequestNetwork(client, network);
-    const derived = alchemyTransport({
-      ...getTransportConfig(client),
-      url: getRpcUrl(slug),
-    })({ retryCount: 0 });
-    return derived.request as EIP1193RequestFn<DataRpcSchema>;
-  })();
-
+  const request = getRpcRequest(client, network);
   return request({
     method: "alchemy_getAssetTransfers",
     params: [rpcParams],

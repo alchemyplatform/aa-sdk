@@ -6,40 +6,39 @@ import {
   type RequestOptions,
 } from "../../internal/clientHelpers.js";
 import { bracketArrayKeys } from "../../internal/query.js";
-import type { GetNftsForOwnerQuery } from "../../generated/rest/nft.schema.js";
+import type { GetContractsForOwnerQuery } from "../../generated/rest/nft.schema.js";
 import type { NftRestSchema } from "../../schema/rest.js";
 import type {
-  GetNftsForOwnerParams,
-  GetNftsForOwnerResult,
+  GetContractsForOwnerParams,
+  GetContractsForOwnerResult,
 } from "../../types.js";
 
 /**
- * Fetches NFTs owned by an address on a single network. The network is
+ * Fetches all NFT contracts an address holds tokens from. The network is
  * resolved per request: an explicit `network` param wins, otherwise the
  * client's configured network/chain applies.
  *
  * @param {DataClient} client A client configured with an Alchemy transport
- * @param {GetNftsForOwnerParams} params Owner address, optional network override, and filters
+ * @param {GetContractsForOwnerParams} params Owner address, optional network override, and filters
  * @param {RequestOptions} [options] Per-request options (abort signal)
- * @returns {Promise<GetNftsForOwnerResult>} The owned NFTs and pagination cursor
+ * @returns {Promise<GetContractsForOwnerResult>} The owned contracts and pagination cursor
  */
-export async function getNftsForOwner(
+export async function getContractsForOwner(
   client: DataClient,
-  params: GetNftsForOwnerParams,
+  params: GetContractsForOwnerParams,
   options?: RequestOptions,
-): Promise<GetNftsForOwnerResult> {
+): Promise<GetContractsForOwnerResult> {
   const { network, ...rest } = params;
   const { slug } = resolveRequestNetwork(client, network);
 
   const restClient = getRestClient<NftRestSchema>(client, getNftApiUrl(slug));
   return restClient.request({
-    route: "getNFTsForOwner",
+    route: "getContractsForOwner",
     method: "GET",
     query: bracketArrayKeys(rest, [
-      "contractAddresses",
       "excludeFilters",
       "includeFilters",
-    ]) as GetNftsForOwnerQuery,
+    ]) as GetContractsForOwnerQuery,
     signal: options?.signal,
   });
 }

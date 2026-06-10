@@ -3,3 +3,4 @@
 // stable regardless of how generation is organized internally.
 export type { NftRestSchema } from "../generated/rest/nft.schema.js";
 export type { PortfolioRestSchema } from "../generated/rest/portfolio.schema.js";
+export type { PricesRestSchema } from "../generated/rest/prices.schema.js";

@@ -15,6 +15,33 @@ export type GetTokensByAddressBody = NonNullable<
 export type GetTokensByAddressResponse =
   operations["get-tokens-by-address"]["responses"]["200"]["content"]["application/json"];
 
+/** Request body for get-token-balances-by-address. */
+export type GetTokenBalancesByAddressBody = NonNullable<
+  operations["get-token-balances-by-address"]["requestBody"]
+>["content"]["application/json"];
+
+/** 200 response for get-token-balances-by-address. */
+export type GetTokenBalancesByAddressResponse =
+  operations["get-token-balances-by-address"]["responses"]["200"]["content"]["application/json"];
+
+/** Request body for get-nfts-by-address. */
+export type GetNftsByAddressBody = NonNullable<
+  operations["get-nfts-by-address"]["requestBody"]
+>["content"]["application/json"];
+
+/** 200 response for get-nfts-by-address. */
+export type GetNftsByAddressResponse =
+  operations["get-nfts-by-address"]["responses"]["200"]["content"]["application/json"];
+
+/** Request body for get-nft-contracts-by-address. */
+export type GetNftContractsByAddressBody = NonNullable<
+  operations["get-nft-contracts-by-address"]["requestBody"]
+>["content"]["application/json"];
+
+/** 200 response for get-nft-contracts-by-address. */
+export type GetNftContractsByAddressResponse =
+  operations["get-nft-contracts-by-address"]["responses"]["200"]["content"]["application/json"];
+
 /** RestRequestSchema entries for the portfolio REST API. */
 export type PortfolioRestSchema = readonly [
   {
@@ -24,6 +51,30 @@ export type PortfolioRestSchema = readonly [
     Body: GetTokensByAddressBody;
     Query?: undefined;
     Response: GetTokensByAddressResponse;
+  },
+  {
+    /** POST /{apiKey}/assets/tokens/balances/by-address (operationId: get-token-balances-by-address) */
+    Route: "assets/tokens/balances/by-address";
+    Method: "POST";
+    Body: GetTokenBalancesByAddressBody;
+    Query?: undefined;
+    Response: GetTokenBalancesByAddressResponse;
+  },
+  {
+    /** POST /{apiKey}/assets/nfts/by-address (operationId: get-nfts-by-address) */
+    Route: "assets/nfts/by-address";
+    Method: "POST";
+    Body: GetNftsByAddressBody;
+    Query?: undefined;
+    Response: GetNftsByAddressResponse;
+  },
+  {
+    /** POST /{apiKey}/assets/nfts/contracts/by-address (operationId: get-nft-contracts-by-address) */
+    Route: "assets/nfts/contracts/by-address";
+    Method: "POST";
+    Body: GetNftContractsByAddressBody;
+    Query?: undefined;
+    Response: GetNftContractsByAddressResponse;
   },
 ];
 

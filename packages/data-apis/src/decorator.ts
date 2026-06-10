@@ -1,32 +1,165 @@
-import type {
-  GetAssetTransfersParams,
-  GetAssetTransfersResult,
-  GetNftsForOwnerParams,
-  GetNftsForOwnerResult,
-  GetTokensByAddressParams,
-  GetTokensByAddressResult,
-} from "./types.js";
-import type { DataClient } from "./internal/clientHelpers.js";
+import type { DataClient, RequestOptions } from "./internal/clientHelpers.js";
+import type * as T from "./types.js";
+
 import { getTokensByAddress } from "./actions/portfolio/getTokensByAddress.js";
+import { getTokenBalancesByAddress } from "./actions/portfolio/getTokenBalancesByAddress.js";
+import { getNftsByAddress } from "./actions/portfolio/getNftsByAddress.js";
+import { getNftContractsByAddress } from "./actions/portfolio/getNftContractsByAddress.js";
+
+import { getTokenPricesBySymbol } from "./actions/prices/getTokenPricesBySymbol.js";
+import { getTokenPricesByAddress } from "./actions/prices/getTokenPricesByAddress.js";
+import { getHistoricalTokenPrices } from "./actions/prices/getHistoricalTokenPrices.js";
+
 import { getNftsForOwner } from "./actions/nft/getNftsForOwner.js";
+import { getNftsForContract } from "./actions/nft/getNftsForContract.js";
+import { getNftsForCollection } from "./actions/nft/getNftsForCollection.js";
+import { getNftMetadata } from "./actions/nft/getNftMetadata.js";
+import { getNftMetadataBatch } from "./actions/nft/getNftMetadataBatch.js";
+import { getContractMetadata } from "./actions/nft/getContractMetadata.js";
+import { getContractMetadataBatch } from "./actions/nft/getContractMetadataBatch.js";
+import { getCollectionMetadata } from "./actions/nft/getCollectionMetadata.js";
+import { getContractsForOwner } from "./actions/nft/getContractsForOwner.js";
+import { getCollectionsForOwner } from "./actions/nft/getCollectionsForOwner.js";
+import { getOwnersForNft } from "./actions/nft/getOwnersForNft.js";
+import { getOwnersForContract } from "./actions/nft/getOwnersForContract.js";
+import { getNftSales } from "./actions/nft/getNftSales.js";
+import { getFloorPrice } from "./actions/nft/getFloorPrice.js";
+import { searchContractMetadata } from "./actions/nft/searchContractMetadata.js";
+import { getSpamContracts } from "./actions/nft/getSpamContracts.js";
+import { isSpamContract } from "./actions/nft/isSpamContract.js";
+import { isAirdropNft } from "./actions/nft/isAirdropNft.js";
+import { isHolderOfContract } from "./actions/nft/isHolderOfContract.js";
+import { computeRarity } from "./actions/nft/computeRarity.js";
+import { summarizeNftAttributes } from "./actions/nft/summarizeNftAttributes.js";
+
+import { getTokenBalances } from "./actions/token/getTokenBalances.js";
+import { getTokenMetadata } from "./actions/token/getTokenMetadata.js";
+import { getTokenAllowance } from "./actions/token/getTokenAllowance.js";
+
 import { getAssetTransfers } from "./actions/transfers/getAssetTransfers.js";
+
+type Action<Params, Result> = (
+  params: Params,
+  options?: RequestOptions,
+) => Promise<Result>;
+
+type RpcAction<Params, Result> = (params: Params) => Promise<Result>;
 
 /** The namespaced Data API actions attached by the {@link dataActions} decorator. */
 export type DataActions = {
   portfolio: {
-    getTokensByAddress: (
-      params: GetTokensByAddressParams,
-    ) => Promise<GetTokensByAddressResult>;
+    getTokensByAddress: Action<
+      T.GetTokensByAddressParams,
+      T.GetTokensByAddressResult
+    >;
+    getTokenBalancesByAddress: Action<
+      T.GetTokenBalancesByAddressParams,
+      T.GetTokenBalancesByAddressResult
+    >;
+    getNftsByAddress: Action<
+      T.GetNftsByAddressParams,
+      T.GetNftsByAddressResult
+    >;
+    getNftContractsByAddress: Action<
+      T.GetNftContractsByAddressParams,
+      T.GetNftContractsByAddressResult
+    >;
+  };
+  prices: {
+    getTokenPricesBySymbol: Action<
+      T.GetTokenPricesBySymbolParams,
+      T.GetTokenPricesBySymbolResult
+    >;
+    getTokenPricesByAddress: Action<
+      T.GetTokenPricesByAddressParams,
+      T.GetTokenPricesByAddressResult
+    >;
+    getHistoricalTokenPrices: Action<
+      T.GetHistoricalTokenPricesParams,
+      T.GetHistoricalTokenPricesResult
+    >;
   };
   nft: {
-    getNftsForOwner: (
-      params: GetNftsForOwnerParams,
-    ) => Promise<GetNftsForOwnerResult>;
+    getNftsForOwner: Action<T.GetNftsForOwnerParams, T.GetNftsForOwnerResult>;
+    getNftsForContract: Action<
+      T.GetNftsForContractParams,
+      T.GetNftsForContractResult
+    >;
+    getNftsForCollection: Action<
+      T.GetNftsForCollectionParams,
+      T.GetNftsForCollectionResult
+    >;
+    getNftMetadata: Action<T.GetNftMetadataParams, T.GetNftMetadataResult>;
+    getNftMetadataBatch: Action<
+      T.GetNftMetadataBatchParams,
+      T.GetNftMetadataBatchResult
+    >;
+    getContractMetadata: Action<
+      T.GetContractMetadataParams,
+      T.GetContractMetadataResult
+    >;
+    getContractMetadataBatch: Action<
+      T.GetContractMetadataBatchParams,
+      T.GetContractMetadataBatchResult
+    >;
+    getCollectionMetadata: Action<
+      T.GetCollectionMetadataParams,
+      T.GetCollectionMetadataResult
+    >;
+    getContractsForOwner: Action<
+      T.GetContractsForOwnerParams,
+      T.GetContractsForOwnerResult
+    >;
+    getCollectionsForOwner: Action<
+      T.GetCollectionsForOwnerParams,
+      T.GetCollectionsForOwnerResult
+    >;
+    getOwnersForNft: Action<T.GetOwnersForNftParams, T.GetOwnersForNftResult>;
+    getOwnersForContract: Action<
+      T.GetOwnersForContractParams,
+      T.GetOwnersForContractResult
+    >;
+    getNftSales: Action<T.GetNftSalesParams, T.GetNftSalesResult>;
+    getFloorPrice: Action<T.GetFloorPriceParams, T.GetFloorPriceResult>;
+    searchContractMetadata: Action<
+      T.SearchContractMetadataParams,
+      T.SearchContractMetadataResult
+    >;
+    getSpamContracts: Action<
+      T.GetSpamContractsParams,
+      T.GetSpamContractsResult
+    >;
+    isSpamContract: Action<T.IsSpamContractParams, T.IsSpamContractResult>;
+    isAirdropNft: Action<T.IsAirdropNftParams, T.IsAirdropNftResult>;
+    isHolderOfContract: Action<
+      T.IsHolderOfContractParams,
+      T.IsHolderOfContractResult
+    >;
+    computeRarity: Action<T.ComputeRarityParams, T.ComputeRarityResult>;
+    summarizeNftAttributes: Action<
+      T.SummarizeNftAttributesParams,
+      T.SummarizeNftAttributesResult
+    >;
+  };
+  token: {
+    getTokenBalances: RpcAction<
+      T.GetTokenBalancesParams,
+      T.GetTokenBalancesResult
+    >;
+    getTokenMetadata: RpcAction<
+      T.GetTokenMetadataParams,
+      T.GetTokenMetadataResult
+    >;
+    getTokenAllowance: RpcAction<
+      T.GetTokenAllowanceParams,
+      T.GetTokenAllowanceResult
+    >;
   };
   transfers: {
-    getAssetTransfers: (
-      params: GetAssetTransfersParams,
-    ) => Promise<GetAssetTransfersResult>;
+    getAssetTransfers: RpcAction<
+      T.GetAssetTransfersParams,
+      T.GetAssetTransfersResult
+    >;
   };
 };
 
@@ -55,10 +188,69 @@ export type DataActions = {
 export function dataActions(client: DataClient): DataActions {
   return {
     portfolio: {
-      getTokensByAddress: (params) => getTokensByAddress(client, params),
+      getTokensByAddress: (params, options) =>
+        getTokensByAddress(client, params, options),
+      getTokenBalancesByAddress: (params, options) =>
+        getTokenBalancesByAddress(client, params, options),
+      getNftsByAddress: (params, options) =>
+        getNftsByAddress(client, params, options),
+      getNftContractsByAddress: (params, options) =>
+        getNftContractsByAddress(client, params, options),
+    },
+    prices: {
+      getTokenPricesBySymbol: (params, options) =>
+        getTokenPricesBySymbol(client, params, options),
+      getTokenPricesByAddress: (params, options) =>
+        getTokenPricesByAddress(client, params, options),
+      getHistoricalTokenPrices: (params, options) =>
+        getHistoricalTokenPrices(client, params, options),
     },
     nft: {
-      getNftsForOwner: (params) => getNftsForOwner(client, params),
+      getNftsForOwner: (params, options) =>
+        getNftsForOwner(client, params, options),
+      getNftsForContract: (params, options) =>
+        getNftsForContract(client, params, options),
+      getNftsForCollection: (params, options) =>
+        getNftsForCollection(client, params, options),
+      getNftMetadata: (params, options) =>
+        getNftMetadata(client, params, options),
+      getNftMetadataBatch: (params, options) =>
+        getNftMetadataBatch(client, params, options),
+      getContractMetadata: (params, options) =>
+        getContractMetadata(client, params, options),
+      getContractMetadataBatch: (params, options) =>
+        getContractMetadataBatch(client, params, options),
+      getCollectionMetadata: (params, options) =>
+        getCollectionMetadata(client, params, options),
+      getContractsForOwner: (params, options) =>
+        getContractsForOwner(client, params, options),
+      getCollectionsForOwner: (params, options) =>
+        getCollectionsForOwner(client, params, options),
+      getOwnersForNft: (params, options) =>
+        getOwnersForNft(client, params, options),
+      getOwnersForContract: (params, options) =>
+        getOwnersForContract(client, params, options),
+      getNftSales: (params, options) => getNftSales(client, params, options),
+      getFloorPrice: (params, options) =>
+        getFloorPrice(client, params, options),
+      searchContractMetadata: (params, options) =>
+        searchContractMetadata(client, params, options),
+      getSpamContracts: (params, options) =>
+        getSpamContracts(client, params, options),
+      isSpamContract: (params, options) =>
+        isSpamContract(client, params, options),
+      isAirdropNft: (params, options) => isAirdropNft(client, params, options),
+      isHolderOfContract: (params, options) =>
+        isHolderOfContract(client, params, options),
+      computeRarity: (params, options) =>
+        computeRarity(client, params, options),
+      summarizeNftAttributes: (params, options) =>
+        summarizeNftAttributes(client, params, options),
+    },
+    token: {
+      getTokenBalances: (params) => getTokenBalances(client, params),
+      getTokenMetadata: (params) => getTokenMetadata(client, params),
+      getTokenAllowance: (params) => getTokenAllowance(client, params),
     },
     transfers: {
       getAssetTransfers: (params) => getAssetTransfers(client, params),

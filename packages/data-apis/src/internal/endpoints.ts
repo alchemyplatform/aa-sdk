@@ -4,6 +4,9 @@
 /** Global, chain-agnostic Data API (multi-network request bodies). */
 export const DATA_API_URL = "https://api.g.alchemy.com/data/v1";
 
+/** Global Prices API (chain-agnostic or networks in the request body). */
+export const PRICES_API_URL = "https://api.g.alchemy.com/prices/v1";
+
 /**
  * Network-scoped NFT v3 base URL.
  *
