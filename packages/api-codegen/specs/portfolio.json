@@ -69,12 +69,12 @@
                     }
                   },
                   "withMetadata": {
-                    "description": "Boolean - if set to `true`, returns metadata. Setting this to false will reduce payload size and may result in a faster API call. Defaults to `true`.",
+                    "description": "Boolean - if set to `true`, returns metadata. Setting this to false will reduce payload size and may result in a faster API call.",
                     "type": "boolean",
                     "default": true
                   },
                   "withPrices": {
-                    "description": "Boolean - if set to `true`, returns token prices. Setting this to false will reduce payload size and may result in a faster API call. Defaults to `true`.",
+                    "description": "Boolean - if set to `true`, returns token prices. Setting this to false will reduce payload size and may result in a faster API call.",
                     "type": "boolean",
                     "default": true
                   },
@@ -85,7 +85,7 @@
                     "default": true
                   },
                   "includeErc20Tokens": {
-                    "description": "Boolean - if set to `true`, returns ERC-20 tokens. Setting this to false will reduce payload size and may result in a faster API call. Defaults to `true`.",
+                    "description": "Boolean - if set to `true`, returns ERC-20 tokens. Setting this to false will reduce payload size and may result in a faster API call.",
                     "type": "boolean",
                     "default": true
                   }
@@ -348,7 +348,7 @@
                     "default": true
                   },
                   "includeErc20Tokens": {
-                    "description": "Boolean - if set to `true`, returns ERC-20 tokens. Setting this to false will reduce payload size and may result in a faster API call. Defaults to `true`.",
+                    "description": "Boolean - if set to `true`, returns ERC-20 tokens. Setting this to false will reduce payload size and may result in a faster API call.",
                     "type": "boolean",
                     "default": true
                   }
@@ -616,7 +616,7 @@
                         }
                       },
                       "withMetadata": {
-                        "description": "Boolean - if set to `true`, returns metadata. Setting this to false will reduce payload size and may result in a faster API call. Defaults to `true`.",
+                        "description": "Boolean - if set to `true`, returns metadata. Setting this to false will reduce payload size and may result in a faster API call.",
                         "type": "boolean",
                         "default": true
                       },
@@ -1123,7 +1123,7 @@
                         }
                       },
                       "withMetadata": {
-                        "description": "Boolean - if set to `true`, returns metadata. Setting this to false will reduce payload size and may result in a faster API call. Defaults to `true`.",
+                        "description": "Boolean - if set to `true`, returns metadata. Setting this to false will reduce payload size and may result in a faster API call.",
                         "type": "boolean",
                         "default": true
                       },
@@ -1507,7 +1507,7 @@
             "default": true
           },
           "includeErc20Tokens": {
-            "description": "Boolean - if set to `true`, returns ERC-20 tokens. Setting this to false will reduce payload size and may result in a faster API call. Defaults to `true`.",
+            "description": "Boolean - if set to `true`, returns ERC-20 tokens. Setting this to false will reduce payload size and may result in a faster API call.",
             "type": "boolean",
             "default": true
           }
@@ -1552,12 +1552,12 @@
             }
           },
           "withMetadata": {
-            "description": "Boolean - if set to `true`, returns metadata. Setting this to false will reduce payload size and may result in a faster API call. Defaults to `true`.",
+            "description": "Boolean - if set to `true`, returns metadata. Setting this to false will reduce payload size and may result in a faster API call.",
             "type": "boolean",
             "default": true
           },
           "withPrices": {
-            "description": "Boolean - if set to `true`, returns token prices. Setting this to false will reduce payload size and may result in a faster API call. Defaults to `true`.",
+            "description": "Boolean - if set to `true`, returns token prices. Setting this to false will reduce payload size and may result in a faster API call.",
             "type": "boolean",
             "default": true
           },
@@ -1568,7 +1568,7 @@
             "default": true
           },
           "includeErc20Tokens": {
-            "description": "Boolean - if set to `true`, returns ERC-20 tokens. Setting this to false will reduce payload size and may result in a faster API call. Defaults to `true`.",
+            "description": "Boolean - if set to `true`, returns ERC-20 tokens. Setting this to false will reduce payload size and may result in a faster API call.",
             "type": "boolean",
             "default": true
           }
@@ -1679,7 +1679,7 @@
             }
           },
           "withMetadata": {
-            "description": "Boolean - if set to `true`, returns metadata. Setting this to false will reduce payload size and may result in a faster API call. Defaults to `true`.",
+            "description": "Boolean - if set to `true`, returns metadata. Setting this to false will reduce payload size and may result in a faster API call.",
             "type": "boolean",
             "default": true
           },
@@ -1731,7 +1731,7 @@
             }
           },
           "withMetadata": {
-            "description": "Boolean - if set to `true`, returns metadata. Setting this to false will reduce payload size and may result in a faster API call. Defaults to `true`.",
+            "description": "Boolean - if set to `true`, returns metadata. Setting this to false will reduce payload size and may result in a faster API call.",
             "type": "boolean",
             "default": true
           }

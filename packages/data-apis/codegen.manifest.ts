@@ -21,6 +21,28 @@ export default {
       ],
     },
     {
+      spec: "prices",
+      schemaTypeName: "PricesRestSchema",
+      // Spec paths: /{apiKey}/tokens/by-symbol etc. Runtime auth is
+      // header-based against https://api.g.alchemy.com/prices/v1.
+      pathRules: { stripApiKeySegment: true },
+      operations: [
+        {
+          operationId: "get-token-prices-by-symbol",
+          exportBaseName: "GetTokenPricesBySymbol",
+          emitQueryType: true,
+        },
+        {
+          operationId: "get-token-prices-by-address",
+          exportBaseName: "GetTokenPricesByAddress",
+        },
+        {
+          operationId: "get-historical-token-prices",
+          exportBaseName: "GetHistoricalTokenPrices",
+        },
+      ],
+    },
+    {
       spec: "nft",
       schemaTypeName: "NftRestSchema",
       // Spec path: GET /v3/{apiKey}/getNFTsForOwner. Runtime base URL is
@@ -43,6 +65,24 @@ export default {
         {
           method: "alchemy_getAssetTransfers",
           exportBaseName: "AlchemyGetAssetTransfers",
+        },
+      ],
+    },
+    {
+      spec: "token",
+      schemaTypeName: "TokenRpcSchema",
+      methods: [
+        {
+          method: "alchemy_getTokenBalances",
+          exportBaseName: "AlchemyGetTokenBalances",
+        },
+        {
+          method: "alchemy_getTokenMetadata",
+          exportBaseName: "AlchemyGetTokenMetadata",
+        },
+        {
+          method: "alchemy_getTokenAllowance",
+          exportBaseName: "AlchemyGetTokenAllowance",
         },
       ],
     },

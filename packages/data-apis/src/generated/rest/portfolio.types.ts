@@ -163,7 +163,7 @@ export interface components {
        */
       includeNativeTokens: boolean;
       /**
-       * @description Boolean - if set to `true`, returns ERC-20 tokens. Setting this to false will reduce payload size and may result in a faster API call. Defaults to `true`.
+       * @description Boolean - if set to `true`, returns ERC-20 tokens. Setting this to false will reduce payload size and may result in a faster API call.
        * @default true
        */
       includeErc20Tokens: boolean;
@@ -188,12 +188,12 @@ export interface components {
         networks: string[];
       }[];
       /**
-       * @description Boolean - if set to `true`, returns metadata. Setting this to false will reduce payload size and may result in a faster API call. Defaults to `true`.
+       * @description Boolean - if set to `true`, returns metadata. Setting this to false will reduce payload size and may result in a faster API call.
        * @default true
        */
       withMetadata: boolean;
       /**
-       * @description Boolean - if set to `true`, returns token prices. Setting this to false will reduce payload size and may result in a faster API call. Defaults to `true`.
+       * @description Boolean - if set to `true`, returns token prices. Setting this to false will reduce payload size and may result in a faster API call.
        * @default true
        */
       withPrices: boolean;
@@ -204,7 +204,7 @@ export interface components {
        */
       includeNativeTokens: boolean;
       /**
-       * @description Boolean - if set to `true`, returns ERC-20 tokens. Setting this to false will reduce payload size and may result in a faster API call. Defaults to `true`.
+       * @description Boolean - if set to `true`, returns ERC-20 tokens. Setting this to false will reduce payload size and may result in a faster API call.
        * @default true
        */
       includeErc20Tokens: boolean;
@@ -267,7 +267,7 @@ export interface components {
         spamConfidenceLevel?: "VERY_HIGH" | "HIGH" | "MEDIUM" | "LOW";
       }[];
       /**
-       * @description Boolean - if set to `true`, returns metadata. Setting this to false will reduce payload size and may result in a faster API call. Defaults to `true`.
+       * @description Boolean - if set to `true`, returns metadata. Setting this to false will reduce payload size and may result in a faster API call.
        * @default true
        */
       withMetadata: boolean;
@@ -295,7 +295,7 @@ export interface components {
         networks: string[];
       }[];
       /**
-       * @description Boolean - if set to `true`, returns metadata. Setting this to false will reduce payload size and may result in a faster API call. Defaults to `true`.
+       * @description Boolean - if set to `true`, returns metadata. Setting this to false will reduce payload size and may result in a faster API call.
        * @default true
        */
       withMetadata: boolean;
@@ -1038,12 +1038,12 @@ export interface operations {
             networks: string[];
           }[];
           /**
-           * @description Boolean - if set to `true`, returns metadata. Setting this to false will reduce payload size and may result in a faster API call. Defaults to `true`.
+           * @description Boolean - if set to `true`, returns metadata. Setting this to false will reduce payload size and may result in a faster API call.
            * @default true
            */
           withMetadata?: boolean;
           /**
-           * @description Boolean - if set to `true`, returns token prices. Setting this to false will reduce payload size and may result in a faster API call. Defaults to `true`.
+           * @description Boolean - if set to `true`, returns token prices. Setting this to false will reduce payload size and may result in a faster API call.
            * @default true
            */
           withPrices?: boolean;
@@ -1054,7 +1054,7 @@ export interface operations {
            */
           includeNativeTokens?: boolean;
           /**
-           * @description Boolean - if set to `true`, returns ERC-20 tokens. Setting this to false will reduce payload size and may result in a faster API call. Defaults to `true`.
+           * @description Boolean - if set to `true`, returns ERC-20 tokens. Setting this to false will reduce payload size and may result in a faster API call.
            * @default true
            */
           includeErc20Tokens?: boolean;
@@ -1195,7 +1195,7 @@ export interface operations {
            */
           includeNativeTokens?: boolean;
           /**
-           * @description Boolean - if set to `true`, returns ERC-20 tokens. Setting this to false will reduce payload size and may result in a faster API call. Defaults to `true`.
+           * @description Boolean - if set to `true`, returns ERC-20 tokens. Setting this to false will reduce payload size and may result in a faster API call.
            * @default true
            */
           includeErc20Tokens?: boolean;
@@ -1328,7 +1328,7 @@ export interface operations {
             spamConfidenceLevel?: "VERY_HIGH" | "HIGH" | "MEDIUM" | "LOW";
           }[];
           /**
-           * @description Boolean - if set to `true`, returns metadata. Setting this to false will reduce payload size and may result in a faster API call. Defaults to `true`.
+           * @description Boolean - if set to `true`, returns metadata. Setting this to false will reduce payload size and may result in a faster API call.
            * @default true
            */
           withMetadata?: boolean;
@@ -1589,7 +1589,7 @@ export interface operations {
             spamConfidenceLevel?: "VERY_HIGH" | "HIGH" | "MEDIUM" | "LOW";
           }[];
           /**
-           * @description Boolean - if set to `true`, returns metadata. Setting this to false will reduce payload size and may result in a faster API call. Defaults to `true`.
+           * @description Boolean - if set to `true`, returns metadata. Setting this to false will reduce payload size and may result in a faster API call.
            * @default true
            */
           withMetadata?: boolean;

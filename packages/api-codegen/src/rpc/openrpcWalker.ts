@@ -42,6 +42,32 @@ export function closeObjectSchemas(node: unknown): unknown {
 }
 
 /**
+ * Recursively removes `title` from schema nodes. json-schema-to-typescript
+ * hoists title-named subschemas as standalone exported types; when multiple
+ * methods in one spec share a titled subschema (e.g. "Hex Encoded Address"),
+ * per-method compilation emits duplicate identifiers. Stripping titles inlines
+ * the subschemas instead — generated internals don't need the pretty names.
+ * The emitter re-applies a root title to pin the exported type name.
+ *
+ * @param {unknown} node A JSON Schema node (or fragment)
+ * @returns {unknown} A deep copy without title fields
+ */
+export function stripTitles(node: unknown): unknown {
+  if (Array.isArray(node)) {
+    return node.map(stripTitles);
+  }
+  if (node === null || typeof node !== "object") {
+    return node;
+  }
+  const copy: Record<string, unknown> = {};
+  for (const [key, value] of Object.entries(node)) {
+    if (key === "title") continue;
+    copy[key] = stripTitles(value);
+  }
+  return copy;
+}
+
+/**
  * Extracts a method's param and result schemas from a bundled (dereferenced)
  * OpenRPC document, with object schemas closed for clean type compilation.
  *
@@ -73,7 +99,7 @@ export function extractMethod(
     return {
       name: param.name ?? `param${index}`,
       required: param.required === true,
-      schema: closeObjectSchemas(param.schema) as JsonSchema,
+      schema: stripTitles(closeObjectSchemas(param.schema)) as JsonSchema,
     };
   });
 
@@ -84,6 +110,6 @@ export function extractMethod(
   return {
     name: methodName,
     params,
-    result: closeObjectSchemas(method.result.schema) as JsonSchema,
+    result: stripTitles(closeObjectSchemas(method.result.schema)) as JsonSchema,
   };
 }

@@ -34,7 +34,7 @@ export interface AlchemyGetAssetTransfersParams {
 }
 
 export type AlchemyGetAssetTransfersResult =
-  | NotFoundNull
+  | string
   | {
       /**
        * Uuid of next page of results (if exists, else blank).
@@ -113,7 +113,6 @@ export type AlchemyGetAssetTransfersResult =
         };
       }[];
     };
-export type NotFoundNull = string;
 
 /** viem RpcSchema entries for the transfers JSON-RPC methods. */
 export type TransfersRpcSchema = [
