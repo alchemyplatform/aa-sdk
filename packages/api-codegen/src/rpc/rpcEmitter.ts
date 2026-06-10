@@ -1,6 +1,8 @@
 import { compile } from "json-schema-to-typescript";
-import { extractMethod } from "./openrpcWalker.js";
-import type { RpcSpecConfig } from "../manifest.js";
+import { CodegenError } from "../errors.js";
+import { schemaHasPath } from "../schemaWalk.js";
+import { extractMethod, type ExtractedMethod } from "./openrpcWalker.js";
+import type { PaginationConfig, RpcSpecConfig } from "../manifest.js";
 
 /**
  * Converts a param name to PascalCase for type naming.
@@ -10,6 +12,39 @@ import type { RpcSpecConfig } from "../manifest.js";
  */
 function pascal(name: string): string {
   return name.charAt(0).toUpperCase() + name.slice(1);
+}
+
+/**
+ * Validates an RPC method's declared pagination metadata against the spec:
+ * the cursor param path must resolve within one of the method's params
+ * (dotted paths traverse nested object params, e.g. "options.pageKey" on
+ * alchemy_getTokenBalances), and the cursor/items fields must exist in the
+ * result schema (combinator branches included).
+ *
+ * @param {ExtractedMethod} extracted The extracted method schemas
+ * @param {PaginationConfig} pagination The manifest's pagination declaration
+ */
+function validateRpcPagination(
+  extracted: ExtractedMethod,
+  pagination: PaginationConfig,
+): void {
+  const [head, ...rest] = pagination.pageParam.split(".");
+  const param = extracted.params.find((p) => p.name === head);
+  const paramOk =
+    param != null &&
+    (rest.length === 0 || schemaHasPath(param.schema, rest.join(".")));
+  if (!paramOk) {
+    throw new CodegenError(
+      `Method "${extracted.name}": pagination pageParam "${pagination.pageParam}" not found among the method's params.`,
+    );
+  }
+  for (const field of [pagination.responseCursorField, pagination.itemsField]) {
+    if (!schemaHasPath(extracted.result, field)) {
+      throw new CodegenError(
+        `Method "${extracted.name}": pagination field "${field}" not found in the result schema.`,
+      );
+    }
+  }
 }
 
 /**
@@ -29,8 +64,11 @@ export async function emitRpcSchema(
   const tupleEntries: string[] = [];
 
   for (const methodConfig of config.methods) {
-    const { method, exportBaseName } = methodConfig;
+    const { method, exportBaseName, pagination } = methodConfig;
     const extracted = extractMethod(spec, method);
+    if (pagination) {
+      validateRpcPagination(extracted, pagination);
+    }
 
     // Single-param methods get the plain "<Base>Params" name; multi-param
     // methods are disambiguated by param name.

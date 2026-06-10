@@ -13,6 +13,12 @@ import type { Chain, Client } from "viem";
 /** The minimal client shape data actions operate on. */
 export type DataClient = Client<AlchemyTransport, Chain | undefined>;
 
+/** Per-request options accepted by data actions. */
+export type RequestOptions = {
+  /** Aborts the request (and any pending retries). */
+  signal?: AbortSignal;
+};
+
 /**
  * Reads the AlchemyTransportConfig back off an instantiated client transport.
  * The transport attaches its creation config to the transport value precisely

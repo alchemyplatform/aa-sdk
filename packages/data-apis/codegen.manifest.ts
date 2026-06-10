@@ -52,7 +52,11 @@ export default {
         {
           operationId: "getNFTsForOwner-v3",
           exportBaseName: "GetNftsForOwner",
-          emitQueryType: true,
+          pagination: {
+            pageParam: "pageKey",
+            responseCursorField: "pageKey",
+            itemsField: "ownedNfts",
+          },
         },
       ],
     },
@@ -65,6 +69,11 @@ export default {
         {
           method: "alchemy_getAssetTransfers",
           exportBaseName: "AlchemyGetAssetTransfers",
+          pagination: {
+            pageParam: "assetTransferParams.pageKey",
+            responseCursorField: "pageKey",
+            itemsField: "transfers",
+          },
         },
       ],
     },

@@ -1,6 +1,7 @@
 import { CodegenError } from "../errors.js";
 import { normalizePath } from "./normalizePath.js";
-import type { RestSpecConfig } from "../manifest.js";
+import { schemaHasPath } from "../schemaWalk.js";
+import type { PaginationConfig, RestSpecConfig } from "../manifest.js";
 
 const REST_METHODS = [
   "get",
@@ -14,9 +15,13 @@ const REST_METHODS = [
 
 type SpecOperation = {
   operationId?: string;
-  requestBody?: { content?: Record<string, unknown> };
-  responses?: Record<string, { content?: Record<string, unknown> }>;
-  parameters?: Array<{ in?: string }>;
+  deprecated?: boolean;
+  requestBody?: { content?: Record<string, { schema?: unknown }> };
+  responses?: Record<
+    string,
+    { content?: Record<string, { schema?: unknown }> }
+  >;
+  parameters?: Array<{ in?: string; name?: string }>;
 };
 
 type LocatedOperation = {
@@ -89,6 +94,51 @@ function pickSuccessResponse(
 }
 
 /**
+ * Validates a REST operation's declared pagination metadata against the spec:
+ * the cursor param must exist among query params or body properties, and the
+ * cursor/items fields must exist in the success response schema.
+ *
+ * @param {string} operationId For error messages
+ * @param {SpecOperation} operation The located spec operation
+ * @param {PaginationConfig} pagination The manifest's pagination declaration
+ * @param {object} success The success response key to inspect
+ * @param {string} success.status The 2xx status code key
+ * @param {string} success.contentType The response content type key
+ */
+function validateRestPagination(
+  operationId: string,
+  operation: SpecOperation,
+  pagination: PaginationConfig,
+  success: { status: string; contentType: string },
+): void {
+  const bodySchema =
+    operation.requestBody?.content?.["application/json"]?.schema;
+  const inQuery = (operation.parameters ?? []).some(
+    (param) => param.in === "query" && param.name === pagination.pageParam,
+  );
+  const inBody = bodySchema
+    ? schemaHasPath(bodySchema, pagination.pageParam)
+    : false;
+  if (!inQuery && !inBody) {
+    throw new CodegenError(
+      `Operation "${operationId}": pagination pageParam "${pagination.pageParam}" not found among query params or body properties.`,
+    );
+  }
+
+  const responseSchema =
+    operation.responses?.[success.status]?.content?.[success.contentType]
+      ?.schema;
+  for (const field of [pagination.responseCursorField, pagination.itemsField]) {
+    // Dotted paths supported: portfolio responses nest cursors under "data".
+    if (!schemaHasPath(responseSchema, field)) {
+      throw new CodegenError(
+        `Operation "${operationId}": pagination field "${field}" not found in the ${success.status} response schema.`,
+      );
+    }
+  }
+}
+
+/**
  * Emits the <spec>.schema.ts source for a REST spec: named Body/Response
  * (and optional Query) aliases indexed into the openapi-typescript output,
  * plus the RestRequestSchema tuple consumed by AlchemyRestClient.
@@ -105,12 +155,32 @@ export function emitRestSchema(
   const tupleEntries: string[] = [];
 
   for (const opConfig of config.operations) {
-    const { operationId, exportBaseName, emitQueryType } = opConfig;
+    const { operationId, exportBaseName, pagination } = opConfig;
     const { path, method, operation } = locateOperation(spec, operationId);
+    if (operation.deprecated) {
+      throw new CodegenError(
+        `Operation "${operationId}" is marked deprecated in the spec. ` +
+          `Drop it from the manifest, or map the replacement operation instead.`,
+      );
+    }
     const route = normalizePath(path, config.pathRules);
     const hasBody = operation.requestBody != null;
+    const queryParams = (operation.parameters ?? []).filter(
+      (param) => param.in === "query",
+    );
+    const hasQuery = queryParams.length > 0;
+    const hasRequiredQuery = queryParams.some(
+      (param) => (param as { required?: boolean }).required === true,
+    );
     const { status, contentType } = pickSuccessResponse(operation, operationId);
     const opIndex = JSON.stringify(operationId);
+
+    if (pagination) {
+      validateRestPagination(operationId, operation, pagination, {
+        status,
+        contentType,
+      });
+    }
 
     if (hasBody) {
       const bodyContentType = Object.keys(
@@ -132,13 +202,9 @@ export function emitRestSchema(
         `  operations[${opIndex}]["responses"][${JSON.stringify(status)}]["content"][${JSON.stringify(contentType)}];`,
     );
 
-    if (emitQueryType) {
+    if (hasQuery) {
       aliasBlocks.push(
-        `/**\n` +
-          ` * Query params for ${operationId}. Sent via the URL at runtime;\n` +
-          ` * RestRequestSchema has no query channel, so this is exposed as a\n` +
-          ` * standalone type for the SDK's params layer.\n` +
-          ` */\n` +
+        `/** Query params for ${operationId}. */\n` +
           `export type ${exportBaseName}Query = NonNullable<\n` +
           `  operations[${opIndex}]["parameters"]["query"]\n` +
           `>;`,
@@ -153,6 +219,11 @@ export function emitRestSchema(
         (hasBody
           ? `    Body: ${exportBaseName}Body;\n`
           : `    Body?: undefined;\n`) +
+        (hasQuery
+          ? hasRequiredQuery
+            ? `    Query: ${exportBaseName}Query;\n`
+            : `    Query?: ${exportBaseName}Query | undefined;\n`
+          : `    Query?: undefined;\n`) +
         `    Response: ${exportBaseName}Response;\n` +
         `  },`,
     );

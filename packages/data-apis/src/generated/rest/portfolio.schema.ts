@@ -22,6 +22,7 @@ export type PortfolioRestSchema = readonly [
     Route: "assets/tokens/by-address";
     Method: "POST";
     Body: GetTokensByAddressBody;
+    Query?: undefined;
     Response: GetTokensByAddressResponse;
   },
 ];

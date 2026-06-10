@@ -10,11 +10,7 @@ import type { operations } from "./nft.types.js";
 export type GetNftsForOwnerResponse =
   operations["getNFTsForOwner-v3"]["responses"]["200"]["content"]["application/json"];
 
-/**
- * Query params for getNFTsForOwner-v3. Sent via the URL at runtime;
- * RestRequestSchema has no query channel, so this is exposed as a
- * standalone type for the SDK's params layer.
- */
+/** Query params for getNFTsForOwner-v3. */
 export type GetNftsForOwnerQuery = NonNullable<
   operations["getNFTsForOwner-v3"]["parameters"]["query"]
 >;
@@ -26,6 +22,7 @@ export type NftRestSchema = readonly [
     Route: "getNFTsForOwner";
     Method: "GET";
     Body?: undefined;
+    Query: GetNftsForOwnerQuery;
     Response: GetNftsForOwnerResponse;
   },
 ];

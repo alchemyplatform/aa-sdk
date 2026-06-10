@@ -80,7 +80,8 @@ export async function snapshot(options: SnapshotOptions = {}): Promise<void> {
     );
   }
   const sha = git(docsDir, ["rev-parse", "HEAD"]);
-  const branch = git(docsDir, ["rev-parse", "--abbrev-ref", "HEAD"]);
+  const branchName = git(docsDir, ["rev-parse", "--abbrev-ref", "HEAD"]);
+  const branch = branchName === "HEAD" ? "(detached)" : branchName;
 
   const { rest, rpc } = await collectSpecNames();
   console.log(

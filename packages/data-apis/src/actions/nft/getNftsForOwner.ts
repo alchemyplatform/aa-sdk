@@ -3,6 +3,7 @@ import {
   getRestClient,
   resolveRequestNetwork,
   type DataClient,
+  type RequestOptions,
 } from "../../internal/clientHelpers.js";
 import type { NftRestSchema } from "../../schema/rest.js";
 import type {
@@ -17,28 +18,22 @@ import type {
  *
  * @param {DataClient} client A client configured with an Alchemy transport
  * @param {GetNftsForOwnerParams} params Owner address, optional network override, and filters
+ * @param {RequestOptions} [options] Per-request options (abort signal)
  * @returns {Promise<GetNftsForOwnerResult>} The owned NFTs and pagination cursor
  */
 export async function getNftsForOwner(
   client: DataClient,
   params: GetNftsForOwnerParams,
+  options?: RequestOptions,
 ): Promise<GetNftsForOwnerResult> {
-  const { network, owner, contractAddresses, ...rest } = params;
+  const { network, contractAddresses, ...query } = params;
   const { slug } = resolveRequestNetwork(client, network);
 
-  const query = new URLSearchParams({ owner });
-  for (const [key, value] of Object.entries(rest)) {
-    if (value != null) query.set(key, String(value));
-  }
-  for (const address of contractAddresses ?? []) {
-    query.append("contractAddresses[]", address);
-  }
-
   const restClient = getRestClient<NftRestSchema>(client, getNftApiUrl(slug));
-  // TODO(common-hardening): AlchemyRestClient should take query params
-  // first-class instead of this cast; tracked in the data SDK plan.
   return restClient.request({
-    route: `getNFTsForOwner?${query.toString()}` as "getNFTsForOwner",
+    route: "getNFTsForOwner",
     method: "GET",
+    query: { ...query, "contractAddresses[]": contractAddresses },
+    signal: options?.signal,
   });
 }

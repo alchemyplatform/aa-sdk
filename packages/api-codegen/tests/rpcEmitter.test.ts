@@ -53,4 +53,37 @@ describe("emitRpcSchema", () => {
     );
     expect(source).toContain("ReturnType: FixtureGetThingsResult;");
   });
+
+  it("validates dotted pagination paths against params and oneOf results", async () => {
+    const withPagination = (pageParam: string, itemsField: string) =>
+      emitRpcSchema(
+        {
+          spec: "rpc.fixture",
+          schemaTypeName: "FixtureRpcSchema",
+          methods: [
+            {
+              method: "fixture_getThings",
+              exportBaseName: "FixtureGetThings",
+              pagination: {
+                pageParam,
+                responseCursorField: "pageKey",
+                itemsField,
+              },
+            },
+          ],
+        },
+        spec,
+      );
+    // pageKey/things live in the object branch of the oneOf result; the
+    // cursor param is nested under the single object param.
+    await expect(
+      withPagination("thingParams.limit", "things"),
+    ).resolves.toContain("FixtureRpcSchema");
+    await expect(withPagination("thingParams.bogus", "things")).rejects.toThrow(
+      /thingParams.bogus/,
+    );
+    await expect(
+      withPagination("thingParams.limit", "bogusItems"),
+    ).rejects.toThrow(/bogusItems/);
+  });
 });

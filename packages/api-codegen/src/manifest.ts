@@ -9,14 +9,30 @@ export type PathRules = {
   stripPrefix?: string;
 };
 
+/**
+ * Cursor-pagination metadata for a method. Validated against the spec
+ * snapshot at generate time; consumed by hand-written `*Pages` companion
+ * actions (no runtime code is generated from it).
+ */
+export type PaginationConfig = {
+  /** Request param carrying the cursor; dotted path for nested params (e.g. "options.pageKey"). */
+  pageParam: string;
+  /** Success-response field carrying the next cursor (e.g. "pageKey"). */
+  responseCursorField: string;
+  /** Success-response field holding the page's items (e.g. "ownedNfts"). */
+  itemsField: string;
+};
+
 /** A single OpenAPI operation the target consumes. */
 export type RestOperationConfig = {
   /** operationId as it appears in the spec (e.g. "getNFTsForOwner-v3"). */
   operationId: string;
   /** Base for emitted type names (e.g. "GetNftsForOwner" → GetNftsForOwnerResponse). */
   exportBaseName: string;
-  /** Also emit a named query-params type (GET endpoints; RestRequestSchema has no query channel). */
+  /** Also emit a named query-params type (redundant since the Query channel; kept for compatibility). */
   emitQueryType?: boolean;
+  /** Cursor pagination metadata, when the operation paginates. */
+  pagination?: PaginationConfig;
 };
 
 /** One REST spec consumed by the target. */
@@ -35,6 +51,8 @@ export type RpcMethodConfig = {
   method: string;
   /** Base for emitted type names (e.g. "AlchemyGetAssetTransfers"). */
   exportBaseName: string;
+  /** Cursor pagination metadata, when the method paginates. */
+  pagination?: PaginationConfig;
 };
 
 /** One OpenRPC spec consumed by the target. */

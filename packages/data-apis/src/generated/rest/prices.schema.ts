@@ -10,11 +10,7 @@ import type { operations } from "./prices.types.js";
 export type GetTokenPricesBySymbolResponse =
   operations["get-token-prices-by-symbol"]["responses"]["200"]["content"]["application/json"];
 
-/**
- * Query params for get-token-prices-by-symbol. Sent via the URL at runtime;
- * RestRequestSchema has no query channel, so this is exposed as a
- * standalone type for the SDK's params layer.
- */
+/** Query params for get-token-prices-by-symbol. */
 export type GetTokenPricesBySymbolQuery = NonNullable<
   operations["get-token-prices-by-symbol"]["parameters"]["query"]
 >;
@@ -44,6 +40,7 @@ export type PricesRestSchema = readonly [
     Route: "tokens/by-symbol";
     Method: "GET";
     Body?: undefined;
+    Query: GetTokenPricesBySymbolQuery;
     Response: GetTokenPricesBySymbolResponse;
   },
   {
@@ -51,6 +48,7 @@ export type PricesRestSchema = readonly [
     Route: "tokens/by-address";
     Method: "POST";
     Body: GetTokenPricesByAddressBody;
+    Query?: undefined;
     Response: GetTokenPricesByAddressResponse;
   },
   {
@@ -58,6 +56,7 @@ export type PricesRestSchema = readonly [
     Route: "tokens/historical";
     Method: "POST";
     Body: GetHistoricalTokenPricesBody;
+    Query?: undefined;
     Response: GetHistoricalTokenPricesResponse;
   },
 ];
