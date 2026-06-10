@@ -186,6 +186,12 @@ jobs:
       - name: Typecheck Test
         run: pnpm run test:typecheck
 
+      - name: Check generated API code is up to date
+        run: |
+          pnpm run generate
+          git diff --exit-code packages/*/src/generated packages/api-codegen/specs || \
+            (echo "::error::Generated API code is out of date or spec snapshots were hand-edited. Run 'pnpm generate' and commit the changes." && exit 1)
+
       - name: Check SDK reference docs are up to date
         run: |
           pnpm run docs:sdk

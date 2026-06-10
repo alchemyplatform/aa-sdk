@@ -1,0 +1,63 @@
+name: Bump API spec snapshots
+
+# Re-snapshots the bundled OpenAPI/OpenRPC specs from alchemyplatform/docs
+# (public) at its current main, regenerates SDK internals, and opens a PR if
+# anything changed. The manifest validation inside `pnpm generate` hard-fails
+# the run if an operation the SDK depends on was renamed or removed — that
+# failure is the drift alarm and needs a human decision, not a merge.
+#
+# Manual for now; switch `workflow_dispatch` to a schedule (or a
+# repository_dispatch from the docs repo's publish workflow) once the cadence
+# is settled.
+
+on:
+  workflow_dispatch:
+
+jobs:
+  bump-specs:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Checkout docs repo
+        uses: actions/checkout@v4
+        with:
+          repository: alchemyplatform/docs
+          path: .docs-checkout
+
+      - name: Setup
+        uses: ./.github/actions/setup
+
+      - name: Install docs dependencies
+        run: pnpm install --ignore-scripts
+        working-directory: .docs-checkout
+
+      - name: Snapshot specs from docs main
+        run: pnpm tsx packages/api-codegen/src/cli.ts snapshot --docs "$GITHUB_WORKSPACE/.docs-checkout"
+
+      - name: Regenerate SDK internals
+        run: |
+          pnpm run build:libs
+          pnpm run generate
+
+      - name: Remove docs checkout before PR
+        run: rm -rf .docs-checkout
+
+      - name: Open PR if anything changed
+        uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: "chore(api-codegen): bump spec snapshots from docs main"
+          title: "chore(api-codegen): bump API spec snapshots"
+          body: |
+            Automated re-snapshot of the bundled OpenAPI/OpenRPC specs from
+            `alchemyplatform/docs` main, plus regenerated SDK internals.
+
+            Review the `packages/api-codegen/specs/` diff for what moved
+            upstream and the `src/generated/` diff for the type impact.
+            Public types in `packages/data-apis/src/types.ts` are aliases —
+            check whether any public-surface change warrants a semver note.
+          branch: chore/bump-api-specs
+          delete-branch: true
