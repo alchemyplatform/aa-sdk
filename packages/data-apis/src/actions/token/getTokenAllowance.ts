@@ -2,6 +2,7 @@ import {
   getRpcRequest,
   type DataClient,
 } from "../../internal/clientHelpers.js";
+import { wrapRpcError } from "../../internal/errors.js";
 import type {
   GetTokenAllowanceParams,
   GetTokenAllowanceResult,
@@ -26,5 +27,5 @@ export async function getTokenAllowance(
   return request({
     method: "alchemy_getTokenAllowance",
     params: [allowanceRequest],
-  });
+  }).catch(wrapRpcError);
 }

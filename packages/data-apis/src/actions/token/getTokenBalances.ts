@@ -2,6 +2,7 @@ import {
   getRpcRequest,
   type DataClient,
 } from "../../internal/clientHelpers.js";
+import { wrapRpcError } from "../../internal/errors.js";
 import type { TokenRpcSchema } from "../../generated/rpc/token.js";
 import type {
   GetTokenBalancesParams,
@@ -38,5 +39,5 @@ export async function getTokenBalances(
   return request({
     method: "alchemy_getTokenBalances",
     params: rpcParams,
-  });
+  }).catch(wrapRpcError);
 }

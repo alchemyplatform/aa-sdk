@@ -2,6 +2,7 @@ import {
   getRpcRequest,
   type DataClient,
 } from "../../internal/clientHelpers.js";
+import { wrapRpcError } from "../../internal/errors.js";
 import type {
   GetAssetTransfersParams,
   GetAssetTransfersResult,
@@ -29,5 +30,5 @@ export async function getAssetTransfers(
   return request({
     method: "alchemy_getAssetTransfers",
     params: [rpcParams],
-  });
+  }).catch(wrapRpcError);
 }

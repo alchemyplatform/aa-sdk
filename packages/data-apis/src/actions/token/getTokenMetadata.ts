@@ -2,6 +2,7 @@ import {
   getRpcRequest,
   type DataClient,
 } from "../../internal/clientHelpers.js";
+import { wrapRpcError } from "../../internal/errors.js";
 import type {
   GetTokenMetadataParams,
   GetTokenMetadataResult,
@@ -26,5 +27,5 @@ export async function getTokenMetadata(
   return request({
     method: "alchemy_getTokenMetadata",
     params: [contractAddress],
-  });
+  }).catch(wrapRpcError);
 }

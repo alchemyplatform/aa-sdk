@@ -172,4 +172,24 @@ describe("nft namespace routing", () => {
       "https://base-mainnet.g.alchemy.com/nft/v3/getContractMetadata?contractAddress=0xc",
     );
   });
+
+  it("getNftsForOwnerPages threads cursors through query params", async () => {
+    fetchMock
+      .mockImplementationOnce(async () =>
+        jsonResponse({ ownedNfts: [{}], pageKey: "page-2" }),
+      )
+      .mockImplementationOnce(async () => jsonResponse({ ownedNfts: [{}] }));
+
+    const pages = [];
+    for await (const page of makeClient().nft.getNftsForOwnerPages({
+      owner: "0xo",
+    })) {
+      pages.push(page);
+    }
+    expect(pages).toHaveLength(2);
+    const url1 = new URL(String(fetchMock.mock.calls[0]![0]));
+    const url2 = new URL(String(fetchMock.mock.calls[1]![0]));
+    expect(url1.searchParams.get("pageKey")).toBeNull();
+    expect(url2.searchParams.get("pageKey")).toBe("page-2");
+  });
 });

@@ -1,10 +1,13 @@
 import type { DataClient, RequestOptions } from "./internal/clientHelpers.js";
+import type { PaginateOptions } from "./internal/paginate.js";
 import type * as T from "./types.js";
 
 import { getTokensByAddress } from "./actions/portfolio/getTokensByAddress.js";
 import { getTokenBalancesByAddress } from "./actions/portfolio/getTokenBalancesByAddress.js";
 import { getNftsByAddress } from "./actions/portfolio/getNftsByAddress.js";
 import { getNftContractsByAddress } from "./actions/portfolio/getNftContractsByAddress.js";
+import { getNftsByAddressPages } from "./actions/portfolio/getNftsByAddressPages.js";
+import { getNftContractsByAddressPages } from "./actions/portfolio/getNftContractsByAddressPages.js";
 
 import { getTokenPricesBySymbol } from "./actions/prices/getTokenPricesBySymbol.js";
 import { getTokenPricesByAddress } from "./actions/prices/getTokenPricesByAddress.js";
@@ -31,12 +34,19 @@ import { isAirdropNft } from "./actions/nft/isAirdropNft.js";
 import { isHolderOfContract } from "./actions/nft/isHolderOfContract.js";
 import { computeRarity } from "./actions/nft/computeRarity.js";
 import { summarizeNftAttributes } from "./actions/nft/summarizeNftAttributes.js";
+import { getNftsForOwnerPages } from "./actions/nft/getNftsForOwnerPages.js";
+import { getNftsForContractPages } from "./actions/nft/getNftsForContractPages.js";
+import { getNftsForCollectionPages } from "./actions/nft/getNftsForCollectionPages.js";
+import { getContractsForOwnerPages } from "./actions/nft/getContractsForOwnerPages.js";
+import { getCollectionsForOwnerPages } from "./actions/nft/getCollectionsForOwnerPages.js";
+import { getNftSalesPages } from "./actions/nft/getNftSalesPages.js";
 
 import { getTokenBalances } from "./actions/token/getTokenBalances.js";
 import { getTokenMetadata } from "./actions/token/getTokenMetadata.js";
 import { getTokenAllowance } from "./actions/token/getTokenAllowance.js";
 
 import { getAssetTransfers } from "./actions/transfers/getAssetTransfers.js";
+import { getAssetTransfersPages } from "./actions/transfers/getAssetTransfersPages.js";
 
 type Action<Params, Result> = (
   params: Params,
@@ -44,6 +54,11 @@ type Action<Params, Result> = (
 ) => Promise<Result>;
 
 type RpcAction<Params, Result> = (params: Params) => Promise<Result>;
+
+type PagesAction<Params, Result> = (
+  params: Params,
+  options?: PaginateOptions,
+) => AsyncGenerator<Result, void, undefined>;
 
 /** The namespaced Data API actions attached by the {@link dataActions} decorator. */
 export type DataActions = {
@@ -61,6 +76,14 @@ export type DataActions = {
       T.GetNftsByAddressResult
     >;
     getNftContractsByAddress: Action<
+      T.GetNftContractsByAddressParams,
+      T.GetNftContractsByAddressResult
+    >;
+    getNftsByAddressPages: PagesAction<
+      T.GetNftsByAddressParams,
+      T.GetNftsByAddressResult
+    >;
+    getNftContractsByAddressPages: PagesAction<
       T.GetNftContractsByAddressParams,
       T.GetNftContractsByAddressResult
     >;
@@ -140,6 +163,27 @@ export type DataActions = {
       T.SummarizeNftAttributesParams,
       T.SummarizeNftAttributesResult
     >;
+    getNftsForOwnerPages: PagesAction<
+      T.GetNftsForOwnerParams,
+      T.GetNftsForOwnerResult
+    >;
+    getNftsForContractPages: PagesAction<
+      T.GetNftsForContractParams,
+      T.GetNftsForContractResult
+    >;
+    getNftsForCollectionPages: PagesAction<
+      T.GetNftsForCollectionParams,
+      T.GetNftsForCollectionResult
+    >;
+    getContractsForOwnerPages: PagesAction<
+      T.GetContractsForOwnerParams,
+      T.GetContractsForOwnerResult
+    >;
+    getCollectionsForOwnerPages: PagesAction<
+      T.GetCollectionsForOwnerParams,
+      T.GetCollectionsForOwnerResult
+    >;
+    getNftSalesPages: PagesAction<T.GetNftSalesParams, T.GetNftSalesResult>;
   };
   token: {
     getTokenBalances: RpcAction<
@@ -157,6 +201,10 @@ export type DataActions = {
   };
   transfers: {
     getAssetTransfers: RpcAction<
+      T.GetAssetTransfersParams,
+      T.GetAssetTransfersResult
+    >;
+    getAssetTransfersPages: PagesAction<
       T.GetAssetTransfersParams,
       T.GetAssetTransfersResult
     >;
@@ -196,6 +244,10 @@ export function dataActions(client: DataClient): DataActions {
         getNftsByAddress(client, params, options),
       getNftContractsByAddress: (params, options) =>
         getNftContractsByAddress(client, params, options),
+      getNftsByAddressPages: (params, options) =>
+        getNftsByAddressPages(client, params, options),
+      getNftContractsByAddressPages: (params, options) =>
+        getNftContractsByAddressPages(client, params, options),
     },
     prices: {
       getTokenPricesBySymbol: (params, options) =>
@@ -246,6 +298,18 @@ export function dataActions(client: DataClient): DataActions {
         computeRarity(client, params, options),
       summarizeNftAttributes: (params, options) =>
         summarizeNftAttributes(client, params, options),
+      getNftsForOwnerPages: (params, options) =>
+        getNftsForOwnerPages(client, params, options),
+      getNftsForContractPages: (params, options) =>
+        getNftsForContractPages(client, params, options),
+      getNftsForCollectionPages: (params, options) =>
+        getNftsForCollectionPages(client, params, options),
+      getContractsForOwnerPages: (params, options) =>
+        getContractsForOwnerPages(client, params, options),
+      getCollectionsForOwnerPages: (params, options) =>
+        getCollectionsForOwnerPages(client, params, options),
+      getNftSalesPages: (params, options) =>
+        getNftSalesPages(client, params, options),
     },
     token: {
       getTokenBalances: (params) => getTokenBalances(client, params),
@@ -254,6 +318,8 @@ export function dataActions(client: DataClient): DataActions {
     },
     transfers: {
       getAssetTransfers: (params) => getAssetTransfers(client, params),
+      getAssetTransfersPages: (params, options) =>
+        getAssetTransfersPages(client, params, options),
     },
   };
 }
