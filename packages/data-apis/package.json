@@ -1,7 +1,16 @@
 {
   "name": "@alchemy/data-apis",
-  "version": "0.0.0",
-  "description": "Alchemy Data APIs SDK (Portfolio, Prices, NFT, Token, Transfers) — MVP",
+  "version": "5.0.3-alpha.0",
+  "description": "Alchemy Data APIs SDK: Portfolio, Prices, NFT, Token, and Transfers, as viem-style actions",
+  "keywords": [
+    "alchemy",
+    "viem",
+    "nft",
+    "token",
+    "prices",
+    "portfolio",
+    "blockchain-data"
+  ],
   "author": "Alchemy",
   "license": "MIT",
   "private": false,
@@ -53,7 +62,8 @@
   },
   "publishConfig": {
     "access": "public",
-    "registry": "https://registry.npmjs.org/"
+    "registry": "https://registry.npmjs.org/",
+    "tag": "alpha"
   },
   "repository": {
     "type": "git",

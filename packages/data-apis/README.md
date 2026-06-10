@@ -1,36 +1,104 @@
-# @alchemy/data-apis (MVP)
+# @alchemy/data-apis
 
-A vertical-slice prototype of the Data APIs SDK, built to prove the architecture
-before scaling to the full v1 surface (Portfolio, Prices, NFT, Token, Transfers).
+Alchemy's Data APIs — Portfolio, Prices, NFT, Token, and Transfers — as
+typed, viem-style actions. **Currently published under the `alpha` dist-tag.**
 
-## What this proves
+```bash
+npm install @alchemy/data-apis@alpha viem
+```
 
-One method per seam, not full coverage:
+## Quickstart
 
-| Method                         | Channel                                   | What it demonstrates                                                                                           |
-| ------------------------------ | ----------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
-| `portfolio.getTokensByAddress` | REST → global `api.g.alchemy.com/data/v1` | Multi-network request bodies via `AlchemyRestClient`; networks are payload, the client's chain is not involved |
-| `nft.getNftsForOwner`          | REST → `{network}.g.alchemy.com/nft/v3`   | Network-scoped endpoint resolution with per-request `network` override falling back to the client default      |
-| `transfers.getAssetTransfers`  | JSON-RPC → `AlchemyTransport`             | Plain viem action; network override derives a transport instance from `client.transport.config`                |
-
-Plus the two entry points:
+Two equivalent entry points:
 
 ```ts
 // Data-only developers (no viem knowledge required)
-const data = createDataClient({ apiKey, network: "eth-mainnet" });
+import { createDataClient } from "@alchemy/data-apis";
 
-// Developers already on a viem client with an Alchemy transport
+const data = createDataClient({
+  apiKey: process.env.ALCHEMY_API_KEY,
+  network: "eth-mainnet", // or `mainnet` from viem/chains, or "eip155:1"
+});
+
+// Developers already holding a viem client with an Alchemy transport
+import { createClient } from "viem";
+import { mainnet } from "viem/chains";
+import { alchemyTransport } from "@alchemy/common";
+import { dataActions } from "@alchemy/data-apis";
+
 const client = createClient({
   chain: mainnet,
-  transport: alchemyTransport({ apiKey }),
+  transport: alchemyTransport({ apiKey: process.env.ALCHEMY_API_KEY }),
 }).extend(dataActions);
 ```
 
-Network inputs accept all three formats everywhere, resolved by
-`resolveNetwork()` in `@alchemy/common`: a viem `Chain`, an Alchemy slug
-(`"eth-mainnet"`), or CAIP-2 (`"eip155:1"`, `"solana:mainnet"`). The slug ↔
-chain-ID mapping is derived from the existing daikon-generated
-`ALCHEMY_RPC_MAPPING` — no second registry.
+Every action is also individually importable
+(`import { getNftsForOwner } from "@alchemy/data-apis"`) for tree-shaking and
+composability.
+
+## Namespaces
+
+```ts
+// Portfolio — multi-network queries; networks travel per request
+const tokens = await data.portfolio.getTokensByAddress({
+  addresses: [
+    { address: "0x...", networks: [mainnet, "base-mainnet", "solana-mainnet"] },
+  ],
+});
+// also: getTokenBalancesByAddress, getNftsByAddress, getNftContractsByAddress
+
+// Prices — chain-agnostic or address+network
+const prices = await data.prices.getTokenPricesBySymbol({
+  symbols: ["ETH", "USDC"],
+});
+// also: getTokenPricesByAddress, getHistoricalTokenPrices
+
+// NFT — full v3 read surface (21 methods): ownership, metadata (+ batch),
+// contracts/collections, owners, sales, floor price, search, spam/airdrop/rarity
+const nfts = await data.nft.getNftsForOwner({ owner: "0x..." });
+
+// Token — balances, metadata, allowance (JSON-RPC)
+const balances = await data.token.getTokenBalances({ address: "0x..." });
+
+// Transfers — historical transfer queries (JSON-RPC)
+const transfers = await data.transfers.getAssetTransfers({
+  category: ["erc20"],
+});
+```
+
+### Networks: three formats, everywhere
+
+Anywhere a network is accepted you can pass a viem `Chain`, an Alchemy slug
+(`"eth-mainnet"`), or a CAIP-2 id (`"eip155:1"`, `"solana:mainnet"`) —
+resolved by `resolveNetwork()` in `@alchemy/common`. Single-network methods
+use the client's default network with a per-request `network` override;
+multi-network methods (Portfolio, Prices-by-address) take networks in the
+request itself. Registry-unknown slugs are passed through as an escape hatch.
+
+### Pagination
+
+Paginated methods have `*Pages` companions returning async generators that
+manage cursors for you (and refuse to loop forever on repeated cursors):
+
+```ts
+for await (const page of data.nft.getNftsForOwnerPages(
+  { owner: "0x..." },
+  { maxPages: 10, signal: controller.signal },
+)) {
+  for (const nft of page.ownedNfts ?? []) {
+    // ...
+  }
+}
+```
+
+### Errors
+
+Both channels (REST and JSON-RPC) normalize failures into `AlchemyApiError`
+from `@alchemy/common`, carrying `status`, `code`, `requestId` (the
+client-generated `X-Alchemy-Client-Request-Id`), and `retryAfter` when known.
+REST requests retry 429/5xx/network failures with exponential backoff
+(honoring `Retry-After`) and time out per attempt; pass an `AbortSignal` via
+the per-request options to cancel.
 
 ## Generated internals
 
@@ -42,15 +110,20 @@ hand-reviewed aliases, and `codegen.manifest.ts` maps spec operations to the
 generated surface — referencing a renamed/removed spec operation fails
 `pnpm generate` loudly.
 
-## Companion changes in @alchemy/common
+## Releasing
 
-- `networks/networkRegistry.ts`: `resolveNetwork` + network types (slug map
-  derived from the registry URLs; to be emitted by ws-tools properly)
-- `AlchemyRestClient` is now exported (was written for signer v5 but unexported)
+While in alpha this package is deliberately **not** in `lerna.json`'s
+fixed-version publish set, so the regular release workflow can't ship it as
+`latest`. To publish an alpha:
 
-## Deliberately out of scope (tracked in the data SDK scope plan)
+```bash
+pnpm --filter @alchemy/data-apis build
+cd packages/data-apis && pnpm publish --tag alpha
+```
 
-- Rest client hardening: retries, timeouts, request-id, first-class query params
-- Pagination iterators, error normalization, the SDK manifest, remaining methods
-- ws-tools generator change to emit `{ slug, chainId, caip2 }` entries +
-  the `KnownAlchemyNetwork` union
+Graduation checklist (when the team blesses a stable release):
+
+1. Bump `version` to the shared monorepo version (drop the `-alpha.N` suffix).
+2. Add `"packages/data-apis"` to `lerna.json`'s `packages` array.
+3. Remove `publishConfig.tag`.
+4. Announce the surface as semver-stable.
