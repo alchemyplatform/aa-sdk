@@ -143,6 +143,60 @@ Initializes a new server error for a failed HTTP response.
 
     <tr>
       <td>
+        <a id="details" /> `details?`
+      </td>
+
+      <td>
+        `string`
+      </td>
+
+      <td>
+        `undefined`
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="docspath" /> `docsPath?`
+      </td>
+
+      <td>
+        `string`
+      </td>
+
+      <td>
+        `undefined`
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <a id="metamessages" /> `metaMessages?`
+      </td>
+
+      <td>
+        `string`\[]
+      </td>
+
+      <td>
+        `undefined`
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
         <a id="name" /> `name`
       </td>
 
@@ -197,6 +251,24 @@ Initializes a new server error for a failed HTTP response.
 
     <tr>
       <td>
+        <a id="shortmessage" /> `shortMessage`
+      </td>
+
+      <td>
+        `string`
+      </td>
+
+      <td>
+        `undefined`
+      </td>
+
+      <td>
+        ‐
+      </td>
+    </tr>
+
+    <tr>
+      <td>
         <a id="status" /> `status?`
       </td>
 
@@ -219,7 +291,7 @@ Initializes a new server error for a failed HTTP response.
       </td>
 
       <td>
-        `string`
+        `"5.0.3"`
       </td>
 
       <td>
@@ -233,3 +305,56 @@ Initializes a new server error for a failed HTTP response.
 
   </tbody>
 </table>
+
+## Methods
+
+### walk()
+
+```ts
+walk(fn?): null | Error;
+```
+
+Defined in: [packages/common/src/errors/AlchemyError.ts:86](https://github.com/alchemyplatform/aa-sdk/blob/main/packages/common/src/errors/AlchemyError.ts#L86)
+
+Walks the cause chain: with no predicate, returns the deepest error;
+with a predicate, returns the first matching error or null (viem
+BaseError-compatible semantics).
+
+#### Parameters
+
+<table>
+  <thead>
+    <tr>
+      <th align="left">Parameter</th>
+      <th align="left">Type</th>
+      <th align="left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `fn?`
+      </td>
+
+      <td>
+        (`err`) => `boolean`
+      </td>
+
+      <td>
+        Optional predicate over each error in the chain
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+
+#### Returns
+
+`null` | `Error`
+
+The deepest error, the first match, or null
+
+#### Inherited from
+
+[`AlchemyApiError`](AlchemyApiError).[`walk`](AlchemyApiError#walk)

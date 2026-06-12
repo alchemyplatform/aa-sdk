@@ -60,7 +60,7 @@ type PagesAction<Params, Result> = (
   options?: PaginateOptions,
 ) => AsyncGenerator<Result, void, undefined>;
 
-/** The namespaced Data API actions attached by the {@link dataActions} decorator. */
+/** The namespaced Data API actions available on a Data API client. */
 export type DataActions = {
   portfolio: {
     getTokensByAddress: Action<

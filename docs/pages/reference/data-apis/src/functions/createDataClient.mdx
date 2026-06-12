@@ -11,12 +11,11 @@ layout: reference
 function createDataClient(options): AlchemyDataClient;
 ```
 
-Defined in: [packages/data-apis/src/client.ts:49](https://github.com/alchemyplatform/aa-sdk/blob/main/packages/data-apis/src/client.ts#L49)
+Defined in: [packages/data-apis/src/client.ts:43](https://github.com/alchemyplatform/aa-sdk/blob/main/packages/data-apis/src/client.ts#L43)
 
-Creates a Data API client. This is a convenience wrapper over
-`createClient` + `alchemyTransport` + the [dataActions](dataActions) decorator —
-developers already holding a viem client with an Alchemy transport can use
-`client.extend(dataActions)` instead and get the identical behavior.
+Creates a Data API client: a plain, dependency-free container holding the
+connection config (apiKey/jwt/proxy url, retry and timeout defaults) and an
+optional default network, with the Data API actions attached by namespace.
 
 ## Example
 
@@ -25,7 +24,7 @@ import { createDataClient } from "@alchemy/data-apis";
 
 const data = createDataClient({
   apiKey: process.env.ALCHEMY_API_KEY,
-  network: "eth-mainnet", // or `mainnet` from viem/chains, or "eip155:1"
+  network: "eth-mainnet", // or "eip155:1"; optional for portfolio/prices
 });
 
 const nfts = await data.nft.getNftsForOwner({ owner: "0x..." });
@@ -53,7 +52,7 @@ const nfts = await data.nft.getNftsForOwner({ owner: "0x..." });
       </td>
 
       <td>
-        Auth (apiKey/jwt/proxy url) and default network
+        Auth (apiKey/jwt/proxy url), retry/timeout defaults, and default network
       </td>
     </tr>
 
@@ -64,4 +63,4 @@ const nfts = await data.nft.getNftsForOwner({ owner: "0x..." });
 
 [`AlchemyDataClient`](../type-aliases/AlchemyDataClient)
 
-A viem client extended with the Data API actions
+The Data API client

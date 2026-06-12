@@ -1,48 +1,42 @@
 # @alchemy/data-apis
 
-Alchemy's Data APIs — Portfolio, Prices, NFT, Token, and Transfers — as
-typed, viem-style actions. **Currently published under the `alpha` dist-tag.**
+Alchemy's Data APIs — Portfolio, Prices, NFT, Token, and Transfers — as typed,
+**dependency-free** actions. No chain library required: the package's only
+dependency is `@alchemy/common`, and nothing EVM- or ecosystem-specific sits
+in the foundation. **Currently published under the `alpha` dist-tag.**
 
 ```bash
-npm install @alchemy/data-apis@alpha viem
+npm install @alchemy/data-apis@alpha
 ```
 
 ## Quickstart
 
-Two equivalent entry points:
-
 ```ts
-// Data-only developers (no viem knowledge required)
 import { createDataClient } from "@alchemy/data-apis";
 
 const data = createDataClient({
   apiKey: process.env.ALCHEMY_API_KEY,
-  network: "eth-mainnet", // or `mainnet` from viem/chains, or "eip155:1"
+  network: "eth-mainnet", // optional — see Networks below
 });
 
-// Developers already holding a viem client with an Alchemy transport
-import { createClient } from "viem";
-import { mainnet } from "viem/chains";
-import { alchemyTransport } from "@alchemy/common";
-import { dataActions } from "@alchemy/data-apis";
-
-const client = createClient({
-  chain: mainnet,
-  transport: alchemyTransport({ apiKey: process.env.ALCHEMY_API_KEY }),
-}).extend(dataActions);
+const nfts = await data.nft.getNftsForOwner({ owner: "0x..." });
 ```
 
 Every action is also individually importable
 (`import { getNftsForOwner } from "@alchemy/data-apis"`) for tree-shaking and
-composability.
+composability, taking `(client, params)`.
 
 ## Namespaces
 
 ```ts
-// Portfolio — multi-network queries; networks travel per request
+// Portfolio — multi-network queries; networks travel per request.
+// No client-level network needed at all.
 const tokens = await data.portfolio.getTokensByAddress({
   addresses: [
-    { address: "0x...", networks: [mainnet, "base-mainnet", "solana-mainnet"] },
+    {
+      address: "0x...",
+      networks: ["eth-mainnet", "base-mainnet", "solana-mainnet"],
+    },
   ],
 });
 // also: getTokenBalancesByAddress, getNftsByAddress, getNftContractsByAddress
@@ -53,9 +47,8 @@ const prices = await data.prices.getTokenPricesBySymbol({
 });
 // also: getTokenPricesByAddress, getHistoricalTokenPrices
 
-// NFT — full v3 read surface (21 methods): ownership, metadata (+ batch),
-// contracts/collections, owners, sales, floor price, search, spam/airdrop/rarity
-const nfts = await data.nft.getNftsForOwner({ owner: "0x..." });
+// NFT — full v3 read surface (21 methods)
+const owned = await data.nft.getNftsForOwner({ owner: "0x..." });
 
 // Token — balances, metadata, allowance (JSON-RPC)
 const balances = await data.token.getTokenBalances({ address: "0x..." });
@@ -66,14 +59,24 @@ const transfers = await data.transfers.getAssetTransfers({
 });
 ```
 
-### Networks: three formats, everywhere
+### Networks
 
-Anywhere a network is accepted you can pass a viem `Chain`, an Alchemy slug
-(`"eth-mainnet"`), or a CAIP-2 id (`"eip155:1"`, `"solana:mainnet"`) —
-resolved by `resolveNetwork()` in `@alchemy/common`. Single-network methods
-use the client's default network with a per-request `network` override;
-multi-network methods (Portfolio, Prices-by-address) take networks in the
-request itself. Registry-unknown slugs are passed through as an escape hatch.
+Network inputs are strings, both ecosystem-neutral: Alchemy slugs
+(`"eth-mainnet"`, exactly as the dashboard and API responses use) or CAIP-2
+ids (`"eip155:1"`, `"solana:mainnet"`). Holding a viem chain object? The
+bridge is one expression: `` `eip155:${chain.id}` ``.
+
+The client-level `network` is optional and only a default: multi-network
+methods (Portfolio, Prices-by-address) take networks in the request itself,
+and every single-network method accepts a per-request `network` override that
+wins over the default. Registry-unknown slugs pass through as an escape
+hatch, so newly launched networks work without an SDK release.
+
+### Proxy / frontend usage
+
+Pass `url` to route traffic through your backend so no API key ships
+client-side: `createDataClient({ url: "https://your-backend/alchemy" })`.
+`jwt` auth is also supported.
 
 ### Pagination
 
@@ -96,19 +99,28 @@ for await (const page of data.nft.getNftsForOwnerPages(
 Both channels (REST and JSON-RPC) normalize failures into `AlchemyApiError`
 from `@alchemy/common`, carrying `status`, `code`, `requestId` (the
 client-generated `X-Alchemy-Client-Request-Id`), and `retryAfter` when known.
-REST requests retry 429/5xx/network failures with exponential backoff
-(honoring `Retry-After`) and time out per attempt; pass an `AbortSignal` via
-the per-request options to cancel.
+Requests retry 429/5xx/network failures with exponential backoff (honoring
+`Retry-After`) and time out per attempt; pass an `AbortSignal` via the
+per-request options to cancel. JSON-RPC-level errors are never retried.
+
+## Ecosystem adapters
+
+The core is deliberately chain-library-free (see the "Data SDK Foundation"
+decision doc). Adapters ship as demand warrants, post-v1 — first in line is
+`@alchemy/data-apis/viem`, a `dataActions` decorator for existing viem and
+wallet-apis clients (`client.extend(dataActions)`). Its implementation is
+already parked and tested at `src/viem/`; it is packaging work away from
+shipping. Adapters depend on their ecosystem's library; the core never does.
 
 ## Generated internals
 
 Param/result types are generated from the docs repo's bundled OpenAPI/OpenRPC
-specs by `@alchemy/api-codegen` (see that package's README for the
-snapshot/generate pipeline). `src/generated/` is committed, machine-owned, and
-never re-exported directly: the public types in `src/types.ts` are
-hand-reviewed aliases, and `codegen.manifest.ts` maps spec operations to the
-generated surface — referencing a renamed/removed spec operation fails
-`pnpm generate` loudly.
+specs by `api-codegen` (repo root; see its README for the snapshot/generate
+pipeline). `src/generated/` is committed, machine-owned, and never
+re-exported directly: the public types in `src/types.ts` are hand-reviewed
+aliases, and `codegen.manifest.ts` maps spec operations to the generated
+surface — referencing a renamed/removed spec operation fails `pnpm generate`
+loudly.
 
 ## Releasing
 

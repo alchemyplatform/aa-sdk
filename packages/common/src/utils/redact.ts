@@ -1,5 +1,5 @@
 /**
- * Redacts credentials that can appear in URLs: keys embedded in "/v2/<key>"
+ * Redacts credentials that can appear in URLs: keys embedded in `/v2/{key}` paths
  * RPC paths (when a caller configured a key-bearing url) and apiKey query
  * params. The header-auth paths never put keys in URLs; this protects
  * configured-url escape hatches and any server-echoed text.

@@ -515,8 +515,6 @@ navigation:
                     path: wallets/pages/reference/data-apis/src/functions/computeRarity.mdx
                   - page: createDataClient
                     path: wallets/pages/reference/data-apis/src/functions/createDataClient.mdx
-                  - page: dataActions
-                    path: wallets/pages/reference/data-apis/src/functions/dataActions.mdx
                   - page: getAssetTransfers
                     path: wallets/pages/reference/data-apis/src/functions/getAssetTransfers.mdx
                   - page: getAssetTransfersPages
@@ -781,6 +779,10 @@ navigation:
                     path: wallets/pages/reference/common/src/classes/AccountNotFoundError.mdx
                   - page: AlchemyApiError
                     path: wallets/pages/reference/common/src/classes/AlchemyApiError.mdx
+                  - page: AlchemyError
+                    path: wallets/pages/reference/common/src/classes/AlchemyError.mdx
+                  - page: AlchemyJsonRpcClient
+                    path: wallets/pages/reference/common/src/classes/AlchemyJsonRpcClient.mdx
                   - page: AlchemyRestClient
                     path: wallets/pages/reference/common/src/classes/AlchemyRestClient.mdx
                   - page: BaseError
@@ -823,6 +825,8 @@ navigation:
                     path: wallets/pages/reference/common/src/functions/lowerAddress.mdx
                   - page: raise
                     path: wallets/pages/reference/common/src/functions/raise.mdx
+                  - page: redactUrlCredentials
+                    path: wallets/pages/reference/common/src/functions/redactUrlCredentials.mdx
                   - page: resolveNetwork
                     path: wallets/pages/reference/common/src/functions/resolveNetwork.mdx
                   - page: sleep
@@ -839,6 +843,8 @@ navigation:
                     path: wallets/pages/reference/common/src/type-aliases/AlchemyApiErrorDetails.mdx
                   - page: AlchemyConnectionConfig
                     path: wallets/pages/reference/common/src/type-aliases/AlchemyConnectionConfig.mdx
+                  - page: AlchemyJsonRpcClientParams
+                    path: wallets/pages/reference/common/src/type-aliases/AlchemyJsonRpcClientParams.mdx
                   - page: AlchemyNetwork
                     path: wallets/pages/reference/common/src/type-aliases/AlchemyNetwork.mdx
                   - page: AlchemyRestClientParams
@@ -847,6 +853,10 @@ navigation:
                     path: wallets/pages/reference/common/src/type-aliases/AlchemyTransport.mdx
                   - page: ExtractRpcMethod
                     path: wallets/pages/reference/common/src/type-aliases/ExtractRpcMethod.mdx
+                  - page: JsonRpcRequestFn
+                    path: wallets/pages/reference/common/src/type-aliases/JsonRpcRequestFn.mdx
+                  - page: JsonRpcSchema
+                    path: wallets/pages/reference/common/src/type-aliases/JsonRpcSchema.mdx
                   - page: KnownAlchemyNetwork
                     path: wallets/pages/reference/common/src/type-aliases/KnownAlchemyNetwork.mdx
                   - page: NetworkInput
@@ -871,3 +881,9 @@ navigation:
                 contents:
                   - page: AlchemyConnectionConfigSchema
                     path: wallets/pages/reference/common/src/variables/AlchemyConnectionConfigSchema.mdx
+                  - page: DEFAULT_RETRY_COUNT
+                    path: wallets/pages/reference/common/src/variables/DEFAULT_RETRY_COUNT.mdx
+                  - page: DEFAULT_RETRY_DELAY_MS
+                    path: wallets/pages/reference/common/src/variables/DEFAULT_RETRY_DELAY_MS.mdx
+                  - page: DEFAULT_TIMEOUT_MS
+                    path: wallets/pages/reference/common/src/variables/DEFAULT_TIMEOUT_MS.mdx
