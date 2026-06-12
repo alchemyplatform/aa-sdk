@@ -1,4 +1,4 @@
-import { AlchemyError } from "@alchemy/common";
+import { AlchemyError } from "@alchemy/common/core";
 
 /** Options accepted by the `*Pages` async-iterator actions. */
 export type PaginateOptions = {

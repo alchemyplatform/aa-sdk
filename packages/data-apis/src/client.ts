@@ -2,7 +2,7 @@ import {
   resolveNetwork,
   type AlchemyNetwork,
   type AlchemyRestClientParams,
-} from "@alchemy/common";
+} from "@alchemy/common/core";
 import { dataActions, type DataActions } from "./decorator.js";
 import type { DataClient } from "./internal/clientHelpers.js";
 

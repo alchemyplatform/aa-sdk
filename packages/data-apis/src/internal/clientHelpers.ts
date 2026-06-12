@@ -7,7 +7,7 @@ import {
   type AlchemyRestClientParams,
   type ResolvedNetwork,
   type RestRequestSchema,
-} from "@alchemy/common";
+} from "@alchemy/common/core";
 import { getRpcUrl } from "./endpoints.js";
 import type { DataRpcSchema } from "../schema/rpc.js";
 

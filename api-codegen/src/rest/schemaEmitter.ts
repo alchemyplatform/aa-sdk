@@ -230,7 +230,7 @@ export function emitRestSchema(
   }
 
   return [
-    `import type { RestRequestSchema } from "@alchemy/common";`,
+    `import type { RestRequestSchema } from "@alchemy/common/core";`,
     `import type { operations } from "./${config.spec}.types.js";`,
     ``,
     ...aliasBlocks.map((block) => block + "\n"),

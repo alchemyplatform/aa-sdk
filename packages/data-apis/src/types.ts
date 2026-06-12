@@ -1,4 +1,4 @@
-import type { AlchemyNetwork } from "@alchemy/common";
+import type { AlchemyNetwork } from "@alchemy/common/core";
 import type {
   ComputeRarityQuery,
   ComputeRarityResponse,

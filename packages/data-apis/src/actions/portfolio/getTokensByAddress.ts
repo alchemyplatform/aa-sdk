@@ -1,4 +1,4 @@
-import { resolveNetwork } from "@alchemy/common";
+import { resolveNetwork } from "@alchemy/common/core";
 import { DATA_API_URL } from "../../internal/endpoints.js";
 import {
   getRestClient,

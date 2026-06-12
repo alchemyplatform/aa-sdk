@@ -3,11 +3,8 @@
 // warrants (post-v1, per the approved standalone-core direction). Kept here
 // with tests so it stays working against the core.
 
-import {
-  resolveNetwork,
-  type AlchemyTransport,
-  type AlchemyTransportConfig,
-} from "@alchemy/common";
+import { resolveNetwork } from "@alchemy/common/core";
+import type { AlchemyTransport, AlchemyTransportConfig } from "@alchemy/common";
 import type { Chain, Client } from "viem";
 import {
   dataActions as coreDataActions,

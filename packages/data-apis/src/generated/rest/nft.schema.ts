@@ -3,7 +3,7 @@
 // Regenerate with `pnpm generate`. Spec provenance (docs repo commit + checksums)
 // is recorded in api-codegen/specs/specs.lock.json.
 
-import type { RestRequestSchema } from "@alchemy/common";
+import type { RestRequestSchema } from "@alchemy/common/core";
 import type { operations } from "./nft.types.js";
 
 /** 200 response for getNFTsForOwner-v3. */
