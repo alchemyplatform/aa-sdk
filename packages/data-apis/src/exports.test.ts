@@ -8,7 +8,6 @@ describe("package export boundary", () => {
         "VERSION",
         "computeRarity",
         "createDataClient",
-        "dataActions",
         "getAssetTransfers",
         "getAssetTransfersPages",
         "getCollectionMetadata",

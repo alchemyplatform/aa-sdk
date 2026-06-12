@@ -81,7 +81,7 @@ describe("nft namespace routing", () => {
     ],
     [
       "getSpamContracts",
-      (c) => c.nft.getSpamContracts(),
+      (c) => c.nft.getSpamContracts({}),
       `${NFT_BASE}/getSpamContracts`,
     ],
     [

@@ -212,25 +212,12 @@ export type DataActions = {
 };
 
 /**
- * A viem client decorator that attaches the Data API actions, grouped by
- * namespace, to any client configured with an Alchemy transport.
+ * Builds the namespaced Data API actions over a core data client. Used by
+ * {@link createDataClient}; ecosystem adapters (e.g. the parked viem adapter
+ * in src/viem/) construct a core client and delegate here, so every surface
+ * shares one implementation.
  *
- * @example
- * ```ts
- * import { createClient } from "viem";
- * import { mainnet } from "viem/chains";
- * import { alchemyTransport } from "@alchemy/common";
- * import { dataActions } from "@alchemy/data-apis";
- *
- * const client = createClient({
- *   chain: mainnet,
- *   transport: alchemyTransport({ apiKey: "..." }),
- * }).extend(dataActions);
- *
- * const nfts = await client.nft.getNftsForOwner({ owner: "0x..." });
- * ```
- *
- * @param {DataClient} client The client to decorate
+ * @param {DataClient} client The core client (config + default network)
  * @returns {DataActions} The namespaced Data API actions
  */
 export function dataActions(client: DataClient): DataActions {

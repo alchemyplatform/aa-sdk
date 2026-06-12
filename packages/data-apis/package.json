@@ -1,10 +1,9 @@
 {
   "name": "@alchemy/data-apis",
   "version": "5.0.3-alpha.0",
-  "description": "Alchemy Data APIs SDK: Portfolio, Prices, NFT, Token, and Transfers, as viem-style actions",
+  "description": "Alchemy Data APIs SDK: Portfolio, Prices, NFT, Token, and Transfers \u2014 typed, dependency-free actions",
   "keywords": [
     "alchemy",
-    "viem",
     "nft",
     "token",
     "prices",
@@ -56,9 +55,6 @@
   },
   "dependencies": {
     "@alchemy/common": "workspace:*"
-  },
-  "peerDependencies": {
-    "viem": "^2.45.0"
   },
   "publishConfig": {
     "access": "public",

@@ -1,35 +1,29 @@
 import {
-  alchemyTransport,
   resolveNetwork,
-  type AlchemyTransportConfig,
-  type NetworkInput,
+  type AlchemyNetwork,
+  type AlchemyRestClientParams,
 } from "@alchemy/common";
-import { createClient, type Chain, type Client } from "viem";
-import { getRpcUrl } from "./internal/endpoints.js";
 import { dataActions, type DataActions } from "./decorator.js";
-import type { AlchemyTransport } from "@alchemy/common";
+import type { DataClient } from "./internal/clientHelpers.js";
 
-export type AlchemyDataClientOptions = Pick<
-  AlchemyTransportConfig,
-  "apiKey" | "jwt" | "url" | "fetchOptions"
-> & {
+export type AlchemyDataClientOptions = AlchemyRestClientParams & {
   /**
    * Default network for network-scoped calls (NFT, Token, Transfers).
-   * Accepts a viem Chain, an Alchemy slug ("eth-mainnet"), or CAIP-2
-   * ("eip155:1"). Multi-network calls (Portfolio) take explicit networks
-   * per request.
+   * Accepts an Alchemy slug ("eth-mainnet") or a CAIP-2 id ("eip155:1",
+   * "solana:mainnet"). Optional: multi-network calls (Portfolio, Prices)
+   * take networks per request, and single-network calls accept a
+   * per-request `network` override. Holding a viem chain? The bridge is
+   * `eip155:${chain.id}`.
    */
-  network?: NetworkInput;
+  network?: AlchemyNetwork;
 };
 
-export type AlchemyDataClient = Client<AlchemyTransport, Chain | undefined> &
-  DataActions;
+export type AlchemyDataClient = DataClient & DataActions;
 
 /**
- * Creates a Data API client. This is a convenience wrapper over
- * `createClient` + `alchemyTransport` + the {@link dataActions} decorator —
- * developers already holding a viem client with an Alchemy transport can use
- * `client.extend(dataActions)` instead and get the identical behavior.
+ * Creates a Data API client: a plain, dependency-free container holding the
+ * connection config (apiKey/jwt/proxy url, retry and timeout defaults) and an
+ * optional default network, with the Data API actions attached by namespace.
  *
  * @example
  * ```ts
@@ -37,43 +31,23 @@ export type AlchemyDataClient = Client<AlchemyTransport, Chain | undefined> &
  *
  * const data = createDataClient({
  *   apiKey: process.env.ALCHEMY_API_KEY,
- *   network: "eth-mainnet", // or `mainnet` from viem/chains, or "eip155:1"
+ *   network: "eth-mainnet", // or "eip155:1"; optional for portfolio/prices
  * });
  *
  * const nfts = await data.nft.getNftsForOwner({ owner: "0x..." });
  * ```
  *
- * @param {AlchemyDataClientOptions} options Auth (apiKey/jwt/proxy url) and default network
- * @returns {AlchemyDataClient} A viem client extended with the Data API actions
+ * @param {AlchemyDataClientOptions} options Auth (apiKey/jwt/proxy url), retry/timeout defaults, and default network
+ * @returns {AlchemyDataClient} The Data API client
  */
 export function createDataClient(
   options: AlchemyDataClientOptions,
 ): AlchemyDataClient {
-  const { network, ...transportConfig } = options;
-
-  // A viem Chain default flows through the transport's registry resolution
-  // untouched. Slug/CAIP-2 defaults are carried on a minimal chain definition
-  // (custom.alchemyNetwork) and the RPC URL is resolved up front — chain ID 0
-  // mirrors how wallet-apis models Solana chains.
-  const chain: Chain | undefined = (() => {
-    if (network == null) return undefined;
-    if (typeof network === "object") return network;
-    const resolved = resolveNetwork(network);
-    return {
-      id: resolved.chainId ?? 0,
-      name: resolved.slug,
-      nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
-      rpcUrls: { default: { http: [] } },
-      custom: { alchemyNetwork: resolved.slug },
-    };
-  })();
-
-  const transport = alchemyTransport({
-    ...transportConfig,
-    ...(chain && chain.custom?.alchemyNetwork && !transportConfig.url
-      ? { url: getRpcUrl(chain.custom.alchemyNetwork as string) }
-      : {}),
-  });
-
-  return createClient({ chain, transport }).extend(dataActions);
+  const { network, ...config } = options;
+  const core: DataClient = {
+    config,
+    // Eager resolution keeps fail-fast behavior for malformed network inputs.
+    network: network != null ? resolveNetwork(network) : undefined,
+  };
+  return Object.assign(core, dataActions(core));
 }

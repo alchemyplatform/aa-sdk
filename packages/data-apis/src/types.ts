@@ -1,4 +1,4 @@
-import type { NetworkInput } from "@alchemy/common";
+import type { AlchemyNetwork } from "@alchemy/common";
 import type {
   ComputeRarityQuery,
   ComputeRarityResponse,
@@ -89,12 +89,12 @@ type Unbracket<T> = {
 /** Query params of a network-scoped method, plus the SDK's network override. */
 type NetworkScoped<T> = Unbracket<T> & {
   /** Overrides the client-level network for this request. */
-  network?: NetworkInput;
+  network?: AlchemyNetwork;
 };
 
-/** Distributes over a union, replacing wire `network: string` with NetworkInput. */
-type WithNetworkInput<T> = T extends { network: string }
-  ? Omit<T, "network"> & { network: NetworkInput }
+/** Distributes over a union, replacing wire `network: string` with AlchemyNetwork. */
+type WithAlchemyNetwork<T> = T extends { network: string }
+  ? Omit<T, "network"> & { network: AlchemyNetwork }
   : T;
 
 // ─── Portfolio (REST, global, multi-network) ────────────────────────────────
@@ -102,14 +102,14 @@ type WithNetworkInput<T> = T extends { network: string }
 /** An address paired with the networks to query it on. */
 export interface PortfolioAddressEntry {
   address: string;
-  /** Networks to query; accepts viem Chains, Alchemy slugs, or CAIP-2 ids. */
-  networks: NetworkInput[];
+  /** Networks to query; accepts Alchemy slugs or CAIP-2 ids. */
+  networks: AlchemyNetwork[];
 }
 
 /**
  * Replaces each wire-format address entry's `networks` (slug strings — an
  * enum in some specs, deliberately widened here to support the SDK's
- * escape-hatch slugs) with the SDK's three-format NetworkInput, preserving
+ * escape-hatch slugs) with the SDK's three-format AlchemyNetwork, preserving
  * any other per-entry fields the operation defines (e.g. per-address
  * include/exclude filters).
  */
@@ -119,8 +119,8 @@ type PortfolioParams<Body extends { addresses: readonly unknown[] }> = Omit<
 > & {
   addresses: Array<
     Omit<Body["addresses"][number], "networks"> & {
-      /** Networks to query; accepts viem Chains, Alchemy slugs, or CAIP-2 ids. */
-      networks: NetworkInput[];
+      /** Networks to query; accepts Alchemy slugs or CAIP-2 ids. */
+      networks: AlchemyNetwork[];
     }
   >;
 };
@@ -151,8 +151,8 @@ export type GetTokenPricesBySymbolResult = GetTokenPricesBySymbolResponse;
 /** A token address paired with the network it lives on. */
 export interface PriceAddressEntry {
   address: string;
-  /** Accepts a viem Chain, an Alchemy slug, or a CAIP-2 id. */
-  network: NetworkInput;
+  /** Accepts an Alchemy slug or a CAIP-2 id. */
+  network: AlchemyNetwork;
 }
 
 export type GetTokenPricesByAddressParams = Omit<
@@ -164,7 +164,7 @@ export type GetTokenPricesByAddressParams = Omit<
 export type GetTokenPricesByAddressResult = GetTokenPricesByAddressResponse;
 
 export type GetHistoricalTokenPricesParams =
-  WithNetworkInput<GetHistoricalTokenPricesBody>;
+  WithAlchemyNetwork<GetHistoricalTokenPricesBody>;
 export type GetHistoricalTokenPricesResult = GetHistoricalTokenPricesResponse;
 
 // ─── NFT (REST, network-scoped) ──────────────────────────────────────────────
@@ -184,7 +184,7 @@ export type GetNftMetadataResult = GetNftMetadataResponse;
 
 export type GetNftMetadataBatchParams = GetNftMetadataBatchBody & {
   /** Overrides the client-level network for this request. */
-  network?: NetworkInput;
+  network?: AlchemyNetwork;
 };
 export type GetNftMetadataBatchResult = GetNftMetadataBatchResponse;
 
@@ -193,7 +193,7 @@ export type GetContractMetadataResult = GetContractMetadataResponse;
 
 export type GetContractMetadataBatchParams = GetContractMetadataBatchBody & {
   /** Overrides the client-level network for this request. */
-  network?: NetworkInput;
+  network?: AlchemyNetwork;
 };
 export type GetContractMetadataBatchResult = GetContractMetadataBatchResponse;
 
@@ -228,7 +228,7 @@ export type SearchContractMetadataResult = SearchContractMetadataResponse;
 
 export type GetSpamContractsParams = {
   /** Overrides the client-level network for this request. */
-  network?: NetworkInput;
+  network?: AlchemyNetwork;
 };
 export type GetSpamContractsResult = GetSpamContractsResponse;
 
@@ -258,7 +258,7 @@ export type GetTokenBalancesParams = {
   /** Paging options (pageKey/maxCount; only valid with the "erc20" spec). */
   options?: AlchemyGetTokenBalancesOptionsParam;
   /** Overrides the client-level network for this request. */
-  network?: NetworkInput;
+  network?: AlchemyNetwork;
 };
 export type GetTokenBalancesResult = AlchemyGetTokenBalancesResult;
 
@@ -266,13 +266,13 @@ export type GetTokenMetadataParams = {
   /** The token contract address. */
   contractAddress: AlchemyGetTokenMetadataParams;
   /** Overrides the client-level network for this request. */
-  network?: NetworkInput;
+  network?: AlchemyNetwork;
 };
 export type GetTokenMetadataResult = AlchemyGetTokenMetadataResult;
 
 export type GetTokenAllowanceParams = AlchemyGetTokenAllowanceParams & {
   /** Overrides the client-level network for this request. */
-  network?: NetworkInput;
+  network?: AlchemyNetwork;
 };
 export type GetTokenAllowanceResult = AlchemyGetTokenAllowanceResult;
 
@@ -281,7 +281,7 @@ export type GetTokenAllowanceResult = AlchemyGetTokenAllowanceResult;
 /** Generated RPC params plus the SDK's network override. */
 export type GetAssetTransfersParams = AlchemyGetAssetTransfersParams & {
   /** Overrides the client-level network for this request. */
-  network?: NetworkInput;
+  network?: AlchemyNetwork;
 };
 
 /**

@@ -1,20 +1,25 @@
 import {
+  AlchemyError,
+  AlchemyJsonRpcClient,
   AlchemyRestClient,
-  alchemyTransport,
   resolveNetwork,
-  type AlchemyTransport,
-  type AlchemyTransportConfig,
-  type NetworkInput,
+  type AlchemyNetwork,
+  type AlchemyRestClientParams,
   type ResolvedNetwork,
   type RestRequestSchema,
 } from "@alchemy/common";
-import { BaseError } from "@alchemy/common";
-import type { Chain, Client, EIP1193RequestFn } from "viem";
 import { getRpcUrl } from "./endpoints.js";
 import type { DataRpcSchema } from "../schema/rpc.js";
 
-/** The minimal client shape data actions operate on. */
-export type DataClient = Client<AlchemyTransport, Chain | undefined>;
+/**
+ * The minimal client shape data actions operate on: validated connection
+ * config plus an optional pre-resolved default network. A plain object — no
+ * chain-library client underneath.
+ */
+export type DataClient = {
+  config: AlchemyRestClientParams;
+  network?: ResolvedNetwork;
+};
 
 /** Per-request options accepted by data actions. */
 export type RequestOptions = {
@@ -23,54 +28,35 @@ export type RequestOptions = {
 };
 
 /**
- * Reads the AlchemyTransportConfig back off an instantiated client transport.
- * The transport attaches its creation config to the transport value precisely
- * to support deriving new instances (tracing relies on the same mechanism).
- *
- * @param {DataClient} client The client to read from
- * @returns {AlchemyTransportConfig} The transport's creation config
- */
-export function getTransportConfig(client: DataClient): AlchemyTransportConfig {
-  return client.transport.config as AlchemyTransportConfig;
-}
-
-/**
  * Resolves the network for a request: explicit per-request input wins,
- * otherwise the client's chain (set at client creation). The
- * `custom.alchemyNetwork` field carries slug-configured defaults (e.g. Solana
- * or escape-hatch networks that have no registry chain ID).
+ * otherwise the client's default network (set at client creation).
  *
- * @param {DataClient} client The client whose chain provides the default
- * @param {NetworkInput} [override] Per-request network override
+ * @param {DataClient} client The client whose default network applies
+ * @param {AlchemyNetwork} [override] Per-request network override (slug or CAIP-2)
  * @returns {ResolvedNetwork} The resolved network
  */
 export function resolveRequestNetwork(
   client: DataClient,
-  override?: NetworkInput,
+  override?: AlchemyNetwork,
 ): ResolvedNetwork {
   if (override != null) {
     return resolveNetwork(override);
   }
-  const chain = client.chain;
-  const customSlug = (chain?.custom as { alchemyNetwork?: string } | undefined)
-    ?.alchemyNetwork;
-  if (customSlug) {
-    return resolveNetwork(customSlug);
+  if (client.network) {
+    return client.network;
   }
-  if (chain) {
-    return resolveNetwork(chain);
-  }
-  throw new BaseError(
-    "No network available: pass `network` on the request or configure the client with a network/chain.",
+  throw new AlchemyError(
+    "No network available: pass `network` on the request or configure the client with a network.",
   );
 }
 
 /**
- * Builds a typed REST client for a service base URL, reusing the auth
- * (apiKey/JWT) and headers from the viem client's Alchemy transport so REST
- * and JSON-RPC requests share one connection config.
+ * Builds a typed REST client for a service base URL, reusing the client's
+ * auth and retry/timeout configuration so REST and JSON-RPC requests share
+ * one connection config. The client-level `url` override applies to the
+ * JSON-RPC channel only; REST URLs are service-scoped by construction.
  *
- * @param {DataClient} client The client whose transport supplies auth
+ * @param {DataClient} client The client whose config supplies auth
  * @param {string} url The service base URL
  * @returns {AlchemyRestClient<Schema>} A typed REST client
  */
@@ -78,31 +64,28 @@ export function getRestClient<Schema extends RestRequestSchema>(
   client: DataClient,
   url: string,
 ): AlchemyRestClient<Schema> {
-  const { apiKey, jwt } = getTransportConfig(client);
-  return new AlchemyRestClient<Schema>({ apiKey, jwt, url });
+  const { url: _rpcUrlOverride, ...config } = client.config;
+  return new AlchemyRestClient<Schema>({ ...config, url });
 }
 
 /**
- * Resolves the JSON-RPC request function for an action: the client's own
- * transport when no override is given, otherwise a transport instance derived
- * from the client's transport config and pointed at the override network's
- * RPC URL (the same mechanism the transport's tracing support uses).
+ * Builds a typed JSON-RPC client for the resolved network: the client's
+ * configured `url` (proxy escape hatch) wins, otherwise the network-scoped
+ * Alchemy RPC URL. Auth and retry/timeout config come from the client.
  *
- * @param {DataClient} client The client whose transport (and config) is used
- * @param {NetworkInput} [network] Optional per-request network override
- * @returns {EIP1193RequestFn<DataRpcSchema>} A typed JSON-RPC request function
+ * @param {DataClient} client The client whose config supplies auth
+ * @param {AlchemyNetwork} [network] Optional per-request network override
+ * @returns {AlchemyJsonRpcClient<DataRpcSchema>} A typed JSON-RPC client
  */
-export function getRpcRequest(
+export function getRpcClient(
   client: DataClient,
-  network?: NetworkInput,
-): EIP1193RequestFn<DataRpcSchema> {
-  if (!network) {
-    return client.request as EIP1193RequestFn<DataRpcSchema>;
-  }
-  const { slug } = resolveRequestNetwork(client, network);
-  const derived = alchemyTransport({
-    ...getTransportConfig(client),
-    url: getRpcUrl(slug),
-  })({ retryCount: 0 });
-  return derived.request as EIP1193RequestFn<DataRpcSchema>;
+  network?: AlchemyNetwork,
+): AlchemyJsonRpcClient<DataRpcSchema> {
+  const { url, ...config } = client.config;
+  const resolvedUrl =
+    url ?? getRpcUrl(resolveRequestNetwork(client, network).slug);
+  return new AlchemyJsonRpcClient<DataRpcSchema>({
+    ...config,
+    url: resolvedUrl,
+  });
 }

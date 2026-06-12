@@ -1,9 +1,5 @@
-import { alchemyTransport } from "@alchemy/common";
-import { createClient } from "viem";
-import { mainnet, base } from "viem/chains";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createDataClient } from "./client.js";
-import { dataActions } from "./decorator.js";
 
 const fetchMock = vi.fn();
 
@@ -34,7 +30,10 @@ describe("createDataClient", () => {
     await data.portfolio.getTokensByAddress({
       addresses: [
         // all three network input formats in one request
-        { address: "0xabc", networks: [mainnet, "base-mainnet", "eip155:10"] },
+        {
+          address: "0xabc",
+          networks: ["eth-mainnet", "base-mainnet", "eip155:10"],
+        },
         { address: "0xdef", networks: ["solana-mainnet"] },
       ],
     });
@@ -70,7 +69,7 @@ describe("createDataClient", () => {
       "https://eth-mainnet.g.alchemy.com/nft/v3/getNFTsForOwner?owner=0xabc",
     );
 
-    await data.nft.getNftsForOwner({ owner: "0xabc", network: base });
+    await data.nft.getNftsForOwner({ owner: "0xabc", network: "eip155:8453" });
     expect(String(fetchMock.mock.calls[1]![0])).toBe(
       "https://base-mainnet.g.alchemy.com/nft/v3/getNFTsForOwner?owner=0xabc",
     );
@@ -105,22 +104,50 @@ describe("createDataClient", () => {
       "https://arb-mainnet.g.alchemy.com/v2",
     );
   });
-});
 
-describe("dataActions decorator", () => {
-  it("behaves identically on a vanilla viem client with an Alchemy transport", async () => {
+  it("sends a well-formed JSON-RPC envelope with a request id header", async () => {
+    fetchMock.mockImplementation(async () =>
+      jsonResponse({ jsonrpc: "2.0", id: 1, result: { transfers: [] } }),
+    );
+    const data = createDataClient({
+      apiKey: "test-key",
+      network: "eth-mainnet",
+    });
+    await data.transfers.getAssetTransfers({ category: ["erc20"] });
+
+    const rpcBody = JSON.parse(fetchMock.mock.calls[0]![1].body);
+    expect(rpcBody.jsonrpc).toBe("2.0");
+    expect(typeof rpcBody.id).toBe("number");
+    const headers = fetchMock.mock.calls[0]![1].headers as Headers;
+    expect(headers.get("X-Alchemy-Client-Request-Id")).toMatch(
+      /^[0-9a-f-]{36}$/,
+    );
+  });
+
+  it("constructs without a network: portfolio works, single-network methods error clearly", async () => {
+    fetchMock.mockImplementation(async () =>
+      jsonResponse({ data: { tokens: [] } }),
+    );
+    const data = createDataClient({ apiKey: "test-key" });
+
+    await data.portfolio.getTokensByAddress({
+      addresses: [{ address: "0xabc", networks: ["eth-mainnet"] }],
+    });
+    expect(String(fetchMock.mock.calls[0]![0])).toBe(
+      "https://api.g.alchemy.com/data/v1/assets/tokens/by-address",
+    );
+
+    await expect(data.nft.getNftsForOwner({ owner: "0xabc" })).rejects.toThrow(
+      /No network available/,
+    );
+
     fetchMock.mockImplementation(async () =>
       jsonResponse({ ownedNfts: [], totalCount: 0 }),
     );
-
-    const client = createClient({
-      chain: mainnet,
-      transport: alchemyTransport({ apiKey: "test-key" }),
-    }).extend(dataActions);
-
-    await client.nft.getNftsForOwner({ owner: "0xabc" });
-    expect(String(fetchMock.mock.calls[0]![0])).toBe(
-      "https://eth-mainnet.g.alchemy.com/nft/v3/getNFTsForOwner?owner=0xabc",
-    );
+    const result = await data.nft.getNftsForOwner({
+      owner: "0xabc",
+      network: "eth-mainnet",
+    });
+    expect(result.totalCount).toBe(0);
   });
 });

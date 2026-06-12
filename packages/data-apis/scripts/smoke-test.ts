@@ -5,18 +5,17 @@
  *   ALCHEMY_API_KEY=<your-key> pnpm --filter @alchemy/data-apis smoke-test
  *
  * What it covers:
- *   - createDataClient with slug, viem Chain, and CAIP-2 network inputs
+ *   - createDataClient with slug and CAIP-2 network inputs
  *   - portfolio.getTokensByAddress (REST, multi-network, all three input formats)
  *   - nft.getNftsForOwner (REST, per-network, per-request override)
  *   - transfers.getAssetTransfers (JSON-RPC, per-request network override)
  */
 
 import { mainnet } from "viem/chains";
-import { BaseError } from "@alchemy/common";
-import { createDataClient } from "../src/client.js";
-import { dataActions } from "../src/decorator.js";
-import { alchemyTransport } from "@alchemy/common";
+import { AlchemyError, alchemyTransport } from "@alchemy/common";
 import { createClient } from "viem";
+import { createDataClient } from "../src/client.js";
+import { dataActions } from "../src/viem/dataActions.js";
 
 const API_KEY = process.env.ALCHEMY_API_KEY;
 if (!API_KEY) {
@@ -44,7 +43,7 @@ async function test(name: string, fn: () => Promise<void>) {
 }
 
 function assert(condition: boolean, message: string) {
-  if (!condition) throw new BaseError(`Assertion failed: ${message}`);
+  if (!condition) throw new AlchemyError(`Assertion failed: ${message}`);
 }
 
 // ─── Clients ──────────────────────────────────────────────────────────────────
@@ -54,16 +53,17 @@ const clientBySlug = createDataClient({
   apiKey: API_KEY,
   network: "eth-mainnet",
 });
+// CAIP-2 derived from a viem chain — the core's bridge for chain objects
 const clientByChain = createDataClient({
   apiKey: API_KEY,
-  network: mainnet,
+  network: `eip155:${mainnet.id}`,
 });
 const clientByCaip2 = createDataClient({
   apiKey: API_KEY,
   network: "eip155:1",
 });
 
-// Decorator path: bring-your-own viem client
+// Parked viem adapter: bring-your-own viem client (post-v1 /viem surface)
 const rawViemClient = createClient({
   chain: mainnet,
   transport: alchemyTransport({ apiKey: API_KEY }),
@@ -86,13 +86,13 @@ await test("single network (slug)", async () => {
   assert((result.data.tokens ?? []).length > 0, "expected at least one token");
 });
 
-await test("multi-network: viem Chain + slug + CAIP-2 in one call", async () => {
+await test("multi-network: slugs + CAIP-2 in one call", async () => {
   const result = await clientBySlug.portfolio.getTokensByAddress({
     addresses: [
       {
         address: VITALIK,
         networks: [
-          mainnet, // viem Chain
+          "eth-mainnet", // Alchemy slug
           "base-mainnet", // Alchemy slug
           "eip155:137", // CAIP-2 (Polygon)
         ],
@@ -226,7 +226,9 @@ await test("per-request network override (CAIP-2)", async () => {
   assert(Array.isArray(result.transfers), "transfers should be an array");
 });
 
-console.log("\n\x1b[1mdecorator path (raw viem client + dataActions)\x1b[0m");
+console.log(
+  "\n\x1b[1mparked viem adapter (raw viem client + dataActions)\x1b[0m",
+);
 
 await test("client.extend(dataActions) works identically", async () => {
   const result = await rawViemClient.transfers.getAssetTransfers({
@@ -296,7 +298,7 @@ await test("getTokenPricesByAddress (network in entry)", async () => {
     addresses: [
       {
         address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
-        network: mainnet,
+        network: "eth-mainnet",
       },
     ],
   });

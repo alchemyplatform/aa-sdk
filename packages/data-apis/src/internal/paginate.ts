@@ -1,4 +1,4 @@
-import { BaseError } from "@alchemy/common";
+import { AlchemyError } from "@alchemy/common";
 
 /** Options accepted by the `*Pages` async-iterator actions. */
 export type PaginateOptions = {
@@ -45,7 +45,7 @@ export async function* paginate<TPage>({
     const next = nextCursor(page);
     if (next == null || next === "") return;
     if (seen.has(next)) {
-      throw new BaseError(
+      throw new AlchemyError(
         `Pagination cursor "${next}" was repeated by the server; stopping to avoid an infinite loop.`,
       );
     }

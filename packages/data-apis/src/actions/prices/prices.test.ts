@@ -1,5 +1,4 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { mainnet } from "viem/chains";
 import { createDataClient } from "../../client.js";
 
 const fetchMock = vi.fn();
@@ -41,7 +40,7 @@ describe("prices namespace", () => {
   it("by-address resolves each entry's network to a slug in the body", async () => {
     await makeClient().prices.getTokenPricesByAddress({
       addresses: [
-        { address: "0xa", network: mainnet },
+        { address: "0xa", network: "eth-mainnet" },
         { address: "0xb", network: "eip155:8453" },
         { address: "0xc", network: "polygon-mainnet" },
       ],

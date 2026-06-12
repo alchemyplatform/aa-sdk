@@ -1,8 +1,4 @@
-import {
-  getRpcRequest,
-  type DataClient,
-} from "../../internal/clientHelpers.js";
-import { wrapRpcError } from "../../internal/errors.js";
+import { getRpcClient, type DataClient } from "../../internal/clientHelpers.js";
 import type {
   GetTokenMetadataParams,
   GetTokenMetadataResult,
@@ -23,9 +19,9 @@ export async function getTokenMetadata(
   params: GetTokenMetadataParams,
 ): Promise<GetTokenMetadataResult> {
   const { network, contractAddress } = params;
-  const request = getRpcRequest(client, network);
-  return request({
+  const rpc = getRpcClient(client, network);
+  return rpc.request({
     method: "alchemy_getTokenMetadata",
     params: [contractAddress],
-  }).catch(wrapRpcError);
+  });
 }
