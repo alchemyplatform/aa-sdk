@@ -43,7 +43,7 @@
     "build:esm": "tsc --project tsconfig.build.json --outDir ./dist/esm",
     "build:types": "tsc --project tsconfig.build.json --declarationDir ./dist/types --emitDeclarationOnly --declaration --declarationMap",
     "clean": "rm -rf ./dist",
-    "generate": "tsx ../api-codegen/src/cli.ts --target data-apis",
+    "generate": "tsx ../../api-codegen/src/cli.ts --target data-apis",
     "test": "vitest",
     "test:run": "vitest run",
     "smoke-test": "tsx scripts/smoke-test.ts"

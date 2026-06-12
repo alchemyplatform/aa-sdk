@@ -17,4 +17,4 @@ pnpm-lock.yaml
 
 # codegen: committed spec snapshots (generated .ts files instead carry a
 # file-level eslint-disable banner so lint-staged can pass them explicitly)
-packages/api-codegen/specs/**
+api-codegen/specs/**

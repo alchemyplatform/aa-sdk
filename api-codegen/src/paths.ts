@@ -8,7 +8,7 @@ export const PACKAGE_DIR = resolve(
 );
 
 /** Absolute path of the aa-sdk repo root. */
-export const REPO_ROOT = resolve(PACKAGE_DIR, "../..");
+export const REPO_ROOT = resolve(PACKAGE_DIR, "..");
 
 /** Absolute path of the committed spec snapshots directory. */
 export const SPECS_DIR = resolve(PACKAGE_DIR, "specs");

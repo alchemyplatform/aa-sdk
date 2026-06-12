@@ -36,7 +36,7 @@ jobs:
         working-directory: .docs-checkout
 
       - name: Snapshot specs from docs main
-        run: pnpm tsx packages/api-codegen/src/cli.ts snapshot --docs "$GITHUB_WORKSPACE/.docs-checkout"
+        run: pnpm tsx api-codegen/src/cli.ts snapshot --docs "$GITHUB_WORKSPACE/.docs-checkout"
 
       - name: Regenerate SDK internals
         run: |
@@ -55,7 +55,7 @@ jobs:
             Automated re-snapshot of the bundled OpenAPI/OpenRPC specs from
             `alchemyplatform/docs` main, plus regenerated SDK internals.
 
-            Review the `packages/api-codegen/specs/` diff for what moved
+            Review the `api-codegen/specs/` diff for what moved
             upstream and the `src/generated/` diff for the type impact.
             Public types in `packages/data-apis/src/types.ts` are aliases —
             check whether any public-surface change warrants a semver note.
