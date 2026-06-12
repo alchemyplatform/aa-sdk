@@ -1,4 +1,5 @@
-import type { Prettify } from "viem";
+/** Flattens an intersection for readable hover types (viem-equivalent, local to stay viem-free). */
+type Prettify<T> = { [K in keyof T]: T[K] } & {};
 
 /** Values the query serializer accepts (null/undefined entries are skipped). */
 export type QueryValue = string | number | boolean | null | undefined;

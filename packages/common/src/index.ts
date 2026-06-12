@@ -2,10 +2,16 @@
 export type * from "./transport/alchemy.js";
 export { alchemyTransport, isAlchemyTransport } from "./transport/alchemy.js";
 
-// http -- exported for @alchemy/data-apis (REST channel); hardening tracked in the data SDK plan
+// http — shared REST + JSON-RPC runtime (viem-free); used by @alchemy/data-apis
 export type * from "./rest/restClient.js";
 export type * from "./rest/types.js";
 export { AlchemyRestClient } from "./rest/restClient.js";
+export type {
+  AlchemyJsonRpcClientParams,
+  JsonRpcRequestFn,
+  JsonRpcSchema,
+} from "./rest/jsonRpcClient.js";
+export { AlchemyJsonRpcClient } from "./rest/jsonRpcClient.js";
 
 // chain registry utilities
 export {
@@ -26,6 +32,7 @@ export { resolveNetwork } from "./networks/networkRegistry.js";
 // utils
 export type * from "./utils/types.js";
 export { composeSignals, sleep } from "./utils/signals.js";
+export { redactUrlCredentials } from "./utils/redact.js";
 export { assertNever } from "./utils/assertNever.js";
 export { raise } from "./utils/raise.js";
 export { bigIntMultiply, bigIntMax } from "./utils/bigint.js";
@@ -41,6 +48,7 @@ export {
 
 // errors
 export { BaseError } from "./errors/BaseError.js";
+export { AlchemyError } from "./errors/AlchemyError.js";
 export type { AlchemyApiErrorDetails } from "./errors/AlchemyApiError.js";
 export { AlchemyApiError } from "./errors/AlchemyApiError.js";
 export { ChainNotFoundError } from "./errors/ChainNotFoundError.js";

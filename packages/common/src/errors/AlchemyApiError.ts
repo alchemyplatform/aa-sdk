@@ -1,4 +1,4 @@
-import { BaseError } from "./BaseError.js";
+import { AlchemyError } from "./AlchemyError.js";
 
 /** Normalized failure metadata shared across REST and JSON-RPC channels. */
 export type AlchemyApiErrorDetails = {
@@ -26,7 +26,7 @@ export type AlchemyApiErrorDetails = {
  * }
  * ```
  */
-export class AlchemyApiError extends BaseError {
+export class AlchemyApiError extends AlchemyError {
   override name = "AlchemyApiError";
 
   /** HTTP status code, when the failure was an HTTP response. */
@@ -42,7 +42,7 @@ export class AlchemyApiError extends BaseError {
    * Creates a normalized API error.
    *
    * @param {string} shortMessage The headline error message
-   * @param {AlchemyApiErrorDetails & { cause?: Error; details?: string; metaMessages?: string[] }} [args] Failure metadata plus BaseError options
+   * @param {AlchemyApiErrorDetails & { cause?: Error; details?: string; metaMessages?: string[] }} [args] Failure metadata plus AlchemyError options
    */
   constructor(
     shortMessage: string,
@@ -57,7 +57,7 @@ export class AlchemyApiError extends BaseError {
       ...(baseArgs.metaMessages ?? []),
       ...(requestId ? [`Request ID: ${requestId}`] : []),
     ];
-    // BaseError takes cause XOR details; forward whichever was provided.
+    // AlchemyError takes cause XOR details; forward whichever was provided.
     super(
       shortMessage,
       baseArgs.cause

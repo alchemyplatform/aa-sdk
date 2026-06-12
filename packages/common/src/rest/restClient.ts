@@ -1,14 +1,13 @@
-import { FetchError } from "../errors/FetchError.js";
 import { ServerError } from "../errors/ServerError.js";
 import { withAlchemyHeaders } from "../utils/headers.js";
-import { composeSignals, sleep } from "../utils/signals.js";
+import { parseErrorCode, sendWithRetry } from "./httpEngine.js";
 import type { QueryParams, RestRequestFn, RestRequestSchema } from "./types.js";
 
 const ALCHEMY_API_URL = "https://api.g.alchemy.com";
 
-const DEFAULT_RETRY_COUNT = 3;
-const DEFAULT_RETRY_DELAY_MS = 150;
-const DEFAULT_TIMEOUT_MS = 10_000;
+export const DEFAULT_RETRY_COUNT = 3;
+export const DEFAULT_RETRY_DELAY_MS = 150;
+export const DEFAULT_TIMEOUT_MS = 10_000;
 
 /**
  * Parameters for creating an AlchemyRestClient instance.
@@ -57,41 +56,6 @@ function serializeQuery(query: QueryParams | undefined): string {
 }
 
 /**
- * Parses a Retry-After response header into milliseconds (integer seconds or
- * HTTP-date forms).
- *
- * @param {Response} response The HTTP response
- * @returns {number | undefined} Milliseconds to wait, or undefined when absent/unparseable
- */
-function parseRetryAfter(response: Response): number | undefined {
-  const header = response.headers.get("Retry-After");
-  if (!header) return undefined;
-  const seconds = Number(header);
-  if (Number.isFinite(seconds)) return Math.max(0, seconds * 1000);
-  const date = Date.parse(header);
-  if (!Number.isNaN(date)) return Math.max(0, date - Date.now());
-  return undefined;
-}
-
-/**
- * Best-effort extraction of an error code from a JSON error body.
- *
- * @param {string} bodyText The raw response body
- * @returns {number | string | undefined} The error code, when present
- */
-function parseErrorCode(bodyText: string): number | string | undefined {
-  try {
-    const parsed = JSON.parse(bodyText);
-    const code = parsed?.error?.code ?? parsed?.code;
-    return typeof code === "number" || typeof code === "string"
-      ? code
-      : undefined;
-  } catch {
-    return undefined;
-  }
-}
-
-/**
  * A client for making requests to Alchemy's non-JSON-RPC endpoints, with
  * typed routes/bodies/queries (via a RestRequestSchema), bounded retries with
  * exponential backoff (429/5xx/network only, honoring Retry-After),
@@ -137,10 +101,6 @@ export class AlchemyRestClient<Schema extends RestRequestSchema> {
    */
   public request: RestRequestFn<Schema> = async (params) => {
     const requestId = crypto.randomUUID();
-    const retryCount = params.retryCount ?? this.retryCount;
-    const retryDelay = params.retryDelay ?? this.retryDelay;
-    const timeout = params.timeout ?? this.timeout;
-
     const headers = new Headers(this.headers);
     headers.set("X-Alchemy-Client-Request-Id", requestId);
 
@@ -148,55 +108,29 @@ export class AlchemyRestClient<Schema extends RestRequestSchema> {
       params.query as QueryParams | undefined,
     )}`;
 
-    for (let attempt = 0; ; attempt++) {
-      // Per-attempt timeout; the caller's signal spans all attempts.
-      const signal = composeSignals(
-        params.signal,
-        AbortSignal.timeout(timeout),
-      );
+    const { response, retryAfter } = await sendWithRetry({
+      url,
+      method: params.method,
+      headers,
+      body: params.body ? JSON.stringify(params.body) : undefined,
+      errorLabel: params.route,
+      requestId,
+      signal: params.signal,
+      retryCount: params.retryCount ?? this.retryCount,
+      retryDelay: params.retryDelay ?? this.retryDelay,
+      timeout: params.timeout ?? this.timeout,
+    });
 
-      let response: Response;
-      try {
-        response = await fetch(url, {
-          method: params.method,
-          body: params.body ? JSON.stringify(params.body) : undefined,
-          headers,
-          signal,
-        });
-      } catch (error) {
-        // A caller-initiated abort propagates as-is, immediately.
-        if (params.signal?.aborted) throw params.signal.reason;
-        // Timeout or network failure: retryable.
-        if (attempt < retryCount) {
-          await sleep((1 << attempt) * retryDelay, params.signal);
-          continue;
-        }
-        throw new FetchError(
-          params.route,
-          params.method,
-          error instanceof Error ? error : undefined,
-          { requestId },
-        );
-      }
-
-      if (response.ok) {
-        return response.json();
-      }
-
-      const retryAfter = parseRetryAfter(response);
-      const retryable = response.status === 429 || response.status >= 500;
-      if (retryable && attempt < retryCount) {
-        await sleep(retryAfter ?? (1 << attempt) * retryDelay, params.signal);
-        continue;
-      }
-
-      const bodyText = await response.text();
-      throw new ServerError(
-        bodyText,
-        response.status,
-        new Error(response.statusText),
-        { requestId, retryAfter, code: parseErrorCode(bodyText) },
-      );
+    if (response.ok) {
+      return response.json();
     }
+
+    const bodyText = await response.text();
+    throw new ServerError(
+      bodyText,
+      response.status,
+      new Error(response.statusText),
+      { requestId, retryAfter, code: parseErrorCode(bodyText) },
+    );
   };
 }

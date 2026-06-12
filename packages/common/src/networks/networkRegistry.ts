@@ -1,5 +1,5 @@
 import type { Chain } from "viem";
-import { BaseError } from "../errors/BaseError.js";
+import { AlchemyError } from "../errors/AlchemyError.js";
 import { ALCHEMY_RPC_MAPPING } from "../transport/chainRegistry.js";
 
 /**
@@ -94,7 +94,7 @@ export function resolveNetwork(input: NetworkInput): ResolvedNetwork {
   if (typeof input === "object") {
     const slug = slugByChainId.get(input.id);
     if (!slug) {
-      throw new BaseError(
+      throw new AlchemyError(
         `Chain ${input.id} (${input.name}) is not in the Alchemy network registry. ` +
           `Pass an Alchemy network slug (e.g. "eth-mainnet") instead.`,
       );
@@ -106,7 +106,7 @@ export function resolveNetwork(input: NetworkInput): ResolvedNetwork {
     const chainId = Number(input.slice("eip155:".length));
     const slug = slugByChainId.get(chainId);
     if (!Number.isInteger(chainId) || !slug) {
-      throw new BaseError(
+      throw new AlchemyError(
         `CAIP-2 identifier "${input}" is not in the Alchemy network registry.`,
       );
     }
@@ -116,7 +116,7 @@ export function resolveNetwork(input: NetworkInput): ResolvedNetwork {
   if (input.startsWith("solana:")) {
     const slug = SOLANA_SLUG_BY_CAIP2[input];
     if (!slug) {
-      throw new BaseError(
+      throw new AlchemyError(
         `CAIP-2 identifier "${input}" is not a known Solana network.`,
       );
     }
@@ -124,7 +124,7 @@ export function resolveNetwork(input: NetworkInput): ResolvedNetwork {
   }
 
   if (!SLUG_PATTERN.test(input)) {
-    throw new BaseError(
+    throw new AlchemyError(
       `"${input}" is not a valid Alchemy network slug (expected lowercase letters, digits, and hyphens).`,
     );
   }
