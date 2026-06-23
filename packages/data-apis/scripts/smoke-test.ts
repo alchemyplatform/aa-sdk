@@ -12,9 +12,9 @@
  */
 
 import { mainnet } from "viem/chains";
-import { AlchemyError, alchemyTransport } from "@alchemy/common";
+import { alchemyTransport } from "@alchemy/common";
 import { createClient } from "viem";
-import { createDataClient } from "../src/client.js";
+import { AlchemyError, createDataClient } from "../src/index.js";
 import { dataActions } from "../src/viem/dataActions.js";
 
 const API_KEY = process.env.ALCHEMY_API_KEY;
@@ -127,7 +127,7 @@ await test("uses client-level network (slug)", async () => {
   );
 });
 
-await test("uses client-level network (viem Chain)", async () => {
+await test("uses client-level network (CAIP-2 from viem chain)", async () => {
   const result = await clientByChain.nft.getNftsForOwner({ owner: VITALIK });
   assert(
     typeof result.totalCount === "number",
@@ -197,7 +197,7 @@ await test("uses client-level network (slug)", async () => {
   assert((result.transfers ?? []).length > 0, "expected at least one transfer");
 });
 
-await test("uses client-level network (viem Chain)", async () => {
+await test("uses client-level network (CAIP-2 from viem chain)", async () => {
   const result = await clientByChain.transfers.getAssetTransfers({
     fromAddress: VITALIK,
     category: ["external"],

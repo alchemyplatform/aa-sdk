@@ -19,14 +19,17 @@ import type {
  *
  * @example
  * ```ts
- * import { mainnet, base } from "viem/chains";
- *
  * const tokens = await getTokensByAddress(client, {
- *   addresses: [{ address: "0x...", networks: [mainnet, base, "solana-mainnet"] }],
+ *   addresses: [
+ *     {
+ *       address: "0x...",
+ *       networks: ["eth-mainnet", "base-mainnet", "solana-mainnet"],
+ *     },
+ *   ],
  * });
  * ```
  *
- * @param {DataClient} client A client configured with an Alchemy transport
+ * @param {DataClient} client A Data API client
  * @param {GetTokensByAddressParams} params Addresses paired with networks, plus options
  * @param {RequestOptions} [options] Per-request options (abort signal)
  * @returns {Promise<GetTokensByAddressResult>} Token balances, metadata, and prices

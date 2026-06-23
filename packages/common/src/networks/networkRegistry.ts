@@ -1,4 +1,3 @@
-import type { Chain } from "viem";
 import { AlchemyError } from "../errors/AlchemyError.js";
 import { ALCHEMY_RPC_MAPPING } from "../transport/chainRegistry.js";
 
@@ -29,13 +28,6 @@ export type KnownAlchemyNetwork =
  * SDK release.
  */
 export type AlchemyNetwork = KnownAlchemyNetwork | (string & {});
-
-/**
- * Any accepted network input: a viem Chain, an Alchemy network slug
- * (e.g. "eth-mainnet"), or a CAIP-2 identifier (e.g. "eip155:1",
- * "solana:mainnet").
- */
-export type NetworkInput = Chain | AlchemyNetwork;
 
 /**
  * A resolved network: the Alchemy slug used for URL construction and REST
@@ -74,43 +66,51 @@ for (const [chainId, url] of Object.entries(ALCHEMY_RPC_MAPPING)) {
 }
 
 /**
- * Resolves any accepted network input — viem Chain, Alchemy network slug, or
- * CAIP-2 identifier — to the Alchemy network slug (and chain ID when one
- * exists). All three forms resolve against the same daikon-generated registry.
+ * Resolves a chain ID to the Alchemy network slug.
  *
  * @example
  * ```ts
- * import { mainnet } from "viem/chains";
- * resolveNetwork(mainnet); // { slug: "eth-mainnet", chainId: 1 }
+ * resolveNetworkByChainId(1); // { slug: "eth-mainnet", chainId: 1 }
+ * ```
+ *
+ * @param {number} chainId The EVM chain ID to resolve
+ * @returns {ResolvedNetwork} The resolved slug and optional chain ID
+ */
+export function resolveNetworkByChainId(chainId: number): ResolvedNetwork {
+  const slug = slugByChainId.get(chainId);
+  if (!Number.isInteger(chainId) || !slug) {
+    throw new AlchemyError(
+      `Chain ID ${chainId} is not in the Alchemy network registry.`,
+    );
+  }
+  return { slug, chainId };
+}
+
+/**
+ * Resolves an Alchemy network slug or CAIP-2 identifier to the Alchemy network
+ * slug (and chain ID when one exists). Both forms resolve against the same
+ * daikon-generated registry.
+ *
+ * @example
+ * ```ts
  * resolveNetwork("eth-mainnet"); // { slug: "eth-mainnet", chainId: 1 }
  * resolveNetwork("eip155:1"); // { slug: "eth-mainnet", chainId: 1 }
  * resolveNetwork("solana:mainnet"); // { slug: "solana-mainnet" }
  * ```
  *
- * @param {NetworkInput} input The network to resolve
+ * @param {AlchemyNetwork} input The network to resolve
  * @returns {ResolvedNetwork} The resolved slug and optional chain ID
  */
-export function resolveNetwork(input: NetworkInput): ResolvedNetwork {
-  if (typeof input === "object") {
-    const slug = slugByChainId.get(input.id);
-    if (!slug) {
-      throw new AlchemyError(
-        `Chain ${input.id} (${input.name}) is not in the Alchemy network registry. ` +
-          `Pass an Alchemy network slug (e.g. "eth-mainnet") instead.`,
-      );
-    }
-    return { slug, chainId: input.id };
-  }
-
+export function resolveNetwork(input: AlchemyNetwork): ResolvedNetwork {
   if (input.startsWith("eip155:")) {
     const chainId = Number(input.slice("eip155:".length));
-    const slug = slugByChainId.get(chainId);
-    if (!Number.isInteger(chainId) || !slug) {
+    try {
+      return resolveNetworkByChainId(chainId);
+    } catch {
       throw new AlchemyError(
         `CAIP-2 identifier "${input}" is not in the Alchemy network registry.`,
       );
     }
-    return { slug, chainId };
   }
 
   if (input.startsWith("solana:")) {

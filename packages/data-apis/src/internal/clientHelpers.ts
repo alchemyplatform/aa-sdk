@@ -11,13 +11,21 @@ import {
 import { getRpcUrl } from "./endpoints.js";
 import type { DataRpcSchema } from "../schema/rpc.js";
 
+export type DataClientConfig = Omit<AlchemyRestClientParams, "url"> & {
+  /**
+   * JSON-RPC endpoint or proxy URL for Token and Transfers methods. REST Data
+   * API methods use service-scoped Alchemy URLs derived per request.
+   */
+  url?: string;
+};
+
 /**
  * The minimal client shape data actions operate on: validated connection
  * config plus an optional pre-resolved default network. A plain object — no
  * chain-library client underneath.
  */
 export type DataClient = {
-  config: AlchemyRestClientParams;
+  config: DataClientConfig;
   network?: ResolvedNetwork;
 };
 
@@ -52,9 +60,9 @@ export function resolveRequestNetwork(
 
 /**
  * Builds a typed REST client for a service base URL, reusing the client's
- * auth and retry/timeout configuration so REST and JSON-RPC requests share
- * one connection config. The client-level `url` override applies to the
- * JSON-RPC channel only; REST URLs are service-scoped by construction.
+ * auth and retry/timeout configuration. The client-level `url` override is
+ * intentionally not used here: Data REST APIs are service-scoped by
+ * construction, while `url` is the JSON-RPC/proxy escape hatch.
  *
  * @param {DataClient} client The client whose config supplies auth
  * @param {string} url The service base URL

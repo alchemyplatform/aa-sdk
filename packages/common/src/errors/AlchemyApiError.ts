@@ -14,9 +14,9 @@ export type AlchemyApiErrorDetails = {
 
 /**
  * The normalized error family for Alchemy API failures. Both the REST channel
- * (AlchemyRestClient → ServerError/FetchError, which extend this class) and
- * SDK JSON-RPC actions surface failures as AlchemyApiError, so consumers can
- * handle status/code/requestId/retryAfter uniformly:
+ * (AlchemyRestClient → AlchemyServerError/AlchemyFetchError, which extend
+ * this class) and SDK JSON-RPC actions surface failures as AlchemyApiError, so
+ * consumers can handle status/code/requestId/retryAfter uniformly:
  *
  * ```ts
  * try { ... } catch (e) {

@@ -1,7 +1,10 @@
 import { expectTypeOf, test } from "vitest";
 import {
+  AlchemyApiError,
+  AlchemyError,
   createDataClient,
   getNftsForOwner,
+  type AlchemyApiErrorDetails,
   type AlchemyDataClient,
   type DataActions,
   type GetAssetTransfersResult,
@@ -22,6 +25,18 @@ test("createDataClient returns a plain container with the namespaced actions", (
     apiKey?: string;
     jwt?: string;
     url?: string;
+  }>();
+});
+
+test("normalized API errors are exported from the data package", () => {
+  expectTypeOf(
+    new AlchemyApiError("request failed"),
+  ).toMatchTypeOf<AlchemyError>();
+  expectTypeOf<AlchemyApiErrorDetails>().toMatchTypeOf<{
+    status?: number;
+    code?: string | number;
+    requestId?: string;
+    retryAfter?: number;
   }>();
 });
 

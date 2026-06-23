@@ -1,5 +1,5 @@
 import { AlchemyApiError } from "../errors/AlchemyApiError.js";
-import { ServerError } from "../errors/ServerError.js";
+import { AlchemyServerError } from "../errors/AlchemyServerError.js";
 import { withAlchemyHeaders } from "../utils/headers.js";
 import { redactUrlCredentials } from "../utils/redact.js";
 import { parseErrorCode, sendWithRetry } from "./httpEngine.js";
@@ -113,7 +113,7 @@ export class AlchemyJsonRpcClient<Schema extends JsonRpcSchema> {
 
     if (!response.ok) {
       const bodyText = await response.text();
-      throw new ServerError(
+      throw new AlchemyServerError(
         redactUrlCredentials(bodyText),
         response.status,
         new Error(response.statusText),

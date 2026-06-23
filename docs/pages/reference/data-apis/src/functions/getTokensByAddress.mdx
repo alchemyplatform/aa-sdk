@@ -20,7 +20,7 @@ function getTokensByAddress(
 }>;
 ```
 
-Defined in: [packages/data-apis/src/actions/portfolio/getTokensByAddress.ts:34](https://github.com/alchemyplatform/aa-sdk/blob/main/packages/data-apis/src/actions/portfolio/getTokensByAddress.ts#L34)
+Defined in: [packages/data-apis/src/actions/portfolio/getTokensByAddress.ts:37](https://github.com/alchemyplatform/aa-sdk/blob/main/packages/data-apis/src/actions/portfolio/getTokensByAddress.ts#L37)
 
 Fetches tokens (with optional metadata and prices) for one or more addresses
 across one or more networks in a single call. This is a multi-network
@@ -30,11 +30,12 @@ so the client's chain is not involved.
 ## Example
 
 ```ts
-import { mainnet, base } from "viem/chains";
-
 const tokens = await getTokensByAddress(client, {
   addresses: [
-    { address: "0x...", networks: [mainnet, base, "solana-mainnet"] },
+    {
+      address: "0x...",
+      networks: ["eth-mainnet", "base-mainnet", "solana-mainnet"],
+    },
   ],
 });
 ```
@@ -61,7 +62,7 @@ const tokens = await getTokensByAddress(client, {
       </td>
 
       <td>
-        A client configured with an Alchemy transport
+        A Data API client
       </td>
     </tr>
 

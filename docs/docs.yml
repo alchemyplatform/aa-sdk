@@ -605,6 +605,8 @@ navigation:
                 contents:
                   - page: AlchemyDataClient
                     path: wallets/pages/reference/data-apis/src/type-aliases/AlchemyDataClient.mdx
+                  - page: AlchemyDataClientConfig
+                    path: wallets/pages/reference/data-apis/src/type-aliases/AlchemyDataClientConfig.mdx
                   - page: AlchemyDataClientOptions
                     path: wallets/pages/reference/data-apis/src/type-aliases/AlchemyDataClientOptions.mdx
                   - page: AssetTransfer
@@ -777,14 +779,6 @@ navigation:
                 contents:
                   - page: AccountNotFoundError
                     path: wallets/pages/reference/common/src/classes/AccountNotFoundError.mdx
-                  - page: AlchemyApiError
-                    path: wallets/pages/reference/common/src/classes/AlchemyApiError.mdx
-                  - page: AlchemyError
-                    path: wallets/pages/reference/common/src/classes/AlchemyError.mdx
-                  - page: AlchemyJsonRpcClient
-                    path: wallets/pages/reference/common/src/classes/AlchemyJsonRpcClient.mdx
-                  - page: AlchemyRestClient
-                    path: wallets/pages/reference/common/src/classes/AlchemyRestClient.mdx
                   - page: BaseError
                     path: wallets/pages/reference/common/src/classes/BaseError.mdx
                   - page: ChainNotFoundError
@@ -799,6 +793,18 @@ navigation:
                     path: wallets/pages/reference/common/src/classes/MethodUnsupportedError.mdx
                   - page: ServerError
                     path: wallets/pages/reference/common/src/classes/ServerError.mdx
+                  - page: AlchemyApiError
+                    path: wallets/pages/reference/common/src/core/classes/AlchemyApiError.mdx
+                  - page: AlchemyError
+                    path: wallets/pages/reference/common/src/core/classes/AlchemyError.mdx
+                  - page: AlchemyFetchError
+                    path: wallets/pages/reference/common/src/core/classes/AlchemyFetchError.mdx
+                  - page: AlchemyJsonRpcClient
+                    path: wallets/pages/reference/common/src/core/classes/AlchemyJsonRpcClient.mdx
+                  - page: AlchemyRestClient
+                    path: wallets/pages/reference/common/src/core/classes/AlchemyRestClient.mdx
+                  - page: AlchemyServerError
+                    path: wallets/pages/reference/common/src/core/classes/AlchemyServerError.mdx
               - section: Functions
                 contents:
                   - page: alchemyTransport
@@ -809,81 +815,81 @@ navigation:
                     path: wallets/pages/reference/common/src/functions/bigIntMax.mdx
                   - page: bigIntMultiply
                     path: wallets/pages/reference/common/src/functions/bigIntMultiply.mdx
-                  - page: composeSignals
-                    path: wallets/pages/reference/common/src/functions/composeSignals.mdx
-                  - page: getAlchemyRpcUrl
-                    path: wallets/pages/reference/common/src/functions/getAlchemyRpcUrl.mdx
-                  - page: getSupportedChainIds
-                    path: wallets/pages/reference/common/src/functions/getSupportedChainIds.mdx
                   - page: isAlchemyConnectionConfig
                     path: wallets/pages/reference/common/src/functions/isAlchemyConnectionConfig.mdx
                   - page: isAlchemyTransport
                     path: wallets/pages/reference/common/src/functions/isAlchemyTransport.mdx
-                  - page: isChainSupported
-                    path: wallets/pages/reference/common/src/functions/isChainSupported.mdx
                   - page: lowerAddress
                     path: wallets/pages/reference/common/src/functions/lowerAddress.mdx
                   - page: raise
                     path: wallets/pages/reference/common/src/functions/raise.mdx
-                  - page: redactUrlCredentials
-                    path: wallets/pages/reference/common/src/functions/redactUrlCredentials.mdx
-                  - page: resolveNetwork
-                    path: wallets/pages/reference/common/src/functions/resolveNetwork.mdx
-                  - page: sleep
-                    path: wallets/pages/reference/common/src/functions/sleep.mdx
                   - page: validateAlchemyConnectionConfig
                     path: wallets/pages/reference/common/src/functions/validateAlchemyConnectionConfig.mdx
+                  - page: composeSignals
+                    path: wallets/pages/reference/common/src/core/functions/composeSignals.mdx
+                  - page: getAlchemyRpcUrl
+                    path: wallets/pages/reference/common/src/core/functions/getAlchemyRpcUrl.mdx
+                  - page: getSupportedChainIds
+                    path: wallets/pages/reference/common/src/core/functions/getSupportedChainIds.mdx
+                  - page: isChainSupported
+                    path: wallets/pages/reference/common/src/core/functions/isChainSupported.mdx
+                  - page: redactUrlCredentials
+                    path: wallets/pages/reference/common/src/core/functions/redactUrlCredentials.mdx
+                  - page: resolveNetwork
+                    path: wallets/pages/reference/common/src/core/functions/resolveNetwork.mdx
+                  - page: resolveNetworkByChainId
+                    path: wallets/pages/reference/common/src/core/functions/resolveNetworkByChainId.mdx
+                  - page: sleep
+                    path: wallets/pages/reference/common/src/core/functions/sleep.mdx
               - section: Interfaces
                 contents:
                   - page: AlchemyTransportConfig
                     path: wallets/pages/reference/common/src/interfaces/AlchemyTransportConfig.mdx
               - section: Type Aliases
                 contents:
-                  - page: AlchemyApiErrorDetails
-                    path: wallets/pages/reference/common/src/type-aliases/AlchemyApiErrorDetails.mdx
                   - page: AlchemyConnectionConfig
                     path: wallets/pages/reference/common/src/type-aliases/AlchemyConnectionConfig.mdx
-                  - page: AlchemyJsonRpcClientParams
-                    path: wallets/pages/reference/common/src/type-aliases/AlchemyJsonRpcClientParams.mdx
-                  - page: AlchemyNetwork
-                    path: wallets/pages/reference/common/src/type-aliases/AlchemyNetwork.mdx
-                  - page: AlchemyRestClientParams
-                    path: wallets/pages/reference/common/src/type-aliases/AlchemyRestClientParams.mdx
                   - page: AlchemyTransport
                     path: wallets/pages/reference/common/src/type-aliases/AlchemyTransport.mdx
                   - page: ExtractRpcMethod
                     path: wallets/pages/reference/common/src/type-aliases/ExtractRpcMethod.mdx
-                  - page: JsonRpcRequestFn
-                    path: wallets/pages/reference/common/src/type-aliases/JsonRpcRequestFn.mdx
-                  - page: JsonRpcSchema
-                    path: wallets/pages/reference/common/src/type-aliases/JsonRpcSchema.mdx
-                  - page: KnownAlchemyNetwork
-                    path: wallets/pages/reference/common/src/type-aliases/KnownAlchemyNetwork.mdx
-                  - page: NetworkInput
-                    path: wallets/pages/reference/common/src/type-aliases/NetworkInput.mdx
                   - page: Never
                     path: wallets/pages/reference/common/src/type-aliases/Never.mdx
+                  - page: AlchemyApiErrorDetails
+                    path: wallets/pages/reference/common/src/core/type-aliases/AlchemyApiErrorDetails.mdx
+                  - page: AlchemyJsonRpcClientParams
+                    path: wallets/pages/reference/common/src/core/type-aliases/AlchemyJsonRpcClientParams.mdx
+                  - page: AlchemyNetwork
+                    path: wallets/pages/reference/common/src/core/type-aliases/AlchemyNetwork.mdx
+                  - page: AlchemyRestClientParams
+                    path: wallets/pages/reference/common/src/core/type-aliases/AlchemyRestClientParams.mdx
+                  - page: JsonRpcRequestFn
+                    path: wallets/pages/reference/common/src/core/type-aliases/JsonRpcRequestFn.mdx
+                  - page: JsonRpcSchema
+                    path: wallets/pages/reference/common/src/core/type-aliases/JsonRpcSchema.mdx
+                  - page: KnownAlchemyNetwork
+                    path: wallets/pages/reference/common/src/core/type-aliases/KnownAlchemyNetwork.mdx
                   - page: QueryParams
-                    path: wallets/pages/reference/common/src/type-aliases/QueryParams.mdx
+                    path: wallets/pages/reference/common/src/core/type-aliases/QueryParams.mdx
                   - page: QueryValue
-                    path: wallets/pages/reference/common/src/type-aliases/QueryValue.mdx
+                    path: wallets/pages/reference/common/src/core/type-aliases/QueryValue.mdx
                   - page: ResolvedNetwork
-                    path: wallets/pages/reference/common/src/type-aliases/ResolvedNetwork.mdx
+                    path: wallets/pages/reference/common/src/core/type-aliases/ResolvedNetwork.mdx
                   - page: RestRequestFn
-                    path: wallets/pages/reference/common/src/type-aliases/RestRequestFn.mdx
+                    path: wallets/pages/reference/common/src/core/type-aliases/RestRequestFn.mdx
                   - page: RestRequestOptions
-                    path: wallets/pages/reference/common/src/type-aliases/RestRequestOptions.mdx
+                    path: wallets/pages/reference/common/src/core/type-aliases/RestRequestOptions.mdx
                   - page: RestRequestParams
-                    path: wallets/pages/reference/common/src/type-aliases/RestRequestParams.mdx
+                    path: wallets/pages/reference/common/src/core/type-aliases/RestRequestParams.mdx
                   - page: RestRequestSchema
-                    path: wallets/pages/reference/common/src/type-aliases/RestRequestSchema.mdx
+                    path: wallets/pages/reference/common/src/core/type-aliases/RestRequestSchema.mdx
               - section: Variables
                 contents:
                   - page: AlchemyConnectionConfigSchema
                     path: wallets/pages/reference/common/src/variables/AlchemyConnectionConfigSchema.mdx
                   - page: DEFAULT_RETRY_COUNT
-                    path: wallets/pages/reference/common/src/variables/DEFAULT_RETRY_COUNT.mdx
+                    path: wallets/pages/reference/common/src/core/variables/DEFAULT_RETRY_COUNT.mdx
                   - page: DEFAULT_RETRY_DELAY_MS
-                    path: wallets/pages/reference/common/src/variables/DEFAULT_RETRY_DELAY_MS.mdx
+                    path: wallets/pages/reference/common/src/core/variables/DEFAULT_RETRY_DELAY_MS.mdx
                   - page: DEFAULT_TIMEOUT_MS
-                    path: wallets/pages/reference/common/src/variables/DEFAULT_TIMEOUT_MS.mdx
+                    path: wallets/pages/reference/common/src/core/variables/DEFAULT_TIMEOUT_MS.mdx

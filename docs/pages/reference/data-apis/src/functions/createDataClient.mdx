@@ -11,10 +11,10 @@ layout: reference
 function createDataClient(options): AlchemyDataClient;
 ```
 
-Defined in: [packages/data-apis/src/client.ts:43](https://github.com/alchemyplatform/aa-sdk/blob/main/packages/data-apis/src/client.ts#L43)
+Defined in: [packages/data-apis/src/client.ts:44](https://github.com/alchemyplatform/aa-sdk/blob/main/packages/data-apis/src/client.ts#L44)
 
-Creates a Data API client: a plain, dependency-free container holding the
-connection config (apiKey/jwt/proxy url, retry and timeout defaults) and an
+Creates a Data API client: a plain, chain-library-free container holding the
+connection config (apiKey/jwt/RPC proxy url, retry and timeout defaults) and an
 optional default network, with the Data API actions attached by namespace.
 
 ## Example
@@ -52,7 +52,7 @@ const nfts = await data.nft.getNftsForOwner({ owner: "0x..." });
       </td>
 
       <td>
-        Auth (apiKey/jwt/proxy url), retry/timeout defaults, and default network
+        Auth (apiKey/jwt/RPC proxy url), retry/timeout defaults, and default network
       </td>
     </tr>
 

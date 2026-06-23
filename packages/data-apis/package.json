@@ -1,7 +1,7 @@
 {
   "name": "@alchemy/data-apis",
   "version": "5.0.3-alpha.0",
-  "description": "Alchemy Data APIs SDK: Portfolio, Prices, NFT, Token, and Transfers — typed, dependency-free actions",
+  "description": "Alchemy Data APIs SDK: Portfolio, Prices, NFT, Token, and Transfers — typed, chain-library-free actions",
   "keywords": [
     "alchemy",
     "nft",

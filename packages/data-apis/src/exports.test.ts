@@ -5,6 +5,8 @@ describe("package export boundary", () => {
   it("exposes exactly the intended runtime exports", () => {
     expect(Object.keys(packageExports).sort()).toEqual(
       [
+        "AlchemyApiError",
+        "AlchemyError",
         "VERSION",
         "computeRarity",
         "createDataClient",

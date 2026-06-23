@@ -1,4 +1,4 @@
-import { ServerError } from "../errors/ServerError.js";
+import { AlchemyServerError } from "../errors/AlchemyServerError.js";
 import { withAlchemyHeaders } from "../utils/headers.js";
 import { parseErrorCode, sendWithRetry } from "./httpEngine.js";
 import type { QueryParams, RestRequestFn, RestRequestSchema } from "./types.js";
@@ -126,7 +126,7 @@ export class AlchemyRestClient<Schema extends RestRequestSchema> {
     }
 
     const bodyText = await response.text();
-    throw new ServerError(
+    throw new AlchemyServerError(
       bodyText,
       response.status,
       new Error(response.statusText),

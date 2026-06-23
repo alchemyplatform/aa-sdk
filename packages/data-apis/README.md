@@ -1,9 +1,10 @@
 # @alchemy/data-apis
 
 Alchemy's Data APIs — Portfolio, Prices, NFT, Token, and Transfers — as typed,
-**dependency-free** actions. No chain library required: the package's only
-dependency is `@alchemy/common`, and nothing EVM- or ecosystem-specific sits
-in the foundation. **Currently published under the `alpha` dist-tag.**
+**chain-library-free** actions. No viem, wallet client, or ecosystem library is
+required: the package's only runtime dependency is `@alchemy/common`, and
+nothing EVM- or ecosystem-specific sits in the foundation. **Currently
+published under the `alpha` dist-tag.**
 
 ```bash
 npm install @alchemy/data-apis@alpha
@@ -74,9 +75,10 @@ hatch, so newly launched networks work without an SDK release.
 
 ### Proxy / frontend usage
 
-Pass `url` to route traffic through your backend so no API key ships
-client-side: `createDataClient({ url: "https://your-backend/alchemy" })`.
-`jwt` auth is also supported.
+Pass `url` to route Token and Transfers JSON-RPC traffic through your backend:
+`createDataClient({ url: "https://your-backend/alchemy-rpc" })`. REST Data API
+methods use service-scoped Alchemy URLs derived per request. `jwt` auth is also
+supported.
 
 ### Pagination
 
@@ -97,8 +99,13 @@ for await (const page of data.nft.getNftsForOwnerPages(
 ### Errors
 
 Both channels (REST and JSON-RPC) normalize failures into `AlchemyApiError`
-from `@alchemy/common`, carrying `status`, `code`, `requestId` (the
+from `@alchemy/data-apis`, carrying `status`, `code`, `requestId` (the
 client-generated `X-Alchemy-Client-Request-Id`), and `retryAfter` when known.
+
+```ts
+import { AlchemyApiError } from "@alchemy/data-apis";
+```
+
 Requests retry 429/5xx/network failures with exponential backoff (honoring
 `Retry-After`) and time out per attempt; pass an `AbortSignal` via the
 per-request options to cancel. JSON-RPC-level errors are never retried.

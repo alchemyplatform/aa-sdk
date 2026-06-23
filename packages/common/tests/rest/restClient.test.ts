@@ -1,8 +1,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { AlchemyRestClient } from "../../src/rest/restClient.js";
 import { AlchemyApiError } from "../../src/errors/AlchemyApiError.js";
-import { ServerError } from "../../src/errors/ServerError.js";
-import { FetchError } from "../../src/errors/FetchError.js";
+import { AlchemyServerError } from "../../src/errors/AlchemyServerError.js";
+import { AlchemyFetchError } from "../../src/errors/AlchemyFetchError.js";
 
 type TestSchema = readonly [
   {
@@ -86,12 +86,12 @@ describe("AlchemyRestClient request id", () => {
     expect(ids[1]).toBe(ids[0]);
   });
 
-  it("surfaces the request id on thrown ServerError", async () => {
+  it("surfaces the request id on thrown AlchemyServerError", async () => {
     fetchMock.mockImplementation(async () => jsonResponse({}, { status: 400 }));
     const error = await makeClient()
       .request({ route: "things", method: "GET" })
       .catch((e) => e);
-    expect(error).toBeInstanceOf(ServerError);
+    expect(error).toBeInstanceOf(AlchemyServerError);
     expect(error).toBeInstanceOf(AlchemyApiError);
     expect(error.requestId).toMatch(/^[0-9a-f-]{36}$/);
     expect(error.status).toBe(400);
@@ -139,7 +139,7 @@ describe("AlchemyRestClient retries", () => {
     expect(error.retryAfter).toBe(0);
   });
 
-  it("retries network errors and throws FetchError with requestId when exhausted", async () => {
+  it("retries network errors and throws AlchemyFetchError with requestId when exhausted", async () => {
     fetchMock.mockImplementation(async () => {
       throw new TypeError("fetch failed");
     });
@@ -147,7 +147,7 @@ describe("AlchemyRestClient retries", () => {
       .request({ route: "things", method: "GET" })
       .catch((e) => e);
     expect(fetchMock).toHaveBeenCalledTimes(3);
-    expect(error).toBeInstanceOf(FetchError);
+    expect(error).toBeInstanceOf(AlchemyFetchError);
     expect(error.requestId).toMatch(/^[0-9a-f-]{36}$/);
   });
 

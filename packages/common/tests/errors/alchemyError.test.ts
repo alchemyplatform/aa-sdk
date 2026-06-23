@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { AlchemyError } from "../../src/errors/AlchemyError.js";
 import { AlchemyApiError } from "../../src/errors/AlchemyApiError.js";
+import { AlchemyServerError } from "../../src/errors/AlchemyServerError.js";
+import { AlchemyFetchError } from "../../src/errors/AlchemyFetchError.js";
 import { ServerError } from "../../src/errors/ServerError.js";
 import { FetchError } from "../../src/errors/FetchError.js";
 import { BaseError } from "../../src/errors/BaseError.js";
@@ -48,14 +50,24 @@ describe("AlchemyError", () => {
   });
 
   it("the API error family is viem-free: not instanceof BaseError", () => {
-    const server = new ServerError("body", 500);
-    const fetchErr = new FetchError("route", "GET");
+    const server = new AlchemyServerError("body", 500);
+    const fetchErr = new AlchemyFetchError("route", "GET");
     for (const error of [server, fetchErr]) {
       expect(error).toBeInstanceOf(AlchemyApiError);
       expect(error).toBeInstanceOf(AlchemyError);
       expect(error).toBeInstanceOf(Error);
       // deliberately NOT instanceof the viem-extending BaseError
       expect(error).not.toBeInstanceOf(BaseError);
+    }
+  });
+
+  it("legacy root FetchError and ServerError remain BaseError-based", () => {
+    const server = new ServerError("body", 500);
+    const fetchErr = new FetchError("route", "GET");
+    for (const error of [server, fetchErr]) {
+      expect(error).toBeInstanceOf(BaseError);
+      expect(error).not.toBeInstanceOf(AlchemyApiError);
+      expect(error).not.toBeInstanceOf(AlchemyError);
     }
   });
 

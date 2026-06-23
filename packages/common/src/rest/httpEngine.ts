@@ -1,4 +1,4 @@
-import { FetchError } from "../errors/FetchError.js";
+import { AlchemyFetchError } from "../errors/AlchemyFetchError.js";
 import { composeSignals, sleep } from "../utils/signals.js";
 
 // Internal request engine shared by AlchemyRestClient and
@@ -11,7 +11,7 @@ export type HttpSendParams = {
   /** Final headers, including auth and X-Alchemy-Client-Request-Id. */
   headers: Headers;
   body?: string;
-  /** Label used in FetchError messages — a route or RPC method, never a URL. */
+  /** Label used in AlchemyFetchError messages — a route or RPC method, never a URL. */
   errorLabel: string;
   requestId: string;
   signal?: AbortSignal;
@@ -62,7 +62,7 @@ export function parseErrorCode(bodyText: string): number | string | undefined {
  * aborts rethrown immediately without retrying. Resolves with the final
  * Response — ok, or non-ok once the policy is exhausted or the status is
  * non-retryable — leaving error mapping to the typed frontends. Throws
- * FetchError when network/timeout failures exhaust the retries.
+ * AlchemyFetchError when network/timeout failures exhaust the retries.
  *
  * @param {HttpSendParams} params The request and retry configuration
  * @returns {Promise<{ response: Response; retryAfter?: number }>} The final response and any Retry-After hint
@@ -94,7 +94,7 @@ export async function sendWithRetry({
         await sleep((1 << attempt) * retryDelay, callerSignal);
         continue;
       }
-      throw new FetchError(
+      throw new AlchemyFetchError(
         errorLabel,
         method,
         error instanceof Error ? error : undefined,

@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { AlchemyJsonRpcClient } from "../../src/rest/jsonRpcClient.js";
 import { AlchemyApiError } from "../../src/errors/AlchemyApiError.js";
-import { ServerError } from "../../src/errors/ServerError.js";
+import { AlchemyServerError } from "../../src/errors/AlchemyServerError.js";
 
 type TestSchema = readonly [
   {
@@ -118,14 +118,14 @@ describe("AlchemyJsonRpcClient", () => {
     expect(error.message).toContain("/v2/[redacted]");
   });
 
-  it("maps non-ok HTTP responses to ServerError with status and requestId", async () => {
+  it("maps non-ok HTTP responses to AlchemyServerError with status and requestId", async () => {
     fetchMock.mockImplementation(async () =>
       rpcResponse({ message: "nope" }, { status: 403 }),
     );
     const error = await makeClient()
       .request({ method: "alchemy_getThings", params: [{ owner: "0xa" }] })
       .catch((e) => e);
-    expect(error).toBeInstanceOf(ServerError);
+    expect(error).toBeInstanceOf(AlchemyServerError);
     expect(error.status).toBe(403);
     expect(error.requestId).toMatch(/^[0-9a-f-]{36}$/);
   });

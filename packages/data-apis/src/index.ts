@@ -1,6 +1,17 @@
 // client
-export type { AlchemyDataClient, AlchemyDataClientOptions } from "./client.js";
+export type {
+  AlchemyDataClient,
+  AlchemyDataClientConfig,
+  AlchemyDataClientOptions,
+} from "./client.js";
 export { createDataClient } from "./client.js";
+
+// errors
+export {
+  AlchemyApiError,
+  AlchemyError,
+  type AlchemyApiErrorDetails,
+} from "@alchemy/common/core";
 
 // actions surface type (the viem adapter ships as /viem post-v1; the
 // dataActions decorator itself is internal to the core)

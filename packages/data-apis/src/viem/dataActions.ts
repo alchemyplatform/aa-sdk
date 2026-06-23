@@ -3,7 +3,7 @@
 // warrants (post-v1, per the approved standalone-core direction). Kept here
 // with tests so it stays working against the core.
 
-import { resolveNetwork } from "@alchemy/common/core";
+import { resolveNetwork, resolveNetworkByChainId } from "@alchemy/common/core";
 import type { AlchemyTransport, AlchemyTransportConfig } from "@alchemy/common";
 import type { Chain, Client } from "viem";
 import {
@@ -42,7 +42,7 @@ export function dataActions(
     network: customSlug
       ? resolveNetwork(customSlug)
       : chain
-        ? resolveNetwork(chain)
+        ? resolveNetworkByChainId(chain.id)
         : undefined,
   };
   return coreDataActions(core);

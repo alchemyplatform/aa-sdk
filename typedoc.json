@@ -7,6 +7,7 @@
   // ============================================================================
   "entryPoints": [
     "packages/aa-infra/src/index.ts",
+    "packages/common/src/core.ts",
     "packages/common/src/index.ts",
     "packages/data-apis/src/index.ts",
     "packages/smart-accounts/src/index.ts",

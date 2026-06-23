@@ -1,12 +1,10 @@
-import {
-  resolveNetwork,
-  type AlchemyNetwork,
-  type AlchemyRestClientParams,
-} from "@alchemy/common/core";
+import { resolveNetwork, type AlchemyNetwork } from "@alchemy/common/core";
 import { dataActions, type DataActions } from "./decorator.js";
-import type { DataClient } from "./internal/clientHelpers.js";
+import type { DataClient, DataClientConfig } from "./internal/clientHelpers.js";
 
-export type AlchemyDataClientOptions = AlchemyRestClientParams & {
+export type AlchemyDataClientConfig = DataClientConfig;
+
+export type AlchemyDataClientOptions = AlchemyDataClientConfig & {
   /**
    * Default network for network-scoped calls (NFT, Token, Transfers).
    * Accepts an Alchemy slug ("eth-mainnet") or a CAIP-2 id ("eip155:1",
@@ -21,8 +19,8 @@ export type AlchemyDataClientOptions = AlchemyRestClientParams & {
 export type AlchemyDataClient = DataClient & DataActions;
 
 /**
- * Creates a Data API client: a plain, dependency-free container holding the
- * connection config (apiKey/jwt/proxy url, retry and timeout defaults) and an
+ * Creates a Data API client: a plain, chain-library-free container holding the
+ * connection config (apiKey/jwt/RPC proxy url, retry and timeout defaults) and an
  * optional default network, with the Data API actions attached by namespace.
  *
  * @example
@@ -37,7 +35,7 @@ export type AlchemyDataClient = DataClient & DataActions;
  * const nfts = await data.nft.getNftsForOwner({ owner: "0x..." });
  * ```
  *
- * @param {AlchemyDataClientOptions} options Auth (apiKey/jwt/proxy url), retry/timeout defaults, and default network
+ * @param {AlchemyDataClientOptions} options Auth (apiKey/jwt/RPC proxy url), retry/timeout defaults, and default network
  * @returns {AlchemyDataClient} The Data API client
  */
 export function createDataClient(
