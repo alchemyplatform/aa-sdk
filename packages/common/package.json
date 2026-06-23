@@ -27,6 +27,11 @@
       "import": "./dist/esm/index.js",
       "default": "./dist/esm/index.js"
     },
+    "./core": {
+      "types": "./dist/types/core.d.ts",
+      "import": "./dist/esm/core.js",
+      "default": "./dist/esm/core.js"
+    },
     "./chains": {
       "types": "./dist/types/chains.d.ts",
       "import": "./dist/esm/chains.js",
@@ -70,5 +75,10 @@
   "bugs": {
     "url": "https://github.com/alchemyplatform/aa-sdk/issues"
   },
-  "homepage": "https://github.com/alchemyplatform/aa-sdk#readme"
+  "homepage": "https://github.com/alchemyplatform/aa-sdk#readme",
+  "peerDependenciesMeta": {
+    "viem": {
+      "optional": true
+    }
+  }
 }
