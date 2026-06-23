@@ -9,6 +9,11 @@
     "clean": {
       "cache": false
     },
+    "generate": {
+      "dependsOn": ["^build"],
+      "outputs": ["src/generated/**"],
+      "cache": false
+    },
     "test": {
       "env": ["VITEST_SEPOLIA_FORK_URL"],
       "dependsOn": ["^build"],

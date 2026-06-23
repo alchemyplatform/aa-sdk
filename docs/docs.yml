@@ -506,6 +506,259 @@ navigation:
                     path: wallets/pages/reference/smart-accounts/src/variables/semiModularAccount7702StaticImpl.mdx
                   - page: semiModularAccountV2StaticImpl
                     path: wallets/pages/reference/smart-accounts/src/variables/semiModularAccountV2StaticImpl.mdx
+          - section: Data APIs
+            path: wallets/pages/reference/data-apis/src/README.mdx
+            contents:
+              - section: Functions
+                contents:
+                  - page: computeRarity
+                    path: wallets/pages/reference/data-apis/src/functions/computeRarity.mdx
+                  - page: createDataClient
+                    path: wallets/pages/reference/data-apis/src/functions/createDataClient.mdx
+                  - page: getAssetTransfers
+                    path: wallets/pages/reference/data-apis/src/functions/getAssetTransfers.mdx
+                  - page: getAssetTransfersPages
+                    path: wallets/pages/reference/data-apis/src/functions/getAssetTransfersPages.mdx
+                  - page: getCollectionMetadata
+                    path: wallets/pages/reference/data-apis/src/functions/getCollectionMetadata.mdx
+                  - page: getCollectionsForOwner
+                    path: wallets/pages/reference/data-apis/src/functions/getCollectionsForOwner.mdx
+                  - page: getCollectionsForOwnerPages
+                    path: wallets/pages/reference/data-apis/src/functions/getCollectionsForOwnerPages.mdx
+                  - page: getContractMetadata
+                    path: wallets/pages/reference/data-apis/src/functions/getContractMetadata.mdx
+                  - page: getContractMetadataBatch
+                    path: wallets/pages/reference/data-apis/src/functions/getContractMetadataBatch.mdx
+                  - page: getContractsForOwner
+                    path: wallets/pages/reference/data-apis/src/functions/getContractsForOwner.mdx
+                  - page: getContractsForOwnerPages
+                    path: wallets/pages/reference/data-apis/src/functions/getContractsForOwnerPages.mdx
+                  - page: getFloorPrice
+                    path: wallets/pages/reference/data-apis/src/functions/getFloorPrice.mdx
+                  - page: getHistoricalTokenPrices
+                    path: wallets/pages/reference/data-apis/src/functions/getHistoricalTokenPrices.mdx
+                  - page: getNftContractsByAddress
+                    path: wallets/pages/reference/data-apis/src/functions/getNftContractsByAddress.mdx
+                  - page: getNftContractsByAddressPages
+                    path: wallets/pages/reference/data-apis/src/functions/getNftContractsByAddressPages.mdx
+                  - page: getNftMetadata
+                    path: wallets/pages/reference/data-apis/src/functions/getNftMetadata.mdx
+                  - page: getNftMetadataBatch
+                    path: wallets/pages/reference/data-apis/src/functions/getNftMetadataBatch.mdx
+                  - page: getNftSales
+                    path: wallets/pages/reference/data-apis/src/functions/getNftSales.mdx
+                  - page: getNftSalesPages
+                    path: wallets/pages/reference/data-apis/src/functions/getNftSalesPages.mdx
+                  - page: getNftsByAddress
+                    path: wallets/pages/reference/data-apis/src/functions/getNftsByAddress.mdx
+                  - page: getNftsByAddressPages
+                    path: wallets/pages/reference/data-apis/src/functions/getNftsByAddressPages.mdx
+                  - page: getNftsForCollection
+                    path: wallets/pages/reference/data-apis/src/functions/getNftsForCollection.mdx
+                  - page: getNftsForCollectionPages
+                    path: wallets/pages/reference/data-apis/src/functions/getNftsForCollectionPages.mdx
+                  - page: getNftsForContract
+                    path: wallets/pages/reference/data-apis/src/functions/getNftsForContract.mdx
+                  - page: getNftsForContractPages
+                    path: wallets/pages/reference/data-apis/src/functions/getNftsForContractPages.mdx
+                  - page: getNftsForOwner
+                    path: wallets/pages/reference/data-apis/src/functions/getNftsForOwner.mdx
+                  - page: getNftsForOwnerPages
+                    path: wallets/pages/reference/data-apis/src/functions/getNftsForOwnerPages.mdx
+                  - page: getOwnersForContract
+                    path: wallets/pages/reference/data-apis/src/functions/getOwnersForContract.mdx
+                  - page: getOwnersForNft
+                    path: wallets/pages/reference/data-apis/src/functions/getOwnersForNft.mdx
+                  - page: getSpamContracts
+                    path: wallets/pages/reference/data-apis/src/functions/getSpamContracts.mdx
+                  - page: getTokenAllowance
+                    path: wallets/pages/reference/data-apis/src/functions/getTokenAllowance.mdx
+                  - page: getTokenBalances
+                    path: wallets/pages/reference/data-apis/src/functions/getTokenBalances.mdx
+                  - page: getTokenBalancesByAddress
+                    path: wallets/pages/reference/data-apis/src/functions/getTokenBalancesByAddress.mdx
+                  - page: getTokenMetadata
+                    path: wallets/pages/reference/data-apis/src/functions/getTokenMetadata.mdx
+                  - page: getTokenPricesByAddress
+                    path: wallets/pages/reference/data-apis/src/functions/getTokenPricesByAddress.mdx
+                  - page: getTokenPricesBySymbol
+                    path: wallets/pages/reference/data-apis/src/functions/getTokenPricesBySymbol.mdx
+                  - page: getTokensByAddress
+                    path: wallets/pages/reference/data-apis/src/functions/getTokensByAddress.mdx
+                  - page: isAirdropNft
+                    path: wallets/pages/reference/data-apis/src/functions/isAirdropNft.mdx
+                  - page: isHolderOfContract
+                    path: wallets/pages/reference/data-apis/src/functions/isHolderOfContract.mdx
+                  - page: isSpamContract
+                    path: wallets/pages/reference/data-apis/src/functions/isSpamContract.mdx
+                  - page: searchContractMetadata
+                    path: wallets/pages/reference/data-apis/src/functions/searchContractMetadata.mdx
+                  - page: summarizeNftAttributes
+                    path: wallets/pages/reference/data-apis/src/functions/summarizeNftAttributes.mdx
+              - section: Interfaces
+                contents:
+                  - page: PortfolioAddressEntry
+                    path: wallets/pages/reference/data-apis/src/interfaces/PortfolioAddressEntry.mdx
+                  - page: PriceAddressEntry
+                    path: wallets/pages/reference/data-apis/src/interfaces/PriceAddressEntry.mdx
+              - section: Type Aliases
+                contents:
+                  - page: AlchemyDataClient
+                    path: wallets/pages/reference/data-apis/src/type-aliases/AlchemyDataClient.mdx
+                  - page: AlchemyDataClientConfig
+                    path: wallets/pages/reference/data-apis/src/type-aliases/AlchemyDataClientConfig.mdx
+                  - page: AlchemyDataClientOptions
+                    path: wallets/pages/reference/data-apis/src/type-aliases/AlchemyDataClientOptions.mdx
+                  - page: AssetTransfer
+                    path: wallets/pages/reference/data-apis/src/type-aliases/AssetTransfer.mdx
+                  - page: ComputeRarityParams
+                    path: wallets/pages/reference/data-apis/src/type-aliases/ComputeRarityParams.mdx
+                  - page: ComputeRarityResult
+                    path: wallets/pages/reference/data-apis/src/type-aliases/ComputeRarityResult.mdx
+                  - page: DataActions
+                    path: wallets/pages/reference/data-apis/src/type-aliases/DataActions.mdx
+                  - page: DataRpcSchema
+                    path: wallets/pages/reference/data-apis/src/type-aliases/DataRpcSchema.mdx
+                  - page: GetAssetTransfersParams
+                    path: wallets/pages/reference/data-apis/src/type-aliases/GetAssetTransfersParams.mdx
+                  - page: GetAssetTransfersResult
+                    path: wallets/pages/reference/data-apis/src/type-aliases/GetAssetTransfersResult.mdx
+                  - page: GetCollectionMetadataParams
+                    path: wallets/pages/reference/data-apis/src/type-aliases/GetCollectionMetadataParams.mdx
+                  - page: GetCollectionMetadataResult
+                    path: wallets/pages/reference/data-apis/src/type-aliases/GetCollectionMetadataResult.mdx
+                  - page: GetCollectionsForOwnerParams
+                    path: wallets/pages/reference/data-apis/src/type-aliases/GetCollectionsForOwnerParams.mdx
+                  - page: GetCollectionsForOwnerResult
+                    path: wallets/pages/reference/data-apis/src/type-aliases/GetCollectionsForOwnerResult.mdx
+                  - page: GetContractMetadataBatchParams
+                    path: wallets/pages/reference/data-apis/src/type-aliases/GetContractMetadataBatchParams.mdx
+                  - page: GetContractMetadataBatchResult
+                    path: wallets/pages/reference/data-apis/src/type-aliases/GetContractMetadataBatchResult.mdx
+                  - page: GetContractMetadataParams
+                    path: wallets/pages/reference/data-apis/src/type-aliases/GetContractMetadataParams.mdx
+                  - page: GetContractMetadataResult
+                    path: wallets/pages/reference/data-apis/src/type-aliases/GetContractMetadataResult.mdx
+                  - page: GetContractsForOwnerParams
+                    path: wallets/pages/reference/data-apis/src/type-aliases/GetContractsForOwnerParams.mdx
+                  - page: GetContractsForOwnerResult
+                    path: wallets/pages/reference/data-apis/src/type-aliases/GetContractsForOwnerResult.mdx
+                  - page: GetFloorPriceParams
+                    path: wallets/pages/reference/data-apis/src/type-aliases/GetFloorPriceParams.mdx
+                  - page: GetFloorPriceResult
+                    path: wallets/pages/reference/data-apis/src/type-aliases/GetFloorPriceResult.mdx
+                  - page: GetHistoricalTokenPricesParams
+                    path: wallets/pages/reference/data-apis/src/type-aliases/GetHistoricalTokenPricesParams.mdx
+                  - page: GetHistoricalTokenPricesResult
+                    path: wallets/pages/reference/data-apis/src/type-aliases/GetHistoricalTokenPricesResult.mdx
+                  - page: GetNftContractsByAddressParams
+                    path: wallets/pages/reference/data-apis/src/type-aliases/GetNftContractsByAddressParams.mdx
+                  - page: GetNftContractsByAddressResult
+                    path: wallets/pages/reference/data-apis/src/type-aliases/GetNftContractsByAddressResult.mdx
+                  - page: GetNftMetadataBatchParams
+                    path: wallets/pages/reference/data-apis/src/type-aliases/GetNftMetadataBatchParams.mdx
+                  - page: GetNftMetadataBatchResult
+                    path: wallets/pages/reference/data-apis/src/type-aliases/GetNftMetadataBatchResult.mdx
+                  - page: GetNftMetadataParams
+                    path: wallets/pages/reference/data-apis/src/type-aliases/GetNftMetadataParams.mdx
+                  - page: GetNftMetadataResult
+                    path: wallets/pages/reference/data-apis/src/type-aliases/GetNftMetadataResult.mdx
+                  - page: GetNftSalesParams
+                    path: wallets/pages/reference/data-apis/src/type-aliases/GetNftSalesParams.mdx
+                  - page: GetNftSalesResult
+                    path: wallets/pages/reference/data-apis/src/type-aliases/GetNftSalesResult.mdx
+                  - page: GetNftsByAddressParams
+                    path: wallets/pages/reference/data-apis/src/type-aliases/GetNftsByAddressParams.mdx
+                  - page: GetNftsByAddressResult
+                    path: wallets/pages/reference/data-apis/src/type-aliases/GetNftsByAddressResult.mdx
+                  - page: GetNftsForCollectionParams
+                    path: wallets/pages/reference/data-apis/src/type-aliases/GetNftsForCollectionParams.mdx
+                  - page: GetNftsForCollectionResult
+                    path: wallets/pages/reference/data-apis/src/type-aliases/GetNftsForCollectionResult.mdx
+                  - page: GetNftsForContractParams
+                    path: wallets/pages/reference/data-apis/src/type-aliases/GetNftsForContractParams.mdx
+                  - page: GetNftsForContractResult
+                    path: wallets/pages/reference/data-apis/src/type-aliases/GetNftsForContractResult.mdx
+                  - page: GetNftsForOwnerParams
+                    path: wallets/pages/reference/data-apis/src/type-aliases/GetNftsForOwnerParams.mdx
+                  - page: GetNftsForOwnerResult
+                    path: wallets/pages/reference/data-apis/src/type-aliases/GetNftsForOwnerResult.mdx
+                  - page: GetOwnersForContractParams
+                    path: wallets/pages/reference/data-apis/src/type-aliases/GetOwnersForContractParams.mdx
+                  - page: GetOwnersForContractResult
+                    path: wallets/pages/reference/data-apis/src/type-aliases/GetOwnersForContractResult.mdx
+                  - page: GetOwnersForNftParams
+                    path: wallets/pages/reference/data-apis/src/type-aliases/GetOwnersForNftParams.mdx
+                  - page: GetOwnersForNftResult
+                    path: wallets/pages/reference/data-apis/src/type-aliases/GetOwnersForNftResult.mdx
+                  - page: GetSpamContractsParams
+                    path: wallets/pages/reference/data-apis/src/type-aliases/GetSpamContractsParams.mdx
+                  - page: GetSpamContractsResult
+                    path: wallets/pages/reference/data-apis/src/type-aliases/GetSpamContractsResult.mdx
+                  - page: GetTokenAllowanceParams
+                    path: wallets/pages/reference/data-apis/src/type-aliases/GetTokenAllowanceParams.mdx
+                  - page: GetTokenAllowanceResult
+                    path: wallets/pages/reference/data-apis/src/type-aliases/GetTokenAllowanceResult.mdx
+                  - page: GetTokenBalancesByAddressParams
+                    path: wallets/pages/reference/data-apis/src/type-aliases/GetTokenBalancesByAddressParams.mdx
+                  - page: GetTokenBalancesByAddressResult
+                    path: wallets/pages/reference/data-apis/src/type-aliases/GetTokenBalancesByAddressResult.mdx
+                  - page: GetTokenBalancesParams
+                    path: wallets/pages/reference/data-apis/src/type-aliases/GetTokenBalancesParams.mdx
+                  - page: GetTokenBalancesResult
+                    path: wallets/pages/reference/data-apis/src/type-aliases/GetTokenBalancesResult.mdx
+                  - page: GetTokenMetadataParams
+                    path: wallets/pages/reference/data-apis/src/type-aliases/GetTokenMetadataParams.mdx
+                  - page: GetTokenMetadataResult
+                    path: wallets/pages/reference/data-apis/src/type-aliases/GetTokenMetadataResult.mdx
+                  - page: GetTokenPricesByAddressParams
+                    path: wallets/pages/reference/data-apis/src/type-aliases/GetTokenPricesByAddressParams.mdx
+                  - page: GetTokenPricesByAddressResult
+                    path: wallets/pages/reference/data-apis/src/type-aliases/GetTokenPricesByAddressResult.mdx
+                  - page: GetTokenPricesBySymbolParams
+                    path: wallets/pages/reference/data-apis/src/type-aliases/GetTokenPricesBySymbolParams.mdx
+                  - page: GetTokenPricesBySymbolResult
+                    path: wallets/pages/reference/data-apis/src/type-aliases/GetTokenPricesBySymbolResult.mdx
+                  - page: GetTokensByAddressParams
+                    path: wallets/pages/reference/data-apis/src/type-aliases/GetTokensByAddressParams.mdx
+                  - page: GetTokensByAddressResult
+                    path: wallets/pages/reference/data-apis/src/type-aliases/GetTokensByAddressResult.mdx
+                  - page: IsAirdropNftParams
+                    path: wallets/pages/reference/data-apis/src/type-aliases/IsAirdropNftParams.mdx
+                  - page: IsAirdropNftResult
+                    path: wallets/pages/reference/data-apis/src/type-aliases/IsAirdropNftResult.mdx
+                  - page: IsHolderOfContractParams
+                    path: wallets/pages/reference/data-apis/src/type-aliases/IsHolderOfContractParams.mdx
+                  - page: IsHolderOfContractResult
+                    path: wallets/pages/reference/data-apis/src/type-aliases/IsHolderOfContractResult.mdx
+                  - page: IsSpamContractParams
+                    path: wallets/pages/reference/data-apis/src/type-aliases/IsSpamContractParams.mdx
+                  - page: IsSpamContractResult
+                    path: wallets/pages/reference/data-apis/src/type-aliases/IsSpamContractResult.mdx
+                  - page: NftRestSchema
+                    path: wallets/pages/reference/data-apis/src/type-aliases/NftRestSchema.mdx
+                  - page: PaginateOptions
+                    path: wallets/pages/reference/data-apis/src/type-aliases/PaginateOptions.mdx
+                  - page: PortfolioRestSchema
+                    path: wallets/pages/reference/data-apis/src/type-aliases/PortfolioRestSchema.mdx
+                  - page: PortfolioToken
+                    path: wallets/pages/reference/data-apis/src/type-aliases/PortfolioToken.mdx
+                  - page: PricesRestSchema
+                    path: wallets/pages/reference/data-apis/src/type-aliases/PricesRestSchema.mdx
+                  - page: RequestOptions
+                    path: wallets/pages/reference/data-apis/src/type-aliases/RequestOptions.mdx
+                  - page: SearchContractMetadataParams
+                    path: wallets/pages/reference/data-apis/src/type-aliases/SearchContractMetadataParams.mdx
+                  - page: SearchContractMetadataResult
+                    path: wallets/pages/reference/data-apis/src/type-aliases/SearchContractMetadataResult.mdx
+                  - page: SummarizeNftAttributesParams
+                    path: wallets/pages/reference/data-apis/src/type-aliases/SummarizeNftAttributesParams.mdx
+                  - page: SummarizeNftAttributesResult
+                    path: wallets/pages/reference/data-apis/src/type-aliases/SummarizeNftAttributesResult.mdx
+              - section: Variables
+                contents:
+                  - page: VERSION
+                    path: wallets/pages/reference/data-apis/src/variables/VERSION.mdx
           - section: AA Infra
             path: wallets/pages/reference/aa-infra/src/README.mdx
             contents:
@@ -540,6 +793,18 @@ navigation:
                     path: wallets/pages/reference/common/src/classes/MethodUnsupportedError.mdx
                   - page: ServerError
                     path: wallets/pages/reference/common/src/classes/ServerError.mdx
+                  - page: AlchemyApiError
+                    path: wallets/pages/reference/common/src/core/classes/AlchemyApiError.mdx
+                  - page: AlchemyError
+                    path: wallets/pages/reference/common/src/core/classes/AlchemyError.mdx
+                  - page: AlchemyFetchError
+                    path: wallets/pages/reference/common/src/core/classes/AlchemyFetchError.mdx
+                  - page: AlchemyJsonRpcClient
+                    path: wallets/pages/reference/common/src/core/classes/AlchemyJsonRpcClient.mdx
+                  - page: AlchemyRestClient
+                    path: wallets/pages/reference/common/src/core/classes/AlchemyRestClient.mdx
+                  - page: AlchemyServerError
+                    path: wallets/pages/reference/common/src/core/classes/AlchemyServerError.mdx
               - section: Functions
                 contents:
                   - page: alchemyTransport
@@ -550,22 +815,32 @@ navigation:
                     path: wallets/pages/reference/common/src/functions/bigIntMax.mdx
                   - page: bigIntMultiply
                     path: wallets/pages/reference/common/src/functions/bigIntMultiply.mdx
-                  - page: getAlchemyRpcUrl
-                    path: wallets/pages/reference/common/src/functions/getAlchemyRpcUrl.mdx
-                  - page: getSupportedChainIds
-                    path: wallets/pages/reference/common/src/functions/getSupportedChainIds.mdx
                   - page: isAlchemyConnectionConfig
                     path: wallets/pages/reference/common/src/functions/isAlchemyConnectionConfig.mdx
                   - page: isAlchemyTransport
                     path: wallets/pages/reference/common/src/functions/isAlchemyTransport.mdx
-                  - page: isChainSupported
-                    path: wallets/pages/reference/common/src/functions/isChainSupported.mdx
                   - page: lowerAddress
                     path: wallets/pages/reference/common/src/functions/lowerAddress.mdx
                   - page: raise
                     path: wallets/pages/reference/common/src/functions/raise.mdx
                   - page: validateAlchemyConnectionConfig
                     path: wallets/pages/reference/common/src/functions/validateAlchemyConnectionConfig.mdx
+                  - page: composeSignals
+                    path: wallets/pages/reference/common/src/core/functions/composeSignals.mdx
+                  - page: getAlchemyRpcUrl
+                    path: wallets/pages/reference/common/src/core/functions/getAlchemyRpcUrl.mdx
+                  - page: getSupportedChainIds
+                    path: wallets/pages/reference/common/src/core/functions/getSupportedChainIds.mdx
+                  - page: isChainSupported
+                    path: wallets/pages/reference/common/src/core/functions/isChainSupported.mdx
+                  - page: redactUrlCredentials
+                    path: wallets/pages/reference/common/src/core/functions/redactUrlCredentials.mdx
+                  - page: resolveNetwork
+                    path: wallets/pages/reference/common/src/core/functions/resolveNetwork.mdx
+                  - page: resolveNetworkByChainId
+                    path: wallets/pages/reference/common/src/core/functions/resolveNetworkByChainId.mdx
+                  - page: sleep
+                    path: wallets/pages/reference/common/src/core/functions/sleep.mdx
               - section: Interfaces
                 contents:
                   - page: AlchemyTransportConfig
@@ -580,7 +855,41 @@ navigation:
                     path: wallets/pages/reference/common/src/type-aliases/ExtractRpcMethod.mdx
                   - page: Never
                     path: wallets/pages/reference/common/src/type-aliases/Never.mdx
+                  - page: AlchemyApiErrorDetails
+                    path: wallets/pages/reference/common/src/core/type-aliases/AlchemyApiErrorDetails.mdx
+                  - page: AlchemyJsonRpcClientParams
+                    path: wallets/pages/reference/common/src/core/type-aliases/AlchemyJsonRpcClientParams.mdx
+                  - page: AlchemyNetwork
+                    path: wallets/pages/reference/common/src/core/type-aliases/AlchemyNetwork.mdx
+                  - page: AlchemyRestClientParams
+                    path: wallets/pages/reference/common/src/core/type-aliases/AlchemyRestClientParams.mdx
+                  - page: JsonRpcRequestFn
+                    path: wallets/pages/reference/common/src/core/type-aliases/JsonRpcRequestFn.mdx
+                  - page: JsonRpcSchema
+                    path: wallets/pages/reference/common/src/core/type-aliases/JsonRpcSchema.mdx
+                  - page: KnownAlchemyNetwork
+                    path: wallets/pages/reference/common/src/core/type-aliases/KnownAlchemyNetwork.mdx
+                  - page: QueryParams
+                    path: wallets/pages/reference/common/src/core/type-aliases/QueryParams.mdx
+                  - page: QueryValue
+                    path: wallets/pages/reference/common/src/core/type-aliases/QueryValue.mdx
+                  - page: ResolvedNetwork
+                    path: wallets/pages/reference/common/src/core/type-aliases/ResolvedNetwork.mdx
+                  - page: RestRequestFn
+                    path: wallets/pages/reference/common/src/core/type-aliases/RestRequestFn.mdx
+                  - page: RestRequestOptions
+                    path: wallets/pages/reference/common/src/core/type-aliases/RestRequestOptions.mdx
+                  - page: RestRequestParams
+                    path: wallets/pages/reference/common/src/core/type-aliases/RestRequestParams.mdx
+                  - page: RestRequestSchema
+                    path: wallets/pages/reference/common/src/core/type-aliases/RestRequestSchema.mdx
               - section: Variables
                 contents:
                   - page: AlchemyConnectionConfigSchema
                     path: wallets/pages/reference/common/src/variables/AlchemyConnectionConfigSchema.mdx
+                  - page: DEFAULT_RETRY_COUNT
+                    path: wallets/pages/reference/common/src/core/variables/DEFAULT_RETRY_COUNT.mdx
+                  - page: DEFAULT_RETRY_DELAY_MS
+                    path: wallets/pages/reference/common/src/core/variables/DEFAULT_RETRY_DELAY_MS.mdx
+                  - page: DEFAULT_TIMEOUT_MS
+                    path: wallets/pages/reference/common/src/core/variables/DEFAULT_TIMEOUT_MS.mdx

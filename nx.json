@@ -11,8 +11,8 @@
     },
     "generate": {
       "dependsOn": ["^build"],
-      "outputs": ["{projectRoot}/src/plugins"],
-      "cache": true
+      "outputs": ["{projectRoot}/src/plugins", "{projectRoot}/src/generated"],
+      "cache": false
     },
     "prepare": {
       "dependsOn": ["^build"],

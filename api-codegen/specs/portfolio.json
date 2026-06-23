@@ -1,0 +1,3210 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "🧠 Data",
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.g.alchemy.com/data/v1"
+    }
+  ],
+  "paths": {
+    "/{apiKey}/assets/tokens/by-address": {
+      "post": {
+        "summary": "Tokens By Wallet",
+        "description": "Fetches fungible tokens (native, ERC-20 and SPL) for multiple wallet addresses and networks. Returns a list of tokens with balances, prices, and metadata for each wallet/network combination. This endpoint is supported on Ethereum, Solana, and 30+ EVM chains. See the full list of supported networks [here](https://dashboard.alchemy.com/chains).\n",
+        "tags": [
+          "Portfolio API Endpoints"
+        ],
+        "parameters": [
+          {
+            "name": "apiKey",
+            "in": "path",
+            "schema": {
+              "type": "string",
+              "default": "docs-demo",
+              "description": "For higher throughput, [create your own API key](https://dashboard.alchemy.com/signup)"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "addresses": {
+                    "type": "array",
+                    "description": "Array of wallet addresses and the networks to query them on. Maximum 2 addresses and maximum 5 networks per address.\n",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "address": {
+                          "type": "string",
+                          "description": "Wallet address.",
+                          "example": "0x1E6E8695FAb3Eb382534915eA8d7Cc1D1994B152",
+                          "default": "0x1E6E8695FAb3Eb382534915eA8d7Cc1D1994B152"
+                        },
+                        "networks": {
+                          "type": "array",
+                          "default": [
+                            "eth-mainnet",
+                            "base-mainnet",
+                            "matic-mainnet"
+                          ],
+                          "items": {
+                            "type": "string",
+                            "default": "eth-mainnet"
+                          },
+                          "description": "Network identifier (e.g., eth-mainnet). Find more network enums [here](https://dashboard.alchemy.com/chains)"
+                        }
+                      },
+                      "required": [
+                        "address",
+                        "networks"
+                      ]
+                    }
+                  },
+                  "withMetadata": {
+                    "description": "Boolean - if set to `true`, returns metadata. Setting this to false will reduce payload size and may result in a faster API call.",
+                    "type": "boolean",
+                    "default": true
+                  },
+                  "withPrices": {
+                    "description": "Boolean - if set to `true`, returns token prices. Setting this to false will reduce payload size and may result in a faster API call.",
+                    "type": "boolean",
+                    "default": true
+                  },
+                  "includeNativeTokens": {
+                    "type": "boolean",
+                    "description": "Whether to include each chain's native token in the response (e.g. ETH on Ethereum). The native token will have a null contract address.",
+                    "example": true,
+                    "default": true
+                  },
+                  "includeErc20Tokens": {
+                    "description": "Boolean - if set to `true`, returns ERC-20 tokens. Setting this to false will reduce payload size and may result in a faster API call.",
+                    "type": "boolean",
+                    "default": true
+                  }
+                },
+                "required": [
+                  "addresses"
+                ]
+              },
+              "example": {
+                "addresses": [
+                  {
+                    "address": "0x1E6E8695FAb3Eb382534915eA8d7Cc1D1994B152",
+                    "networks": [
+                      "eth-mainnet",
+                      "base-mainnet",
+                      "matic-mainnet"
+                    ]
+                  }
+                ],
+                "withMetadata": true,
+                "withPrices": true,
+                "includeNativeTokens": true,
+                "includeErc20Tokens": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "description": "List of tokens by address, with prices and metadata.",
+                      "properties": {
+                        "tokens": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "address": {
+                                "type": "string",
+                                "description": "Wallet address."
+                              },
+                              "network": {
+                                "type": "string",
+                                "description": "Network identifier."
+                              },
+                              "tokenAddress": {
+                                "type": "string",
+                                "description": "Token address."
+                              },
+                              "tokenBalance": {
+                                "type": "string",
+                                "description": "Balance of that particular token."
+                              },
+                              "tokenMetadata": {
+                                "type": "object",
+                                "properties": {
+                                  "decimals": {
+                                    "type": "integer",
+                                    "description": "Number of decimals the token uses"
+                                  },
+                                  "logo": {
+                                    "type": "string",
+                                    "description": "URL of the token's logo image"
+                                  },
+                                  "name": {
+                                    "type": "string",
+                                    "description": "Token's name"
+                                  },
+                                  "symbol": {
+                                    "type": "string",
+                                    "description": "Token's symbol"
+                                  }
+                                }
+                              },
+                              "tokenPrices": {
+                                "type": "array",
+                                "description": "List of price information.",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "currency": {
+                                      "type": "string",
+                                      "example": "usd"
+                                    },
+                                    "value": {
+                                      "type": "string",
+                                      "example": "4608.2208671202"
+                                    },
+                                    "lastUpdatedAt": {
+                                      "type": "string",
+                                      "format": "date-time",
+                                      "example": "2025-08-26T20:17:27Z"
+                                    }
+                                  },
+                                  "required": [
+                                    "currency",
+                                    "value",
+                                    "lastUpdatedAt"
+                                  ]
+                                }
+                              },
+                              "error": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ],
+                                "description": "Error message if applicable."
+                              }
+                            },
+                            "required": [
+                              "network",
+                              "address",
+                              "tokenAddress",
+                              "tokenBalance"
+                            ]
+                          }
+                        },
+                        "pageKey": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request: Invalid input (e.g., malformed JSON).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "description": "Detailed error message."
+                        }
+                      },
+                      "required": [
+                        "message"
+                      ],
+                      "description": "Error details."
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests: Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "description": "Detailed error message."
+                        }
+                      },
+                      "required": [
+                        "message"
+                      ],
+                      "description": "Error details."
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-tokens-by-address"
+      }
+    },
+    "/{apiKey}/assets/tokens/balances/by-address": {
+      "post": {
+        "summary": "Token Balances By Wallet",
+        "description": "Fetches fungible tokens (native, ERC-20, and SPL) for multiple wallet addresses and networks. Returns a list of tokens with balances for each wallet/network combination. This endpoint is supported on Ethereum, Solana, and 30+ EVM chains. See the full list of supported networks [here](https://dashboard.alchemy.com/chains)\n",
+        "tags": [
+          "Portfolio API Endpoints"
+        ],
+        "parameters": [
+          {
+            "name": "apiKey",
+            "in": "path",
+            "schema": {
+              "type": "string",
+              "default": "docs-demo",
+              "description": "For higher throughput, [create your own API key](https://dashboard.alchemy.com/signup)"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "addresses": {
+                    "type": "array",
+                    "description": "Array of address and networks pairs (limit 3 pairs, max 20 networks). Networks should match network enums.\n",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "address": {
+                          "type": "string",
+                          "description": "Wallet address.",
+                          "example": "0x1E6E8695FAb3Eb382534915eA8d7Cc1D1994B152",
+                          "default": "0x1E6E8695FAb3Eb382534915eA8d7Cc1D1994B152"
+                        },
+                        "networks": {
+                          "type": "array",
+                          "default": [
+                            "eth-mainnet",
+                            "base-mainnet",
+                            "matic-mainnet"
+                          ],
+                          "items": {
+                            "type": "string",
+                            "default": "eth-mainnet"
+                          },
+                          "description": "Network identifier (e.g., eth-mainnet). Find more network enums [here](https://dashboard.alchemy.com/chains)"
+                        }
+                      },
+                      "required": [
+                        "address",
+                        "networks"
+                      ]
+                    }
+                  },
+                  "includeNativeTokens": {
+                    "type": "boolean",
+                    "description": "Whether to include each chain's native token in the response (e.g. ETH on Ethereum). The native token will have a null contract address.",
+                    "example": true,
+                    "default": true
+                  },
+                  "includeErc20Tokens": {
+                    "description": "Boolean - if set to `true`, returns ERC-20 tokens. Setting this to false will reduce payload size and may result in a faster API call.",
+                    "type": "boolean",
+                    "default": true
+                  }
+                },
+                "required": [
+                  "addresses"
+                ]
+              },
+              "example": {
+                "addresses": [
+                  {
+                    "address": "0x1E6E8695FAb3Eb382534915eA8d7Cc1D1994B152",
+                    "networks": [
+                      "eth-mainnet",
+                      "base-mainnet",
+                      "matic-mainnet"
+                    ]
+                  }
+                ],
+                "includeNativeTokens": true,
+                "includeErc20Tokens": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "tokens": {
+                          "type": "array",
+                          "description": "List of token balances by address.",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "network": {
+                                "type": "string",
+                                "description": "Network identifier."
+                              },
+                              "address": {
+                                "type": "string",
+                                "description": "Wallet address."
+                              },
+                              "tokenAddress": {
+                                "type": "string",
+                                "description": "Token address."
+                              },
+                              "tokenBalance": {
+                                "type": "string",
+                                "description": "Balance of that particular token."
+                              }
+                            },
+                            "required": [
+                              "network",
+                              "address",
+                              "tokenAddress",
+                              "tokenBalance"
+                            ]
+                          }
+                        },
+                        "pageKey": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request: Invalid input (e.g., malformed JSON).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "description": "Detailed error message."
+                        }
+                      },
+                      "required": [
+                        "message"
+                      ],
+                      "description": "Error details."
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests: Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "description": "Detailed error message."
+                        }
+                      },
+                      "required": [
+                        "message"
+                      ],
+                      "description": "Error details."
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-token-balances-by-address"
+      }
+    },
+    "/{apiKey}/assets/nfts/by-address": {
+      "post": {
+        "summary": "NFTs By Wallet",
+        "description": "Fetches NFTs for multiple wallet addresses and networks. Returns a list of NFTs and metadata for each wallet/network combination. This endpoint is supported on Ethereum and many L2s, including Polygon, Arbitrum, Optimism, Base, World Chain and more. See the full list of supported networks [here](https://dashboard.alchemy.com/chains).\n",
+        "tags": [
+          "Portfolio API Endpoints"
+        ],
+        "parameters": [
+          {
+            "name": "apiKey",
+            "in": "path",
+            "schema": {
+              "type": "string",
+              "default": "docs-demo",
+              "description": "For higher throughput, [create your own API key](https://dashboard.alchemy.com/signup)"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "addresses": {
+                        "type": "array",
+                        "description": "Array of address and networks pairs (limit 2 pairs, max 15 networks each). Networks should match network enums.\n",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "address": {
+                              "type": "string",
+                              "description": "Wallet address.",
+                              "example": "0x1E6E8695FAb3Eb382534915eA8d7Cc1D1994B152",
+                              "default": "0x1E6E8695FAb3Eb382534915eA8d7Cc1D1994B152"
+                            },
+                            "networks": {
+                              "type": "array",
+                              "default": [
+                                "eth-mainnet",
+                                "base-mainnet",
+                                "matic-mainnet"
+                              ],
+                              "items": {
+                                "type": "string",
+                                "enum": [
+                                  "eth-mainnet",
+                                  "eth-sepolia",
+                                  "eth-holesky",
+                                  "avax-mainnet",
+                                  "avax-fuji",
+                                  "zksync-mainnet",
+                                  "opt-mainnet",
+                                  "polygon-mainnet",
+                                  "polygon-amoy",
+                                  "arb-mainnet",
+                                  "arb-sepolia",
+                                  "blast-mainnet",
+                                  "blast-sepolia",
+                                  "base-mainnet",
+                                  "base-sepolia",
+                                  "soneium-mainnet",
+                                  "soneium-minato",
+                                  "scroll-mainnet",
+                                  "scroll-sepolia",
+                                  "shape-mainnet",
+                                  "shape-sepolia",
+                                  "lens-mainnet",
+                                  "lens-sepolia",
+                                  "starknet-mainnet",
+                                  "starknet-sepolia",
+                                  "rootstock-mainnet",
+                                  "rootstock-testnet",
+                                  "linea-mainnet",
+                                  "linea-sepolia",
+                                  "settlus-septestnet",
+                                  "abstract-mainnet",
+                                  "abstract-testnet",
+                                  "apechain-mainnet"
+                                ],
+                                "default": "eth-mainnet"
+                              },
+                              "description": "Network identifier (e.g., eth-mainnet). Find more network enums [here](https://dashboard.alchemy.com/chains)"
+                            },
+                            "excludeFilters": {
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "enum": [
+                                  "SPAM",
+                                  "AIRDROPS"
+                                ],
+                                "default": "SPAM"
+                              }
+                            },
+                            "includeFilters": {
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "enum": [
+                                  "SPAM",
+                                  "AIRDROPS"
+                                ],
+                                "default": "SPAM"
+                              }
+                            },
+                            "spamConfidenceLevel": {
+                              "type": "string",
+                              "enum": [
+                                "VERY_HIGH",
+                                "HIGH",
+                                "MEDIUM",
+                                "LOW"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "address",
+                            "networks"
+                          ]
+                        }
+                      },
+                      "withMetadata": {
+                        "description": "Boolean - if set to `true`, returns metadata. Setting this to false will reduce payload size and may result in a faster API call.",
+                        "type": "boolean",
+                        "default": true
+                      },
+                      "pageKey": {
+                        "type": "string"
+                      },
+                      "pageSize": {
+                        "type": "integer",
+                        "default": 100
+                      }
+                    },
+                    "required": [
+                      "addresses"
+                    ]
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "orderBy": {
+                        "type": "string",
+                        "enum": [
+                          "transferTime"
+                        ],
+                        "description": "Field to order results by"
+                      },
+                      "sortOrder": {
+                        "type": "string",
+                        "enum": [
+                          "asc",
+                          "desc"
+                        ],
+                        "description": "Sort order for results"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "description": "List of nfts by address with appropriate metadata.",
+                      "properties": {
+                        "ownedNfts": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "description": "The object that represents an NFT and has all data corresponding to that NFT",
+                            "properties": {
+                              "network": {
+                                "type": "string",
+                                "description": "Network identifier."
+                              },
+                              "address": {
+                                "type": "string",
+                                "description": "Wallet address."
+                              },
+                              "contract": {
+                                "type": "object",
+                                "description": "The contract object that has details of a contract",
+                                "properties": {
+                                  "address": {
+                                    "description": "Address of the held contract",
+                                    "type": "string"
+                                  },
+                                  "name": {
+                                    "type": "string",
+                                    "description": "String - NFT contract name."
+                                  },
+                                  "symbol": {
+                                    "type": "string",
+                                    "description": "String - NFT contract symbol abbreviation."
+                                  },
+                                  "totalSupply": {
+                                    "type": "string",
+                                    "description": "String - Total number of NFTs in a given NFT collection."
+                                  },
+                                  "tokenType": {
+                                    "type": "string",
+                                    "enum": [
+                                      "ERC721",
+                                      "ERC1155",
+                                      "NO_SUPPORTED_NFT_STANDARD",
+                                      "NOT_A_CONTRACT"
+                                    ],
+                                    "description": "String - For valid NFTs, 'ERC721' or 'ERC1155.' For invalid NFTs, a descriptive reason such as 'NO_SUPPORTED_NFT_STANDARD' if the input contract address doesn't support a known NFT standard, or 'NOT_A_CONTRACT' if there is no contract deployed at the input address."
+                                  },
+                                  "contractDeployer": {
+                                    "type": "string",
+                                    "description": "String - Address that deployed the smart contract"
+                                  },
+                                  "deployedBlockNumber": {
+                                    "type": "number",
+                                    "description": "Number - The Block Number when the deployment transaction is successfully mined"
+                                  },
+                                  "openseaMetadata": {
+                                    "type": "object",
+                                    "description": "Note that the OpenSea metadata object is currently only available on ETH and Polygon Mainnet. Please reach out to us at support@alchemy.com if you would like to access this data on other networks.",
+                                    "properties": {
+                                      "floorPrice": {
+                                        "type": "number",
+                                        "description": "NFT floor price"
+                                      },
+                                      "collectionName": {
+                                        "type": "string",
+                                        "description": "OpenSea collection name"
+                                      },
+                                      "safelistRequestStatus": {
+                                        "type": "string",
+                                        "description": "Collection approval status within OpenSea. For more info, see the Opensea docs at docs.opensea.io/reference/collection-model"
+                                      },
+                                      "imageUrl": {
+                                        "type": "string",
+                                        "description": "OpenSea CDN image URL"
+                                      },
+                                      "description": {
+                                        "type": "string",
+                                        "description": "OpenSea collection description. Note: this value is truncated to 255 characters."
+                                      },
+                                      "externalUrl": {
+                                        "type": "string",
+                                        "description": "Collection homepage"
+                                      },
+                                      "twitterUsername": {
+                                        "type": "string",
+                                        "description": "The twitter username of the collection"
+                                      },
+                                      "discordUrl": {
+                                        "type": "string",
+                                        "description": "The discord URL of the collection"
+                                      },
+                                      "bannerImageUrl": {
+                                        "type": "string",
+                                        "description": "The banner image URL of the collection"
+                                      },
+                                      "lastIngestedAt": {
+                                        "type": "string",
+                                        "description": "The timestamp when the collection was last ingested by us"
+                                      }
+                                    }
+                                  },
+                                  "isSpam": {
+                                    "type": "string",
+                                    "description": "\"true\" if contract is spam, else \"false\". **Only available on paid tiers.**"
+                                  },
+                                  "spamClassifications": {
+                                    "description": "List of reasons why a contract was classified as spam. **Only available on paid tiers.**",
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    }
+                                  }
+                                }
+                              },
+                              "tokenId": {
+                                "type": "string",
+                                "default": "44"
+                              },
+                              "tokenType": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "type": "string",
+                                "description": "String - Name of the NFT asset."
+                              },
+                              "description": {
+                                "type": "string",
+                                "description": "String - Brief human-readable description"
+                              },
+                              "image": {
+                                "type": "object",
+                                "description": "Details of the image corresponding to this contract",
+                                "properties": {
+                                  "cachedUrl": {
+                                    "type": "string",
+                                    "description": "The Url of the image stored in Alchemy cache"
+                                  },
+                                  "thumbnailUrl": {
+                                    "type": "string",
+                                    "description": "The Url that has the thumbnail version of the NFT"
+                                  },
+                                  "pngUrl": {
+                                    "type": "string",
+                                    "description": "The Url that has the NFT image in png"
+                                  },
+                                  "contentType": {
+                                    "type": "string",
+                                    "description": "The Url of the image stored in Alchemy cache"
+                                  },
+                                  "size": {
+                                    "type": "integer",
+                                    "description": "The size of the media asset in bytes."
+                                  },
+                                  "originalUrl": {
+                                    "type": "string",
+                                    "description": "The original Url of the image coming straight from the smart contract"
+                                  }
+                                }
+                              },
+                              "raw": {
+                                "type": "object",
+                                "description": "Raw details of the NFT like its tokenUri and metadata info obtained directly from the smart contract",
+                                "properties": {
+                                  "tokenUri": {
+                                    "type": "string",
+                                    "description": "String - Uri representing the location of the NFT's original metadata blob. This is a backup for you to parse when the metadata field is not automatically populated."
+                                  },
+                                  "metadata": {
+                                    "type": "object",
+                                    "description": "Relevant metadata for NFT contract. This is useful for viewing image url, traits, etc. without having to follow the metadata url in tokenUri to parse manually.",
+                                    "properties": {
+                                      "image": {
+                                        "type": "string",
+                                        "description": "String - URL to the NFT asset image. Can be standard URLs pointing to images on conventional servers, IPFS, or Arweave. Most types of images (SVGs, PNGs, JPEGs, etc.) are supported by NFT marketplaces."
+                                      },
+                                      "name": {
+                                        "type": "string",
+                                        "description": "String - Name of the NFT asset."
+                                      },
+                                      "description": {
+                                        "type": "string",
+                                        "description": "String - Human-readable description of the NFT asset. (Markdown is supported/rendered on OpenSea and other NFT platforms)"
+                                      },
+                                      "attributes": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "object",
+                                          "properties": {
+                                            "value": {
+                                              "type": "string"
+                                            },
+                                            "trait_type": {
+                                              "type": "string"
+                                            }
+                                          }
+                                        },
+                                        "description": "Object - Traits/attributes/characteristics for each NFT asset."
+                                      }
+                                    }
+                                  },
+                                  "error": {
+                                    "type": "string",
+                                    "description": "String - A string describing a particular reason that we were unable to fetch complete metadata for the NFT."
+                                  }
+                                }
+                              },
+                              "collection": {
+                                "type": "object",
+                                "description": "The collection object that has details of a collection",
+                                "properties": {
+                                  "name": {
+                                    "type": "string",
+                                    "description": "String - Collection name"
+                                  },
+                                  "slug": {
+                                    "type": "string",
+                                    "description": "String - OpenSea collection slug"
+                                  },
+                                  "externalUrl": {
+                                    "type": "string",
+                                    "description": "String - URL for the external site of the collection"
+                                  },
+                                  "bannerImageUrl": {
+                                    "type": "string",
+                                    "description": "String - Banner image URL for the collection"
+                                  }
+                                }
+                              },
+                              "tokenUri": {
+                                "type": "string",
+                                "description": "String - Uri representing the location of the NFT's original metadata blob. This is a backup for you to parse when the metadata field is not automatically populated."
+                              },
+                              "timeLastUpdated": {
+                                "type": "string",
+                                "description": "String - ISO timestamp of the last cache refresh for the information returned in the metadata field."
+                              },
+                              "acquiredAt": {
+                                "type": "object",
+                                "description": "Only present if the request specified `orderBy=transferTime`.",
+                                "properties": {
+                                  "blockTimestamp": {
+                                    "type": "string",
+                                    "description": "Block timestamp of the block where the NFT was most recently acquired."
+                                  },
+                                  "blockNumber": {
+                                    "type": "string",
+                                    "description": "Block number of the block where the NFT was most recently acquired."
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "totalCount": {
+                          "type": "integer",
+                          "description": "Integer - Total number of NFTs (distinct `tokenIds`) owned by the given address."
+                        },
+                        "pageKey": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request: Invalid input (e.g., malformed JSON).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "description": "Detailed error message."
+                        }
+                      },
+                      "required": [
+                        "message"
+                      ],
+                      "description": "Error details."
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests: Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "description": "Detailed error message."
+                        }
+                      },
+                      "required": [
+                        "message"
+                      ],
+                      "description": "Error details."
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-nfts-by-address"
+      }
+    },
+    "/{apiKey}/assets/nfts/contracts/by-address": {
+      "post": {
+        "summary": "NFT Collections By Wallet",
+        "description": "Fetches NFT collections (contracts) for multiple wallet addresses and networks. Returns a list of collections and metadata for each wallet/network combination. This endpoint is supported on Ethereum and many L2s, including Polygon, Arbitrum, Optimism, Base, World Chain and more. See the full list of supported networks [here](https://dashboard.alchemy.com/chains).\n",
+        "tags": [
+          "Portfolio API Endpoints"
+        ],
+        "parameters": [
+          {
+            "name": "apiKey",
+            "in": "path",
+            "schema": {
+              "type": "string",
+              "default": "docs-demo",
+              "description": "For higher throughput, [create your own API key](https://dashboard.alchemy.com/signup)"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "addresses": {
+                        "type": "array",
+                        "description": "Array of address and networks pairs (limit 2 pairs, max 15 networks each). Networks should match network enums.\n",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "address": {
+                              "type": "string",
+                              "description": "Wallet address.",
+                              "example": "0x1E6E8695FAb3Eb382534915eA8d7Cc1D1994B152",
+                              "default": "0x1E6E8695FAb3Eb382534915eA8d7Cc1D1994B152"
+                            },
+                            "networks": {
+                              "type": "array",
+                              "default": [
+                                "eth-mainnet",
+                                "base-mainnet",
+                                "matic-mainnet"
+                              ],
+                              "items": {
+                                "type": "string",
+                                "enum": [
+                                  "eth-mainnet",
+                                  "eth-sepolia",
+                                  "eth-holesky",
+                                  "avax-mainnet",
+                                  "avax-fuji",
+                                  "zksync-mainnet",
+                                  "opt-mainnet",
+                                  "polygon-mainnet",
+                                  "polygon-amoy",
+                                  "arb-mainnet",
+                                  "arb-sepolia",
+                                  "blast-mainnet",
+                                  "blast-sepolia",
+                                  "base-mainnet",
+                                  "base-sepolia",
+                                  "soneium-mainnet",
+                                  "soneium-minato",
+                                  "scroll-mainnet",
+                                  "scroll-sepolia",
+                                  "shape-mainnet",
+                                  "shape-sepolia",
+                                  "lens-mainnet",
+                                  "lens-sepolia",
+                                  "starknet-mainnet",
+                                  "starknet-sepolia",
+                                  "rootstock-mainnet",
+                                  "rootstock-testnet",
+                                  "linea-mainnet",
+                                  "linea-sepolia",
+                                  "settlus-septestnet",
+                                  "abstract-mainnet",
+                                  "abstract-testnet",
+                                  "apechain-mainnet"
+                                ],
+                                "default": "eth-mainnet"
+                              },
+                              "description": "Network identifier (e.g., eth-mainnet). Find more network enums [here](https://dashboard.alchemy.com/chains)"
+                            },
+                            "excludeFilters": {
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "enum": [
+                                  "SPAM",
+                                  "AIRDROPS"
+                                ],
+                                "default": "SPAM"
+                              }
+                            },
+                            "includeFilters": {
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "enum": [
+                                  "SPAM",
+                                  "AIRDROPS"
+                                ],
+                                "default": "SPAM"
+                              }
+                            },
+                            "spamConfidenceLevel": {
+                              "type": "string",
+                              "enum": [
+                                "VERY_HIGH",
+                                "HIGH",
+                                "MEDIUM",
+                                "LOW"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "address",
+                            "networks"
+                          ]
+                        }
+                      },
+                      "withMetadata": {
+                        "description": "Boolean - if set to `true`, returns metadata. Setting this to false will reduce payload size and may result in a faster API call.",
+                        "type": "boolean",
+                        "default": true
+                      },
+                      "pageKey": {
+                        "type": "string"
+                      },
+                      "pageSize": {
+                        "type": "integer",
+                        "default": 100
+                      }
+                    },
+                    "required": [
+                      "addresses"
+                    ]
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "orderBy": {
+                        "type": "string",
+                        "enum": [
+                          "transferTime"
+                        ],
+                        "description": "Field to order results by"
+                      },
+                      "sortOrder": {
+                        "type": "string",
+                        "enum": [
+                          "asc",
+                          "desc"
+                        ],
+                        "description": "Sort order for results"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "description": "List of nft collections.",
+                      "properties": {
+                        "contracts": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "description": "The object that represents an NFT collection",
+                            "properties": {
+                              "network": {
+                                "type": "string",
+                                "description": "Network identifier."
+                              },
+                              "address": {
+                                "type": "string",
+                                "description": "Wallet address."
+                              },
+                              "contract": {
+                                "type": "object",
+                                "description": "The contract object that has details of a contract",
+                                "properties": {
+                                  "address": {
+                                    "description": "Address of the held contract",
+                                    "type": "string"
+                                  },
+                                  "name": {
+                                    "type": "string",
+                                    "description": "String - NFT contract name."
+                                  },
+                                  "symbol": {
+                                    "type": "string",
+                                    "description": "String - NFT contract symbol abbreviation."
+                                  },
+                                  "totalSupply": {
+                                    "type": "string",
+                                    "description": "String - Total number of NFTs in a given NFT collection."
+                                  },
+                                  "tokenType": {
+                                    "type": "string",
+                                    "enum": [
+                                      "ERC721",
+                                      "ERC1155",
+                                      "NO_SUPPORTED_NFT_STANDARD",
+                                      "NOT_A_CONTRACT"
+                                    ],
+                                    "description": "String - For valid NFTs, 'ERC721' or 'ERC1155.' For invalid NFTs, a descriptive reason such as 'NO_SUPPORTED_NFT_STANDARD' if the input contract address doesn't support a known NFT standard, or 'NOT_A_CONTRACT' if there is no contract deployed at the input address."
+                                  },
+                                  "contractDeployer": {
+                                    "type": "string",
+                                    "description": "String - Address that deployed the smart contract"
+                                  },
+                                  "deployedBlockNumber": {
+                                    "type": "number",
+                                    "description": "Number - The Block Number when the deployment transaction is successfully mined"
+                                  },
+                                  "openseaMetadata": {
+                                    "type": "object",
+                                    "description": "Note that the OpenSea metadata object is currently only available on ETH and Polygon Mainnet. Please reach out to us at support@alchemy.com if you would like to access this data on other networks.",
+                                    "properties": {
+                                      "floorPrice": {
+                                        "type": "number",
+                                        "description": "NFT floor price"
+                                      },
+                                      "collectionName": {
+                                        "type": "string",
+                                        "description": "OpenSea collection name"
+                                      },
+                                      "safelistRequestStatus": {
+                                        "type": "string",
+                                        "description": "Collection approval status within OpenSea. For more info, see the Opensea docs at docs.opensea.io/reference/collection-model"
+                                      },
+                                      "imageUrl": {
+                                        "type": "string",
+                                        "description": "OpenSea CDN image URL"
+                                      },
+                                      "description": {
+                                        "type": "string",
+                                        "description": "OpenSea collection description. Note: this value is truncated to 255 characters."
+                                      },
+                                      "externalUrl": {
+                                        "type": "string",
+                                        "description": "Collection homepage"
+                                      },
+                                      "twitterUsername": {
+                                        "type": "string",
+                                        "description": "The twitter username of the collection"
+                                      },
+                                      "discordUrl": {
+                                        "type": "string",
+                                        "description": "The discord URL of the collection"
+                                      },
+                                      "bannerImageUrl": {
+                                        "type": "string",
+                                        "description": "The banner image URL of the collection"
+                                      },
+                                      "lastIngestedAt": {
+                                        "type": "string",
+                                        "description": "The timestamp when the collection was last ingested by us"
+                                      }
+                                    }
+                                  },
+                                  "isSpam": {
+                                    "type": "string",
+                                    "description": "\"true\" if contract is spam, else \"false\". **Only available on paid tiers.**"
+                                  },
+                                  "spamClassifications": {
+                                    "description": "List of reasons why a contract was classified as spam. **Only available on paid tiers.**",
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "totalCount": {
+                          "type": "integer",
+                          "description": "Integer - Total number of NFTs (distinct `tokenIds`) owned by the given address."
+                        },
+                        "pageKey": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request: Invalid input (e.g., malformed JSON).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "description": "Detailed error message."
+                        }
+                      },
+                      "required": [
+                        "message"
+                      ],
+                      "description": "Error details."
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests: Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "description": "Detailed error message."
+                        }
+                      },
+                      "required": [
+                        "message"
+                      ],
+                      "description": "Error details."
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-nft-contracts-by-address"
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ByAddressRequest": {
+        "type": "object",
+        "properties": {
+          "addresses": {
+            "type": "array",
+            "description": "Array of wallet addresses and the networks to query them on. Maximum 2 addresses and maximum 5 networks per address.\n",
+            "items": {
+              "type": "object",
+              "properties": {
+                "address": {
+                  "type": "string",
+                  "description": "Wallet address.",
+                  "example": "0x1E6E8695FAb3Eb382534915eA8d7Cc1D1994B152",
+                  "default": "0x1E6E8695FAb3Eb382534915eA8d7Cc1D1994B152"
+                },
+                "networks": {
+                  "type": "array",
+                  "default": [
+                    "eth-mainnet",
+                    "base-mainnet",
+                    "matic-mainnet"
+                  ],
+                  "items": {
+                    "type": "string",
+                    "default": "eth-mainnet"
+                  },
+                  "description": "Network identifier (e.g., eth-mainnet). Find more network enums [here](https://dashboard.alchemy.com/chains)"
+                }
+              },
+              "required": [
+                "address",
+                "networks"
+              ]
+            }
+          }
+        },
+        "required": [
+          "addresses"
+        ]
+      },
+      "ByAddressRequestWith1AddressAnd2Networks": {
+        "type": "object",
+        "properties": {
+          "addresses": {
+            "type": "array",
+            "description": "Array of address and networks pairs (limit 1 pairs, max 2 networks). Networks should match network enums.\n",
+            "items": {
+              "type": "object",
+              "properties": {
+                "address": {
+                  "type": "string",
+                  "description": "Wallet address.",
+                  "example": "0x1E6E8695FAb3Eb382534915eA8d7Cc1D1994B152",
+                  "default": "0x1E6E8695FAb3Eb382534915eA8d7Cc1D1994B152"
+                },
+                "networks": {
+                  "type": "array",
+                  "default": [
+                    "eth-mainnet",
+                    "base-mainnet"
+                  ],
+                  "items": {
+                    "type": "string",
+                    "default": "eth-mainnet"
+                  },
+                  "description": "(In BETA and only accepts ETH & BASE mainnets). Network identifier (e.g., eth-mainnet). Find more network enums [here](https://dashboard.alchemy.com/chains)"
+                }
+              },
+              "required": [
+                "address",
+                "networks"
+              ]
+            }
+          },
+          "before": {
+            "type": "string",
+            "description": "The cursor that points to the previous set of results."
+          },
+          "after": {
+            "type": "string",
+            "description": "The cursor that points to the end of the current set of results."
+          },
+          "limit": {
+            "type": "integer",
+            "description": "Sets the maximum number of items per page (Max: 50)",
+            "default": 25
+          },
+          "pageKey": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "addresses"
+        ]
+      },
+      "ByAddressRequestWith3PairsAnd20Networks": {
+        "type": "object",
+        "properties": {
+          "addresses": {
+            "type": "array",
+            "description": "Array of address and networks pairs (limit 3 pairs, max 20 networks). Networks should match network enums.\n",
+            "items": {
+              "type": "object",
+              "properties": {
+                "address": {
+                  "type": "string",
+                  "description": "Wallet address.",
+                  "example": "0x1E6E8695FAb3Eb382534915eA8d7Cc1D1994B152",
+                  "default": "0x1E6E8695FAb3Eb382534915eA8d7Cc1D1994B152"
+                },
+                "networks": {
+                  "type": "array",
+                  "default": [
+                    "eth-mainnet",
+                    "base-mainnet",
+                    "matic-mainnet"
+                  ],
+                  "items": {
+                    "type": "string",
+                    "default": "eth-mainnet"
+                  },
+                  "description": "Network identifier (e.g., eth-mainnet). Find more network enums [here](https://dashboard.alchemy.com/chains)"
+                }
+              },
+              "required": [
+                "address",
+                "networks"
+              ]
+            }
+          },
+          "includeNativeTokens": {
+            "type": "boolean",
+            "description": "Whether to include each chain's native token in the response (e.g. ETH on Ethereum). The native token will have a null contract address.",
+            "example": true,
+            "default": true
+          },
+          "includeErc20Tokens": {
+            "description": "Boolean - if set to `true`, returns ERC-20 tokens. Setting this to false will reduce payload size and may result in a faster API call.",
+            "type": "boolean",
+            "default": true
+          }
+        },
+        "required": [
+          "addresses"
+        ]
+      },
+      "ByAddressRequestWithOptions": {
+        "type": "object",
+        "properties": {
+          "addresses": {
+            "type": "array",
+            "description": "Array of wallet addresses and the networks to query them on. Maximum 2 addresses and maximum 5 networks per address.\n",
+            "items": {
+              "type": "object",
+              "properties": {
+                "address": {
+                  "type": "string",
+                  "description": "Wallet address.",
+                  "example": "0x1E6E8695FAb3Eb382534915eA8d7Cc1D1994B152",
+                  "default": "0x1E6E8695FAb3Eb382534915eA8d7Cc1D1994B152"
+                },
+                "networks": {
+                  "type": "array",
+                  "default": [
+                    "eth-mainnet",
+                    "base-mainnet",
+                    "matic-mainnet"
+                  ],
+                  "items": {
+                    "type": "string",
+                    "default": "eth-mainnet"
+                  },
+                  "description": "Network identifier (e.g., eth-mainnet). Find more network enums [here](https://dashboard.alchemy.com/chains)"
+                }
+              },
+              "required": [
+                "address",
+                "networks"
+              ]
+            }
+          },
+          "withMetadata": {
+            "description": "Boolean - if set to `true`, returns metadata. Setting this to false will reduce payload size and may result in a faster API call.",
+            "type": "boolean",
+            "default": true
+          },
+          "withPrices": {
+            "description": "Boolean - if set to `true`, returns token prices. Setting this to false will reduce payload size and may result in a faster API call.",
+            "type": "boolean",
+            "default": true
+          },
+          "includeNativeTokens": {
+            "type": "boolean",
+            "description": "Whether to include each chain's native token in the response (e.g. ETH on Ethereum). The native token will have a null contract address.",
+            "example": true,
+            "default": true
+          },
+          "includeErc20Tokens": {
+            "description": "Boolean - if set to `true`, returns ERC-20 tokens. Setting this to false will reduce payload size and may result in a faster API call.",
+            "type": "boolean",
+            "default": true
+          }
+        },
+        "required": [
+          "addresses"
+        ]
+      },
+      "ByAddressRequestWithNFTOptionsAndPaging": {
+        "type": "object",
+        "properties": {
+          "addresses": {
+            "type": "array",
+            "description": "Array of address and networks pairs (limit 2 pairs, max 15 networks each). Networks should match network enums.\n",
+            "items": {
+              "type": "object",
+              "properties": {
+                "address": {
+                  "type": "string",
+                  "description": "Wallet address.",
+                  "example": "0x1E6E8695FAb3Eb382534915eA8d7Cc1D1994B152",
+                  "default": "0x1E6E8695FAb3Eb382534915eA8d7Cc1D1994B152"
+                },
+                "networks": {
+                  "type": "array",
+                  "default": [
+                    "eth-mainnet",
+                    "base-mainnet",
+                    "matic-mainnet"
+                  ],
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "eth-mainnet",
+                      "eth-sepolia",
+                      "eth-holesky",
+                      "avax-mainnet",
+                      "avax-fuji",
+                      "zksync-mainnet",
+                      "opt-mainnet",
+                      "polygon-mainnet",
+                      "polygon-amoy",
+                      "arb-mainnet",
+                      "arb-sepolia",
+                      "blast-mainnet",
+                      "blast-sepolia",
+                      "base-mainnet",
+                      "base-sepolia",
+                      "soneium-mainnet",
+                      "soneium-minato",
+                      "scroll-mainnet",
+                      "scroll-sepolia",
+                      "shape-mainnet",
+                      "shape-sepolia",
+                      "lens-mainnet",
+                      "lens-sepolia",
+                      "starknet-mainnet",
+                      "starknet-sepolia",
+                      "rootstock-mainnet",
+                      "rootstock-testnet",
+                      "linea-mainnet",
+                      "linea-sepolia",
+                      "settlus-septestnet",
+                      "abstract-mainnet",
+                      "abstract-testnet",
+                      "apechain-mainnet"
+                    ],
+                    "default": "eth-mainnet"
+                  },
+                  "description": "Network identifier (e.g., eth-mainnet). Find more network enums [here](https://dashboard.alchemy.com/chains)"
+                },
+                "excludeFilters": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "SPAM",
+                      "AIRDROPS"
+                    ],
+                    "default": "SPAM"
+                  }
+                },
+                "includeFilters": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "SPAM",
+                      "AIRDROPS"
+                    ],
+                    "default": "SPAM"
+                  }
+                },
+                "spamConfidenceLevel": {
+                  "type": "string",
+                  "enum": [
+                    "VERY_HIGH",
+                    "HIGH",
+                    "MEDIUM",
+                    "LOW"
+                  ]
+                }
+              },
+              "required": [
+                "address",
+                "networks"
+              ]
+            }
+          },
+          "withMetadata": {
+            "description": "Boolean - if set to `true`, returns metadata. Setting this to false will reduce payload size and may result in a faster API call.",
+            "type": "boolean",
+            "default": true
+          },
+          "pageKey": {
+            "type": "string"
+          },
+          "pageSize": {
+            "type": "integer",
+            "default": 100
+          }
+        },
+        "required": [
+          "addresses"
+        ]
+      },
+      "ByAddressRequestWithNFTOptions": {
+        "type": "object",
+        "properties": {
+          "addresses": {
+            "type": "array",
+            "description": "Array of wallet addresses and the networks to query them on. Maximum 2 addresses and maximum 5 networks per address.\n",
+            "items": {
+              "type": "object",
+              "properties": {
+                "address": {
+                  "type": "string",
+                  "description": "Wallet address.",
+                  "example": "0x1E6E8695FAb3Eb382534915eA8d7Cc1D1994B152",
+                  "default": "0x1E6E8695FAb3Eb382534915eA8d7Cc1D1994B152"
+                },
+                "networks": {
+                  "type": "array",
+                  "default": [
+                    "eth-mainnet",
+                    "base-mainnet",
+                    "matic-mainnet"
+                  ],
+                  "items": {
+                    "type": "string",
+                    "default": "eth-mainnet"
+                  },
+                  "description": "Network identifier (e.g., eth-mainnet). Find more network enums [here](https://dashboard.alchemy.com/chains)"
+                }
+              },
+              "required": [
+                "address",
+                "networks"
+              ]
+            }
+          },
+          "withMetadata": {
+            "description": "Boolean - if set to `true`, returns metadata. Setting this to false will reduce payload size and may result in a faster API call.",
+            "type": "boolean",
+            "default": true
+          }
+        },
+        "required": [
+          "addresses"
+        ]
+      },
+      "AddressItemForNFTOwnership": {
+        "type": "object",
+        "properties": {
+          "address": {
+            "type": "string",
+            "description": "Wallet address.",
+            "example": "0x1E6E8695FAb3Eb382534915eA8d7Cc1D1994B152",
+            "default": "0x1E6E8695FAb3Eb382534915eA8d7Cc1D1994B152"
+          },
+          "networks": {
+            "type": "array",
+            "default": [
+              "eth-mainnet",
+              "base-mainnet",
+              "matic-mainnet"
+            ],
+            "items": {
+              "type": "string",
+              "enum": [
+                "eth-mainnet",
+                "eth-sepolia",
+                "eth-holesky",
+                "avax-mainnet",
+                "avax-fuji",
+                "zksync-mainnet",
+                "opt-mainnet",
+                "polygon-mainnet",
+                "polygon-amoy",
+                "arb-mainnet",
+                "arb-sepolia",
+                "blast-mainnet",
+                "blast-sepolia",
+                "base-mainnet",
+                "base-sepolia",
+                "soneium-mainnet",
+                "soneium-minato",
+                "scroll-mainnet",
+                "scroll-sepolia",
+                "shape-mainnet",
+                "shape-sepolia",
+                "lens-mainnet",
+                "lens-sepolia",
+                "starknet-mainnet",
+                "starknet-sepolia",
+                "rootstock-mainnet",
+                "rootstock-testnet",
+                "linea-mainnet",
+                "linea-sepolia",
+                "settlus-septestnet",
+                "abstract-mainnet",
+                "abstract-testnet",
+                "apechain-mainnet"
+              ],
+              "default": "eth-mainnet"
+            },
+            "description": "Network identifier (e.g., eth-mainnet). Find more network enums [here](https://dashboard.alchemy.com/chains)"
+          },
+          "excludeFilters": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "SPAM",
+                "AIRDROPS"
+              ],
+              "default": "SPAM"
+            }
+          },
+          "includeFilters": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "SPAM",
+                "AIRDROPS"
+              ],
+              "default": "SPAM"
+            }
+          },
+          "spamConfidenceLevel": {
+            "type": "string",
+            "enum": [
+              "VERY_HIGH",
+              "HIGH",
+              "MEDIUM",
+              "LOW"
+            ]
+          }
+        },
+        "required": [
+          "address",
+          "networks"
+        ]
+      },
+      "TokensResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "description": "List of tokens by address, with prices and metadata.",
+            "properties": {
+              "tokens": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "address": {
+                      "type": "string",
+                      "description": "Wallet address."
+                    },
+                    "network": {
+                      "type": "string",
+                      "description": "Network identifier."
+                    },
+                    "tokenAddress": {
+                      "type": "string",
+                      "description": "Token address."
+                    },
+                    "tokenBalance": {
+                      "type": "string",
+                      "description": "Balance of that particular token."
+                    },
+                    "tokenMetadata": {
+                      "type": "object",
+                      "properties": {
+                        "decimals": {
+                          "type": "integer",
+                          "description": "Number of decimals the token uses"
+                        },
+                        "logo": {
+                          "type": "string",
+                          "description": "URL of the token's logo image"
+                        },
+                        "name": {
+                          "type": "string",
+                          "description": "Token's name"
+                        },
+                        "symbol": {
+                          "type": "string",
+                          "description": "Token's symbol"
+                        }
+                      }
+                    },
+                    "tokenPrices": {
+                      "type": "array",
+                      "description": "List of price information.",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "currency": {
+                            "type": "string",
+                            "example": "usd"
+                          },
+                          "value": {
+                            "type": "string",
+                            "example": "4608.2208671202"
+                          },
+                          "lastUpdatedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "example": "2025-08-26T20:17:27Z"
+                          }
+                        },
+                        "required": [
+                          "currency",
+                          "value",
+                          "lastUpdatedAt"
+                        ]
+                      }
+                    },
+                    "error": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "description": "Error message if applicable."
+                    }
+                  },
+                  "required": [
+                    "network",
+                    "address",
+                    "tokenAddress",
+                    "tokenBalance"
+                  ]
+                }
+              },
+              "pageKey": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "TokenBalancesResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "tokens": {
+                "type": "array",
+                "description": "List of token balances by address.",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "network": {
+                      "type": "string",
+                      "description": "Network identifier."
+                    },
+                    "address": {
+                      "type": "string",
+                      "description": "Wallet address."
+                    },
+                    "tokenAddress": {
+                      "type": "string",
+                      "description": "Token address."
+                    },
+                    "tokenBalance": {
+                      "type": "string",
+                      "description": "Balance of that particular token."
+                    }
+                  },
+                  "required": [
+                    "network",
+                    "address",
+                    "tokenAddress",
+                    "tokenBalance"
+                  ]
+                }
+              },
+              "pageKey": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "NFTByOwnerResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "description": "List of nfts by address with appropriate metadata.",
+            "properties": {
+              "ownedNfts": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "description": "The object that represents an NFT and has all data corresponding to that NFT",
+                  "properties": {
+                    "network": {
+                      "type": "string",
+                      "description": "Network identifier."
+                    },
+                    "address": {
+                      "type": "string",
+                      "description": "Wallet address."
+                    },
+                    "contract": {
+                      "type": "object",
+                      "description": "The contract object that has details of a contract",
+                      "properties": {
+                        "address": {
+                          "description": "Address of the held contract",
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string",
+                          "description": "String - NFT contract name."
+                        },
+                        "symbol": {
+                          "type": "string",
+                          "description": "String - NFT contract symbol abbreviation."
+                        },
+                        "totalSupply": {
+                          "type": "string",
+                          "description": "String - Total number of NFTs in a given NFT collection."
+                        },
+                        "tokenType": {
+                          "type": "string",
+                          "enum": [
+                            "ERC721",
+                            "ERC1155",
+                            "NO_SUPPORTED_NFT_STANDARD",
+                            "NOT_A_CONTRACT"
+                          ],
+                          "description": "String - For valid NFTs, 'ERC721' or 'ERC1155.' For invalid NFTs, a descriptive reason such as 'NO_SUPPORTED_NFT_STANDARD' if the input contract address doesn't support a known NFT standard, or 'NOT_A_CONTRACT' if there is no contract deployed at the input address."
+                        },
+                        "contractDeployer": {
+                          "type": "string",
+                          "description": "String - Address that deployed the smart contract"
+                        },
+                        "deployedBlockNumber": {
+                          "type": "number",
+                          "description": "Number - The Block Number when the deployment transaction is successfully mined"
+                        },
+                        "openseaMetadata": {
+                          "type": "object",
+                          "description": "Note that the OpenSea metadata object is currently only available on ETH and Polygon Mainnet. Please reach out to us at support@alchemy.com if you would like to access this data on other networks.",
+                          "properties": {
+                            "floorPrice": {
+                              "type": "number",
+                              "description": "NFT floor price"
+                            },
+                            "collectionName": {
+                              "type": "string",
+                              "description": "OpenSea collection name"
+                            },
+                            "safelistRequestStatus": {
+                              "type": "string",
+                              "description": "Collection approval status within OpenSea. For more info, see the Opensea docs at docs.opensea.io/reference/collection-model"
+                            },
+                            "imageUrl": {
+                              "type": "string",
+                              "description": "OpenSea CDN image URL"
+                            },
+                            "description": {
+                              "type": "string",
+                              "description": "OpenSea collection description. Note: this value is truncated to 255 characters."
+                            },
+                            "externalUrl": {
+                              "type": "string",
+                              "description": "Collection homepage"
+                            },
+                            "twitterUsername": {
+                              "type": "string",
+                              "description": "The twitter username of the collection"
+                            },
+                            "discordUrl": {
+                              "type": "string",
+                              "description": "The discord URL of the collection"
+                            },
+                            "bannerImageUrl": {
+                              "type": "string",
+                              "description": "The banner image URL of the collection"
+                            },
+                            "lastIngestedAt": {
+                              "type": "string",
+                              "description": "The timestamp when the collection was last ingested by us"
+                            }
+                          }
+                        },
+                        "isSpam": {
+                          "type": "string",
+                          "description": "\"true\" if contract is spam, else \"false\". **Only available on paid tiers.**"
+                        },
+                        "spamClassifications": {
+                          "description": "List of reasons why a contract was classified as spam. **Only available on paid tiers.**",
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    },
+                    "tokenId": {
+                      "type": "string",
+                      "default": "44"
+                    },
+                    "tokenType": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "String - Name of the NFT asset."
+                    },
+                    "description": {
+                      "type": "string",
+                      "description": "String - Brief human-readable description"
+                    },
+                    "image": {
+                      "type": "object",
+                      "description": "Details of the image corresponding to this contract",
+                      "properties": {
+                        "cachedUrl": {
+                          "type": "string",
+                          "description": "The Url of the image stored in Alchemy cache"
+                        },
+                        "thumbnailUrl": {
+                          "type": "string",
+                          "description": "The Url that has the thumbnail version of the NFT"
+                        },
+                        "pngUrl": {
+                          "type": "string",
+                          "description": "The Url that has the NFT image in png"
+                        },
+                        "contentType": {
+                          "type": "string",
+                          "description": "The Url of the image stored in Alchemy cache"
+                        },
+                        "size": {
+                          "type": "integer",
+                          "description": "The size of the media asset in bytes."
+                        },
+                        "originalUrl": {
+                          "type": "string",
+                          "description": "The original Url of the image coming straight from the smart contract"
+                        }
+                      }
+                    },
+                    "raw": {
+                      "type": "object",
+                      "description": "Raw details of the NFT like its tokenUri and metadata info obtained directly from the smart contract",
+                      "properties": {
+                        "tokenUri": {
+                          "type": "string",
+                          "description": "String - Uri representing the location of the NFT's original metadata blob. This is a backup for you to parse when the metadata field is not automatically populated."
+                        },
+                        "metadata": {
+                          "type": "object",
+                          "description": "Relevant metadata for NFT contract. This is useful for viewing image url, traits, etc. without having to follow the metadata url in tokenUri to parse manually.",
+                          "properties": {
+                            "image": {
+                              "type": "string",
+                              "description": "String - URL to the NFT asset image. Can be standard URLs pointing to images on conventional servers, IPFS, or Arweave. Most types of images (SVGs, PNGs, JPEGs, etc.) are supported by NFT marketplaces."
+                            },
+                            "name": {
+                              "type": "string",
+                              "description": "String - Name of the NFT asset."
+                            },
+                            "description": {
+                              "type": "string",
+                              "description": "String - Human-readable description of the NFT asset. (Markdown is supported/rendered on OpenSea and other NFT platforms)"
+                            },
+                            "attributes": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "value": {
+                                    "type": "string"
+                                  },
+                                  "trait_type": {
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "description": "Object - Traits/attributes/characteristics for each NFT asset."
+                            }
+                          }
+                        },
+                        "error": {
+                          "type": "string",
+                          "description": "String - A string describing a particular reason that we were unable to fetch complete metadata for the NFT."
+                        }
+                      }
+                    },
+                    "collection": {
+                      "type": "object",
+                      "description": "The collection object that has details of a collection",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "description": "String - Collection name"
+                        },
+                        "slug": {
+                          "type": "string",
+                          "description": "String - OpenSea collection slug"
+                        },
+                        "externalUrl": {
+                          "type": "string",
+                          "description": "String - URL for the external site of the collection"
+                        },
+                        "bannerImageUrl": {
+                          "type": "string",
+                          "description": "String - Banner image URL for the collection"
+                        }
+                      }
+                    },
+                    "tokenUri": {
+                      "type": "string",
+                      "description": "String - Uri representing the location of the NFT's original metadata blob. This is a backup for you to parse when the metadata field is not automatically populated."
+                    },
+                    "timeLastUpdated": {
+                      "type": "string",
+                      "description": "String - ISO timestamp of the last cache refresh for the information returned in the metadata field."
+                    },
+                    "acquiredAt": {
+                      "type": "object",
+                      "description": "Only present if the request specified `orderBy=transferTime`.",
+                      "properties": {
+                        "blockTimestamp": {
+                          "type": "string",
+                          "description": "Block timestamp of the block where the NFT was most recently acquired."
+                        },
+                        "blockNumber": {
+                          "type": "string",
+                          "description": "Block number of the block where the NFT was most recently acquired."
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "totalCount": {
+                "type": "integer",
+                "description": "Integer - Total number of NFTs (distinct `tokenIds`) owned by the given address."
+              },
+              "pageKey": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "NFTCollectionsByOwnerResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "description": "List of nft collections.",
+            "properties": {
+              "contracts": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "description": "The object that represents an NFT collection",
+                  "properties": {
+                    "network": {
+                      "type": "string",
+                      "description": "Network identifier."
+                    },
+                    "address": {
+                      "type": "string",
+                      "description": "Wallet address."
+                    },
+                    "contract": {
+                      "type": "object",
+                      "description": "The contract object that has details of a contract",
+                      "properties": {
+                        "address": {
+                          "description": "Address of the held contract",
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string",
+                          "description": "String - NFT contract name."
+                        },
+                        "symbol": {
+                          "type": "string",
+                          "description": "String - NFT contract symbol abbreviation."
+                        },
+                        "totalSupply": {
+                          "type": "string",
+                          "description": "String - Total number of NFTs in a given NFT collection."
+                        },
+                        "tokenType": {
+                          "type": "string",
+                          "enum": [
+                            "ERC721",
+                            "ERC1155",
+                            "NO_SUPPORTED_NFT_STANDARD",
+                            "NOT_A_CONTRACT"
+                          ],
+                          "description": "String - For valid NFTs, 'ERC721' or 'ERC1155.' For invalid NFTs, a descriptive reason such as 'NO_SUPPORTED_NFT_STANDARD' if the input contract address doesn't support a known NFT standard, or 'NOT_A_CONTRACT' if there is no contract deployed at the input address."
+                        },
+                        "contractDeployer": {
+                          "type": "string",
+                          "description": "String - Address that deployed the smart contract"
+                        },
+                        "deployedBlockNumber": {
+                          "type": "number",
+                          "description": "Number - The Block Number when the deployment transaction is successfully mined"
+                        },
+                        "openseaMetadata": {
+                          "type": "object",
+                          "description": "Note that the OpenSea metadata object is currently only available on ETH and Polygon Mainnet. Please reach out to us at support@alchemy.com if you would like to access this data on other networks.",
+                          "properties": {
+                            "floorPrice": {
+                              "type": "number",
+                              "description": "NFT floor price"
+                            },
+                            "collectionName": {
+                              "type": "string",
+                              "description": "OpenSea collection name"
+                            },
+                            "safelistRequestStatus": {
+                              "type": "string",
+                              "description": "Collection approval status within OpenSea. For more info, see the Opensea docs at docs.opensea.io/reference/collection-model"
+                            },
+                            "imageUrl": {
+                              "type": "string",
+                              "description": "OpenSea CDN image URL"
+                            },
+                            "description": {
+                              "type": "string",
+                              "description": "OpenSea collection description. Note: this value is truncated to 255 characters."
+                            },
+                            "externalUrl": {
+                              "type": "string",
+                              "description": "Collection homepage"
+                            },
+                            "twitterUsername": {
+                              "type": "string",
+                              "description": "The twitter username of the collection"
+                            },
+                            "discordUrl": {
+                              "type": "string",
+                              "description": "The discord URL of the collection"
+                            },
+                            "bannerImageUrl": {
+                              "type": "string",
+                              "description": "The banner image URL of the collection"
+                            },
+                            "lastIngestedAt": {
+                              "type": "string",
+                              "description": "The timestamp when the collection was last ingested by us"
+                            }
+                          }
+                        },
+                        "isSpam": {
+                          "type": "string",
+                          "description": "\"true\" if contract is spam, else \"false\". **Only available on paid tiers.**"
+                        },
+                        "spamClassifications": {
+                          "description": "List of reasons why a contract was classified as spam. **Only available on paid tiers.**",
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "totalCount": {
+                "type": "integer",
+                "description": "Integer - Total number of NFTs (distinct `tokenIds`) owned by the given address."
+              },
+              "pageKey": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "NFTResponseItem": {
+        "type": "object",
+        "description": "The object that represents an NFT and has all data corresponding to that NFT",
+        "properties": {
+          "network": {
+            "type": "string",
+            "description": "Network identifier."
+          },
+          "address": {
+            "type": "string",
+            "description": "Wallet address."
+          },
+          "contract": {
+            "type": "object",
+            "description": "The contract object that has details of a contract",
+            "properties": {
+              "address": {
+                "description": "Address of the held contract",
+                "type": "string"
+              },
+              "name": {
+                "type": "string",
+                "description": "String - NFT contract name."
+              },
+              "symbol": {
+                "type": "string",
+                "description": "String - NFT contract symbol abbreviation."
+              },
+              "totalSupply": {
+                "type": "string",
+                "description": "String - Total number of NFTs in a given NFT collection."
+              },
+              "tokenType": {
+                "type": "string",
+                "enum": [
+                  "ERC721",
+                  "ERC1155",
+                  "NO_SUPPORTED_NFT_STANDARD",
+                  "NOT_A_CONTRACT"
+                ],
+                "description": "String - For valid NFTs, 'ERC721' or 'ERC1155.' For invalid NFTs, a descriptive reason such as 'NO_SUPPORTED_NFT_STANDARD' if the input contract address doesn't support a known NFT standard, or 'NOT_A_CONTRACT' if there is no contract deployed at the input address."
+              },
+              "contractDeployer": {
+                "type": "string",
+                "description": "String - Address that deployed the smart contract"
+              },
+              "deployedBlockNumber": {
+                "type": "number",
+                "description": "Number - The Block Number when the deployment transaction is successfully mined"
+              },
+              "openseaMetadata": {
+                "type": "object",
+                "description": "Note that the OpenSea metadata object is currently only available on ETH and Polygon Mainnet. Please reach out to us at support@alchemy.com if you would like to access this data on other networks.",
+                "properties": {
+                  "floorPrice": {
+                    "type": "number",
+                    "description": "NFT floor price"
+                  },
+                  "collectionName": {
+                    "type": "string",
+                    "description": "OpenSea collection name"
+                  },
+                  "safelistRequestStatus": {
+                    "type": "string",
+                    "description": "Collection approval status within OpenSea. For more info, see the Opensea docs at docs.opensea.io/reference/collection-model"
+                  },
+                  "imageUrl": {
+                    "type": "string",
+                    "description": "OpenSea CDN image URL"
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "OpenSea collection description. Note: this value is truncated to 255 characters."
+                  },
+                  "externalUrl": {
+                    "type": "string",
+                    "description": "Collection homepage"
+                  },
+                  "twitterUsername": {
+                    "type": "string",
+                    "description": "The twitter username of the collection"
+                  },
+                  "discordUrl": {
+                    "type": "string",
+                    "description": "The discord URL of the collection"
+                  },
+                  "bannerImageUrl": {
+                    "type": "string",
+                    "description": "The banner image URL of the collection"
+                  },
+                  "lastIngestedAt": {
+                    "type": "string",
+                    "description": "The timestamp when the collection was last ingested by us"
+                  }
+                }
+              },
+              "isSpam": {
+                "type": "string",
+                "description": "\"true\" if contract is spam, else \"false\". **Only available on paid tiers.**"
+              },
+              "spamClassifications": {
+                "description": "List of reasons why a contract was classified as spam. **Only available on paid tiers.**",
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "tokenId": {
+            "type": "string",
+            "default": "44"
+          },
+          "tokenType": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string",
+            "description": "String - Name of the NFT asset."
+          },
+          "description": {
+            "type": "string",
+            "description": "String - Brief human-readable description"
+          },
+          "image": {
+            "type": "object",
+            "description": "Details of the image corresponding to this contract",
+            "properties": {
+              "cachedUrl": {
+                "type": "string",
+                "description": "The Url of the image stored in Alchemy cache"
+              },
+              "thumbnailUrl": {
+                "type": "string",
+                "description": "The Url that has the thumbnail version of the NFT"
+              },
+              "pngUrl": {
+                "type": "string",
+                "description": "The Url that has the NFT image in png"
+              },
+              "contentType": {
+                "type": "string",
+                "description": "The Url of the image stored in Alchemy cache"
+              },
+              "size": {
+                "type": "integer",
+                "description": "The size of the media asset in bytes."
+              },
+              "originalUrl": {
+                "type": "string",
+                "description": "The original Url of the image coming straight from the smart contract"
+              }
+            }
+          },
+          "raw": {
+            "type": "object",
+            "description": "Raw details of the NFT like its tokenUri and metadata info obtained directly from the smart contract",
+            "properties": {
+              "tokenUri": {
+                "type": "string",
+                "description": "String - Uri representing the location of the NFT's original metadata blob. This is a backup for you to parse when the metadata field is not automatically populated."
+              },
+              "metadata": {
+                "type": "object",
+                "description": "Relevant metadata for NFT contract. This is useful for viewing image url, traits, etc. without having to follow the metadata url in tokenUri to parse manually.",
+                "properties": {
+                  "image": {
+                    "type": "string",
+                    "description": "String - URL to the NFT asset image. Can be standard URLs pointing to images on conventional servers, IPFS, or Arweave. Most types of images (SVGs, PNGs, JPEGs, etc.) are supported by NFT marketplaces."
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "String - Name of the NFT asset."
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "String - Human-readable description of the NFT asset. (Markdown is supported/rendered on OpenSea and other NFT platforms)"
+                  },
+                  "attributes": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "type": "string"
+                        },
+                        "trait_type": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "description": "Object - Traits/attributes/characteristics for each NFT asset."
+                  }
+                }
+              },
+              "error": {
+                "type": "string",
+                "description": "String - A string describing a particular reason that we were unable to fetch complete metadata for the NFT."
+              }
+            }
+          },
+          "collection": {
+            "type": "object",
+            "description": "The collection object that has details of a collection",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "String - Collection name"
+              },
+              "slug": {
+                "type": "string",
+                "description": "String - OpenSea collection slug"
+              },
+              "externalUrl": {
+                "type": "string",
+                "description": "String - URL for the external site of the collection"
+              },
+              "bannerImageUrl": {
+                "type": "string",
+                "description": "String - Banner image URL for the collection"
+              }
+            }
+          },
+          "tokenUri": {
+            "type": "string",
+            "description": "String - Uri representing the location of the NFT's original metadata blob. This is a backup for you to parse when the metadata field is not automatically populated."
+          },
+          "timeLastUpdated": {
+            "type": "string",
+            "description": "String - ISO timestamp of the last cache refresh for the information returned in the metadata field."
+          },
+          "acquiredAt": {
+            "type": "object",
+            "description": "Only present if the request specified `orderBy=transferTime`.",
+            "properties": {
+              "blockTimestamp": {
+                "type": "string",
+                "description": "Block timestamp of the block where the NFT was most recently acquired."
+              },
+              "blockNumber": {
+                "type": "string",
+                "description": "Block number of the block where the NFT was most recently acquired."
+              }
+            }
+          }
+        }
+      },
+      "NFTCollectionResponseItem": {
+        "type": "object",
+        "description": "The object that represents an NFT collection",
+        "properties": {
+          "network": {
+            "type": "string",
+            "description": "Network identifier."
+          },
+          "address": {
+            "type": "string",
+            "description": "Wallet address."
+          },
+          "contract": {
+            "type": "object",
+            "description": "The contract object that has details of a contract",
+            "properties": {
+              "address": {
+                "description": "Address of the held contract",
+                "type": "string"
+              },
+              "name": {
+                "type": "string",
+                "description": "String - NFT contract name."
+              },
+              "symbol": {
+                "type": "string",
+                "description": "String - NFT contract symbol abbreviation."
+              },
+              "totalSupply": {
+                "type": "string",
+                "description": "String - Total number of NFTs in a given NFT collection."
+              },
+              "tokenType": {
+                "type": "string",
+                "enum": [
+                  "ERC721",
+                  "ERC1155",
+                  "NO_SUPPORTED_NFT_STANDARD",
+                  "NOT_A_CONTRACT"
+                ],
+                "description": "String - For valid NFTs, 'ERC721' or 'ERC1155.' For invalid NFTs, a descriptive reason such as 'NO_SUPPORTED_NFT_STANDARD' if the input contract address doesn't support a known NFT standard, or 'NOT_A_CONTRACT' if there is no contract deployed at the input address."
+              },
+              "contractDeployer": {
+                "type": "string",
+                "description": "String - Address that deployed the smart contract"
+              },
+              "deployedBlockNumber": {
+                "type": "number",
+                "description": "Number - The Block Number when the deployment transaction is successfully mined"
+              },
+              "openseaMetadata": {
+                "type": "object",
+                "description": "Note that the OpenSea metadata object is currently only available on ETH and Polygon Mainnet. Please reach out to us at support@alchemy.com if you would like to access this data on other networks.",
+                "properties": {
+                  "floorPrice": {
+                    "type": "number",
+                    "description": "NFT floor price"
+                  },
+                  "collectionName": {
+                    "type": "string",
+                    "description": "OpenSea collection name"
+                  },
+                  "safelistRequestStatus": {
+                    "type": "string",
+                    "description": "Collection approval status within OpenSea. For more info, see the Opensea docs at docs.opensea.io/reference/collection-model"
+                  },
+                  "imageUrl": {
+                    "type": "string",
+                    "description": "OpenSea CDN image URL"
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "OpenSea collection description. Note: this value is truncated to 255 characters."
+                  },
+                  "externalUrl": {
+                    "type": "string",
+                    "description": "Collection homepage"
+                  },
+                  "twitterUsername": {
+                    "type": "string",
+                    "description": "The twitter username of the collection"
+                  },
+                  "discordUrl": {
+                    "type": "string",
+                    "description": "The discord URL of the collection"
+                  },
+                  "bannerImageUrl": {
+                    "type": "string",
+                    "description": "The banner image URL of the collection"
+                  },
+                  "lastIngestedAt": {
+                    "type": "string",
+                    "description": "The timestamp when the collection was last ingested by us"
+                  }
+                }
+              },
+              "isSpam": {
+                "type": "string",
+                "description": "\"true\" if contract is spam, else \"false\". **Only available on paid tiers.**"
+              },
+              "spamClassifications": {
+                "description": "List of reasons why a contract was classified as spam. **Only available on paid tiers.**",
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "TransactionHistoryResponse": {
+        "type": "object",
+        "properties": {
+          "before": {
+            "type": "string",
+            "description": "The cursor that points to the previous set of results."
+          },
+          "after": {
+            "type": "string",
+            "description": "The cursor that points to the end of the current set of results."
+          },
+          "totalCount": {
+            "type": "integer",
+            "description": "Total count of the response items."
+          },
+          "transactions": {
+            "type": "array",
+            "description": "List of transactions by address.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "network": {
+                  "type": "string",
+                  "description": "Network associated with an individual transaction"
+                },
+                "hash": {
+                  "type": "string",
+                  "description": "Transaction hash"
+                },
+                "timeStamp": {
+                  "type": "string",
+                  "description": "(ISO 8601)  Timestamp of transaction mining / confirmation"
+                },
+                "blockNumber": {
+                  "type": "integer",
+                  "description": "Block number of transaction mining / confirmation"
+                },
+                "blockHash": {
+                  "type": "string",
+                  "description": "Block hash of transaction mining / confirmation"
+                },
+                "nonce": {
+                  "type": "integer",
+                  "description": "Transaction nonce"
+                },
+                "transactionIndex": {
+                  "type": "integer",
+                  "description": "Position of transaction within a block"
+                },
+                "fromAddress": {
+                  "type": "string",
+                  "description": "From address of transaction (hex string)."
+                },
+                "toAddress": {
+                  "type": "string",
+                  "description": "To address of transaction (hex string). null if contract creation."
+                },
+                "contractAddress": {
+                  "type": "string",
+                  "description": "20 Bytes - The contract address created, if the transaction was a contract creation, otherwise null"
+                },
+                "value": {
+                  "type": "string",
+                  "description": "(uint8) Value of native token value moved within the external transaction"
+                },
+                "cumulativeGasUsed": {
+                  "type": "string",
+                  "description": "The total amount of gas used when this transaction was executed in the block."
+                },
+                "effectiveGasPrice": {
+                  "type": "string",
+                  "description": "Gas price parameter"
+                },
+                "gasUsed": {
+                  "type": "string",
+                  "description": "The amount of gas used by this specific transaction alone"
+                },
+                "logs": {
+                  "type": "array",
+                  "description": "Array of log objects, which this transaction generated",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "contractAddress": {
+                        "type": "string",
+                        "description": "20 Bytes - contract address from which this log originated."
+                      },
+                      "logIndex": {
+                        "type": "string",
+                        "description": "Integer of the log index position in the block. null when its pending log."
+                      },
+                      "data": {
+                        "type": "string",
+                        "description": "Contains one or more 32 Bytes non-indexed arguments of the log."
+                      },
+                      "removed": {
+                        "type": "boolean",
+                        "description": "true when the log was removed, due to a chain reorganization. false if its a valid log."
+                      },
+                      "topics": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "description": "Array of zero to four 32 Bytes DATA of indexed log arguments"
+                      }
+                    }
+                  }
+                },
+                "internalTxns": {
+                  "type": "array",
+                  "description": "Array of internal transaction objects, which this transaction generated",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "description": "CALL or CREATE"
+                      },
+                      "fromAddress": {
+                        "type": "string",
+                        "description": "20 Bytes - address of the sender"
+                      },
+                      "toAddress": {
+                        "type": "string",
+                        "description": "20 Bytes - address of the receiver. null when its a contract creation transaction"
+                      },
+                      "value": {
+                        "type": "string",
+                        "description": "amount of value for transfer (in hex)"
+                      },
+                      "gas": {
+                        "type": "string",
+                        "description": "amount of gas provided for the call (in hex)"
+                      },
+                      "gasUsed": {
+                        "type": "string",
+                        "description": "amount of gas used during the call (in hex)"
+                      },
+                      "input": {
+                        "type": "string",
+                        "description": "call data"
+                      },
+                      "output": {
+                        "type": "string",
+                        "description": "return data"
+                      },
+                      "error": {
+                        "type": "string",
+                        "description": "error, if any"
+                      },
+                      "revertReason": {
+                        "type": "string",
+                        "description": "solidity revert reason, if any"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "transactions"
+        ]
+      },
+      "TransactionHistoryResponseItem": {
+        "type": "object",
+        "properties": {
+          "network": {
+            "type": "string",
+            "description": "Network associated with an individual transaction"
+          },
+          "hash": {
+            "type": "string",
+            "description": "Transaction hash"
+          },
+          "timeStamp": {
+            "type": "string",
+            "description": "(ISO 8601)  Timestamp of transaction mining / confirmation"
+          },
+          "blockNumber": {
+            "type": "integer",
+            "description": "Block number of transaction mining / confirmation"
+          },
+          "blockHash": {
+            "type": "string",
+            "description": "Block hash of transaction mining / confirmation"
+          },
+          "nonce": {
+            "type": "integer",
+            "description": "Transaction nonce"
+          },
+          "transactionIndex": {
+            "type": "integer",
+            "description": "Position of transaction within a block"
+          },
+          "fromAddress": {
+            "type": "string",
+            "description": "From address of transaction (hex string)."
+          },
+          "toAddress": {
+            "type": "string",
+            "description": "To address of transaction (hex string). null if contract creation."
+          },
+          "contractAddress": {
+            "type": "string",
+            "description": "20 Bytes - The contract address created, if the transaction was a contract creation, otherwise null"
+          },
+          "value": {
+            "type": "string",
+            "description": "(uint8) Value of native token value moved within the external transaction"
+          },
+          "cumulativeGasUsed": {
+            "type": "string",
+            "description": "The total amount of gas used when this transaction was executed in the block."
+          },
+          "effectiveGasPrice": {
+            "type": "string",
+            "description": "Gas price parameter"
+          },
+          "gasUsed": {
+            "type": "string",
+            "description": "The amount of gas used by this specific transaction alone"
+          },
+          "logs": {
+            "type": "array",
+            "description": "Array of log objects, which this transaction generated",
+            "items": {
+              "type": "object",
+              "properties": {
+                "contractAddress": {
+                  "type": "string",
+                  "description": "20 Bytes - contract address from which this log originated."
+                },
+                "logIndex": {
+                  "type": "string",
+                  "description": "Integer of the log index position in the block. null when its pending log."
+                },
+                "data": {
+                  "type": "string",
+                  "description": "Contains one or more 32 Bytes non-indexed arguments of the log."
+                },
+                "removed": {
+                  "type": "boolean",
+                  "description": "true when the log was removed, due to a chain reorganization. false if its a valid log."
+                },
+                "topics": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Array of zero to four 32 Bytes DATA of indexed log arguments"
+                }
+              }
+            }
+          },
+          "internalTxns": {
+            "type": "array",
+            "description": "Array of internal transaction objects, which this transaction generated",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "description": "CALL or CREATE"
+                },
+                "fromAddress": {
+                  "type": "string",
+                  "description": "20 Bytes - address of the sender"
+                },
+                "toAddress": {
+                  "type": "string",
+                  "description": "20 Bytes - address of the receiver. null when its a contract creation transaction"
+                },
+                "value": {
+                  "type": "string",
+                  "description": "amount of value for transfer (in hex)"
+                },
+                "gas": {
+                  "type": "string",
+                  "description": "amount of gas provided for the call (in hex)"
+                },
+                "gasUsed": {
+                  "type": "string",
+                  "description": "amount of gas used during the call (in hex)"
+                },
+                "input": {
+                  "type": "string",
+                  "description": "call data"
+                },
+                "output": {
+                  "type": "string",
+                  "description": "return data"
+                },
+                "error": {
+                  "type": "string",
+                  "description": "error, if any"
+                },
+                "revertReason": {
+                  "type": "string",
+                  "description": "solidity revert reason, if any"
+                }
+              }
+            }
+          }
+        }
+      },
+      "TokenPricesResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "description": "List of token price data.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "symbol": {
+                  "type": "string",
+                  "description": "Token symbol."
+                },
+                "prices": {
+                  "type": "array",
+                  "description": "List of price information.",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "currency": {
+                        "type": "string",
+                        "description": "Currency code (e.g., USD)."
+                      },
+                      "value": {
+                        "type": "string",
+                        "description": "Price value as a string."
+                      },
+                      "lastUpdatedAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Time when the price was last updated."
+                      }
+                    },
+                    "required": [
+                      "currency",
+                      "value",
+                      "lastUpdatedAt"
+                    ]
+                  }
+                },
+                "error": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "Error message if applicable."
+                }
+              },
+              "required": [
+                "symbol",
+                "prices",
+                "error"
+              ]
+            }
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "TokenPriceResponseItem": {
+        "type": "object",
+        "properties": {
+          "symbol": {
+            "type": "string",
+            "description": "Token symbol."
+          },
+          "prices": {
+            "type": "array",
+            "description": "List of price information.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "currency": {
+                  "type": "string",
+                  "description": "Currency code (e.g., USD)."
+                },
+                "value": {
+                  "type": "string",
+                  "description": "Price value as a string."
+                },
+                "lastUpdatedAt": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "Time when the price was last updated."
+                }
+              },
+              "required": [
+                "currency",
+                "value",
+                "lastUpdatedAt"
+              ]
+            }
+          },
+          "error": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Error message if applicable."
+          }
+        },
+        "required": [
+          "symbol",
+          "prices",
+          "error"
+        ]
+      },
+      "BlockTimestampResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "description": "List of blocks",
+            "items": {
+              "type": "object",
+              "properties": {
+                "network": {
+                  "type": "string",
+                  "description": "Network identifier"
+                },
+                "block": {
+                  "type": "object",
+                  "properties": {
+                    "number": {
+                      "type": "integer",
+                      "description": "Block number"
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "description": "ISO timestamp of the block"
+                    }
+                  },
+                  "required": [
+                    "number",
+                    "timestamp"
+                  ]
+                }
+              },
+              "required": [
+                "network",
+                "block"
+              ]
+            }
+          }
+        },
+        "required": [
+          "data"
+        ]
+      }
+    }
+  }
+}
