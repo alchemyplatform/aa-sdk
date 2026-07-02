@@ -39,6 +39,8 @@ jobs:
   lint_docs:
     name: Lint Documentation
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     needs: changes
     if: ${{ needs.changes.outputs.docs == 'true' }}
     steps:
