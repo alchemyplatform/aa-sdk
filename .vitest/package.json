@@ -11,7 +11,7 @@
     "is-ci": "^3.0.1",
     "node-fetch": "^3.3.1",
     "prool": "^0.0.15",
-    "tar": "^7.5.15",
+    "tar": "^7.5.16",
     "typescript-template": "workspace:*",
     "viem": "^2.45.0"
   },
