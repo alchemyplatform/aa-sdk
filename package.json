@@ -98,7 +98,8 @@
       "viem": "^2.45.0",
       "@noble/hashes": "^1.4.0",
       "@noble/curves": "^1.4.0",
-      "eslint-plugin-react-hooks": "4.6.0"
+      "eslint-plugin-react-hooks": "4.6.0",
+      "js-yaml@4.1.0": "^4.2.0"
     }
   },
   "workspaces": [

@@ -10,6 +10,7 @@ overrides:
   '@noble/hashes': ^1.4.0
   '@noble/curves': ^1.4.0
   eslint-plugin-react-hooks: 4.6.0
+  js-yaml@4.1.0: ^4.2.0
 
 importers:
 
@@ -173,8 +174,8 @@ importers:
         specifier: ^0.0.15
         version: 0.0.15
       tar:
-        specifier: ^7.5.16
-        version: 7.5.16
+        specifier: ^7.5.18
+        version: 7.5.21
       typescript-template:
         specifier: workspace:*
         version: link:../templates/typescript
@@ -5121,10 +5122,6 @@ packages:
     resolution: {integrity: sha512-PMSmkqxr106Xa156c2M265Z+FTrPl+oxd/rgOQy2tijQeK5TxQ43psO1ZCwhVOSdnn+RzkzlRz/eY4BgJBYVpg==}
     hasBin: true
 
-  js-yaml@4.1.0:
-    resolution: {integrity: sha512-wpxZs9NoxZaJESJGIZTyDEaYpl0FKSA+FB9aJiyemKhMwkxQg63h4T1KJgUGHpTqPDNRcmmYLugrRjJlBtWvRA==}
-    hasBin: true
-
   js-yaml@4.2.0:
     resolution: {integrity: sha512-ePWsvanv0DWuDRsW8dnt+R4jQ31SCRCQ7hhNcPXZPsoBZiemuZNYGf7adZdqX2D86j6rvKp3RpCxVTSb8WQlOw==}
     hasBin: true
@@ -7153,8 +7150,8 @@ packages:
     engines: {node: '>=18'}
     deprecated: Old versions of tar are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
 
-  tar@7.5.16:
-    resolution: {integrity: sha512-56adEpPMouktRlBLXiaYFFzZ/3+JXa8P9n7WbR+ibIjtviN55mEaOkiysCnPnWm+7kkui1Dn8J9l+g6zV8731w==}
+  tar@7.5.21:
+    resolution: {integrity: sha512-XdhtCvlMywwxpCW8YEq3lOXBJpUPTR2OHHcwLPO3HwsJqOHa2Ok/oJ7ruGzp+JrKoRPVCzJwAdEjqLW/vNRPHA==}
     engines: {node: '>=18'}
 
   temp-dir@1.0.0:
@@ -9541,7 +9538,7 @@ snapshots:
       inquirer: 8.2.7(@types/node@22.19.15)
       is-ci: 3.0.1
       is-stream: 2.0.0
-      js-yaml: 4.1.0
+      js-yaml: 4.2.0
       libnpmpublish: 9.0.9
       load-json-file: 6.2.0
       make-dir: 4.0.0
@@ -14588,10 +14585,6 @@ snapshots:
       argparse: 1.0.10
       esprima: 4.0.1
 
-  js-yaml@4.1.0:
-    dependencies:
-      argparse: 2.0.1
-
   js-yaml@4.2.0:
     dependencies:
       argparse: 2.0.1
@@ -14770,7 +14763,7 @@ snapshots:
       is-ci: 3.0.1
       is-stream: 2.0.0
       jest-diff: 29.7.0
-      js-yaml: 4.1.0
+      js-yaml: 4.2.0
       libnpmaccess: 8.0.6
       libnpmpublish: 9.0.9
       load-json-file: 6.2.0
@@ -17460,7 +17453,7 @@ snapshots:
       mkdirp: 3.0.1
       yallist: 5.0.0
 
-  tar@7.5.16:
+  tar@7.5.21:
     dependencies:
       '@isaacs/fs-minipass': 4.0.1
       chownr: 3.0.0
