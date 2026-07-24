@@ -7,7 +7,7 @@ export class ServerError extends BaseError {
   override name = "ServerError";
 
   /**
-   * Initializes a new instance of the error message with a default message indicating that no chain was supplied to the client.
+   * Initializes a server error for a failed HTTP response.
    *
    * @param {string} message - The error message.
    * @param {number} status - The HTTP status code of the error.

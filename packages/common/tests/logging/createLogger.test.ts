@@ -339,7 +339,9 @@ describe("createLogger", () => {
       );
 
       const entry = mockSink.mock.calls[0][0] as LogEntry;
-      expect(entry.data?.executionTimeMs).toBeGreaterThanOrEqual(10);
+      // setTimeout(10) can measure as 9ms due to millisecond truncation at
+      // both timing endpoints — allow 1ms of tolerance to deflake CI.
+      expect(entry.data?.executionTimeMs).toBeGreaterThanOrEqual(9);
     });
 
     it("should track failed profiled functions", async () => {

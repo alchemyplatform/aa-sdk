@@ -56,6 +56,7 @@ type TypeSections = Record<string, string>;
 const PACKAGE_DISPLAY_NAMES: Record<string, string> = {
   "aa-infra": "AA Infra",
   common: "Alchemy Common",
+  "data-apis": "Data APIs",
   "smart-accounts": "Smart Accounts",
   "wallet-apis": "Wallet APIs",
 } as const;
@@ -65,6 +66,7 @@ const PACKAGE_DISPLAY_NAMES: Record<string, string> = {
 const PACKAGES_INCLUDED_IN_NAV: string[] = [
   "wallet-apis",
   "smart-accounts",
+  "data-apis",
   "aa-infra",
   "common",
 ];

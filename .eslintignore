@@ -14,3 +14,7 @@ site/.vitepress/cache/**/*
 **/test-results/*
 **/playwright-report/*
 pnpm-lock.yaml
+
+# codegen: committed spec snapshots (generated .ts files instead carry a
+# file-level eslint-disable banner so lint-staged can pass them explicitly)
+api-codegen/specs/**

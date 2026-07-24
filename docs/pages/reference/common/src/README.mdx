@@ -20,7 +20,7 @@ npm install @alchemy/common viem
 - **`alchemyTransport`** - viem-compatible HTTP transport for Alchemy APIs (supports API key, JWT, or direct URL auth)
 - **Chain registry** - `getAlchemyRpcUrl`, `isChainSupported`, `getSupportedChainIds`
 - **Custom chain definitions** (via `@alchemy/common/chains`) - chains not yet in viem
-- **`AlchemyRestClient`** - typed REST client for non-JSON-RPC Alchemy APIs
+- **Core infrastructure** (via `@alchemy/common/core`) - viem-free REST/JSON-RPC clients, normalized API errors, retry/timeout helpers, and network resolution
 - **Error classes** - `BaseError`, `ChainNotFoundError`, `AccountNotFoundError`, `ConnectionConfigError`, etc.
 - **Logging** - `createLogger`, `setGlobalLoggerConfig`, `LogLevel`
 - **Utilities** - `bigIntMultiply`, `bigIntMax`, `lowerAddress`, `assertNever`
@@ -84,11 +84,26 @@ MIT
 | [assertNever](/wallets/reference/common/functions/assertNever)                                         | Asserts that a value is never.                                                                                                                           |
 | [bigIntMax](/wallets/reference/common/functions/bigIntMax)                                             | Returns the max bigint in a list of bigints                                                                                                              |
 | [bigIntMultiply](/wallets/reference/common/functions/bigIntMultiply)                                   | Given a bigint and a number (which can be a float), returns the bigint value. Note: this function has loss and will round down to the nearest integer.   |
-| [getAlchemyRpcUrl](/wallets/reference/common/functions/getAlchemyRpcUrl)                               | Gets the Alchemy RPC base URL for a given chain ID.                                                                                                      |
-| [getSupportedChainIds](/wallets/reference/common/functions/getSupportedChainIds)                       | Gets all supported chain IDs from the registry.                                                                                                          |
 | [isAlchemyConnectionConfig](/wallets/reference/common/functions/isAlchemyConnectionConfig)             | Type guard to check if a value is a valid Alchemy connection config.                                                                                     |
 | [isAlchemyTransport](/wallets/reference/common/functions/isAlchemyTransport)                           | A type guard for the transport to determine if it is an Alchemy transport. Used in cases where we would like to do switching depending on the transport. |
-| [isChainSupported](/wallets/reference/common/functions/isChainSupported)                               | Checks if a chain ID is supported by the Alchemy RPC registry.                                                                                           |
 | [lowerAddress](/wallets/reference/common/functions/lowerAddress)                                       | Lowercase an address                                                                                                                                     |
 | [raise](/wallets/reference/common/functions/raise)                                                     | Raises an error.                                                                                                                                         |
 | [validateAlchemyConnectionConfig](/wallets/reference/common/functions/validateAlchemyConnectionConfig) | Validates an Alchemy connection configuration object.                                                                                                    |
+
+## References
+
+### getAlchemyRpcUrl
+
+Re-exports [getAlchemyRpcUrl](/wallets/reference/common/core/functions/getAlchemyRpcUrl)
+
+---
+
+### getSupportedChainIds
+
+Re-exports [getSupportedChainIds](/wallets/reference/common/core/functions/getSupportedChainIds)
+
+---
+
+### isChainSupported
+
+Re-exports [isChainSupported](/wallets/reference/common/core/functions/isChainSupported)

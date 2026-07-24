@@ -1,0 +1,43 @@
+{
+  "openrpc": "1.2.4",
+  "info": { "title": "Fixture RPC API", "version": "1.0" },
+  "methods": [
+    {
+      "name": "fixture_getThings",
+      "params": [
+        {
+          "name": "thingParams",
+          "required": true,
+          "schema": {
+            "type": "object",
+            "properties": {
+              "kind": { "type": "string", "enum": ["a", "b"] },
+              "limit": { "type": "string" }
+            }
+          }
+        }
+      ],
+      "result": {
+        "name": "things",
+        "schema": {
+          "oneOf": [
+            { "title": "Not Found (null)", "type": "string" },
+            {
+              "type": "object",
+              "properties": {
+                "pageKey": { "type": "string" },
+                "things": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": { "id": { "type": "string" } }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

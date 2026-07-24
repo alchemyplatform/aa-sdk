@@ -1,0 +1,7 @@
+{
+  "extends": "typescript-template/base.json",
+  "compilerOptions": {
+    "types": ["node"]
+  },
+  "include": ["src", "tests"]
+}

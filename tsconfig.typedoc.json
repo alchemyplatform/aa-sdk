@@ -11,6 +11,7 @@
   "include": [
     "packages/aa-infra/src/**/*",
     "packages/common/src/**/*",
+    "packages/data-apis/src/**/*",
     "packages/smart-accounts/src/**/*",
     "packages/wallet-apis/src/**/*"
   ],

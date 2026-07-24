@@ -1,0 +1,1263 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "📈 Prices API",
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.g.alchemy.com/prices/v1"
+    }
+  ],
+  "paths": {
+    "/{apiKey}/tokens/by-symbol": {
+      "get": {
+        "summary": "Token Prices By Symbol",
+        "description": "Fetches current prices for multiple tokens using their symbols. Returns a list of token prices, each containing the symbol, prices, and an optional error field.\n",
+        "tags": [
+          "Prices API Endpoints"
+        ],
+        "parameters": [
+          {
+            "name": "apiKey",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "docs-demo",
+              "description": "For higher throughput, [create your own API key](https://dashboard.alchemy.com/signup)."
+            }
+          },
+          {
+            "in": "query",
+            "name": "symbols",
+            "required": true,
+            "description": "Array of token symbols (limit 25). Example: symbols=[ETH,BTC]\n",
+            "schema": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "default": "ETH"
+              }
+            },
+            "style": "form",
+            "explode": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response, even if some tokens are missing.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "description": "List of token price data.",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "symbol": {
+                            "type": "string",
+                            "description": "Token symbol."
+                          },
+                          "prices": {
+                            "type": "array",
+                            "description": "List of price information.",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "currency": {
+                                  "type": "string",
+                                  "description": "Currency code (e.g., USD)."
+                                },
+                                "value": {
+                                  "type": "string",
+                                  "description": "Price value as a string."
+                                },
+                                "lastUpdatedAt": {
+                                  "type": "string",
+                                  "format": "date-time",
+                                  "description": "Time when the price was last updated."
+                                }
+                              },
+                              "required": [
+                                "currency",
+                                "value",
+                                "lastUpdatedAt"
+                              ]
+                            }
+                          },
+                          "error": {
+                            "type": "string",
+                            "description": "Error message if applicable."
+                          }
+                        },
+                        "required": [
+                          "symbol",
+                          "prices",
+                          "error"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request: Malformed request or missing parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "description": "Detailed error message."
+                        }
+                      },
+                      "required": [
+                        "message"
+                      ],
+                      "description": "Error details."
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests: Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "description": "Detailed error message."
+                        }
+                      },
+                      "required": [
+                        "message"
+                      ],
+                      "description": "Error details."
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-token-prices-by-symbol"
+      }
+    },
+    "/{apiKey}/tokens/by-address": {
+      "post": {
+        "summary": "Token Prices By Address",
+        "description": "Fetches current prices for multiple tokens using network and address pairs. Returns a list of token prices, each containing the network, address, prices, and an optional error field.\n",
+        "tags": [
+          "Prices API Endpoints"
+        ],
+        "parameters": [
+          {
+            "name": "apiKey",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "docs-demo",
+              "description": "For higher throughput, [create your own API key](https://dashboard.alchemy.com/signup)."
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "addresses": {
+                    "type": "array",
+                    "minItems": 1,
+                    "description": "Array of token network and address pairs (limit 25 addresses, max 3 networks). Networks should match network enums.\n",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "network": {
+                          "type": "string",
+                          "example": "eth-mainnet",
+                          "default": "eth-mainnet",
+                          "description": "Network identifier (e.g., eth-mainnet). Find more network enums [here](https://dashboard.alchemy.com/chains)"
+                        },
+                        "address": {
+                          "type": "string",
+                          "description": "Token contract address.",
+                          "example": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                          "default": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"
+                        }
+                      },
+                      "required": [
+                        "network",
+                        "address"
+                      ]
+                    },
+                    "maxItems": 25
+                  }
+                },
+                "required": [
+                  "addresses"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response, even if some prices are missing.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "description": "List of token prices by address.",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "network": {
+                            "type": "string",
+                            "description": "Network identifier."
+                          },
+                          "address": {
+                            "type": "string",
+                            "description": "Token contract address."
+                          },
+                          "prices": {
+                            "type": "array",
+                            "description": "List of price information.",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "currency": {
+                                  "type": "string",
+                                  "description": "Currency code (e.g., USD)."
+                                },
+                                "value": {
+                                  "type": "string",
+                                  "description": "Price value as a string."
+                                },
+                                "lastUpdatedAt": {
+                                  "type": "string",
+                                  "format": "date-time",
+                                  "description": "Time when the price was last updated."
+                                }
+                              },
+                              "required": [
+                                "currency",
+                                "value",
+                                "lastUpdatedAt"
+                              ]
+                            }
+                          },
+                          "error": {
+                            "type": "string",
+                            "description": "Error message if applicable."
+                          }
+                        },
+                        "required": [
+                          "network",
+                          "address",
+                          "prices",
+                          "error"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request: Invalid input (e.g., malformed JSON).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "description": "Detailed error message."
+                        }
+                      },
+                      "required": [
+                        "message"
+                      ],
+                      "description": "Error details."
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests: Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "description": "Detailed error message."
+                        }
+                      },
+                      "required": [
+                        "message"
+                      ],
+                      "description": "Error details."
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-token-prices-by-address"
+      }
+    },
+    "/{apiKey}/tokens/historical": {
+      "post": {
+        "summary": "Historical Token Prices",
+        "description": "Provides historical price data for a single token over a time range. You can identify the token by symbol or by network and contract address.\n",
+        "tags": [
+          "Prices API Endpoints"
+        ],
+        "parameters": [
+          {
+            "name": "apiKey",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "docs-demo",
+              "description": "For higher throughput, [create your own API key](https://dashboard.alchemy.com/signup)."
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "Request body for fetching historical token prices. Provide either the token `symbol` or both `network` and `address`, along with the required time range parameters.\n",
+                "oneOf": [
+                  {
+                    "required": [
+                      "symbol",
+                      "startTime",
+                      "endTime"
+                    ],
+                    "properties": {
+                      "symbol": {
+                        "type": "string",
+                        "description": "Token symbol (e.g., ETH, BTC).",
+                        "example": "ETH",
+                        "default": "ETH"
+                      },
+                      "startTime": {
+                        "oneOf": [
+                          {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Start of the time range in ISO 8601 format.",
+                            "default": "2024-01-01T00:00:00Z"
+                          },
+                          {
+                            "type": "number",
+                            "description": "Start of the time range as a timestamp in seconds since epoch.",
+                            "default": 1704067200
+                          }
+                        ],
+                        "description": "Start of the time range.",
+                        "example": "2024-01-01T00:00:00Z"
+                      },
+                      "endTime": {
+                        "oneOf": [
+                          {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "End of the time range in ISO 8601 format.",
+                            "default": "2024-01-31T23:59:59Z"
+                          },
+                          {
+                            "type": "number",
+                            "description": "End of the time range as a timestamp in seconds since epoch.",
+                            "default": 1706745599
+                          }
+                        ],
+                        "description": "End of the time range.",
+                        "example": "2024-01-31T23:59:59Z"
+                      },
+                      "interval": {
+                        "type": "string",
+                        "description": "Time interval for data points. Max ranges: (5m, 7d), (1h, 30d), (1d, 1yr)\n",
+                        "enum": [
+                          "5m",
+                          "1h",
+                          "1d"
+                        ],
+                        "default": "1d",
+                        "example": "1d"
+                      },
+                      "withMarketData": {
+                        "type": "boolean",
+                        "description": "Whether to include market cap and volume for each token",
+                        "example": true,
+                        "default": false
+                      }
+                    }
+                  },
+                  {
+                    "required": [
+                      "network",
+                      "address",
+                      "startTime",
+                      "endTime"
+                    ],
+                    "properties": {
+                      "network": {
+                        "type": "string",
+                        "description": "Network identifier (e.g., eth-mainnet).",
+                        "example": "eth-mainnet",
+                        "default": "eth-mainnet"
+                      },
+                      "address": {
+                        "type": "string",
+                        "description": "Token contract address.",
+                        "example": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                        "default": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"
+                      },
+                      "startTime": {
+                        "oneOf": [
+                          {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Start of the time range in ISO 8601 format.",
+                            "default": "2024-01-01T00:00:00Z"
+                          },
+                          {
+                            "type": "number",
+                            "description": "Start of the time range as a timestamp since epoch.",
+                            "default": 1704067200
+                          }
+                        ],
+                        "description": "Start of the time range.",
+                        "example": "2024-01-01T00:00:00Z"
+                      },
+                      "endTime": {
+                        "oneOf": [
+                          {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "End of the time range in ISO 8601 format.",
+                            "default": "2024-01-31T23:59:59Z"
+                          },
+                          {
+                            "type": "number",
+                            "description": "End of the time range as a timestamp since epoch.",
+                            "default": 1706745599
+                          }
+                        ],
+                        "description": "End of the time range.",
+                        "example": "2024-01-31T23:59:59Z"
+                      },
+                      "interval": {
+                        "type": "string",
+                        "description": "Time interval for data points. Max ranges: (5m, 7d), (1h, 30d), (1d, 1yr)\n",
+                        "enum": [
+                          "5m",
+                          "1h",
+                          "1d"
+                        ],
+                        "default": "1d",
+                        "example": "1d"
+                      },
+                      "withMarketData": {
+                        "type": "boolean",
+                        "description": "Whether to include market cap and volume for each token",
+                        "example": true,
+                        "default": false
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response with historical price data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Response containing historical price data. It will either include `symbol` or both `network` and `address` based on the request.\n",
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "symbol": {
+                          "type": "string",
+                          "description": "Token symbol.",
+                          "example": "ETH",
+                          "default": "ETH"
+                        },
+                        "currency": {
+                          "type": "string",
+                          "description": "Currency identifier.",
+                          "example": "usd",
+                          "default": "usd"
+                        },
+                        "data": {
+                          "type": "array",
+                          "description": "List of historical price data points.",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "type": "string",
+                                "description": "Price value as a string.",
+                                "example": "1900.00"
+                              },
+                              "timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp of the price data point.",
+                                "example": "2024-01-01T00:00:00Z"
+                              },
+                              "marketCap": {
+                                "type": "string",
+                                "description": "Total market capitalization at the timestamp",
+                                "example": "274292310008.21802"
+                              },
+                              "totalVolume": {
+                                "type": "string",
+                                "description": "Volume traded during the defined interval",
+                                "example": "6715146404.608721"
+                              }
+                            },
+                            "required": [
+                              "value",
+                              "timestamp"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "symbol",
+                        "currency",
+                        "data"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "network": {
+                          "type": "string",
+                          "description": "Network identifier.",
+                          "example": "eth-mainnet",
+                          "default": "eth-mainnet"
+                        },
+                        "address": {
+                          "type": "string",
+                          "description": "Token contract address.",
+                          "example": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                          "default": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"
+                        },
+                        "currency": {
+                          "type": "string",
+                          "description": "Currency identifier.",
+                          "example": "usd",
+                          "default": "usd"
+                        },
+                        "data": {
+                          "type": "array",
+                          "description": "List of historical price data points.",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "type": "string",
+                                "description": "Price value as a string.",
+                                "example": "1900.00"
+                              },
+                              "timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp of the price data point.",
+                                "example": "2024-01-01T00:00:00Z"
+                              },
+                              "marketCap": {
+                                "type": "string",
+                                "description": "Total market capitalization at the timestamp",
+                                "example": "274292310008.21802"
+                              },
+                              "totalVolume": {
+                                "type": "string",
+                                "description": "Volume traded during the defined interval",
+                                "example": "6715146404.608721"
+                              }
+                            },
+                            "required": [
+                              "value",
+                              "timestamp"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "network",
+                        "address",
+                        "currency",
+                        "data"
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request: Invalid input (e.g., malformed request, missing parameters).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "description": "Detailed error message."
+                        }
+                      },
+                      "required": [
+                        "message"
+                      ],
+                      "description": "Error details."
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found: Token not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "description": "Detailed error message."
+                        }
+                      },
+                      "required": [
+                        "message"
+                      ],
+                      "description": "Error details."
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests: Rate limit exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "description": "Detailed error message."
+                        }
+                      },
+                      "required": [
+                        "message"
+                      ],
+                      "description": "Error details."
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-historical-token-prices"
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "apiKey": {
+        "type": "apiKey",
+        "name": "Authorization",
+        "in": "header",
+        "description": "An API key that will be supplied in a named header.",
+        "x-default": "Bearer API_KEY"
+      }
+    },
+    "schemas": {
+      "TokenPricesResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "description": "List of token price data.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "symbol": {
+                  "type": "string",
+                  "description": "Token symbol."
+                },
+                "prices": {
+                  "type": "array",
+                  "description": "List of price information.",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "currency": {
+                        "type": "string",
+                        "description": "Currency code (e.g., USD)."
+                      },
+                      "value": {
+                        "type": "string",
+                        "description": "Price value as a string."
+                      },
+                      "lastUpdatedAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Time when the price was last updated."
+                      }
+                    },
+                    "required": [
+                      "currency",
+                      "value",
+                      "lastUpdatedAt"
+                    ]
+                  }
+                },
+                "error": {
+                  "type": "string",
+                  "description": "Error message if applicable."
+                }
+              },
+              "required": [
+                "symbol",
+                "prices",
+                "error"
+              ]
+            }
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "TokenPriceResponseItem": {
+        "type": "object",
+        "properties": {
+          "symbol": {
+            "type": "string",
+            "description": "Token symbol."
+          },
+          "prices": {
+            "type": "array",
+            "description": "List of price information.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "currency": {
+                  "type": "string",
+                  "description": "Currency code (e.g., USD)."
+                },
+                "value": {
+                  "type": "string",
+                  "description": "Price value as a string."
+                },
+                "lastUpdatedAt": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "Time when the price was last updated."
+                }
+              },
+              "required": [
+                "currency",
+                "value",
+                "lastUpdatedAt"
+              ]
+            }
+          },
+          "error": {
+            "type": "string",
+            "description": "Error message if applicable."
+          }
+        },
+        "required": [
+          "symbol",
+          "prices",
+          "error"
+        ]
+      },
+      "ByAddressRequest": {
+        "type": "object",
+        "properties": {
+          "addresses": {
+            "type": "array",
+            "minItems": 1,
+            "description": "Array of token network and address pairs (limit 25 addresses, max 3 networks). Networks should match network enums.\n",
+            "items": {
+              "type": "object",
+              "properties": {
+                "network": {
+                  "type": "string",
+                  "example": "eth-mainnet",
+                  "default": "eth-mainnet",
+                  "description": "Network identifier (e.g., eth-mainnet). Find more network enums [here](https://dashboard.alchemy.com/chains)"
+                },
+                "address": {
+                  "type": "string",
+                  "description": "Token contract address.",
+                  "example": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                  "default": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"
+                }
+              },
+              "required": [
+                "network",
+                "address"
+              ]
+            },
+            "maxItems": 25
+          }
+        },
+        "required": [
+          "addresses"
+        ]
+      },
+      "AddressPricesResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "description": "List of token prices by address.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "network": {
+                  "type": "string",
+                  "description": "Network identifier."
+                },
+                "address": {
+                  "type": "string",
+                  "description": "Token contract address."
+                },
+                "prices": {
+                  "type": "array",
+                  "description": "List of price information.",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "currency": {
+                        "type": "string",
+                        "description": "Currency code (e.g., USD)."
+                      },
+                      "value": {
+                        "type": "string",
+                        "description": "Price value as a string."
+                      },
+                      "lastUpdatedAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Time when the price was last updated."
+                      }
+                    },
+                    "required": [
+                      "currency",
+                      "value",
+                      "lastUpdatedAt"
+                    ]
+                  }
+                },
+                "error": {
+                  "type": "string",
+                  "description": "Error message if applicable."
+                }
+              },
+              "required": [
+                "network",
+                "address",
+                "prices",
+                "error"
+              ]
+            }
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "AddressPriceResponseItem": {
+        "type": "object",
+        "properties": {
+          "network": {
+            "type": "string",
+            "description": "Network identifier."
+          },
+          "address": {
+            "type": "string",
+            "description": "Token contract address."
+          },
+          "prices": {
+            "type": "array",
+            "description": "List of price information.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "currency": {
+                  "type": "string",
+                  "description": "Currency code (e.g., USD)."
+                },
+                "value": {
+                  "type": "string",
+                  "description": "Price value as a string."
+                },
+                "lastUpdatedAt": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "Time when the price was last updated."
+                }
+              },
+              "required": [
+                "currency",
+                "value",
+                "lastUpdatedAt"
+              ]
+            }
+          },
+          "error": {
+            "type": "string",
+            "description": "Error message if applicable."
+          }
+        },
+        "required": [
+          "network",
+          "address",
+          "prices",
+          "error"
+        ]
+      },
+      "HistoricalPricesResponse": {
+        "type": "object",
+        "description": "Response containing historical price data. It will either include `symbol` or both `network` and `address` based on the request.\n",
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "symbol": {
+                "type": "string",
+                "description": "Token symbol.",
+                "example": "ETH",
+                "default": "ETH"
+              },
+              "currency": {
+                "type": "string",
+                "description": "Currency identifier.",
+                "example": "usd",
+                "default": "usd"
+              },
+              "data": {
+                "type": "array",
+                "description": "List of historical price data points.",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "value": {
+                      "type": "string",
+                      "description": "Price value as a string.",
+                      "example": "1900.00"
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Timestamp of the price data point.",
+                      "example": "2024-01-01T00:00:00Z"
+                    },
+                    "marketCap": {
+                      "type": "string",
+                      "description": "Total market capitalization at the timestamp",
+                      "example": "274292310008.21802"
+                    },
+                    "totalVolume": {
+                      "type": "string",
+                      "description": "Volume traded during the defined interval",
+                      "example": "6715146404.608721"
+                    }
+                  },
+                  "required": [
+                    "value",
+                    "timestamp"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "symbol",
+              "currency",
+              "data"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "network": {
+                "type": "string",
+                "description": "Network identifier.",
+                "example": "eth-mainnet",
+                "default": "eth-mainnet"
+              },
+              "address": {
+                "type": "string",
+                "description": "Token contract address.",
+                "example": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+                "default": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"
+              },
+              "currency": {
+                "type": "string",
+                "description": "Currency identifier.",
+                "example": "usd",
+                "default": "usd"
+              },
+              "data": {
+                "type": "array",
+                "description": "List of historical price data points.",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "value": {
+                      "type": "string",
+                      "description": "Price value as a string.",
+                      "example": "1900.00"
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Timestamp of the price data point.",
+                      "example": "2024-01-01T00:00:00Z"
+                    },
+                    "marketCap": {
+                      "type": "string",
+                      "description": "Total market capitalization at the timestamp",
+                      "example": "274292310008.21802"
+                    },
+                    "totalVolume": {
+                      "type": "string",
+                      "description": "Volume traded during the defined interval",
+                      "example": "6715146404.608721"
+                    }
+                  },
+                  "required": [
+                    "value",
+                    "timestamp"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "network",
+              "address",
+              "currency",
+              "data"
+            ]
+          }
+        ]
+      },
+      "HistoricalPricesBySymbol": {
+        "type": "object",
+        "properties": {
+          "symbol": {
+            "type": "string",
+            "description": "Token symbol.",
+            "example": "ETH",
+            "default": "ETH"
+          },
+          "currency": {
+            "type": "string",
+            "description": "Currency identifier.",
+            "example": "usd",
+            "default": "usd"
+          },
+          "data": {
+            "type": "array",
+            "description": "List of historical price data points.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "value": {
+                  "type": "string",
+                  "description": "Price value as a string.",
+                  "example": "1900.00"
+                },
+                "timestamp": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "Timestamp of the price data point.",
+                  "example": "2024-01-01T00:00:00Z"
+                },
+                "marketCap": {
+                  "type": "string",
+                  "description": "Total market capitalization at the timestamp",
+                  "example": "274292310008.21802"
+                },
+                "totalVolume": {
+                  "type": "string",
+                  "description": "Volume traded during the defined interval",
+                  "example": "6715146404.608721"
+                }
+              },
+              "required": [
+                "value",
+                "timestamp"
+              ]
+            }
+          }
+        },
+        "required": [
+          "symbol",
+          "currency",
+          "data"
+        ]
+      },
+      "HistoricalPricesByAddress": {
+        "type": "object",
+        "properties": {
+          "network": {
+            "type": "string",
+            "description": "Network identifier.",
+            "example": "eth-mainnet",
+            "default": "eth-mainnet"
+          },
+          "address": {
+            "type": "string",
+            "description": "Token contract address.",
+            "example": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+            "default": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"
+          },
+          "currency": {
+            "type": "string",
+            "description": "Currency identifier.",
+            "example": "usd",
+            "default": "usd"
+          },
+          "data": {
+            "type": "array",
+            "description": "List of historical price data points.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "value": {
+                  "type": "string",
+                  "description": "Price value as a string.",
+                  "example": "1900.00"
+                },
+                "timestamp": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "Timestamp of the price data point.",
+                  "example": "2024-01-01T00:00:00Z"
+                },
+                "marketCap": {
+                  "type": "string",
+                  "description": "Total market capitalization at the timestamp",
+                  "example": "274292310008.21802"
+                },
+                "totalVolume": {
+                  "type": "string",
+                  "description": "Volume traded during the defined interval",
+                  "example": "6715146404.608721"
+                }
+              },
+              "required": [
+                "value",
+                "timestamp"
+              ]
+            }
+          }
+        },
+        "required": [
+          "network",
+          "address",
+          "currency",
+          "data"
+        ]
+      }
+    }
+  }
+}
