@@ -14,5 +14,3 @@ site/.vitepress/cache/**/*
 **/test-results/*
 **/playwright-report/*
 pnpm-lock.yaml
-
-/.nx/workspace-data
