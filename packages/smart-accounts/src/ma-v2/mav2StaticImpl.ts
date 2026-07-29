@@ -4,7 +4,12 @@ import { lowerAddress } from "@alchemy/common";
 import type { StaticSmartAccountImplementation } from "../types.js";
 import { semiModularAccountBytecodeAbi } from "./abis/semiModularAccountBytecodeAbi.js";
 import { accountFactoryAbi } from "./abis/accountFactoryAbi.js";
-import { DefaultAddress as DefaultMAV2Address } from "./utils/account.js";
+import {
+  DEFAULT_SEMI_MODULAR_ACCOUNT_7702_VERSION,
+  DefaultAddress as DefaultMAV2Address,
+  SemiModularAccount7702Address,
+  type SemiModularAccount7702Version,
+} from "./utils/account.js";
 import { predictModularAccountV2Address } from "./predictAddress.js";
 
 export type SemiModularAccountV2FactoryArgs = {
@@ -70,10 +75,41 @@ export type SemiModularAccount7702StaticImpl = StaticSmartAccountImplementation<
 >;
 
 /**
- * Static implementation logic for SemiModularAccount7702.
+ * Static implementation logic for SemiModularAccount7702 v1.0.0.
  */
-export const semiModularAccount7702StaticImpl: SemiModularAccount7702StaticImpl =
+export const semiModularAccount7702StaticImplV1_0_0: SemiModularAccount7702StaticImpl =
   {
     ...semiModularAccountBase,
-    delegationAddress: lowerAddress(DefaultMAV2Address.SMAV2_7702),
+    delegationAddress: lowerAddress(SemiModularAccount7702Address["v1.0.0"]),
   };
+
+/**
+ * Static implementation logic for SemiModularAccount7702 v1.1.0, which also
+ * accepts bare ECDSA signatures from the delegating EOA for ERC-1271 checks.
+ */
+export const semiModularAccount7702StaticImplV1_1_0: SemiModularAccount7702StaticImpl =
+  {
+    ...semiModularAccountBase,
+    delegationAddress: lowerAddress(SemiModularAccount7702Address["v1.1.0"]),
+  };
+
+/**
+ * Static implementation logic for each released version of
+ * SemiModularAccount7702, keyed by version.
+ */
+export const SemiModularAccount7702VersionRegistry = {
+  "v1.0.0": semiModularAccount7702StaticImplV1_0_0,
+  "v1.1.0": semiModularAccount7702StaticImplV1_1_0,
+} satisfies Record<
+  SemiModularAccount7702Version,
+  SemiModularAccount7702StaticImpl
+>;
+
+/**
+ * Static implementation logic for SemiModularAccount7702, at the default
+ * version.
+ */
+export const semiModularAccount7702StaticImpl: SemiModularAccount7702StaticImpl =
+  SemiModularAccount7702VersionRegistry[
+    DEFAULT_SEMI_MODULAR_ACCOUNT_7702_VERSION
+  ];

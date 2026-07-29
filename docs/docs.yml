@@ -408,6 +408,8 @@ navigation:
                     path: wallets/pages/reference/smart-accounts/src/type-aliases/PredictMultiOwnerModularAccountV1AddressParams.mdx
                   - page: SemiModularAccount7702StaticImpl
                     path: wallets/pages/reference/smart-accounts/src/type-aliases/SemiModularAccount7702StaticImpl.mdx
+                  - page: SemiModularAccount7702Version
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/SemiModularAccount7702Version.mdx
                   - page: SemiModularAccountV2FactoryArgs
                     path: wallets/pages/reference/smart-accounts/src/type-aliases/SemiModularAccountV2FactoryArgs.mdx
                   - page: SemiModularAccountV2StaticImpl
@@ -454,6 +456,8 @@ navigation:
                     path: wallets/pages/reference/smart-accounts/src/variables/AllowlistModule.mdx
                   - page: DEFAULT_OWNER_ENTITY_ID
                     path: wallets/pages/reference/smart-accounts/src/variables/DEFAULT_OWNER_ENTITY_ID.mdx
+                  - page: DEFAULT_SEMI_MODULAR_ACCOUNT_7702_VERSION
+                    path: wallets/pages/reference/smart-accounts/src/variables/DEFAULT_SEMI_MODULAR_ACCOUNT_7702_VERSION.mdx
                   - page: DefaultAddress
                     path: wallets/pages/reference/smart-accounts/src/variables/DefaultAddress.mdx
                   - page: DefaultMaV1Address
@@ -484,6 +488,10 @@ navigation:
                     path: wallets/pages/reference/smart-accounts/src/variables/PaymasterGuardModule.mdx
                   - page: PermissionType
                     path: wallets/pages/reference/smart-accounts/src/variables/PermissionType.mdx
+                  - page: SemiModularAccount7702Address
+                    path: wallets/pages/reference/smart-accounts/src/variables/SemiModularAccount7702Address.mdx
+                  - page: SemiModularAccount7702VersionRegistry
+                    path: wallets/pages/reference/smart-accounts/src/variables/SemiModularAccount7702VersionRegistry.mdx
                   - page: SignaturePrefix
                     path: wallets/pages/reference/smart-accounts/src/variables/SignaturePrefix.mdx
                   - page: SingleSignerValidationModule
@@ -504,6 +512,10 @@ navigation:
                     path: wallets/pages/reference/smart-accounts/src/variables/multiOwnerModularAccountStaticImpl.mdx
                   - page: semiModularAccount7702StaticImpl
                     path: wallets/pages/reference/smart-accounts/src/variables/semiModularAccount7702StaticImpl.mdx
+                  - page: semiModularAccount7702StaticImplV1_0_0
+                    path: wallets/pages/reference/smart-accounts/src/variables/semiModularAccount7702StaticImplV1_0_0.mdx
+                  - page: semiModularAccount7702StaticImplV1_1_0
+                    path: wallets/pages/reference/smart-accounts/src/variables/semiModularAccount7702StaticImplV1_1_0.mdx
                   - page: semiModularAccountV2StaticImpl
                     path: wallets/pages/reference/smart-accounts/src/variables/semiModularAccountV2StaticImpl.mdx
           - section: AA Infra

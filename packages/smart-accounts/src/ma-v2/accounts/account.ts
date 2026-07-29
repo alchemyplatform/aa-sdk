@@ -22,7 +22,13 @@ import {
 import { accountFactoryAbi } from "../abis/accountFactoryAbi.js";
 import { EntityIdOverrideError } from "../../errors/EntityIdOverrideError.js";
 import { InvalidOwnerError } from "../../errors/InvalidOwnerError.js";
-import { DEFAULT_OWNER_ENTITY_ID, DefaultAddress } from "../utils/account.js";
+import {
+  DEFAULT_OWNER_ENTITY_ID,
+  DEFAULT_SEMI_MODULAR_ACCOUNT_7702_VERSION,
+  DefaultAddress,
+  SemiModularAccount7702Address,
+  type SemiModularAccount7702Version,
+} from "../utils/account.js";
 import { LOGGER } from "../../logger.js";
 
 type Mode = "default" | "7702";
@@ -41,12 +47,18 @@ export type ToModularAccountV2Params<
   mode?: TMode;
 } & (TMode extends "7702"
   ? {
+      /**
+       * The `SemiModularAccount7702` version to delegate to. Defaults to
+       * {@link DEFAULT_SEMI_MODULAR_ACCOUNT_7702_VERSION}.
+       */
+      version?: SemiModularAccount7702Version;
       salt?: never;
       factory?: never;
       factoryData?: never;
       implementationAddress?: never;
     }
   : {
+      version?: never;
       factory?: Address;
       implementationAddress?: Address;
     } & (
@@ -116,12 +128,15 @@ export async function toModularAccountV2<TMode extends Mode = Mode>({
   factoryData: factoryData_,
   implementationAddress: implementationAddress_,
   mode,
+  version = DEFAULT_SEMI_MODULAR_ACCOUNT_7702_VERSION,
 }: ToModularAccountV2Params<TMode>): Promise<ModularAccountV2> {
   const is7702 = mode === "7702";
+  const delegationAddress = SemiModularAccount7702Address[version];
 
   LOGGER.debug("toModularAccountV2:start", {
     ownerType: owner.type,
     mode,
+    ...(is7702 ? { version } : {}),
     hasDeferredAction: !!deferredAction,
     hasAccountAddress: !!accountAddress_,
   });
@@ -132,7 +147,7 @@ export async function toModularAccountV2<TMode extends Mode = Mode>({
 
   const implementationAddress =
     implementationAddress_ ??
-    (is7702 ? DefaultAddress.SMAV2_7702 : DefaultAddress.SMAV2_BYTECODE);
+    (is7702 ? delegationAddress : DefaultAddress.SMAV2_BYTECODE);
 
   const getFactoryArgs = async () => {
     if (is7702) {
@@ -216,7 +231,7 @@ export async function toModularAccountV2<TMode extends Mode = Mode>({
       // on a `PrivateKeyAccount`, but this seems safe as long as the
       // owner is able to `signAuthorization`.
       account: owner as PrivateKeyAccount,
-      address: DefaultAddress.SMAV2_7702,
+      address: delegationAddress,
     };
   }
 

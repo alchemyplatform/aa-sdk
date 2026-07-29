@@ -12,12 +12,41 @@ import { semiModularAccountStorageAbi } from "../abis/semiModularAccountStorageA
 import type { ModularAccountV2Base } from "../accounts/base.js";
 
 /**
+ * The delegation address of each released `SemiModularAccount7702` version.
+ *
+ * `v1.1.0` additionally accepts a bare 64- or 65-byte ECDSA signature from the
+ * delegating EOA for ERC-1271 checks. Contracts that route signature
+ * verification through ERC-1271 whenever the signer address has code - Permit2,
+ * Seaport, OpenZeppelin's `SignatureChecker` - hand a delegated account the
+ * plain signature the EOA's wallet produced, which `v1.0.0` rejects. The
+ * account's own signature encoding is accepted by both versions, so the SDK's
+ * signing path is unchanged.
+ */
+export const SemiModularAccount7702Address = {
+  "v1.0.0": "0x69007702764179f14F51cdce752f4f775d74E139",
+  // TODO: placeholder - replace once SemiModularAccount7702 v1.1.0 is deployed.
+  "v1.1.0": "0xDEaDBeeF00000000000000000000000000007702",
+} as const satisfies Record<string, Address>;
+
+export type SemiModularAccount7702Version =
+  keyof typeof SemiModularAccount7702Address;
+
+/**
+ * The `SemiModularAccount7702` version used when no version is specified.
+ */
+export const DEFAULT_SEMI_MODULAR_ACCOUNT_7702_VERSION =
+  "v1.0.0" as const satisfies SemiModularAccount7702Version;
+
+/**
  * A mapping of default addresses for the ModularAccountV2.
  */
 export const DefaultAddress = {
   MAV2_FACTORY: "0x00000000000017c61b5bEe81050EC8eFc9c6fecd",
   SMAV2_BYTECODE: "0x000000000000c5A9089039570Dd36455b5C07383",
   SMAV2_STORAGE: "0x0000000000006E2f9d80CaEc0Da6500f005EB25A",
+  // Spelled out rather than read off `SemiModularAccount7702Address` so the
+  // generated reference docs render the address. Kept in sync by the assertion
+  // in `mav2StaticImpl.test.ts`.
   SMAV2_7702: "0x69007702764179f14F51cdce752f4f775d74E139",
 } satisfies Record<string, Address>;
 

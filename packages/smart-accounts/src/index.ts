@@ -78,6 +78,9 @@ export { installValidationActions } from "./ma-v2/decorators/installValidation.j
 export {
   semiModularAccountV2StaticImpl,
   semiModularAccount7702StaticImpl,
+  semiModularAccount7702StaticImplV1_0_0,
+  semiModularAccount7702StaticImplV1_1_0,
+  SemiModularAccount7702VersionRegistry,
 } from "./ma-v2/mav2StaticImpl.js";
 export type * from "./ma-v2/mav2StaticImpl.js";
 
@@ -103,7 +106,9 @@ export type * from "./ma-v2/utils/account.js";
 export {
   DefaultAddress,
   DefaultModuleAddress,
+  SemiModularAccount7702Address,
   DEFAULT_OWNER_ENTITY_ID,
+  DEFAULT_SEMI_MODULAR_ACCOUNT_7702_VERSION,
   EXECUTE_USER_OP_SELECTOR,
   getMAV2UpgradeToData,
   buildFullNonceKey,
