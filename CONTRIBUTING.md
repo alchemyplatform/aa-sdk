@@ -12,13 +12,14 @@ We are excited to have you contribute to the `aa-sdk`. Here's a step-by-step gui
 
 4. **Testing Environment**: Before making changes, make sure to verify the testing environment.
 
-   - Use the Node version specified in `package.json` (currently 18.16.0). Run `node -v` to check your version.
-   - Build the project with `pnpm run build`.
-   - Run existing tests using `pnpm test` & `pnpm run test:typecheck` to ensure everything is working correctly.
+   - Use a Node version that satisfies the `package.json` engines requirement (currently `>=22.12.0`). Run `node -v` to check your version.
+   - Use the pnpm version specified by `packageManager` in `package.json`.
+   - Build the project with `pnpm run build:libs`.
+   - Run existing tests using `pnpm run test:ci` and `pnpm run test:typecheck` to ensure everything is working correctly.
 
-5. **Make Changes**: Now, you can start making changes to the packages or docs. When updating or adding new functionality, update or add a new doc in `site/packages/*` corresponding to the package you have worked on to document the changes.
+5. **Make Changes**: Now, you can start making changes to the packages or docs. When updating or adding new functionality, update the relevant package source, TSDoc, or docs in `docs/` so the change is documented.
 
-6. **Re-verify Tests**: After making your changes, re-run `pnpm test` & `pnpm run test:typecheck` to ensure all tests still pass.
+6. **Re-verify Tests**: After making your changes, re-run `pnpm run test:ci` and `pnpm run test:typecheck` to ensure all tests still pass.
 
 7. **Code Formatting**:
 
@@ -27,9 +28,10 @@ We are excited to have you contribute to the `aa-sdk`. Here's a step-by-step gui
 
 8. **Docs Changes**:
 
-   - To run docs locally: `pnpm run docs:dev`.
    - To build SDK docs: `pnpm run docs:sdk`.
-   - When editing or adding new docs, make sure you follow the [docs contributing guidelines](docs/CONTRIBUTING.md)
+   - To lint docs prose: `pnpm run lint:docs`.
+   - To check docs links: `pnpm run docs:broken-links`.
+   - When editing TypeDoc-generated SDK reference docs, update the source or TSDoc first, then run `pnpm run docs:sdk` and commit the generated `docs/pages/reference/` changes.
 
 9. **Committing Changes**: Commit your changes using a standardized message format.
 
