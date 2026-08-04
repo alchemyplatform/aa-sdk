@@ -10,6 +10,13 @@ layout: reference
 ```ts
 type SendCallsParams = {
   account?: AccountParam | undefined;
+  calls?:
+    | {
+        to: `0x${string}`;
+        data?: `0x${string}` | undefined;
+        value?: bigint | undefined;
+      }[]
+    | undefined;
   capabilities?:
     | (Omit<
         {
@@ -264,13 +271,6 @@ type SendCallsParams = {
             })
           | undefined;
       })
-    | undefined;
-  calls?:
-    | {
-        to: `0x${string}`;
-        data?: `0x${string}` | undefined;
-        value?: bigint | undefined;
-      }[]
     | undefined;
   paymasterPermitSignature?:
     | {
