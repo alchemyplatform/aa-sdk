@@ -12,6 +12,12 @@ import {
  * A version only appears here once its contract is deployed. To use an
  * unreleased or custom deployment, pass `delegationAddress` to
  * `toModularAccountV2`.
+ *
+ * Versions that ship in beta are keyed with their pre-release suffix — a beta
+ * SemiModularAccount7702 v1.1.0 registers as `"v1.1.0-beta"`, so the key a
+ * caller passes to `toModularAccountV2` states the stability of the delegation
+ * it selects. Dropping the suffix at GA is a deliberate breaking change for
+ * beta callers.
  */
 export const ModularAccountV2VersionRegistry = {
   SemiModularAccountBytecode: {
@@ -34,7 +40,8 @@ export type SemiModularAccount7702Version =
  * The SemiModularAccount7702 version `toModularAccountV2` delegates to when no
  * `version` is given. Newer versions are opt-in rather than default: moving
  * this would re-delegate every existing 7702 account, since `is7702Delegated`
- * compares on-chain code against the delegation address.
+ * compares on-chain code against the delegation address. A pre-release version
+ * is never the default.
  */
 export const DEFAULT_SMAV2_7702_VERSION =
   "v1.0.0" as const satisfies SemiModularAccount7702Version;
