@@ -41,6 +41,10 @@ import { deferralActions } from "../decorators/deferralActions.js";
 import { installValidationActions } from "../decorators/installValidation.js";
 import { HookType, SignaturePrefix } from "../types.js";
 import { buildFullNonceKey, DefaultModuleAddress } from "../utils/account.js";
+import {
+  DEFAULT_SMAV2_7702_VERSION,
+  ModularAccountV2VersionRegistry,
+} from "../registry.js";
 import { semiModularAccountBytecodeAbi } from "../abis/semiModularAccountBytecodeAbi.js";
 import { SingleSignerValidationModule } from "../modules/single-signer-validation/module.js";
 import { PermissionBuilder, PermissionType } from "../permissionBuilder.js";
@@ -52,7 +56,7 @@ import { TimeRangeModule } from "../modules/time-range-module/module.js";
 import { getMAV2UpgradeToData } from "../utils/account.js";
 import { packAccountGasLimits, packPaymasterData } from "../../utils.js";
 import { estimateFeesPerGas } from "@alchemy/aa-infra";
-import { raise } from "@alchemy/common";
+import { lowerAddress, raise } from "@alchemy/common";
 import { EXECUTE_USER_OP_SELECTOR } from "../utils/account.js";
 
 // Note: These tests maintain a shared state to not break the local-running rundler by desyncing the chain.
@@ -2188,6 +2192,58 @@ describe("MA v2 Account Tests", async () => {
       expect(success2).toEqual(true);
     },
   );
+
+  describe("7702 delegation selection", () => {
+    // Construction-only: none of these delegations need to exist on the fork.
+    const client7702 = () =>
+      createPublicClient({
+        transport: custom(localInstance.getClient()),
+        chain: localInstance.chain,
+      });
+
+    const registry7702 = ModularAccountV2VersionRegistry.SemiModularAccount7702;
+
+    it("defaults to DEFAULT_SMAV2_7702_VERSION", async () => {
+      const account = await toModularAccountV2({
+        client: client7702(),
+        owner,
+        mode: "7702",
+      });
+
+      expect(account.authorization?.address).toBe(
+        registry7702[DEFAULT_SMAV2_7702_VERSION].delegationAddress,
+      );
+    });
+
+    it("uses the delegation for an explicit version", async () => {
+      const account = await toModularAccountV2({
+        client: client7702(),
+        owner,
+        mode: "7702",
+        version: "v1.0.0",
+      });
+
+      expect(account.authorization?.address).toBe(
+        registry7702["v1.0.0"].delegationAddress,
+      );
+    });
+
+    it("uses an explicit delegationAddress, lowercased", async () => {
+      const delegationAddress = "0x1234567890AbcdEF1234567890aBcdef12345678";
+
+      const account = await toModularAccountV2({
+        client: client7702(),
+        owner,
+        mode: "7702",
+        delegationAddress,
+      });
+
+      // Lowercase on both paths, so callers get one predictable casing.
+      expect(account.authorization?.address).toBe(
+        lowerAddress(delegationAddress),
+      );
+    });
+  });
 
   const givenConnectedProvider = async ({
     signer,

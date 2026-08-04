@@ -70,10 +70,18 @@ export type SemiModularAccount7702StaticImpl = StaticSmartAccountImplementation<
 >;
 
 /**
- * Static implementation logic for SemiModularAccount7702.
+ * Static implementation logic for SemiModularAccount7702 v1.0.0
+ * (`alchemy.sma-7702.1.0.0`).
  */
-export const semiModularAccount7702StaticImpl: SemiModularAccount7702StaticImpl =
+export const semiModularAccount7702StaticImplV1_0_0: SemiModularAccount7702StaticImpl =
   {
     ...semiModularAccountBase,
     delegationAddress: lowerAddress(DefaultMAV2Address.SMAV2_7702),
   };
+
+/**
+ * Static implementation logic for SemiModularAccount7702, at the default
+ * version (`DEFAULT_SMAV2_7702_VERSION`).
+ */
+export const semiModularAccount7702StaticImpl: SemiModularAccount7702StaticImpl =
+  semiModularAccount7702StaticImplV1_0_0;

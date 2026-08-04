@@ -13,6 +13,7 @@ import {
   type ToSmartAccountParameters,
   entryPoint07Address,
 } from "viem/account-abstraction";
+import { lowerAddress } from "@alchemy/common";
 import { toModularAccountV2Base, type ModularAccountV2Base } from "./base.js";
 import type { SignerEntity } from "../types.js";
 import {
@@ -23,6 +24,11 @@ import { accountFactoryAbi } from "../abis/accountFactoryAbi.js";
 import { EntityIdOverrideError } from "../../errors/EntityIdOverrideError.js";
 import { InvalidOwnerError } from "../../errors/InvalidOwnerError.js";
 import { DEFAULT_OWNER_ENTITY_ID, DefaultAddress } from "../utils/account.js";
+import {
+  DEFAULT_SMAV2_7702_VERSION,
+  ModularAccountV2VersionRegistry,
+  type SemiModularAccount7702Version,
+} from "../registry.js";
 import { LOGGER } from "../../logger.js";
 
 type Mode = "default" | "7702";
@@ -45,8 +51,27 @@ export type ToModularAccountV2Params<
       factory?: never;
       factoryData?: never;
       implementationAddress?: never;
-    }
+    } & (
+      | {
+          /**
+           * The SemiModularAccount7702 version to delegate to. Defaults to
+           * {@link DEFAULT_SMAV2_7702_VERSION}.
+           */
+          version?: SemiModularAccount7702Version;
+          delegationAddress?: never;
+        }
+      | {
+          version?: never;
+          /**
+           * A raw delegation address, for custom or unreleased deployments not
+           * in {@link ModularAccountV2VersionRegistry}.
+           */
+          delegationAddress?: Address;
+        }
+    )
   : {
+      version?: never;
+      delegationAddress?: never;
       factory?: Address;
       implementationAddress?: Address;
     } & (
@@ -104,6 +129,37 @@ export type ToModularAccountV2Params<
  *
  * const receipt = await bundlerClient.waitForUserOperationReceipt({ hash });
  * ```
+ *
+ * @example
+ * In `7702` mode the account delegates to a `SemiModularAccount7702`
+ * deployment. Pin one of the registered versions with `version`, or pass a raw
+ * `delegationAddress` for an unreleased or custom deployment. The default is
+ * `DEFAULT_SMAV2_7702_VERSION`; newer versions are opt-in, so existing
+ * accounts are never silently re-delegated.
+ * ```ts
+ * // Default delegation (DEFAULT_SMAV2_7702_VERSION)
+ * const account = await toModularAccountV2({
+ *   client,
+ *   owner: privateKeyToAccount(generatePrivateKey()),
+ *   mode: "7702",
+ * });
+ *
+ * // Pin a registered version
+ * const pinned = await toModularAccountV2({
+ *   client,
+ *   owner: privateKeyToAccount(generatePrivateKey()),
+ *   mode: "7702",
+ *   version: "v1.0.0",
+ * });
+ *
+ * // An unreleased or custom delegation
+ * const custom = await toModularAccountV2({
+ *   client,
+ *   owner: privateKeyToAccount(generatePrivateKey()),
+ *   mode: "7702",
+ *   delegationAddress: "0x...",
+ * });
+ * ```
  */
 export async function toModularAccountV2<TMode extends Mode = Mode>({
   client,
@@ -115,6 +171,8 @@ export async function toModularAccountV2<TMode extends Mode = Mode>({
   factory,
   factoryData: factoryData_,
   implementationAddress: implementationAddress_,
+  version = DEFAULT_SMAV2_7702_VERSION,
+  delegationAddress: delegationAddress_,
   mode,
 }: ToModularAccountV2Params<TMode>): Promise<ModularAccountV2> {
   const is7702 = mode === "7702";
@@ -124,15 +182,23 @@ export async function toModularAccountV2<TMode extends Mode = Mode>({
     mode,
     hasDeferredAction: !!deferredAction,
     hasAccountAddress: !!accountAddress_,
+    ...(is7702 ? { version, hasDelegationAddress: !!delegationAddress_ } : {}),
   });
 
   const entityId = signerEntity?.entityId ?? DEFAULT_OWNER_ENTITY_ID;
 
   const factoryAddress = factory ?? DefaultAddress.MAV2_FACTORY;
 
+  // Lowercased on both paths: this value is only ever compared, never displayed.
+  const delegationAddress = lowerAddress(
+    delegationAddress_ ??
+      ModularAccountV2VersionRegistry.SemiModularAccount7702[version]
+        .delegationAddress,
+  );
+
   const implementationAddress =
     implementationAddress_ ??
-    (is7702 ? DefaultAddress.SMAV2_7702 : DefaultAddress.SMAV2_BYTECODE);
+    (is7702 ? delegationAddress : DefaultAddress.SMAV2_BYTECODE);
 
   const getFactoryArgs = async () => {
     if (is7702) {
@@ -216,7 +282,7 @@ export async function toModularAccountV2<TMode extends Mode = Mode>({
       // on a `PrivateKeyAccount`, but this seems safe as long as the
       // owner is able to `signAuthorization`.
       account: owner as PrivateKeyAccount,
-      address: DefaultAddress.SMAV2_7702,
+      address: delegationAddress,
     };
   }
 
