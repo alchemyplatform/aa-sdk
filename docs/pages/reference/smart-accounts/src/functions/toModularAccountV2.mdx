@@ -11,7 +11,7 @@ layout: reference
 function toModularAccountV2<TMode>(param0): Promise<ModularAccountV2>;
 ```
 
-Defined in: [packages/smart-accounts/src/ma-v2/accounts/account.ts:128](https://github.com/alchemyplatform/aa-sdk/blob/main/packages/smart-accounts/src/ma-v2/accounts/account.ts#L128)
+Defined in: [packages/smart-accounts/src/ma-v2/accounts/account.ts:162](https://github.com/alchemyplatform/aa-sdk/blob/main/packages/smart-accounts/src/ma-v2/accounts/account.ts#L162)
 
 Creates a MAv2 account.
 
@@ -117,12 +117,30 @@ const hash = await bundlerClient.sendUserOperation({
 const receipt = await bundlerClient.waitForUserOperationReceipt({ hash });
 ```
 
-In `7702` mode the account delegates to `DefaultAddress.SMAV2_7702` by
-default. Pass `delegationAddress` to delegate to a different
-`SemiModularAccount7702` deployment instead.
+In `7702` mode the account delegates to a `SemiModularAccount7702`
+deployment. Pin one of the registered versions with `version`, or pass a raw
+`delegationAddress` for an unreleased or custom deployment. The default is
+`DEFAULT_SMAV2_7702_VERSION`; newer versions are opt-in, so existing
+accounts are never silently re-delegated.
 
 ```ts
+// Default delegation (DEFAULT_SMAV2_7702_VERSION)
 const account = await toModularAccountV2({
+  client,
+  owner: privateKeyToAccount(generatePrivateKey()),
+  mode: "7702",
+});
+
+// Pin a registered version
+const pinned = await toModularAccountV2({
+  client,
+  owner: privateKeyToAccount(generatePrivateKey()),
+  mode: "7702",
+  version: "v1.1.0",
+});
+
+// An unreleased or custom delegation
+const custom = await toModularAccountV2({
   client,
   owner: privateKeyToAccount(generatePrivateKey()),
   mode: "7702",

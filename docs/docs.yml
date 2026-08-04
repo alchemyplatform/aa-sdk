@@ -384,6 +384,10 @@ navigation:
                     path: wallets/pages/reference/smart-accounts/src/type-aliases/ModularAccountV2.mdx
                   - page: ModularAccountV2Base
                     path: wallets/pages/reference/smart-accounts/src/type-aliases/ModularAccountV2Base.mdx
+                  - page: ModularAccountV2Type
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/ModularAccountV2Type.mdx
+                  - page: ModularAccountV2Version
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/ModularAccountV2Version.mdx
                   - page: ModuleEntity
                     path: wallets/pages/reference/smart-accounts/src/type-aliases/ModuleEntity.mdx
                   - page: MultiOwnerLightAccount
@@ -408,6 +412,8 @@ navigation:
                     path: wallets/pages/reference/smart-accounts/src/type-aliases/PredictMultiOwnerModularAccountV1AddressParams.mdx
                   - page: SemiModularAccount7702StaticImpl
                     path: wallets/pages/reference/smart-accounts/src/type-aliases/SemiModularAccount7702StaticImpl.mdx
+                  - page: SemiModularAccount7702Version
+                    path: wallets/pages/reference/smart-accounts/src/type-aliases/SemiModularAccount7702Version.mdx
                   - page: SemiModularAccountV2FactoryArgs
                     path: wallets/pages/reference/smart-accounts/src/type-aliases/SemiModularAccountV2FactoryArgs.mdx
                   - page: SemiModularAccountV2StaticImpl
@@ -454,6 +460,8 @@ navigation:
                     path: wallets/pages/reference/smart-accounts/src/variables/AllowlistModule.mdx
                   - page: DEFAULT_OWNER_ENTITY_ID
                     path: wallets/pages/reference/smart-accounts/src/variables/DEFAULT_OWNER_ENTITY_ID.mdx
+                  - page: DEFAULT_SMAV2_7702_VERSION
+                    path: wallets/pages/reference/smart-accounts/src/variables/DEFAULT_SMAV2_7702_VERSION.mdx
                   - page: DefaultAddress
                     path: wallets/pages/reference/smart-accounts/src/variables/DefaultAddress.mdx
                   - page: DefaultMaV1Address
@@ -478,6 +486,8 @@ navigation:
                     path: wallets/pages/reference/smart-accounts/src/variables/LightAccountV1Versions.mdx
                   - page: LightAccountV2Versions
                     path: wallets/pages/reference/smart-accounts/src/variables/LightAccountV2Versions.mdx
+                  - page: ModularAccountV2VersionRegistry
+                    path: wallets/pages/reference/smart-accounts/src/variables/ModularAccountV2VersionRegistry.mdx
                   - page: NativeTokenLimitModule
                     path: wallets/pages/reference/smart-accounts/src/variables/NativeTokenLimitModule.mdx
                   - page: PaymasterGuardModule
@@ -504,6 +514,10 @@ navigation:
                     path: wallets/pages/reference/smart-accounts/src/variables/multiOwnerModularAccountStaticImpl.mdx
                   - page: semiModularAccount7702StaticImpl
                     path: wallets/pages/reference/smart-accounts/src/variables/semiModularAccount7702StaticImpl.mdx
+                  - page: semiModularAccount7702StaticImplV1_0_0
+                    path: wallets/pages/reference/smart-accounts/src/variables/semiModularAccount7702StaticImplV1_0_0.mdx
+                  - page: semiModularAccount7702StaticImplV1_1_0
+                    path: wallets/pages/reference/smart-accounts/src/variables/semiModularAccount7702StaticImplV1_1_0.mdx
                   - page: semiModularAccountV2StaticImpl
                     path: wallets/pages/reference/smart-accounts/src/variables/semiModularAccountV2StaticImpl.mdx
           - section: AA Infra

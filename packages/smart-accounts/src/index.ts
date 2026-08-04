@@ -78,8 +78,16 @@ export { installValidationActions } from "./ma-v2/decorators/installValidation.j
 export {
   semiModularAccountV2StaticImpl,
   semiModularAccount7702StaticImpl,
+  semiModularAccount7702StaticImplV1_0_0,
+  semiModularAccount7702StaticImplV1_1_0,
 } from "./ma-v2/mav2StaticImpl.js";
 export type * from "./ma-v2/mav2StaticImpl.js";
+
+export {
+  ModularAccountV2VersionRegistry,
+  DEFAULT_SMAV2_7702_VERSION,
+} from "./ma-v2/registry.js";
+export type * from "./ma-v2/registry.js";
 
 // Modules
 export { AllowlistModule } from "./ma-v2/modules/allowlist-module/module.js";

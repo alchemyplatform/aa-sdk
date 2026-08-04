@@ -45,6 +45,7 @@ import {
   DefaultAddress,
   DefaultModuleAddress,
 } from "../utils/account.js";
+import { ModularAccountV2VersionRegistry } from "../registry.js";
 import { semiModularAccountBytecodeAbi } from "../abis/semiModularAccountBytecodeAbi.js";
 import { SingleSignerValidationModule } from "../modules/single-signer-validation/module.js";
 import { PermissionBuilder, PermissionType } from "../permissionBuilder.js";
@@ -2193,15 +2194,17 @@ describe("MA v2 Account Tests", async () => {
     },
   );
 
-  describe("7702 delegationAddress", () => {
-    // Construction-only: neither delegation has to exist on the fork.
+  describe("7702 delegation selection", () => {
+    // Construction-only: none of these delegations need to exist on the fork.
     const client7702 = () =>
       createPublicClient({
         transport: custom(localInstance.getClient()),
         chain: localInstance.chain,
       });
 
-    it("defaults to DefaultAddress.SMAV2_7702", async () => {
+    const registry7702 = ModularAccountV2VersionRegistry.SemiModularAccount7702;
+
+    it("preserves the default DefaultAddress.SMAV2_7702", async () => {
       const account = await toModularAccountV2({
         client: client7702(),
         owner,
@@ -2211,7 +2214,33 @@ describe("MA v2 Account Tests", async () => {
       expect(account.authorization?.address).toBe(DefaultAddress.SMAV2_7702);
     });
 
-    it("authorizes an explicit delegationAddress instead", async () => {
+    it("uses the delegation for an explicit version", async () => {
+      const account = await toModularAccountV2({
+        client: client7702(),
+        owner,
+        mode: "7702",
+        version: "v1.0.0",
+      });
+
+      expect(account.authorization?.address).toBe(
+        registry7702["v1.0.0"].delegationAddress,
+      );
+    });
+
+    it("uses the deployed v1.1.0 delegation", async () => {
+      const account = await toModularAccountV2({
+        client: client7702(),
+        owner,
+        mode: "7702",
+        version: "v1.1.0",
+      });
+
+      expect(account.authorization?.address).toBe(
+        registry7702["v1.1.0"].delegationAddress,
+      );
+    });
+
+    it("preserves an explicit delegationAddress", async () => {
       const delegationAddress = "0x1234567890AbcdEF1234567890aBcdef12345678";
 
       const account = await toModularAccountV2({
