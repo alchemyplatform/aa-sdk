@@ -490,6 +490,8 @@ navigation:
                     path: wallets/pages/reference/smart-accounts/src/variables/ModularAccountV2VersionRegistry.mdx
                   - page: NativeTokenLimitModule
                     path: wallets/pages/reference/smart-accounts/src/variables/NativeTokenLimitModule.mdx
+                  - page: PLACEHOLDER_DELEGATION_ADDRESS
+                    path: wallets/pages/reference/smart-accounts/src/variables/PLACEHOLDER_DELEGATION_ADDRESS.mdx
                   - page: PaymasterGuardModule
                     path: wallets/pages/reference/smart-accounts/src/variables/PaymasterGuardModule.mdx
                   - page: PermissionType
@@ -516,6 +518,8 @@ navigation:
                     path: wallets/pages/reference/smart-accounts/src/variables/semiModularAccount7702StaticImpl.mdx
                   - page: semiModularAccount7702StaticImplV1_0_0
                     path: wallets/pages/reference/smart-accounts/src/variables/semiModularAccount7702StaticImplV1_0_0.mdx
+                  - page: semiModularAccount7702StaticImplV1_1_0Beta
+                    path: wallets/pages/reference/smart-accounts/src/variables/semiModularAccount7702StaticImplV1_1_0Beta.mdx
                   - page: semiModularAccountV2StaticImpl
                     path: wallets/pages/reference/smart-accounts/src/variables/semiModularAccountV2StaticImpl.mdx
           - section: AA Infra

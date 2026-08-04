@@ -4,7 +4,10 @@ import {
   DEFAULT_SMAV2_7702_VERSION,
   ModularAccountV2VersionRegistry,
 } from "./registry.js";
-import { semiModularAccount7702StaticImpl } from "./mav2StaticImpl.js";
+import {
+  PLACEHOLDER_DELEGATION_ADDRESS,
+  semiModularAccount7702StaticImpl,
+} from "./mav2StaticImpl.js";
 import { DefaultAddress } from "./utils/account.js";
 
 describe("ModularAccountV2VersionRegistry", () => {
@@ -56,14 +59,30 @@ describe("ModularAccountV2VersionRegistry", () => {
     ).toBe(true);
   });
 
-  it("registers no placeholder addresses", () => {
-    // A version is only registered once it's deployed, so callers can trust
-    // that any `version` they can name resolves to an address with code.
+  it("registers no placeholder address for a non-pre-release version", () => {
+    // Only pre-release versions may be registered before deployment, so callers
+    // can trust that any stable `version` resolves to an address with code.
     for (const [version, impl] of Object.entries(smav2_7702)) {
+      if (version.includes("-")) continue;
+
       expect(
-        isAddressEqual(impl.delegationAddress, zeroAddress),
+        isAddressEqual(impl.delegationAddress, PLACEHOLDER_DELEGATION_ADDRESS),
         `${version} has a placeholder address`,
       ).toBe(false);
     }
+  });
+
+  it("registers v1.1.0-beta at the placeholder address", () => {
+    // Remove this assertion when the deployment lands and the real address
+    // replaces the placeholder — the test above then covers it.
+    expect(smav2_7702["v1.1.0-beta"].delegationAddress).toBe(
+      PLACEHOLDER_DELEGATION_ADDRESS,
+    );
+  });
+
+  it("keeps the placeholder unmistakable for a real deployment", () => {
+    expect(isAddressEqual(PLACEHOLDER_DELEGATION_ADDRESS, zeroAddress)).toBe(
+      true,
+    );
   });
 });

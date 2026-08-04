@@ -1,6 +1,7 @@
 import type { StaticSmartAccountImplementation } from "../types.js";
 import {
   semiModularAccount7702StaticImplV1_0_0,
+  semiModularAccount7702StaticImplV1_1_0Beta,
   semiModularAccountV2StaticImpl,
 } from "./mav2StaticImpl.js";
 
@@ -9,15 +10,17 @@ import {
  * then by contract version. The two semi-modular account contracts version
  * independently, so each gets its own version line.
  *
- * A version only appears here once its contract is deployed. To use an
- * unreleased or custom deployment, pass `delegationAddress` to
- * `toModularAccountV2`.
+ * Versions that ship in beta are keyed with their pre-release suffix, so the key
+ * a caller passes to `toModularAccountV2` states the stability of the delegation
+ * it selects. A pre-release entry may carry
+ * `PLACEHOLDER_DELEGATION_ADDRESS` while its contract is undeployed, so
+ * selecting it delegates to an address with no code. Both its address and its
+ * key can change without a major bump — dropping the suffix at GA is a
+ * deliberate break for beta callers.
  *
- * Versions that ship in beta are keyed with their pre-release suffix — a beta
- * SemiModularAccount7702 v1.1.0 registers as `"v1.1.0-beta"`, so the key a
- * caller passes to `toModularAccountV2` states the stability of the delegation
- * it selects. Dropping the suffix at GA is a deliberate breaking change for
- * beta callers.
+ * Every non-pre-release entry resolves to a deployed address, enforced by a
+ * registry test. For a custom deployment, or a beta one before its address
+ * lands here, pass `delegationAddress` to `toModularAccountV2`.
  */
 export const ModularAccountV2VersionRegistry = {
   SemiModularAccountBytecode: {
@@ -25,6 +28,7 @@ export const ModularAccountV2VersionRegistry = {
   },
   SemiModularAccount7702: {
     "v1.0.0": semiModularAccount7702StaticImplV1_0_0,
+    "v1.1.0-beta": semiModularAccount7702StaticImplV1_1_0Beta,
   },
 } satisfies Record<string, Record<string, StaticSmartAccountImplementation>>;
 

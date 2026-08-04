@@ -1,4 +1,4 @@
-import { encodeFunctionData, type Address } from "viem";
+import { encodeFunctionData, zeroAddress, type Address } from "viem";
 import { entryPoint07Abi, entryPoint07Address } from "viem/account-abstraction";
 import { lowerAddress } from "@alchemy/common";
 import type { StaticSmartAccountImplementation } from "../types.js";
@@ -20,6 +20,16 @@ export type SemiModularAccountV2StaticImpl = StaticSmartAccountImplementation<
   typeof semiModularAccountBytecodeAbi,
   typeof accountFactoryAbi
 >;
+
+/**
+ * Stands in for the address of a contract that isn't deployed yet, so an
+ * unreleased version can be registered before its deployment lands.
+ *
+ * `zeroAddress` rather than a plausible-looking address: it can't be mistaken
+ * for a real deployment, and `isAddressEqual(addr, zeroAddress)` is how the
+ * registry test finds these entries.
+ */
+export const PLACEHOLDER_DELEGATION_ADDRESS = zeroAddress;
 
 // Shared entryPoint configuration across all modular account v2 implementations
 const entryPoint = {
@@ -77,6 +87,25 @@ export const semiModularAccount7702StaticImplV1_0_0: SemiModularAccount7702Stati
   {
     ...semiModularAccountBase,
     delegationAddress: lowerAddress(DefaultMAV2Address.SMAV2_7702),
+  };
+
+/**
+ * Static implementation logic for SemiModularAccount7702 v1.1.0-beta, which
+ * fixes ERC-1271 for callers that go through Permit2, Seaport, or
+ * OpenZeppelin's `SignatureChecker`.
+ *
+ * @remarks
+ * **Experimental.** `delegationAddress` is
+ * {@link PLACEHOLDER_DELEGATION_ADDRESS}, not a deployment — the contract isn't
+ * live yet, so selecting this version delegates to an address with no code.
+ * Both the address and the `"v1.1.0-beta"` key are subject to change or removal
+ * without a major version bump; at GA the key becomes `"v1.1.0"` and beta
+ * callers have to update.
+ */
+export const semiModularAccount7702StaticImplV1_1_0Beta: SemiModularAccount7702StaticImpl =
+  {
+    ...semiModularAccountBase,
+    delegationAddress: PLACEHOLDER_DELEGATION_ADDRESS,
   };
 
 /**

@@ -1,6 +1,6 @@
 ---
 title: ModularAccountV2VersionRegistry
-description: Account version registry for ModularAccountV2, keyed by contract name and then by contract version. The two semi-modular account contracts version independently, so each gets its own version line.  A version only appears here once its contract is deployed. To use an unreleased or custom deployment, pass `delegationAddress` to `toModularAccountV2`.  Versions that ship in beta are keyed with their pre-release suffix — a beta SemiModularAccount7702 v1.1.0 registers as `"v1.1.0-beta"`, so the key a caller passes to `toModularAccountV2` states the stability of the delegation it selects. Dropping the suffix at GA is a deliberate breaking change for beta callers.
+description: Account version registry for ModularAccountV2, keyed by contract name and then by contract version. The two semi-modular account contracts version independently, so each gets its own version line.  Versions that ship in beta are keyed with their pre-release suffix, so the key a caller passes to `toModularAccountV2` states the stability of the delegation it selects. A pre-release entry may carry `PLACEHOLDER_DELEGATION_ADDRESS` while its contract is undeployed, so selecting it delegates to an address with no code. Both its address and its key can change without a major bump — dropping the suffix at GA is a deliberate break for beta callers.  Every non-pre-release entry resolves to a deployed address, enforced by a registry test. For a custom deployment, or a beta one before its address lands here, pass `delegationAddress` to `toModularAccountV2`.
 slug: wallets/reference/smart-accounts/variables/ModularAccountV2VersionRegistry
 layout: reference
 ---
@@ -11,21 +11,23 @@ layout: reference
 const ModularAccountV2VersionRegistry: object;
 ```
 
-Defined in: [packages/smart-accounts/src/ma-v2/registry.ts:22](https://github.com/alchemyplatform/aa-sdk/blob/main/packages/smart-accounts/src/ma-v2/registry.ts#L22)
+Defined in: [packages/smart-accounts/src/ma-v2/registry.ts:25](https://github.com/alchemyplatform/aa-sdk/blob/main/packages/smart-accounts/src/ma-v2/registry.ts#L25)
 
 Account version registry for ModularAccountV2, keyed by contract name and
 then by contract version. The two semi-modular account contracts version
 independently, so each gets its own version line.
 
-A version only appears here once its contract is deployed. To use an
-unreleased or custom deployment, pass `delegationAddress` to
-`toModularAccountV2`.
+Versions that ship in beta are keyed with their pre-release suffix, so the key
+a caller passes to `toModularAccountV2` states the stability of the delegation
+it selects. A pre-release entry may carry
+`PLACEHOLDER_DELEGATION_ADDRESS` while its contract is undeployed, so
+selecting it delegates to an address with no code. Both its address and its
+key can change without a major bump — dropping the suffix at GA is a
+deliberate break for beta callers.
 
-Versions that ship in beta are keyed with their pre-release suffix — a beta
-SemiModularAccount7702 v1.1.0 registers as `"v1.1.0-beta"`, so the key a
-caller passes to `toModularAccountV2` states the stability of the delegation
-it selects. Dropping the suffix at GA is a deliberate breaking change for
-beta callers.
+Every non-pre-release entry resolves to a deployed address, enforced by a
+registry test. For a custom deployment, or a beta one before its address
+lands here, pass `delegationAddress` to `toModularAccountV2`.
 
 ## Type Declaration
 
@@ -64,6 +66,20 @@ beta callers.
 
       <td>
         `semiModularAccount7702StaticImplV1_0_0`
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `SemiModularAccount7702.v1.1.0-beta`
+      </td>
+
+      <td>
+        [`SemiModularAccount7702StaticImpl`](../type-aliases/SemiModularAccount7702StaticImpl)
+      </td>
+
+      <td>
+        `semiModularAccount7702StaticImplV1_1_0Beta`
       </td>
     </tr>
 

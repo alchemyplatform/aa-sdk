@@ -11,7 +11,7 @@ layout: reference
 function toModularAccountV2<TMode>(param0): Promise<ModularAccountV2>;
 ```
 
-Defined in: [packages/smart-accounts/src/ma-v2/accounts/account.ts:164](https://github.com/alchemyplatform/aa-sdk/blob/main/packages/smart-accounts/src/ma-v2/accounts/account.ts#L164)
+Defined in: [packages/smart-accounts/src/ma-v2/accounts/account.ts:166](https://github.com/alchemyplatform/aa-sdk/blob/main/packages/smart-accounts/src/ma-v2/accounts/account.ts#L166)
 
 Creates a MAv2 account.
 
@@ -121,7 +121,8 @@ In `7702` mode the account delegates to a `SemiModularAccount7702`
 deployment. Pin one of the registered versions with `version`, or pass a raw
 `delegationAddress` for an unreleased or custom deployment. The default is
 `DEFAULT_SMAV2_7702_VERSION`; newer versions are opt-in, so existing
-accounts are never silently re-delegated.
+accounts are never silently re-delegated. A `-beta` version is experimental:
+its key and address can change without a major bump.
 
 ```ts
 // Default delegation (DEFAULT_SMAV2_7702_VERSION)

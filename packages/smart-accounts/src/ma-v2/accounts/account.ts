@@ -55,7 +55,8 @@ export type ToModularAccountV2Params<
       | {
           /**
            * The SemiModularAccount7702 version to delegate to. Defaults to
-           * {@link DEFAULT_SMAV2_7702_VERSION}.
+           * {@link DEFAULT_SMAV2_7702_VERSION}. A `-beta` version is
+           * experimental — see {@link ModularAccountV2VersionRegistry}.
            */
           version?: SemiModularAccount7702Version;
           delegationAddress?: never;
@@ -135,7 +136,8 @@ export type ToModularAccountV2Params<
  * deployment. Pin one of the registered versions with `version`, or pass a raw
  * `delegationAddress` for an unreleased or custom deployment. The default is
  * `DEFAULT_SMAV2_7702_VERSION`; newer versions are opt-in, so existing
- * accounts are never silently re-delegated.
+ * accounts are never silently re-delegated. A `-beta` version is experimental:
+ * its key and address can change without a major bump.
  * ```ts
  * // Default delegation (DEFAULT_SMAV2_7702_VERSION)
  * const account = await toModularAccountV2({

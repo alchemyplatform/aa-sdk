@@ -76,9 +76,11 @@ export type * from "./ma-v2/decorators/installValidation.js";
 export { installValidationActions } from "./ma-v2/decorators/installValidation.js";
 
 export {
+  PLACEHOLDER_DELEGATION_ADDRESS,
   semiModularAccountV2StaticImpl,
   semiModularAccount7702StaticImpl,
   semiModularAccount7702StaticImplV1_0_0,
+  semiModularAccount7702StaticImplV1_1_0Beta,
 } from "./ma-v2/mav2StaticImpl.js";
 export type * from "./ma-v2/mav2StaticImpl.js";
 
