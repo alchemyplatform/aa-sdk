@@ -40,7 +40,11 @@ import { toLightAccount } from "../../light-account/accounts/account.js";
 import { deferralActions } from "../decorators/deferralActions.js";
 import { installValidationActions } from "../decorators/installValidation.js";
 import { HookType, SignaturePrefix } from "../types.js";
-import { buildFullNonceKey, DefaultModuleAddress } from "../utils/account.js";
+import {
+  buildFullNonceKey,
+  DefaultAddress,
+  DefaultModuleAddress,
+} from "../utils/account.js";
 import { semiModularAccountBytecodeAbi } from "../abis/semiModularAccountBytecodeAbi.js";
 import { SingleSignerValidationModule } from "../modules/single-signer-validation/module.js";
 import { PermissionBuilder, PermissionType } from "../permissionBuilder.js";
@@ -2188,6 +2192,38 @@ describe("MA v2 Account Tests", async () => {
       expect(success2).toEqual(true);
     },
   );
+
+  describe("7702 delegationAddress", () => {
+    // Construction-only: neither delegation has to exist on the fork.
+    const client7702 = () =>
+      createPublicClient({
+        transport: custom(localInstance.getClient()),
+        chain: localInstance.chain,
+      });
+
+    it("defaults to DefaultAddress.SMAV2_7702", async () => {
+      const account = await toModularAccountV2({
+        client: client7702(),
+        owner,
+        mode: "7702",
+      });
+
+      expect(account.authorization?.address).toBe(DefaultAddress.SMAV2_7702);
+    });
+
+    it("authorizes an explicit delegationAddress instead", async () => {
+      const delegationAddress = "0x1234567890AbcdEF1234567890aBcdef12345678";
+
+      const account = await toModularAccountV2({
+        client: client7702(),
+        owner,
+        mode: "7702",
+        delegationAddress,
+      });
+
+      expect(account.authorization?.address).toBe(delegationAddress);
+    });
+  });
 
   const givenConnectedProvider = async ({
     signer,
