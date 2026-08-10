@@ -129,33 +129,13 @@ export type ToModularAccountV2Params<
  * ```
  *
  * @example
- * In `7702` mode the account delegates to a `SemiModularAccount7702`
- * deployment. Pin one of the registered versions with `version`, or pass a raw
- * `delegationAddress` for an unreleased or custom deployment. The default is
- * `DEFAULT_SMAV2_7702_VERSION`; newer versions are opt-in, so existing
- * accounts are never silently re-delegated.
+ * In `7702` mode, choose a registered delegation version.
  * ```ts
- * // Default delegation (DEFAULT_SMAV2_7702_VERSION)
  * const account = await toModularAccountV2({
  *   client,
  *   owner: privateKeyToAccount(generatePrivateKey()),
  *   mode: "7702",
- * });
- *
- * // Pin a registered version
- * const pinned = await toModularAccountV2({
- *   client,
- *   owner: privateKeyToAccount(generatePrivateKey()),
- *   mode: "7702",
  *   version: "v1.1.0",
- * });
- *
- * // An unreleased or custom delegation
- * const custom = await toModularAccountV2({
- *   client,
- *   owner: privateKeyToAccount(generatePrivateKey()),
- *   mode: "7702",
- *   delegationAddress: "0x...",
  * });
  * ```
  */

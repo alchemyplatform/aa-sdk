@@ -13,9 +13,6 @@ import type { ModularAccountV2Base } from "../accounts/base.js";
 
 /**
  * A mapping of default addresses for the ModularAccountV2.
- *
- * `SMAV2_7702` is the default 7702 delegation. To select a different version,
- * see `ModularAccountV2VersionRegistry`.
  */
 export const DefaultAddress = {
   MAV2_FACTORY: "0x00000000000017c61b5bEe81050EC8eFc9c6fecd",
