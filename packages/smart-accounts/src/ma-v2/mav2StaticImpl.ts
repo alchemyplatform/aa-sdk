@@ -94,6 +94,8 @@ export const semiModularAccount7702StaticImplV1_1_0: SemiModularAccount7702Stati
 /**
  * Static implementation logic for SemiModularAccount7702, at the default
  * version (`DEFAULT_SMAV2_7702_VERSION`).
+ *
+ * @deprecated Use {@link semiModularAccount7702StaticImplV1_0_0} instead.
  */
 export const semiModularAccount7702StaticImpl: SemiModularAccount7702StaticImpl =
   semiModularAccount7702StaticImplV1_0_0;

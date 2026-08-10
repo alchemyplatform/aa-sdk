@@ -7,12 +7,7 @@ import {
 
 /**
  * Account version registry for ModularAccountV2, keyed by contract name and
- * then by contract version. The two semi-modular account contracts version
- * independently, so each gets its own version line.
- *
- * A version only appears here once its contract is deployed. To use an
- * unreleased or custom deployment, pass `delegationAddress` to
- * `toModularAccountV2`.
+ * version.
  */
 export const ModularAccountV2VersionRegistry = {
   SemiModularAccountBytecode: {

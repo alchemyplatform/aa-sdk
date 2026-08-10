@@ -1,6 +1,6 @@
 ---
 title: ModularAccountV2VersionRegistry
-description: Account version registry for ModularAccountV2, keyed by contract name and then by contract version. The two semi-modular account contracts version independently, so each gets its own version line.  A version only appears here once its contract is deployed. To use an unreleased or custom deployment, pass `delegationAddress` to `toModularAccountV2`.
+description: Account version registry for ModularAccountV2, keyed by contract name and version.
 slug: wallets/reference/smart-accounts/variables/ModularAccountV2VersionRegistry
 layout: reference
 ---
@@ -11,15 +11,10 @@ layout: reference
 const ModularAccountV2VersionRegistry: object;
 ```
 
-Defined in: [packages/smart-accounts/src/ma-v2/registry.ts:17](https://github.com/alchemyplatform/aa-sdk/blob/main/packages/smart-accounts/src/ma-v2/registry.ts#L17)
+Defined in: [packages/smart-accounts/src/ma-v2/registry.ts:12](https://github.com/alchemyplatform/aa-sdk/blob/main/packages/smart-accounts/src/ma-v2/registry.ts#L12)
 
 Account version registry for ModularAccountV2, keyed by contract name and
-then by contract version. The two semi-modular account contracts version
-independently, so each gets its own version line.
-
-A version only appears here once its contract is deployed. To use an
-unreleased or custom deployment, pass `delegationAddress` to
-`toModularAccountV2`.
+version.
 
 ## Type Declaration
 
