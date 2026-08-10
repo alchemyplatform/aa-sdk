@@ -2227,7 +2227,7 @@ describe("MA v2 Account Tests", async () => {
       );
     });
 
-    it("uses the deployed v1.1.0 delegation", async () => {
+    it("uses the v1.1.0 delegation", async () => {
       const account = await toModularAccountV2({
         client: client7702(),
         owner,

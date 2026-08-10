@@ -57,8 +57,7 @@ describe("ModularAccountV2VersionRegistry", () => {
   });
 
   it("registers no placeholder addresses", () => {
-    // A version is only registered once it's deployed, so callers can trust
-    // that any `version` they can name resolves to an address with code.
+    // Registered versions must provide a concrete delegation address.
     for (const [version, impl] of Object.entries(smav2_7702)) {
       expect(
         isAddressEqual(impl.delegationAddress, zeroAddress),
