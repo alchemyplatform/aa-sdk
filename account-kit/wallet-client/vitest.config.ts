@@ -1,12 +1,15 @@
-import { defineProject, mergeConfig } from "vitest/config";
-import { sharedConfig } from "../../.vitest/vitest.shared";
+import { defineProject } from "vitest/config";
 
-export default mergeConfig(
-  // @ts-ignore this does work
-  sharedConfig,
-  defineProject({
-    test: {
-      name: "account-kit/wallet-client",
-    },
-  }),
-);
+// Stub unit tests only (e2e lives in *.e2e.test.ts and runs via bun).
+// Intentionally skip sharedConfig so we do not pull in anvil/rundler setup.
+export default defineProject({
+  test: {
+    name: "account-kit/wallet-client",
+    globals: true,
+    exclude: [
+      "**/e2e-tests/**/*.test.ts",
+      "**/*.test.e2e.ts",
+      "**/*.e2e.test.ts",
+    ],
+  },
+});

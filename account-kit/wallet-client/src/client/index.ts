@@ -6,7 +6,6 @@ import {
   type Prettify,
   type Transport,
   createClient,
-  custom,
   type JsonRpcAccount,
 } from "viem";
 import type { InnerWalletApiClientBase } from "../types.ts";
@@ -14,11 +13,7 @@ import {
   smartWalletClientActions,
   type SmartWalletActions,
 } from "./decorator.js";
-import { Provider, RpcSchema } from "ox";
-import type {
-  WalletServerRpcSchemaType,
-  WalletServerViemRpcSchema,
-} from "@alchemy/wallet-api-types/rpc";
+import type { WalletServerViemRpcSchema } from "@alchemy/wallet-api-types/rpc";
 import { internalStateDecorator } from "../internal/decorator.js";
 import { metrics } from "../metrics.js";
 
@@ -86,18 +81,19 @@ export function createSmartWalletClient(
       ? params.policyIds
       : undefined;
 
+  // Pass the Alchemy transport through directly. Do not wrap with
+  // `custom(Provider.from(...))`: ox `parseError` rewrites AA codes like
+  // `-32521` to `-32603`, and the outer `custom()` then retries them with
+  // viem's default `retryCount=3` (4 identical wallet_prepareCalls).
+  // Typing for `client.request` comes from `WalletServerViemRpcSchema`.
+  // Retries stay on `alchemy({ retryCount })` (default 0).
   const innerClient = createClient<
     Transport,
     Chain,
     JsonRpcAccount<Address> | undefined,
     WalletServerViemRpcSchema
   >({
-    transport: (opts) =>
-      custom(
-        Provider.from(transport(opts), {
-          schema: RpcSchema.from<WalletServerRpcSchemaType>(),
-        }),
-      )(opts),
+    transport,
     chain,
     account,
   }).extend(() => ({
