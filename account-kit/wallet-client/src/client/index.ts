@@ -6,7 +6,6 @@ import {
   type Prettify,
   type Transport,
   createClient,
-  custom,
   type JsonRpcAccount,
 } from "viem";
 import type { InnerWalletApiClientBase } from "../types.ts";
@@ -14,11 +13,7 @@ import {
   smartWalletClientActions,
   type SmartWalletActions,
 } from "./decorator.js";
-import { Provider, RpcSchema } from "ox";
-import type {
-  WalletServerRpcSchemaType,
-  WalletServerViemRpcSchema,
-} from "@alchemy/wallet-api-types/rpc";
+import type { WalletServerViemRpcSchema } from "@alchemy/wallet-api-types/rpc";
 import { internalStateDecorator } from "../internal/decorator.js";
 import { metrics } from "../metrics.js";
 
@@ -92,12 +87,7 @@ export function createSmartWalletClient(
     JsonRpcAccount<Address> | undefined,
     WalletServerViemRpcSchema
   >({
-    transport: (opts) =>
-      custom(
-        Provider.from(transport(opts), {
-          schema: RpcSchema.from<WalletServerRpcSchemaType>(),
-        }),
-      )(opts),
+    transport,
     chain,
     account,
   }).extend(() => ({
