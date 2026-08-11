@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.88.5](https://github.com/alchemyplatform/aa-sdk/compare/v4.88.4...v4.88.5) (2026-08-11)
+
+### Bug Fixes
+
+- **wallet-client:** preserve -32521 instead of ox/custom rewrite+retry ([#2560](https://github.com/alchemyplatform/aa-sdk/issues/2560)) ([8e315bf](https://github.com/alchemyplatform/aa-sdk/commit/8e315bf95cebc355f1f606947db8e4d0e5757ae6))
+
 ## [4.88.4](https://github.com/alchemyplatform/aa-sdk/compare/v4.88.3...v4.88.4) (2026-05-22)
 
 **Note:** Version bump only for package root
