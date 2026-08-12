@@ -30,6 +30,8 @@ jobs:
 
       - name: Setup
         uses: ./.github/actions/setup
+        with:
+          install-foundry: false
 
       - name: Use commitlint to check PR title
         env:
@@ -120,6 +122,8 @@ jobs:
 
       - name: Setup
         uses: ./.github/actions/setup
+        with:
+          install-foundry: false
 
       - name: Build eslint plugin
         run: |
