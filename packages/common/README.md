@@ -13,7 +13,7 @@ npm install @alchemy/common viem
 - **`alchemyTransport`** - viem-compatible HTTP transport for Alchemy APIs (supports API key, JWT, or direct URL auth)
 - **Chain registry** - `getAlchemyRpcUrl`, `isChainSupported`, `getSupportedChainIds`
 - **Custom chain definitions** (via `@alchemy/common/chains`) - chains not yet in viem
-- **`AlchemyRestClient`** - typed REST client for non-JSON-RPC Alchemy APIs
+- **Core infrastructure** (via `@alchemy/common/core`) - viem-free REST/JSON-RPC clients, normalized API errors, retry/timeout helpers, and network resolution
 - **Error classes** - `BaseError`, `ChainNotFoundError`, `AccountNotFoundError`, `ConnectionConfigError`, etc.
 - **Logging** - `createLogger`, `setGlobalLoggerConfig`, `LogLevel`
 - **Utilities** - `bigIntMultiply`, `bigIntMax`, `lowerAddress`, `assertNever`

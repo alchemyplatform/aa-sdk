@@ -2,11 +2,6 @@
 export type * from "./transport/alchemy.js";
 export { alchemyTransport, isAlchemyTransport } from "./transport/alchemy.js";
 
-// http -- Revisit exporting this once it has a use case.
-// export type * from "./rest/restClient.js";
-// export type * from "./rest/types.js";
-// export { AlchemyRestClient } from "./rest/restClient.js";
-
 // chain registry utilities
 export {
   getAlchemyRpcUrl,

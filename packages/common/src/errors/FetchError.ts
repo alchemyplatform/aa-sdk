@@ -7,7 +7,7 @@ export class FetchError extends BaseError {
   override name = "FetchError";
 
   /**
-   * Initializes a new instance of the error message with a default message indicating that no chain was supplied to the client.
+   * Initializes a fetch error for a request that failed before a response.
    *
    * @param {string} route - The route that failed to fetch.
    * @param {string} method - The HTTP method that was used.
