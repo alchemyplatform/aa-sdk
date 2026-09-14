@@ -10,42 +10,48 @@ layout: reference
 ```ts
 type SolanaSignPreparedCallsParams = {
   type: "solana-transaction-v0";
-  chainId: "solana:mainnet" | "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp" | "solana:devnet" | "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1";
+  chainId:
+    | "solana:mainnet"
+    | "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+    | "solana:devnet"
+    | "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1";
   signatureRequest: {
-  type: "solana_signTransaction";
-  data: `0x${string}`;
-};
+    type: "solana_signTransaction";
+    data: `0x${string}`;
+  };
   data: {
-  compiledTransaction: `0x${string}`;
-  signer: string;
-  version: "0";
-  lifetimeConstraint: {
-  blockHash: string;
-  lastValidBlockHeight?: bigint | undefined;
-};
-};
+    compiledTransaction: `0x${string}`;
+    signer: string;
+    version: "0";
+    lifetimeConstraint: {
+      blockHash: string;
+      lastValidBlockHeight?: bigint | undefined;
+    };
+  };
   feePayment: {
-  sponsored: boolean;
-  feePayer: string;
-  estimatedFeeLamports?: number | undefined;
-  estimatedRentLamports?: number | undefined;
-  prefundLamports?: number | undefined;
-};
+    sponsored: boolean;
+    feePayer: string;
+    estimatedFeeLamports?: number | undefined;
+    estimatedRentLamports?: number | undefined;
+    prefundLamports?: number | undefined;
+  };
   details: {
-  type: "solana-transaction-v0";
-  data: {
-  calls: {
-  programId: string;
-  data: `0x${string}`;
-  accounts?: {
-  pubkey: string;
-  isSigner: boolean;
-  isWritable: boolean;
-}[] | undefined;
-}[];
-  addressLookupTableAddresses?: string[] | undefined;
-};
-};
+    type: "solana-transaction-v0";
+    data: {
+      calls: {
+        programId: string;
+        data: `0x${string}`;
+        accounts?:
+          | {
+              pubkey: string;
+              isSigner: boolean;
+              isWritable: boolean;
+            }[]
+          | undefined;
+      }[];
+      addressLookupTableAddresses?: string[] | undefined;
+    };
+  };
 };
 ```
 

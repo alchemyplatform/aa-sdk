@@ -20,13 +20,15 @@ Internally calls `prepareCalls`, `signPreparedCalls`, and `sendPreparedCalls`.
 
 ```ts
 const result = await client.sendCalls({
-  calls: [{
-    programId: "11111111111111111111111111111111",
-    data: "0x...",
-  }],
+  calls: [
+    {
+      programId: "11111111111111111111111111111111",
+      data: "0x...",
+    },
+  ],
   capabilities: {
-    paymaster: { policyId: "your-policy-id" }
-  }
+    paymaster: { policyId: "your-policy-id" },
+  },
 });
 ```
 
@@ -69,6 +71,7 @@ const result = await client.sendCalls({
         Parameters for sending Solana calls
       </td>
     </tr>
+
   </tbody>
 </table>
 

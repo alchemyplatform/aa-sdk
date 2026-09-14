@@ -21,13 +21,15 @@ before submitting to sendPreparedCalls.
 
 ```ts
 const result = await client.prepareCalls({
-  calls: [{
-    programId: "11111111111111111111111111111111",
-    data: "0x...",
-  }],
+  calls: [
+    {
+      programId: "11111111111111111111111111111111",
+      data: "0x...",
+    },
+  ],
   capabilities: {
-    paymaster: { policyId: "your-policy-id" }
-  }
+    paymaster: { policyId: "your-policy-id" },
+  },
 });
 ```
 
@@ -70,6 +72,7 @@ const result = await client.prepareCalls({
         Parameters for preparing Solana calls
       </td>
     </tr>
+
   </tbody>
 </table>
 

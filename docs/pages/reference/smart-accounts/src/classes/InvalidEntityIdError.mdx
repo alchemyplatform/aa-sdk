@@ -13,7 +13,7 @@ Error class denoting that the provided entity id is invalid because it's too lar
 
 ## Extends
 
-* `BaseError`
+- `BaseError`
 
 ## Constructors
 
@@ -75,6 +75,7 @@ Initializes a new instance of the error message with a default message indicatin
         inclusive upper bound the entityId must not exceed. Defaults to `uint32.max`.
       </td>
     </tr>
+
   </tbody>
 </table>
 
@@ -85,7 +86,7 @@ Initializes a new instance of the error message with a default message indicatin
 #### Overrides
 
 ```ts
-BaseError.constructor
+BaseError.constructor;
 ```
 
 ## Properties
@@ -113,5 +114,6 @@ BaseError.constructor
         `"InvalidEntityIdError"`
       </td>
     </tr>
+
   </tbody>
 </table>

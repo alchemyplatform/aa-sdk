@@ -11,31 +11,47 @@ layout: reference
 type SolanaSendCallsParams = {
   account?: string | undefined;
   calls: {
-  programId: string;
-  data: `0x${string}`;
-  accounts?: {
-  pubkey: string;
-  isSigner: boolean;
-  isWritable: boolean;
-}[] | undefined;
-}[];
-  capabilities?: (Omit<{
-  paymasterService?: ({
-  policyId: string;
-} & {
-  webhookData?: string | undefined;
-  prefundRent?: boolean | undefined;
-}) | undefined;
-}, "paymasterService"> & {
-  paymaster?: ({
-  policyId: string;
-} & {
-  webhookData?: string | undefined;
-  prefundRent?: boolean | undefined;
-}) | undefined;
-}) | undefined;
+    programId: string;
+    data: `0x${string}`;
+    accounts?:
+      | {
+          pubkey: string;
+          isSigner: boolean;
+          isWritable: boolean;
+        }[]
+      | undefined;
+  }[];
+  capabilities?:
+    | (Omit<
+        {
+          paymasterService?:
+            | ({
+                policyId: string;
+              } & {
+                webhookData?: string | undefined;
+                prefundRent?: boolean | undefined;
+              })
+            | undefined;
+        },
+        "paymasterService"
+      > & {
+        paymaster?:
+          | ({
+              policyId: string;
+            } & {
+              webhookData?: string | undefined;
+              prefundRent?: boolean | undefined;
+            })
+          | undefined;
+      })
+    | undefined;
   addressLookupTableAddresses?: string[] | undefined;
-  chainId?: "solana:mainnet" | "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp" | "solana:devnet" | "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1" | undefined;
+  chainId?:
+    | "solana:mainnet"
+    | "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+    | "solana:devnet"
+    | "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1"
+    | undefined;
 };
 ```
 

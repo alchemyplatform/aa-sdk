@@ -10,29 +10,38 @@ layout: reference
 ```ts
 type PrepareSignResult = {
   chainId: number;
-  signatureRequest: {
-  type: "personal_sign";
-  data: string | {
-  raw: `0x${string}`;
-};
-} | {
-  type: "eth_signTypedData_v4";
-  data: {
-  types: Record<string, {
-  name: string;
-  type: string;
-}[]>;
-  primaryType: string;
-  message: Record<string, unknown>;
-  domain?: {
-  chainId?: number | bigint | undefined;
-  name?: string | undefined;
-  salt?: `0x${string}` | undefined;
-  verifyingContract?: `0x${string}` | undefined;
-  version?: string | undefined;
-} | undefined;
-};
-};
+  signatureRequest:
+    | {
+        type: "personal_sign";
+        data:
+          | string
+          | {
+              raw: `0x${string}`;
+            };
+      }
+    | {
+        type: "eth_signTypedData_v4";
+        data: {
+          types: Record<
+            string,
+            {
+              name: string;
+              type: string;
+            }[]
+          >;
+          primaryType: string;
+          message: Record<string, unknown>;
+          domain?:
+            | {
+                chainId?: number | bigint | undefined;
+                name?: string | undefined;
+                salt?: `0x${string}` | undefined;
+                verifyingContract?: `0x${string}` | undefined;
+                version?: string | undefined;
+              }
+            | undefined;
+        };
+      };
 };
 ```
 
