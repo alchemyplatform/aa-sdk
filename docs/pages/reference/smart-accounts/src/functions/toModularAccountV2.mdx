@@ -35,7 +35,6 @@ Creates a MAv2 account.
         `Mode`
       </td>
     </tr>
-
   </tbody>
 </table>
 
@@ -64,7 +63,6 @@ Creates a MAv2 account.
         The parameters for creating a MAv2 account.
       </td>
     </tr>
-
   </tbody>
 </table>
 
@@ -78,10 +76,7 @@ A MAv2 account.
 
 ```ts
 import { createPublicClient } from "viem";
-import {
-  createBundlerClient,
-  createPaymasterClient,
-} from "viem/account-abstraction";
+import { createBundlerClient, createPaymasterClient } from "viem/account-abstraction";
 import { sepolia } from "viem/chains";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import { alchemyTransport } from "@alchemy/common";

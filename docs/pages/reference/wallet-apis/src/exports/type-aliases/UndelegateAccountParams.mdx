@@ -11,15 +11,11 @@ layout: reference
 type UndelegateAccountParams = {
   account?: AccountParam | undefined;
   chain?: Pick<Chain, "id"> | undefined;
-  capabilities?:
-    | {
-        paymaster?:
-          | {
-              policyId: string;
-            }
-          | undefined;
-      }
-    | undefined;
+  capabilities?: {
+  paymaster?: {
+  policyId: string;
+} | undefined;
+} | undefined;
 };
 ```
 

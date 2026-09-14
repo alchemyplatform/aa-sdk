@@ -11,20 +11,15 @@ layout: reference
 type SolanaSignPreparedCallsResult = {
   type: "solana-transaction-v0";
   data: {
-    compiledTransaction: `0x${string}`;
-    signer: string;
-    version: "0";
-    lifetimeConstraint: {
-      blockHash: string;
-      lastValidBlockHeight?: bigint | undefined;
-    };
-    minContextSlot?: bigint | undefined;
-  };
-  chainId:
-    | "solana:mainnet"
-    | "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
-    | "solana:devnet"
-    | "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1";
+  compiledTransaction: `0x${string}`;
+  signer: string;
+  version: "0";
+  lifetimeConstraint: {
+  blockHash: string;
+  lastValidBlockHeight?: bigint | undefined;
+};
+};
+  chainId: "solana:mainnet" | "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp" | "solana:devnet" | "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1";
   signature: SolanaSignatureResult;
 };
 ```

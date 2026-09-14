@@ -13,7 +13,7 @@ Error class representing a "Server Error" error, typically thrown when a server 
 
 ## Extends
 
-- [`BaseError`](BaseError)
+* [`BaseError`](BaseError)
 
 ## Constructors
 
@@ -21,8 +21,8 @@ Error class representing a "Server Error" error, typically thrown when a server 
 
 ```ts
 new ServerError(
-   message,
-   status,
+   message, 
+   status, 
    cause?): ServerError;
 ```
 
@@ -83,7 +83,6 @@ Initializes a new instance of the error message with a default message indicatin
         The cause of the error.
       </td>
     </tr>
-
   </tbody>
 </table>
 
@@ -134,6 +133,5 @@ Initializes a new instance of the error message with a default message indicatin
         `VERSION`
       </td>
     </tr>
-
   </tbody>
 </table>
