@@ -313,8 +313,6 @@ describe("createLogger", () => {
     });
 
     it("should profile async functions", async () => {
-      // Fake timers make the elapsed time deterministic; asserting on real
-      // wall-clock time here is flaky under CPU contention (see DX-3894).
       vi.useFakeTimers();
       try {
         const logger = createLogger({
