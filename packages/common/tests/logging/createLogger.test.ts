@@ -313,33 +313,42 @@ describe("createLogger", () => {
     });
 
     it("should profile async functions", async () => {
-      const logger = createLogger({
-        package: "@test/pkg",
-        version: "1.0.0",
-      });
+      // Fake timers make the elapsed time deterministic; asserting on real
+      // wall-clock time here is flaky under CPU contention (see DX-3894).
+      vi.useFakeTimers();
+      try {
+        const logger = createLogger({
+          package: "@test/pkg",
+          version: "1.0.0",
+        });
 
-      const asyncFn = async (x: number) => {
-        await new Promise((resolve) => setTimeout(resolve, 10));
-        return x * 2;
-      };
+        const asyncFn = async (x: number) => {
+          await new Promise((resolve) => setTimeout(resolve, 10));
+          return x * 2;
+        };
 
-      const profiledFn = logger.profiled("asyncMultiply", asyncFn);
-      const result = await profiledFn(5);
+        const profiledFn = logger.profiled("asyncMultiply", asyncFn);
+        const resultPromise = profiledFn(5);
+        await vi.advanceTimersByTimeAsync(10);
+        const result = await resultPromise;
 
-      expect(result).toBe(10);
-      expect(mockSink).toHaveBeenCalledWith(
-        expect.objectContaining({
-          level: LogLevel.DEBUG,
-          message: "profiled asyncMultiply",
-          data: expect.objectContaining({
-            executionTimeMs: expect.any(Number),
-            functionName: "asyncMultiply",
+        expect(result).toBe(10);
+        expect(mockSink).toHaveBeenCalledWith(
+          expect.objectContaining({
+            level: LogLevel.DEBUG,
+            message: "profiled asyncMultiply",
+            data: expect.objectContaining({
+              executionTimeMs: expect.any(Number),
+              functionName: "asyncMultiply",
+            }),
           }),
-        }),
-      );
+        );
 
-      const entry = mockSink.mock.calls[0][0] as LogEntry;
-      expect(entry.data?.executionTimeMs).toBeGreaterThanOrEqual(10);
+        const entry = mockSink.mock.calls[0][0] as LogEntry;
+        expect(entry.data?.executionTimeMs).toBeGreaterThanOrEqual(10);
+      } finally {
+        vi.useRealTimers();
+      }
     });
 
     it("should track failed profiled functions", async () => {
