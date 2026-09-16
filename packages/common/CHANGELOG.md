@@ -3,6 +3,50 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.2.5](https://github.com/alchemyplatform/aa-sdk/compare/v5.2.4...v5.2.5) (2026-09-14)
+
+**Note:** Version bump only for package @alchemy/common
+
+## [5.2.4](https://github.com/alchemyplatform/aa-sdk/compare/v5.2.3...v5.2.4) (2026-09-14)
+
+**Note:** Version bump only for package @alchemy/common
+
+## [5.2.3](https://github.com/alchemyplatform/aa-sdk/compare/v5.2.2...v5.2.3) (2026-09-14)
+
+**Note:** Version bump only for package @alchemy/common
+
+## [5.2.2](https://github.com/alchemyplatform/aa-sdk/compare/v5.2.1...v5.2.2) (2026-09-14)
+
+**Note:** Version bump only for package @alchemy/common
+
+## [5.2.1](https://github.com/alchemyplatform/aa-sdk/compare/v5.2.0...v5.2.1) (2026-09-14)
+
+**Note:** Version bump only for package @alchemy/common
+
+# [5.2.0](https://github.com/alchemyplatform/aa-sdk/compare/v5.1.1...v5.2.0) (2026-08-17)
+
+**Note:** Version bump only for package @alchemy/common
+
+## [5.1.1](https://github.com/alchemyplatform/aa-sdk/compare/v5.1.0...v5.1.1) (2026-08-12)
+
+**Note:** Version bump only for package @alchemy/common
+
+# [5.1.0](https://github.com/alchemyplatform/aa-sdk/compare/v5.0.9...v5.1.0) (2026-08-05)
+
+**Note:** Version bump only for package @alchemy/common
+
+## [5.0.9](https://github.com/alchemyplatform/aa-sdk/compare/v5.0.8...v5.0.9) (2026-07-24)
+
+**Note:** Version bump only for package @alchemy/common
+
+## [5.0.8](https://github.com/alchemyplatform/aa-sdk/compare/v5.0.7...v5.0.8) (2026-07-24)
+
+**Note:** Version bump only for package @alchemy/common
+
+## [5.0.7](https://github.com/alchemyplatform/aa-sdk/compare/v5.0.6...v5.0.7) (2026-07-22)
+
+**Note:** Version bump only for package @alchemy/common
+
 ## [5.0.6](https://github.com/alchemyplatform/aa-sdk/compare/v5.0.5...v5.0.6) (2026-06-17)
 
 **Note:** Version bump only for package @alchemy/common
