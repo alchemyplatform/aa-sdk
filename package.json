@@ -98,7 +98,7 @@
       "@noble/hashes": "^1.4.0",
       "@noble/curves": "^1.4.0",
       "eslint-plugin-react-hooks": "4.6.0",
-      "js-yaml@>=4 <4.3.1": "4.3.1",
+      "js-yaml@>=4 <4.3.2": "4.3.2",
       "tar@<7.5.18": "7.5.21",
       "postcss@<8.5.12": "8.5.23"
     }
