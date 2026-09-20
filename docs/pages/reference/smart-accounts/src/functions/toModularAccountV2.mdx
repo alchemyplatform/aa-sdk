@@ -11,7 +11,7 @@ layout: reference
 function toModularAccountV2<TMode>(param0): Promise<ModularAccountV2>;
 ```
 
-Defined in: [packages/smart-accounts/src/ma-v2/accounts/account.ts:142](https://github.com/alchemyplatform/aa-sdk/blob/main/packages/smart-accounts/src/ma-v2/accounts/account.ts#L142)
+Defined in: [packages/smart-accounts/src/ma-v2/accounts/account.ts:128](https://github.com/alchemyplatform/aa-sdk/blob/main/packages/smart-accounts/src/ma-v2/accounts/account.ts#L128)
 
 Creates a MAv2 account.
 
@@ -117,13 +117,15 @@ const hash = await bundlerClient.sendUserOperation({
 const receipt = await bundlerClient.waitForUserOperationReceipt({ hash });
 ```
 
-In `7702` mode, choose a registered delegation version.
+In `7702` mode the account delegates to `DefaultAddress.SMAV2_7702` by
+default. Pass `delegationAddress` to delegate to a different
+`SemiModularAccount7702` deployment instead.
 
 ```ts
 const account = await toModularAccountV2({
   client,
   owner: privateKeyToAccount(generatePrivateKey()),
   mode: "7702",
-  version: "v1.1.0",
+  delegationAddress: "0x...",
 });
 ```
