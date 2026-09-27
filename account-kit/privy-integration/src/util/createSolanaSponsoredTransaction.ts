@@ -55,6 +55,10 @@ export async function createSolanaSponsoredTransaction(
       "X-Alchemy-Client-Breadcrumb": "privyIntegrationSdk",
     },
     body,
+    // Bound the fee-payer request: an unbounded fetch here hangs sponsored
+    // transaction construction forever if the RPC endpoint stalls without
+    // replying. Feature-detected for runtimes without AbortSignal.timeout.
+    signal: AbortSignal.timeout ? AbortSignal.timeout(30_000) : undefined,
   };
 
   const response = await fetch(connection.rpcEndpoint, options);
