@@ -63,6 +63,13 @@ import { secp256k1 } from "@noble/curves/secp256k1";
 import { Point } from "@noble/secp256k1";
 import { p256 } from "@noble/curves/p256";
 
+/**
+ * Default timeout (ms) applied to signer API fetch requests so that a
+ * stalled api.g.alchemy.com endpoint rejects with TimeoutError instead of
+ * leaving the caller awaiting forever.
+ */
+export const SIGNER_REQUEST_TIMEOUT_MS = 30_000;
+
 export interface BaseSignerClientParams {
   stamper: TurnkeyClient["stamper"];
   connection: ConnectionConfig;
@@ -1125,6 +1132,12 @@ export abstract class BaseSignerClient<
       method: "POST",
       body: JSON.stringify(body),
       headers,
+      // Bound the request so a stalled signer endpoint surfaces as an
+      // error instead of hanging the caller forever. Feature-detected for
+      // environments without AbortSignal.timeout (older browsers/RN).
+      ...(AbortSignal.timeout
+        ? { signal: AbortSignal.timeout(SIGNER_REQUEST_TIMEOUT_MS) }
+        : {}),
     });
 
     if (!response.ok) {

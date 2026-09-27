@@ -52,6 +52,10 @@ export async function createSolanaSponsoredTransaction(
       "content-type": "application/json",
     },
     body,
+    // Bound the fee-payer request: an unbounded fetch here hangs transaction
+    // construction forever if the RPC endpoint stalls without replying.
+    // Feature-detected for runtimes without AbortSignal.timeout.
+    ...(AbortSignal.timeout ? { signal: AbortSignal.timeout(30_000) } : {}),
   };
 
   const response = await fetch(
