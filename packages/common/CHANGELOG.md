@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.3.0](https://github.com/alchemyplatform/aa-sdk/compare/v5.2.7...v5.3.0) (2026-10-05)
+
+### Features
+
+- add new chains ([#2574](https://github.com/alchemyplatform/aa-sdk/issues/2574)) ([60a20c3](https://github.com/alchemyplatform/aa-sdk/commit/60a20c305d1702c7d7277f418a3d69b070faa48f))
+
 ## [5.2.7](https://github.com/alchemyplatform/aa-sdk/compare/v5.2.6...v5.2.7) (2026-09-23)
 
 **Note:** Version bump only for package @alchemy/common
