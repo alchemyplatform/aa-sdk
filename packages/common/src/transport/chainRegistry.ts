@@ -18,6 +18,7 @@ export const ALCHEMY_RPC_MAPPING: Record<number, string> = {
   42161: "https://arb-mainnet.g.alchemy.com/v2", // arbMainnet
 
   // ARC networks
+  5042: "https://arc-mainnet.g.alchemy.com/v2", // arcMainnet
   5042002: "https://arc-testnet.g.alchemy.com/v2", // arcTestnet
 
   // BASE networks
@@ -32,12 +33,17 @@ export const ALCHEMY_RPC_MAPPING: Record<number, string> = {
   97: "https://bnb-testnet.g.alchemy.com/v2", // bnbTestnet
   56: "https://bnb-mainnet.g.alchemy.com/v2", // bnbMainnet
 
+  // BOBA networks
+  288: "https://boba-mainnet.g.alchemy.com/v2", // bobaMainnet
+  28882: "https://boba-sepolia.g.alchemy.com/v2", // bobaSepolia
+
   // CELO networks
   11142220: "https://celo-sepolia.g.alchemy.com/v2", // celoSepolia
   42220: "https://celo-mainnet.g.alchemy.com/v2", // celoMainnet
 
-  // CLANKERMON networks
-  510525: "https://clankermon-mainnet.g.alchemy.com/v2", // clankermonMainnet
+  // CRONOS networks
+  25: "https://cronos-mainnet.g.alchemy.com/v2", // cronosMainnet
+  338: "https://cronos-testnet.g.alchemy.com/v2", // cronosTestnet
 
   // ETH networks
   1: "https://eth-mainnet.g.alchemy.com/v2", // ethMainnet
