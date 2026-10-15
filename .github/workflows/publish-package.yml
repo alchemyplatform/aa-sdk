@@ -40,7 +40,7 @@ jobs:
           private-key: ${{ secrets.PR_BYPASSER_PRIVATE_KEY }}
 
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           token: ${{ steps.app-token.outputs.token }}
           fetch-depth: "0"
