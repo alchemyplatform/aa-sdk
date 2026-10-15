@@ -44,3 +44,5 @@ jsconfig.json
 .claude/scheduled_tasks.lock
 
 .lycheecache
+
+.claude/worktrees

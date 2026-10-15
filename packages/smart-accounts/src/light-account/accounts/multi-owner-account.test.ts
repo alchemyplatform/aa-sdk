@@ -24,8 +24,8 @@ import type { LightAccountVersion } from "../registry.js";
 import { toMultiOwnerLightAccount } from "./multi-owner-account.js";
 import { estimateFeesPerGas } from "@alchemy/aa-infra";
 
-// Run sequentially to avoid interference across tests sharing anvil/rundler state
-describe.sequential("MultiOwner Light Account Tests", () => {
+// Run sequentially (the default) to avoid interference across tests sharing anvil/rundler state
+describe("MultiOwner Light Account Tests", () => {
   let client: ReturnType<typeof localInstance.getClient>;
   let salt: bigint = BigInt(poolId());
   let signer: WalletClient<Transport, Chain, JsonRpcAccount | LocalAccount>;

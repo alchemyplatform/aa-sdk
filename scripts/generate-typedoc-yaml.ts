@@ -2,7 +2,7 @@
 
 import fs from "fs";
 import path from "path";
-import yaml from "js-yaml";
+import { dump } from "js-yaml";
 
 /**
  * Script to automatically update the SDK Reference section in docs.yml from TypeDoc-generated MDX files
@@ -501,7 +501,7 @@ function updateDocsYml(sdkReference: SDKReference): void {
     `Found SDK Reference section from line ${startIndex + 1} to ${endIndex}`,
   );
 
-  const sdkReferenceYaml = yaml.dump([sdkReference], {
+  const sdkReferenceYaml = dump([sdkReference], {
     indent: 2,
     lineWidth: -1, // Disable line wrapping
     noRefs: true,

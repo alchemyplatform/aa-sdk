@@ -10,6 +10,17 @@ layout: reference
 ```ts
 type SolanaSendCallsParams = {
   account?: string | undefined;
+  calls: {
+    programId: string;
+    data: `0x${string}`;
+    accounts?:
+      | {
+          pubkey: string;
+          isSigner: boolean;
+          isWritable: boolean;
+        }[]
+      | undefined;
+  }[];
   capabilities?:
     | (Omit<
         {
@@ -34,17 +45,6 @@ type SolanaSendCallsParams = {
           | undefined;
       })
     | undefined;
-  calls: {
-    programId: string;
-    data: `0x${string}`;
-    accounts?:
-      | {
-          pubkey: string;
-          isSigner: boolean;
-          isWritable: boolean;
-        }[]
-      | undefined;
-  }[];
   addressLookupTableAddresses?: string[] | undefined;
   chainId?:
     | "solana:mainnet"

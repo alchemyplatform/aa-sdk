@@ -32,6 +32,7 @@ type RequestAccountParams =
           ))
         | {
             accountType: "7702";
+            version?: "v1.1.0" | "v1.0.0" | undefined;
           }
         | undefined;
       signerAddress?: `0x${string}` | undefined;
@@ -60,6 +61,7 @@ type RequestAccountParams =
           ))
         | {
             accountType: "7702";
+            version?: "v1.1.0" | "v1.0.0" | undefined;
           }
         | undefined;
       signerAddress?: undefined;

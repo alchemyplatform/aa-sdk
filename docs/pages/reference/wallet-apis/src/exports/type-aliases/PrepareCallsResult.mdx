@@ -453,11 +453,9 @@ type PrepareCallsResult =
                 eip7702Auth?:
                   | true
                   | {
-                      delegation:
-                        | "ModularAccountV2"
-                        | "0x69007702764179f14F51cdce752f4f775d74E139"
-                        | "0x0000000000000000000000000000000000000000";
+                      delegation: `0x${string}` | "ModularAccountV2";
                       account?: `0x${string}` | undefined;
+                      version?: "v1.1.0" | "v1.0.0" | undefined;
                     }
                   | undefined;
                 nonceOverride?:
@@ -745,11 +743,9 @@ type PrepareCallsResult =
                 eip7702Auth?:
                   | true
                   | {
-                      delegation:
-                        | "ModularAccountV2"
-                        | "0x69007702764179f14F51cdce752f4f775d74E139"
-                        | "0x0000000000000000000000000000000000000000";
+                      delegation: `0x${string}` | "ModularAccountV2";
                       account?: `0x${string}` | undefined;
+                      version?: "v1.1.0" | "v1.0.0" | undefined;
                     }
                   | undefined;
                 nonceOverride?:

@@ -5,6 +5,10 @@ inputs:
     description: 'Node.js version'
     required: false
     default: '22'
+  install-foundry:
+    description: 'Whether to install Foundry'
+    required: false
+    default: 'true'
 
 runs:
   using: 'composite'
@@ -24,6 +28,7 @@ runs:
 
     # Foundry setup
     - name: Set up foundry
+      if: inputs.install-foundry == 'true'
       uses: foundry-rs/foundry-toolchain@v1
       with:
         cache: false
