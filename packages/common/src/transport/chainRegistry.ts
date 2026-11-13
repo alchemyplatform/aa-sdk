@@ -21,6 +21,10 @@ export const ALCHEMY_RPC_MAPPING: Record<number, string> = {
   5042: "https://arc-mainnet.g.alchemy.com/v2", // arcMainnet
   5042002: "https://arc-testnet.g.alchemy.com/v2", // arcTestnet
 
+  // AVAX networks
+  43114: "https://avax-mainnet.g.alchemy.com/v2", // avaxMainnet
+  43113: "https://avax-fuji.g.alchemy.com/v2", // avaxFuji
+
   // BASE networks
   8453: "https://base-mainnet.g.alchemy.com/v2", // baseMainnet
   84532: "https://base-sepolia.g.alchemy.com/v2", // baseSepolia
@@ -44,6 +48,9 @@ export const ALCHEMY_RPC_MAPPING: Record<number, string> = {
   // CRONOS networks
   25: "https://cronos-mainnet.g.alchemy.com/v2", // cronosMainnet
   338: "https://cronos-testnet.g.alchemy.com/v2", // cronosTestnet
+
+  // ELYSIUM networks
+  99801: "https://elysium-testnet.g.alchemy.com/v2", // elysiumTestnet
 
   // ETH networks
   1: "https://eth-mainnet.g.alchemy.com/v2", // ethMainnet
