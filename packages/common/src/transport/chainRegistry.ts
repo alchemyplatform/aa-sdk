@@ -50,6 +50,7 @@ export const ALCHEMY_RPC_MAPPING: Record<number, string> = {
   338: "https://cronos-testnet.g.alchemy.com/v2", // cronosTestnet
 
   // ELYSIUM networks
+  99901: "https://elysium-mainnet.g.alchemy.com/v2", // elysiumMainnet
   99801: "https://elysium-testnet.g.alchemy.com/v2", // elysiumTestnet
 
   // ETH networks
