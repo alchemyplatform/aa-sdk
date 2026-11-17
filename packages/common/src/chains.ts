@@ -140,3 +140,28 @@ export const robinhoodMainnet = defineChain({
   },
   testnet: false,
 });
+
+// Kinetiq's Elysium (Arbitrum Orbit on HyperEVM). Not viem's `elysiumTestnet`, which is an unrelated chain with ID 1338.
+export const elysiumTestnet = defineChain({
+  id: 99801,
+  name: "Elysium Testnet",
+  nativeCurrency: { name: "HYPE", symbol: "HYPE", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://elysium-testnet.g.alchemy.com/v2"],
+    },
+  },
+  testnet: true,
+});
+
+export const elysiumMainnet = defineChain({
+  id: 99901,
+  name: "Elysium Mainnet",
+  nativeCurrency: { name: "HYPE", symbol: "HYPE", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ["https://elysium-mainnet.g.alchemy.com/v2"],
+    },
+  },
+  testnet: false,
+});
