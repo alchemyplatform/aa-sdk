@@ -6,6 +6,7 @@ import {
 } from "../../src/transport/alchemy.js";
 import { http } from "viem";
 import { createBundlerClient } from "viem/account-abstraction";
+import { VERSION } from "../../src/version.js";
 
 describe("Alchemy Transport Tests", () => {
   it.each([
@@ -200,6 +201,86 @@ describe("Alchemy Transport Tests", () => {
   });
 
   describe("Headers Management", () => {
+    const callerHeaders: [string, string][] = [
+      ["authorization", "Bearer caller-token"],
+      ["alchemy-aa-sdk-version", "caller-version"],
+      ["X-Custom", "custom-value"],
+    ];
+
+    it.each<[string, () => HeadersInit]>([
+      ["record", () => Object.fromEntries(callerHeaders)],
+      ["Headers", () => new Headers(callerHeaders)],
+      [
+        "tuples",
+        () =>
+          callerHeaders.map<[string, string]>(([name, value]) => [name, value]),
+      ],
+    ])(
+      "overrides configured headers case-insensitively for %s",
+      (_, makeHeaders) => {
+        const headers = makeHeaders();
+        const before = Array.from(new Headers(headers).entries());
+        const result = alchemyTransport({
+          url: "https://custom-alchemy.com/v2",
+          apiKey: "configured-key",
+          fetchOptions: { headers },
+        })({ chain: sepolia });
+        const headerRecord = result.value?.fetchOptions?.headers as Record<
+          string,
+          string
+        >;
+        const sent = new Headers(headerRecord);
+
+        expect(sent.get("Authorization")).toBe("Bearer configured-key");
+        expect(sent.get("Alchemy-AA-Sdk-Version")).toBe(VERSION);
+        expect(sent.get("X-Custom")).toBe("custom-value");
+        expect(headerRecord["Authorization"]).toBe("Bearer configured-key");
+        expect(headerRecord["Alchemy-AA-Sdk-Version"]).toBe(VERSION);
+        expect(Array.from(new Headers(headers).entries())).toEqual(before);
+      },
+    );
+
+    it("preserves JWT priority over API keys and caller authorization", () => {
+      const result = alchemyTransport({
+        url: "https://custom-alchemy.com/v2",
+        apiKey: "configured-key",
+        jwt: "configured-jwt",
+        fetchOptions: { headers: { authorization: "Bearer caller-token" } },
+      })({ chain: sepolia });
+
+      expect(
+        new Headers(result.value?.fetchOptions?.headers).get("Authorization"),
+      ).toBe("Bearer configured-jwt");
+    });
+
+    it("preserves caller authorization when no credentials are configured", () => {
+      const result = alchemyTransport({
+        url: "https://custom-alchemy.com/v2",
+        fetchOptions: { headers: { authorization: "Bearer caller-token" } },
+      })({ chain: sepolia });
+
+      expect(
+        new Headers(result.value?.fetchOptions?.headers).get("Authorization"),
+      ).toBe("Bearer caller-token");
+    });
+
+    it("retains existing exact-case configured header precedence", () => {
+      const result = alchemyTransport({
+        url: "https://custom-alchemy.com/v2",
+        apiKey: "configured-key",
+        fetchOptions: {
+          headers: {
+            Authorization: "Bearer caller-token",
+            "Alchemy-AA-Sdk-Version": "caller-version",
+          },
+        },
+      })({ chain: sepolia });
+      const sent = new Headers(result.value?.fetchOptions?.headers);
+
+      expect(sent.get("Authorization")).toBe("Bearer configured-key");
+      expect(sent.get("Alchemy-AA-Sdk-Version")).toBe(VERSION);
+    });
+
     it("should add Authorization header when using custom URL with API key", () => {
       const transport = alchemyTransport({
         url: "https://custom-alchemy.com/v2",

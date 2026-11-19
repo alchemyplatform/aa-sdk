@@ -12,8 +12,18 @@ export function withAlchemyHeaders({
   jwt,
 }: WithAlchemyHeadersParams): Record<string, string> {
   const bearerToken = jwt ?? apiKey;
+  const callerHeaders = { ...convertHeadersToObject(headers) };
+  for (const name of Object.keys(callerHeaders)) {
+    const normalizedName = name.toLowerCase();
+    if (
+      normalizedName === "alchemy-aa-sdk-version" ||
+      (bearerToken && normalizedName === "authorization")
+    ) {
+      delete callerHeaders[name];
+    }
+  }
   return {
-    ...convertHeadersToObject(headers),
+    ...callerHeaders,
     "Alchemy-AA-Sdk-Version": VERSION,
     ...(bearerToken ? { Authorization: `Bearer ${bearerToken}` } : {}),
   };
