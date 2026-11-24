@@ -10,13 +10,52 @@ import { LOGGER } from "../logger.js";
 import { signSignatureRequest } from "./signSignatureRequest.js";
 import { extractCapabilitiesForSending } from "../utils/capabilities.js";
 
+export interface SendCallsDacsGuardrail {
+  /** Optional DACS mandate identifier. */
+  dacsMandate?: string;
+  /** Optional DACS session identifier. */
+  dacsSessionId?: string;
+  /**
+   * Deterministic pre-flight spend ceiling in native base units (wei, bigint or integer string).
+   * Enforced whenever supplied, even when `dacsMandate` / `dacsSessionId` are omitted.
+   */
+  dacsMaxAmount?: bigint | string;
+  /**
+   * Optional synchronous or async DACS attestation hook invoked before `prepareCalls` and signing.
+   * Contract-call spend checks inspect aggregate native `value` only (do not decode ABI `data`).
+   */
+  onAttest?: (context: {
+    totalNativeValue: bigint;
+    callCount: number;
+    chainId?: number;
+    dacsMandate?: string;
+    dacsSessionId?: string;
+  }) => void | Promise<void>;
+}
+
 export type SendCallsParams = Prettify<
   DistributiveOmit<PrepareCallsParams, "chainId"> & {
     chain?: Pick<Chain, "id">;
+    dacsGuardrail?: SendCallsDacsGuardrail;
   }
 >;
 
 export type SendCallsResult = Prettify<SendPreparedCallsResult>;
+
+function parseDacsMaxAmountBaseUnits(maxAmount: bigint | string): bigint {
+  if (typeof maxAmount === "bigint") {
+    if (maxAmount < 0n) {
+      throw new Error(`Invalid negative DACS ceiling: ${maxAmount.toString()}`);
+    }
+    return maxAmount;
+  }
+
+  const normalized = maxAmount.trim();
+  if (!/^\d+$/.test(normalized)) {
+    throw new Error(`Invalid DACS ceiling base units: "${maxAmount}"`);
+  }
+  return BigInt(normalized);
+}
 
 /**
  * Prepares, signs, and submits calls. This function internally calls `prepareCalls`, `signPreparedCalls`, and `sendPreparedCalls`.
@@ -29,6 +68,7 @@ export type SendCallsResult = Prettify<SendPreparedCallsResult>;
  * @param {Array<{to: Address, data?: Hex, value?: bigint}>} params.calls - Array of contract calls to execute
  * @param {AccountParam} [params.account] - The account to execute the calls from. Can be an address string or an object with an `address` property. Defaults to the client's account (signer address via EIP-7702).
  * @param {object} [params.capabilities] - Optional capabilities to include with the request.
+ * @param {SendCallsDacsGuardrail} [params.dacsGuardrail] - Optional DACS pre-flight spend ceiling and attestation hook.
  * @returns {Promise<SendPreparedCallsResult>} A Promise that resolves to the result containing the call ID.
  *
  * @example
@@ -47,7 +87,7 @@ export type SendCallsResult = Prettify<SendPreparedCallsResult>;
  *
  * // Wait for the calls to be mined and confirmed.
  * // Polls getCallsStatus until the bundle succeeds, fails, or times out (default 60s).
- * // See: https://viem.sh/docs/actions/wallet/waitForCallsStatus
+ * // See: [https://viem.sh/docs/actions/wallet/waitForCallsStatus](https://viem.sh/docs/actions/wallet/waitForCallsStatus)
  * const status = await client.waitForCallsStatus({ id: result.id });
  * console.log(status.status); // "success" | "failure"
  * ```
@@ -64,7 +104,40 @@ export async function sendCalls(
     calls: params.calls?.length,
     hasCapabilities: !!params.capabilities,
   });
-  const { chain, ...prepareCallsParams } = params;
+  const { chain, dacsGuardrail, ...prepareCallsParams } = params;
+
+  if (dacsGuardrail) {
+    const totalNativeValue = (params.calls ?? []).reduce(
+      (sum, call) => sum + BigInt(call.value ?? 0n),
+      0n,
+    );
+
+    if (dacsGuardrail.dacsMaxAmount !== undefined) {
+      const ceilingBaseUnits = parseDacsMaxAmountBaseUnits(
+        dacsGuardrail.dacsMaxAmount,
+      );
+      if (totalNativeValue > ceilingBaseUnits) {
+        throw new Error(
+          `[DACS Guardrail] Aggregate native call value (${totalNativeValue.toString()}) exceeds ceiling (${ceilingBaseUnits.toString()}).`,
+        );
+      }
+    }
+
+    if (dacsGuardrail.onAttest) {
+      await dacsGuardrail.onAttest({
+        totalNativeValue,
+        callCount: params.calls?.length ?? 0,
+        ...(chain != null ? { chainId: chain.id } : {}),
+        ...(dacsGuardrail.dacsMandate !== undefined
+          ? { dacsMandate: dacsGuardrail.dacsMandate }
+          : {}),
+        ...(dacsGuardrail.dacsSessionId !== undefined
+          ? { dacsSessionId: dacsGuardrail.dacsSessionId }
+          : {}),
+      });
+    }
+  }
+
   let calls = await prepareCalls(client, {
     ...prepareCallsParams,
     ...(chain != null ? { chainId: chain.id } : {}),
